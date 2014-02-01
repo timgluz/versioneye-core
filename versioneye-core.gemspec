@@ -129,7 +129,8 @@ Gem::Specification.new do |s|
     "spec/versioneye/models/userlinkcollection_spec.rb",
     "spec/versioneye/models/versionarchive_spec.rb",
     "spec/versioneye/models/versioncomment_spec.rb",
-    "spec/versioneye/models/versionlink_spec.rb"
+    "spec/versioneye/models/versionlink_spec.rb",
+    "versioneye-core.gemspec"
   ]
   s.homepage = "http://github.com/versioneye/versioneye-core"
   s.licenses = ["private"]
