@@ -100,7 +100,7 @@ class Product < Versioneye::Model
   def self.find_by_id id
     self.find id
   rescue => e
-    Rails.logger.error e.message
+    logger.error e.message
     nil
   end
 
@@ -121,7 +121,7 @@ class Product < Versioneye::Model
     return nil if searched_key.to_s.strip.empty?
     Product.where(prod_key: searched_key).shift
   rescue => e
-    Rails.logger.error e.message
+    logger.error e.message
     nil
   end
 
@@ -153,8 +153,8 @@ class Product < Versioneye::Model
   def sorted_versions
     Naturalsorter::Sorter.sort_version_by_method( versions, "version", false )
   rescue => e
-    Rails.logger.error e.message
-    Rails.logger.error e.backtrace.join('\n')
+    logger.error e.message
+    logger.error e.backtrace.join('\n')
     versions
   end
 
@@ -164,7 +164,7 @@ class Product < Versioneye::Model
     end
     nil
   rescue => e
-    Rails.logger.error e
+    logger.error e
     nil
   end
 

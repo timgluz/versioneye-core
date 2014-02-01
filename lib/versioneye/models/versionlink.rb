@@ -69,7 +69,7 @@ class Versionlink < Versioneye::Model
     end
     versionlinks = Versionlink.find_version_link(language, prod_key, version_number, link)
     if versionlinks && !versionlinks.empty?
-      Rails.logger.info "-- link exist already : #{prod_key} - #{version_number} - #{link} - #{name}"
+      logger.info "-- link exist already : #{prod_key} - #{version_number} - #{link} - #{name}"
       return nil
     end
     versionlink = Versionlink.new({:name => name, :link => link, :language => language,

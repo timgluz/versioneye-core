@@ -68,7 +68,7 @@ class BitbucketRepo < Versioneye::Model
   def self.create_new(user, repo, repo_branches = nil, project_files = nil)
     new_repo = build_new(user, repo, repo_branches, project_files)
     unless new_repo.save
-      Rails.logger.error "Cant save new repo:#{new_repo.errors.full_messages.to_sentence}"
+      logger.error "Cant save new repo:#{new_repo.errors.full_messages.to_sentence}"
     end
     new_repo
   end

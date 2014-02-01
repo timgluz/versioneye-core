@@ -110,8 +110,8 @@ class GithubRepo < Versioneye::Model
 
     repo
   rescue => e
-    Rails.logger.error e.message
-    Rails.logger.error e.backtrace.join("\n")
+    logger.error e.message
+    logger.error e.backtrace.join("\n")
     nil
   end
 

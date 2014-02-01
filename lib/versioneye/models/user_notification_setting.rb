@@ -34,13 +34,13 @@ class UserNotificationSetting < Versioneye::Model
   end
 
   def self.send_newsletter_new_features_for_user( user )
-    Rails.logger.info "Send new feature newsletter to #{user.fullname}"
+    logger.info "Send new feature newsletter to #{user.fullname}"
     NewsletterMailer.newsletter_new_features_email(user).deliver
   rescue => e
     user.email_send_error = e.message
     user.save
-    Rails.logger.error e.message
-    Rails.logger.error e.backtrace.join("\n")
+    logger.error e.message
+    logger.error e.backtrace.join("\n")
   end
 
 end

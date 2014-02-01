@@ -1,5 +1,7 @@
 class Projectdependency < Versioneye::Model
 
+  require 'naturalsorter'
+
   # This Model describes the relationship between a project and a package
   # This Model describes 1 dependency of a project
 
@@ -87,24 +89,25 @@ class Projectdependency < Versioneye::Model
     self.outdated
   end
 
+  # TODO rr
   def update_version_current
-    return false if self.prod_key.nil?
+  #   return false if self.prod_key.nil?
 
-    product = Product.fetch_product self.language, self.prod_key
-    if product.nil? && group_id && artifact_id
-      product = Product.find_by_group_and_artifact( group_id, artifact_id )
-    end
-    return false if product.nil?
+  #   product = Product.fetch_product self.language, self.prod_key
+  #   if product.nil? && group_id && artifact_id
+  #     product = Product.find_by_group_and_artifact( group_id, artifact_id )
+  #   end
+  #   return false if product.nil?
 
-    newest_version = VersionService.newest_version_number( product.versions, self.stability )
-    return false if newest_version.nil? || newest_version.empty?
+  #   newest_version = VersionService.newest_version_number( product.versions, self.stability )
+  #   return false if newest_version.nil? || newest_version.empty?
 
-    if self.version_current.nil? || self.version_current.empty? || !self.version_current.eql?( newest_version )
-      self.version_current = newest_version
-      self.release         = VersionTagRecognizer.release? self.version_current
-      self.muted = false
-      self.save()
-    end
+  #   if self.version_current.nil? || self.version_current.empty? || !self.version_current.eql?( newest_version )
+  #     self.version_current = newest_version
+  #     self.release         = VersionTagRecognizer.release? self.version_current
+  #     self.muted = false
+  #     self.save()
+  #   end
   end
 
   def to_s

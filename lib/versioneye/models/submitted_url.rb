@@ -52,16 +52,17 @@ class SubmittedUrl < Versioneye::Model
 
     if self.save
       submitted_url = self
-      SubmittedUrlMailer.integrated_url_email(submitted_url, product).deliver
+      # TODO mailer
+      # SubmittedUrlMailer.integrated_url_email(submitted_url, product).deliver
       return true
     else
-      Rails.logger.error "Failed to update integration status for submittedUrl.#{self._id}"
-      Rails.logger.error self.errors.full_messages.to_sentence
+      logger.error "Failed to update integration status for submittedUrl.#{self._id}"
+      logger.error self.errors.full_messages.to_sentence
     end
     false
   rescue => e
-    Rails.logger.error e.message
-    Rails.logger.error e.backtrace.join('\n')
+    logger.error e.message
+    logger.error e.backtrace.join('\n')
     false
   end
 

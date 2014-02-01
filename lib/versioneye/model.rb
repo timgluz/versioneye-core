@@ -1,7 +1,12 @@
-require 'mongoid'
-
 module Versioneye
   class Model
+
+    require 'mongoid'
+
+    require 'log4r'
+    include Log4r
+    logger = Logger.new 'logger'
+    logger.outputters = Outputter.stdout
 
     require 'versioneye/models/api'
     require 'versioneye/models/api_call'
@@ -43,10 +48,9 @@ module Versioneye
     require 'versioneye/models/userlinkcollection'
     require 'versioneye/models/version'
     require 'versioneye/models/versionarchive'
-    require 'versioneye/models/verisoncomment'
+    require 'versioneye/models/versioncomment'
     require 'versioneye/models/versioncommentreply'
     require 'versioneye/models/versionlink'
-
 
   end
 end

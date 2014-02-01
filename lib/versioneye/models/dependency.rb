@@ -137,84 +137,85 @@ class Dependency < Versioneye::Model
   end
 
   def version_parsed
-    return "unknown" if version.nil? || version.empty?
-    abs_version = String.new(version)
-    if prod_type.eql?( Project::A_TYPE_RUBYGEMS )
-      abs_version = String.new( gem_version_parsed )
-    elsif prod_type.eql?( Project::A_TYPE_COMPOSER )
-      abs_version = String.new( packagist_version_parsed )
-    elsif prod_type.eql?( Project::A_TYPE_NPM )
-      abs_version = String.new( npm_version_parsed )
-    elsif prod_type.eql?( Project::A_TYPE_COCOAPODS )
-      abs_version = String.new( cocoapods_version_parsed )
-    elsif prod_type == Project::A_TYPE_BOWER
-      abs_version = bower_version_parsed
-    end
-    # TODO cases for java
-    abs_version
+    # return "unknown" if version.nil? || version.empty?
+    # abs_version = String.new(version)
+    # if prod_type.eql?( Project::A_TYPE_RUBYGEMS )
+    #   abs_version = String.new( gem_version_parsed )
+    # elsif prod_type.eql?( Project::A_TYPE_COMPOSER )
+    #   abs_version = String.new( packagist_version_parsed )
+    # elsif prod_type.eql?( Project::A_TYPE_NPM )
+    #   abs_version = String.new( npm_version_parsed )
+    # elsif prod_type.eql?( Project::A_TYPE_COCOAPODS )
+    #   abs_version = String.new( cocoapods_version_parsed )
+    # elsif prod_type == Project::A_TYPE_BOWER
+    #   abs_version = bower_version_parsed
+    # end
+    # # TODO cases for java
+    # abs_version
+    version
   end
 
-  def gem_version_parsed
-    version_string = String.new(version)
-    product        = Product.fetch_product( self.language, self.dep_prod_key )
-    dependency     = Projectdependency.new
-    parser         = GemfileParser.new
-    parser.parse_requested_version(version_string, dependency, product)
-    dependency.version_requested
-  end
+  # def gem_version_parsed
+  #   version_string = String.new(version)
+  #   product        = Product.fetch_product( self.language, self.dep_prod_key )
+  #   dependency     = Projectdependency.new
+  #   parser         = GemfileParser.new
+  #   parser.parse_requested_version(version_string, dependency, product)
+  #   dependency.version_requested
+  # end
 
-  def cocoapods_version_parsed
-    version_string = String.new(version)
-    product        = Product.fetch_product( self.language, self.dep_prod_key )
-    dependency     = Projectdependency.new
-    CocoapodsPackageManager.parse_requested_version(version_string, dependency, product)
-    dependency.version_requested
-  end
+  # def cocoapods_version_parsed
+  #   version_string = String.new(version)
+  #   product        = Product.fetch_product( self.language, self.dep_prod_key )
+  #   dependency     = Projectdependency.new
+  #   CocoapodsPackageManager.parse_requested_version(version_string, dependency, product)
+  #   dependency.version_requested
+  # end
 
-  def packagist_version_parsed
-    lang = self.language
-    if self.dep_prod_key.eql?("php/php") or self.dep_prod_key.eql?("php")
-      lang = Product::A_LANGUAGE_C
-    end
-    version_string = String.new(version)
-    product        = Product.fetch_product( lang, self.dep_prod_key )
-    dependency     = Projectdependency.new
-    parser         = ComposerParser.new
-    parser.parse_requested_version(version_string, dependency, product)
-    dependency.version_requested
-  end
+  # def packagist_version_parsed
+  #   lang = self.language
+  #   if self.dep_prod_key.eql?("php/php") or self.dep_prod_key.eql?("php")
+  #     lang = Product::A_LANGUAGE_C
+  #   end
+  #   version_string = String.new(version)
+  #   product        = Product.fetch_product( lang, self.dep_prod_key )
+  #   dependency     = Projectdependency.new
+  #   parser         = ComposerParser.new
+  #   parser.parse_requested_version(version_string, dependency, product)
+  #   dependency.version_requested
+  # end
 
-  def npm_version_parsed
-    version_string = String.new( version )
-    product        = Product.fetch_product( self.language, self.dep_prod_key )
-    dependency     = Projectdependency.new
-    parser         = PackageParser.new
-    parser.parse_requested_version( version_string, dependency, product )
-    dependency.version_requested
-  end
+  # def npm_version_parsed
+  #   version_string = String.new( version )
+  #   product        = Product.fetch_product( self.language, self.dep_prod_key )
+  #   dependency     = Projectdependency.new
+  #   parser         = PackageParser.new
+  #   parser.parse_requested_version( version_string, dependency, product )
+  #   dependency.version_requested
+  # end
 
-  def bower_version_parsed
-    product    = Product.fetch_bower dep_prod_key
-    parser     = BowerParser.new
-    dependency = Projectdependency.new
-    dependency = parser.parse_requested_version(version.to_s, dependency, product)
-    dependency[:version_requested]
-  end
+  # def bower_version_parsed
+  #   product    = Product.fetch_bower dep_prod_key
+  #   parser     = BowerParser.new
+  #   dependency = Projectdependency.new
+  #   dependency = parser.parse_requested_version(version.to_s, dependency, product)
+  #   dependency[:version_requested]
+  # end
 
-  def dep_prod_key_for_url
-    prod_key = dep_prod_key
-    if prod_type == Project::A_TYPE_BOWER
-      doc = Product.fetch_bower dep_prod_key
-      prod_key =  doc[:prod_key]
-    end
-    Product.encode_prod_key prod_key
-  end
+  # def dep_prod_key_for_url
+  #   prod_key = dep_prod_key
+  #   if prod_type == Project::A_TYPE_BOWER
+  #     doc = Product.fetch_bower dep_prod_key
+  #     prod_key =  doc[:prod_key]
+  #   end
+  #   Product.encode_prod_key prod_key
+  # end
 
   def version_for_url
-    url_param = version_parsed
-    Version.encode_version( url_param )
+    # url_param = version_parsed
+    # Version.encode_version( url_param )
   rescue => e
-    Rails.logger.error e.message
+    logger.error e.message
     return self.version
   end
 

@@ -91,8 +91,8 @@ class Project < Versioneye::Model
   def self.find_by_id( id )
     Project.find( id )
   rescue => e
-    Rails.logger.error e.message
-    Rails.logger.error e.backtrace.join("\n")
+    logger.error e.message
+    logger.error e.backtrace.join("\n")
     nil
   end
 
