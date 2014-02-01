@@ -15,10 +15,10 @@ require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://guides.rubygems.org/specification-reference/ for more options
   gem.name = "versioneye-core"
-  gem.homepage = "http://github.com/reiz/versioneye-core"
-  gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.homepage = "http://github.com/versioneye/versioneye-core"
+  gem.license = "private"
+  gem.summary = %Q{Models & Services for VersionEye}
+  gem.description = %Q{This project contains the Models and Services for VersionEye}
   gem.email = "robert.reiz.81@gmail.com"
   gem.authors = ["reiz"]
   # dependencies defined in Gemfile
@@ -27,8 +27,8 @@ Jeweler::RubygemsDotOrgTasks.new
 
 require 'rake/testtask'
 Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/test_*.rb'
+  test.libs << 'lib' << 'spec'
+  test.pattern = 'spec/**/*_spec.rb'
   test.verbose = true
 end
 
