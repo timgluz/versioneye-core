@@ -3,10 +3,10 @@ require 'dalli'
 
 class BitbucketService
 
-  A_TASK_NIL = nil
+  A_TASK_NIL     = nil
   A_TASK_RUNNING = 'running'
-  A_TASK_DONE = 'done'
-  A_MAX_WORKERS = 16
+  A_TASK_DONE    = 'done'
+  A_MAX_WORKERS  = 16
 
 
   def self.update_repo_info(user, repo_fullname)
@@ -74,7 +74,7 @@ class BitbucketService
     repos = Bitbucket.read_repos(owner_name, token, secret)
 
     tasks = []
-    #add information about branches and project files
+    # add information about branches and project files
     repos.each do |repo|
       tasks << Thread.new {add_repo(user, repo, token, secret)}
     end
