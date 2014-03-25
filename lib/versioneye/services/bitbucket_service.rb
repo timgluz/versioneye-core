@@ -74,7 +74,7 @@ class BitbucketService
     repos = Bitbucket.read_repos(owner_name, token, secret)
 
     tasks = []
-    # add information about branches and project files
+    #add information about branches and project files
     repos.each do |repo|
       tasks << Thread.new {add_repo(user, repo, token, secret)}
     end

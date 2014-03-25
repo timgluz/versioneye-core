@@ -1,11 +1,49 @@
 class ProductService
 
+
+  # This method fetches and product and initializes it for the UI.
+  def self.fetch_product( lang, prod_key )
+    product = Product.fetch_product lang, prod_key
+    if product.nil? && lang.eql?( Product::A_LANGUAGE_CLOJURE )
+      product = Product.fetch_product Product::A_LANGUAGE_JAVA, prod_key
+    end
+    return nil if product.nil?
+
+    product.check_nil_version
+    update_dependencies( product )
+    update_average_release_time( product )
+    product
+  end
+
+
+  # This method updates the dependencies of a product.
+  # It updates the parsed_version and the outdated field.
+  def self.update_dependencies( product )
+    deps = product.all_dependencies
+    deps.each do |dependency|
+      outdated = DependencyService.cache_outdated?( dependency )
+      if outdated != dependency.outdated
+        dependency.update_attributes({outdated: outdated})
+      end
+    end
+  end
+
+
+  def self.update_average_release_time product
+    average_release_time = VersionService.average_release_time( product.versions )
+    if average_release_time.nil?
+      average_release_time = VersionService.estimated_average_release_time( product.versions )
+    end
+    product[:average_release_time] = average_release_time
+  end
+
+
   # languages have to be an array of strings.
   def self.search(q, group_id = nil, languages = nil, page_count = 1)
     EsProduct.search(q, group_id, languages, page_count)
   rescue => e
     logger.error e.message
-    logger.error e.backtrace.join("\n")
+    logger.error e.backtrace.join('\n')
     logger.info  "Dam. We don't give up. Not yet! Start alternative search on awesome MongoDB."
     MongoProduct.find_by(q, '', group_id, languages, 300).paginate(:page => page_count)
   end
@@ -39,17 +77,20 @@ class ProductService
   end
 
 
-  def self.updates_since_to(dt_since, dt_to)
-    stats = []
-    Product::A_LANGS_SUPPORTED.each do |lang|
-      stats << {
-        title: lang.downcase,
-        value: Newest.where(:language => lang,
-                            :created_at.gte => dt_since,
-                            :created_at.lt => dt_to).count
-      }
-    end
-    stats
+  def self.update_version_data( product, persist = true )
+    return nil if product.nil?
+
+    versions = product.versions
+    return nil if versions.nil? || versions.empty?
+
+    newest_stable_version = VersionService.newest_version( versions )
+    return nil if newest_stable_version.to_s.eql?( product.version)
+
+    product.version = newest_stable_version.to_s
+    product.save if persist
+  rescue => e
+    logger.error e.message
+    logger.error e.backtrace.join('\n')
   end
 
 
@@ -62,21 +103,23 @@ class ProductService
       skip = i * page
       products = Product.all().skip(skip).limit(page)
       products.each do |product|
-        VersionService.update_version_data( product, true )
+        self.update_version_data( product, true )
         product.update_used_by_count( true )
         self.update_followers_for product
       end
     end
   rescue => e
     logger.error e.message
-    logger.error e.backtrace.join("\n")
+    logger.error e.backtrace.join('\n')
   end
+
 
   def self.update_followers_for product
     return nil if product.followers == product.user_ids.count
     product.followers = product.user_ids.count
     product.save
   end
+
 
   def self.update_followers
     products = Product.where( :'user_ids.0' => {'$exists' => true} )
@@ -88,62 +131,10 @@ class ProductService
     logger.info "#{products.count} products updated."
   end
 
+
   def self.remove product
     EsProduct.remove( product )
     product.remove
   end
 
-
-  def self.to_stats_container(title, stats)
-    {
-      title: title || "",
-      total: stats.inject(0) {|acc, item| acc += item[:value]},
-      values: stats
-    }
-  end
-
-  def self.stats_today_releases
-    dt_since = Date.today.at_midnight
-    dt_to = DateTime.now
-    to_stats_container("Today", updates_since_to(dt_since, dt_to))
-  end
-
-  def self.stats_yesterday_releases
-    dt_since = 1.day.ago.at_midnight
-    dt_to = Date.today.at_midnight
-    to_stats_container("Yesterday", updates_since_to(dt_since, dt_to))
-  end
-
-  def self.stats_current_week_releases
-    dt_since = Date.today.at_beginning_of_week
-    dt_to = DateTime.now
-    to_stats_container("Current week", updates_since_to(dt_since, dt_to))
-  end
-
-  def self.stats_current_month_releases
-    dt_since = Date.today.at_beginning_of_month
-    dt_to = DateTime.now
-    to_stats_container("Current month", updates_since_to(dt_since, dt_to))
-  end
-
-  def self.stats_last_7days_releases
-    dt_since = 7.days.ago.at_midnight
-    dt_to = DateTime.now
-    to_stats_container("Last 7 days", updates_since_to(dt_since, dt_to))
-  end
-
-  def self.stats_last_30days_releases
-    dt_since = 30.days.ago.at_midnight
-    dt_to = DateTime.now
-    to_stats_container("Last 30 days", updates_since_to(dt_since, dt_to))
-  end
-
-  def self.stats_last_month_releases
-    month_ago = Date.today << 1
-    to_stats_container(
-      "Last month",
-      updates_since_to(month_ago.at_beginning_of_month,
-                       month_ago.at_end_of_month)
-    )
-  end
 end

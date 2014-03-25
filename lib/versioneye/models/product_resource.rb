@@ -10,14 +10,15 @@ class ProductResource < Versioneye::Model
   field :prod_key     , type: String
   field :prod_type    , type: String
   field :language     , type: String
+  field :force_fullname, type: Boolean, default: false
 
   has_one :submitted_url, autosave: true
 
   validates_presence_of :url, :resource_type
 
   def self.find_by_id( id )
-    return nil if id.to_s.strip.empty?
-    id = id.to_s
+    id = id.to_s.strip
+    return nil if id.empty?
     return ProductResource.find(id) if ProductResource.where(_id: id).exists?
   end
 

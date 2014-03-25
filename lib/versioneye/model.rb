@@ -4,9 +4,15 @@ module Versioneye
     require 'mongoid'
 
     require 'log4r'
+    require 'log4r/configurator'
+
     include Log4r
-    logger = Logger.new 'logger'
-    logger.outputters = Outputter.stdout
+
+    Configurator.load_xml_file('config/log4r.xml')
+
+    def self.log
+      Logger['MainLogger']
+    end
 
     require 'versioneye/models/api'
     require 'versioneye/models/api_call'

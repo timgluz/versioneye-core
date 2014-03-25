@@ -1,4 +1,5 @@
 class Testimonial < Versioneye::Model
+
   require 'will_paginate/array'
 
   include Mongoid::Document

@@ -15,6 +15,33 @@ class ProjectService
     return nil
   end
 
+  def self.set_prod_type_if_nil dependency
+    return nil if dependency.nil?
+    return nil if dependency.prod_type
+    dependency.prod_type = Project::A_TYPE_RUBYGEMS  if dependency.language.eql?(Product::A_LANGUAGE_RUBY)
+    dependency.prod_type = Project::A_TYPE_COMPOSER  if dependency.language.eql?(Product::A_LANGUAGE_PHP)
+    dependency.prod_type = Project::A_TYPE_PIP       if dependency.language.eql?(Product::A_LANGUAGE_PYTHON)
+    dependency.prod_type = Project::A_TYPE_NPM       if dependency.language.eql?(Product::A_LANGUAGE_NODEJS)
+    dependency.prod_type = Project::A_TYPE_MAVEN2    if dependency.language.eql?(Product::A_LANGUAGE_JAVA)
+    dependency.prod_type = Project::A_TYPE_LEIN      if dependency.language.eql?(Product::A_LANGUAGE_CLOJURE)
+    dependency.prod_type = Project::A_TYPE_BOWER     if dependency.language.eql?(Product::A_LANGUAGE_JAVASCRIPT)
+    dependency.prod_type = Project::A_TYPE_COCOAPODS if dependency.language.eql?(Product::A_LANGUAGE_OBJECTIVEC)
+    dependency
+  end
+
+  def self.upload file, user = nil, api_created = false
+    project_name        = file['datafile'].original_filename
+    filename            = S3.upload_fileupload(file )
+    url                 = S3.url_for( filename )
+    project             = ProjectService.build_project( url, project_name )
+    project.s3_filename = filename
+    project.source      = Project::A_SOURCE_UPLOAD
+    project.user        = user
+    project.api_created = api_created
+    project.make_project_key!
+    project
+  end
+
   def self.store project
     return false if project.nil?
 
@@ -65,7 +92,7 @@ class ProjectService
     self.update_url project
     new_project = self.build_from_url project.url
     project.update_from new_project
-    update_badge_for_project( project )
+    Rails.cache.delete( project.id.to_s )
     if send_email && project.out_number > 0 && project.user.email_inactive == false
       logger.info "send out email notification for project: #{project.name} to user #{project.user.fullname}"
       ProjectMailer.projectnotification_email( project ).deliver
@@ -174,7 +201,6 @@ class ProjectService
    - Parsing the project_file to a new project
    - Storing the new project to DB
 =end
-
   def self.import_from_bitbucket(user, repo_name, filename, branch = "master")
     repo = BitbucketRepo.by_user(user).by_fullname(repo_name).shift
     private_project = repo[:private]
@@ -183,7 +209,8 @@ class ProjectService
     end
 
     content = Bitbucket.fetch_project_file_from_branch(
-      repo_name, branch, filename, user[:bitbucket_token], user[:bitbucket_secret]
+      repo_name, branch, filename,
+      user[:bitbucket_token], user[:bitbucket_secret]
     )
     if content.nil? or content == "error"
       error_msg = " Didn't find any project file of a supported package manager."
@@ -213,6 +240,15 @@ class ProjectService
     })
 
     return parsed_project if store( parsed_project )
+  end
+
+
+  def self.build_project( url, project_name )
+    project      = ProjectService.build_from_url( url )
+    if project.name.nil? || project.name.empty?
+      project.name = project_name
+    end
+    project
   end
 
 
@@ -300,12 +336,32 @@ class ProjectService
 
   def self.update_badge_for_project project
     badge    = project.outdated?() ? 'out-of-date' : 'up-to-date'
-    Rails.cache.write( project.id.to_s, badge, timeToLive: 1.day)
+    Rails.cache.write( project.id.to_s, badge, timeToLive: 6.hour)
     badge
   rescue => e
     logger.error e.message
     logger.error e.backtrace.join "\n"
     "unknown"
+  end
+
+
+  # TODO refactor usage
+  # TODO test this
+  def self.outdated?( project )
+    project.projectdependencies.each do |dep|
+      return true if ProjectdependencyService.outdated?( dep )
+    end
+    false
+  end
+
+  # TODO refactor usage
+  # TODO test this
+  def self.outdated_dependencies( project )
+    outdated_dependencies = Array.new
+    project.projectdependencies.each do |dep|
+      outdated_dependencies << dep if ProjectdependencyService.outdated?( dep )
+    end
+    outdated_dependencies
   end
 
 

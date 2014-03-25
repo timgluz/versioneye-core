@@ -9,14 +9,12 @@ describe PromoCode do
     end
 
     it "returns promo tada for nil" do
-      promo_name = "changelog_weekly_2"
-      now        = DateTime.now
-      future     = now + 7.days
-      pc         = PromoCode.new({:name => promo_name, :free_private_projects => 3, :end_date => future})
-      pc.save!.should be_true
-      tada = PromoCode.by_name(promo_name)
+      now = DateTime.now
+      future = now + 7.days
+      PromoCode.new({:name => "changelog_weekly_1", :free_private_projects => 3, :end_date => future}).save
+      tada = PromoCode.by_name("changelog_weekly_1")
       tada.should_not be_nil
-      tada.name.should eq(promo_name)
+      tada.name.should eq("changelog_weekly_1")
       tada.free_private_projects.should eq(3)
       tada.redeemed.should eq(0)
       tada.end_date.should_not be_nil

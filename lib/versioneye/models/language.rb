@@ -1,4 +1,5 @@
 class Language < Versioneye::Model
+
   include Mongoid::Document
   include Mongoid::Timestamps
 

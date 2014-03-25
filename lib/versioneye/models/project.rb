@@ -91,8 +91,8 @@ class Project < Versioneye::Model
   def self.find_by_id( id )
     Project.find( id )
   rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join("\n")
+    log.error e.message
+    log.error e.backtrace.join('\n')
     nil
   end
 
@@ -136,21 +136,6 @@ class Project < Versioneye::Model
     collaborators.each do |collaborator|
       collaborator.remove
     end
-  end
-
-  def outdated?
-    self.projectdependencies.each do |dep|
-      return true if dep.outdated?
-    end
-    false
-  end
-
-  def outdated_dependencies
-    outdated_dependencies = Array.new
-    self.projectdependencies.each do |dep|
-      outdated_dependencies << dep if dep.outdated?
-    end
-    outdated_dependencies
   end
 
   def known_dependencies

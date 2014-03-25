@@ -22,6 +22,7 @@ class Notification < Versioneye::Model
     Notification.where( sent_email: 'false', user_id: user.id )
   end
 
+  # TODO email
   def self.send_notifications
     count = 0
     user_ids = Notification.all.distinct(:user_id)
@@ -34,32 +35,31 @@ class Notification < Versioneye::Model
         count += 1 if self.send_unsend_notifications user
       end
     end
-    # TODO mailer
     # NotificationMailer.status( count ).deliver
-    logger.info "Send out #{count} emails"
+    log.info "Send out #{count} emails"
     count
   end
 
+  # TODO email
   def self.send_unsend_notifications user
     notifications = self.unsent_user_notifications user
     return false if notifications.nil? || notifications.empty?
 
     notifications.sort_by {|notice| [notice.product.language]}
-    # TODO mailer
     # NotificationMailer.new_version_email( user, notifications ).deliver
-    logger.info "send notifications for user #{user.fullname} start"
+    log.info "send notifications for user #{user.fullname} start"
     return true
   rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join("\n")
+    log.error e.message
+    log.error e.backtrace.join("\n")
     return false
   end
 
   def self.remove_notifications user
-    logger.info " -- No user found for id: #{user.id} "
+    log.info " -- No user found for id: #{user.id} "
     notifications = Notification.where( :user_id => user.id )
     notifications.each do |notification|
-      logger.info " ---- Remove notification for user id: #{user.id} "
+      log.info " ---- Remove notification for user id: #{user.id} "
       notification.remove
     end
   end

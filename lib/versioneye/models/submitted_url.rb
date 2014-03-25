@@ -41,6 +41,7 @@ class SubmittedUrl < Versioneye::Model
     end
   end
 
+  # TODO email
   def update_integration_status
     resource = self.product_resource
     return false if resource.nil? || resource.prod_key.nil?
@@ -52,17 +53,16 @@ class SubmittedUrl < Versioneye::Model
 
     if self.save
       submitted_url = self
-      # TODO mailer
       # SubmittedUrlMailer.integrated_url_email(submitted_url, product).deliver
       return true
     else
-      logger.error "Failed to update integration status for submittedUrl.#{self._id}"
-      logger.error self.errors.full_messages.to_sentence
+      log.error "Failed to update integration status for submittedUrl.#{self._id}"
+      log.error self.errors.full_messages.to_sentence
     end
     false
   rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join('\n')
+    log.error e.message
+    log.error e.backtrace.join('\n')
     false
   end
 

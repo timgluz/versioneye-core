@@ -11,7 +11,7 @@ class VersionService
       end
     end
     filtered = versions if filtered.empty?
-    sorted = Naturalsorter::Sorter.sort_version_by_method( filtered, 'version', false )
+    sorted = Naturalsorter::Sorter.sort_version_by_method( filtered, 'to_s', false )
     sorted.first
   rescue => e
     logger.error e.message
@@ -36,7 +36,7 @@ class VersionService
     VersionService.newest_version( versions, stability )
   end
 
-  # TODO write test
+
   def self.newest_version_from_wildcard( versions, version_start, stability = 'stable')
     version_start.gsub!(/x/i, "*")
     versions_filtered = versions_start_with( versions, version_start )
@@ -187,29 +187,18 @@ class VersionService
   end
 
 
-  def self.update_version_data( product, persist = true )
-    return nil if product.nil?
-    versions = product.versions
-    return nil if versions.nil? || versions.empty?
-    newest_stable_version = self.newest_version( versions )
-    return nil if newest_stable_version.to_s.eql?( product.version)
-    product.version      = newest_stable_version.to_s
-    product.save if persist
-  rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join("\n")
-  end
-
-
   # TODO test
   def self.average_release_time( versions )
     return nil if versions.nil? || versions.empty? || versions.size == 1
+
     released_versions = self.versions_with_released_date( versions )
     return nil if released_versions.nil? || released_versions.empty? || released_versions.size < 3
+
     sorted_versions = released_versions.sort! { |a,b| a.released_at <=> b.released_at }
     first = sorted_versions.first.released_at
     last  = sorted_versions.last.released_at
     return nil if first.nil? || last.nil?
+
     diff = last.to_i - first.to_i
     diff_days = diff / 60 / 60 / 24
     average = diff_days / sorted_versions.size
@@ -223,10 +212,12 @@ class VersionService
 
   def self.estimated_average_release_time( versions )
     return nil if versions.nil? || versions.empty? || versions.size == 1
+
     sorted_versions = versions.sort! { |a,b| a.created_at <=> b.created_at }
     first = sorted_versions.first.created_at
     last  = sorted_versions.last.created_at
     return nil if first.nil? || last.nil?
+
     diff = last.to_i - first.to_i
     diff_days = diff / 60 / 60 / 24
     average = diff_days / sorted_versions.size

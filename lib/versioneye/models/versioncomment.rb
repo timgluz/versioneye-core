@@ -28,6 +28,8 @@ class Versioncomment < Versioneye::Model
   def self.find_by_id( id )
     Versioncomment.find( id )
   rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
     nil
   end
 

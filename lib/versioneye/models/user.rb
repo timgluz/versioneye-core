@@ -118,9 +118,8 @@ class User < Versioneye::Model
     self.verification = secure_hash("#{random}--#{username}")
   end
 
-  # TODO email
   def send_verification_email
-    # UserMailer.verification_email(self, self.verification, self.email).deliver
+    UserMailer.verification_email(self, self.verification, self.email).deliver
   end
 
   def self.send_verification_reminders
@@ -131,23 +130,21 @@ class User < Versioneye::Model
     end
   end
 
-  # TODO email
   def send_verification_reminder
     if !self.verification.nil? && self.deleted != true
-      # UserMailer.verification_email_reminder(self, self.verification, self.email).deliver
+      UserMailer.verification_email_reminder(self, self.verification, self.email).deliver
     end
   rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join('\n')
+    log.error e.message
+    log.error e.backtrace.join('\n')
   end
 
-  # TODO email
   def send_suggestions
     return nil if deleted || email_inactive
-    # UserMailer.suggest_packages_email(self).deliver
+    UserMailer.suggest_packages_email(self).deliver
   rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join('\n')
+    log.error e.message
+    log.error e.backtrace.join('\n')
     nil
   end
 
@@ -166,9 +163,8 @@ class User < Versioneye::Model
     self.username = name
   end
 
-  # TODO email
   def self.new_user_email(user)
-    # UserMailer.new_user_email(user).deliver
+    UserMailer.new_user_email(user).deliver
   end
 
   def self.activate!(verification)
@@ -204,16 +200,16 @@ class User < Versioneye::Model
     return nil if id.nil?
     return User.find(id.to_s)
   rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join("\n")
+    log.error e.message
+    log.error e.backtrace.join("\n")
     nil
   end
 
   def self.find_by_ids( ids )
     User.where(:id.in => ids)
   rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join("\n")
+    log.error e.message
+    log.error e.backtrace.join("\n")
     nil
   end
 
@@ -285,8 +281,8 @@ class User < Versioneye::Model
     user = User.find( id )
     ( user && user.salt == coockie_salt ) ? user : nil
   rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join("\n")
+    log.error e.message
+    log.error e.backtrace.join("\n")
     nil
   end
 

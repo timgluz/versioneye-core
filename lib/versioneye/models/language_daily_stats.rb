@@ -33,7 +33,7 @@ class LanguageDailyStats < Versioneye::Model
     ndays += skip
     ndays.times do |n|
       next if n < skip
-      logger.debug( "Counting language_daily_stats: #{n + 1} / #{ndays}" )
+      log.debug( "Counting language_daily_stats: #{n + 1} / #{ndays}" )
       self.update_day_stats(n)
     end
   end
@@ -94,7 +94,7 @@ class LanguageDailyStats < Versioneye::Model
       self.inc_version(metric_key)
       self.inc_novel(metric_key) if LanguageDailyStats.novel?(release, prod_info)
     else
-      logger.error("Product #{release[:prod_key]} misses language or language are not supported.")
+      log.error("Product #{release[:prod_key]} misses language or language are not supported.")
     end
   end
 
@@ -162,7 +162,7 @@ class LanguageDailyStats < Versioneye::Model
   #shows only metrics of Stats doc
   def self.doc_metrics(doc)
     if doc.nil?
-      logger.warn("It tried to read not existing todays stat - returning new empty doc.")
+      log.warn("It tried to read not existing todays stat - returning new empty doc.")
       doc = self.new_document(Date.today)
     end
     doc.metrics

@@ -34,7 +34,7 @@ class Product < Versioneye::Model
   field :prod_key     , type: String # Unique identifier inside a language
   field :prod_type    , type: String # Identifies the package manager
   field :language     , type: String
-  field :version      , type: String # latest stable version
+  field :version      , type: String, default: '0.0.0+NA' # latest stable version
 
   field :group_id   , type: String # Maven specific
   field :artifact_id, type: String # Maven specific
@@ -62,8 +62,15 @@ class Product < Versioneye::Model
 
   has_and_belongs_to_many :users
 
+  validates_presence_of :language , :message => 'language  is mandatory!'
+  validates_presence_of :prod_type, :message => 'prod_type is mandatory!'
+  validates_presence_of :prod_key , :message => 'prod_key  is mandatory!'
+  validates_presence_of :name     , :message => 'name      is mandatory!'
+
+  attr_accessor :average_release_time
   attr_accessor :released_days_ago, :released_ago_in_words, :released_ago_text
   attr_accessor :in_my_products, :dependencies_cache
+
 
   scope :by_language, ->(lang){where(language: lang)}
 
@@ -87,8 +94,13 @@ class Product < Versioneye::Model
     A_LANGS_DEP_BADGE.include?(self.language)
   end
 
+  def save(*arg)
+    self.name_downcase = self.name.downcase if self.name
+    super
+  end
+
   def to_s
-    "<Product #{prod_key}(#{version}) ##{language}>"
+    "<Product #{language}/#{prod_key}(#{version}) >"
   end
 
   def to_param
@@ -100,7 +112,7 @@ class Product < Versioneye::Model
   def self.find_by_id id
     self.find id
   rescue => e
-    logger.error e.message
+    log.error e.message
     nil
   end
 
@@ -118,21 +130,15 @@ class Product < Versioneye::Model
 
   # legacy, still used by fall back search and API v1.0
   def self.find_by_key searched_key
-    return nil if searched_key.to_s.strip.empty?
-    Product.where(prod_key: searched_key).shift
-  rescue => e
-    logger.error e.message
-    nil
+    Product.where(prod_key: searched_key).first
   end
 
   def self.find_by_lang_key language, searched_key
-    return nil if searched_key.to_s.strip.empty? || language.to_s.strip.empty?
     Product.where(language: language, prod_key: searched_key).shift
   end
 
   # This is slow!! Searches by regex are always slower than exact searches!
   def self.find_by_lang_key_case_insensitiv language, searched_key
-    return nil if searched_key.to_s.strip.empty? || language.to_s.strip.empty?
     result = Product.where( prod_key: /^#{searched_key}$/i, language: /^#{language}$/i ).shift
   end
 
@@ -153,8 +159,8 @@ class Product < Versioneye::Model
   def sorted_versions
     Naturalsorter::Sorter.sort_version_by_method( versions, "version", false )
   rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join('\n')
+    log.error e.message
+    log.error e.backtrace.join('\n')
     versions
   end
 
@@ -164,7 +170,7 @@ class Product < Versioneye::Model
     end
     nil
   rescue => e
-    logger.error e
+    log.error e
     nil
   end
 
@@ -181,10 +187,10 @@ class Product < Versioneye::Model
   end
 
   def check_nil_version
-    return nil if version
-    return nil if versions.nil? or versions.empty?
-    self.version = sorted_versions.first
-    self.save
+    if versions && !versions.empty? && (version.nil? || version.eql?('0.0.0+NA'))
+      self.version = sorted_versions.first
+      self.save
+    end
   end
 
   ######## ENCODE / DECODE ###################
@@ -221,12 +227,7 @@ class Product < Versioneye::Model
   ########## UPDATE #############
 
   def update_used_by_count persist = true
-    grouped = nil
-    if self.prod_type && self.prod_type.eql?( Project::A_TYPE_BOWER )
-      grouped = Dependency.where(:prod_type => self.prod_type, :dep_prod_key => self.name).group_by(&:name)
-    else
-      grouped = Dependency.where(:language => self.language, :dep_prod_key => self.prod_key).group_by(&:prod_key)
-    end
+    grouped = Dependency.where(:language => self.language, :dep_prod_key => self.prod_key).group_by(&:prod_key)
     count = grouped.count
     return nil if count == self.used_by_count
     self.used_by_count = count
@@ -313,6 +314,10 @@ class Product < Versioneye::Model
 
   def http_version_links
     Versionlink.where(language: language, prod_key: self.prod_key, version_id: self.version, link: /^http*/ ).asc(:name)
+  end
+
+  def archives
+    downloads = Versionarchive.archives( self.language, self.prod_key, version.to_s )
   end
 
   def self.unique_languages_for_product_ids(product_ids)

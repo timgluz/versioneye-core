@@ -1,4 +1,5 @@
 require 'versioneye/model'
+require 'versioneye/service'
 
 class VersioneyeCore
 

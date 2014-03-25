@@ -1,4 +1,5 @@
 class GithubRepo < Versioneye::Model
+
   require 'will_paginate/array'
 
   include Mongoid::Document
@@ -68,6 +69,10 @@ class GithubRepo < Versioneye::Model
       user.save
     end
     user[:github_login]
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    nil
   end
 
 
@@ -110,8 +115,8 @@ class GithubRepo < Versioneye::Model
 
     repo
   rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join("\n")
+    log.error e.message
+    log.error e.backtrace.join("\n")
     nil
   end
 

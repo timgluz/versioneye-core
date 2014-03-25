@@ -9,6 +9,7 @@ class BillingAddress < Versioneye::Model
   field :zip    , type: String
   field :city   , type: String
   field :country, type: String
+  field :vat    , type: String
 
   belongs_to :user
 
@@ -19,6 +20,7 @@ class BillingAddress < Versioneye::Model
     self.zip     = params[:zip_code]
     self.city    = params[:city]
     self.country = params[:country]
+    self.vat     = params[:vat]
     self.save
   end
 
