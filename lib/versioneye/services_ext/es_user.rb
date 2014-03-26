@@ -1,7 +1,7 @@
 class EsUser
 
   def self.create_index_with_mappings
-    Tire.index(Settings.elasticsearch_user_index) do
+    Tire.index(Settings.instance.elasticsearch_user_index) do
       create :mappings => {
         :user => {
           :properties => {
@@ -17,7 +17,7 @@ class EsUser
   #-- search
   def self.search(term, results_per_page = 10)
     q = term || '*'
-    s = Tire.search(Settings.elasticsearch_user_index,
+    s = Tire.search(Settings.instance.elasticsearch_user_index,
                     load: true,
                     search_type: 'dfs_query_and_fetch',
                     size: results_per_page) do |search|
@@ -31,7 +31,7 @@ class EsUser
 
   #--  admin funcs
   def self.clean_all
-    Tire.index( Settings.elasticsearch_user_index ).delete
+    Tire.index( Settings.instance.elasticsearch_user_index ).delete
   end
 
   def self.reset
@@ -40,7 +40,7 @@ class EsUser
   end
 
   def self.refresh
-    Tire.index( Settings.elasticsearch_user_index ).refresh
+    Tire.index( Settings.instance.elasticsearch_user_index ).refresh
   end
 
   def self.index_all
@@ -50,7 +50,7 @@ class EsUser
 
   def self.index(user)
     log.info "indexing: #{user[:username]}"
-    Tire.index Settings.elasticsearch_user_index do
+    Tire.index Settings.instance.elasticsearch_user_index do
       store user.to_indexed_json
     end
   rescue => e

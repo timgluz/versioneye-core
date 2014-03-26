@@ -1,7 +1,7 @@
 class EsProduct
 
   def self.create_index_with_mappings
-    Tire.index Settings.elasticsearch_product_index do
+    Tire.index Settings.instance.elasticsearch_product_index do
       create :settings => {
           :number_of_shards => 1,
           :number_of_replicas => 1,
@@ -63,7 +63,7 @@ class EsProduct
   end
 
   def self.clean_all
-    Tire.index( Settings.elasticsearch_product_index ).delete
+    Tire.index( Settings.instance.elasticsearch_product_index ).delete
   end
 
   def self.reset
@@ -80,7 +80,7 @@ class EsProduct
 
   def self.index( product )
     log.info "index #{product.name}"
-    Tire.index Settings.elasticsearch_product_index do
+    Tire.index Settings.instance.elasticsearch_product_index do
       store product.to_indexed_json
       product.update_attribute(:reindex, false)
     end
@@ -90,7 +90,7 @@ class EsProduct
   end
 
   def self.refresh
-    Tire.index( Settings.elasticsearch_product_index ).refresh
+    Tire.index( Settings.instance.elasticsearch_product_index ).refresh
   end
 
   def self.index_and_refresh( product )
@@ -110,7 +110,7 @@ class EsProduct
   end
 
   def self.remove( product )
-    Tire.index( Settings.elasticsearch_product_index ).remove( product.id )
+    Tire.index( Settings.instance.elasticsearch_product_index ).remove( product.id )
   end
 
   # langs: need to be an Array !
@@ -130,7 +130,7 @@ class EsProduct
     q = "*" if !q || q.empty?
     q.downcase
 
-    s = Tire.search( Settings.elasticsearch_product_index,
+    s = Tire.search( Settings.instance.elasticsearch_product_index,
                       load: true,
                       from: from,
                       search_type: "dfs_query_and_fetch",
@@ -170,7 +170,7 @@ class EsProduct
   def self.autocomplete(term, results_per_page = 10)
     q = term || "*"
     s = Tire.search(
-          Settings.elasticsearch_product_index,
+          Settings.instance.elasticsearch_product_index,
           load: true,
           search_type: 'dfs_query_and_fetch',
           size: results_per_page

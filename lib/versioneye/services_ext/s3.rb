@@ -3,20 +3,20 @@ class S3
   def self.url_for filename
     return nil if filename.to_s.empty?
     encoded_name = URI.encode( filename )
-    url = AWS.s3.buckets[Settings.s3_projects_bucket].objects[encoded_name].url_for( :read, :secure => true )
+    url = AWS.s3.buckets[Settings.instance.s3_projects_bucket].objects[encoded_name].url_for( :read, :secure => true )
     url.to_s
   end
 
   def self.infographic_url_for filename
     return nil if filename.to_s.empty?
     encoded_name = URI.encode( filename )
-    url = AWS.s3.buckets[Settings.s3_infographics_bucket].objects[encoded_name].url_for( :read, :secure => true )
+    url = AWS.s3.buckets[Settings.instance.s3_infographics_bucket].objects[encoded_name].url_for( :read, :secure => true )
     url.to_s
   end
 
   def self.delete filename
     return nil if filename.nil? || filename.empty?
-    AWS.s3.buckets[Settings.s3_projects_bucket].objects[filename].delete
+    AWS.s3.buckets[Settings.instance.s3_projects_bucket].objects[filename].delete
   end
 
   def self.upload_fileupload file_up
@@ -60,7 +60,7 @@ class S3
   end
 
   def self.store_in_project_bucket filename, bin
-    bucket = AWS.s3.buckets[Settings.s3_projects_bucket]
+    bucket = AWS.s3.buckets[Settings.instance.s3_projects_bucket]
     obj    = bucket.objects[ filename ]
     obj.write bin
   rescue => e

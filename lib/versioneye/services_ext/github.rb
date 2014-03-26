@@ -36,7 +36,7 @@ class Github
   })
 
   def self.token code
-    response = Octokit.exchange_code_for_token code, Settings.github_client_id, Settings.github_client_secret
+    response = Octokit.exchange_code_for_token code, Settings.instance.github_client_id, Settings.instance.github_client_secret
     response.access_token
   end
 

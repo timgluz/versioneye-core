@@ -3,7 +3,7 @@ require 'octokit'
 class OctokitApi
 
   def self.application_authentication
-    { :client_id => Settings.github_client_id, :client_secret => Settings.github_client_secret }
+    { :client_id => Settings.instance.github_client_id, :client_secret => Settings.instance.github_client_secret }
   end
 
   # Singleton pattern
