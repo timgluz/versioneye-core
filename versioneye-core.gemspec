@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["reiz"]
-  s.date = "2014-02-01"
+  s.date = "2014-03-26"
   s.description = "This project contains the Models and Services for VersionEye"
   s.email = "robert.reiz.81@gmail.com"
   s.extra_rdoc_files = [
@@ -25,7 +25,10 @@ Gem::Specification.new do |s|
     "README.rdoc",
     "Rakefile",
     "VERSION",
+    "config/log4r.xml",
     "config/mongoid.yml",
+    "config/settings.json",
+    "lib/settings.rb",
     "lib/versioneye-core.rb",
     "lib/versioneye/model.rb",
     "lib/versioneye/models/api.rb",
@@ -74,13 +77,23 @@ Gem::Specification.new do |s|
     "lib/versioneye/service.rb",
     "lib/versioneye/services/analytics_service.rb",
     "lib/versioneye/services/bitbucket_service.rb",
+    "lib/versioneye/services/circle_element_service.rb",
     "lib/versioneye/services/dependency_service.rb",
     "lib/versioneye/services/git_hub_service.rb",
     "lib/versioneye/services/product_service.rb",
     "lib/versioneye/services/project_service.rb",
+    "lib/versioneye/services/projectdependency_service.rb",
     "lib/versioneye/services/statistic_service.rb",
     "lib/versioneye/services/user_service.rb",
     "lib/versioneye/services/version_service.rb",
+    "lib/versioneye/services_ext/bitbucket.rb",
+    "lib/versioneye/services_ext/es_product.rb",
+    "lib/versioneye/services_ext/es_user.rb",
+    "lib/versioneye/services_ext/github.rb",
+    "lib/versioneye/services_ext/mongo_product.rb",
+    "lib/versioneye/services_ext/octokit_api.rb",
+    "lib/versioneye/services_ext/s3.rb",
+    "lib/versioneye/services_ext/stripe_service.rb",
     "lib/versioneye/version.rb",
     "spec/spec_helper.rb",
     "spec/versioneye-core_spec.rb",
@@ -105,6 +118,7 @@ Gem::Specification.new do |s|
     "spec/versioneye/factories/user_factory.rb",
     "spec/versioneye/factories/version_factory.rb",
     "spec/versioneye/models/.DS_Store",
+    "spec/versioneye/models/api_spec.rb",
     "spec/versioneye/models/circle_element_spec.rb",
     "spec/versioneye/models/dependency_spec.rb",
     "spec/versioneye/models/developer_spec.rb",
@@ -130,6 +144,15 @@ Gem::Specification.new do |s|
     "spec/versioneye/models/versionarchive_spec.rb",
     "spec/versioneye/models/versioncomment_spec.rb",
     "spec/versioneye/models/versionlink_spec.rb",
+    "spec/versioneye/services/bitbucket_service_spec.rb",
+    "spec/versioneye/services/circle_element_service_spec.rb",
+    "spec/versioneye/services/dependency_service_spec.rb",
+    "spec/versioneye/services/product_service_spec.rb",
+    "spec/versioneye/services/project_service_spec.rb",
+    "spec/versioneye/services/projectdependency_service_spec.rb",
+    "spec/versioneye/services/user_service_spec.rb",
+    "spec/versioneye/services/version_service_minimum_stability_spec.rb",
+    "spec/versioneye/services/version_service_spec.rb",
     "versioneye-core.gemspec"
   ]
   s.homepage = "http://github.com/versioneye/versioneye-core"
@@ -146,6 +169,16 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<naturalsorter>, ["= 2.0.8"])
       s.add_runtime_dependency(%q<mongoid>, ["~> 3.1.0"])
       s.add_runtime_dependency(%q<log4r>, ["= 1.1.10"])
+      s.add_runtime_dependency(%q<dalli>, ["= 2.7.0"])
+      s.add_runtime_dependency(%q<kgio>, ["~> 2.9.0"])
+      s.add_runtime_dependency(%q<oauth>, ["= 0.4.7"])
+      s.add_runtime_dependency(%q<aws-sdk>, ["~> 1.0"])
+      s.add_runtime_dependency(%q<stripe>, ["= 1.10.1"])
+      s.add_runtime_dependency(%q<tire>, ["= 0.6.2"])
+      s.add_runtime_dependency(%q<octokit>, ["~> 2.7.0"])
+      s.add_runtime_dependency(%q<semverly>, ["= 1.0.0"])
+      s.add_runtime_dependency(%q<httparty>, ["= 0.13.0"])
+      s.add_runtime_dependency(%q<persistent_httparty>, ["= 0.1.1"])
       s.add_development_dependency(%q<bundler>, ["~> 1.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 2.0.1"])
     else
@@ -153,6 +186,16 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<naturalsorter>, ["= 2.0.8"])
       s.add_dependency(%q<mongoid>, ["~> 3.1.0"])
       s.add_dependency(%q<log4r>, ["= 1.1.10"])
+      s.add_dependency(%q<dalli>, ["= 2.7.0"])
+      s.add_dependency(%q<kgio>, ["~> 2.9.0"])
+      s.add_dependency(%q<oauth>, ["= 0.4.7"])
+      s.add_dependency(%q<aws-sdk>, ["~> 1.0"])
+      s.add_dependency(%q<stripe>, ["= 1.10.1"])
+      s.add_dependency(%q<tire>, ["= 0.6.2"])
+      s.add_dependency(%q<octokit>, ["~> 2.7.0"])
+      s.add_dependency(%q<semverly>, ["= 1.0.0"])
+      s.add_dependency(%q<httparty>, ["= 0.13.0"])
+      s.add_dependency(%q<persistent_httparty>, ["= 0.1.1"])
       s.add_dependency(%q<bundler>, ["~> 1.0"])
       s.add_dependency(%q<jeweler>, ["~> 2.0.1"])
     end
@@ -161,6 +204,16 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<naturalsorter>, ["= 2.0.8"])
     s.add_dependency(%q<mongoid>, ["~> 3.1.0"])
     s.add_dependency(%q<log4r>, ["= 1.1.10"])
+    s.add_dependency(%q<dalli>, ["= 2.7.0"])
+    s.add_dependency(%q<kgio>, ["~> 2.9.0"])
+    s.add_dependency(%q<oauth>, ["= 0.4.7"])
+    s.add_dependency(%q<aws-sdk>, ["~> 1.0"])
+    s.add_dependency(%q<stripe>, ["= 1.10.1"])
+    s.add_dependency(%q<tire>, ["= 0.6.2"])
+    s.add_dependency(%q<octokit>, ["~> 2.7.0"])
+    s.add_dependency(%q<semverly>, ["= 1.0.0"])
+    s.add_dependency(%q<httparty>, ["= 0.13.0"])
+    s.add_dependency(%q<persistent_httparty>, ["= 0.1.1"])
     s.add_dependency(%q<bundler>, ["~> 1.0"])
     s.add_dependency(%q<jeweler>, ["~> 2.0.1"])
   end
