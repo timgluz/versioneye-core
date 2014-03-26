@@ -1,3 +1,4 @@
+require 'settings'
 require 'versioneye/model'
 require 'versioneye/service'
 
