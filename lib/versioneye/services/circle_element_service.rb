@@ -1,4 +1,4 @@
-class CircleElementService
+class CircleElementService < Versioneye::Service
 
 
   # TODO refactor usage

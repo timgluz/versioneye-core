@@ -1,4 +1,4 @@
-class AnalyticsService
+class AnalyticsService < Versioneye::Service
 
   # this class provides business analytics services to find out which products our users really need
 

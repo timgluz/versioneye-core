@@ -1,7 +1,7 @@
 require 'benchmark'
 require 'dalli'
 
-class BitbucketService
+class BitbucketService < Versioneye::Service
 
   A_TASK_NIL     = nil
   A_TASK_RUNNING = 'running'

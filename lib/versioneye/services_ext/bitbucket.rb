@@ -1,6 +1,6 @@
 require 'oauth'
 
-class Bitbucket
+class Bitbucket < Versioneye::Service
 
   A_API_URL = "https://bitbucket.org"
   A_API_V2_PATH = "/api/2.0"
@@ -8,11 +8,11 @@ class Bitbucket
   A_DEFAULT_HEADERS = {"User-Agent" => "Chrome28 (contact@versioneye.com)"}
 
   def self.consumer_key
-   Settings.bitbucket_token
+   Settings.instance.bitbucket_token
   end
 
   def self.init_oauth_client
-    OAuth::Consumer.new(Settings.bitbucket_token, Settings.bitbucket_secret,
+    OAuth::Consumer.new(Settings.instance.bitbucket_token, Settings.instance.bitbucket_secret,
                        site: A_API_URL,
                        request_token_path: "/api/1.0/oauth/request_token",
                        authorize_path: "/api/1.0/oauth/authenticate",

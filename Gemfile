@@ -14,6 +14,7 @@ gem 'octokit'            , '~> 2.7.0'
 gem 'semverly'           , '1.0.0'
 gem 'httparty'           , '0.13.0'
 gem 'persistent_httparty', '0.1.1'
+gem 'json'               , '~> 1.8.0'
 
 group :development do
   gem 'bundler', '~> 1.0'
@@ -21,6 +22,7 @@ group :development do
 end
 
 group :test do
+  gem 'turn'              , :require => false
   gem 'shoulda'         , '>= 0'
   gem 'rdoc'            , '~> 3.12'
   gem 'simplecov'       , '>= 0'
@@ -32,4 +34,5 @@ group :test do
   gem 'capybara-firebug', '~> 2.0.0'
   gem 'vcr'             , '~> 2.8.0',  :require => false
   gem 'webmock'         , '~> 1.17.0', :require => false
+  gem 'fakeweb'         , '~> 1.3.0'
 end

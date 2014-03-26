@@ -1,3 +1,9 @@
+require 'log4r'
+require 'log4r/configurator'
+require 'mongoid'
+require 'dalli'
+require 'httparty'
+
 require 'settings'
 require 'versioneye/model'
 require 'versioneye/service'
@@ -9,7 +15,7 @@ class VersioneyeCore
   end
 
   def self.servus
-    puts "Servus!"
+    puts "Ja Servus!"
   end
 
 end

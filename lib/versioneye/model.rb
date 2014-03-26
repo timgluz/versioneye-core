@@ -1,11 +1,6 @@
 module Versioneye
   class Model
 
-    require 'mongoid'
-
-    require 'log4r'
-    require 'log4r/configurator'
-
     include Log4r
 
     Configurator.load_xml_file('config/log4r.xml')

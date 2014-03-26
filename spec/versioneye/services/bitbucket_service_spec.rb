@@ -18,7 +18,7 @@ describe BitbucketService do
   let(:user){create(:bitbucket_user,
                     :bitbucket_token => 'YsR6vM5qxmfZtkYt9G',
                     :bitbucket_secret => 'raEFhqE2YuBZtwqswGXFRZEzLnnLD8Lu',
-                    :bitbucket_login => Settings.bitbucket_username )}
+                    :bitbucket_login => Settings.instance.bitbucket_username )}
 
   context "as authorized user" do
     before :each do
