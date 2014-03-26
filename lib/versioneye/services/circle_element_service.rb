@@ -26,8 +26,8 @@ class CircleElementService
     end
     return self.fetch_deps(1, hash, Hash.new, lang)
   rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join("\n")
+    log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
 
@@ -71,8 +71,8 @@ class CircleElementService
     merged_hash = parent_merged.merge(rec_hash)
     return merged_hash
   rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join("\n")
+    log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
 

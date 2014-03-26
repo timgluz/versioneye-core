@@ -2,7 +2,7 @@ class ProjectFactory
 
   def self.create_new(user, extra_fields = nil, save = true)
     if user.nil? or user.to_s.empty?
-      logger.error "User was unspecified or empty."
+      log.error "User was unspecified or empty."
     end
 
     if user.is_a? Mongoid::Document

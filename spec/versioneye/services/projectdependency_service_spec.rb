@@ -18,40 +18,40 @@ describe ProjectdependencyService do
   describe "outdated?" do
 
     it "is up to date" do
-      dep                   = ProjectdependencyFactory.create_new(@project, @product)
+      dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.version_requested = "1.0"
       dep.outdated?.should be_false
       dep.unknown?.should  be_false
     end
 
     it "is outdated" do
-      dep                   = ProjectdependencyFactory.create_new(@project, @product)
+      dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.version_requested = "0.9"
       ProjectdependencyService.outdated?(dep).should be_true
       dep.unknown?.should  be_false
     end
 
     it "is up to date" do
-      dep                   = ProjectdependencyFactory.create_new(@project, @product)
+      dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.version_requested = "1.9"
       ProjectdependencyService.outdated?(dep).should be_false
       dep.unknown?.should  be_false
     end
 
     it "is up to date because it is GIT" do
-      dep                   = ProjectdependencyFactory.create_new(@project, @product)
+      dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.version_requested = "GIT"
       ProjectdependencyService.outdated?(dep).should be_false
     end
 
     it "is up to date because it is PATH" do
-      dep                   = ProjectdependencyFactory.create_new(@project, @product)
+      dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.version_requested = "PATH"
       ProjectdependencyService.outdated?(dep).should be_false
     end
 
     it "is up to date because it is unknown" do
-      dep                   = ProjectdependencyFactory.create_new(@project, nil)
+      dep = ProjectdependencyFactory.create_new(@project, nil)
       dep.version_requested = "2.0.0"
       ProjectdependencyService.outdated?(dep).should be_false
       dep.unknown?.should  be_true
@@ -91,7 +91,7 @@ describe ProjectdependencyService do
     end
 
     it "checks the cache" do
-      dep                   = ProjectdependencyFactory.create_new(@project, @product)
+      dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.version_requested = "1.0"
       ProjectdependencyService.outdated?(dep).should be_false
       dep.unknown?.should  be_false
@@ -107,7 +107,7 @@ describe ProjectdependencyService do
   describe "update_version_current" do
 
     it "doesnt update because prod_key is nil" do
-      dep                   = ProjectdependencyFactory.create_new(@project, @product)
+      dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.prod_key          = nil
       dep.version_requested = '0.1'
       ProjectdependencyService.update_version_current( dep )
@@ -115,7 +115,7 @@ describe ProjectdependencyService do
     end
 
     it "doesnt update because prod_key is empty" do
-      dep                   = ProjectdependencyFactory.create_new(@project, @product)
+      dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.prod_key          = ''
       dep.version_requested = '0.1'
       ProjectdependencyService.update_version_current( dep )
@@ -123,7 +123,7 @@ describe ProjectdependencyService do
     end
 
     it "doesnt update because prod_key, group_id and artifact_id are unknown" do
-      dep                   = ProjectdependencyFactory.create_new(@project, @product)
+      dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.prod_key          = 'gibts_doch_net'
       dep.group_id          = 'gibts_doch_net'
       dep.artifact_id       = 'gibts_doch_net'
@@ -140,7 +140,7 @@ describe ProjectdependencyService do
     end
 
     it "updates with the current verson from different language" do
-      user              = UserFactory.create_new
+      user = UserFactory.create_new
 
       project          = ProjectFactory.create_new( user )
       project.language = Product::A_LANGUAGE_JAVA
@@ -151,7 +151,7 @@ describe ProjectdependencyService do
       product.version  = product.versions.first.to_s
       product.save
 
-      dep                   = ProjectdependencyFactory.create_new(project, product)
+      dep = ProjectdependencyFactory.create_new(project, product)
       dep.language          = Product::A_LANGUAGE_JAVA
       dep.version_requested = '0.1'
       ProjectdependencyService.update_version_current( dep )

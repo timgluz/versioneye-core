@@ -1,4 +1,5 @@
-class ProjectService
+class ProjectService < Versioneye::Service
+
 
   def self.type_by_filename filename
     return nil if filename.to_s.empty?
@@ -51,7 +52,7 @@ class ProjectService
       project.save_dependencies
       return true
     else
-      logger.error "Can't save project: #{project.errors.full_messages.to_json}"
+      log.error "Can't save project: #{project.errors.full_messages.to_json}"
       return false
     end
   end
@@ -92,15 +93,15 @@ class ProjectService
     self.update_url project
     new_project = self.build_from_url project.url
     project.update_from new_project
-    Rails.cache.delete( project.id.to_s )
+    cache.delete( project.id.to_s )
     if send_email && project.out_number > 0 && project.user.email_inactive == false
-      logger.info "send out email notification for project: #{project.name} to user #{project.user.fullname}"
+      log.info "send out email notification for project: #{project.name} to user #{project.user.fullname}"
       ProjectMailer.projectnotification_email( project ).deliver
     end
     project
   rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join('\n')
+    log.error e.message
+    log.error e.backtrace.join('\n')
     nil
   end
 
@@ -120,7 +121,7 @@ class ProjectService
   def self.update_project_file_from_github project
     project_file = self.fetch_project_file project
     if project_file.to_s.strip.empty?
-      logger.error "Importing project file from Github failed."
+      log.error "Importing project file from Github failed."
       return nil
     end
     s3_infos = S3.upload_github_file( project_file, project_file[:name] )
@@ -131,7 +132,7 @@ class ProjectService
     filename = project.filename
     project_file = Github.fetch_project_file_from_branch project.scm_fullname, filename, project.scm_branch, project.user.github_token
     if project_file['content'].nil? && filename.eql?('pom.json')
-      logger.warn "project_file.content is nil for pom.json, try to fetch pom.xml"
+      log.warn "project_file.content is nil for pom.json, try to fetch pom.xml"
       filename = 'pom.xml'
       project_file = Github.fetch_project_file_from_branch project.scm_fullname, filename, project.scm_branch, project.user.github_token
     end
@@ -143,7 +144,7 @@ class ProjectService
     user = project.user
     project_content = Bitbucket.fetch_project_file_from_branch project.scm_fullname, project.scm_branch, project.filename, user.bitbucket_token, user.bitbucket_secret
     if project_content.nil? || project_content.to_s.empty?
-      logger.error "Importing project file from BitBucket failed."
+      log.error "Importing project file from BitBucket failed."
       return nil
     end
 
@@ -167,14 +168,14 @@ class ProjectService
     project_file = Github.fetch_project_file_from_branch(repo_name, filename, branch, user[:github_token] )
     if project_file.nil?
       error_msg = " Didn't find any project file of a supported package manager."
-      logger.error " Can't import project file `#{filename}` from #{repo_name} branch #{branch} "
+      log.error " Can't import project file `#{filename}` from #{repo_name} branch #{branch} "
       return error_msg
     end
 
     s3_info = S3.upload_github_file( project_file, project_file[:name] )
     if s3_info.nil? && !s3_info.has_key?('filename') && !s3_info.has_key?('s3_url')
       error_msg = "Connectivity issues - can't import project file for parsing."
-      logger.error " Can't upload file to s3: #{project_file[:name]}"
+      log.error " Can't upload file to s3: #{project_file[:name]}"
       return error_msg
     end
 
@@ -214,14 +215,14 @@ class ProjectService
     )
     if content.nil? or content == "error"
       error_msg = " Didn't find any project file of a supported package manager."
-      logger.error " Can't import project file `#{filename}` from #{repo_name} branch #{branch} "
+      log.error " Can't import project file `#{filename}` from #{repo_name} branch #{branch} "
       return error_msg
     end
 
     s3_info = S3.upload_file_content(content, filename)
     if s3_info.nil? && !s3_info.has_key?('filename') && !s3_info.has_key?('s3_url')
       error_msg = "Connectivity issues - can't import project file for parsing."
-      logger.error " Can't upload file to s3: #{project_file[:name]}"
+      log.error " Can't upload file to s3: #{project_file[:name]}"
       return error_msg
     end
 
@@ -257,8 +258,8 @@ class ProjectService
     parser       = ParserStrategy.parser_for( project_type, url )
     parser.parse url
   rescue => e
-    logger.error "Error in build_from_url(url) -> #{e.message}"
-    logger.error e.backtrace.join("\n")
+    log.error "Error in build_from_url(url) -> #{e.message}"
+    log.error e.backtrace.join("\n")
     Project.new
   end
 
@@ -324,7 +325,9 @@ class ProjectService
 
 
   def self.badge_for_project project_id
-    badge = Rails.cache.read project_id.to_s
+    log.debug "project_id: #{project_id}"
+    badge = cache.get project_id.to_s
+    log.info "badge: #{badge}"
     return badge if badge
 
     project = Project.find_by_id project_id.to_s
@@ -335,12 +338,12 @@ class ProjectService
 
 
   def self.update_badge_for_project project
-    badge    = project.outdated?() ? 'out-of-date' : 'up-to-date'
-    Rails.cache.write( project.id.to_s, badge, timeToLive: 6.hour)
+    badge    = outdated?(project) ? 'out-of-date' : 'up-to-date'
+    cache.set( project.id.to_s, badge, 21600) # TTL = 6.hour
     badge
   rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join "\n"
+    log.error e.message
+    log.error e.backtrace.join "\n"
     "unknown"
   end
 

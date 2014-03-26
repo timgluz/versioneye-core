@@ -12,7 +12,7 @@ class BitbucketService
   def self.update_repo_info(user, repo_fullname)
     current_repo = user.bitbucket_repos.where(fullname: repo_fullname).shift
     if current_repo.nil?
-      logger.error "User #{user[:username]} has no such repo `#{repo_fullname}`"
+      log.error "User #{user[:username]} has no such repo `#{repo_fullname}`"
       return nil
     end
 
@@ -32,12 +32,12 @@ class BitbucketService
     task_status = memcache.get(user_task_key)
 
     if task_status == A_TASK_RUNNING
-      logger.debug "Still importing data for #{user[:username]} from bitbucket"
+      log.debug "Still importing data for #{user[:username]} from bitbucket"
       return task_status
     end
 
     if user[:bitbucket_token] and user.bitbucket_repos.all.count == 0
-      logger.info "Going to import bitbucket data for #{user[:username]}"
+      log.info "Going to import bitbucket data for #{user[:username]}"
       task_status =  A_TASK_RUNNING
       memcache.set(user_task_key, task_status)
       Thread.new do
@@ -45,7 +45,7 @@ class BitbucketService
         memcache.set(user_task_key, A_TASK_DONE)
       end
     else
-      logger.info "Nothing to import - maybe clean user's repo?"
+      log.info "Nothing to import - maybe clean user's repo?"
       task_status = A_TASK_DONE
     end
 
@@ -92,7 +92,7 @@ class BitbucketService
     secret = user[:bitbucket_secret]
     repos = Bitbucket.read_repos_v1(token, secret)
     if repos.nil? or repos.empty?
-      logger.error "cache_invited_repos | didnt get any repos from APIv1."
+      log.error "cache_invited_repos | didnt get any repos from APIv1."
       return false
     end
     user.reload #pull newest updates
@@ -106,7 +106,7 @@ class BitbucketService
     invited_repos.each do |old_repo|
       repo = Bitbucket.repo_info(old_repo[:full_name], token, secret) #fetch repo info from api2
       if repo.nil?
-        logger.error "cache_invited_repos | didnt get repo info for `#{old_repo[:full_name]}`"
+        log.error "cache_invited_repos | didnt get repo info for `#{old_repo[:full_name]}`"
         next
       end
       add_repo(user, repo, token, secret)
@@ -123,7 +123,7 @@ class BitbucketService
       Thread.current[:val] = Bitbucket.repo_project_files(repo_name, token, secret)
     end
     bm = Benchmark.measure {read_branches.join; read_files.join; }
-    logger.info("#-- Added #{repo_name}\n#{bm}\n")
+    log.info("#-- Added #{repo_name}\n#{bm}\n")
     repo = BitbucketRepo.create_new(user, repo, read_branches[:val], read_files[:val])
     repo
   end

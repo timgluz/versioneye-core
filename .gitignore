@@ -15,7 +15,7 @@ doc
 # jeweler generated
 pkg
 
-# Have editor/IDE/OS specific files you need to ignore? Consider using a global gitignore: 
+# Have editor/IDE/OS specific files you need to ignore? Consider using a global gitignore:
 #
 # * Create a file at ~/.gitignore
 # * Include files you want ignored
@@ -47,3 +47,31 @@ pkg
 
 # For rubinius:
 #*.rbc
+
+/log
+/log/*
+/pids
+/pids/*
+/tmp/*
+.DS_Store
+
+*.rbc
+*.sassc
+.sass-cache
+.sass-cache/
+capybara-*.html
+.rspec
+/.bundle
+/vendor/bundle
+/coverage/
+/spec/tmp/*
+**.orig
+rerun.txt
+pickle-email-*.html
+.idea/
+.env
+app/assets/.DS_Store
+app/assets/images/.DS_Store
+webrate.log
+versioneye.sublime-project
+versioneye.sublime-workspace

@@ -32,7 +32,7 @@ class UserFactory
       return true
     end
 
-    logger.error "Can't delete Users default_values, because Rails is  in wrong environment: #{rails_mode}."
+    p "Can't delete Users default_values, because Rails is  in wrong environment: #{rails_mode}."
     return false
   end
 

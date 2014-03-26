@@ -1,9 +1,19 @@
 source "http://rubygems.org"
 
-gem 'will_paginate', '3.0.5'
-gem 'naturalsorter', '2.0.8'
-gem 'mongoid'      , '~> 3.1.0'
-gem 'log4r'        , '1.1.10'
+gem 'will_paginate'      , '3.0.5'
+gem 'naturalsorter'      , '2.0.8'
+gem 'mongoid'            , '~> 3.1.0'
+gem 'log4r'              , '1.1.10'
+gem 'dalli'              , '2.7.0'
+gem 'kgio'               , '~> 2.9.0'   # 20% performance boost for dalli
+gem 'oauth'              , '0.4.7' #:github => "oauth-xx/oauth-ruby" #'0.4.7'
+gem 'aws-sdk'            , '~> 1.0'
+gem 'stripe'             , '1.10.1'
+gem 'tire'               , '0.6.2'
+gem 'octokit'            , '~> 2.7.0'
+gem 'semverly'           , '1.0.0'
+gem 'httparty'           , '0.13.0'
+gem 'persistent_httparty', '0.1.1'
 
 group :development do
   gem 'bundler', '~> 1.0'
@@ -18,4 +28,8 @@ group :test do
   gem 'rspec-mocks'     , '2.14.4'
   gem 'database_cleaner', '1.2.0'
   gem 'factory_girl'    , '4.3.0'
+  gem 'capybara'        , '~> 2.2.0'
+  gem 'capybara-firebug', '~> 2.0.0'
+  gem 'vcr'             , '~> 2.8.0',  :require => false
+  gem 'webmock'         , '~> 1.17.0', :require => false
 end

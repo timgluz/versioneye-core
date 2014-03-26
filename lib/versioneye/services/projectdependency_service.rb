@@ -49,8 +49,8 @@ class ProjectdependencyService
     projectdependency.save
     projectdependency.outdated
   rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join '\n'
+    log.error e.message
+    log.error e.backtrace.join '\n'
     out_value
   end
 

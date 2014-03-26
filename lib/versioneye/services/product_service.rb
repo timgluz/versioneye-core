@@ -42,9 +42,9 @@ class ProductService
   def self.search(q, group_id = nil, languages = nil, page_count = 1)
     EsProduct.search(q, group_id, languages, page_count)
   rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join('\n')
-    logger.info  "Dam. We don't give up. Not yet! Start alternative search on awesome MongoDB."
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    log.info  "Dam. We don't give up. Not yet! Start alternative search on awesome MongoDB."
     MongoProduct.find_by(q, '', group_id, languages, 300).paginate(:page => page_count)
   end
 
@@ -89,8 +89,8 @@ class ProductService
     product.version = newest_stable_version.to_s
     product.save if persist
   rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join('\n')
+    log.error e.message
+    log.error e.backtrace.join('\n')
   end
 
 
@@ -109,8 +109,8 @@ class ProductService
       end
     end
   rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join('\n')
+    log.error e.message
+    log.error e.backtrace.join('\n')
   end
 
 
@@ -126,9 +126,9 @@ class ProductService
     products.each do |product|
       product.followers = product.users.count
       product.save
-      logger.info "#{product.name} has #{product.followers} followers"
+      log.info "#{product.name} has #{product.followers} followers"
     end
-    logger.info "#{products.count} products updated."
+    log.info "#{products.count} products updated."
   end
 
 

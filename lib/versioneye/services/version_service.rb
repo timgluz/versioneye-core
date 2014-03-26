@@ -14,8 +14,8 @@ class VersionService
     sorted = Naturalsorter::Sorter.sort_version_by_method( filtered, 'to_s', false )
     sorted.first
   rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join('\n')
+    log.error e.message
+    log.error e.backtrace.join('\n')
     versions.first
   end
 
@@ -204,8 +204,8 @@ class VersionService
     average = diff_days / sorted_versions.size
     average
   rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join("\n")
+    log.error e.message
+    log.error e.backtrace.join("\n")
     nil
   end
 
@@ -223,8 +223,8 @@ class VersionService
     average = diff_days / sorted_versions.size
     average
   rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join("\n")
+    log.error e.message
+    log.error e.backtrace.join("\n")
     nil
   end
 

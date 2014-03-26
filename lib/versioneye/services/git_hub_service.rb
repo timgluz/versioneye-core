@@ -15,14 +15,14 @@ class GitHubService
   end
 
   def self.update_repos_for_user user
-    logger.debug "Importing repos for #{user.fullname}."
+    log.debug "Importing repos for #{user.fullname}."
     user.github_repos.delete_all
     GitHubService.cached_user_repos user
-    logger.debug  "Got #{user.github_repos.count} repos for #{user.fullname}."
+    log.debug  "Got #{user.github_repos.count} repos for #{user.fullname}."
     user.github_repos.all
   rescue => e
-    logger.error "Cant import repos for #{user.fullname} \n #{e.message}"
-    logger.error e.backtrace.join("\n")
+    log.error "Cant import repos for #{user.fullname} \n #{e.message}"
+    log.error e.backtrace.join("\n")
   end
 
 
@@ -36,31 +36,31 @@ class GitHubService
 =end
   def self.cached_user_repos user
     user_task_key = "#{user[:username]}-#{user[:github_id]}"
-    task_status   = Rails.cache.read( user_task_key )
+    task_status   = cache.get( user_task_key )
 
     if task_status == A_TASK_RUNNING
-      logger.debug "We are still importing repos for `#{user[:fullname]}.`"
+      log.debug "We are still importing repos for `#{user[:fullname]}.`"
       return task_status
     end
 
     if user[:github_token] and user.github_repos.all.count == 0
-      logger.info 'Fetch Repositories from GitHub and cache them in DB.'
+      log.info 'Fetch Repositories from GitHub and cache them in DB.'
       n_repos    = Github.count_user_repos user
       orga_names = Github.orga_names(user.github_token)
       if n_repos == 0 && orga_names.empty?
-        logger.debug 'user has no repositories;'
+        log.debug 'user has no repositories;'
         task_status = A_TASK_DONE
-        Rails.cache.write( user_task_key, task_status, timeToLive: 30.minutes )
+        cache.set( user_task_key, task_status, 1800 )
         return task_status
       end
       task_status = A_TASK_RUNNING
-      Rails.cache.write( user_task_key, task_status, timeToLive: 30.minutes )
+      cache.set( user_task_key, task_status, 1800 )
       Thread.new do
         self.cache_user_all_repos(user, orga_names)
-        Rails.cache.write( user_task_key, A_TASK_DONE, timeToLive: 30.minutes )
+        cache.set( user_task_key, A_TASK_DONE, 1800 )
       end
     else
-      logger.info 'Nothing is changed - skipping update.'
+      log.info 'Nothing is changed - skipping update.'
       task_status = A_TASK_DONE
     end
 
@@ -71,7 +71,7 @@ class GitHubService
   def self.update_repo_info user, repo_fullname
     current_repo = GithubRepo.by_user(user).by_fullname(repo_fullname).shift
     if current_repo.nil?
-      logger.error "User #{user[:username]} has no such repo `#{repo_fullname}`."
+      log.error "User #{user[:username]} has no such repo `#{repo_fullname}`."
       return nil
     end
 
@@ -92,10 +92,10 @@ class GitHubService
       user[:user_login] = user_info['login'] if user_info.is_a?(Hash)
       #load data
       threads = []
-      logger.info "reading user repos"
+      log.info "reading user repos"
       cache_user_repos(user)
       orga_names.each do |orga_name|
-        logger.info "reading repos for orga: #{orga_name}"
+        log.info "reading repos for orga: #{orga_name}"
         cache_user_orga_repos(user, orga_name)
       end
     end

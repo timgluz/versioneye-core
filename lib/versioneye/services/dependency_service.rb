@@ -12,15 +12,15 @@ class DependencyService
 
   def self.cache_outdated?( dependency )
     key = "#{dependency.id.to_s}_outdated?"
-    outdated = Rails.cache.read( key )
+    outdated = cache.get( key )
     return outdated if !outdated.nil?
 
     outdated = self.outdated?( dependency )
-    Rails.cache.write( key, outdated, timeToLive: 6.hour )
+    cache.set( key, outdated, 21600 )
     outdated
   rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join("\n")
+    log.error e.message
+    log.error e.backtrace.join("\n")
     return false
   end
 
@@ -40,8 +40,8 @@ class DependencyService
     return false if newest_version.eql?( dependency.parsed_version )
     return true
   rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join("\n")
+    log.error e.message
+    log.error e.backtrace.join("\n")
     return false
   end
 
