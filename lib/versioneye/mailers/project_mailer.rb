@@ -7,21 +7,20 @@ class ProjectMailer < ActionMailer::Base
   def projectnotification_email( project, user = nil )
     @user = user
     @user = project.user if user.nil?
-    deps          = project.outdated_dependencies
     @dependencies = Hash.new
+    deps  = ProjectService.outdated_dependencies( project )
     deps.each do |dep|
       @dependencies[dep.name] = dep
     end
     @project_name = project.name
-    @projectlink  = "#{Settings.server_url}/user/projects/#{project.id}"
+    @projectlink  = "#{Settings.instance.server_url}/user/projects/#{project.id}"
+    @base_url     = Settings.instance.server_url
 
     email = user ? user.email : Project.email_for(project, @user)
 
-    mail(
-      :to      => email,
-      :subject => "Project Notification for #{project.name}",
-      :tag     => 'project_notification'
-      )
+    mail(:to => email, :subject => "Project Notification for #{project.name}") do |format|
+      format.html{ render layout: 'email_html_layout' }
+    end
   end
 
 end

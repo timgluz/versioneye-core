@@ -11,9 +11,9 @@ describe FeedbackMailer do
       email.encoded.should include( 'VersionEye is awesome' )
       email.encoded.should include( 'Potsdam' )
 
+      ActionMailer::Base.deliveries.clear
       email.deliver!
       ActionMailer::Base.deliveries.size.should == 1
-      ActionMailer::Base.deliveries.clear
     end
 
   end

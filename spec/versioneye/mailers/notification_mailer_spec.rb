@@ -26,9 +26,9 @@ describe NotificationMailer do
       email.encoded.should include( notification.version_id )
       email.encoded.should include( "/user/projects/#{project._id.to_s}" )
 
+      ActionMailer::Base.deliveries.clear
       email.deliver!
       ActionMailer::Base.deliveries.size.should == 1
-      ActionMailer::Base.deliveries.clear
     end
 
   end
@@ -45,6 +45,7 @@ describe NotificationMailer do
       email.encoded.should include( 'CEO' )
       email.encoded.should include( 'Robert Reiz' )
 
+      ActionMailer::Base.deliveries.clear
       email.deliver!
       ActionMailer::Base.deliveries.size.should == 1
     end

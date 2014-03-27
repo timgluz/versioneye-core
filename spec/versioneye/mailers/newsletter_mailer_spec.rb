@@ -14,9 +14,9 @@ describe NewsletterMailer do
       email.encoded.should include( 'And since we like continuous updating')
       email.encoded.should include( 'Potsdam' )
 
+      ActionMailer::Base.deliveries.clear
       email.deliver!
       ActionMailer::Base.deliveries.size.should == 1
-      ActionMailer::Base.deliveries.clear
     end
 
   end
