@@ -60,6 +60,9 @@ RSpec.configure do |config|
     c.allow_http_connections_when_no_cassette = true
   end
 
+  ActionMailer::Base.view_paths = File.expand_path('../../lib/versioneye/views/', __FILE__)
+  ActionMailer::Base.delivery_method = :test
+
 end
 
 # module SimpleCov::Configuration

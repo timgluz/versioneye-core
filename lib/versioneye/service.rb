@@ -9,6 +9,7 @@ module Versioneye
     require 'versioneye/services/circle_element_service'
     require 'versioneye/services/dependency_service'
     require 'versioneye/services/git_hub_service'
+    require 'versioneye/services/notification_service'
     require 'versioneye/services/product_service'
     require 'versioneye/services/project_service'
     require 'versioneye/services/projectdependency_service'
@@ -24,6 +25,8 @@ module Versioneye
     require 'versioneye/services_ext/octokit_api'
     require 'versioneye/services_ext/s3'
     require 'versioneye/services_ext/stripe_service'
+
+    require 'versioneye/mailers/notification_mailer'
 
     require 'versioneye/parsers/bower_parser'
     require 'versioneye/parsers/common_parser'

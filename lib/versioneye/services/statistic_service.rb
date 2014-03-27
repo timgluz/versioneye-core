@@ -1,4 +1,4 @@
-class StatisticService
+class StatisticService < Versioneye::Service
 
   A_STAT_LANGUAGES = [
       Product::A_LANGUAGE_RUBY,

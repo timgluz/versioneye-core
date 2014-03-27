@@ -1,4 +1,4 @@
-class DependencyService
+class DependencyService < Versioneye::Service
 
 
   def self.dependencies_outdated?( dependencies )

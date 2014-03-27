@@ -1,4 +1,4 @@
-class ProductService
+class ProductService < Versioneye::Service
 
 
   # This method fetches and product and initializes it for the UI.

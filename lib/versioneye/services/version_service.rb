@@ -1,4 +1,4 @@
-class VersionService
+class VersionService < Versioneye::Service
 
 
   def self.newest_version(versions, stability = 'stable')

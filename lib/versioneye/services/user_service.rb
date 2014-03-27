@@ -1,4 +1,4 @@
-class UserService
+class UserService < Versioneye::Service
 
   def self.search(term)
     EsUser.search( term )
@@ -31,7 +31,7 @@ class UserService
   end
 
   def self.delete user
-    Notification.remove_notifications user
+    NotificationService.remove_notifications user
     collaborators = ProjectCollaborator.by_user user
     if !collaborators.nil? && !collaborators.empty?
       collaborators.each do |project_collaborator|

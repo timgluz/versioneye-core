@@ -1,7 +1,7 @@
 require 'benchmark'
 require 'dalli'
 
-class GitHubService
+class GitHubService < Versioneye::Service
 
   A_TASK_NIL     = nil
   A_TASK_RUNNING = 'running'

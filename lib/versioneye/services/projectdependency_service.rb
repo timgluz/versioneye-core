@@ -1,4 +1,4 @@
-class ProjectdependencyService
+class ProjectdependencyService < Versioneye::Service
 
   require 'naturalsorter'
 
