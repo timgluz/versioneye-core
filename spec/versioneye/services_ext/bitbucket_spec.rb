@@ -1,7 +1,6 @@
 require 'spec_helper'
 require 'vcr'
-require 'webmock'
-
+require 'webmock/rspec'
 require 'capybara/rspec'
 
 VCR.configure do |c|
@@ -17,17 +16,19 @@ describe Bitbucket do
   let(:user_with_token){create(:bitbucket_user,
     :bitbucket_token => 'YsR6vM5qxmfZtkYt9G',
     :bitbucket_secret => 'raEFhqE2YuBZtwqswGXFRZEzLnnLD8Lu',
-    :bitbucket_login => Settings.bitbucket_username)}
+    :bitbucket_login => Settings.instance.bitbucket_username)}
+
 
   def connect_bitbucket(user)
+    WebMock.allow_net_connect!
     Capybara.current_driver = Capybara.javascript_driver
     visit "/signin"
     click_button "Login with Bitbucket"
 
     #when bitbucket asks testuser's credentials
     within("form.login-form") do
-      fill_in "Username", :with => Settings.bitbucket_username
-      fill_in 'Password', :with => Settings.bitbucket_password
+      fill_in "Username", :with => Settings.instance.bitbucket_username
+      fill_in 'Password', :with => Settings.instance.bitbucket_password
       click_button 'Log in'
     end
     #grant access
@@ -37,6 +38,27 @@ describe Bitbucket do
 
     user.reload
   end
+
+
+  it "returns content of the project files" do
+    WebMock.allow_net_connect!
+
+    username = user_with_token[:bitbucket_login]
+    token    = user_with_token[:bitbucket_token]
+    secret   = user_with_token[:bitbucket_secret]
+
+    username.should_not be_nil
+    token.should_not be_nil
+    secret.should_not be_nil
+    repo_name = "#{username}/fantom_hydra"
+
+    VCR.use_cassette('bitbucket_project_file_from_branch', allow_playback_repeats: true) do
+      file = Bitbucket.fetch_project_file_from_branch(repo_name, "master", "Gemfile", token, secret)
+      file.should_not be_nil
+      file.is_a?(String).should be_true
+    end
+  end
+
 
   context "as authorized user " do
 
@@ -210,24 +232,6 @@ describe Bitbucket do
         files.second[:path].should eql('bower.json')
       end
     end
-
-    it "returns content of the project files" do
-
-      username = user_with_token[:bitbucket_login]
-      token = user_with_token[:bitbucket_token]
-      secret = user_with_token[:bitbucket_secret]
-
-      username.should_not be_nil
-      token.should_not be_nil
-      secret.should_not be_nil
-      repo_name = "#{username}/fantom_hydra"
-
-      file = Bitbucket.fetch_project_file_from_branch(repo_name, "master", "Gemfile", token, secret)
-      file.should_not be_nil
-      file.is_a?(String).should be_true
-    end
-
-
 
   end
 end

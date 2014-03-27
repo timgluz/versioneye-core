@@ -1,6 +1,6 @@
 require 'spec_helper'
 require 'vcr'
-require 'webmock'
+require 'webmock/rspec'
 require 'fakeweb'
 
 VCR.configure do |c|
