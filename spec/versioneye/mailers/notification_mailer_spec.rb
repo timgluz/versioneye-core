@@ -18,7 +18,7 @@ describe NotificationMailer do
 
       email = NotificationMailer.new_version_email(user, notifications)
 
-      email.to.should eq( user.email )
+      email.to.should eq( [user.email] )
       email.encoded.should include( "Hello #{user.fullname}" )
       email.encoded.should include( 'There are new releases out there' )
       email.encoded.should include( '?utm_medium=email' )
