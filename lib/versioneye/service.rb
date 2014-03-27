@@ -28,6 +28,7 @@ module Versioneye
 
     require 'versioneye/mailers/notification_mailer'
     require 'versioneye/mailers/feedback_mailer'
+    require 'versioneye/mailers/newsletter_mailer'
 
     require 'versioneye/parsers/bower_parser'
     require 'versioneye/parsers/common_parser'
