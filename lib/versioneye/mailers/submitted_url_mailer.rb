@@ -4,6 +4,7 @@ class SubmittedUrlMailer < ActionMailer::Base
   default from: "\"VersionEye\" <notify@versioneye.com>"
 
   def new_submission_email(submitted_url)
+    @base_url = Settings.instance.server_url
     @submitted_url = submitted_url
     @user = submitted_url.user
     mail(
@@ -31,6 +32,7 @@ class SubmittedUrlMailer < ActionMailer::Base
   end
 
   def integrated_url_email(submitted_url, product)
+    @base_url = Settings.instance.server_url
     @submitted_url = submitted_url
     @user = submitted_url.user
     @product = product

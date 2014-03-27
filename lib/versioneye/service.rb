@@ -30,6 +30,7 @@ module Versioneye
     require 'versioneye/mailers/feedback_mailer'
     require 'versioneye/mailers/newsletter_mailer'
     require 'versioneye/mailers/project_mailer'
+    require 'versioneye/mailers/submitted_url_mailer'
 
     require 'versioneye/parsers/bower_parser'
     require 'versioneye/parsers/common_parser'
