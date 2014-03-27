@@ -27,6 +27,7 @@ module Versioneye
     require 'versioneye/services_ext/stripe_service'
 
     require 'versioneye/mailers/notification_mailer'
+    require 'versioneye/mailers/feedback_mailer'
 
     require 'versioneye/parsers/bower_parser'
     require 'versioneye/parsers/common_parser'

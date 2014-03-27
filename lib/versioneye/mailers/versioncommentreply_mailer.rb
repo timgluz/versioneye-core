@@ -5,9 +5,9 @@ class VersioncommentreplyMailer < ActionMailer::Base
 
   def versioncomment_reply_email(comment_user, reply_user, comment)
     @comment_user = comment_user
-    @reply_user = reply_user
-    @comment = comment
-    @prod = comment.product
+    @reply_user   = reply_user
+    @comment      = comment
+    @prod         = comment.product
     @commentlink = "#{Settings.server_url}/vc/#{comment.id}"
     mail(
       :to => @comment_user.email,
