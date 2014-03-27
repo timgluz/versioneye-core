@@ -2,6 +2,7 @@ module Versioneye
   class Service
 
     require 'versioneye/log'
+    require 'versioneye/cache'
 
     require 'versioneye/services/analytics_service'
     require 'versioneye/services/bitbucket_service'
@@ -46,8 +47,7 @@ module Versioneye
     end
 
     def self.cache
-      options = { :username => '', :password => '', :namespace => 'veye', :expires_in => 1.day, :compress => true }
-      Dalli::Client.new('127.0.0.1:11211')
+      Versioneye::Cache.instance.mc
     end
 
   end
