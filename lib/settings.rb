@@ -5,8 +5,13 @@ class Settings
   include Singleton
 
   def initialize
-    p 'initialize Settings'
-    json = File.read("config/settings.json")
+    puts 'initialize Settings'
+    load_settings
+  end
+
+  def load_settings( path_to_settings = 'config/settings.json' )
+    puts "load #{path_to_settings}"
+    json = File.read( path_to_settings )
     settings = JSON.parse(json)
     return nil if settings.nil?
 
@@ -14,6 +19,8 @@ class Settings
     if environment.to_s == ''
       environment = 'development'
     end
+    instance_variable_set("@environment", environment)
+    self.class.class_eval { attr_reader "environment".intern }
 
     settings[environment].each { |name, value|
       if value && value.is_a?(String) && value.match(/^env_/)
