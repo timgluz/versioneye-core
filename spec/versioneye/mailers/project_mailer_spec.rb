@@ -18,13 +18,13 @@ describe ProjectMailer do
 
       email = described_class.projectnotification_email(project, user)
 
+      email.to.should eq( [user.email]  )
       email.encoded.should include( "Hello #{user.fullname}" )
       email.encoded.should include( 'for your project ' )
       email.encoded.should include( '?utm_medium=email' )
       email.encoded.should include( 'utm_source=project_notification' )
       email.encoded.should include( "/user/projects/#{project._id.to_s}" )
       email.encoded.should include( product_1.name )
-      # email.encoded.should include( product_2.name )
       email.encoded.should include( "#{Settings.instance.server_url}/#{product_1.language_esc}/#{product_1.to_param}" )
 
       ActionMailer::Base.deliveries.clear
@@ -49,8 +49,9 @@ describe ProjectMailer do
       deps = ProjectService.outdated_dependencies( project )
       deps.count.should eq(2)
 
-      email = described_class.projectnotification_email(project, user)
+      email = described_class.projectnotification_email(project)
 
+      email.to.should eq( [user.email] )
       email.encoded.should include( "Hello #{user.fullname}" )
       email.encoded.should include( 'for your project ' )
       email.encoded.should include( '?utm_medium=email' )
