@@ -1,4 +1,4 @@
-class EsUser
+class EsUser < Versioneye::Service
 
   def self.create_index_with_mappings
     Tire.index(Settings.instance.elasticsearch_user_index) do

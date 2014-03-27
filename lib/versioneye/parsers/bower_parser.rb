@@ -92,12 +92,12 @@ class BowerParser < CommonParser
     product    = fetch_product( package_name )
     dependency = init_dependency( product, package_name )
     if product.nil?
-      Rails.logger.error "#{self.class}.parse_version_label | Cant find product for #{Project::A_TYPE_BOWER}, `#{package_name}`"
+      log.error "#{self.class}.parse_version_label | Cant find product for #{Project::A_TYPE_BOWER}, `#{package_name}`"
       project.unknown_number += 1
     else
       dependency = parse_requested_version(version_label, dependency, product)
     end
-    project.out_number     += 1 if dependency.outdated?
+    project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
     project.projectdependencies.push dependency
     project
   end
@@ -134,7 +134,7 @@ class BowerParser < CommonParser
 
       version_data = parse_version_data(package_name, version, product)
       if version_data.nil?
-        Rails.logger.error "Cant parse version `#{version_label}` for #{package_name}."
+        log.error "Cant parse version `#{version_label}` for #{package_name}."
         return nil
       end
 
@@ -154,7 +154,7 @@ class BowerParser < CommonParser
     #TODO: what if allowed_versions nil? - tautology or missing versions on DB??
     newest_version = VersionService.newest_version(allowed_versions)
     if newest_version.nil?
-      Rails.logger.error "#{self.class}.parse_combined_versions| Didnt get any versions for `#{package_name}`:`#{version_label}`"
+      log.error "#{self.class}.parse_combined_versions| Didnt get any versions for `#{package_name}`:`#{version_label}`"
       newest_version = Version.new version: 'unknown'
     end
 
@@ -173,7 +173,7 @@ class BowerParser < CommonParser
 
   def parse_version_data(package_name, version, product)
     if product.nil?
-      Rails.logger.error "parse_version_data | product is nil for #{package_name}: #{version}"
+      log.error "parse_version_data | product is nil for #{package_name}: #{version}"
       return {
         version: cleanup_version(version),
         label: cleanup_version(version),
@@ -214,7 +214,7 @@ class BowerParser < CommonParser
       if newest
         version_data = {version: newest.version, label: ver, comperator: m[:comperator]}
       else
-        Rails.debug.error("Couldnt find latest versions for #{product[:name]} using version: `#{ver}`")
+        log.error("Couldnt find latest versions for #{product[:name]} using version: `#{ver}`")
 
         version_data = {version: ver, label: version, comperator: m[:comperator]}
       end
@@ -257,7 +257,7 @@ class BowerParser < CommonParser
         comperator: "="
       }
     else
-      Rails.logger.error %Q{BowerParser.parse_version_data | Version `#{version}` for #{product[:name]}
+      log.error %Q{BowerParser.parse_version_data | Version `#{version}` for #{product[:name]}
                             doesnt match with any rules. Probably misformed.}
       version_data = { version: product.version, label: "*", comperator: "="}
     end

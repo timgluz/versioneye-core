@@ -1,4 +1,4 @@
-class S3
+class S3 < Versioneye::Service
 
   def self.url_for filename
     return nil if filename.to_s.empty?

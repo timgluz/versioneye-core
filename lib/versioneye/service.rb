@@ -1,19 +1,7 @@
 module Versioneye
   class Service
 
-    include Log4r
-
-    Configurator.load_xml_file('config/log4r.xml')
-
-    def self.log
-      Logger['MainLogger']
-    end
-
-    def self.cache
-      options = { :username => '', :password => '', :namespace => 'veye', :expires_in => 1.day, :compress => true }
-      Dalli::Client.new('127.0.0.1:11211')
-    end
-
+    require 'versioneye/log'
 
     require 'versioneye/services/analytics_service'
     require 'versioneye/services/bitbucket_service'
@@ -52,6 +40,15 @@ module Versioneye
     require 'versioneye/parsers/pom_parser'
     require 'versioneye/parsers/python_setup_parser'
     require 'versioneye/parsers/requirements_parser'
+
+    def self.log
+      Versioneye::Log.instance.log
+    end
+
+    def self.cache
+      options = { :username => '', :password => '', :namespace => 'veye', :expires_in => 1.day, :compress => true }
+      Dalli::Client.new('127.0.0.1:11211')
+    end
 
   end
 end

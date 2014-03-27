@@ -43,7 +43,7 @@ class PodfilelockParser < CommonParser
 
   def create_project
     @project = init_project
-    Rails.logger.info "created project #{@project}"
+    log.info "created project #{@project}"
     create_dependencies
     @project
   end
@@ -79,18 +79,18 @@ class PodfilelockParser < CommonParser
     end
 
     @project.dep_number = @project.projectdependencies.count
-    Rails.logger.info "Project has #{@project.projectdependencies.count} dependencies"
+    log.info "Project has #{@project.projectdependencies.count} dependencies"
   end
 
   # spec should now be the spec without subspec
   def create_dependency spec, dep_version
 
     unless spec
-      Rails.logger.debug "Problem: try to create_dependency(nil)"
+      log.debug "Problem: try to create_dependency(nil)"
       return nil
     end
 
-    Rails.logger.debug "create_dependency '#{spec}' -- #{dep_version}"
+    log.debug "create_dependency '#{spec}' -- #{dep_version}"
 
     product  = load_product( spec )
     prod_key = nil
@@ -106,7 +106,7 @@ class PodfilelockParser < CommonParser
       :version_label      => dep_version
       })
 
-    project.out_number     += 1 if dependency.outdated?
+    project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
     project.unknown_number += 1 if dependency.prod_key.nil?
     project.projectdependencies.push dependency
     dependency.save
@@ -117,10 +117,10 @@ class PodfilelockParser < CommonParser
     prod_key = name.downcase
     products = Product.where({:language => language, :prod_key => prod_key })
     if products.nil? || products.empty?
-      Rails.logger.warn "no product found for language #{language} prod_key #{prod_key}"
+      log.warn "no product found for language #{language} prod_key #{prod_key}"
       return nil
     elsif products.count > 1
-      Rails.logger.error "more than one Product found for (#{language}, #{prod_key})"
+      log.error "more than one Product found for (#{language}, #{prod_key})"
     end
 
     products.first

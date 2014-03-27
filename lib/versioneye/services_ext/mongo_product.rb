@@ -1,4 +1,4 @@
-class MongoProduct
+class MongoProduct < Versioneye::Service
 
   # This class handles the product search on MongoDB.
 

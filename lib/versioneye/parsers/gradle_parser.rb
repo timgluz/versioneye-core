@@ -54,7 +54,7 @@ class GradleParser < CommonParser
       dependency.stability = VersionTagRecognizer.stability_tag_for version
       VersionTagRecognizer.remove_minimum_stability version
 
-      out_number += 1 if dependency.outdated?
+      out_number += 1 if ProjectdependencyService.outdated?( dependency )
       data << dependency
     end
 

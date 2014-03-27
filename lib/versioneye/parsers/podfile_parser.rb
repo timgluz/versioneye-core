@@ -20,8 +20,8 @@ class PodfileParser < CommonParser
     pod_file = Pod::Podfile.from_file( filename )
     create_project pod_file
   rescue => e
-    Rails.logger.error e.message
-    Rails.logger.error e.backtrace.join('\n')
+    log.error e.message
+    log.error e.backtrace.join('\n')
     nil
   end
 
@@ -31,8 +31,8 @@ class PodfileParser < CommonParser
     pod_file = Pod::Podfile.from_url( url )
     create_project pod_file, url
   rescue => e
-    Rails.logger.error e.message
-    Rails.logger.error e.backtrace.join('\n')
+    log.error e.message
+    log.error e.backtrace.join('\n')
     nil
   end
 
@@ -74,13 +74,13 @@ class PodfileParser < CommonParser
     end
 
     project.dep_number = project.projectdependencies.size
-    Rails.logger.info "Project has #{project.projectdependencies.count} dependencies"
+    log.info "Project has #{project.projectdependencies.count} dependencies"
   end
 
 
   def create_dependency project, dep_name, requirements
     if dep_name.nil?
-      Rails.logger.debug "Problem: don't know how to handle #{dep_name}"
+      log.debug "Problem: don't know how to handle #{dep_name}"
       return nil
     end
 
@@ -92,11 +92,11 @@ class PodfileParser < CommonParser
 
     requirement = requirements.map do |req_version|
       v_hash = version_hash(req_version, dep_name, product)
-      Rails.logger.debug "VERSION HASH IS #{v_hash}"
+      log.debug "VERSION HASH IS #{v_hash}"
       v_hash
     end
 
-    Rails.logger.debug "create_dependency '#{dep_name}' -- #{requirement}"
+    log.debug "create_dependency '#{dep_name}' -- #{requirement}"
 
     dependency = Projectdependency.new({
       :language => Product::A_LANGUAGE_OBJECTIVEC,
@@ -109,7 +109,7 @@ class PodfileParser < CommonParser
       })
 
 
-    project.out_number     += 1 if dependency.outdated?
+    project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
     project.unknown_number += 1 if dependency.prod_key.nil?
     project.projectdependencies.push dependency
     dependency.save
@@ -119,11 +119,11 @@ class PodfileParser < CommonParser
 
   def version_hash version_from_file, prod_name, product
     if [:git, :head].member? version_from_file
-      Rails.logger.debug "WARNING dependency '#{prod_name}' requires GIT" # TODO
+      log.debug "WARNING dependency '#{prod_name}' requires GIT" # TODO
       {:version_requested => "GIT", :version_label => "GIT", :comperator => "="}
 
     elsif :path == version_from_file
-      Rails.logger.debug "WARNING dependency '#{prod_name}' requires PATH" # TODO
+      log.debug "WARNING dependency '#{prod_name}' requires PATH" # TODO
       {:version_requested => "PATH", :version_label => "PATH", :comperator => "="}
 
     else
@@ -156,7 +156,7 @@ class PodfileParser < CommonParser
     products = Product.where({:language => Product::A_LANGUAGE_OBJECTIVEC, :prod_key => prod_key, })
     return nil if products.nil? || products.empty?
     if products.count > 1
-      Rails.logger.error "more than one Product found for (#{Product::A_LANGUAGE_OBJECTIVEC}, #{prod_key})"
+      log.error "more than one Product found for (#{Product::A_LANGUAGE_OBJECTIVEC}, #{prod_key})"
     end
     products.first
   end

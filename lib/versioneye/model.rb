@@ -1,13 +1,7 @@
 module Versioneye
   class Model
 
-    include Log4r
-
-    Configurator.load_xml_file('config/log4r.xml')
-
-    def self.log
-      Logger['MainLogger']
-    end
+    require 'versioneye/log'
 
     require 'versioneye/models/api'
     require 'versioneye/models/api_call'
@@ -52,6 +46,10 @@ module Versioneye
     require 'versioneye/models/versioncomment'
     require 'versioneye/models/versioncommentreply'
     require 'versioneye/models/versionlink'
+
+    def self.log
+      Versioneye::Log.instance.log
+    end
 
   end
 end

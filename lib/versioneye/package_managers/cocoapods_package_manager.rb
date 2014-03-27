@@ -1,4 +1,6 @@
+require 'cocoapods-core'
 require 'versioneye/package_managers/package_manager'
+require 'versioneye/log'
 
 class CocoapodsPackageManager < PackageManager
 
@@ -80,10 +82,10 @@ class CocoapodsPackageManager < PackageManager
       return highest_version.version if highest_version
       return version_number
     else
-      version
+      version_number
     end
   rescue => e
-    Rails.logger.error e.message
+    Versioneye::Log.instance.log.error e.message
     version_number
   end
 
@@ -105,6 +107,7 @@ class CocoapodsPackageManager < PackageManager
   end
 
 end
+
 
 ## Monkey Patch CocoaPods, so we are able to parse from URLs
 
@@ -128,7 +131,7 @@ module Pod
             # rubocop:enable Eval
           end
         rescue Exception => e
-          Rails.logger.error e
+          Versioneye::Log.instance.log.error e
           message = "Invalid url `#{url}`: #{e.message}"
           raise DSLError.new(message, url, e.backtrace)
         end

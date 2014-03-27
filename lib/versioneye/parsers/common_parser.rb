@@ -1,4 +1,11 @@
+require 'versioneye/log'
+require 'nokogiri'
+
 class CommonParser
+
+  def log
+    Versioneye::Log.instance.log
+  end
 
   def parse(url)
     raise NotImplementedError, 'Implement me!'
@@ -39,8 +46,8 @@ class CommonParser
     query = uri.query
     http.get("#{path}?#{query}")
   rescue => e
-    Rails.logger.error e.message
-    Rails.logger.error e.backtrace.join("\n")
+    log.error e.message
+    log.error e.backtrace.join("\n")
     nil
   end
 
@@ -48,8 +55,8 @@ class CommonParser
     response = self.fetch_response( url )
     response.body
   rescue => e
-    Rails.logger.error e.message
-    Rails.logger.error e.backtrace.join("\n")
+    log.error e.message
+    log.error e.backtrace.join("\n")
     nil
   end
 
@@ -57,8 +64,8 @@ class CommonParser
     body = self.fetch_response_body( url )
     JSON.parse( body )
   rescue => e
-    Rails.logger.error e.message
-    Rails.logger.error e.backtrace.join("\n")
+    log.error e.message
+    log.error e.backtrace.join("\n")
     nil
   end
 

@@ -23,8 +23,8 @@ class RequirementsParser < CommonParser
 
     return project
   rescue => e
-    Rails.logger.error e.message
-    Rails.logger.error e.backtrace.join("\n")
+    log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
 
@@ -58,7 +58,7 @@ class RequirementsParser < CommonParser
 
     parse_requested_version("#{comparator}#{version}", dependency, product)
 
-    if dependency.outdated?
+    if ProjectdependencyService.outdated?( dependency )
       project.out_number = project.out_number + 1
     end
     project.projectdependencies.push dependency

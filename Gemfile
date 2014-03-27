@@ -15,6 +15,8 @@ gem 'semverly'           , '1.0.0'
 gem 'httparty'           , '0.13.0'
 gem 'persistent_httparty', '0.1.1'
 gem 'json'               , '~> 1.8.0'
+gem 'nokogiri'           , '~> 1.6.0'
+gem 'cocoapods-core'     , '0.29.0'
 
 group :development do
   gem 'bundler', '~> 1.0'

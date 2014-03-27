@@ -1,4 +1,4 @@
-class EsProduct
+class EsProduct < Versioneye::Service
 
   def self.create_index_with_mappings
     Tire.index Settings.instance.elasticsearch_product_index do
@@ -180,4 +180,5 @@ class EsProduct
       end
     s.results
   end
+
 end

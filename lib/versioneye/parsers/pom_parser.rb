@@ -16,8 +16,8 @@ class PomParser < CommonParser
     project.dep_number = project.projectdependencies.size
     project
   rescue => e
-    Rails.logger.error e.message
-    Rails.logger.error e.backtrace.join("\n")
+    log.error e.message
+    log.error e.backtrace.join("\n")
     nil
   end
 
@@ -44,7 +44,7 @@ class PomParser < CommonParser
     parse_requested_version( dependency.version_requested, dependency, product )
     dependency.prod_key    = product.prod_key if product
     project.unknown_number += 1 if product.nil?
-    project.out_number     += 1 if dependency.outdated?
+    project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
     project.projectdependencies.push( dependency )
     dependency
   end

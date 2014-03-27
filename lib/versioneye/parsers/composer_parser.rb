@@ -50,7 +50,7 @@ class ComposerParser < CommonParser
       dep_in_ext_repo = dependency_in_repositories?( dependency, data )
       project.unknown_number += 1 if !dep_in_ext_repo
     end
-    project.out_number += 1 if dependency.outdated?
+    project.out_number += 1 if ProjectdependencyService.outdated?( dependency )
     project.projectdependencies.push dependency
   end
 
@@ -264,8 +264,8 @@ class ComposerParser < CommonParser
     end
 
     def print_backtrace e
-      Rails.logger.error e.message
-      Rails.logger.error e.backtrace.join("\n")
+      log.error e.message
+      log.error e.backtrace.join("\n")
     end
 
 end

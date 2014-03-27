@@ -51,7 +51,7 @@ class GemfilelockParser < GemfileParser
 
     data = Array.new
     deps.each do |k, v|
-      if v.outdated?
+      if ProjectdependencyService.outdated?( v )
         out_number += 1
       end
       data.push v
