@@ -20,7 +20,7 @@
   </outputter>
 
   <!-- Loggers -->
-  <logger name="MainLogger" level="ERROR" additive="false" trace="true">
+  <logger name="MainLogger" level="ALL" additive="false" trace="true">
       <outputter>console</outputter>
       <outputter>file_outputter</outputter>
   </logger>

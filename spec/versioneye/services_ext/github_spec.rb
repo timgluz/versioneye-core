@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'vcr'
 require 'webmock'
+require 'fakeweb'
 
 VCR.configure do |c|
   c.cassette_library_dir = 'spec/fixtures/vcr_cassettes/'
@@ -11,13 +12,20 @@ end
 describe Github do
 
   let(:user_without_token) {create(:user, username: "pupujuku",
-                                   fullname: "Pupu Juku", email: "juku@pupu.com")}
+                                    fullname: "Pupu Juku",
+                                    email: "juku@pupu.com")}
+
   let(:user_with_token) {create(:user, username: "aitaleida",
-                                fullname: "Leida Aita", email: "leida@aita.com",
+                                fullname: "Leida Aita",
+                                email: "leida@aita.com",
                                 github_token: "12345")}
+
   let(:repo1) {create(:github_repo, user_id: user_with_token.id.to_s,
-                      github_id: 1, fullname: "spec/repo1",
-                      owner_login: "versioneye", owner_type: "user")}
+                      github_id: 1,
+                      fullname: "spec/repo1",
+                      owner_login: "versioneye",
+                      owner_type: "user")}
+
   let(:private_repo_response) {
     {
       id: 1296269,
@@ -134,19 +142,9 @@ describe Github do
 
 
   describe "getting user information via API" do
-    before :each do
-      FakeWeb.allow_net_connect = false
 
-      FakeWeb.register_uri(:get, %r|https://api\.github\.com/user*|,
-                           [{:body => {"message"=>"Bad credentials"}.to_json},
-                            {:body => {
-                              login: "octocat",
-                              id: 1,
-                              avatar_url: "https://github.com/images/error/octocat_happy.gif",
-                              gravatar_id: "somehexcode",
-                              name: "monalisa octocat",
-                              company: "VersionEye"}.to_json}]
-)
+    before :each do
+      FakeWeb.allow_net_connect = true
     end
 
     after :each do

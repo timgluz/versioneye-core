@@ -45,7 +45,7 @@ class Github < Versioneye::Service
     JSON.parse client.user.to_json
   rescue => e
     log.error e.message
-    log.error e.backtrace.join( "\n" )
+    log.error e.backtrace.join( '\n' )
     nil
   end
 
