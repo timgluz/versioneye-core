@@ -27,7 +27,7 @@ class PackageParser < CommonParser
     product    = Product.fetch_product( Product::A_LANGUAGE_NODEJS, key )
     dependency = init_dependency( product, key )
     parse_requested_version( value, dependency, product )
-    project.out_number     += 1 if dependency.outdated?
+    project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
     project.unknown_number += 1 if product.nil?
     project.projectdependencies.push dependency
   end

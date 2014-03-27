@@ -23,7 +23,7 @@ class ComposerLockParser < ComposerParser
     version = self.fetch_package_version( package )
     self.parse_requested_version(version, dependency, product)
 
-    project.out_number     += 1 if dependency.outdated?
+    project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
     project.unknown_number += 1 unless product
 
     project.projectdependencies.push dependency

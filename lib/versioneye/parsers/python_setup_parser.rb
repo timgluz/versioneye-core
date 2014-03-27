@@ -48,7 +48,7 @@ class PythonSetupParser < RequirementsParser
 
     parse_requested_version("#{comparator}#{version}", dependency, product)
 
-    if dependency.outdated?
+    if ProjectdependencyService.outdated?( dependency )
       project.out_number = project.out_number + 1
     end
 

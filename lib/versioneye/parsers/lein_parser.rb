@@ -74,7 +74,7 @@ class LeinParser < CommonParser
       else
         unknowns += 1
       end
-      if dependency.outdated?
+      if ProjectdependencyService.outdated?( dependency )
         out_number += 1
       end
       data << dependency
