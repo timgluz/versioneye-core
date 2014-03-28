@@ -5,11 +5,9 @@ class SubscriptionMailer < ActionMailer::Base
 
   def update_subscription( user )
     @user =  user
-    mail(
-      to: user.email,
-      subject: 'VersionEye Subscription',
-      tag: 'subscription'
-    )
+    mail(to: user.email, subject: 'VersionEye Subscription') do |format|
+      format.html{ render layout: 'email_html_layout' }
+    end
   end
 
 end
