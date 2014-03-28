@@ -3,7 +3,7 @@ source "http://rubygems.org"
 gem 'will_paginate'      , '3.0.5'
 gem 'naturalsorter'      , '2.0.8'
 gem 'mongoid'            , '~> 3.1.0'
-gem 'log4r'              , '1.1.10'
+gem 'log4r'              , '~> 1.1.0'
 gem 'dalli'              , '2.7.0'
 gem 'kgio'               , '~> 2.9.0'   # 20% performance boost for dalli
 gem 'oauth'              , '0.4.7' #:github => "oauth-xx/oauth-ruby" #'0.4.7'
@@ -27,15 +27,15 @@ end
 group :test do
   gem 'turn'              , :require => false
   gem 'shoulda'         , '>= 0'
-  gem 'rdoc'            , '~> 3.12'
+  gem 'rdoc'            , '~> 4.1.0'
   gem 'simplecov'       , '~> 0.7.1'
-  gem 'rspec'           , '2.14.1'
-  gem 'rspec-mocks'     , '2.14.4'
-  gem 'database_cleaner', '1.2.0'
-  gem 'factory_girl'    , '4.3.0'
+  gem 'rspec'           , '~> 2.14.0'
+  gem 'rspec-mocks'     , '~> 2.14.0'
+  gem 'database_cleaner', '~> 1.2.0'
+  gem 'factory_girl'    , '~> 4.4.0'
   gem 'capybara'        , '~> 2.2.0'
   gem 'capybara-firebug', '~> 2.0.0'
-  gem 'vcr'             , '~> 2.8.0',  :require => false
+  gem 'vcr'             , '~> 2.9.0',  :require => false
   gem 'webmock'         , '~> 1.17.0', :require => false
   gem 'fakeweb'         , '~> 1.3.0'
 end
