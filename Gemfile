@@ -28,7 +28,7 @@ group :test do
   gem 'turn'              , :require => false
   gem 'shoulda'         , '>= 0'
   gem 'rdoc'            , '~> 3.12'
-  gem 'simplecov'       , '>= 0'
+  gem 'simplecov'       , '~> 0.7.1'
   gem 'rspec'           , '2.14.1'
   gem 'rspec-mocks'     , '2.14.4'
   gem 'database_cleaner', '1.2.0'
