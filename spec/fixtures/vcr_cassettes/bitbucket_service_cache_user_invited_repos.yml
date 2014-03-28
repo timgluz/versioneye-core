@@ -54,62 +54,58 @@ http_interactions:
       - nosniff
     body:
       encoding: UTF-8
-      string: "{\"pagelen\": 10, \"values\": [{\"scm\": \"git\", \"has_wiki\": false,
-        \"description\": \"Test project for private repos\", \"links\": {\"watchers\":
-        {\"href\": \"https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra_private/watchers\"},
-        \"commits\": {\"href\": \"https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra_private/commits\"},
-        \"self\": {\"href\": \"https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra_private\"},
-        \"html\": {\"href\": \"https://bitbucket.org/versioneye_test/fantom_hydra_private\"},
-        \"avatar\": {\"href\": \"https://d3oaxc4q5k2d6q.cloudfront.net/m/6f5a7e713ff3/img/language-avatars/default_16.png\"},
-        \"forks\": {\"href\": \"https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra_private/forks\"},
-        \"clone\": [{\"href\": \"https://versioneye_test@bitbucket.org/versioneye_test/fantom_hydra_private.git\",
-        \"name\": \"https\"}, {\"href\": \"ssh://git@bitbucket.org/versioneye_test/fantom_hydra_private.git\",
-        \"name\": \"ssh\"}], \"pullrequests\": {\"href\": \"https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra_private/pullrequests\"}},
-        \"fork_policy\": \"no_public_forks\", \"language\": \"\", \"created_on\":
-        \"2014-01-19T09:59:50.799913+00:00\", \"parent\": {\"links\": {\"self\": {\"href\":
-        \"https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra\"},
-        \"avatar\": {\"href\": \"https://d3oaxc4q5k2d6q.cloudfront.net/m/6f5a7e713ff3/img/language-avatars/default_16.png\"}},
-        \"full_name\": \"versioneye_test/fantom_hydra\", \"name\": \"fantom_hydra\"},
-        \"full_name\": \"versioneye_test/fantom_hydra_private\", \"has_issues\": false,
-        \"owner\": {\"username\": \"versioneye_test\", \"display_name\": \"Version
-        Eye\", \"links\": {\"self\": {\"href\": \"https://bitbucket.org/!api/2.0/users/versioneye_test\"},
-        \"avatar\": {\"href\": \"https://secure.gravatar.com/avatar/ef4bc1256a1b06c7de9da2515680ceee?d=https%3A%2F%2Fd3oaxc4q5k2d6q.cloudfront.net%2Fm%2F6f5a7e713ff3%2Fimg%2Fdefault_avatar%2F32%2Fuser_blue.png&s=32\"}}},
-        \"updated_on\": \"2014-01-19T09:59:50.868863+00:00\", \"size\": 606137, \"is_private\":
-        true, \"name\": \"fantom_hydra_private\"}, {\"scm\": \"git\", \"has_wiki\":
-        false, \"description\": \"Test project for BitbucketSP\", \"links\": {\"watchers\":
-        {\"href\": \"https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra/watchers\"},
-        \"commits\": {\"href\": \"https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra/commits\"},
-        \"self\": {\"href\": \"https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra\"},
-        \"html\": {\"href\": \"https://bitbucket.org/versioneye_test/fantom_hydra\"},
-        \"avatar\": {\"href\": \"https://d3oaxc4q5k2d6q.cloudfront.net/m/6f5a7e713ff3/img/language-avatars/default_16.png\"},
-        \"forks\": {\"href\": \"https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra/forks\"},
-        \"clone\": [{\"href\": \"https://versioneye_test@bitbucket.org/versioneye_test/fantom_hydra.git\",
-        \"name\": \"https\"}, {\"href\": \"ssh://git@bitbucket.org/versioneye_test/fantom_hydra.git\",
-        \"name\": \"ssh\"}], \"pullrequests\": {\"href\": \"https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra/pullrequests\"}},
-        \"fork_policy\": \"allow_forks\", \"language\": \"\", \"created_on\": \"2013-12-25T13:57:03.873043+00:00\",
-        \"full_name\": \"versioneye_test/fantom_hydra\", \"has_issues\": false, \"owner\":
-        {\"username\": \"versioneye_test\", \"display_name\": \"Version Eye\", \"links\":
-        {\"self\": {\"href\": \"https://bitbucket.org/!api/2.0/users/versioneye_test\"},
-        \"avatar\": {\"href\": \"https://secure.gravatar.com/avatar/ef4bc1256a1b06c7de9da2515680ceee?d=https%3A%2F%2Fd3oaxc4q5k2d6q.cloudfront.net%2Fm%2F6f5a7e713ff3%2Fimg%2Fdefault_avatar%2F32%2Fuser_blue.png&s=32\"}}},
-        \"updated_on\": \"2013-12-25T13:58:03.794584+00:00\", \"size\": 619780, \"is_private\":
-        false, \"name\": \"fantom_hydra\"}, {\"scm\": \"hg\", \"has_wiki\": false,
-        \"description\": \"Just demo repo for testing purposed.\", \"links\": {\"watchers\":
-        {\"href\": \"https://bitbucket.org/!api/2.0/repositories/versioneye_test/emptyrepo/watchers\"},
-        \"commits\": {\"href\": \"https://bitbucket.org/!api/2.0/repositories/versioneye_test/emptyrepo/commits\"},
-        \"self\": {\"href\": \"https://bitbucket.org/!api/2.0/repositories/versioneye_test/emptyrepo\"},
-        \"html\": {\"href\": \"https://bitbucket.org/versioneye_test/emptyrepo\"},
-        \"avatar\": {\"href\": \"https://d3oaxc4q5k2d6q.cloudfront.net/m/6f5a7e713ff3/img/language-avatars/default_16.png\"},
-        \"forks\": {\"href\": \"https://bitbucket.org/!api/2.0/repositories/versioneye_test/emptyrepo/forks\"},
-        \"clone\": [{\"href\": \"https://versioneye_test@bitbucket.org/versioneye_test/emptyrepo\",
-        \"name\": \"https\"}, {\"href\": \"ssh://hg@bitbucket.org/versioneye_test/emptyrepo\",
-        \"name\": \"ssh\"}], \"pullrequests\": {\"href\": \"https://bitbucket.org/!api/2.0/repositories/versioneye_test/emptyrepo/pullrequests\"}},
-        \"fork_policy\": \"allow_forks\", \"language\": \"\", \"created_on\": \"2013-12-23T14:02:22.766300+00:00\",
-        \"full_name\": \"versioneye_test/emptyrepo\", \"has_issues\": false, \"owner\":
-        {\"username\": \"versioneye_test\", \"display_name\": \"Version Eye\", \"links\":
-        {\"self\": {\"href\": \"https://bitbucket.org/!api/2.0/users/versioneye_test\"},
-        \"avatar\": {\"href\": \"https://secure.gravatar.com/avatar/ef4bc1256a1b06c7de9da2515680ceee?d=https%3A%2F%2Fd3oaxc4q5k2d6q.cloudfront.net%2Fm%2F6f5a7e713ff3%2Fimg%2Fdefault_avatar%2F32%2Fuser_blue.png&s=32\"}}},
-        \"updated_on\": \"2013-12-23T14:02:22.792920+00:00\", \"size\": 12744, \"is_private\":
-        false, \"name\": \"EmptyRepo\"}], \"page\": 1, \"size\": 3}"
+      string: '{"pagelen": 10, "values": [{"scm": "git", "has_wiki": false, "description":
+        "Test project for private repos", "links": {"watchers": {"href": "https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra_private/watchers"},
+        "commits": {"href": "https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra_private/commits"},
+        "self": {"href": "https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra_private"},
+        "html": {"href": "https://bitbucket.org/versioneye_test/fantom_hydra_private"},
+        "avatar": {"href": "https://d3oaxc4q5k2d6q.cloudfront.net/m/6f5a7e713ff3/img/language-avatars/default_16.png"},
+        "forks": {"href": "https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra_private/forks"},
+        "clone": [{"href": "https://versioneye_test@bitbucket.org/versioneye_test/fantom_hydra_private.git",
+        "name": "https"}, {"href": "ssh://git@bitbucket.org/versioneye_test/fantom_hydra_private.git",
+        "name": "ssh"}], "pullrequests": {"href": "https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra_private/pullrequests"}},
+        "fork_policy": "no_public_forks", "language": "", "created_on": "2014-01-19T09:59:50.799913+00:00",
+        "parent": {"links": {"self": {"href": "https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra"},
+        "avatar": {"href": "https://d3oaxc4q5k2d6q.cloudfront.net/m/6f5a7e713ff3/img/language-avatars/default_16.png"}},
+        "full_name": "versioneye_test/fantom_hydra", "name": "fantom_hydra"}, "full_name":
+        "versioneye_test/fantom_hydra_private", "has_issues": false, "owner": {"username":
+        "versioneye_test", "display_name": "Version Eye", "links": {"self": {"href":
+        "https://bitbucket.org/!api/2.0/users/versioneye_test"}, "avatar": {"href":
+        "https://secure.gravatar.com/avatar/ef4bc1256a1b06c7de9da2515680ceee?d=https%3A%2F%2Fd3oaxc4q5k2d6q.cloudfront.net%2Fm%2F6f5a7e713ff3%2Fimg%2Fdefault_avatar%2F32%2Fuser_blue.png&s=32"}}},
+        "updated_on": "2014-01-19T09:59:50.868863+00:00", "size": 606137, "is_private":
+        true, "name": "fantom_hydra_private"}, {"scm": "git", "has_wiki": false, "description":
+        "Test project for BitbucketSP", "links": {"watchers": {"href": "https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra/watchers"},
+        "commits": {"href": "https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra/commits"},
+        "self": {"href": "https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra"},
+        "html": {"href": "https://bitbucket.org/versioneye_test/fantom_hydra"}, "avatar":
+        {"href": "https://d3oaxc4q5k2d6q.cloudfront.net/m/6f5a7e713ff3/img/language-avatars/default_16.png"},
+        "forks": {"href": "https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra/forks"},
+        "clone": [{"href": "https://versioneye_test@bitbucket.org/versioneye_test/fantom_hydra.git",
+        "name": "https"}, {"href": "ssh://git@bitbucket.org/versioneye_test/fantom_hydra.git",
+        "name": "ssh"}], "pullrequests": {"href": "https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra/pullrequests"}},
+        "fork_policy": "allow_forks", "language": "", "created_on": "2013-12-25T13:57:03.873043+00:00",
+        "full_name": "versioneye_test/fantom_hydra", "has_issues": false, "owner":
+        {"username": "versioneye_test", "display_name": "Version Eye", "links": {"self":
+        {"href": "https://bitbucket.org/!api/2.0/users/versioneye_test"}, "avatar":
+        {"href": "https://secure.gravatar.com/avatar/ef4bc1256a1b06c7de9da2515680ceee?d=https%3A%2F%2Fd3oaxc4q5k2d6q.cloudfront.net%2Fm%2F6f5a7e713ff3%2Fimg%2Fdefault_avatar%2F32%2Fuser_blue.png&s=32"}}},
+        "updated_on": "2013-12-25T13:58:03.794584+00:00", "size": 619780, "is_private":
+        false, "name": "fantom_hydra"}, {"scm": "hg", "has_wiki": false, "description":
+        "Just demo repo for testing purposed.", "links": {"watchers": {"href": "https://bitbucket.org/!api/2.0/repositories/versioneye_test/emptyrepo/watchers"},
+        "commits": {"href": "https://bitbucket.org/!api/2.0/repositories/versioneye_test/emptyrepo/commits"},
+        "self": {"href": "https://bitbucket.org/!api/2.0/repositories/versioneye_test/emptyrepo"},
+        "html": {"href": "https://bitbucket.org/versioneye_test/emptyrepo"}, "avatar":
+        {"href": "https://d3oaxc4q5k2d6q.cloudfront.net/m/6f5a7e713ff3/img/language-avatars/default_16.png"},
+        "forks": {"href": "https://bitbucket.org/!api/2.0/repositories/versioneye_test/emptyrepo/forks"},
+        "clone": [{"href": "https://versioneye_test@bitbucket.org/versioneye_test/emptyrepo",
+        "name": "https"}, {"href": "ssh://hg@bitbucket.org/versioneye_test/emptyrepo",
+        "name": "ssh"}], "pullrequests": {"href": "https://bitbucket.org/!api/2.0/repositories/versioneye_test/emptyrepo/pullrequests"}},
+        "fork_policy": "allow_forks", "language": "", "created_on": "2013-12-23T14:02:22.766300+00:00",
+        "full_name": "versioneye_test/emptyrepo", "has_issues": false, "owner": {"username":
+        "versioneye_test", "display_name": "Version Eye", "links": {"self": {"href":
+        "https://bitbucket.org/!api/2.0/users/versioneye_test"}, "avatar": {"href":
+        "https://secure.gravatar.com/avatar/ef4bc1256a1b06c7de9da2515680ceee?d=https%3A%2F%2Fd3oaxc4q5k2d6q.cloudfront.net%2Fm%2F6f5a7e713ff3%2Fimg%2Fdefault_avatar%2F32%2Fuser_blue.png&s=32"}}},
+        "updated_on": "2013-12-23T14:02:22.792920+00:00", "size": 12744, "is_private":
+        false, "name": "EmptyRepo"}], "page": 1, "size": 3}'
     http_version: 
   recorded_at: Wed, 29 Jan 2014 11:31:41 GMT
 - request:
@@ -159,7 +155,7 @@ http_interactions:
       X-Version:
       - 0a8edae404be
       Etag:
-      - "\"99914b932bd37a50b983c5e7c90ae93b\""
+      - '"99914b932bd37a50b983c5e7c90ae93b"'
       X-Frame-Options:
       - SAMEORIGIN
       Strict-Transport-Security:
@@ -671,7 +667,7 @@ http_interactions:
       X-Version:
       - 0a8edae404be
       Etag:
-      - "\"99914b932bd37a50b983c5e7c90ae93b\""
+      - '"99914b932bd37a50b983c5e7c90ae93b"'
       X-Frame-Options:
       - SAMEORIGIN
       Strict-Transport-Security:
@@ -743,14 +739,13 @@ http_interactions:
       - nosniff
     body:
       encoding: UTF-8
-      string: "{\"node\": \"d0ad758b2cdc\", \"path\": \"/\", \"directories\": [],
-        \"files\": [{\"size\": 0, \"path\": \"LICENSE\", \"timestamp\": \"2013-11-01T14:29:08Z\",
-        \"utctimestamp\": \"2013-11-01 14:29:08+00:00\", \"revision\": \"a3ffc834e602\"},
-        {\"size\": 139, \"path\": \"README.md\", \"timestamp\": \"2013-11-01T14:36:31Z\",
-        \"utctimestamp\": \"2013-11-01 14:36:31+00:00\", \"revision\": \"20b9c1193a16\"},
-        {\"size\": 4164, \"path\": \"hadoop-core-0.20.2.pom.xml\", \"timestamp\":
-        \"2013-11-01T14:40:29Z\", \"utctimestamp\": \"2013-11-01 14:40:29+00:00\",
-        \"revision\": \"d0ad758b2cdc\"}]}"
+      string: '{"node": "d0ad758b2cdc", "path": "/", "directories": [], "files": [{"size":
+        0, "path": "LICENSE", "timestamp": "2013-11-01T14:29:08Z", "utctimestamp":
+        "2013-11-01 14:29:08+00:00", "revision": "a3ffc834e602"}, {"size": 139, "path":
+        "README.md", "timestamp": "2013-11-01T14:36:31Z", "utctimestamp": "2013-11-01
+        14:36:31+00:00", "revision": "20b9c1193a16"}, {"size": 4164, "path": "hadoop-core-0.20.2.pom.xml",
+        "timestamp": "2013-11-01T14:40:29Z", "utctimestamp": "2013-11-01 14:40:29+00:00",
+        "revision": "d0ad758b2cdc"}]}'
     http_version: 
   recorded_at: Wed, 29 Jan 2014 11:31:43 GMT
 - request:
@@ -964,15 +959,15 @@ http_interactions:
       - nosniff
     body:
       encoding: UTF-8
-      string: "{\"node\": \"20b9c1193a16\", \"path\": \"/\", \"directories\": [],
-        \"files\": [{\"size\": 1990, \"path\": \"Gemfile\", \"timestamp\": \"2013-11-01T14:36:31Z\",
-        \"utctimestamp\": \"2013-11-01 14:36:31+00:00\", \"revision\": \"20b9c1193a16\"},
-        {\"size\": 0, \"path\": \"LICENSE\", \"timestamp\": \"2013-11-01T14:29:08Z\",
-        \"utctimestamp\": \"2013-11-01 14:29:08+00:00\", \"revision\": \"a3ffc834e602\"},
-        {\"size\": 139, \"path\": \"README.md\", \"timestamp\": \"2013-11-01T14:36:31Z\",
-        \"utctimestamp\": \"2013-11-01 14:36:31+00:00\", \"revision\": \"20b9c1193a16\"},
-        {\"size\": 215, \"path\": \"bower.json\", \"timestamp\": \"2013-11-01T14:32:25Z\",
-        \"utctimestamp\": \"2013-11-01 14:32:25+00:00\", \"revision\": \"69f219d5fd26\"}]}"
+      string: '{"node": "20b9c1193a16", "path": "/", "directories": [], "files": [{"size":
+        1990, "path": "Gemfile", "timestamp": "2013-11-01T14:36:31Z", "utctimestamp":
+        "2013-11-01 14:36:31+00:00", "revision": "20b9c1193a16"}, {"size": 0, "path":
+        "LICENSE", "timestamp": "2013-11-01T14:29:08Z", "utctimestamp": "2013-11-01
+        14:29:08+00:00", "revision": "a3ffc834e602"}, {"size": 139, "path": "README.md",
+        "timestamp": "2013-11-01T14:36:31Z", "utctimestamp": "2013-11-01 14:36:31+00:00",
+        "revision": "20b9c1193a16"}, {"size": 215, "path": "bower.json", "timestamp":
+        "2013-11-01T14:32:25Z", "utctimestamp": "2013-11-01 14:32:25+00:00", "revision":
+        "69f219d5fd26"}]}'
     http_version: 
   recorded_at: Wed, 29 Jan 2014 11:31:44 GMT
 - request:
@@ -1035,14 +1030,13 @@ http_interactions:
       - nosniff
     body:
       encoding: UTF-8
-      string: "{\"node\": \"d0ad758b2cdc\", \"path\": \"/\", \"directories\": [],
-        \"files\": [{\"size\": 0, \"path\": \"LICENSE\", \"timestamp\": \"2013-11-01T14:29:08Z\",
-        \"utctimestamp\": \"2013-11-01 14:29:08+00:00\", \"revision\": \"a3ffc834e602\"},
-        {\"size\": 139, \"path\": \"README.md\", \"timestamp\": \"2013-11-01T14:36:31Z\",
-        \"utctimestamp\": \"2013-11-01 14:36:31+00:00\", \"revision\": \"20b9c1193a16\"},
-        {\"size\": 4164, \"path\": \"hadoop-core-0.20.2.pom.xml\", \"timestamp\":
-        \"2013-11-01T14:40:29Z\", \"utctimestamp\": \"2013-11-01 14:40:29+00:00\",
-        \"revision\": \"d0ad758b2cdc\"}]}"
+      string: '{"node": "d0ad758b2cdc", "path": "/", "directories": [], "files": [{"size":
+        0, "path": "LICENSE", "timestamp": "2013-11-01T14:29:08Z", "utctimestamp":
+        "2013-11-01 14:29:08+00:00", "revision": "a3ffc834e602"}, {"size": 139, "path":
+        "README.md", "timestamp": "2013-11-01T14:36:31Z", "utctimestamp": "2013-11-01
+        14:36:31+00:00", "revision": "20b9c1193a16"}, {"size": 4164, "path": "hadoop-core-0.20.2.pom.xml",
+        "timestamp": "2013-11-01T14:40:29Z", "utctimestamp": "2013-11-01 14:40:29+00:00",
+        "revision": "d0ad758b2cdc"}]}'
     http_version: 
   recorded_at: Wed, 29 Jan 2014 11:31:45 GMT
 - request:
@@ -1191,15 +1185,15 @@ http_interactions:
       - nosniff
     body:
       encoding: UTF-8
-      string: "{\"node\": \"20b9c1193a16\", \"path\": \"/\", \"directories\": [],
-        \"files\": [{\"size\": 1990, \"path\": \"Gemfile\", \"timestamp\": \"2013-11-01T14:36:31Z\",
-        \"utctimestamp\": \"2013-11-01 14:36:31+00:00\", \"revision\": \"20b9c1193a16\"},
-        {\"size\": 0, \"path\": \"LICENSE\", \"timestamp\": \"2013-11-01T14:29:08Z\",
-        \"utctimestamp\": \"2013-11-01 14:29:08+00:00\", \"revision\": \"a3ffc834e602\"},
-        {\"size\": 139, \"path\": \"README.md\", \"timestamp\": \"2013-11-01T14:36:31Z\",
-        \"utctimestamp\": \"2013-11-01 14:36:31+00:00\", \"revision\": \"20b9c1193a16\"},
-        {\"size\": 215, \"path\": \"bower.json\", \"timestamp\": \"2013-11-01T14:32:25Z\",
-        \"utctimestamp\": \"2013-11-01 14:32:25+00:00\", \"revision\": \"69f219d5fd26\"}]}"
+      string: '{"node": "20b9c1193a16", "path": "/", "directories": [], "files": [{"size":
+        1990, "path": "Gemfile", "timestamp": "2013-11-01T14:36:31Z", "utctimestamp":
+        "2013-11-01 14:36:31+00:00", "revision": "20b9c1193a16"}, {"size": 0, "path":
+        "LICENSE", "timestamp": "2013-11-01T14:29:08Z", "utctimestamp": "2013-11-01
+        14:29:08+00:00", "revision": "a3ffc834e602"}, {"size": 139, "path": "README.md",
+        "timestamp": "2013-11-01T14:36:31Z", "utctimestamp": "2013-11-01 14:36:31+00:00",
+        "revision": "20b9c1193a16"}, {"size": 215, "path": "bower.json", "timestamp":
+        "2013-11-01T14:32:25Z", "utctimestamp": "2013-11-01 14:32:25+00:00", "revision":
+        "69f219d5fd26"}]}'
     http_version: 
   recorded_at: Wed, 29 Jan 2014 11:31:46 GMT
 - request:
@@ -1342,67 +1336,64 @@ http_interactions:
       - nosniff
     body:
       encoding: UTF-8
-      string: "[{\"scm\": \"git\", \"has_wiki\": true, \"last_updated\": \"2012-10-18T22:19:17.941\",
-        \"no_forks\": null, \"created_on\": \"2012-10-18T22:16:54.614\", \"owner\":
-        \"timgluz\", \"logo\": \"https://bitbucket-assetroot.s3.amazonaws.com/c/photos/2012/Oct/18/clj-sparse-logo-2710802377-6_avatar.png\",
-        \"email_mailinglist\": \"\", \"is_mq\": false, \"size\": 5218, \"read_only\":
-        false, \"fork_of\": null, \"mq_of\": null, \"state\": \"available\", \"utc_created_on\":
-        \"2012-10-18 20:16:54+00:00\", \"website\": \"\", \"description\": \"Module
-        to perform calculations with sparse-matrices.\", \"has_issues\": true, \"is_fork\":
-        false, \"slug\": \"clj-sparse\", \"is_private\": false, \"name\": \"clj-sparse\",
-        \"language\": \"clojure\", \"utc_last_updated\": \"2012-10-18 20:19:17+00:00\",
-        \"email_writers\": true, \"no_public_forks\": false, \"creator\": null, \"resource_uri\":
-        \"/1.0/repositories/timgluz/clj-sparse\"}, {\"scm\": \"hg\", \"has_wiki\":
-        false, \"last_updated\": \"2013-12-23T15:02:22.792\", \"no_forks\": false,
-        \"created_on\": \"2013-12-23T15:02:22.766\", \"owner\": \"versioneye_test\",
-        \"logo\": \"https://d3oaxc4q5k2d6q.cloudfront.net/m/6f5a7e713ff3/img/language-avatars/default_16.png\",
-        \"email_mailinglist\": \"\", \"is_mq\": false, \"size\": 12744, \"read_only\":
-        false, \"fork_of\": null, \"mq_of\": null, \"state\": \"available\", \"utc_created_on\":
-        \"2013-12-23 14:02:22+00:00\", \"website\": \"\", \"description\": \"Just
-        demo repo for testing purposed.\", \"has_issues\": false, \"is_fork\": false,
-        \"slug\": \"emptyrepo\", \"is_private\": false, \"name\": \"EmptyRepo\", \"language\":
-        \"\", \"utc_last_updated\": \"2013-12-23 14:02:22+00:00\", \"email_writers\":
-        true, \"no_public_forks\": false, \"creator\": null, \"resource_uri\": \"/1.0/repositories/versioneye_test/emptyrepo\"},
-        {\"scm\": \"git\", \"has_wiki\": false, \"last_updated\": \"2013-12-25T14:58:03.794\",
-        \"no_forks\": false, \"created_on\": \"2013-12-25T14:57:03.873\", \"owner\":
-        \"versioneye_test\", \"logo\": \"https://d3oaxc4q5k2d6q.cloudfront.net/m/6f5a7e713ff3/img/language-avatars/default_16.png\",
-        \"email_mailinglist\": \"\", \"is_mq\": false, \"size\": 619780, \"read_only\":
-        false, \"fork_of\": null, \"mq_of\": null, \"state\": \"available\", \"utc_created_on\":
-        \"2013-12-25 13:57:03+00:00\", \"website\": \"\", \"description\": \"Test
-        project for BitbucketSP\", \"has_issues\": false, \"is_fork\": false, \"slug\":
-        \"fantom_hydra\", \"is_private\": false, \"name\": \"fantom_hydra\", \"language\":
-        \"\", \"utc_last_updated\": \"2013-12-25 13:58:03+00:00\", \"email_writers\":
-        true, \"no_public_forks\": false, \"creator\": null, \"resource_uri\": \"/1.0/repositories/versioneye_test/fantom_hydra\"},
-        {\"scm\": \"git\", \"has_wiki\": false, \"last_updated\": \"2014-01-19T10:59:50.868\",
-        \"no_forks\": false, \"created_on\": \"2014-01-19T10:59:50.799\", \"owner\":
-        \"versioneye_test\", \"logo\": \"https://d3oaxc4q5k2d6q.cloudfront.net/m/6f5a7e713ff3/img/language-avatars/default_16.png\",
-        \"email_mailinglist\": \"\", \"is_mq\": false, \"size\": 606137, \"read_only\":
-        false, \"fork_of\": {\"scm\": \"git\", \"has_wiki\": false, \"last_updated\":
-        \"2013-12-25T14:58:03.794\", \"no_forks\": false, \"created_on\": \"2013-12-25T14:57:03.873\",
-        \"owner\": \"versioneye_test\", \"logo\": \"https://d3oaxc4q5k2d6q.cloudfront.net/m/6f5a7e713ff3/img/language-avatars/default_16.png\",
-        \"email_mailinglist\": \"\", \"is_mq\": false, \"size\": 619780, \"read_only\":
-        false, \"creator\": null, \"state\": \"available\", \"utc_created_on\": \"2013-12-25
-        13:57:03+00:00\", \"website\": \"\", \"description\": \"Test project for BitbucketSP\",
-        \"has_issues\": false, \"is_fork\": false, \"slug\": \"fantom_hydra\", \"is_private\":
-        false, \"name\": \"fantom_hydra\", \"language\": \"\", \"utc_last_updated\":
-        \"2013-12-25 13:58:03+00:00\", \"email_writers\": true, \"no_public_forks\":
-        false, \"resource_uri\": \"/1.0/repositories/versioneye_test/fantom_hydra\"},
-        \"mq_of\": {\"scm\": \"git\", \"has_wiki\": false, \"last_updated\": \"2013-12-25T14:58:03.794\",
-        \"no_forks\": false, \"created_on\": \"2013-12-25T14:57:03.873\", \"owner\":
-        \"versioneye_test\", \"logo\": \"https://d3oaxc4q5k2d6q.cloudfront.net/m/6f5a7e713ff3/img/language-avatars/default_16.png\",
-        \"email_mailinglist\": \"\", \"is_mq\": false, \"size\": 619780, \"read_only\":
-        false, \"creator\": null, \"state\": \"available\", \"utc_created_on\": \"2013-12-25
-        13:57:03+00:00\", \"website\": \"\", \"description\": \"Test project for BitbucketSP\",
-        \"has_issues\": false, \"is_fork\": false, \"slug\": \"fantom_hydra\", \"is_private\":
-        false, \"name\": \"fantom_hydra\", \"language\": \"\", \"utc_last_updated\":
-        \"2013-12-25 13:58:03+00:00\", \"email_writers\": true, \"no_public_forks\":
-        false, \"resource_uri\": \"/1.0/repositories/versioneye_test/fantom_hydra\"},
-        \"state\": \"available\", \"utc_created_on\": \"2014-01-19 09:59:50+00:00\",
-        \"website\": null, \"description\": \"Test project for private repos\", \"has_issues\":
-        false, \"is_fork\": true, \"slug\": \"fantom_hydra_private\", \"is_private\":
-        true, \"name\": \"fantom_hydra_private\", \"language\": \"\", \"utc_last_updated\":
-        \"2014-01-19 09:59:50+00:00\", \"email_writers\": true, \"no_public_forks\":
-        true, \"creator\": null, \"resource_uri\": \"/1.0/repositories/versioneye_test/fantom_hydra_private\"}]"
+      string: '[{"scm": "git", "has_wiki": true, "last_updated": "2012-10-18T22:19:17.941",
+        "no_forks": null, "created_on": "2012-10-18T22:16:54.614", "owner": "timgluz",
+        "logo": "https://bitbucket-assetroot.s3.amazonaws.com/c/photos/2012/Oct/18/clj-sparse-logo-2710802377-6_avatar.png",
+        "email_mailinglist": "", "is_mq": false, "size": 5218, "read_only": false,
+        "fork_of": null, "mq_of": null, "state": "available", "utc_created_on": "2012-10-18
+        20:16:54+00:00", "website": "", "description": "Module to perform calculations
+        with sparse-matrices.", "has_issues": true, "is_fork": false, "slug": "clj-sparse",
+        "is_private": false, "name": "clj-sparse", "language": "clojure", "utc_last_updated":
+        "2012-10-18 20:19:17+00:00", "email_writers": true, "no_public_forks": false,
+        "creator": null, "resource_uri": "/1.0/repositories/timgluz/clj-sparse"},
+        {"scm": "hg", "has_wiki": false, "last_updated": "2013-12-23T15:02:22.792",
+        "no_forks": false, "created_on": "2013-12-23T15:02:22.766", "owner": "versioneye_test",
+        "logo": "https://d3oaxc4q5k2d6q.cloudfront.net/m/6f5a7e713ff3/img/language-avatars/default_16.png",
+        "email_mailinglist": "", "is_mq": false, "size": 12744, "read_only": false,
+        "fork_of": null, "mq_of": null, "state": "available", "utc_created_on": "2013-12-23
+        14:02:22+00:00", "website": "", "description": "Just demo repo for testing
+        purposed.", "has_issues": false, "is_fork": false, "slug": "emptyrepo", "is_private":
+        false, "name": "EmptyRepo", "language": "", "utc_last_updated": "2013-12-23
+        14:02:22+00:00", "email_writers": true, "no_public_forks": false, "creator":
+        null, "resource_uri": "/1.0/repositories/versioneye_test/emptyrepo"}, {"scm":
+        "git", "has_wiki": false, "last_updated": "2013-12-25T14:58:03.794", "no_forks":
+        false, "created_on": "2013-12-25T14:57:03.873", "owner": "versioneye_test",
+        "logo": "https://d3oaxc4q5k2d6q.cloudfront.net/m/6f5a7e713ff3/img/language-avatars/default_16.png",
+        "email_mailinglist": "", "is_mq": false, "size": 619780, "read_only": false,
+        "fork_of": null, "mq_of": null, "state": "available", "utc_created_on": "2013-12-25
+        13:57:03+00:00", "website": "", "description": "Test project for BitbucketSP",
+        "has_issues": false, "is_fork": false, "slug": "fantom_hydra", "is_private":
+        false, "name": "fantom_hydra", "language": "", "utc_last_updated": "2013-12-25
+        13:58:03+00:00", "email_writers": true, "no_public_forks": false, "creator":
+        null, "resource_uri": "/1.0/repositories/versioneye_test/fantom_hydra"}, {"scm":
+        "git", "has_wiki": false, "last_updated": "2014-01-19T10:59:50.868", "no_forks":
+        false, "created_on": "2014-01-19T10:59:50.799", "owner": "versioneye_test",
+        "logo": "https://d3oaxc4q5k2d6q.cloudfront.net/m/6f5a7e713ff3/img/language-avatars/default_16.png",
+        "email_mailinglist": "", "is_mq": false, "size": 606137, "read_only": false,
+        "fork_of": {"scm": "git", "has_wiki": false, "last_updated": "2013-12-25T14:58:03.794",
+        "no_forks": false, "created_on": "2013-12-25T14:57:03.873", "owner": "versioneye_test",
+        "logo": "https://d3oaxc4q5k2d6q.cloudfront.net/m/6f5a7e713ff3/img/language-avatars/default_16.png",
+        "email_mailinglist": "", "is_mq": false, "size": 619780, "read_only": false,
+        "creator": null, "state": "available", "utc_created_on": "2013-12-25 13:57:03+00:00",
+        "website": "", "description": "Test project for BitbucketSP", "has_issues":
+        false, "is_fork": false, "slug": "fantom_hydra", "is_private": false, "name":
+        "fantom_hydra", "language": "", "utc_last_updated": "2013-12-25 13:58:03+00:00",
+        "email_writers": true, "no_public_forks": false, "resource_uri": "/1.0/repositories/versioneye_test/fantom_hydra"},
+        "mq_of": {"scm": "git", "has_wiki": false, "last_updated": "2013-12-25T14:58:03.794",
+        "no_forks": false, "created_on": "2013-12-25T14:57:03.873", "owner": "versioneye_test",
+        "logo": "https://d3oaxc4q5k2d6q.cloudfront.net/m/6f5a7e713ff3/img/language-avatars/default_16.png",
+        "email_mailinglist": "", "is_mq": false, "size": 619780, "read_only": false,
+        "creator": null, "state": "available", "utc_created_on": "2013-12-25 13:57:03+00:00",
+        "website": "", "description": "Test project for BitbucketSP", "has_issues":
+        false, "is_fork": false, "slug": "fantom_hydra", "is_private": false, "name":
+        "fantom_hydra", "language": "", "utc_last_updated": "2013-12-25 13:58:03+00:00",
+        "email_writers": true, "no_public_forks": false, "resource_uri": "/1.0/repositories/versioneye_test/fantom_hydra"},
+        "state": "available", "utc_created_on": "2014-01-19 09:59:50+00:00", "website":
+        null, "description": "Test project for private repos", "has_issues": false,
+        "is_fork": true, "slug": "fantom_hydra_private", "is_private": true, "name":
+        "fantom_hydra_private", "language": "", "utc_last_updated": "2014-01-19 09:59:50+00:00",
+        "email_writers": true, "no_public_forks": true, "creator": null, "resource_uri":
+        "/1.0/repositories/versioneye_test/fantom_hydra_private"}]'
     http_version: 
   recorded_at: Wed, 29 Jan 2014 11:31:48 GMT
 - request:
@@ -1459,24 +1450,22 @@ http_interactions:
       - nosniff
     body:
       encoding: UTF-8
-      string: "{\"scm\": \"git\", \"has_wiki\": true, \"description\": \"Module to
-        perform calculations with sparse-matrices.\", \"links\": {\"watchers\": {\"href\":
-        \"https://bitbucket.org/!api/2.0/repositories/timgluz/clj-sparse/watchers\"},
-        \"commits\": {\"href\": \"https://bitbucket.org/!api/2.0/repositories/timgluz/clj-sparse/commits\"},
-        \"self\": {\"href\": \"https://bitbucket.org/!api/2.0/repositories/timgluz/clj-sparse\"},
-        \"html\": {\"href\": \"https://bitbucket.org/timgluz/clj-sparse\"}, \"avatar\":
-        {\"href\": \"https://bitbucket-assetroot.s3.amazonaws.com/c/photos/2012/Oct/18/clj-sparse-logo-2710802377-6_avatar.png\"},
-        \"forks\": {\"href\": \"https://bitbucket.org/!api/2.0/repositories/timgluz/clj-sparse/forks\"},
-        \"clone\": [{\"href\": \"https://versioneye_test@bitbucket.org/timgluz/clj-sparse.git\",
-        \"name\": \"https\"}, {\"href\": \"ssh://git@bitbucket.org/timgluz/clj-sparse.git\",
-        \"name\": \"ssh\"}], \"pullrequests\": {\"href\": \"https://bitbucket.org/!api/2.0/repositories/timgluz/clj-sparse/pullrequests\"}},
-        \"fork_policy\": \"allow_forks\", \"language\": \"clojure\", \"created_on\":
-        \"2012-10-18T20:16:54.614768+00:00\", \"full_name\": \"timgluz/clj-sparse\",
-        \"has_issues\": true, \"owner\": {\"username\": \"timgluz\", \"display_name\":
-        \"Timo Sulg\", \"links\": {\"self\": {\"href\": \"https://bitbucket.org/!api/2.0/users/timgluz\"},
-        \"avatar\": {\"href\": \"https://secure.gravatar.com/avatar/2a8d090768d237544a7c69a0f9c217c7?d=https%3A%2F%2Fd3oaxc4q5k2d6q.cloudfront.net%2Fm%2F6f5a7e713ff3%2Fimg%2Fdefault_avatar%2F32%2Fuser_blue.png&s=32\"}}},
-        \"updated_on\": \"2012-10-18T20:19:17.941812+00:00\", \"size\": 5218, \"is_private\":
-        false, \"name\": \"clj-sparse\"}"
+      string: '{"scm": "git", "has_wiki": true, "description": "Module to perform
+        calculations with sparse-matrices.", "links": {"watchers": {"href": "https://bitbucket.org/!api/2.0/repositories/timgluz/clj-sparse/watchers"},
+        "commits": {"href": "https://bitbucket.org/!api/2.0/repositories/timgluz/clj-sparse/commits"},
+        "self": {"href": "https://bitbucket.org/!api/2.0/repositories/timgluz/clj-sparse"},
+        "html": {"href": "https://bitbucket.org/timgluz/clj-sparse"}, "avatar": {"href":
+        "https://bitbucket-assetroot.s3.amazonaws.com/c/photos/2012/Oct/18/clj-sparse-logo-2710802377-6_avatar.png"},
+        "forks": {"href": "https://bitbucket.org/!api/2.0/repositories/timgluz/clj-sparse/forks"},
+        "clone": [{"href": "https://versioneye_test@bitbucket.org/timgluz/clj-sparse.git",
+        "name": "https"}, {"href": "ssh://git@bitbucket.org/timgluz/clj-sparse.git",
+        "name": "ssh"}], "pullrequests": {"href": "https://bitbucket.org/!api/2.0/repositories/timgluz/clj-sparse/pullrequests"}},
+        "fork_policy": "allow_forks", "language": "clojure", "created_on": "2012-10-18T20:16:54.614768+00:00",
+        "full_name": "timgluz/clj-sparse", "has_issues": true, "owner": {"username":
+        "timgluz", "display_name": "Timo Sulg", "links": {"self": {"href": "https://bitbucket.org/!api/2.0/users/timgluz"},
+        "avatar": {"href": "https://secure.gravatar.com/avatar/2a8d090768d237544a7c69a0f9c217c7?d=https%3A%2F%2Fd3oaxc4q5k2d6q.cloudfront.net%2Fm%2F6f5a7e713ff3%2Fimg%2Fdefault_avatar%2F32%2Fuser_blue.png&s=32"}}},
+        "updated_on": "2012-10-18T20:19:17.941812+00:00", "size": 5218, "is_private":
+        false, "name": "clj-sparse"}'
     http_version: 
   recorded_at: Wed, 29 Jan 2014 11:31:49 GMT
 - request:
@@ -1533,16 +1522,15 @@ http_interactions:
       - nosniff
     body:
       encoding: UTF-8
-      string: "{\"master\": {\"node\": \"40a6b8a4027d\", \"files\": [{\"type\": \"added\",
-        \"file\": \".gitignore\"}, {\"type\": \"added\", \"file\": \"README.md\"},
-        {\"type\": \"added\", \"file\": \"doc/intro.md\"}, {\"type\": \"added\", \"file\":
-        \"project.clj\"}, {\"type\": \"added\", \"file\": \"src/clj_sparse/core.clj\"},
-        {\"type\": \"added\", \"file\": \"src/clj_sparse/ops.clj\"}, {\"type\": \"added\",
-        \"file\": \"test/clj_sparse/core_test.clj\"}], \"raw_author\": \"TimGLuz <timgluz@gmail.com>\",
-        \"utctimestamp\": \"2012-10-18 20:14:30+00:00\", \"author\": \"timgluz\",
-        \"timestamp\": \"2012-10-18 22:14:30\", \"raw_node\": \"40a6b8a4027dc5b9c1eb97519be2b003a21974dd\",
-        \"parents\": [], \"branch\": \"master\", \"message\": \"Initial commit. Added
-        first test.\\n\", \"revision\": null, \"size\": -1}}"
+      string: '{"master": {"node": "40a6b8a4027d", "files": [{"type": "added", "file":
+        ".gitignore"}, {"type": "added", "file": "README.md"}, {"type": "added", "file":
+        "doc/intro.md"}, {"type": "added", "file": "project.clj"}, {"type": "added",
+        "file": "src/clj_sparse/core.clj"}, {"type": "added", "file": "src/clj_sparse/ops.clj"},
+        {"type": "added", "file": "test/clj_sparse/core_test.clj"}], "raw_author":
+        "TimGLuz <timgluz@gmail.com>", "utctimestamp": "2012-10-18 20:14:30+00:00",
+        "author": "timgluz", "timestamp": "2012-10-18 22:14:30", "raw_node": "40a6b8a4027dc5b9c1eb97519be2b003a21974dd",
+        "parents": [], "branch": "master", "message": "Initial commit. Added first
+        test.\n", "revision": null, "size": -1}}'
     http_version: 
   recorded_at: Wed, 29 Jan 2014 11:31:50 GMT
 - request:
@@ -1599,16 +1587,15 @@ http_interactions:
       - nosniff
     body:
       encoding: UTF-8
-      string: "{\"master\": {\"node\": \"40a6b8a4027d\", \"files\": [{\"type\": \"added\",
-        \"file\": \".gitignore\"}, {\"type\": \"added\", \"file\": \"README.md\"},
-        {\"type\": \"added\", \"file\": \"doc/intro.md\"}, {\"type\": \"added\", \"file\":
-        \"project.clj\"}, {\"type\": \"added\", \"file\": \"src/clj_sparse/core.clj\"},
-        {\"type\": \"added\", \"file\": \"src/clj_sparse/ops.clj\"}, {\"type\": \"added\",
-        \"file\": \"test/clj_sparse/core_test.clj\"}], \"raw_author\": \"TimGLuz <timgluz@gmail.com>\",
-        \"utctimestamp\": \"2012-10-18 20:14:30+00:00\", \"author\": \"timgluz\",
-        \"timestamp\": \"2012-10-18 22:14:30\", \"raw_node\": \"40a6b8a4027dc5b9c1eb97519be2b003a21974dd\",
-        \"parents\": [], \"branch\": \"master\", \"message\": \"Initial commit. Added
-        first test.\\n\", \"revision\": null, \"size\": -1}}"
+      string: '{"master": {"node": "40a6b8a4027d", "files": [{"type": "added", "file":
+        ".gitignore"}, {"type": "added", "file": "README.md"}, {"type": "added", "file":
+        "doc/intro.md"}, {"type": "added", "file": "project.clj"}, {"type": "added",
+        "file": "src/clj_sparse/core.clj"}, {"type": "added", "file": "src/clj_sparse/ops.clj"},
+        {"type": "added", "file": "test/clj_sparse/core_test.clj"}], "raw_author":
+        "TimGLuz <timgluz@gmail.com>", "utctimestamp": "2012-10-18 20:14:30+00:00",
+        "author": "timgluz", "timestamp": "2012-10-18 22:14:30", "raw_node": "40a6b8a4027dc5b9c1eb97519be2b003a21974dd",
+        "parents": [], "branch": "master", "message": "Initial commit. Added first
+        test.\n", "revision": null, "size": -1}}'
     http_version: 
   recorded_at: Wed, 29 Jan 2014 11:31:50 GMT
 - request:
@@ -1671,14 +1658,87 @@ http_interactions:
       - nosniff
     body:
       encoding: UTF-8
-      string: "{\"node\": \"40a6b8a4027d\", \"path\": \"/\", \"directories\": [\"doc\",
-        \"src\", \"test\"], \"files\": [{\"size\": 99, \"path\": \".gitignore\", \"timestamp\":
-        \"2012-10-18T20:14:30Z\", \"utctimestamp\": \"2012-10-18 20:14:30+00:00\",
-        \"revision\": \"40a6b8a4027d\"}, {\"size\": 595, \"path\": \"README.md\",
-        \"timestamp\": \"2012-10-18T20:14:30Z\", \"utctimestamp\": \"2012-10-18 20:14:30+00:00\",
-        \"revision\": \"40a6b8a4027d\"}, {\"size\": 612, \"path\": \"project.clj\",
-        \"timestamp\": \"2012-10-18T20:14:30Z\", \"utctimestamp\": \"2012-10-18 20:14:30+00:00\",
-        \"revision\": \"40a6b8a4027d\"}]}"
+      string: '{"node": "40a6b8a4027d", "path": "/", "directories": ["doc", "src",
+        "test"], "files": [{"size": 99, "path": ".gitignore", "timestamp": "2012-10-18T20:14:30Z",
+        "utctimestamp": "2012-10-18 20:14:30+00:00", "revision": "40a6b8a4027d"},
+        {"size": 595, "path": "README.md", "timestamp": "2012-10-18T20:14:30Z", "utctimestamp":
+        "2012-10-18 20:14:30+00:00", "revision": "40a6b8a4027d"}, {"size": 612, "path":
+        "project.clj", "timestamp": "2012-10-18T20:14:30Z", "utctimestamp": "2012-10-18
+        20:14:30+00:00", "revision": "40a6b8a4027d"}]}'
     http_version: 
   recorded_at: Wed, 29 Jan 2014 11:31:51 GMT
-recorded_with: VCR 2.8.0
+- request:
+    method: get
+    uri: https://bitbucket.org/api/1.0/repositories/versioneye_test/fantom_hydra_private/src/master/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Chrome28 (contact@versioneye.com) (OAuth gem v0.4.7)
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      Authorization:
+      - OAuth oauth_consumer_key="HgSkE62pTT3HmxFGAm", oauth_nonce="QppYgurZryPHwyn7DvDN3bL1a61yATpuq1nxC51SSos",
+        oauth_signature="Kb7G6Kc%2Fivqd6Rpps7%2Fk%2BpvQEFY%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1396040741", oauth_token="YsR6vM5qxmfZtkYt9G", oauth_version="1.0"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.5.10
+      Date:
+      - Fri, 28 Mar 2014 21:05:42 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Served-By:
+      - app16
+      X-Render-Time:
+      - '0.340094089508'
+      Content-Language:
+      - en
+      Cache-Control:
+      - max-age=0
+      X-Request-Count:
+      - '483'
+      Expires:
+      - Fri, 28 Mar 2014 21:05:42 GMT
+      Vary:
+      - Authorization, Accept-Language, Cookie
+      Last-Modified:
+      - Fri, 28 Mar 2014 21:05:42 GMT
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Version:
+      - b972bad14045
+      X-Static-Version:
+      - b972bad14045
+      Set-Cookie:
+      - bb_session=iqncsi5ez2zz94n1o8mhmbkdoz1tmpnu; expires=Fri, 11-Apr-2014 21:05:42
+        GMT; httponly; Max-Age=1209600; Path=/; secure
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Content-Type-Options:
+      - nosniff
+    body:
+      encoding: UTF-8
+      string: '{"node": "20b9c1193a16", "path": "/", "directories": [], "files": [{"size":
+        1990, "path": "Gemfile", "timestamp": "2013-11-01T14:36:31Z", "utctimestamp":
+        "2013-11-01 14:36:31+00:00", "revision": "20b9c1193a16"}, {"size": 0, "path":
+        "LICENSE", "timestamp": "2013-11-01T14:29:08Z", "utctimestamp": "2013-11-01
+        14:29:08+00:00", "revision": "a3ffc834e602"}, {"size": 139, "path": "README.md",
+        "timestamp": "2013-11-01T14:36:31Z", "utctimestamp": "2013-11-01 14:36:31+00:00",
+        "revision": "20b9c1193a16"}, {"size": 215, "path": "bower.json", "timestamp":
+        "2013-11-01T14:32:25Z", "utctimestamp": "2013-11-01 14:32:25+00:00", "revision":
+        "69f219d5fd26"}]}'
+    http_version: 
+  recorded_at: Fri, 28 Mar 2014 21:05:42 GMT
+recorded_with: VCR 2.9.0
