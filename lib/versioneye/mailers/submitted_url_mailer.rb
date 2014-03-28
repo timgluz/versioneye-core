@@ -7,28 +7,19 @@ class SubmittedUrlMailer < ActionMailer::Base
     @base_url = Settings.instance.server_url
     @submitted_url = submitted_url
     @user = submitted_url.user
-    mail(
-      :to       => 'reiz@versioneye.com',
-      :subject  => 'New Submission',
-      :tag      => 'notice')
+    mail(:to => 'reiz@versioneye.com', :subject => 'New Submission')
   end
 
   def approved_url_email(submitted_url)
     @submitted_url = submitted_url
     @user = submitted_url.user
-    mail(
-      :to       => @user.email,
-      :subject  => 'Your submitted Resource is accepted.',
-      :tag      => 'notice')
+    mail(:to => @user.email, :subject => 'Your submitted Resource is accepted.')
   end
 
   def declined_url_email(submitted_url)
     @submitted_url = submitted_url
     @user = submitted_url.user
-    mail(
-      :to       => @user.email,
-      :subject  => 'You submitted Resource is declined.',
-      :tag      => 'notice')
+    mail(:to => @user.email, :subject => 'You submitted Resource is declined.')
   end
 
   def integrated_url_email(submitted_url, product)
@@ -36,10 +27,7 @@ class SubmittedUrlMailer < ActionMailer::Base
     @submitted_url = submitted_url
     @user = submitted_url.user
     @product = product
-    mail(
-      :to       => @user.email,
-      :subject  => 'Your submitted Resource is integrated',
-      :tag      => 'notice')
+    mail(:to => @user.email, :subject => 'Your submitted Resource is integrated')
   end
 
 end
