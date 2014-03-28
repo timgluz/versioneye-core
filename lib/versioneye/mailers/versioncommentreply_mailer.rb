@@ -8,7 +8,7 @@ class VersioncommentreplyMailer < ActionMailer::Base
     @reply_user   = reply_user
     @comment      = comment
     @prod         = comment.product
-    @commentlink = "#{Settings.server_url}/vc/#{comment.id}"
+    @commentlink = "#{Settings.instance.server_url}/vc/#{comment.id}"
     mail(
       :to => @comment_user.email,
       :subject => "#{reply_user.fullname} replied to your comment",
