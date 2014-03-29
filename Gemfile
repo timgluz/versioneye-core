@@ -1,23 +1,23 @@
 source "http://rubygems.org"
 
-gem 'will_paginate'      , '3.0.5'
-gem 'naturalsorter'      , '2.0.8'
+gem 'will_paginate'      , '~> 3.0.5'
+gem 'naturalsorter'      , '~> 2.0.8'
 gem 'mongoid'            , '~> 3.1.0'
 gem 'log4r'              , '~> 1.1.0'
-gem 'dalli'              , '2.7.0'
+gem 'dalli'              , '~> 2.7.0'
 gem 'kgio'               , '~> 2.9.0'   # 20% performance boost for dalli
-gem 'oauth'              , '0.4.7' #:github => "oauth-xx/oauth-ruby" #'0.4.7'
+gem 'oauth'              , '~> 0.4.7' #:github => "oauth-xx/oauth-ruby" #'0.4.7'
 gem 'aws-sdk'            , '~> 1.0'
-gem 'stripe'             , '1.10.1'
-gem 'tire'               , '0.6.2'
+gem 'stripe'             , '~> 1.10.1'
+gem 'tire'               , '~> 0.6.2'
 gem 'octokit'            , '~> 3.0.0'
-gem 'semverly'           , '1.0.0'
-gem 'httparty'           , '0.13.0'
-gem 'persistent_httparty', '0.1.1'
+gem 'semverly'           , '~> 1.0.0'
+gem 'httparty'           , '~> 0.13.0'
+gem 'persistent_httparty', '~> 0.1.0'
 gem 'json'               , '~> 1.8.0'
 gem 'nokogiri'           , '~> 1.6.0'
-gem 'cocoapods-core'     , '0.29.0'
-gem 'actionmailer'       , '3.2.17'
+gem 'cocoapods-core'     , '~> 0.29.0'
+gem 'actionmailer'       , '~> 3.2.17'
 
 group :development do
   gem 'bundler', '~> 1.0'
@@ -25,8 +25,6 @@ group :development do
 end
 
 group :test do
-  gem 'turn'              , :require => false
-  gem 'shoulda'         , '>= 0'
   gem 'rdoc'            , '~> 4.1.0'
   gem 'simplecov'       , '~> 0.8.0'
   gem 'rspec'           , '~> 2.14.0'

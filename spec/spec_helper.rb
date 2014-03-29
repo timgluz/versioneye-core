@@ -10,7 +10,6 @@ require 'mongoid'
 require 'database_cleaner'
 require 'rubygems'
 require 'bundler'
-require 'shoulda'
 require 'factory_girl'
 
 require 'vcr'
