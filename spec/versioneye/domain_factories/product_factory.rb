@@ -17,6 +17,8 @@ class ProductFactory
       product = self.create_for_cocoapods(name, version)
     when :npm
       product = self.create_for_npm(name, version)
+    when :bower
+      product = self.create_for_bower(name, version)
     end
 
     if save_db and not product.save
@@ -74,7 +76,6 @@ class ProductFactory
   end
 
   def self.create_for_bower(name, version)
-    version_obj = Version.new :version => version
     product = Product.new(
       {
         :name          => name,
@@ -84,7 +85,7 @@ class ProductFactory
         :prod_type     => Project::A_TYPE_BOWER,
         :version       => version
       })
-    product.versions.push(version_obj)
+    product.versions.push(Version.new :version => version)
     product
   end
 

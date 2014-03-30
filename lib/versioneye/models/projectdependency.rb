@@ -41,14 +41,20 @@ class Projectdependency < Versioneye::Model
   end
 
   def find_or_init_product
-    product = Product.fetch_product( language, prod_key)
-    if product.nil? && ( !group_id.to_s.empty? && !artifact_id.to_s.empty? )
+    if project.project_type.eql?( Project::A_TYPE_BOWER )
+      product = Product.fetch_bower name
+      return product if product
+    end
+
+    if !group_id.to_s.empty? && !artifact_id.to_s.empty?
       product = Product.find_by_group_and_artifact self.group_id, self.artifact_id
+      return product if product
     end
-    unless product
-      product = init_product
-    end
-    product
+
+    product = Product.fetch_product( language, prod_key)
+    return product if product
+
+    init_product
   end
 
   def unknown?
