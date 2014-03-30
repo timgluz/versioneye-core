@@ -2,7 +2,9 @@
 ENV["RAILS_ENV"] ||= 'test'
 
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start do
+  add_filter "/spec"
+end
 
 require 'versioneye-core'
 require 'rspec/autorun'
@@ -65,18 +67,3 @@ RSpec.configure do |config|
   ActionMailer::Base.delivery_method = :test
 
 end
-
-# module SimpleCov::Configuration
-#   def clean_filters
-#     @filters = []
-#   end
-# end
-
-# SimpleCov.configure do
-#   clean_filters
-#   load_adapter 'test_frameworks'
-# end
-
-# ENV["COVERAGE"] && SimpleCov.start do
-#   add_filter "/.rvm/"
-# end
