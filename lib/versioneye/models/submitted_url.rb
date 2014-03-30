@@ -1,6 +1,6 @@
 class SubmittedUrl < Versioneye::Model
 
-  require 'will_paginate/array'
+  # require 'will_paginate/array'
 
   include Mongoid::Document
   include Mongoid::Timestamps

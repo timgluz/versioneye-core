@@ -1,8 +1,5 @@
 class Product < Versioneye::Model
 
-  require 'will_paginate'
-  require 'will_paginate/array'
-
   include Mongoid::Document
   include Mongoid::Timestamps
 

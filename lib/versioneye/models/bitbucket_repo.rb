@@ -1,7 +1,7 @@
 class BitbucketRepo < Versioneye::Model
 
   include Mongoid::Document
-  require 'will_paginate/array'
+  # require 'will_paginate/array'
 
   field :name         , type: String
   field :fullname     , type: String
