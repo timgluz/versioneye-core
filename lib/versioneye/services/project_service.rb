@@ -30,6 +30,16 @@ class ProjectService < Versioneye::Service
     dependency
   end
 
+
+  def self.find id
+    project = Project.find_by_id( id )
+    project.dependencies.each do |dep|
+      ProjectdependencyService.outdated?( dep )
+    end
+    project
+  end
+
+
   def self.upload file, user = nil, api_created = false
     project_name        = file['datafile'].original_filename
     filename            = S3.upload_fileupload(file )

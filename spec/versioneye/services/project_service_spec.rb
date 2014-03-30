@@ -4,6 +4,25 @@ describe ProjectService do
 
   let(:github_user) { FactoryGirl.create(:github_user)}
 
+  describe "find" do
+    it "returns the project with dependencies" do
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user
+      prod_1  = ProductFactory.create_new 1
+      prod_2  = ProductFactory.create_new 2
+      prod_3  = ProductFactory.create_new 3
+      dep_1   = ProjectdependencyFactory.create_new project, prod_1, {:version_requested => '1000.0.0'}
+      dep_2   = ProjectdependencyFactory.create_new project, prod_2, {:version_requested => '0.0.0'}
+      dep_3   = ProjectdependencyFactory.create_new project, prod_3, {:version_requested => '0.0.0'}
+
+      project.dependencies.count.should eq(3)
+      project.dependencies.first.outdated.should be_nil
+      proj = ProjectService.find project.id.to_s
+      proj.dependencies.count.should eq(3)
+      proj.dependencies.first.outdated.should_not be_nil
+    end
+  end
+
   describe "type_by_filename" do
     it "returns RubyGems. OK" do
       url1 = "http://localhost:4567/veye_dev_projects/i5lSWS951IxJjU1rurMg_Gemfile?AWSAccessKeyId=123&Expires=1360525084&Signature=HRPsn%2Bai%2BoSjm8zqwZFRtzxJvvE%3D"

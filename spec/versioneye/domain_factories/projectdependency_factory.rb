@@ -1,7 +1,7 @@
 class ProjectdependencyFactory
 
-  def self.create_new(project, product, store = true)
-    dependency = Projectdependency.new
+  def self.create_new(project, product, store = true, options = {})
+    dependency = Projectdependency.new( options )
     if product
       dependency.name        = product.name
       dependency.language    = product.language
