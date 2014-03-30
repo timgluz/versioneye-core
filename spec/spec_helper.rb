@@ -44,6 +44,8 @@ Moped.logger.level   = Logger::ERROR
 
 RSpec.configure do |config|
 
+  AWS.config(:s3_endpoint => 'localhost', :s3_port => 4567, :use_ssl => false )
+
   config.before(:suite) do
     DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.orm = "mongoid"
