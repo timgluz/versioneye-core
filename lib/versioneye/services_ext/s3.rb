@@ -1,3 +1,5 @@
+require 'aws-sdk'
+
 class S3 < Versioneye::Service
 
   def self.url_for filename
@@ -28,7 +30,7 @@ class S3 < Versioneye::Service
     filename
   rescue => e
     log.error "Exception in S3.upload_fileupload(file_up) - #{e.message}"
-    log.error e.backtrace.join "\n"
+    log.error e.backtrace.join '\n'
     nil
   end
 
