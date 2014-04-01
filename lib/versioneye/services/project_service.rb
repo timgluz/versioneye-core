@@ -359,8 +359,6 @@ class ProjectService < Versioneye::Service
   end
 
 
-  # TODO refactor usage
-  # TODO test this
   def self.outdated?( project )
     project.projectdependencies.each do |dep|
       return true if ProjectdependencyService.outdated?( dep )
@@ -368,8 +366,6 @@ class ProjectService < Versioneye::Service
     false
   end
 
-  # TODO refactor usage
-  # TODO test this
   def self.outdated_dependencies( project )
     outdated_dependencies = Array.new
     project.projectdependencies.each do |dep|

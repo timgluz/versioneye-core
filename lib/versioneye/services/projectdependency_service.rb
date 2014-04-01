@@ -4,9 +4,8 @@ class ProjectdependencyService < Versioneye::Service
 
   A_SECONDS_PER_DAY = 24 * 60 * 60 # 24h * 60min * 60s = 86400
 
-  # TODO refactor the usage of this method.
-  # TODO test this
 
+  # TODO test this
   def self.release?( projectdependency )
     projectdependency.release = VersionTagRecognizer.release? projectdependency.version_current
     projectdependency.save
