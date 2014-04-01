@@ -1,5 +1,4 @@
 = versioneye-core
 
-<img src="https://www.codeship.io/projects/89b50ff0-9c04-0131-2ec8-3af16e33d613/status" />
 
 This project contains the core elements of VersionEye. This project is used by the WWW server and the API.
