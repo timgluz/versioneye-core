@@ -6,20 +6,50 @@ describe ProjectService do
 
   describe "find" do
     it "returns the project with dependencies" do
+      rc_1 = '200.0.0-RC1'
+      zz_1 = '0.0.1'
+
       user    = UserFactory.create_new
       project = ProjectFactory.create_new user
+
       prod_1  = ProductFactory.create_new 1
       prod_2  = ProductFactory.create_new 2
+      prod_2.versions = []
+      prod_2.add_version rc_1
+      prod_2.version = rc_1
+      prod_2.save
+      p prod_2.to_s
       prod_3  = ProductFactory.create_new 3
-      dep_1   = ProjectdependencyFactory.create_new project, prod_1, {:version_requested => '1000.0.0'}
-      dep_2   = ProjectdependencyFactory.create_new project, prod_2, {:version_requested => '0.0.0'}
-      dep_3   = ProjectdependencyFactory.create_new project, prod_3, {:version_requested => '0.0.0'}
+
+      dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1000.0.0'}
+      dep_2 = ProjectdependencyFactory.create_new project, prod_2, true, {:version_requested => zz_1, :version_current => rc_1}
+      dep_3 = ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => '0.0.0'}
 
       project.dependencies.count.should eq(3)
-      project.dependencies.first.outdated.should be_nil
+      project.dependencies.each do |dep|
+        dep.outdated = nil
+        dep.release = nil
+        dep.save
+      end
+
+      project.dependencies.each do |dep|
+        dep.outdated.should be_nil
+        dep.release.should be_nil
+      end
+
       proj = ProjectService.find project.id.to_s
       proj.dependencies.count.should eq(3)
-      proj.dependencies.first.outdated.should_not be_nil
+      proj.dependencies.each do |dep|
+        dep.outdated.should_not be_nil
+        dep.release.should_not be_nil
+        p dep.to_s
+      end
+
+      d1 = Projectdependency.find dep_1.id.to_s
+      d1.release.should be_true
+
+      d2 = Projectdependency.find dep_2.id.to_s
+      d2.release.should be_false
     end
   end
 

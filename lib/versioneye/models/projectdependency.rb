@@ -33,7 +33,7 @@ class Projectdependency < Versioneye::Model
 
 
   def to_s
-    "<Projectdependency: #{project} depends on #{name} (#{version_label}) current: #{version_current} >"
+    "<Projectdependency: #{project} depends on #{name} (#{version_label}/#{version_requested}) current: #{version_current} >"
   end
 
   def product
@@ -41,7 +41,7 @@ class Projectdependency < Versioneye::Model
   end
 
   def find_or_init_product
-    if project.project_type.eql?( Project::A_TYPE_BOWER )
+    if project && project.project_type.to_s.eql?( Project::A_TYPE_BOWER )
       product = Product.fetch_bower name
       return product if product
     end

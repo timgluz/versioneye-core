@@ -8,18 +8,18 @@ class ProjectdependencyService < Versioneye::Service
   # TODO test this
 
   def self.release?( projectdependency )
-    if projectdependency.release.nil?
-      projectdependency.release = VersionTagRecognizer.release? projectdependency.version_current
-      projectdependency.save
-    end
+    projectdependency.release = VersionTagRecognizer.release? projectdependency.version_current
+    projectdependency.save
     projectdependency.release
   end
 
 
   def self.outdated?( projectdependency )
     return update_outdated!(projectdependency) if projectdependency.outdated.nil?
+
     last_update_ago = Time.now - projectdependency.outdated_updated_at
     return projectdependency.outdated if last_update_ago < A_SECONDS_PER_DAY
+
     update_outdated!( projectdependency )
   end
 
@@ -58,16 +58,8 @@ class ProjectdependencyService < Versioneye::Service
   def self.update_version_current( projectdependency )
     return false if projectdependency.prod_key.nil?
 
-    language    = projectdependency.language
-    prod_key    = projectdependency.prod_key
-    group_id    = projectdependency.group_id
-    artifact_id = projectdependency.artifact_id
-
-    product = Product.fetch_product language, prod_key
-    if product.nil? && group_id && artifact_id
-      product = Product.find_by_group_and_artifact( group_id, artifact_id )
-    end
-    return false if product.nil?
+    product = projectdependency.find_or_init_product
+    return false if product.nil? || product.prod_key.nil?
 
     newest_version = VersionService.newest_version_number( product.versions, projectdependency.stability )
     return false if newest_version.nil? || newest_version.empty?
@@ -79,7 +71,7 @@ class ProjectdependencyService < Versioneye::Service
       projectdependency.muted = false
       projectdependency.save()
     end
+    true
   end
-
 
 end

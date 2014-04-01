@@ -35,6 +35,7 @@ class ProjectService < Versioneye::Service
     project = Project.find_by_id( id )
     project.dependencies.each do |dep|
       ProjectdependencyService.outdated?( dep )
+      ProjectdependencyService.release?(  dep )
     end
     project
   end

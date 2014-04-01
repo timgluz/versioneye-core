@@ -1590,4 +1590,66 @@ http_interactions:
         b21lIG5vaXNlO1xuIiwgInJldmlzaW9uIjogbnVsbCwgInNpemUiOiAtMX19
     http_version: 
   recorded_at: Sun, 30 Mar 2014 19:43:48 GMT
+- request:
+    method: get
+    uri: https://bitbucket.org/api/1.0/repositories/versioneye_test/emptyrepo/branches
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Chrome28 (contact@versioneye.com) (OAuth gem v0.4.7)
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      Authorization:
+      - OAuth oauth_consumer_key="HgSkE62pTT3HmxFGAm", oauth_nonce="NfrVJCKI1BVQEwk4IQMNK9dpSbMVlKYP1JA4qvCsB0Q",
+        oauth_signature="A2gZn8o57jVBUUVCFD9HJa8Ucqw%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1396361831", oauth_token="YsR6vM5qxmfZtkYt9G", oauth_version="1.0"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.5.10
+      Date:
+      - Tue, 01 Apr 2014 14:17:11 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '2'
+      Connection:
+      - keep-alive
+      X-Request-Count:
+      - '266'
+      X-Served-By:
+      - app12
+      X-Render-Time:
+      - '0.0979919433594'
+      Content-Language:
+      - en
+      X-Static-Version:
+      - 1558700f08fc
+      Vary:
+      - Authorization, Accept-Language, Cookie
+      X-Version:
+      - 1558700f08fc
+      Etag:
+      - '"99914b932bd37a50b983c5e7c90ae93b"'
+      X-Frame-Options:
+      - SAMEORIGIN
+      Set-Cookie:
+      - bb_session=rmw35oka9zgrxo09f4ryb31v13wm6pes; expires=Tue, 15-Apr-2014 14:17:11
+        GMT; httponly; Max-Age=1209600; Path=/; secure
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Content-Type-Options:
+      - nosniff
+    body:
+      encoding: UTF-8
+      string: "{}"
+    http_version: 
+  recorded_at: Tue, 01 Apr 2014 14:17:11 GMT
 recorded_with: VCR 2.9.0

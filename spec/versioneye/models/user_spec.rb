@@ -298,7 +298,7 @@ describe User do
       github_user.update_password("passwordasg", "asgasgfs").should be_false
     end
     it "does update the password" do
-      github_user.reset_password
+      UserService.reset_password( github_user )
       github_user.update_password(github_user.verification, "newpassword").should be_true
       user = User.authenticate(github_user.email, "newpassword")
       user.should_not be_nil

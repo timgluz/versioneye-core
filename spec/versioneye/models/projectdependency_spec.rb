@@ -103,7 +103,7 @@ describe Projectdependency do
       pr = dep_1.product
       pr.should_not be_nil
       pr.prod_key.should eq('log4r')
-      dep_1.to_s.should eq("<Projectdependency: #{project} depends on log4r (3.2.1) current: 3.2.1 >")
+      dep_1.to_s.should eq("<Projectdependency: #{project} depends on log4r (3.2.1/) current: 3.2.1 >")
     end
 
   end

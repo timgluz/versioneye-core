@@ -97,7 +97,7 @@ class Product < Versioneye::Model
   end
 
   def to_s
-    "<Product #{language}/#{prod_key}(#{version}) >"
+    "<Product #{language} / #{prod_key} (#{version}) >"
   end
 
   def to_param
@@ -122,7 +122,7 @@ class Product < Versioneye::Model
   end
 
   def self.fetch_bower name
-    Product.where(prod_type: Project::A_TYPE_BOWER, name: /^#{name}$/i).shift
+    Product.where(prod_type: Project::A_TYPE_BOWER, name: /^#{name}$/i).first
   end
 
   # legacy, still used by fall back search and API v1.0
@@ -177,7 +177,8 @@ class Product < Versioneye::Model
 
   def add_version(version_string, hash = {})
     unless version_by_number(version_string)
-      version_hash = {:version => version_string}.merge(hash)
+      version_hash = {:version => version_string}
+      version_hash.merge(hash) if !hash.nil? and !hash.empty?
       version = Version.new(version_hash)
       versions.push( version )
     end
