@@ -26,6 +26,11 @@ class SubmittedUrl < Versioneye::Model
   scope :as_declined      , where(declined: true)
   scope :as_not_integrated, where(integrated: false)
 
+
+  def to_s
+    "<SubmittedUrl> url: #{url}, declined: #{declined}, integrated: #{integrated}, product_resource: #{product_resource_id.to_s}"
+  end
+
   def self.find_by_id(id)
     return nil if id.to_s.strip.empty?
     return self.find(id.to_s) if self.where(_id: id.to_s).exists?
@@ -33,37 +38,6 @@ class SubmittedUrl < Versioneye::Model
 
   def user
     User.find_by_id user_id
-  end
-
-  def self.update_integration_statuses()
-    SubmittedUrl.as_not_integrated.each do |submitted_url|
-      submitted_url.update_integration_status
-    end
-  end
-
-  # TODO email
-  def update_integration_status
-    resource = self.product_resource
-    return false if resource.nil? || resource.prod_key.nil?
-
-    product = Product.fetch_product( resource.language, resource.prod_key )
-    return false if product.nil?
-
-    self.integrated = true
-
-    if self.save
-      submitted_url = self
-      # SubmittedUrlMailer.integrated_url_email(submitted_url, product).deliver
-      return true
-    else
-      log.error "Failed to update integration status for submittedUrl.#{self._id}"
-      log.error self.errors.full_messages.to_sentence
-    end
-    false
-  rescue => e
-    log.error e.message
-    log.error e.backtrace.join('\n')
-    false
   end
 
   def url_guessed

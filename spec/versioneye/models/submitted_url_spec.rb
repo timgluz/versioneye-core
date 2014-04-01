@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe SubmittedUrl do
+
   describe 'find_by_id' do
     before(:each) do
       @submitted_url = SubmittedUrlFactory.create_new
@@ -19,14 +20,15 @@ describe SubmittedUrl do
       result = SubmittedUrl.find_by_id(@submitted_url._id)
       result.should_not be_nil
       result._id.to_s.should eql(@submitted_url._id.to_s)
+      result.to_s.should eq( "<SubmittedUrl> url: #{@submitted_url.url}, declined: #{@submitted_url.declined}, integrated: #{@submitted_url.integrated}, product_resource: #{@submitted_url.product_resource_id.to_s}" )
     end
   end
 
   describe 'user' do
       before(:each) do
         @url_without_userid = SubmittedUrlFactory.create_new
-        @test_user = UserFactory.create_new(2)
-        @url_with_userid = SubmittedUrlFactory.create_new(user_id: @test_user._id)
+        @test_user          = UserFactory.create_new(2)
+        @url_with_userid    = SubmittedUrlFactory.create_new(user_id: @test_user._id)
       end
 
       after(:each) do
@@ -40,41 +42,50 @@ describe SubmittedUrl do
       end
 
       it 'returns correct User when user_id exists' do
-          user = @url_with_userid.user
-          user.should_not be_nil
-          user._id.to_s.should eql(@test_user._id.to_s)
+        user = @url_with_userid.user
+        user.should_not be_nil
+        user._id.to_s.should eql(@test_user._id.to_s)
       end
   end
 
-  describe 'update_integration_status' do
-    before(:each) do
-      @submitted_url1           = SubmittedUrlFactory.create_new(user_email: "t1@test.com")
-      @resource_without_product = ProductResourceFactory.create_new({:submitted_url => @submitted_url1})
+  describe 'type_guessed' do
 
-      @test_user_2           = UserFactory.create_new(2)
-      @submitted_url2        = SubmittedUrlFactory.create_new(user_id: @test_user_2._id.to_s)
-      @product               = ProductFactory.create_new(:maven)
-      @resource_with_product = ProductResourceFactory.create_new({
-                                  :submitted_url => @submitted_url2,
-                                  :prod_key => @product.prod_key,
-                                  :language => @product.language})
+    it 'returns GitHub' do
+      su = SubmittedUrl.new({ :url => 'https://github.com' })
+      su.type_guessed.should eq('GitHub')
     end
 
-    after(:each) do
-      @submitted_url1.delete
-      @submitted_url2.delete
-      @resource_without_product.delete
-      @product.delete
-      @resource_with_product.delete
-      @test_user_2.delete
+    it 'returns an empty string' do
+      su = SubmittedUrl.new({ :url => 'https://bonzo.com' })
+      su.type_guessed.should eq('')
     end
 
-    it 'returns false when updating fails' do
-      @submitted_url1.update_integration_status.should be_false
+  end
+
+  describe 'url_guessed' do
+
+    it 'returns the API GitHub repo url' do
+      su = SubmittedUrl.new({ :url => 'https://github.com/versioneye/versioneye_maven_plugin' })
+      su.url_guessed.should eq('https://api.github.com/repos/versioneye/versioneye_maven_plugin')
     end
 
-    it 'returns true when updating is successful' do
-      @submitted_url2.update_integration_status.should be_true
+    it 'returns the given URL' do
+      su = SubmittedUrl.new({ :url => 'https://bonzo.com' })
+      su.url_guessed.should eq('https://bonzo.com')
+    end
+
+  end
+
+  describe 'name_guessed' do
+
+    it 'returns the GitHub repo name' do
+      su = SubmittedUrl.new({ :url => 'https://github.com/versioneye/versioneye_maven_plugin' })
+      su.name_guessed.should eq('versioneye/versioneye_maven_plugin')
+    end
+
+    it 'returns the given URL' do
+      su = SubmittedUrl.new({ :url => 'https://bonzo.com' })
+      su.name_guessed.should eq('https://bonzo.com')
     end
 
   end
