@@ -30,6 +30,15 @@ class UserService < Versioneye::Service
     true
   end
 
+  def self.reset_password user
+    random_value = create_random_value
+    user.password = random_value # prevents using old password
+    user.verification = create_random_token
+    user.encrypt_password
+    user.save
+    UserMailer.reset_password( user ).deliver
+  end
+
   def self.delete user
     NotificationService.remove_notifications user
     collaborators = ProjectCollaborator.by_user user

@@ -293,17 +293,6 @@ describe User do
     end
   end
 
-  describe "reset_password" do
-    it "does reset the password" do
-      password = String.new github_user.password
-      user = User.authenticate(github_user.email, password)
-      user.should_not be_nil
-      user.reset_password
-      user.password.should_not eql(password)
-      user.verification.should_not be_nil
-    end
-  end
-
   describe "update_password" do
     it "does not update the password" do
       github_user.update_password("passwordasg", "asgasgfs").should be_false

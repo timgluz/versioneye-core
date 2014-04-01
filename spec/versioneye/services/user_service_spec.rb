@@ -108,4 +108,21 @@ describe UserService do
 
   end
 
+  describe "reset_password" do
+
+    let(:github_user) { FactoryGirl.create(:github_user)}
+
+    it "does reset the password" do
+      ActionMailer::Base.deliveries.clear
+      password = String.new github_user.password
+      user = User.authenticate(github_user.email, password)
+      user.should_not be_nil
+      UserService.reset_password( user )
+      user.password.should_not eql(password)
+      user.verification.should_not be_nil
+      ActionMailer::Base.deliveries.size.should == 1
+    end
+
+  end
+
 end

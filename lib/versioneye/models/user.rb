@@ -312,16 +312,6 @@ class User < Versioneye::Model
     enc_password.eql?(encrypted_password)
   end
 
-  # TODO email
-  def reset_password
-    random_value = create_random_value
-    self.password = random_value # prevents using old password
-    self.verification = create_random_token
-    encrypt_password
-    save
-    # UserMailer.reset_password(self).deliver
-  end
-
   def update_password(verification_code, password)
     user = User.by_verification(verification_code).first
     return false if user.nil?
@@ -419,6 +409,11 @@ class User < Versioneye::Model
     }
   end
 
+  def encrypt_password
+    self.salt = make_salt if new_record?
+    self.encrypted_password = encrypt(password)
+  end
+
   private
 
     def create_random_token(length = 25)
@@ -430,11 +425,6 @@ class User < Versioneye::Model
       value = ""
       10.times { value << chars[rand(chars.size)] }
       value
-    end
-
-    def encrypt_password
-      self.salt = make_salt if new_record?
-      self.encrypted_password = encrypt(password)
     end
 
     def downcase_email
