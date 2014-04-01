@@ -20,6 +20,12 @@ describe SubmittedUrlService do
                                   :language => @product.language})
     end
 
+    it 'returns false because because the parameter type is wrong.' do
+      ActionMailer::Base.deliveries.clear
+      SubmittedUrlService.update_integration_status( 'fake' ).should be_false
+      ActionMailer::Base.deliveries.size.should == 0
+    end
+
     it 'returns false because there is no product_resource attached.' do
       ActionMailer::Base.deliveries.clear
       submitted_url = SubmittedUrlFactory.create_new(user_email: "t1@test.com")
@@ -30,6 +36,14 @@ describe SubmittedUrlService do
     it 'returns false because the product_resource doesnt has a prod_key. Its not attached to a product yet.' do
       ActionMailer::Base.deliveries.clear
       SubmittedUrlService.update_integration_status(@submitted_url_1).should be_false
+      ActionMailer::Base.deliveries.size.should == 0
+    end
+
+    it 'returns false because url is nil' do
+      ActionMailer::Base.deliveries.clear
+      @submitted_url_2.url = nil
+      @submitted_url_2.save
+      SubmittedUrlService.update_integration_status(@submitted_url_2).should be_false
       ActionMailer::Base.deliveries.size.should == 0
     end
 
