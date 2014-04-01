@@ -39,7 +39,7 @@ GEM
       selenium-webdriver
     childprocess (0.5.2)
       ffi (~> 1.0, >= 1.0.11)
-    cocoapods-core (0.29.0)
+    cocoapods-core (0.31.1)
       activesupport (>= 3.2.15, < 4)
       fuzzy_match (~> 2.0.4)
       json_pure (~> 1.8)
@@ -201,10 +201,10 @@ PLATFORMS
 DEPENDENCIES
   actionmailer (~> 3.2.17)
   aws-sdk (~> 1.0)
-  bundler (~> 1.0)
+  bundler (~> 1.6.0)
   capybara (~> 2.2.0)
   capybara-firebug (~> 2.0.0)
-  cocoapods-core (~> 0.29.0)
+  cocoapods-core (~> 0.31.0)
   dalli (~> 2.7.0)
   database_cleaner (~> 1.2.0)
   factory_girl (~> 4.4.0)

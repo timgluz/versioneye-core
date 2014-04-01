@@ -130,7 +130,7 @@ describe Product do
       result.name.should eq('moment')
     end
     it "return searched product, the first one" do
-      product = described_class.new({:language => 'JavaScript', :prod_type => 'Bower', :prod_key => 'moment/moment', :name => 'moment'})
+      product  = described_class.new({:language => 'JavaScript', :prod_type => 'Bower', :prod_key => 'moment/moment', :name => 'moment'})
       product.save.should be_true
       product2 = described_class.new({:language => 'JavaScript', :prod_type => 'Bower', :prod_key => 'moment/', :name => 'moment'})
       product2.save.should be_true

@@ -15,12 +15,12 @@ gem 'httparty'           , '~> 0.13.0'
 gem 'persistent_httparty', '~> 0.1.0'
 gem 'json'               , '~> 1.8.0'
 gem 'nokogiri'           , '~> 1.6.0'
-gem 'cocoapods-core'     , '~> 0.29.0'
+gem 'cocoapods-core'     , '~> 0.31.0'
 gem 'actionmailer'       , '~> 3.2.17'
 # gem 'will_paginate'      , '~> 3.0.5'
 
 group :development do
-  gem 'bundler', '~> 1.0'
+  gem 'bundler', '~> 1.6.0'
   gem 'jeweler', '~> 2.0.1'
 end
 
