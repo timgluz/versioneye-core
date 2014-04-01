@@ -25,6 +25,7 @@ group :development do
 end
 
 group :test do
+  gem 'fakes3'          , '0.1.5.2'
   gem 'rdoc'            , '~> 4.1.0'
   gem 'simplecov'       , '~> 0.8.0'
   gem 'rspec'           , '~> 2.14.0'
