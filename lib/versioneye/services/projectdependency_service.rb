@@ -5,8 +5,9 @@ class ProjectdependencyService < Versioneye::Service
   A_SECONDS_PER_DAY = 24 * 60 * 60 # 24h * 60min * 60s = 86400
 
 
-  # TODO test this
   def self.release?( projectdependency )
+    return nil if projectdependency.nil? || projectdependency.version_current.nil?
+
     projectdependency.release = VersionTagRecognizer.release? projectdependency.version_current
     projectdependency.save
     projectdependency.release
@@ -14,6 +15,8 @@ class ProjectdependencyService < Versioneye::Service
 
 
   def self.outdated?( projectdependency )
+    return nil if projectdependency.nil?
+
     return update_outdated!(projectdependency) if projectdependency.outdated.nil?
 
     last_update_ago = Time.now - projectdependency.outdated_updated_at
@@ -45,6 +48,9 @@ class ProjectdependencyService < Versioneye::Service
   def self.update_outdated( projectdependency, out_value )
     projectdependency.outdated = out_value
     projectdependency.outdated_updated_at = DateTime.now
+    if !projectdependency.version_current.nil?
+      self.release? projectdependency
+    end
     projectdependency.save
     projectdependency.outdated
   rescue => e
