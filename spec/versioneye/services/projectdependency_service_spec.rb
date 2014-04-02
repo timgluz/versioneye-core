@@ -54,7 +54,7 @@ describe ProjectdependencyService do
     it "is up to date" do
       dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.version_requested = "1.0"
-      dep.outdated?.should be_false
+      ProjectdependencyService.outdated?(dep).should be_false
       dep.unknown?.should  be_false
     end
 
@@ -131,9 +131,35 @@ describe ProjectdependencyService do
       dep.unknown?.should  be_false
 
       dep.version_requested = "0.1"
+      dep.release = nil
       ProjectdependencyService.outdated?(dep).should be_false
       ProjectdependencyService.update_outdated!(dep)
       ProjectdependencyService.outdated?(dep).should be_true
+      dep.release.should_not be_nil
+      dep.release.should be_true
+    end
+
+
+    it "checks if the cache updates after a time period" do
+      dep = ProjectdependencyFactory.create_new(@project, @product)
+      dep.version_requested = "1.0"
+      ProjectdependencyService.outdated?(dep).should be_false
+      dep.unknown?.should be_false
+
+      dep.version_requested = "0.1"
+      dep.release = nil
+      dep.save
+      # Should fetch value from catch and return false
+      ProjectdependencyService.outdated?(dep).should be_false
+
+      day_before = dep.outdated_updated_at - 1
+      dep.outdated_updated_at = day_before
+      dep.save
+
+      # Should update the cached value and return true
+      ProjectdependencyService.outdated?(dep).should be_true
+      dep.release.should_not be_nil
+      dep.release.should be_true
     end
 
   end

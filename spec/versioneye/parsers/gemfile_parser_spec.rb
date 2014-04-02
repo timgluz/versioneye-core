@@ -108,6 +108,8 @@ describe GemfileParser do
       dep_6.version_current.should eql("1.1.6")
       dep_6.version_label.should eql("1.1.3")
       dep_6.comperator.should eql(">=")
+      dep_6.release.should_not be_nil
+      dep_6.release.should be_true
 
       dep_7 = project.dependencies[6]
       dep_7.name.should eql("sassy")

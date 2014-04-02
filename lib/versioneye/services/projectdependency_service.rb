@@ -19,7 +19,7 @@ class ProjectdependencyService < Versioneye::Service
 
     return update_outdated!(projectdependency) if projectdependency.outdated.nil?
 
-    last_update_ago = Time.now - projectdependency.outdated_updated_at
+    last_update_ago = DateTime.now.to_i - projectdependency.outdated_updated_at.to_i
     return projectdependency.outdated if last_update_ago < A_SECONDS_PER_DAY
 
     update_outdated!( projectdependency )
