@@ -19,6 +19,7 @@ class Project < Versioneye::Model
   A_SOURCE_URL       = 'url'
   A_SOURCE_GITHUB    = 'github'
   A_SOURCE_BITBUCKET = 'bitbucket'
+  A_SOURCE_API       = 'API'  # TODO use this to replace property :api_created
 
   A_PERIOD_MONTHLY = 'monthly'
   A_PERIOD_WEEKLY  = 'weekly'
@@ -56,11 +57,11 @@ class Project < Versioneye::Model
   has_many   :projectdependencies
   has_many   :collaborators, class_name: 'ProjectCollaborator'
 
-  scope :by_user  , ->(user)  { where(user_id: user[:_id].to_s) }
-  scope :by_collaborator, ->(user){all_in(_id: ProjectCollaborator.by_user(user).to_a.map(&:project_id))}
-  scope :by_source, ->(source){ where(source:  source ) }
-  scope :by_period, ->(period){ where(period:  period ) }
-  scope :by_github, ->(reponame){ where(source: A_SOURCE_GITHUB, scm_fullname: reponame)}
+  scope :by_collaborator, ->(user){ all_in(_id: ProjectCollaborator.by_user(user).to_a.map(&:project_id)) }
+  scope :by_user  , ->(user)    { where(user_id: user[:_id].to_s) }
+  scope :by_source, ->(source)  { where(source:  source ) }
+  scope :by_period, ->(period)  { where(period:  period ) }
+  scope :by_github, ->(reponame){ where(source: A_SOURCE_GITHUB, scm_fullname: reponame) }
 
   def to_s
     "<Project #{language}/#{project_type} #{name}>"
