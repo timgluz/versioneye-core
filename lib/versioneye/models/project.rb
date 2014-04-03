@@ -134,29 +134,19 @@ class Project < Versioneye::Model
   end
 
   def remove_collaborators
-    collaborators.each do |collaborator|
-      collaborator.remove
-    end
+    collaborators.each { |collaborator| collaborator.remove }
   end
 
   def known_dependencies
-    knows_deps = Array.new
-    self.projectdependencies.each do |dep|
-      knows_deps << dep if dep.prod_key
-    end
-    knows_deps
+    self.projectdependencies.find_all {|dep| dep.prod_key }
   end
 
   def remove_dependencies
-    projectdependencies.each do |dependency|
-      dependency.remove
-    end
+    projectdependencies.each { |dependency| dependency.remove }
   end
 
   def save_dependencies
-    projectdependencies.each do |dependency|
-      dependency.save
-    end
+    projectdependencies.each { |dependency| dependency.save }
   end
 
   def muted_prod_keys
@@ -215,13 +205,11 @@ class Project < Versioneye::Model
   end
 
   def self.email_for(project, user)
-    if project.email.nil? || project.email.empty?
-      return user.email
-    end
+    return user.email if project.email.to_s.empty?
+
     user_email = user.get_email( project.email )
-    if user_email && user_email.verified?
-      return user_email.email
-    end
+    return user_email.email if user_email && user_email.verified?
+
     return user.email
   end
 

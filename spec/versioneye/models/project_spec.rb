@@ -3,16 +3,10 @@ require 'spec_helper'
 describe Project do
 
   before(:each) do
-    @user = User.new
-    @user.fullname = "Hans Tanz"
-    @user.username = "hanstanz"
-    @user.email = "hans@tanz.de"
-    @user.password = "password"
-    @user.salt = "salt"
-    @user.terms = true
-    @user.datenerhebung = true
+    @user = User.new({:fullname => 'Hans Tanz', :username => 'hanstanz',
+      :email => 'hans@tanz.de', :password => 'password', :salt => 'salt',
+      :terms => true, :datenerhebung => true})
     @user.save
-    @properties = Hash.new
   end
 
   describe "email_for" do
@@ -218,16 +212,20 @@ describe Project do
       dep_1.version_current = "2.0.0"
       dep_1.version_requested = "1.0.0"
       dep_1.save
+
       dep_2 = ProjectdependencyFactory.create_new project, product_2
       dep_2.version_current = "2.0.0"
       dep_2.version_requested = "1.0.0"
       dep_2.muted = true
       dep_2.save
+
       dep_3 = ProjectdependencyFactory.create_new project, product_3
       dep_3.version_current = "2.0.0"
       dep_3.version_requested = "1.0.0"
       dep_3.muted = true
       dep_3.save
+
+      old_deps = [dep_1.id.to_s, dep_2.id.to_s, dep_3.id.to_s, ]
 
       unmuted = project.unmuted_dependencies
       unmuted.count.should eq(1)
@@ -257,13 +255,207 @@ describe Project do
 
       project.overwrite_dependencies( new_deps )
 
-      unmuted = project.unmuted_dependencies
+      proj_db = Project.find project.id
+
+      unmuted = proj_db.unmuted_dependencies
       unmuted.count.should eq(2)
 
-      muted = project.muted_dependencies
+      muted = proj_db.muted_dependencies
       muted.count.should eq(1)
       muted.first.prod_key.should eql( dep_6.prod_key )
+
+      proj_db.dependencies.each do |dep|
+        old_deps.include?( dep.id.to_s ).should be_false
+      end
     end
+  end
+
+  describe 'update_from' do
+
+    it 'updates from new project' do
+
+      user = UserFactory.create_new 1077
+      project = ProjectFactory.create_new user
+      project.description = 'project_1'
+      project.license = 'GPL'
+      project.url = 'https://github/awesome/awesome_1'
+      project.s3_filename = 'https://amazon.s3.s1'
+      project.dep_number = 3
+      project.out_number = 0
+      project.unknown_number = 0
+      project.save
+
+      product_1 = ProductFactory.create_new 1
+      product_2 = ProductFactory.create_new 2
+      product_3 = ProductFactory.create_new 3
+
+      dep_1 = ProjectdependencyFactory.create_new project, product_1
+      dep_2 = ProjectdependencyFactory.create_new project, product_2
+      dep_3 = ProjectdependencyFactory.create_new project, product_3
+
+      proj_1 = Project.find project.id
+      proj_1.dependencies.count.should eq(3)
+
+      # Create new project to update the old one
+
+      new_project = ProjectFactory.create_new user
+      new_project.description = 'new_project'
+      new_project.license = 'MIT'
+      new_project.url = 'https://github/awesome/awesome_2'
+      new_project.s3_filename = 'https://amazon.s3.s2'
+      new_project.dep_number = 4
+      new_project.out_number = 1
+      new_project.unknown_number = 1
+      new_project.save
+
+      product_4 = ProductFactory.create_new 4
+      product_5 = ProductFactory.create_new 5
+      product_6 = ProductFactory.create_new 6
+      product_7 = ProductFactory.create_new 7
+
+      dep_4 = ProjectdependencyFactory.create_new new_project, product_4
+      dep_5 = ProjectdependencyFactory.create_new new_project, product_5
+      dep_6 = ProjectdependencyFactory.create_new new_project, product_6
+      dep_7 = ProjectdependencyFactory.create_new new_project, product_7
+
+      new_proj = Project.find_by_id new_project.id
+      new_proj.dependencies.count.should eq(4)
+
+      project.update_from new_project
+      project = Project.find_by_id project.id
+      project.dependencies.count.should eq(4)
+      project.description.should eq('new_project')
+      project.license.should eq('MIT')
+      project.url.should eq('https://github/awesome/awesome_2')
+      project.s3_filename.should eq('https://amazon.s3.s2')
+      project.dep_number.should eq(4)
+      project.out_number.should eq(1)
+      project.unknown_number.should eq(1)
+    end
+
+  end
+
+  describe 'create_random_value' do
+    it 'returns a random value with the length of 20' do
+      rd = Project.create_random_value
+      rd.should_not be_nil
+      rd.length.should eq(20)
+    end
+  end
+
+  describe 'save_dependencies' do
+
+    it 'stores the dependencies' do
+
+      user = UserFactory.create_new 1077
+
+      # Cretate a project but don't persist it!
+      project = ProjectFactory.create_new user, nil, false
+
+      product_1 = ProductFactory.create_new 1
+      product_2 = ProductFactory.create_new 2
+
+      # Add unstored deps to unstored project
+      dep_1 = ProjectdependencyFactory.create_new project, product_1, false
+      dep_2 = ProjectdependencyFactory.create_new project, product_2, false
+
+      project.dependencies.size.should eq(2)
+
+      # Returns nil because project is not persisted
+      proj_db = Project.find_by_id project.id
+      proj_db.should be_nil
+
+      # Persist project. But it does not cascade to dependencies
+      project.save
+      proj_db = Project.find_by_id project.id
+      proj_db.dependencies.count.should eq(0)
+
+      # Persist dependencies
+      project.save_dependencies
+
+      # Reloaded project has now all dependencies
+      proj_db = Project.find_by_id project.id
+      proj_db.dependencies.count.should eq(2)
+    end
+
+  end
+
+  describe 'remove_dependencies' do
+
+    it 'removes the dependencies' do
+
+      user = UserFactory.create_new 1077
+      project = ProjectFactory.create_new user
+
+      product_1 = ProductFactory.create_new 1
+      product_2 = ProductFactory.create_new 2
+
+      dep_1 = ProjectdependencyFactory.create_new project, product_1
+      dep_2 = ProjectdependencyFactory.create_new project, product_2
+
+      proj_db = Project.find_by_id project.id
+      proj_db.dependencies.count.should eq(2)
+
+      proj_db.remove_dependencies
+
+      proj_db = Project.find_by_id project.id
+      proj_db.dependencies.count.should eq(0)
+      proj_db.dependencies.size.should eq(0)
+    end
+
+  end
+
+  describe 'known_dependencies' do
+
+    it 'returns the known dependencies' do
+
+      user = UserFactory.create_new 1077
+      project = ProjectFactory.create_new user
+
+      product_1 = ProductFactory.create_new 1
+      product_2 = ProductFactory.create_new 2
+
+      dep_1 = ProjectdependencyFactory.create_new project, product_1
+      dep_2 = ProjectdependencyFactory.create_new project, product_2
+      dep_2.prod_key = nil
+      dep_2.save
+
+      known_deps = project.known_dependencies
+      known_deps.should_not be_nil
+      known_deps.count.should eq(1)
+      known_deps.first.id.to_s.should eq(dep_1.id.to_s)
+    end
+
+  end
+
+  describe 'sorted_dependencies_by_rank' do
+
+    it 'returns sorted dependencies' do
+      user = UserFactory.create_new 1077
+      project = ProjectFactory.create_new user
+
+      product_1 = ProductFactory.create_new 1
+      product_2 = ProductFactory.create_new 2
+      product_3 = ProductFactory.create_new 3
+
+      dep_1 = ProjectdependencyFactory.create_new project, product_1
+      dep_2 = ProjectdependencyFactory.create_new project, product_2
+      dep_3 = ProjectdependencyFactory.create_new project, product_3
+      dep_3.version_requested = '0.0.0'
+      dep_3.outdated = true
+      dep_3.save
+
+      deps = project.dependencies.first.id.to_s.should eq( dep_1.id.to_s )
+
+      dep_1[:status_rank] = 3
+      dep_2[:status_rank] = 2
+      dep_3[:status_rank] = 1
+
+      deps = project.sorted_dependencies_by_rank
+      deps.first.id.to_s.should eq(dep_3.id.to_s)
+      deps.last.id.to_s.should eq(dep_1.id.to_s)
+    end
+
   end
 
 end
