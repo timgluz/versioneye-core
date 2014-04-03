@@ -29,7 +29,7 @@ class S3 < Versioneye::Service
     self.store_in_project_bucket filename, file_up['datafile'].read
     filename
   rescue => e
-    log.error "Exception in S3.upload_fileupload(file_up) - #{e.message}"
+    log.error "Exception in S3.upload_fileupload(file_up)"
     log.error e.backtrace.join '\n'
     nil
   end
@@ -66,7 +66,7 @@ class S3 < Versioneye::Service
     obj    = bucket.objects[ filename ]
     obj.write bin
   rescue => e
-    log.error "Error in store_in_project_bucket: #{e.message}"
+    log.error "Error in store_in_project_bucket"
     log.error e.backtrace.message
   end
 

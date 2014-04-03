@@ -5,6 +5,8 @@ describe S3 do
 
   describe 'upload_fileupload - url_for - delete' do
     it 'stores the file, gets the url and deletes the file' do
+      AWS.config(:s3_endpoint => 'localhost', :s3_port => 4567, :use_ssl => false )
+
       gemfile = "spec/fixtures/files/Gemfile"
       file_attachment = Rack::Test::UploadedFile.new(gemfile, "application/octet-stream")
       file = {'datafile' => file_attachment}
