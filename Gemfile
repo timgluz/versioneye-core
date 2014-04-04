@@ -5,7 +5,7 @@ gem 'mongoid'            , '~> 3.1.0'
 gem 'log4r'              , '~> 1.1.0'
 gem 'dalli'              , '~> 2.7.0'
 gem 'kgio'               , '~> 2.9.0'   # 20% performance boost for dalli
-gem 'oauth'              , '~> 0.4.7' #:github => "oauth-xx/oauth-ruby" #'0.4.7'
+gem 'oauth'              , '~> 0.4.7'
 gem 'aws-sdk'            , '~> 1.0'
 gem 'stripe'             , '~> 1.10.1'
 gem 'tire'               , '~> 0.6.2'
@@ -17,7 +17,6 @@ gem 'json'               , '~> 1.8.0'
 gem 'nokogiri'           , '~> 1.6.0'
 gem 'cocoapods-core'     , '~> 0.31.0'
 gem 'actionmailer'       , '~> 3.2.17'
-# gem 'will_paginate'      , '~> 3.0.5'
 
 group :development do
   gem 'bundler', '~> 1.6.0'
