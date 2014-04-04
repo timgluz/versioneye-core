@@ -54,12 +54,15 @@ class UserService < Versioneye::Service
     user.prev_fullname  = user.fullname
     user.fullname       = 'Deleted'
     user.username       = "#{random}_#{user.username}"
+
     user.github_id      = nil
     user.github_token   = nil
     user.github_scope   = nil
-    user.twitter_id     = nil
-    user.twitter_token  = nil
-    user.twitter_secret = nil
+
+    user.bitbucket_id     = nil
+    user.bitbucket_token  = nil
+    user.bitbucket_secret = nil
+
     user.products.clear
     user.save
   end

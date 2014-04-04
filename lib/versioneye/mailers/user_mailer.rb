@@ -69,8 +69,8 @@ class UserMailer < ActionMailer::Base
 
   def fetch_source( user )
     source = "email"
-    source = "twitter" if user.twitter_id
-    source = "github"  if user.github_id
+    source = "bitbucket" if user.bitbucket_id
+    source = "github"    if user.github_id
     source
   end
 

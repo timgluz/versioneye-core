@@ -15,9 +15,9 @@ describe UserService do
       user.github_id = "123"
       user.github_token = "asgasgas"
       user.github_scope = "none"
-      user.twitter_id = "456"
-      user.twitter_token = "asgfasgfa"
-      user.twitter_secret = "asgasgasgas"
+      user.bitbucket_id = "456"
+      user.bitbucket_token = "asgfasgfa"
+      user.bitbucket_secret = "asgasgasgas"
       user.save.should be_true
       Notification.count.should eql(0)
       NotificationFactory.create_new user, true
@@ -30,9 +30,9 @@ describe UserService do
       user.github_id.should be_nil
       user.github_token.should be_nil
       user.github_scope.should be_nil
-      user.twitter_id.should be_nil
-      user.twitter_token.should be_nil
-      user.twitter_secret.should be_nil
+      user.bitbucket_id.should be_nil
+      user.bitbucket_token.should be_nil
+      user.bitbucket_secret.should be_nil
     end
 
   end

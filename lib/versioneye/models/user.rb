@@ -1,7 +1,5 @@
 class User < Versioneye::Model
 
-  # require 'will_paginate/array'
-
   A_EMAIL_REGEX = /\A([\w\!\#\z\%\&\'\*\+\-\/\=\?\\A\`{\|\}\~]+\.)*[\w\+-]+@((((([a-z0-9]{1}[a-z0-9\-]{0,62}[a-z0-9]{1})|[a-z])\.)+[a-z]{2,6})|(\d{1,3}\.){3}\d{1,3}(\:\d{1,5})?)\z/i
 
   include Mongoid::Document
@@ -32,23 +30,19 @@ class User < Versioneye::Model
   field :refer_name, type: String
   field :free_private_projects, type: Integer, default: 0
 
-  # TODO refactor this in facebook_account, twitter_account
+  # TODO refactor this in github_account, bitbucket_account
   # create own models for that und connect them to user
-
-  field :twitter_id    , type: String
-  field :twitter_token , type: String
-  field :twitter_secret, type: String
 
   field :github_id   , type: String
   field :github_login, type: String #username on github
   field :github_token, type: String
   field :github_scope, type: String
 
-  field :bitbucket_id, type: String
-  field :bitbucket_login, type: String #username on bitbucket
-  field :bitbucket_token, type: String
+  field :bitbucket_id,     type: String
+  field :bitbucket_login,  type: String #username on bitbucket
+  field :bitbucket_token,  type: String
   field :bitbucket_secret, type: String
-  field :bitbucket_scope, type: String
+  field :bitbucket_scope,  type: String
 
   field :stripe_token      , type: String
   field :stripe_customer_id, type: String
@@ -233,11 +227,6 @@ class User < Versioneye::Model
     self.encrypted_password == encrypt(submitted_password)
   end
 
-  def self.find_by_twitter_id twitter_id
-    return nil if twitter_id.nil? || twitter_id.strip.empty?
-    User.where(twitter_id: twitter_id).shift
-  end
-
   def self.find_by_github_id github_id
     return nil if github_id.nil? || github_id.strip.empty?
     User.where(github_id: github_id).shift
@@ -318,26 +307,6 @@ class User < Versioneye::Model
     self.password = password
     encrypt_password
     save
-  end
-
-  def update_from_twitter_json(json_user, token, secret)
-    self.fullname = json_user['name']
-    self.username = json_user['screen_name']
-    self.description = json_user['description']
-    self.location = json_user['location']
-    self.time_zone = json_user['time_zone']
-    self.blog = json_user['url']
-    self.twitter_id = json_user['id']
-    self.twitter_token = token
-    self.twitter_secret = secret
-    self.password = create_random_value
-    if self.username.nil? || self.username.empty?
-      self.username = create_random_value
-    end
-    self.username = replacements_for_username( self.username )
-    if self.fullname.nil? || self.fullname.empty?
-      self.fullname = self.username
-    end
   end
 
   def update_from_github_json(json_user, token, scopes = "no_scope")

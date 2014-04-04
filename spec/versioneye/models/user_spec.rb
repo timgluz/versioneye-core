@@ -3,7 +3,6 @@ require 'spec_helper'
 describe User do
 
   let(:github_user) { FactoryGirl.create(:github_user)}
-  let(:twitter_user){ FactoryGirl.create(:twitter_user)}
 
   before(:each) do
     User.destroy_all
@@ -222,25 +221,6 @@ describe User do
       user.should_not be_nil
       user.github_id.eql?(github_user.github_id).should be_true
       user.id.eql?(github_user.id).should be_true
-    end
-  end
-
-  describe "find_by_twitter_id" do
-    it "doesn't find by twitter id" do
-      User.find_by_twitter_id("agfgasasgasfgasfg").should be_nil
-    end
-    it "returns nil for nil" do
-      User.find_by_twitter_id( nil ).should be_nil
-    end
-    it "returns nil for empty string" do
-      User.find_by_twitter_id( "   " ).should be_nil
-    end
-    it "does find by twitter_id" do
-      twitter_user
-      user = User.find_by_twitter_id("twitter_id_123")
-      user.should_not be_nil
-      user.twitter_id.eql?(twitter_user.twitter_id).should be_true
-      user.id.eql?(twitter_user.id).should be_true
     end
   end
 
