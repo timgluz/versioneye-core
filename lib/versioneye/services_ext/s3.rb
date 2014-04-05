@@ -67,7 +67,8 @@ class S3 < Versioneye::Service
     obj.write bin
   rescue => e
     log.error "Error in store_in_project_bucket"
-    log.error e.backtrace.message
+    log.error e.message
+    log.error e.backtrace.join '\n'
   end
 
   private
