@@ -94,7 +94,7 @@ class LanguageDailyStats < Versioneye::Model
       self.inc_version(metric_key)
       self.inc_novel(metric_key) if LanguageDailyStats.novel?(release, prod_info)
     else
-      self.log.error("Product #{release[:prod_key]} misses language or language are not supported.")
+      LanguageDailyStats.log.error("Product #{release[:prod_key]} misses language or language are not supported.")
     end
   end
 
