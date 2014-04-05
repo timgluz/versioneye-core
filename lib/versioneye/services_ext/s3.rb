@@ -28,12 +28,18 @@ class S3 < Versioneye::Service
     encoded_name = URI.encode( filename )
     url = AWS.s3.buckets[Settings.instance.s3_infographics_bucket].objects[encoded_name].url_for( :read, :secure => true )
     url.to_s
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join '\n'
   end
 
   def self.delete filename
     return nil if filename.nil? || filename.empty?
     set_aws_crendentials
     AWS.s3.buckets[Settings.instance.s3_projects_bucket].objects[filename].delete
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join '\n'
   end
 
   def self.upload_fileupload file_up
@@ -44,7 +50,7 @@ class S3 < Versioneye::Service
     self.store_in_project_bucket filename, file_up['datafile'].read
     filename
   rescue => e
-    log.error "Exception in S3.upload_fileupload(file_up)"
+    log.error "Exception in S3.upload_fileupload(file_up) #{e.message}"
     log.error e.backtrace.join '\n'
     nil
   end
@@ -62,6 +68,9 @@ class S3 < Versioneye::Service
     result['filename'] = new_filename
     result['s3_url']   = url
     result
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join '\n'
   end
 
   def self.upload_file_content( content, filename)
@@ -76,6 +85,9 @@ class S3 < Versioneye::Service
     result['filename'] = new_filename
     result['s3_url']   = url
     result
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join '\n'
   end
 
   def self.store_in_project_bucket filename, bin
