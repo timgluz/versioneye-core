@@ -21,10 +21,8 @@ class ProductService < Versioneye::Service
   def self.update_dependencies( product )
     deps = product.all_dependencies
     deps.each do |dependency|
-      outdated = DependencyService.cache_outdated?( dependency )
-      if outdated != dependency.outdated
-        dependency.update_attributes({outdated: outdated})
-      end
+      dependency.outdated = DependencyService.cache_outdated?( dependency )
+      dependency.save
     end
   end
 
