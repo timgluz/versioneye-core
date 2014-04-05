@@ -19,6 +19,7 @@ class S3 < Versioneye::Service
     url.to_s
   rescue => e
     log.error e.message
+    log.error "AWS.config: #{AWS.config.s3_endpoint} - #{AWS.config.s3_port} - #{AWS.config.use_ssl} - #{AWS.config.access_key_id} -  #{AWS.config.secret_access_key}"
     log.error e.backtrace.join '\n'
   end
 
