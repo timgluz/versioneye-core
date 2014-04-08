@@ -27,6 +27,7 @@ require 'versioneye/domain_factories/projectdependency_factory'
 require 'versioneye/domain_factories/stripe_invoice_factory'
 require 'versioneye/domain_factories/submitted_url_factory'
 require 'versioneye/domain_factories/user_factory'
+require 'versioneye/domain_factories/license_factory'
 
 require 'versioneye/factories/dependency_factory'
 require 'versioneye/factories/github_repo_factory'

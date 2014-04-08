@@ -57,7 +57,7 @@ class License < Versioneye::Model
   end
 
   def to_s
-    "[License for(#{language}/#{prod_key}/#{version}) : #{name}]"
+    "[License for (#{language}/#{prod_key}/#{version}) : #{name}]"
   end
 
   private
@@ -79,11 +79,11 @@ class License < Versioneye::Model
     end
 
     def gpl_20_match name
-      name.match(/^GPL\-2$/i) || name.match(/^GPL\-2\.0$/i)
+      name.match(/^GPL\-2$/i) || name.match(/^GPL\-2\.0$/i)  || name.match(/^GPL 2\.0$/i) || name.match(/^GPL 2$/i)
     end
 
     def artistic_10_match name
-      name.match(/^Artistic License 1\.0$/i) || name.match(/^Artistic License$/) || name.match(/^Artistic\-1\.0$/)
+      name.match(/^Artistic License 1\.0$/i) || name.match(/^Artistic License$/) || name.match(/^Artistic\-1\.0$/) || name.match(/^Artistic 1\.0$/)
     end
 
     def artistic_20_match name
@@ -91,7 +91,7 @@ class License < Versioneye::Model
     end
 
     def apache_license_match name
-      name.match(/^Apache License$/i) || name.match(/^Apache Software Licenses$/i)
+      name.match(/^Apache License$/i) || name.match(/^Apache Software Licenses$/i) || name.match(/^Apache Software License$/i)
     end
 
     def apache_license_2_match name
