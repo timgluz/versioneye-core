@@ -31,6 +31,7 @@ class License < Versioneye::Model
 
   def link
     return url if url && !url.empty?
+    return 'http://www.linfo.org/bsdlicense.html' if bsd_match( name )
     return 'http://choosealicense.com/licenses/mit/' if mit_match( name )
     return 'http://www.ruby-lang.org/en/about/license.txt' if ruby_match( name )
     return 'http://www.apache.org/licenses/LICENSE-2.0.txt' if apache_license_2_match( name )
@@ -63,6 +64,10 @@ class License < Versioneye::Model
 
     def ruby_match name
       name.match(/^Ruby$/i) || name.match(/^Ruby License$/)
+    end
+
+    def bsd_match name
+      name.match(/^BSD$/i) || name.match(/^BSD License$/)
     end
 
     def mit_match name
