@@ -1,4 +1,4 @@
-class DependencyFacotry
+class DependencyFactory
 
   def self.create_new(product, dep_product, store = true)
     dependency              = Dependency.new

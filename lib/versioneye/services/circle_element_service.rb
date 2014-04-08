@@ -3,7 +3,7 @@ class CircleElementService < Versioneye::Service
 
   # TODO refactor usage
   def self.dependency_circle(lang, prod_key, version, scope)
-    if scope == nil
+    if scope.to_s.empty?
       scope = Dependency.main_scope( lang )
     end
     hash = Hash.new
