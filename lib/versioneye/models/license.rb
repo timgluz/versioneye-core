@@ -66,10 +66,6 @@ class License < Versioneye::Model
       name.match(/^Ruby$/i) || name.match(/^Ruby License$/)
     end
 
-    def bsd_match name
-      name.match(/^BSD$/i) || name.match(/^BSD License$/)
-    end
-
     def mit_match name
       name.match(/^MIT$/i) || name.match(/^The MIT License$/) || name.match(/^MIT License$/)
     end
@@ -79,7 +75,7 @@ class License < Versioneye::Model
     end
 
     def bsd_match name
-      name.match(/^BSD License$/i) || name.match(/^BSD$/) || name.match(/^MIT License$/)
+      name.match(/^BSD License$/i) || name.match(/^BSD$/)
     end
 
     def gpl_20_match name

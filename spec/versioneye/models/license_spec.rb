@@ -68,8 +68,6 @@ describe License do
       license.name_substitute.should eq("Apache License, Version 2.0")
     end
 
-
   end
 
 end
-
