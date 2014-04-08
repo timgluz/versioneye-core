@@ -43,10 +43,6 @@ class Version < Versioneye::Model
     "#{val}".strip
   end
 
-  def get_decimal_uid
-    uid.to_s.to_i(16).to_s(10)
-  end
-
   def released_or_detected
     return released_at if released_at
     created_at
