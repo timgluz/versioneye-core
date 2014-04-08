@@ -87,15 +87,21 @@ class LanguageDailyStats < Versioneye::Model
   end
 
   def count_release(release)
-    if Product::A_LANGS_SUPPORTED.include?(release[:language])
-      prod_info = Product.fetch_product(release[:language], release[:prod_key])
-      metric_key = LanguageDailyStats.language_to_sym(release[:language])
-
-      self.inc_version(metric_key)
-      self.inc_novel(metric_key) if LanguageDailyStats.novel?(release, prod_info)
-    else
-      LanguageDailyStats.log.error("Product #{release[:prod_key]} misses language or language are not supported.")
+    if release[:language].nil? || release[:language].empty?
+      LanguageDailyStats.log.error("Product #{release[:prod_key]} misses language")
+      return nil
     end
+
+    if !Product::A_LANGS_SUPPORTED.include?(release[:language])
+      LanguageDailyStats.log.warn("Product #{release[:prod_key]} language is not supported.")
+      return nil
+    end
+
+    prod_info = Product.fetch_product(release[:language], release[:prod_key])
+    metric_key = LanguageDailyStats.language_to_sym(release[:language])
+
+    self.inc_version(metric_key)
+    self.inc_novel(metric_key) if LanguageDailyStats.novel?(release, prod_info)
   end
 
   def count_language_packages
