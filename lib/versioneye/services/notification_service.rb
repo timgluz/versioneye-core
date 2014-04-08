@@ -7,6 +7,7 @@ class NotificationService < Versioneye::Service
     user_ids.each do |id|
       user = User.find_by_id( id )
       next if user.nil?
+
       if user.deleted
         self.remove_notifications user
       else
