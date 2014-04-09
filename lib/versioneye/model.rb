@@ -14,7 +14,7 @@ module Versioneye
     require 'versioneye/models/developer'
     require 'versioneye/models/error_message'
     require 'versioneye/models/event'
-    require 'versioneye/models/email_settings'
+    require 'versioneye/models/email_setting'
     require 'versioneye/models/github_repo'
     require 'versioneye/models/json_cache'
     require 'versioneye/models/language'
