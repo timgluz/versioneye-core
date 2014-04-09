@@ -16,6 +16,7 @@ module Versioneye
     require 'versioneye/services/statistic_service'
     require 'versioneye/services/submitted_url_service'
     require 'versioneye/services/user_service'
+    require 'versioneye/services/admin_service'
     require 'versioneye/services/version_service'
 
     require 'versioneye/services_ext/bitbucket'
