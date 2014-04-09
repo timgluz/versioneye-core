@@ -13,7 +13,6 @@ class S3 < Versioneye::Service
 
   def self.url_for filename
     return nil if filename.to_s.empty?
-    set_aws_crendentials
     encoded_name = URI.encode( filename )
     url = AWS.s3.buckets[Settings.instance.s3_projects_bucket].objects[encoded_name].url_for( :read, :secure => true )
     url.to_s
@@ -25,7 +24,6 @@ class S3 < Versioneye::Service
 
   def self.infographic_url_for filename
     return nil if filename.to_s.empty?
-    set_aws_crendentials
     encoded_name = URI.encode( filename )
     url = AWS.s3.buckets[Settings.instance.s3_infographics_bucket].objects[encoded_name].url_for( :read, :secure => true )
     url.to_s
@@ -36,7 +34,6 @@ class S3 < Versioneye::Service
 
   def self.delete filename
     return nil if filename.nil? || filename.empty?
-    set_aws_crendentials
     AWS.s3.buckets[Settings.instance.s3_projects_bucket].objects[filename].delete
   rescue => e
     log.error e.message
@@ -59,7 +56,6 @@ class S3 < Versioneye::Service
 
   def self.upload_github_file file, filename
     return nil if file.nil? || filename.to_s.empty?
-    set_aws_crendentials
     file_bin     = file[:content]
     random_value = Project.create_random_value
     new_filename = "#{random_value}_#{filename}"
@@ -76,7 +72,6 @@ class S3 < Versioneye::Service
 
   def self.upload_file_content( content, filename)
     return nil if content.nil? || filename.to_s.empty?
-    set_aws_crendentials
     file_bin = content
     random_value = Project.create_random_value
     new_filename = "#{random_value}_#{filename}"
@@ -92,7 +87,6 @@ class S3 < Versioneye::Service
   end
 
   def self.store_in_project_bucket filename, bin
-    set_aws_crendentials
     bucket = AWS.s3.buckets[Settings.instance.s3_projects_bucket]
     obj    = bucket.objects[ filename ]
     obj.write bin
