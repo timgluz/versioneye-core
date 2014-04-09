@@ -61,11 +61,11 @@ class User < Versioneye::Model
   has_and_belongs_to_many :products
   # *** RELATIONS END ***
 
-  validates_presence_of :username          , :message => 'Username is mandatory!'
-  validates_presence_of :fullname          , :message => 'Fullname is mandatory!'
-  validates_presence_of :email             , :message => 'E-Mail is mandatory!'
-  validates_presence_of :encrypted_password, :message => 'Encrypted_password is mandatory!'
-  validates_presence_of :salt              , :message => 'Salt is mandatory!'
+  validates_presence_of :username          , :message => 'is mandatory!'
+  validates_presence_of :fullname          , :message => 'is mandatory!'
+  validates_presence_of :email             , :message => 'is mandatory!'
+  validates_presence_of :encrypted_password, :message => 'is mandatory!'
+  validates_presence_of :salt              , :message => 'is mandatory!'
 
   validates_uniqueness_of :username          , :message => 'Username exist already.'
   validates_uniqueness_of :email             , :message => 'E-Mail exist already.'

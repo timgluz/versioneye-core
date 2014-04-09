@@ -11,13 +11,13 @@ class EmailSetting < Versioneye::Model
   field :authentication      , type: String , default: 'plain'
   field :enable_starttls_auto, type: Boolean, default: true
 
-  validates_presence_of :address , :message => 'Address is mandatory!'
-  validates_presence_of :port    , :message => 'Port is mandatory!'
-  validates_presence_of :username, :message => 'Username is mandatory!'
-  validates_presence_of :password, :message => 'Password is mandatory!'
-  validates_presence_of :domain  , :message => 'Domain is mandatory!'
-  validates_presence_of :authentication, :message => 'Authentication is mandatory!'
-  validates_presence_of :enable_starttls_auto, :message => 'Enable_starttls_auto is mandatory!'
+  validates_presence_of :address , :message => 'is mandatory!'
+  validates_presence_of :port    , :message => 'is mandatory!'
+  validates_presence_of :username, :message => 'is mandatory!'
+  validates_presence_of :password, :message => 'is mandatory!'
+  validates_presence_of :domain  , :message => 'is mandatory!'
+  validates_presence_of :authentication, :message => 'is mandatory!'
+  validates_presence_of :enable_starttls_auto, :message => 'is mandatory!'
 
   def self.create_default
     EmailSetting.new.save
