@@ -2,10 +2,11 @@ require 'spec_helper'
 
 describe EmailSetting do
 
-  describe "defaults" do
+  describe "create_default" do
 
     it "checks the default values" do
-      es = EmailSetting.new
+      EmailSetting.create_default.should be_true
+      es = EmailSetting.first
       es.address.should_not be_nil
       es.port.should_not be_nil
       es.username.should_not be_nil

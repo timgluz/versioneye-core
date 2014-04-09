@@ -16,7 +16,11 @@ class EmailSetting < Versioneye::Model
   validates_presence_of :username, :message => 'Username is mandatory!'
   validates_presence_of :password, :message => 'Password is mandatory!'
   validates_presence_of :domain  , :message => 'Domain is mandatory!'
-  validates_presence_of :authentification, :message => 'Authentification is mandatory!'
+  validates_presence_of :authentication, :message => 'Authentication is mandatory!'
   validates_presence_of :enable_starttls_auto, :message => 'Enable_starttls_auto is mandatory!'
+
+  def self.create_default
+    EmailSetting.new.save
+  end
 
 end
