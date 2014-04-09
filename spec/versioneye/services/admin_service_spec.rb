@@ -10,6 +10,9 @@ describe AdminService do
       admin = User.find_by_username 'admin'
       admin.should_not be_nil
       admin.verification.should be_nil
+      admin[:terms].should be_true
+      admin[:datenerhebung].should be_true
+      admin[:admin].should be_true
     end
 
   end

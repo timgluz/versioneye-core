@@ -4,6 +4,7 @@ class AdminService < Versioneye::Service
     admin = User.new({:username => 'admin', :fullname => 'admin',
       :email => 'admin@admin.com', :password => 'admin', :terms => true,
       :datenerhebung => true })
+    admin[:admin] = true
     admin.save
   end
 
