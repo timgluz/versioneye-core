@@ -5,7 +5,7 @@ class NewsletterMailer < ActionMailer::Base
 
   def newsletter_new_features_email(user)
     @user = user
-    mail(:to => @user.email, :subject => 'New Feature - Bower Integration') do |format|
+    mail(:to => @user.email, :subject => 'The Heartbleed Bug') do |format|
       format.html{ render layout: 'email_html_layout' }
     end
   end
