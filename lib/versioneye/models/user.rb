@@ -67,14 +67,14 @@ class User < Versioneye::Model
   validates_presence_of :encrypted_password, :message => 'is mandatory!'
   validates_presence_of :salt              , :message => 'is mandatory!'
 
-  validates_uniqueness_of :username          , :message => 'Username exist already.'
-  validates_uniqueness_of :email             , :message => 'E-Mail exist already.'
+  validates_uniqueness_of :username          , :message => 'exist already.'
+  validates_uniqueness_of :email             , :message => 'exist already.'
 
-  validates_length_of :username, minimum: 2, maximum: 50, :message => 'username length is not ok'
-  validates_length_of :fullname, minimum: 2, maximum: 50, :message => 'fullname length is not ok'
+  validates_length_of :username, minimum: 2, maximum: 50, :message => 'length is not ok'
+  validates_length_of :fullname, minimum: 2, maximum: 50, :message => 'length is not ok'
 
   validates_format_of :username, with: /^[a-zA-Z0-9_]+$/
-  validates_format_of :email   , :with => A_EMAIL_REGEX, :message => 'The email is not valid.'
+  validates_format_of :email   , :with => A_EMAIL_REGEX, :message => 'is not valid.'
 
   before_validation :downcase_email
 
