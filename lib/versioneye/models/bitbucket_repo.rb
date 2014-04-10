@@ -1,7 +1,6 @@
 class BitbucketRepo < Versioneye::Model
 
   include Mongoid::Document
-  # require 'will_paginate/array'
 
   field :name         , type: String
   field :fullname     , type: String
@@ -77,4 +76,3 @@ class BitbucketRepo < Versioneye::Model
     log.error e.backtrace.join('\n')
   end
 end
-

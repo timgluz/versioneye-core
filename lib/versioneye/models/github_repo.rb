@@ -1,7 +1,5 @@
 class GithubRepo < Versioneye::Model
 
-  # require 'will_paginate/array'
-
   include Mongoid::Document
 
   field :github_id   , type: String
