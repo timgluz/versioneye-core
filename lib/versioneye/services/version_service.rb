@@ -187,11 +187,10 @@ class VersionService < Versioneye::Service
   end
 
 
-  # TODO test
   def self.average_release_time( versions )
     return nil if versions.nil? || versions.empty? || versions.size == 1
 
-    released_versions = self.versions_with_released_date( versions )
+    released_versions = versions.find_all{ |version| version.released_at }
     return nil if released_versions.nil? || released_versions.empty? || released_versions.size < 3
 
     sorted_versions = released_versions.sort! { |a,b| a.released_at <=> b.released_at }
@@ -231,17 +230,9 @@ class VersionService < Versioneye::Service
 
   private
 
-    def self.versions_with_released_date( versions )
-      return nil if versions.nil? || versions.empty?
-      new_versions = Array.new
-      versions.each do |version|
-        new_versions << version if !version.released_at.nil?
-      end
-      new_versions
-    end
-
     def self.get_newest_or_value(newest, value)
       return Version.new({:version => value}) if newest.nil?
       return newest
     end
+
 end

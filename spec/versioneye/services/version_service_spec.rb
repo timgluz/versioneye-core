@@ -566,4 +566,72 @@ describe VersionService do
   end
 
 
+  describe 'average_release_time' do
+
+    it 'returns nil for nil' do
+      VersionService.average_release_time(nil).should be_nil
+    end
+
+    it 'returns nil for empty array' do
+      VersionService.average_release_time(Array.new).should be_nil
+    end
+
+    it 'returns nil for array with 1 element' do
+      VersionService.average_release_time([Version.new]).should be_nil
+    end
+
+    it 'returns nil for array with 2 elements' do
+      VersionService.average_release_time([Version.new, Version.new ]).should be_nil
+    end
+
+    it 'returns 1 day' do
+      version_1 = Version.new :released_at => DateTime.new(2014, 01, 01)
+      version_2 = Version.new :released_at => DateTime.new(2014, 01, 03)
+      version_3 = Version.new :released_at => DateTime.new(2014, 01, 05)
+      versions = [version_1, version_2, version_3]
+      VersionService.average_release_time( versions ).should eq(1)
+    end
+
+    it 'returns 20 day' do
+      version_1 = Version.new :released_at => DateTime.new(2014, 01, 01)
+      version_2 = Version.new :released_at => DateTime.new(2014, 02, 01)
+      version_3 = Version.new :released_at => DateTime.new(2014, 03, 02)
+      versions = [version_1, version_2, version_3]
+      VersionService.average_release_time( versions ).should eq(20)
+    end
+
+  end
+
+  describe 'estimated_average_release_time' do
+
+    it 'returns nil for nil' do
+      VersionService.estimated_average_release_time(nil).should be_nil
+    end
+
+    it 'returns nil for empty array' do
+      VersionService.estimated_average_release_time(Array.new).should be_nil
+    end
+
+    it 'returns nil for array with 1 element' do
+      VersionService.estimated_average_release_time([Version.new]).should be_nil
+    end
+
+    it 'returns 1 day' do
+      version_1 = Version.new :created_at => DateTime.new(2014, 01, 01)
+      version_2 = Version.new :created_at => DateTime.new(2014, 01, 03)
+      version_3 = Version.new :created_at => DateTime.new(2014, 01, 05)
+      versions = [version_1, version_2, version_3]
+      VersionService.estimated_average_release_time( versions ).should eq(1)
+    end
+
+    it 'returns 20 day' do
+      version_1 = Version.new :created_at => DateTime.new(2014, 01, 01)
+      version_2 = Version.new :created_at => DateTime.new(2014, 02, 01)
+      version_3 = Version.new :created_at => DateTime.new(2014, 03, 02)
+      versions = [version_1, version_2, version_3]
+      VersionService.estimated_average_release_time( versions ).should eq(20)
+    end
+
+  end
+
 end
