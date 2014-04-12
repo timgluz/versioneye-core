@@ -21,7 +21,7 @@ class DependencyService < Versioneye::Service
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
-    return false
+    false
   end
 
 
