@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-gem 'naturalsorter'      , '~> 2.0.9'
+gem 'naturalsorter'      , '~> 2.0.10'
 gem 'mongoid'            , '~> 3.1.0'
 gem 'log4r'              , '~> 1.1.0'
 gem 'dalli'              , '~> 2.7.0'
