@@ -1,8 +1,19 @@
 class ProductService < Versioneye::Service
 
 
+  # languages have to be an array of strings.
+  def self.search(q, group_id = nil, languages = nil, page_count = 1)
+    EsProduct.search(q, group_id, languages, page_count)
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    log.info  "Dam. We don't give up. Not yet! Start alternative search on awesome MongoDB."
+    MongoProduct.find_by(q, '', group_id, languages, 300).paginate(:page => page_count)
+  end
+
+
   # This method fetches and product and initializes it for the UI.
-  def self.fetch_product( lang, prod_key )
+  def self.fetch_product( lang, prod_key, version = nil )
     product = Product.fetch_product lang, prod_key
     if product.nil? && lang.eql?( Product::A_LANGUAGE_CLOJURE )
       product = Product.fetch_product Product::A_LANGUAGE_JAVA, prod_key
@@ -10,6 +21,7 @@ class ProductService < Versioneye::Service
     return nil if product.nil?
 
     product.check_nil_version
+    product.version = version if version
     update_dependencies( product )
     update_average_release_time( product )
     product
@@ -33,17 +45,6 @@ class ProductService < Versioneye::Service
       average_release_time = VersionService.estimated_average_release_time( product.versions )
     end
     product[:average_release_time] = average_release_time
-  end
-
-
-  # languages have to be an array of strings.
-  def self.search(q, group_id = nil, languages = nil, page_count = 1)
-    EsProduct.search(q, group_id, languages, page_count)
-  rescue => e
-    log.error e.message
-    log.error e.backtrace.join('\n')
-    log.info  "Dam. We don't give up. Not yet! Start alternative search on awesome MongoDB."
-    MongoProduct.find_by(q, '', group_id, languages, 300).paginate(:page => page_count)
   end
 
 
@@ -75,6 +76,7 @@ class ProductService < Versioneye::Service
   end
 
 
+  # Updates product.version with the newest version number from product.versions
   def self.update_version_data( product, persist = true )
     return nil if product.nil?
 
@@ -112,13 +114,6 @@ class ProductService < Versioneye::Service
   end
 
 
-  def self.update_followers_for product
-    return nil if product.followers == product.user_ids.count
-    product.followers = product.user_ids.count
-    product.save
-  end
-
-
   def self.update_followers
     products = Product.where( :'user_ids.0' => {'$exists' => true} )
     products.each do |product|
@@ -127,6 +122,12 @@ class ProductService < Versioneye::Service
       log.info "#{product.name} has #{product.followers} followers"
     end
     log.info "#{products.count} products updated."
+  end
+
+  def self.update_followers_for product
+    return nil if product.followers == product.user_ids.count
+    product.followers = product.user_ids.count
+    product.save
   end
 
 
