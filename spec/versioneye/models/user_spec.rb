@@ -117,8 +117,8 @@ describe User do
       db_user.should_not be_nil
       db_user.remove
     end
-    it "dosn't save. Because username is unique" do
-      email = "h+ans+2@ta+nz.de"
+    it "dosn't save. Because email is wrong" do
+      email = "h+ans+2@ta+nzde"
       user = User.new
       user.fullname = "Hans Tanz"
       user.username = "hanstanz"
