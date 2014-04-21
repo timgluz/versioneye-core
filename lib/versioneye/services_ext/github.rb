@@ -208,9 +208,9 @@ class Github < Versioneye::Service
 
   # TODO: add tests
   def self.project_file_info(git_project, filename, sha, token)
-    url   = "#{A_API_URL}/repos/#{git_project}/git/trees/#{sha}"
+    url   = "#{A_API_URL}/repos/#{git_project}/git/trees/#{sha}?recursive=1"
     tree = get_json(url, token)
-    return nil if tree.nil? or not tree.has_key?(:tree)
+    return nil if tree.nil? || !tree.has_key?(:tree)
 
     matching_files = tree[:tree].keep_if {|blob| blob[:path] == filename}
     return nil if matching_files.nil? or matching_files.empty?
