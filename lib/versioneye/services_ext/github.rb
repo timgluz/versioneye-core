@@ -184,7 +184,7 @@ class Github < Versioneye::Service
   def self.fetch_project_file_from_branch repo_name, filename, branch = "master", token = nil
     branch_info = Github.repo_branch_info repo_name, branch, token
     if branch_info.nil?
-      log.error "fetch_project_file_from_branch | can't read branch info."
+      log.error "fetch_project_file_from_branch - can't read branch info for [repo_name: #{repo_name}, filename: #{filename}, branch: #{branch}]"
       return nil
     end
 
@@ -210,11 +210,16 @@ class Github < Versioneye::Service
   def self.project_file_info(git_project, filename, sha, token)
     url   = "#{A_API_URL}/repos/#{git_project}/git/trees/#{sha}?recursive=1"
     tree = get_json(url, token)
-    return nil if tree.nil? || !tree.has_key?(:tree)
+    if tree.nil? || !tree.has_key?(:tree)
+      log.error "No file tree for #{url}"
+      return nil
+    end
 
-    # TODO This works only for files in the root directory, not in subdirectories!
     matching_files = tree[:tree].keep_if {|blob| blob[:path] == filename}
-    return nil if matching_files.nil? or matching_files.empty?
+    if matching_files.nil? or matching_files.empty?
+      log.error "No file matches #{filename}"
+      return nil
+    end
 
     file = matching_files.first
     {
