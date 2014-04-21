@@ -151,7 +151,7 @@ class Github < Versioneye::Service
       execute_job(workers) if workers.count == A_WORKERS_COUNT
     end
 
-    #execute & wait reduntant tasks
+    # execute & wait reduntant tasks
     execute_job(workers)
     paging_links = parse_paging_links(response.headers)
     repos = {
@@ -212,13 +212,14 @@ class Github < Versioneye::Service
     tree = get_json(url, token)
     return nil if tree.nil? || !tree.has_key?(:tree)
 
+    # TODO This works only for files in the root directory, not in subdirectories!
     matching_files = tree[:tree].keep_if {|blob| blob[:path] == filename}
     return nil if matching_files.nil? or matching_files.empty?
 
     file = matching_files.first
     {
       name: file[:path],
-      url: file[:url],
+      url:  file[:url],
       type: ProjectService.type_by_filename(file[:path])
     }
   end
@@ -263,7 +264,7 @@ class Github < Versioneye::Service
   end
 
 
-  #returns all project files in the given repos grouped by branches
+  # Returns all project files in the given repos grouped by branches
   def self.repo_project_files(repo_name, token, branch_docs = nil)
 
     branches = branch_docs ? branch_docs : repo_branches(repo_name, token)
@@ -289,7 +290,7 @@ class Github < Versioneye::Service
   end
 
   def self.fetch_file( url, token )
-    return nil if url.nil? || url.empty?
+    return nil if url.to_s.empty?
     uri = URI(url)
     get_json(uri.path, token)
   rescue => e
