@@ -4,3 +4,5 @@
 = versioneye-core
 
 This project contains the core elements of VersionEye. This project is used by the WWW server and the API.
+
+This project is setup and managed with {jeweler}[https://www.versioneye.com/ruby/jeweler/2.0.1]. 
