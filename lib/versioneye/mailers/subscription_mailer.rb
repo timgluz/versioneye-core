@@ -1,7 +1,7 @@
 class SubscriptionMailer < ActionMailer::Base
 
   layout 'email_html_layout'
-  default from: "\"VersionEye\" <notify@versioneye.com>"
+  default from: "#{Settings.instance.smtp_sender_email}"
 
   def update_subscription( user )
     @user =  user

@@ -1,6 +1,6 @@
 class NotificationMailer < ActionMailer::Base
 
-  default from: "\"VersionEye\" <notify@versioneye.com>"
+  default from: "#{Settings.instance.smtp_sender_email}"
 
   def new_version_email(user, notifications)
     @user = user

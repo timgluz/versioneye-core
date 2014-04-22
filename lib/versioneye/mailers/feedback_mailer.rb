@@ -1,7 +1,7 @@
 class FeedbackMailer < ActionMailer::Base
 
   layout 'email_html_layout'
-  default from: "\"VersionEye\" <notify@versioneye.com>"
+  default from: "#{Settings.instance.smtp_sender_email}"
 
   def feedback_email(name, email, feedback)
     @name     = name

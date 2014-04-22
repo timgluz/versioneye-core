@@ -1,7 +1,7 @@
 class SubmittedUrlMailer < ActionMailer::Base
 
   layout 'email_html_layout'
-  default from: "\"VersionEye\" <notify@versioneye.com>"
+  default from: "#{Settings.instance.smtp_sender_email}"
 
   def new_submission_email(submitted_url)
     @base_url = Settings.instance.server_url

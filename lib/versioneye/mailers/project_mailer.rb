@@ -1,7 +1,7 @@
 class ProjectMailer < ActionMailer::Base
 
   layout 'email_html_layout'
-  default from: "\"VersionEye\" <notify@versioneye.com>"
+  default from: "#{Settings.instance.smtp_sender_email}"
 
   # TODO refactor this email. Send only link to project on VersionEye.
   def projectnotification_email( project, user = nil )
