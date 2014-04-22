@@ -18,6 +18,7 @@ module Versioneye
     require 'versioneye/services/user_service'
     require 'versioneye/services/admin_service'
     require 'versioneye/services/version_service'
+    require 'versioneye/services/email_setting_service'
 
     require 'versioneye/services_ext/bitbucket'
     require 'versioneye/services_ext/es_product'
