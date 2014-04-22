@@ -2,10 +2,7 @@ class EmailSettingService < Versioneye::Service
 
   def self.email_setting
     emailsetting = EmailSetting.first
-    if emailsetting.nil?
-      emailsetting = EmailSetting.new
-      emailsetting.save
-    end
+    emailsetting = EmailSetting.create_default if emailsetting.nil?
     emailsetting
   end
 
