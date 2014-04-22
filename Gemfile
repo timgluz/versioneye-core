@@ -15,7 +15,7 @@ gem 'httparty'           , '~> 0.13.1'
 gem 'persistent_httparty', '~> 0.1.0'
 gem 'json'               , '~> 1.8.0'
 gem 'nokogiri'           , '~> 1.6.0'
-gem 'cocoapods-core'     , '~> 0.31.0'
+gem 'cocoapods-core'     , '~> 0.32.0'
 gem 'actionmailer'       , '~> 3.2.17'
 
 group :development do
