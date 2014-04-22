@@ -10,6 +10,8 @@ class EmailSetting < Versioneye::Model
   field :domain              , type: String , default: 'versioneye.com'
   field :authentication      , type: String , default: 'plain'
   field :enable_starttls_auto, type: Boolean, default: true
+  field :sender_name         , type: String , default: 'VersionEye'
+  field :sender_email        , type: String , default: 'notify@versioneye.com'
 
   validates_presence_of :address , :message => 'is mandatory!'
   validates_presence_of :port    , :message => 'is mandatory!'
