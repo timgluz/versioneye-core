@@ -22,7 +22,9 @@ class EmailSetting < Versioneye::Model
   validates_presence_of :enable_starttls_auto, :message => 'is mandatory!'
 
   def self.create_default
-    EmailSetting.new.save
+    email_setting = EmailSetting.new
+    email_setting.save
+    email_setting
   end
 
 end
