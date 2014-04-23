@@ -36,7 +36,8 @@ class Settings
 
       if name.eql?("smtp_sender_email") || name.eql?("smtp_sender_name") ||
         name.eql?("server_url") || name.eql?("server_host") || name.eql?("server_port") ||
-        name.eql?("github_api_url") || name.eql?("github_client_id") || name.eql?("github_client_secret")
+        name.eql?("github_api_url") || name.eql?("github_client_id") || name.eql?("github_client_secret") ||
+        name.eql?("nexus_url")
         self.class.class_eval { attr_writer name.intern }
       end
     }

@@ -11,6 +11,8 @@ class GlobalSetting < Versioneye::Model
   field :github_client_id    , type: String , default: 'client_id'
   field :github_client_secret, type: String , default: 'client_secret'
 
+  field :nexus_url, type: String , default: 'https://nexus.pro'
+
   validates_presence_of :server_url , :message => 'is mandatory!'
   validates_presence_of :server_host, :message => 'is mandatory!'
   validates_presence_of :server_port, :message => 'is mandatory!'
