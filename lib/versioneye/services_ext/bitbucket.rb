@@ -147,6 +147,7 @@ class Bitbucket < Versioneye::Service
   def self.encode_db_key(key_val)
     URI.escape(key_val.to_s, /\.|\$/)
   end
+
   def self.decode_db_key(key_val)
     URI.unescape key_val.to_s
   end
