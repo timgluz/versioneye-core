@@ -13,7 +13,7 @@ describe UserMailer do
 
       email.to.should eq( [user.email] )
       email.encoded.should include( "Hello #{user.fullname}" )
-      email.encoded.should include( "#{Settings.instance.server_url_https}/users/activate/" )
+      email.encoded.should include( "#{Settings.instance.server_url}/users/activate/" )
       email.encoded.should include( "#{verification}" )
       email.encoded.should include( "Handelsregister" )
 
@@ -35,7 +35,7 @@ describe UserMailer do
 
       email.to.should eq( [user.email] )
       email.encoded.should include( "Hello #{user.fullname}" )
-      email.encoded.should include( "#{Settings.instance.server_url_https}/users/activate/email/#{verification}" )
+      email.encoded.should include( "#{Settings.instance.server_url}/users/activate/email/#{verification}" )
       email.encoded.should include( "Handelsregister" )
 
       ActionMailer::Base.deliveries.clear
@@ -57,7 +57,7 @@ describe UserMailer do
       email.to.should eq( [user.email] )
       email.subject.should eq('Verification Reminder')
       email.encoded.should include( "Hello #{user.fullname}" )
-      email.encoded.should include( "#{Settings.instance.server_url_https}/users/activate/" )
+      email.encoded.should include( "#{Settings.instance.server_url}/users/activate/" )
       email.encoded.should include( "#{verification}" )
       email.encoded.should include( "We noticed that you still didn't activate your account." )
       email.encoded.should include( "Handelsregister" )
@@ -137,7 +137,7 @@ describe UserMailer do
       email.to.should eq( [user.email] )
       email.subject.should eq('Password Reset')
       email.encoded.should include( "You've requested a new password" )
-      email.encoded.should include( "#{Settings.instance.server_url_https}/updatepassword/#{user.verification}" )
+      email.encoded.should include( "#{Settings.instance.server_url}/updatepassword/#{user.verification}" )
       email.encoded.should include( 'Handelsregister' )
 
       ActionMailer::Base.deliveries.clear
@@ -226,4 +226,3 @@ describe UserMailer do
   end
 
 end
-

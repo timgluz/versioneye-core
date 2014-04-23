@@ -13,20 +13,20 @@ class UserMailer < ActionMailer::Base
   def verification_email(user, verification, email)
     @user  = user
     source = fetch_source( user )
-    @verificationlink = "#{Settings.instance.server_url_https}/users/activate/#{source}/#{verification}"
+    @verificationlink = "#{Settings.instance.server_url}/users/activate/#{source}/#{verification}"
     mail( :to => email, :subject => 'Verification' )
   end
 
   def verification_email_only(user, verification, email)
     @user = user
-    @verificationlink = "#{Settings.instance.server_url_https}/users/activate/email/#{verification}"
+    @verificationlink = "#{Settings.instance.server_url}/users/activate/email/#{verification}"
     mail(:to => email, :subject => 'Verification')
   end
 
   def verification_email_reminder(user, verification, email)
     @user  = user
     source = fetch_source( user )
-    @verificationlink = "#{Settings.instance.server_url_https}/users/activate/#{source}/#{verification}"
+    @verificationlink = "#{Settings.instance.server_url}/users/activate/#{source}/#{verification}"
     mail( :to => email, :subject => 'Verification Reminder' )
   end
 
@@ -47,7 +47,7 @@ class UserMailer < ActionMailer::Base
 
   def reset_password(user)
     @user = user
-    @url  = "#{Settings.instance.server_url_https}/updatepassword/#{@user.verification}"
+    @url  = "#{Settings.instance.server_url}/updatepassword/#{@user.verification}"
     mail(:to => @user.email, :subject => 'Password Reset')
   end
 
