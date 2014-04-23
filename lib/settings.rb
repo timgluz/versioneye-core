@@ -34,7 +34,8 @@ class Settings
       instance_variable_set("@#{name}", value)
       self.class.class_eval { attr_reader name.intern }
 
-      if name.eql?("smtp_sender_email") || name.eql?("smtp_sender_name")
+      if name.eql?("smtp_sender_email") || name.eql?("smtp_sender_name") ||
+        name.eql?("server_url") || name.eql?("server_host") || name.eql?("server_port")
         self.class.class_eval { attr_writer name.intern }
       end
     }
