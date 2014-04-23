@@ -20,6 +20,7 @@ class EmailSetting < Versioneye::Model
   validates_presence_of :domain  , :message => 'is mandatory!'
   validates_presence_of :authentication, :message => 'is mandatory!'
   validates_presence_of :enable_starttls_auto, :message => 'is mandatory!'
+  validates_presence_of :sender_email, :message => 'is mandatory!'
 
   def self.create_default
     email_setting = EmailSetting.new
