@@ -47,6 +47,7 @@ module Versioneye
     require 'versioneye/models/versioncomment'
     require 'versioneye/models/versioncommentreply'
     require 'versioneye/models/versionlink'
+    require 'versioneye/models/global_setting'
 
     def self.log
       Versioneye::Log.instance.log
