@@ -12,7 +12,7 @@
       <tr>
         <td style="vertical-align: top;">
           <% version = product.version_by_number( notification.version_id ) %>
-          <img src= "https://www.versioneye.com/assets/language/<%= product.language.downcase %>.png" style = "width: 48px; height: 48px;"/>
+          <img src= "<%= Settings.instance.server_url %>/assets/language/<%= product.language.downcase %>.png" style = "width: 48px; height: 48px;"/>
         </td>
         <td style = "vertical-align: middle;">
           <% product_url    = "#{@link}#{product.language_esc}" %>
@@ -47,5 +47,5 @@
 </p>
 <p>
   Your VersionEye Team<br/>
-  <a href="http://www.versioneye.com?utm_medium=email&amp;utm_source=new_versoin">http://www.versioneye.com</a>
+  <a href="<%= Settings.instance.server_url %>?utm_medium=email&amp;utm_source=new_versoin"><%= Settings.instance.server_url %></a>
 </p>

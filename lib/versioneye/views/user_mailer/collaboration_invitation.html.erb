@@ -8,18 +8,18 @@
 </p>
 <p>
     Little reminder how to accept <%= @caller[:fullname] %>'s invitation. <br />
-    1. <a href="https://www.versioneye.com/signup?utm_medium=email&amp;utm_source=collaboration_invitation">Sign up </a><br />
+    1. <a href="<%= Settings.instance.server_url %>/signup?utm_medium=email&amp;utm_source=collaboration_invitation">Sign up </a><br />
     2. Activate your account <br />
     3. Select "Collaborations" on left nav-bar.<br />
     4. Click "Approve".
 </p>
 <p>
-  Our signup page: <a href = "https://www.versioneye.com/signup?utm_medium=email&amp;utm_source=collaboration_invitation">https://www.versioneye.com/signup</a>
+  Our signup page: <a href = "<%= Settings.instance.server_url %>/signup?utm_medium=email&amp;utm_source=collaboration_invitation"><%= Settings.instance.server_url %>/signup</a>
 </p>
 <p>
   Thanks for joining and have a great day!
 </p>
 <p>
   Your VersionEye Team<br/>
-  <a href="http://www.versioneye.com?utm_medium=email&amp;utm_source=collaboration_invitation">http://www.versioneye.com</a>
+  <a href="<%= Settings.instance.server_url %>?utm_medium=email&amp;utm_source=collaboration_invitation"><%= Settings.instance.server_url %></a>
 </p>

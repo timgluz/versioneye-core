@@ -11,12 +11,12 @@
   <br/>
   <% @ticket[:selection].each do |selection| %>
     <% product  = Product.fetch_product(selection[:language], selection[:prod_key]) %>
-    <% product_url    = "http://www.versioneye.com/#{product.language_esc}/#{product.to_param}" %>
+    <% product_url    = "#{Settings.instance.server_url}/#{product.language_esc}/#{product.to_param}" %>
     <% product_title  = "#{product.name}".strip %>
     - <a href="<%= product_url %>?utm_medium=email&amp;utm_source=new_ticket"><%= product_title %></a><br/>
   <% end %>
 </p>
 <p>
   Your VersionEye Team<br/>
-  <a href="http://www.versioneye.com?utm_medium=email&amp;utm_source=new_ticket">http://www.versioneye.com</a>
+  <a href="<%= Settings.instance.server_url %>?utm_medium=email&amp;utm_source=new_ticket"><%= Settings.instance.server_url %></a>
 </p>

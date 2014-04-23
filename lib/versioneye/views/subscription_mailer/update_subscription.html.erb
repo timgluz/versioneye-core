@@ -4,13 +4,13 @@
 <p>
   You just updated your subscription to the plan "<%= @user.plan.name %>".<br/>
   You can find your payment history in the settings area:<br/>
-  <a href="https://www.versioneye.com/settings/payments?utm_medium=email&amp;utm_source=update_subscription" >https://www.versioneye.com/settings/payments</a><br/>
+  <a href="<%= Settings.instance.server_url %>/settings/payments?utm_medium=email&amp;utm_source=update_subscription" ><%= Settings.instance.server_url %>/settings/payments</a><br/>
   And you can change your subscription here: <br/>
-  <a href="https://www.versioneye.com/settings/plans?utm_medium=email&amp;utm_source=update_subscription" >https://www.versioneye.com/settings/plans</a><br/>
+  <a href="<%= Settings.instance.server_url %>/settings/plans?utm_medium=email&amp;utm_source=update_subscription" ><%= Settings.instance.server_url %>/settings/plans</a><br/>
 </p>
 <p>
 As usual, your feedback is highly appreciated.
 </p>
 <br/>
 Your VersionEye Team<br/>
-<a href="http://www.versioneye.com?utm_medium=email&amp;utm_source=update_subscription">http://www.versioneye.com</a>
+<a href="<%= Settings.instance.server_url %>?utm_medium=email&amp;utm_source=update_subscription"><%= Settings.instance.server_url %></a>

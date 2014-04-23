@@ -26,6 +26,7 @@ describe NotificationMailer do
       email.encoded.should include( product.name )
       email.encoded.should include( notification.version_id )
       email.encoded.should include( "/user/projects/#{project._id.to_s}" )
+      email.encoded.should include( "http://localhost:3000" )
 
       ActionMailer::Base.deliveries.clear
       email.deliver!
