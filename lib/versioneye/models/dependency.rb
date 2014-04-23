@@ -1,6 +1,5 @@
 class Dependency < Versioneye::Model
 
-  # require 'will_paginate/array'
   require 'versioneye/models/project'
   require 'versioneye/models/product'
 
