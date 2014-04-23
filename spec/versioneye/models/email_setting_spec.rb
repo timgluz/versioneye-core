@@ -14,6 +14,7 @@ describe EmailSetting do
       es.domain.should_not be_nil
       es.authentication.should_not be_nil
       es.enable_starttls_auto.should_not be_nil
+      es.sender_email.should_not be_nil
       es.save.should be_true
     end
 
