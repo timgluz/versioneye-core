@@ -7,7 +7,8 @@ class GlobalSetting < Versioneye::Model
   field :server_host, type: String , default: 'localhost'
   field :server_port, type: Integer, default: 3000
 
-  field :github_api_url      , type: String , default: 'https://api.github.com'
+  field :github_base_url     , type: String , default: 'http://192.168.0.15'
+  field :github_api_url      , type: String , default: 'http://192.168.0.15/api/v3'
   field :github_client_id    , type: String , default: 'client_id'
   field :github_client_secret, type: String , default: 'client_secret'
 
