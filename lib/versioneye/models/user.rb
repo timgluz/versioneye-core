@@ -114,6 +114,9 @@ class User < Versioneye::Model
 
   def send_verification_email
     UserMailer.verification_email(self, self.verification, self.email).deliver
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
   end
 
   def self.send_verification_reminders
