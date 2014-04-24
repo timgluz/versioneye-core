@@ -48,6 +48,15 @@ class Github < Versioneye::Service
     nil
   end
 
+  def self.emails token
+    client = user_client token
+    client.emails
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join( '\n' )
+    nil
+  end
+
   def self.oauth_scopes token
     client = user_client token
     client.scopes token
