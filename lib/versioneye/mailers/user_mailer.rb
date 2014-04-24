@@ -51,11 +51,6 @@ class UserMailer < ActionMailer::Base
     mail(:to => @user.email, :subject => 'Password Reset')
   end
 
-  def new_user_email(user)
-    @user = user
-    mail( :to => "reiz@versioneye.com", :subject => "New User" )
-  end
-
   def new_ticket(user, ticket)
     @fullname = user[:fullname]
     @ticket   = ticket

@@ -160,10 +160,6 @@ class User < Versioneye::Model
     self.username = name
   end
 
-  def self.new_user_email(user)
-    UserMailer.new_user_email(user).deliver
-  end
-
   def self.activate!(verification)
     return false if verification.nil? || verification.strip.empty?
     user = User.where(verification: verification).shift
