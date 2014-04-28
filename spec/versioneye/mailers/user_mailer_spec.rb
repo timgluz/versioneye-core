@@ -147,30 +147,6 @@ describe UserMailer do
 
   end
 
-  describe 'new_user_email' do
-
-    it 'contain the user data from the new sign up' do
-
-      user = UserFactory.create_new 1
-
-      email = described_class.new_user_email( user )
-
-      email.to.should eq( ['reiz@versioneye.com'] )
-      email.subject.should eq('New User')
-      email.encoded.should include( "Hey Admin Dude" )
-      email.encoded.should include( "#{user.fullname}" )
-      email.encoded.should include( "#{user.username}" )
-      email.encoded.should include( "#{user.github_id}" )
-      email.encoded.should include( "#{user.bitbucket_id}" )
-      email.encoded.should include( 'Handelsregister' )
-
-      ActionMailer::Base.deliveries.clear
-      email.deliver!
-      ActionMailer::Base.deliveries.size.should == 1
-    end
-
-  end
-
   describe 'new_ticket' do
 
     it 'contains the new lottery ticket' do
