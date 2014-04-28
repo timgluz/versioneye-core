@@ -26,11 +26,12 @@ describe PackageParser do
       product12 = create_product('pg'           , 'pg'           , '0.6.6', ['0.5.0' , '0.6.1' ] )
       product13 = create_product('pg_connect'   , 'pg_connect'   , '0.6.9', ['0.5.0' , '0.6.1' ] )
       product14 = create_product('mocha'        , 'mocha'        , '1.16.2', ['1.0.0' , '1.16.0', '1.16.2' ] )
+      product15 = create_product('bruno'        , 'bruno'        , '1.12.1', ['1.0.0' , '1.12.0', '1.12.1' ] )
 
       parser = PackageParser.new
       project = parser.parse('http://s3.amazonaws.com/veye_test_env/package.json')
       project.should_not be_nil
-      project.dependencies.size.should eql(14)
+      project.dependencies.size.should eql(15)
 
       dep_01 = project.dependencies.first
       dep_01.name.should eql('connect-redis')
@@ -117,6 +118,14 @@ describe PackageParser do
       dep_14.comperator.should eql('=')
       dep_14.version_label.should eql('latest')
       dep_14.outdated?().should be_false
+
+      dep_15 = project.dependencies[14]
+      dep_15.name.should eql('bruno')
+      dep_15.version_requested.should eql('1.12.1')
+      dep_15.version_current.should eql('1.12.1')
+      dep_15.comperator.should eql('^')
+      dep_15.version_label.should eql('^1.12')
+      dep_15.outdated?().should be_false
     end
 
   end

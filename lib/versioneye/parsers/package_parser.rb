@@ -129,6 +129,22 @@ class PackageParser < CommonParser
       dependency.comperator = "~"
       dependency.version_label = ver
 
+    elsif version.match(/\A\^/)
+      # Tilde Version Ranges -> Pessimistic Version Constraint
+      # ^1.2 is similar to ~1.2.0
+      ver = version.gsub("\>", "")
+      ver = ver.gsub("^", "")
+      ver = ver.gsub(" ", "")
+      ver = "#{ver}.0"
+      highest_version = VersionService.version_tilde_newest(product.versions, ver)
+      if highest_version
+        dependency.version_requested = highest_version.to_s
+      else
+        dependency.version_requested = ver
+      end
+      dependency.comperator = "^"
+      dependency.version_label = version
+
     elsif version.match(/.x$/i)
       # X Version Ranges
       ver = version.gsub("x", "")
