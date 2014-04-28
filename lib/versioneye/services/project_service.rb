@@ -289,6 +289,8 @@ class ProjectService < Versioneye::Service
 
   def self.allowed_to_add_project?( user, private_project )
     return true if !private_project
+    return true if Settings.instance.projects_unlimited
+
     private_project_count = Project.private_project_count_by_user( user.id )
     max = user.free_private_projects
     if user.plan

@@ -199,6 +199,19 @@ describe ProjectService do
       described_class.allowed_to_add_project?(github_user, true).should be_false
     end
 
+    it "allows because unlimited projects is true" do
+      Plan.create_default_plans
+      plan = Plan.by_name_id( Plan::A_PLAN_PERSONAL )
+      user = github_user
+      user.plan = plan
+      user.free_private_projects = 1
+      user.save
+      max = plan.private_projects + user.free_private_projects
+      max.times { ProjectFactory.create_new( user, {:private_project => true} ) }
+      Settings.instance.projects_unlimited = true
+      described_class.allowed_to_add_project?(github_user, true).should be_true
+    end
+
   end
 
   describe "badge_for_project" do

@@ -63,7 +63,7 @@ class Github < Versioneye::Service
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
-    'no_scope'
+    ''
   end
 
   def self.user_client token
