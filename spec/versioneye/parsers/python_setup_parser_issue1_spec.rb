@@ -19,7 +19,7 @@ describe PythonSetupParser do
 
       @parser = PythonSetupParser.new
 
-      @testfile_url = "https://raw.github.com/dotcloud/dotcloud-cli/master/setup.py"
+      @testfile_url = "https://raw.githubusercontent.com/dotcloud/dotcloud-cli/master/setup.py"
 
       @product1 = ProductFactory.create_for_pip "argparse", "1.2.1"
       @product2 = ProductFactory.create_for_pip "requests", "1.1.0"
