@@ -61,7 +61,7 @@ class PackageParser < CommonParser
       dependency.version_label = 'latest'
       dependency.comperator = '='
 
-    elsif version.match(/^=/)
+    elsif version.match(/\A=/)
       # Equals
       version.gsub!('=', '')
       version.gsub!(' ', '')
@@ -69,7 +69,7 @@ class PackageParser < CommonParser
       dependency.version_label = version
       dependency.comperator = '='
 
-    elsif version.match(/^!=/)
+    elsif version.match(/\A!=/)
       # Not equal to version
       version.gsub!('!=', '')
       version.gsub!(' ', '')
@@ -78,7 +78,7 @@ class PackageParser < CommonParser
       dependency.comperator = '!='
       dependency.version_label = version
 
-    elsif version.match(/^>=/)
+    elsif version.match(/\A>=/)
       # Greater than or equal to
       version.gsub!('>=', '')
       version.gsub!(' ', '')
@@ -87,7 +87,7 @@ class PackageParser < CommonParser
       dependency.comperator = '>='
       dependency.version_label = version
 
-    elsif version.match(/^>/)
+    elsif version.match(/\A>/)
       # Greater than version
       version.gsub!('>', '')
       version.gsub!(' ', '')
@@ -96,7 +96,7 @@ class PackageParser < CommonParser
       dependency.comperator = ">"
       dependency.version_label = version
 
-    elsif version.match(/^<=/)
+    elsif version.match(/\A<=/)
       # Less than or equal to
       version.gsub!("<=", "")
       version.gsub!(" ", "")
@@ -105,7 +105,7 @@ class PackageParser < CommonParser
       dependency.comperator = "<="
       dependency.version_label = version
 
-    elsif version.match(/^\</)
+    elsif version.match(/\A\</)
       # Less than version
       version.gsub!("\<", "")
       version.gsub!(" ", "")
@@ -114,7 +114,7 @@ class PackageParser < CommonParser
       dependency.comperator = "<"
       dependency.version_label = version
 
-    elsif version.match(/^~/)
+    elsif version.match(/\A~/)
       # Tilde Version Ranges -> Pessimistic Version Constraint
       # ~1.2.3 = >=1.2.3 <1.3.0
       ver = version.gsub("\>", "")
