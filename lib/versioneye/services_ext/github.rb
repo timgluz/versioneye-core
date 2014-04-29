@@ -122,7 +122,7 @@ class Github < Versioneye::Service
     try_n.times do
       project_files = repo_project_files(fullname, token, branch_docs)
       break unless project_files.nil? or project_files.empty?
-      logger.info "Trying to read `#{fullname}` again"
+      log.info "Trying to read `#{fullname}` again"
       sleep 3
     end
 
