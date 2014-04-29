@@ -30,16 +30,16 @@ class RequirementsParser < CommonParser
 
   def parse_line( line, project )
     line.gsub!(' ', '')
-    return false if !line.match(/^#/).nil? || line.empty?
+    return false if !line.match(/\A#/).nil? || line.empty?
 
     comparator  = extract_comparator line
     requirement = line.split(comparator)
     package = requirement[0]
 
     return false if package.nil? || package.strip.empty?
-    return false if package.match(/^http:\/\//)
-    return false if package.match(/^https:\/\//)
-    return false if package.match(/^--/)
+    return false if package.match(/\Ahttp:\/\//)
+    return false if package.match(/\Ahttps:\/\//)
+    return false if package.match(/\A--/)
 
     dependency = init_dependency package, comparator
 
@@ -89,23 +89,23 @@ class RequirementsParser < CommonParser
       prod.versions = product.versions
       version_splitted.each do |verso|
         verso.gsub!(" ", "")
-        if verso.match(/^>=/)
+        if verso.match(/\A>=/)
           verso.gsub!(">=", "")
           new_range = VersionService.greater_than_or_equal( product.versions, verso, true )
           prod.versions = new_range
-        elsif verso.match(/^>/)
+        elsif verso.match(/\A>/)
           verso.gsub!(">", "")
           new_range = VersionService.greater_than( product.versions, verso, true )
           prod.versions = new_range
-        elsif verso.match(/^<=/)
+        elsif verso.match(/\A<=/)
           verso.gsub!("<=", "")
           new_range = VersionService.smaller_than_or_equal( product.versions, verso, true )
           prod.versions = new_range
-        elsif verso.match(/^</)
+        elsif verso.match(/\A</)
           verso.gsub!("<", "")
           new_range = VersionService.smaller_than( product.versions, verso, true )
           prod.versions = new_range
-        elsif verso.match(/^!=/)
+        elsif verso.match(/\A!=/)
           verso.gsub!("!=", "")
           new_range = VersionService.newest_but_not( product.versions, verso, true)
           prod.versions = new_range
@@ -132,20 +132,20 @@ class RequirementsParser < CommonParser
       end
       dependency.comperator = "="
 
-    elsif version.empty? || version.match(/^\*$/)
+    elsif version.empty? || version.match(/\A\*$/)
       # This case is not allowed. But we handle it anyway. Because we are fucking awesome!
       dependency.version_requested = VersionService.newest_version_number( product.versions, dependency.stability )
       dependency.version_label = "*"
       dependency.comperator = "="
 
-    elsif version.match(/^==/)
+    elsif version.match(/\A==/)
       # Equals
       version.gsub!("==", "")
       version.gsub!(" ", "")
       dependency.version_requested = version
       dependency.comperator = "=="
 
-    elsif version.match(/^!=/)
+    elsif version.match(/\A!=/)
       # Not equal to version
       version.gsub!("!=", "")
       version.gsub!(" ", "")
@@ -153,7 +153,7 @@ class RequirementsParser < CommonParser
       dependency.version_requested = newest_version
       dependency.comperator = "!="
 
-    elsif version.match(/^>=/)
+    elsif version.match(/\A>=/)
       # Greater than or equal to
       version.gsub!(">=", "")
       version.gsub!(" ", "")
@@ -161,7 +161,7 @@ class RequirementsParser < CommonParser
       dependency.version_requested = newest_version.to_s
       dependency.comperator = ">="
 
-    elsif version.match(/^>/)
+    elsif version.match(/\A>/)
       # Greater than version
       version.gsub!(">", "")
       version.gsub!(" ", "")
@@ -169,7 +169,7 @@ class RequirementsParser < CommonParser
       dependency.version_requested = newest_version.to_s
       dependency.comperator = ">"
 
-    elsif version.match(/^<=/)
+    elsif version.match(/\A<=/)
       # Less than or equal to
       version.gsub!("<=", "")
       version.gsub!(" ", "")
@@ -177,7 +177,7 @@ class RequirementsParser < CommonParser
       dependency.version_requested = newest_version.to_s
       dependency.comperator = "<="
 
-    elsif version.match(/^\</)
+    elsif version.match(/\A\</)
       # Less than version
       version.gsub!("<", "")
       version.gsub!(" ", "")

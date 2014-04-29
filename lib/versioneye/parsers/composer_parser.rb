@@ -101,23 +101,23 @@ class ComposerParser < CommonParser
       version_splitted.each do |verso|
         verso.gsub!(" ", "")
         stability = VersionTagRecognizer.stability_tag_for verso
-        if verso.match(/^>=/)
+        if verso.match(/\A>=/)
           verso.gsub!(">=", "")
           new_range = VersionService.greater_than_or_equal( prod.versions, verso, true, stability )
           prod.versions = new_range
-        elsif verso.match(/^>/)
+        elsif verso.match(/\A>/)
           verso.gsub!(">", "")
           new_range = VersionService.greater_than( prod.versions, verso, true, stability )
           prod.versions = new_range
-        elsif verso.match(/^<=/)
+        elsif verso.match(/\A<=/)
           verso.gsub!("<=", "")
           new_range = VersionService.smaller_than_or_equal( prod.versions, verso, true, stability )
           prod.versions = new_range
-        elsif verso.match(/^</)
+        elsif verso.match(/\A</)
           verso.gsub!("<", "")
           new_range = VersionService.smaller_than( prod.versions, verso, true, stability )
           prod.versions = new_range
-        elsif verso.match(/^!=/)
+        elsif verso.match(/\A!=/)
           verso.gsub!("!=", "")
           new_range = VersionService.newest_but_not( prod.versions, verso, true, stability)
           prod.versions = new_range
@@ -143,13 +143,13 @@ class ComposerParser < CommonParser
       end
       dependency.comperator = "="
 
-    when version.empty? || version.match(/^\*$/)
+    when version.empty? || version.match(/\A\*$/)
       # This case is not allowed. But we handle it anyway. Because we are fucking awesome!
       dependency.version_requested = VersionService.newest_version_number( product.versions, dependency.stability )
       dependency.version_label = "*"
       dependency.comperator = "="
 
-    when version.match(/^>=/)
+    when version.match(/\A>=/)
       # Greater than or equal to
       version.gsub!(">=", "")
       version.gsub!(" ", "")
@@ -157,7 +157,7 @@ class ComposerParser < CommonParser
       dependency.version_requested = greater_than_or_equal.version
       dependency.comperator = ">="
 
-    when version.match(/^>/)
+    when version.match(/\A>/)
       # Greater than version
       version.gsub!(">", "")
       version.gsub!(" ", "")
@@ -165,7 +165,7 @@ class ComposerParser < CommonParser
       dependency.version_requested = greater_than.version
       dependency.comperator = ">"
 
-    when version.match(/^<=/)
+    when version.match(/\A<=/)
       # Less than or equal to
       version.gsub!("<=", "")
       version.gsub!(" ", "")
@@ -173,7 +173,7 @@ class ComposerParser < CommonParser
       dependency.version_requested = smaller_or_equal.version
       dependency.comperator = "<="
 
-    when version.match(/^\</)
+    when version.match(/\A\</)
       # Less than version
       version.gsub!("\<", "")
       version.gsub!(" ", "")
@@ -181,7 +181,7 @@ class ComposerParser < CommonParser
       dependency.version_requested = smaller_than.version
       dependency.comperator = "<"
 
-    when version.match(/^!=/)
+    when version.match(/\A!=/)
       # Not equal to version
       version.gsub!("!=", "")
       version.gsub!(" ", "")
@@ -189,7 +189,7 @@ class ComposerParser < CommonParser
       dependency.version_requested = newest_but_not.version
       dependency.comperator = "!="
 
-    when version.match(/^~/)
+    when version.match(/\A~/)
       # Approximately greater than -> Pessimistic Version Constraint
       version.gsub!("~", "")
       version.gsub!(" ", "")

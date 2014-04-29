@@ -50,7 +50,7 @@ class GemfileParser < CommonParser
 
     version = String.new( version_number )
 
-    if version.match(/^=/)
+    if version.match(/\A=/)
       # Equals
       version.gsub!('=', '')
       version.gsub!(' ', '')
@@ -58,7 +58,7 @@ class GemfileParser < CommonParser
       dependency.version_label     = version
       dependency.comperator        = '='
 
-    elsif version.match(/^!=/)
+    elsif version.match(/\A!=/)
       # Not equal to version
       version.gsub!('!=', '')
       version.gsub!(' ', '')
@@ -67,7 +67,7 @@ class GemfileParser < CommonParser
       dependency.comperator        = '!='
       dependency.version_label     = version
 
-    elsif version.match(/^>=/)
+    elsif version.match(/\A>=/)
       # Greater than or equal to
       version.gsub!('>=', '')
       version.gsub!(' ', '')
@@ -76,7 +76,7 @@ class GemfileParser < CommonParser
       dependency.comperator        = '>='
       dependency.version_label     = version
 
-    elsif version.match(/^>/)
+    elsif version.match(/\A>/)
       # Greater than version
       version.gsub!('>', '')
       version.gsub!(' ', '')
@@ -85,7 +85,7 @@ class GemfileParser < CommonParser
       dependency.comperator        = ">"
       dependency.version_label     = version
 
-    elsif version.match(/^<=/)
+    elsif version.match(/\A<=/)
       # Less than or equal to
       version.gsub!("<=", "")
       version.gsub!(" ", "")
@@ -94,7 +94,7 @@ class GemfileParser < CommonParser
       dependency.comperator        = "<="
       dependency.version_label     = version
 
-    elsif version.match(/^\</)
+    elsif version.match(/\A\</)
       # Less than version
       version.gsub!("\<", "")
       version.gsub!(" ", "")
@@ -103,7 +103,7 @@ class GemfileParser < CommonParser
       dependency.comperator        = "<"
       dependency.version_label     = version
 
-    elsif version.match(/^~>/)
+    elsif version.match(/\A~>/)
       # Approximately greater than -> Pessimistic Version Constraint
       ver = version.gsub("~>", "")
       ver = ver.gsub(" ", "")
@@ -118,12 +118,12 @@ class GemfileParser < CommonParser
       dependency.comperator = "~>"
       dependency.version_label = ver
 
-    elsif version.match(/^git:/) or version.match(/^:git/)
+    elsif version.match(/^git:/) or version.match(/\A:git/)
       dependency.version_requested = "GIT"
       dependency.version_label     = "GIT"
       dependency.comperator        = "="
 
-    elsif version.match(/^path:/) or version.match(/^:path/)
+    elsif version.match(/^path:/) or version.match(/\A:path/)
       dependency.version_requested = "PATH"
       dependency.version_label     = "PATH"
       dependency.comperator        = "="
@@ -157,28 +157,28 @@ class GemfileParser < CommonParser
     line_elements.each_with_index do |element, index|
       next if index == 0
       element = element.strip
-      if element.match(/^require:/) or element.match(/^:require/)
+      if element.match(/^require:/) or element.match(/\A:require/)
         next
-      elsif element.match(/^:group/) or element.match(/^group:/)
+      elsif element.match(/\A:group/) or element.match(/^group:/)
         next
-      elsif element.match(/^:development/) or element.match(/^development:/)
+      elsif element.match(/\A:development/) or element.match(/^development:/)
         next
-      elsif element.match(/^:test/) or element.match(/^test:/)
+      elsif element.match(/\A:test/) or element.match(/^test:/)
         next
-      elsif element.match(/^:platforms/) or element.match(/^platforms:/)
+      elsif element.match(/\A:platforms/) or element.match(/^platforms:/)
         next
-      elsif element.match(/^:engine/) or element.match(/^engine:/)
+      elsif element.match(/\A:engine/) or element.match(/^engine:/)
         next
-      elsif element.match(/^:engine_version/) or element.match(/^engine_version:/)
+      elsif element.match(/\A:engine_version/) or element.match(/^engine_version:/)
         next
-      elsif element.match(/^:branch/) or element.match(/^branch:/)
+      elsif element.match(/\A:branch/) or element.match(/^branch:/)
         next
-      elsif element.match(/^:tag/) or element.match(/^tag:/)
+      elsif element.match(/\A:tag/) or element.match(/^tag:/)
         next
-      elsif element.match(/^:path/) or element.match(/^path:/)
+      elsif element.match(/\A:path/) or element.match(/^path:/)
         version = element
         break
-      elsif element.match(/^:git/) or element.match(/^git:/)
+      elsif element.match(/\A:git/) or element.match(/^git:/)
         version = element
         break
       else
