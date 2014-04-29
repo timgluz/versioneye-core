@@ -93,7 +93,7 @@ class Github < Versioneye::Service
   end
 
   def self.user_orga_repos user, orga_name, url = nil, page = 1, per_page = 30
-    url = "#{Settings.instance.github_api_url}/orgs/#{orga_name}/repos?access_token=#{user.github_token}" if url.nil?
+    url = "#{Settings.instance.github_api_url}/orgs/#{orga_name}/repos?access_token=#{user.github_token}&page=#{page}&per_page=#{per_page}" if url.nil?
     read_repos(user, url, page, per_page)
   end
 
@@ -127,7 +127,7 @@ class Github < Versioneye::Service
     end
 
     if project_files.nil?
-      msg = "Cant read project files for repo `#{full_name}`. Tried to read #{try_n} ntimes."
+      msg = "Cant read project files for repo `#{fullname}`. Tried to read #{try_n} ntimes."
       log.error msg
     end
 
@@ -150,7 +150,7 @@ class Github < Versioneye::Service
       workers << Thread.new do
         time = Benchmark.measure do
           repo_data = read_repo_data(repo, user.github_token)
-          new_repo = GithubRepo.create_new(user, repo_data)
+          new_repo  = GithubRepo.create_new( user, repo_data )
           repo_docs << new_repo
         end
         puts "Reading `#{repo[:full_name]}` took: #{time}"
@@ -464,4 +464,5 @@ class Github < Versioneye::Service
       end
       Hash[*links.flatten]
     end
+    
 end

@@ -62,9 +62,11 @@ class GithubRepo < Versioneye::Model
   def self.github_login_for user
     if user[:github_login].nil?
       user_info = Github.user(user.github_token)
-      user_info.deep_symbolize_keys
-      user[:github_login] = user_info[:login]
-      user.save
+      if user_info
+        user_info.deep_symbolize_keys
+        user[:github_login] = user_info[:login]
+        user.save
+      end
     end
     user[:github_login]
   rescue => e
