@@ -51,6 +51,7 @@ class ProjectCollaborator < Versioneye::Model
     self.owner_id == current_user.id.to_s
   end
 
+  # TODO this doesn't work for users who just signed up, who are invited by email to the project!
   def current?(user)
     return false if user.nil?
     return false if self[:user_id].nil?
