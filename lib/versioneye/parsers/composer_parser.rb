@@ -9,8 +9,10 @@ class ComposerParser < CommonParser
   def parse url
     data = self.fetch_data url
     return nil if data.nil?
+
     dependencies = fetch_dependencies data
     return nil if dependencies.nil?
+
     project = init_project( url )
     dependencies.each do |key, value|
       self.process_dependency( key, value, project, data )
