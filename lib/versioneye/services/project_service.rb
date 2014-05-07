@@ -184,14 +184,14 @@ class ProjectService < Versioneye::Service
       return error_msg
     end
 
-    s3_info = S3.upload_github_file( project_file, project_file[:name] )
-    if s3_info.nil? && !s3_info.has_key?('filename') && !s3_info.has_key?('s3_url')
-      error_msg = "Connectivity issues - can't import project file for parsing."
-      log.error " Can't upload file to s3: #{project_file[:name]}"
-      return error_msg
-    end
+    file_bin = project_file[:content]
+    file_txt = Base64.decode64(file_bin)
 
-    parsed_project = build_from_url s3_info['s3_url']
+    rnd = SecureRandom.urlsafe_base64(7)
+    file_path = "/tmp/#{rnd}_#{project_file[:content]}"
+    File.open(file_path, 'w') { |file| file.write( file_txt ) }
+
+    parsed_project = build_from_file_path file_path
     parsed_project.update_attributes({
       name: repo_name,
       project_type: project_file[:type],
@@ -238,8 +238,8 @@ class ProjectService < Versioneye::Service
       return error_msg
     end
 
-    project_type = ProjectService.type_by_filename(filename)
-    parsed_project = build_from_url(s3_info['s3_url'], project_type)
+    project_type = ProjectService.type_by_filename( filename )
+    parsed_project = build_from_url( s3_info['s3_url'], project_type)
     parsed_project.update_attributes({
       name: repo_name,
       project_type: project_type,
@@ -262,6 +262,17 @@ class ProjectService < Versioneye::Service
       project.name = project_name
     end
     project
+  end
+
+
+  def self.build_from_file_path(file_path, project_type = nil)
+    project_type = type_by_filename(file_path) if project_type.nil?
+    parser       = ParserStrategy.parser_for( project_type, file_path )
+    parser.parse_file file_path
+  rescue => e
+    log.error "Error in build_from_url(url) -> #{e.message}"
+    log.error e.backtrace.join("\n")
+    Project.new
   end
 
 
