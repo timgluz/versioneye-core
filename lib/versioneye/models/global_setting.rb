@@ -15,6 +15,7 @@ class GlobalSetting < Versioneye::Model
   field :nexus_url, type: String , default: 'https://nexus.pro'
 
   field :cocoapods_spec_git, type: String , default: 'https://github.com/CocoaPods/Specs.git'
+  field :cocoapods_spec_url, type: String , default: 'https://github.com/CocoaPods/Specs'
 
   validates_presence_of :server_url , :message => 'is mandatory!'
   validates_presence_of :server_host, :message => 'is mandatory!'
