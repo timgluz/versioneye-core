@@ -31,6 +31,7 @@ class PodfileParser < CommonParser
     pod_file = Pod::Podfile.from_url( url )
     create_project pod_file, url
   rescue => e
+    log.error "Cant'parse #{url}"
     log.error e.message
     log.error e.backtrace.join('\n')
     nil
