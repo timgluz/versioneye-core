@@ -18,6 +18,8 @@ class Dependency < Versioneye::Model
   A_SCOPE_BUNDLED     = 'bundled'     # NPM
   A_SCOPE_OPTIONAL    = 'optional'    # NPM
 
+  # Podspecs of CocoaPods doesn't have scopes/targets
+  # But Podfiles can have targets
 
   # This attributes describe to which product
   # this dependency belongs to. Parent!
