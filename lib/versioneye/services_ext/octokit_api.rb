@@ -8,7 +8,7 @@ class OctokitApi
 
   # Singleton pattern
   def self.client
-    @@client ||= Octokit::Client.new( self.application_authentication )
+    Octokit::Client.new( self.application_authentication )
   end
 
   # Singleton pattern
