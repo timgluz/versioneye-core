@@ -187,8 +187,10 @@ class ProjectService < Versioneye::Service
     file_bin = project_file[:content]
     file_txt = Base64.decode64(file_bin)
 
+    full_name = project_file[:name]
+    file_name = full_name.split("/").last
     rnd = SecureRandom.urlsafe_base64(7)
-    file_path = "/tmp/#{rnd}_#{project_file[:name]}"
+    file_path = "/tmp/#{rnd}_#{file_name}"
     File.open(file_path, 'w') { |file| file.write( file_txt ) }
 
     parsed_project = build_from_file_path file_path
@@ -270,7 +272,7 @@ class ProjectService < Versioneye::Service
     parser       = ParserStrategy.parser_for( project_type, file_path )
     parser.parse_file file_path
   rescue => e
-    log.error "Error in build_from_url(url) -> #{e.message}"
+    log.error "Error in build_from_file_path(#{file_path}) -> #{e.message}"
     log.error e.backtrace.join("\n")
     Project.new
   end
