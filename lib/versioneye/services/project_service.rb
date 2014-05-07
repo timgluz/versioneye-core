@@ -188,7 +188,7 @@ class ProjectService < Versioneye::Service
     file_txt = Base64.decode64(file_bin)
 
     rnd = SecureRandom.urlsafe_base64(7)
-    file_path = "/tmp/#{rnd}_#{project_file[:content]}"
+    file_path = "/tmp/#{rnd}_#{project_file[:name]}"
     File.open(file_path, 'w') { |file| file.write( file_txt ) }
 
     parsed_project = build_from_file_path file_path
@@ -200,8 +200,8 @@ class ProjectService < Versioneye::Service
       private_project: private_project,
       scm_fullname: repo_name,
       scm_branch: branch,
-      s3_filename: s3_info['filename'],
-      url: s3_info['s3_url']
+      s3_filename: project_file[:name],
+      url: project_file[:url]
     })
 
     return parsed_project if store( parsed_project )
