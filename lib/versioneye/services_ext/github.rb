@@ -348,26 +348,6 @@ class Github < Versioneye::Service
     nil
   end
 
-  def self.rate_limit(token)
-    limits = {
-      core: {
-        limit: 0,
-        remaining: 0,
-        reset: DateTime.now.to_i + (5 * 60)  #default wait 5minute before trying again
-      }
-    }
-
-    url = "#{Settings.instance.github_api_url}/rate_limit"
-
-    response = get_json(url, token)
-    if response and response.has_key?(:resources)
-      limits = response[:resources]
-    else
-      log.error "Didnt get any rate_limit from API - going to use default limits: #{limits}"
-    end
-    limits
-  end
-
   def self.search(q, langs = nil, users = nil, page = 1, per_page = 30)
     search_term = "#{q}"
     if langs
