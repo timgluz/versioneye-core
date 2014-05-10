@@ -380,23 +380,27 @@ class Github < Versioneye::Service
   end
 
   def self.get_json(url, token = nil, raw = false, updated_at = nil)
-    request_headers = A_DEFAULT_HEADERS
-    if token
-      request_headers["Authorization"] = " token #{token}"
-    end
-
-    if updated_at.is_a?(Date) or updated_at.is_a?(DateTime)
-      request_headers["If-Modified-Since"] = updated_at.to_datetime.rfc822
-    end
-
+    request_headers = build_request_headers token, updated_at
     response = get(url, headers: request_headers)
     return response if raw
+
     content = JSON.parse(response.body, symbolize_names: true)
     catch_github_exception(content)
   rescue => e
     log.error e.message
     log.error e.backtrace.first
     return nil
+  end
+
+  def self.build_request_headers token, updated_at
+    request_headers = A_DEFAULT_HEADERS
+    if token
+      request_headers["Authorization"] = " token #{token}"
+    end
+    if updated_at.is_a?(Date) or updated_at.is_a?(DateTime)
+      request_headers["If-Modified-Since"] = updated_at.to_datetime.rfc822
+    end
+    request_headers
   end
 
   def self.support_project_files
