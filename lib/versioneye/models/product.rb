@@ -1,42 +1,13 @@
 class Product < Versioneye::Model
 
+  require 'versioneye/models/helpers/product_constants'
+  include VersionEye::ProductConstants
+
+  require 'versioneye/models/helpers/product_es_mapping'
+  include VersionEye::ProductEsMapping
+
   include Mongoid::Document
   include Mongoid::Timestamps
-
-  A_LANGUAGE_RUBY         = 'Ruby'
-  A_LANGUAGE_PYTHON       = 'Python'
-  A_LANGUAGE_NODEJS       = 'Node.JS'
-  A_LANGUAGE_JAVA         = 'Java'
-  A_LANGUAGE_PHP          = 'PHP'
-  A_LANGUAGE_R            = 'R'
-  A_LANGUAGE_JAVASCRIPT   = 'JavaScript'
-  A_LANGUAGE_CLOJURE      = 'Clojure'
-  A_LANGUAGE_C            = 'C'
-  A_LANGUAGE_C_PP         = 'C++'
-  A_LANGUAGE_OBJECTIVEC   = 'Objective-C'
-  A_LANGUAGE_GO           = 'Go'
-  A_LANGUAGE_CSS          = 'CSS'
-  A_LANGUAGE_COFFEESCRIPT = 'CoffeeScript'
-  A_LANGUAGE_ACTIONSCRIPT = 'ActionScript'
-  A_LANGUAGE_TYPESCRIPT   = 'TypeScript'
-  A_LANGUAGE_LIVESCRIPT   = 'LiveScript'
-
-  # TODO check if this can be removed
-  A_LANGS_ALL           = [A_LANGUAGE_JAVA, A_LANGUAGE_RUBY, A_LANGUAGE_PYTHON, A_LANGUAGE_PHP, A_LANGUAGE_NODEJS, A_LANGUAGE_JAVASCRIPT, A_LANGUAGE_CLOJURE, A_LANGUAGE_R, A_LANGUAGE_OBJECTIVEC, A_LANGUAGE_C, A_LANGUAGE_CSS, A_LANGUAGE_C_PP, A_LANGUAGE_COFFEESCRIPT, A_LANGUAGE_GO]
-
-  # TODO remove this, take the list from DB.
-  A_LANGS_LANGUAGE_PAGE = [A_LANGUAGE_JAVA, A_LANGUAGE_RUBY, A_LANGUAGE_PYTHON, A_LANGUAGE_PHP, A_LANGUAGE_NODEJS, A_LANGUAGE_JAVASCRIPT, A_LANGUAGE_CLOJURE, A_LANGUAGE_R, A_LANGUAGE_OBJECTIVEC]
-
-  # For the search filter
-  A_LANGS_FILTER        = [A_LANGUAGE_JAVA, A_LANGUAGE_RUBY, A_LANGUAGE_PYTHON, A_LANGUAGE_PHP, A_LANGUAGE_NODEJS, A_LANGUAGE_JAVASCRIPT, A_LANGUAGE_CLOJURE, A_LANGUAGE_R, A_LANGUAGE_OBJECTIVEC]
-
-  # Supported for package managers
-  A_LANGS_SUPPORTED     = [A_LANGUAGE_JAVA, A_LANGUAGE_RUBY, A_LANGUAGE_PYTHON, A_LANGUAGE_PHP, A_LANGUAGE_NODEJS, A_LANGUAGE_JAVASCRIPT, A_LANGUAGE_CLOJURE, A_LANGUAGE_R, A_LANGUAGE_OBJECTIVEC]
-
-  A_LANGS_DEP_BADGE     = [A_LANGUAGE_JAVA, A_LANGUAGE_RUBY,                    A_LANGUAGE_PHP, A_LANGUAGE_NODEJS, A_LANGUAGE_JAVASCRIPT, A_LANGUAGE_CLOJURE,               A_LANGUAGE_OBJECTIVEC]
-
-  A_LANGS_DEP_GRAPH     = [A_LANGUAGE_RUBY, A_LANGUAGE_PHP, A_LANGUAGE_NODEJS, A_LANGUAGE_JAVASCRIPT, A_LANGUAGE_OBJECTIVEC]
-
 
   field :name         , type: String
   field :name_downcase, type: String
@@ -83,21 +54,7 @@ class Product < Versioneye::Model
 
   scope :by_language, ->(lang){where(language: lang)}
 
-  def to_indexed_json # For ElasticSearch
-    {
-      :_id                => self.id.to_s,
-      :_type              => 'product',
-      :name               => self.name,
-      :description        => self.description.to_s,
-      :description_manual => self.description_manual.to_s,
-      :followers          => self.followers,
-      :used_by_count      => self.used_by_count,
-      :group_id           => self.group_id.to_s,
-      :prod_key           => self.prod_key,
-      :language           => self.language,
-      :prod_type          => self.prod_type
-    }
-  end
+
 
   def show_dependency_badge?
     A_LANGS_DEP_BADGE.include?(self.language)
