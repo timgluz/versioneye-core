@@ -68,15 +68,6 @@ class CommonParser
     nil
   end
 
-  def fetch_response_body_json( url )
-    body = self.fetch_response_body( url )
-    JSON.parse( body )
-  rescue => e
-    log.error e.message
-    log.error e.backtrace.join("\n")
-    nil
-  end
-
   def do_replacements_for_github(url)
     if url.match(/^https:\/\/github.com\//)
       url = url.gsub('https://github.com', 'https://raw.github.com')
