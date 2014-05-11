@@ -1,7 +1,7 @@
 class ProjectFactory
 
   def self.create_new(user, extra_fields = nil, save = true)
-    if user.nil? or user.to_s.empty?
+    if user.nil? || user.to_s.empty?
       log.error "User was unspecified or empty."
     end
 
@@ -30,6 +30,43 @@ class ProjectFactory
     end
 
     new_project
+  end
+
+
+  def self.default user
+    project = ProjectFactory.create_new user
+
+    prod_1  = ProductFactory.create_new 1
+    prod_2  = ProductFactory.create_new 2
+    prod_3  = ProductFactory.create_new 3
+
+    dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1000.0.0'}
+    dep_2 = ProjectdependencyFactory.create_new project, prod_2, true, {:version_requested => '0.0.0'}
+    dep_3 = ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => '0.0.0'}
+
+    project.dependencies.each do |dep|
+      dep.save
+    end
+
+    project
+  end
+
+  def self.new_project user
+    project = ProjectFactory.create_new user
+
+    prod_4  = ProductFactory.create_new 4
+    prod_5  = ProductFactory.create_new 5
+    prod_6  = ProductFactory.create_new 6
+
+    dep_4 = ProjectdependencyFactory.create_new project, prod_4, true, {:version_requested => '0.0.0'}
+    dep_5 = ProjectdependencyFactory.create_new project, prod_5, true, {:version_requested => '0.0.0'}
+    dep_6 = ProjectdependencyFactory.create_new project, prod_6, true, {:version_requested => '0.0.0'}
+
+    project.dependencies.each do |dep|
+      dep.save
+    end
+
+    project
   end
 
 end
