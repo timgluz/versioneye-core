@@ -69,7 +69,7 @@ class ProjectdependencyService < Versioneye::Service
     version_current = projectdependency.version_current
     if version_current.nil? || version_current.empty? || !version_current.eql?( newest_version )
       projectdependency.version_current = newest_version
-      projectdependency.release         = VersionTagRecognizer.release? projectdependency.version_current
+      projectdependency.release = VersionTagRecognizer.release? projectdependency.version_current
       projectdependency.muted = false
       projectdependency.save()
     end
