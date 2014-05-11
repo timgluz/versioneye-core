@@ -65,7 +65,7 @@ class BowerParser < CommonParser
     version_label.to_s.gsub(/^\D+/, "") #removes all non-numerical before version
   end
 
-  def parse ( url )
+  def parse( url )
     return nil if url.nil? || url.empty?
 
     body = self.fetch_response_body( url )
@@ -76,7 +76,7 @@ class BowerParser < CommonParser
     nil
   end
 
-  def parse_content(content)
+  def parse_content( content )
     data = JSON.parse( content )
     return nil if data.nil?
 
