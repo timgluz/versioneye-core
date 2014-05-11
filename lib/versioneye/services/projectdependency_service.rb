@@ -36,11 +36,8 @@ class ProjectdependencyService < Versioneye::Service
     end
 
     newest_version = Naturalsorter::Sorter.sort_version([projectdependency.version_current, projectdependency.version_requested]).last
-    if newest_version.eql?( projectdependency.version_requested)
-      return update_outdated( projectdependency, false )
-    end
-
-    update_outdated( projectdependency, true )
+    outdated = !newest_version.eql?( projectdependency.version_requested)
+    update_outdated( projectdependency, outdated )
     projectdependency.outdated
   end
 
