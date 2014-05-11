@@ -10,10 +10,12 @@ class ProjectMailer < ActionMailer::Base
     @base_url     = Settings.instance.server_url
     @user         = user ? user : project.user
     @dependencies = Hash.new
+
     deps  = ProjectService.outdated_dependencies( project )
     deps.each do |dep|
       @dependencies[dep.name] = dep
     end
+
     email = user ? user.email : Project.email_for(project, @user)
 
     mail(:to => email, :subject => "Project Notification for #{project.name}") do |format|
