@@ -11,6 +11,14 @@ class CommonParser
     raise NotImplementedError, 'Implement me!'
   end
 
+  def parse_file(file_path)
+    raise NotImplementedError, 'Implement me!'
+  end
+
+  def parse_content(content)
+    raise NotImplementedError, 'Implement me!'
+  end
+
   # It is important that this method is NOT writing into the database!
   #
   # Params:

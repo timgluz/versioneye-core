@@ -6,16 +6,30 @@ class GemfileParser < CommonParser
   # http://gembundler.com/man/gemfile.5.html
   # http://guides.rubygems.org/patterns/#semantic_versioning
   #
-  def parse ( url )
+  def parse( url )
     return nil if url.nil? || url.empty?
+
     gemfile = fetch_response_body( url )
     return nil if gemfile.nil?
-    project = init_project( url )
+
+    parse_content( gemfile )
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
+  end
+
+  def parse_content( gemfile )
+    project = init_project
     gemfile.each_line do |line|
       parse_line( line, project )
     end
     project.dep_number = project.dependencies.size
     project
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
   end
 
   def parse_line( line, project )
@@ -198,7 +212,7 @@ class GemfileParser < CommonParser
     value
   end
 
-  def init_project( url )
+  def init_project( url = nil )
     project = Project.new
     project.project_type = Project::A_TYPE_RUBYGEMS
     project.language     = Product::A_LANGUAGE_RUBY

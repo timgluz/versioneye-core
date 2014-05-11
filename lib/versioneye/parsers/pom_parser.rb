@@ -7,8 +7,17 @@ class PomParser < CommonParser
   # XPath: //project/dependencies/dependency
   #
   def parse( url )
-    doc        = fetch_xml( url )
-    project    = init_project( url, doc )
+    response = self.fetch_response( url )
+    parse_content response.body
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
+  end
+
+  def parse_content( content )
+    doc        = fetch_xml( content )
+    project    = init_project( doc )
     properties = fetch_properties( doc )
     doc.xpath('//dependencies/dependency').each do |node|
       fetch_dependency(node, properties, project)
@@ -17,7 +26,7 @@ class PomParser < CommonParser
     project
   rescue => e
     log.error e.message
-    log.error e.backtrace.join("\n")
+    log.error e.backtrace.join('\n')
     nil
   end
 
@@ -103,21 +112,21 @@ class PomParser < CommonParser
     end
   end
 
-  def init_project( url, doc )
+  def init_project( doc )
     project              = Project.new
     project.project_type = Project::A_TYPE_MAVEN2
     project.language     = Product::A_LANGUAGE_JAVA
-    project.url          = url
     project.name         = doc.xpath('//project/name').text
     project
   end
 
-  def fetch_xml( url )
-    response = self.fetch_response( url )
-    doc = Nokogiri::XML( response.body )
+  def fetch_xml( content )
+    doc = Nokogiri::XML( content )
     return nil if doc.nil?
+
     doc.remove_namespaces!
     return nil if doc.nil?
+
     doc
   end
 

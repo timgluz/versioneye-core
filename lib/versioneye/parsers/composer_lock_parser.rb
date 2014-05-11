@@ -3,8 +3,15 @@ require 'versioneye/parsers/composer_parser'
 class ComposerLockParser < ComposerParser
 
   def parse( url )
-    dependencies = self.fetch_project_dependencies(url)
-    project = init_project( url )
+    return nil if url.nil?
+    response = self.fetch_response( url )
+    data = JSON.parse(response.body)
+    parse_content( data )
+  end
+
+  def parse_content( data )
+    dependencies = self.fetch_project_dependencies( data )
+    project = init_project
     dependencies.each do |package|
       self.process_package project, package
     end
@@ -46,11 +53,8 @@ class ComposerLockParser < ComposerParser
     version
   end
 
-  def fetch_project_dependencies( url )
-    return nil if url.nil?
-    response = self.fetch_response( url )
-    data = JSON.parse(response.body)
-    return nil if data.nil?  or data['packages'].nil?
+  def fetch_project_dependencies( data )
+    return nil if data.nil? || data['packages'].nil?
     data['packages']
   end
 

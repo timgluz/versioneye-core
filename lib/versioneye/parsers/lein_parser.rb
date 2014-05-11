@@ -2,7 +2,7 @@ require 'versioneye/parsers/common_parser'
 
 class LeinParser < CommonParser
 
-  def parse(url)
+  def parse( url )
     return nil if url.nil?
 
     response = self.fetch_response(url)
@@ -11,6 +11,14 @@ class LeinParser < CommonParser
     content  = response.body
     return nil if content.nil?
 
+    parse_content(content)
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
+  end
+
+  def parse_content(content)
     xml_content = transform_to_xml content
 
     doc = Nokogiri::HTML(xml_content)
@@ -26,10 +34,12 @@ class LeinParser < CommonParser
     project              = Project.new deps
     project.project_type = Project::A_TYPE_LEIN
     project.language     = Product::A_LANGUAGE_CLOJURE
-    project.url          = url
     project.dep_number   = project.dependencies.size
-
     project
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
   end
 
   def transform_to_xml(content)

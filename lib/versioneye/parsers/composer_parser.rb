@@ -8,12 +8,19 @@ class ComposerParser < CommonParser
   #
   def parse url
     data = self.fetch_data url
+    parse_content( data )
+  rescue => e
+    print_backtrace e
+    nil
+  end
+
+  def parse_content( data )
     return nil if data.nil?
 
     dependencies = fetch_dependencies data
     return nil if dependencies.nil?
 
-    project = init_project( url )
+    project = init_project
     dependencies.each do |key, value|
       self.process_dependency( key, value, project, data )
     end
@@ -234,7 +241,7 @@ class ComposerParser < CommonParser
     false
   end
 
-  def init_project url
+  def init_project url = nil
     project              = Project.new
     project.project_type = Project::A_TYPE_COMPOSER
     project.language     = Product::A_LANGUAGE_PHP

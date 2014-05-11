@@ -2,13 +2,24 @@ require 'versioneye/parsers/common_parser'
 
 class PomJsonParser < CommonParser
 
+
   def parse(url)
     return nil if url.nil? || url.empty?
 
-    pom_json = self.fetch_response_body_json(url)
+    response = self.fetch_response( url )
+    parse_content response.body
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    nil
+  end
+
+
+  def parse_content( content )
+    pom_json = JSON.parse( content )
     return nil if pom_json.nil?
 
-    project = init_project(url)
+    project = Project.new({:project_type => Project::A_TYPE_MAVEN2, :language => Product::A_LANGUAGE_JAVA })
     pom_json['dependencies'].each do |json_dep|
       version     = json_dep['version']
       name        = json_dep['name']
@@ -25,11 +36,8 @@ class PomJsonParser < CommonParser
     project.dep_number = project.dependencies.size
     project.name = pom_json['name']
     project
-  rescue => e
-    log.error e.message
-    log.error e.backtrace.join("\n")
-    nil
   end
+
 
   def init_dependency name, group_id, artifact_id, version
     dependency             = Projectdependency.new
@@ -39,14 +47,6 @@ class PomJsonParser < CommonParser
     dependency.artifact_id = artifact_id
     dependency.version_requested = version
     dependency
-  end
-
-  def init_project( url )
-    project              = Project.new
-    project.project_type = Project::A_TYPE_MAVEN2
-    project.language     = Product::A_LANGUAGE_JAVA
-    project.url          = url
-    project
   end
 
 end

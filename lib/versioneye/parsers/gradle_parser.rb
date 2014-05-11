@@ -4,7 +4,16 @@ class GradleParser < CommonParser
 
   def parse(url)
     return nil if url.nil?
+
     content = self.fetch_response(url).body
+    parse_content( content )
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
+  end
+
+  def parse_content( content )
     return nil if content.nil?
 
     dependecies_matcher = /
@@ -20,9 +29,12 @@ class GradleParser < CommonParser
     project              = Project.new deps
     project.project_type = Project::A_TYPE_GRADLE
     project.language     = Product::A_LANGUAGE_JAVA
-    project.url          = url
     project.dep_number   = project.dependencies.size
     project
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
   end
 
   def build_dependencies(matches)

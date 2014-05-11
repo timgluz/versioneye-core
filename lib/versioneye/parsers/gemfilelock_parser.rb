@@ -8,19 +8,32 @@ class GemfilelockParser < GemfileParser
   #
   def parse(url)
     return nil if url.nil?
+
     content = self.fetch_response(url).body
     return nil if content.nil?
 
+    parse_content( content )
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
+  end
+
+  def parse_content(content)
     dependecies_matcher = /([\w|\d|\.|\-|\_]+) (\(.*\))/
 
     matches = content.scan( dependecies_matcher )
     deps = self.build_dependencies(matches)
-    project                     = init_project( url )
+    project                     = init_project
     project.projectdependencies = deps[:projectdependencies]
     project.unknown_number      = deps[:unknown_number]
     project.out_number          = deps[:out_number]
     project.dep_number          = project.dependencies.size
     project
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
   end
 
   def build_dependencies(matches)

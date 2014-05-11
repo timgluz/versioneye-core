@@ -10,10 +10,18 @@ class RequirementsParser < CommonParser
     return nil if url.nil?
 
     response = self.fetch_response(url)
-    txt = response.body
+    parse_content response.body
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
+  end
+
+
+  def parse_content( txt )
     return nil if txt.nil? || txt.empty?
 
-    project = init_project( url )
+    project = Project.new({:project_type => Project::A_TYPE_PIP, :language => Product::A_LANGUAGE_PYTHON })
 
     txt.each_line do |line|
       parse_line line, project
@@ -24,7 +32,8 @@ class RequirementsParser < CommonParser
     return project
   rescue => e
     log.error e.message
-    log.error e.backtrace.join("\n")
+    log.error e.backtrace.join('\n')
+    nil
   end
 
 
@@ -190,15 +199,6 @@ class RequirementsParser < CommonParser
       dependency.comperator = "=="
     end
 
-  end
-
-
-  def init_project url
-    project              = Project.new
-    project.project_type = Project::A_TYPE_PIP
-    project.language     = Product::A_LANGUAGE_PYTHON
-    project.url          = url
-    project
   end
 
 

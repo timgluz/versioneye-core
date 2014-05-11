@@ -12,15 +12,27 @@ class PackageParser < CommonParser
     data = self.fetch_response_body_json( url )
     return nil if data.nil?
 
+    parse_content data
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
+  end
+
+  def parse_content( data )
     dependencies = fetch_dependencies( data )
     return nil if dependencies.nil?
 
-    project = init_project( url, data )
+    project = init_project( data )
     dependencies.each do |key, value|
       parse_line( key, value, project )
     end
     project.dep_number = project.dependencies.size
     project
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
   end
 
   def parse_line( key, value, project )
@@ -182,11 +194,10 @@ class PackageParser < CommonParser
     end
   end
 
-  def init_project( url, data )
+  def init_project( data )
     project = Project.new
     project.project_type = Project::A_TYPE_NPM
     project.language     = Product::A_LANGUAGE_NODEJS
-    project.url          = url
     project.name         = data['name']
     project.description  = data['description']
     project

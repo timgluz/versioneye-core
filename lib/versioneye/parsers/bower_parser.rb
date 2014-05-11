@@ -68,12 +68,21 @@ class BowerParser < CommonParser
   def parse ( url )
     return nil if url.nil? || url.empty?
 
-    data = self.fetch_response_body_json( url )
+    body = self.fetch_response_body( url )
+    parse_content( body )
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
+  end
+
+  def parse_content(content)
+    data = JSON.parse( content )
     return nil if data.nil?
 
     dependencies = fetch_dependencies( data )
     return nil if dependencies.nil?
-    project = init_project( url, data )
+    project = init_project( data )
 
     dependencies.each do |package_name, version_label|
       parse_version_label( package_name.to_s.downcase, version_label, project )
@@ -81,6 +90,10 @@ class BowerParser < CommonParser
     project.dep_number = project.dependencies.size
 
     project
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
   end
 
   def trim_text(text)
@@ -265,11 +278,10 @@ class BowerParser < CommonParser
   end
 
   #TODO: try to add more info ~ licence, github etc
-  def init_project( url, data )
+  def init_project( data )
     project = Project.new
     project.project_type = Project::A_TYPE_BOWER
     project.language     = Product::A_LANGUAGE_JAVASCRIPT
-    project.url          = url
     project.name         = data['name']
     project.description  = data['description']
     project
