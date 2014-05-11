@@ -56,6 +56,13 @@ module Versioneye
     require 'versioneye/parsers/python_setup_parser'
     require 'versioneye/parsers/requirements_parser'
 
+    require 'versioneye/updaters/update_strategy'
+    require 'versioneye/updaters/common_updater'
+    require 'versioneye/updaters/bitbucket_updater'
+    require 'versioneye/updaters/github_updater'
+    require 'versioneye/updaters/upload_updater'
+    require 'versioneye/updaters/url_updater'
+
     def self.log
       Versioneye::Log.instance.log
     end

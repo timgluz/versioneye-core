@@ -8,16 +8,21 @@ class CommonParser
   end
 
   def parse(url)
-    raise NotImplementedError, 'Implement me!'
+    raise NotImplementedError, 'Implement me in subclass!'
   end
 
+=begin
+
+  One of this bothe methods needs to be implemented in each subclass.
+
   def parse_file(file_path)
-    raise NotImplementedError, 'Implement me!'
+    raise NotImplementedError, 'Implement me in subclass!'
   end
 
   def parse_content(content)
-    raise NotImplementedError, 'Implement me!'
+    raise NotImplementedError, 'Implement me in subclass!'
   end
+=end
 
   # It is important that this method is NOT writing into the database!
   #
@@ -33,7 +38,7 @@ class CommonParser
   #   - projectdependency.comperator
   #
   def parse_requested_version(version, projectdependency, product)
-    raise NotImplementedError, 'Implement me!'
+    raise NotImplementedError, 'Implement me in subclass!'
   end
 
   def fetch_response url
@@ -70,7 +75,7 @@ class CommonParser
 
   def do_replacements_for_github(url)
     if url.match(/^https:\/\/github.com\//)
-      url = url.gsub('https://github.com', 'https://raw.github.com')
+      url = url.gsub('https://github.com', 'https://raw.githubusercontent.com')
       url = url.gsub('/blob/', '/')
     end
     url

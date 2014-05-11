@@ -98,70 +98,19 @@ class ProjectService < Versioneye::Service
     end
   end
 
+
   def self.update project, send_email = false
     return nil if project.nil?
     return nil if project.user_id.nil? || project.user.nil?
     return nil if project.user.deleted
-    self.update_url project
-    new_project = self.build_from_url project.url
-    project.update_from new_project
-    cache.delete( project.id.to_s )
-    if send_email && project.out_number > 0 && project.user.email_inactive == false
-      log.info "send out email notification for project: #{project.name} to user #{project.user.fullname}"
-      ProjectMailer.projectnotification_email( project ).deliver
-    end
+
+    updater = UpdateStrategy.updater_for project.source
+    updater.update project
     project
   rescue => e
     log.error e.message
     log.error e.backtrace.join('\n')
     nil
-  end
-
-  def self.update_url project
-    if project.source.eql?( Project::A_SOURCE_GITHUB )
-      self.update_project_file_from_github( project )
-    elsif project.source.eql?( Project::A_SOURCE_BITBUCKET )
-      self.update_project_file_from_bitbucket( project )
-    end
-
-    if project.s3_filename && !project.s3_filename.empty?
-      project.url = S3.url_for( project.s3_filename )
-    end
-  end
-
-
-  def self.update_project_file_from_github project
-    project_file = self.fetch_project_file project
-    if project_file.to_s.strip.empty?
-      log.error "Importing project file from Github failed."
-      return nil
-    end
-    s3_infos = S3.upload_github_file( project_file, project_file[:name] )
-    update_project_with_s3_file project, s3_infos
-  end
-
-  def self.fetch_project_file project
-    filename = project.filename
-    project_file = Github.fetch_project_file_from_branch project.scm_fullname, filename, project.scm_branch, project.user.github_token
-    if project_file['content'].nil? && filename.eql?('pom.json')
-      log.warn "project_file.content is nil for pom.json, try to fetch pom.xml"
-      filename = 'pom.xml'
-      project_file = Github.fetch_project_file_from_branch project.scm_fullname, filename, project.scm_branch, project.user.github_token
-    end
-    project_file
-  end
-
-
-  def self.update_project_file_from_bitbucket project
-    user = project.user
-    project_content = Bitbucket.fetch_project_file_from_branch project.scm_fullname, project.scm_branch, project.filename, user.bitbucket_token, user.bitbucket_secret
-    if project_content.nil? || project_content.to_s.empty?
-      log.error "Importing project file from BitBucket failed."
-      return nil
-    end
-
-    s3_infos = S3.upload_file_content( project_content, project.filename )
-    update_project_with_s3_file project, s3_infos
   end
 
 
@@ -389,17 +338,5 @@ class ProjectService < Versioneye::Service
     end
     outdated_dependencies
   end
-
-
-  private
-
-    def self.update_project_with_s3_file project, s3_infos
-      return false unless s3_infos && s3_infos['filename'] && s3_infos['s3_url']
-
-      S3.delete( project.s3_filename )
-      project.s3_filename = s3_infos['filename']
-      project.url         = s3_infos['s3_url']
-      project.save
-    end
 
 end
