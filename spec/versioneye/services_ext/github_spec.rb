@@ -353,4 +353,5 @@ describe Github do
       Github.private_repo?(user_without_token.github_token, "versioneye").should be_true
     end
   end
+
 end
