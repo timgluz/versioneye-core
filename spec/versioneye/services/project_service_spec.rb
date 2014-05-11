@@ -18,7 +18,6 @@ describe ProjectService do
       prod_2.add_version rc_1
       prod_2.version = rc_1
       prod_2.save
-      p prod_2.to_s
       prod_3  = ProductFactory.create_new 3
 
       dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1000.0.0'}
@@ -42,7 +41,6 @@ describe ProjectService do
       proj.dependencies.each do |dep|
         dep.outdated.should_not be_nil
         dep.release.should_not be_nil
-        p dep.to_s
       end
 
       d1 = Projectdependency.find dep_1.id.to_s
