@@ -189,6 +189,7 @@ class Project < Versioneye::Model
 
   def update_from new_project
     return nil if new_project.nil?
+
     if new_project.dependencies && !new_project.dependencies.empty?
       self.overwrite_dependencies( new_project.dependencies )
     end
