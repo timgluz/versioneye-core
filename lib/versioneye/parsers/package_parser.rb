@@ -9,17 +9,16 @@ class PackageParser < CommonParser
   def parse ( url )
     return nil if url.to_s.empty?
 
-    data = self.fetch_response_body_json( url )
-    return nil if data.nil?
-
-    parse_content data
+    body = self.fetch_response_body( url )
+    parse_content body
   rescue => e
     log.error e.message
     log.error e.backtrace.join('\n')
     nil
   end
 
-  def parse_content( data )
+  def parse_content( content )
+    data = JSON.parse( content )
     dependencies = fetch_dependencies( data )
     return nil if dependencies.nil?
 
