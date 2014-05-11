@@ -74,6 +74,8 @@ class ProjectdependencyService < Versioneye::Service
       projectdependency.save()
     end
     true
+  rescue => e
+    log.error e.message
   end
 
 end
