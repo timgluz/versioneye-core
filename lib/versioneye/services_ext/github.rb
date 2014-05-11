@@ -19,8 +19,8 @@ require 'persistent_httparty'
 
 class Github < Versioneye::Service
 
-  A_USER_AGENT = 'Chrome/28(www.versioneye.com, contact@versioneye.com)'
   A_WORKERS_COUNT = 4
+  A_USER_AGENT = 'Chrome/28(www.versioneye.com, contact@versioneye.com)'
   A_DEFAULT_HEADERS = {
     'Accept' => 'application/vnd.github.v3+json',
     'User-Agent' => A_USER_AGENT,
@@ -40,7 +40,7 @@ class Github < Versioneye::Service
   end
 
   def self.user token
-    client = user_client token
+    client = OctokitApi.client token
     JSON.parse client.user.to_json
   rescue => e
     log.error e.message
@@ -49,7 +49,7 @@ class Github < Versioneye::Service
   end
 
   def self.emails token
-    client = user_client token
+    client = OctokitApi.client token
     client.emails
   rescue => e
     log.error e.message
@@ -58,24 +58,15 @@ class Github < Versioneye::Service
   end
 
   def self.oauth_scopes token
-    client = user_client token
+    client = OctokitApi.client token
     client.scopes token
   rescue => e
     log.error e.message
-    log.error e.backtrace.join("\n")
+    log.error e.backtrace.join( '\n' )
     ''
   end
 
-  def self.user_client token
-    return nil if token.to_s.empty?
-    Octokit::Client.new :access_token => token
-  rescue => e
-    log.error e.message
-    log.error e.backtrace.join "\n"
-    nil
-  end
-
-  #returns how many repos user has. NB! doesnt count orgs
+  # Returns how many repos user has. NB! doesnt count orgs
   def self.count_user_repos(user_info)
     n = 0
     return n if user_info[:github_token].nil?
@@ -214,6 +205,7 @@ class Github < Versioneye::Service
     })
   end
 
+
   # TODO: add tests
   def self.project_file_info(git_project, filename, sha, token)
     url   = "#{Settings.instance.github_api_url}/repos/#{git_project}/git/trees/#{sha}?recursive=1"
@@ -348,37 +340,6 @@ class Github < Versioneye::Service
     nil
   end
 
-  def self.search(q, langs = nil, users = nil, page = 1, per_page = 30)
-    search_term = "#{q}"
-    if langs
-      langs.gsub!(/\s+/, '')
-      search_term += "+language:#{langs}"
-    end
-
-    if users
-      u = []
-      tokens = users.split(",")
-      tokens.each do |user|
-        user.strip!
-        user += "@#{user}" unless user =~ /@/
-        u <<  user
-      end
-      search_term += " #{u.join(',')}"
-    end
-
-    search_term.gsub!(/\s+/, '+')
-    pagination_data = "page=#{page}&per_page=#{per_page}"
-
-    response = get(
-      "#{Settings.instance.github_api_url}/search/repositories?q=#{search_term}&#{pagination_data}",
-      headers: {
-        "User-Agent" => "#{A_USER_AGENT}",
-        "Accept" => "application/vnd.github.preview"
-      }
-    )
-    JSON.parse(response.body)
-  end
-
   def self.get_json(url, token = nil, raw = false, updated_at = nil)
     request_headers = build_request_headers token, updated_at
     response = get(url, headers: request_headers)
@@ -411,9 +372,11 @@ class Github < Versioneye::Service
   def self.encode_db_key(key_val)
     URI.escape(key_val.to_s, /\.|\$/)
   end
+
   def self.decode_db_key(key_val)
     URI.unescape key_val.to_s
   end
+
   private
 
 =begin
@@ -433,7 +396,6 @@ class Github < Versioneye::Service
     rescue => e
       # by default here should be no message or nil
       # We expect that everything is ok and there is no error message
-      p "#{e.message}, #{e.backtrace.first}"
       log.error e.message
       log.error e.backtrace.join('\n')
       nil
@@ -448,5 +410,5 @@ class Github < Versioneye::Service
       end
       Hash[*links.flatten]
     end
-    
+
 end
