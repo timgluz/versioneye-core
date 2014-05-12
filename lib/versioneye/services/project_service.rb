@@ -41,6 +41,7 @@ class ProjectService < Versioneye::Service
     project
   end
 
+
   def self.store project
     return false if project.nil?
 
@@ -80,12 +81,11 @@ class ProjectService < Versioneye::Service
 
     full_name = project_file[:name]
     file_name = full_name.split("/").last
-    rnd = SecureRandom.urlsafe_base64(7)
-    file_path = "/tmp/#{rnd}_#{file_name}"
-    File.open(file_path, 'w') { |file| file.write( file_txt ) }
 
-    parsed_project = build_from_file_path file_path
-    parsed_project.update_attributes({
+    parser  = ProjectParseService.parser_for file_name
+    project = ProjectParseService.parse_content parser, file_txt, file_name
+
+    project.update_attributes({
       name: repo_name,
       project_type: project_file[:type],
       user_id: user.id.to_s,
@@ -93,11 +93,12 @@ class ProjectService < Versioneye::Service
       private_project: private_project,
       scm_fullname: repo_name,
       scm_branch: branch,
-      s3_filename: project_file[:name],
+      s3_filename: file_name,
       url: project_file[:url]
     })
 
-    return parsed_project if store( parsed_project )
+    return project if store( project )
+    return nil
   end
 
 
@@ -155,17 +156,6 @@ class ProjectService < Versioneye::Service
       project.name = project_name
     end
     project
-  end
-
-
-  def self.build_from_file_path(file_path, project_type = nil)
-    project_type = type_by_filename(file_path) if project_type.nil?
-    parser       = ParserStrategy.parser_for( project_type, file_path )
-    parser.parse_file file_path
-  rescue => e
-    log.error "Error in build_from_file_path(#{file_path}) -> #{e.message}"
-    log.error e.backtrace.join("\n")
-    Project.new
   end
 
 

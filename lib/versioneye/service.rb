@@ -13,6 +13,7 @@ module Versioneye
     require 'versioneye/services/product_service'
     require 'versioneye/services/project_service'
     require 'versioneye/services/project_update_service'
+    require 'versioneye/services/project_parse_service'
     require 'versioneye/services/projectdependency_service'
     require 'versioneye/services/statistic_service'
     require 'versioneye/services/submitted_url_service'
