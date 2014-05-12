@@ -1,7 +1,7 @@
 class GithubUpdater < CommonUpdater
 
 
-  def update project
+  def update project, send_email = false
     project_file = fetch_project_file project
     if project_file.to_s.strip.empty?
       log.error "Importing project file from Github failed."
@@ -9,7 +9,7 @@ class GithubUpdater < CommonUpdater
     end
 
     new_project = parse project_file
-    update_old_with_new project, new_project
+    update_old_with_new project, new_project, send_email
   end
 
 
