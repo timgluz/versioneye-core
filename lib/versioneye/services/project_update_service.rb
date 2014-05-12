@@ -43,7 +43,6 @@ class ProjectUpdateService < Versioneye::Service
     project
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
     nil
   end
 
