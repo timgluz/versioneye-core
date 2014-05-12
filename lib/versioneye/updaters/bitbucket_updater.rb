@@ -1,7 +1,7 @@
 class BitbucketUpdater < CommonUpdater
 
 
-  def update project, send_email = false 
+  def update project, send_email = false
     project_file = fetch_project_file project
     if project_file.to_s.empty? || project_file.match("you've found a dead link")
       log.error "Importing project file from Bitbucket failed."
