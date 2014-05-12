@@ -54,7 +54,7 @@ class DependencyService < Versioneye::Service
     if product.nil?
       product  = find_product( dependency.prod_type, dependency.language, dependency.dep_prod_key )
     end
-    ProjectService.set_prod_type_if_nil( dependency )
+    dependency.set_prod_type_if_nil
     parser   = ParserStrategy.parser_for( dependency.prod_type, '' )
     proj_dep = Projectdependency.new
     parser.parse_requested_version( dependency.version, proj_dep, product )

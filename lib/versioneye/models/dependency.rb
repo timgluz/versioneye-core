@@ -154,4 +154,17 @@ class Dependency < Versioneye::Model
     "Dependency - #{language}:#{prod_key}:#{prod_version} depends on #{dep_prod_key}:#{version} scope: #{scope} - name: #{name}"
   end
 
+  def set_prod_type_if_nil
+    self.prod_type = Project::A_TYPE_RUBYGEMS  if self.language.eql?(Product::A_LANGUAGE_RUBY)
+    self.prod_type = Project::A_TYPE_COMPOSER  if self.language.eql?(Product::A_LANGUAGE_PHP)
+    self.prod_type = Project::A_TYPE_PIP       if self.language.eql?(Product::A_LANGUAGE_PYTHON)
+    self.prod_type = Project::A_TYPE_NPM       if self.language.eql?(Product::A_LANGUAGE_NODEJS)
+    self.prod_type = Project::A_TYPE_MAVEN2    if self.language.eql?(Product::A_LANGUAGE_JAVA)
+    self.prod_type = Project::A_TYPE_LEIN      if self.language.eql?(Product::A_LANGUAGE_CLOJURE)
+    self.prod_type = Project::A_TYPE_BOWER     if self.language.eql?(Product::A_LANGUAGE_JAVASCRIPT)
+    self.prod_type = Project::A_TYPE_COCOAPODS if self.language.eql?(Product::A_LANGUAGE_OBJECTIVEC)
+    self
+  end
+
+
 end
