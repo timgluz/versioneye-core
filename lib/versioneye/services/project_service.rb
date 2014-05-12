@@ -58,7 +58,7 @@ class ProjectService < Versioneye::Service
 
 
 =begin
-  This methods is doing
+  This methods is
    - Importing a project_file from GitHub
    - Parsing the project_file to a new project
    - Storing the new project to DB
@@ -93,7 +93,7 @@ class ProjectService < Versioneye::Service
       private_project: private_project,
       scm_fullname: repo_name,
       scm_branch: branch,
-      s3_filename: file_name,
+      s3_filename: filename,
       url: project_file[:url]
     })
 
