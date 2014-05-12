@@ -1,0 +1,224 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.github.com/repos/xing/XNGAPIClient/branches/master
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Chrome/28(www.versioneye.com, contact@versioneye.com)
+      Connection:
+      - Keep-Alive
+      - keep-alive
+      Keep-Alive:
+      - 30
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Mon, 12 May 2014 12:10:45 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '54'
+      X-Ratelimit-Reset:
+      - '1399900115'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Etag:
+      - '"c074968fb7396512867c44c0880b046a"'
+      Vary:
+      - Accept
+      - Accept-Encoding
+      X-Github-Media-Type:
+      - github.v3; format=json
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Frame-Options:
+      - deny
+      Content-Security-Policy:
+      - default-src 'none'
+      Content-Length:
+      - '3233'
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Github-Request-Id:
+      - 4E334AEF:460E:25DCF0:5370BA43
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Content-Type-Options:
+      - nosniff
+      X-Served-By:
+      - d818ddef80f4c7d10683dd483558952a
+    body:
+      encoding: UTF-8
+      string: '{"name":"master","commit":{"sha":"3041e42eb9e86c81cc8d4c54e801935685b439b7","commit":{"author":{"name":"Piet
+        Brauer","email":"piet@nerdishbynature.com","date":"2014-05-06T16:11:05Z"},"committer":{"name":"Piet
+        Brauer","email":"piet@nerdishbynature.com","date":"2014-05-06T16:11:05Z"},"message":"Set
+        deployment target to 6.0 and set OS to 7.1","tree":{"sha":"19fc978918b05451248d432f466fe672ff8929d8","url":"https://api.github.com/repos/xing/XNGAPIClient/git/trees/19fc978918b05451248d432f466fe672ff8929d8"},"url":"https://api.github.com/repos/xing/XNGAPIClient/git/commits/3041e42eb9e86c81cc8d4c54e801935685b439b7","comment_count":0},"url":"https://api.github.com/repos/xing/XNGAPIClient/commits/3041e42eb9e86c81cc8d4c54e801935685b439b7","html_url":"https://github.com/xing/XNGAPIClient/commit/3041e42eb9e86c81cc8d4c54e801935685b439b7","comments_url":"https://api.github.com/repos/xing/XNGAPIClient/commits/3041e42eb9e86c81cc8d4c54e801935685b439b7/comments","author":{"login":"pietbrauer","id":759730,"avatar_url":"https://avatars.githubusercontent.com/u/759730?","gravatar_id":"e5bce28aa297e921eb2b6aa4e4e983fc","url":"https://api.github.com/users/pietbrauer","html_url":"https://github.com/pietbrauer","followers_url":"https://api.github.com/users/pietbrauer/followers","following_url":"https://api.github.com/users/pietbrauer/following{/other_user}","gists_url":"https://api.github.com/users/pietbrauer/gists{/gist_id}","starred_url":"https://api.github.com/users/pietbrauer/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/pietbrauer/subscriptions","organizations_url":"https://api.github.com/users/pietbrauer/orgs","repos_url":"https://api.github.com/users/pietbrauer/repos","events_url":"https://api.github.com/users/pietbrauer/events{/privacy}","received_events_url":"https://api.github.com/users/pietbrauer/received_events","type":"User","site_admin":false},"committer":{"login":"pietbrauer","id":759730,"avatar_url":"https://avatars.githubusercontent.com/u/759730?","gravatar_id":"e5bce28aa297e921eb2b6aa4e4e983fc","url":"https://api.github.com/users/pietbrauer","html_url":"https://github.com/pietbrauer","followers_url":"https://api.github.com/users/pietbrauer/followers","following_url":"https://api.github.com/users/pietbrauer/following{/other_user}","gists_url":"https://api.github.com/users/pietbrauer/gists{/gist_id}","starred_url":"https://api.github.com/users/pietbrauer/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/pietbrauer/subscriptions","organizations_url":"https://api.github.com/users/pietbrauer/orgs","repos_url":"https://api.github.com/users/pietbrauer/repos","events_url":"https://api.github.com/users/pietbrauer/events{/privacy}","received_events_url":"https://api.github.com/users/pietbrauer/received_events","type":"User","site_admin":false},"parents":[{"sha":"be9d4102099857246a859acdc85829f062f5d992","url":"https://api.github.com/repos/xing/XNGAPIClient/commits/be9d4102099857246a859acdc85829f062f5d992","html_url":"https://github.com/xing/XNGAPIClient/commit/be9d4102099857246a859acdc85829f062f5d992"}]},"_links":{"self":"https://api.github.com/repos/xing/XNGAPIClient/branches/master","html":"https://github.com/xing/XNGAPIClient/tree/master"}}'
+    http_version: 
+  recorded_at: Mon, 12 May 2014 12:10:45 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/xing/XNGAPIClient/git/trees/3041e42eb9e86c81cc8d4c54e801935685b439b7?recursive=1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Chrome/28(www.versioneye.com, contact@versioneye.com)
+      Connection:
+      - Keep-Alive
+      - keep-alive
+      Keep-Alive:
+      - 30
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Mon, 12 May 2014 12:10:45 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '53'
+      X-Ratelimit-Reset:
+      - '1399900115'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Last-Modified:
+      - Tue, 06 May 2014 16:11:08 GMT
+      Etag:
+      - '"3a790910331ed95296e08d7eef2db341"'
+      Vary:
+      - Accept
+      - Accept-Encoding
+      X-Github-Media-Type:
+      - github.v3; format=json
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Frame-Options:
+      - deny
+      Content-Security-Policy:
+      - default-src 'none'
+      Content-Length:
+      - '23396'
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Github-Request-Id:
+      - 4E334AEF:460D:18D411:5370BA45
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Content-Type-Options:
+      - nosniff
+      X-Served-By:
+      - 3061975e1f37121b3751604ad153c687
+    body:
+      encoding: UTF-8
+      string: '{"sha":"3041e42eb9e86c81cc8d4c54e801935685b439b7","url":"https://api.github.com/repos/xing/XNGAPIClient/git/trees/3041e42eb9e86c81cc8d4c54e801935685b439b7","tree":[{"mode":"100644","type":"blob","sha":"3a49d8be89d60eb2b43067878d700e929571c7c9","path":".gitignore","size":121,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/3a49d8be89d60eb2b43067878d700e929571c7c9"},{"mode":"100644","type":"blob","sha":"aa8328f4f9a2f834ce9ed954c4a03f101b9e975e","path":".travis.yml","size":89,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/aa8328f4f9a2f834ce9ed954c4a03f101b9e975e"},{"mode":"040000","type":"tree","sha":"3997023a27eccbe79c1147d19ab46f9814d6b74c","path":"Example","url":"https://api.github.com/repos/xing/XNGAPIClient/git/trees/3997023a27eccbe79c1147d19ab46f9814d6b74c"},{"mode":"100644","type":"blob","sha":"0891b7aabfcf3422423b109c8beed2bab838c607","path":"Example/Default-568h@2x.png","size":18594,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/0891b7aabfcf3422423b109c8beed2bab838c607"},{"mode":"100644","type":"blob","sha":"4c8ca6f693f96d511e9113c0eb59eec552354e42","path":"Example/Default.png","size":6540,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/4c8ca6f693f96d511e9113c0eb59eec552354e42"},{"mode":"100644","type":"blob","sha":"35b84cffeb4db607983c8383fa9199731dc3aba0","path":"Example/Default@2x.png","size":16107,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/35b84cffeb4db607983c8383fa9199731dc3aba0"},{"mode":"040000","type":"tree","sha":"10739ab71b30fadc17945cf3bbefa38e3c7864af","path":"Example/Example.xcodeproj","url":"https://api.github.com/repos/xing/XNGAPIClient/git/trees/10739ab71b30fadc17945cf3bbefa38e3c7864af"},{"mode":"100644","type":"blob","sha":"5471607a06d4bc98b270628989575edd5a3ba14a","path":"Example/Example.xcodeproj/project.pbxproj","size":30957,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/5471607a06d4bc98b270628989575edd5a3ba14a"},{"mode":"040000","type":"tree","sha":"feae92a63a7c9c7b05c8852114ebd33f62e43a95","path":"Example/Example.xcodeproj/project.xcworkspace","url":"https://api.github.com/repos/xing/XNGAPIClient/git/trees/feae92a63a7c9c7b05c8852114ebd33f62e43a95"},{"mode":"100644","type":"blob","sha":"6d2a51bbdeeddf730440fd3758da35143ac13c69","path":"Example/Example.xcodeproj/project.xcworkspace/contents.xcworkspacedata","size":152,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/6d2a51bbdeeddf730440fd3758da35143ac13c69"},{"mode":"040000","type":"tree","sha":"13fcc5ec25a7ab8881ce7bb29611df161d4c94fa","path":"Example/Example.xcodeproj/xcshareddata","url":"https://api.github.com/repos/xing/XNGAPIClient/git/trees/13fcc5ec25a7ab8881ce7bb29611df161d4c94fa"},{"mode":"040000","type":"tree","sha":"1915adc47010aad64f81459e185129e876906c13","path":"Example/Example.xcodeproj/xcshareddata/xcschemes","url":"https://api.github.com/repos/xing/XNGAPIClient/git/trees/1915adc47010aad64f81459e185129e876906c13"},{"mode":"100644","type":"blob","sha":"cf57974a9240e89c55626085c18f95582999449e","path":"Example/Example.xcodeproj/xcshareddata/xcschemes/Example.xcscheme","size":3565,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/cf57974a9240e89c55626085c18f95582999449e"},{"mode":"040000","type":"tree","sha":"11eac75d8414d46543574c4f25c058d922005c51","path":"Example/Example","url":"https://api.github.com/repos/xing/XNGAPIClient/git/trees/11eac75d8414d46543574c4f25c058d922005c51"},{"mode":"100644","type":"blob","sha":"35f4d5044dec1c01f279f2502141dbee7e681bf8","path":"Example/Example/Example-Info.plist","size":1054,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/35f4d5044dec1c01f279f2502141dbee7e681bf8"},{"mode":"100644","type":"blob","sha":"743435c9bee5c433fe166891e698fdc70d81a3de","path":"Example/Example/Example-Prefix.pch","size":344,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/743435c9bee5c433fe166891e698fdc70d81a3de"},{"mode":"040000","type":"tree","sha":"2560a2b9ab9323ca61a0fdebd3b4af46dbe4c272","path":"Example/Example/Images.xcassets","url":"https://api.github.com/repos/xing/XNGAPIClient/git/trees/2560a2b9ab9323ca61a0fdebd3b4af46dbe4c272"},{"mode":"040000","type":"tree","sha":"6cfc746d4ecf2e3ac67bb0cf6c4013e1aff9b1f1","path":"Example/Example/Images.xcassets/AppIcon.appiconset","url":"https://api.github.com/repos/xing/XNGAPIClient/git/trees/6cfc746d4ecf2e3ac67bb0cf6c4013e1aff9b1f1"},{"mode":"100644","type":"blob","sha":"a396706db4ec4cfca4d984d38b90dc8098bded40","path":"Example/Example/Images.xcassets/AppIcon.appiconset/Contents.json","size":333,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/a396706db4ec4cfca4d984d38b90dc8098bded40"},{"mode":"040000","type":"tree","sha":"6f3b0ab36651ca648408c176f81e4b2e202efa0b","path":"Example/Example/Images.xcassets/LaunchImage.launchimage","url":"https://api.github.com/repos/xing/XNGAPIClient/git/trees/6f3b0ab36651ca648408c176f81e4b2e202efa0b"},{"mode":"100644","type":"blob","sha":"c79ebd3ada1309bae694b8e6760592b1254e035c","path":"Example/Example/Images.xcassets/LaunchImage.launchimage/Contents.json","size":442,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/c79ebd3ada1309bae694b8e6760592b1254e035c"},{"mode":"100644","type":"blob","sha":"1a664fa5d4b32793190bfb73599bf0df9352a703","path":"Example/Example/XNGAppDelegate.h","size":1272,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/1a664fa5d4b32793190bfb73599bf0df9352a703"},{"mode":"100644","type":"blob","sha":"a63868eb092dc026fb9da8979aa1c61df86f577d","path":"Example/Example/XNGAppDelegate.m","size":2811,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/a63868eb092dc026fb9da8979aa1c61df86f577d"},{"mode":"100644","type":"blob","sha":"e1ef5d78b2f19f7ded3333ebb508acbfb0eb9ac5","path":"Example/Example/XNGExampleViewController.h","size":1238,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/e1ef5d78b2f19f7ded3333ebb508acbfb0eb9ac5"},{"mode":"100644","type":"blob","sha":"4dc850e2406217d365de803bb9d677466ebb54ee","path":"Example/Example/XNGExampleViewController.m","size":5849,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/4dc850e2406217d365de803bb9d677466ebb54ee"},{"mode":"100644","type":"blob","sha":"e776101964d6281d89110978f20291a200823565","path":"Example/Example/XNGLoginWebViewController.h","size":1271,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/e776101964d6281d89110978f20291a200823565"},{"mode":"100644","type":"blob","sha":"1ec8ea1dddbabece4db6fbb872bb56f731df3155","path":"Example/Example/XNGLoginWebViewController.m","size":3540,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/1ec8ea1dddbabece4db6fbb872bb56f731df3155"},{"mode":"040000","type":"tree","sha":"0237597b848a1890bb30ba0ff4102f8107cafdcb","path":"Example/Example/en.lproj","url":"https://api.github.com/repos/xing/XNGAPIClient/git/trees/0237597b848a1890bb30ba0ff4102f8107cafdcb"},{"mode":"100644","type":"blob","sha":"477b28ff8f86a3158a71c4934fbd3a2456717d7a","path":"Example/Example/en.lproj/InfoPlist.strings","size":45,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/477b28ff8f86a3158a71c4934fbd3a2456717d7a"},{"mode":"100644","type":"blob","sha":"bc2b2a41e6f363fef66266f5d3d84ebb0f1bb620","path":"Example/Example/main.m","size":340,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/bc2b2a41e6f363fef66266f5d3d84ebb0f1bb620"},{"mode":"040000","type":"tree","sha":"08d05a2d4f35c53cda8c9ef9b72c7706e688e0e1","path":"Example/ExampleTests","url":"https://api.github.com/repos/xing/XNGAPIClient/git/trees/08d05a2d4f35c53cda8c9ef9b72c7706e688e0e1"},{"mode":"100644","type":"blob","sha":"84ca22c16d58cb27423678be65f14078dab7bc3d","path":"Example/ExampleTests/ExampleTests-Info.plist","size":688,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/84ca22c16d58cb27423678be65f14078dab7bc3d"},{"mode":"100644","type":"blob","sha":"ac5e2b50950132c847ce94534cbad22a4b31e0fa","path":"Example/ExampleTests/XINGAPIClientTests.m","size":2636,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/ac5e2b50950132c847ce94534cbad22a4b31e0fa"},{"mode":"100644","type":"blob","sha":"58c39e7b744004f77c891e82c717d06fdab3a1d5","path":"Example/ExampleTests/XNGContactPathTests.m","size":2303,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/58c39e7b744004f77c891e82c717d06fdab3a1d5"},{"mode":"100644","type":"blob","sha":"a879d901c22773a7bf6cb533291927f06bf3e1e4","path":"Example/ExampleTests/XNGContactRequestsTests.m","size":5300,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/a879d901c22773a7bf6cb533291927f06bf3e1e4"},{"mode":"100644","type":"blob","sha":"c053d07539f9e476aa2bf05045f031ee4944f624","path":"Example/ExampleTests/XNGContactsTests.m","size":8581,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/c053d07539f9e476aa2bf05045f031ee4944f624"},{"mode":"100644","type":"blob","sha":"b0f3efd48f6b7e8f39f7ea68ad4c3d363413458a","path":"Example/ExampleTests/XNGGeoLocationsTests.m","size":3234,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/b0f3efd48f6b7e8f39f7ea68ad4c3d363413458a"},{"mode":"100644","type":"blob","sha":"4ca9aa5b4e4ee8ee72c7cba61979b360240f8869","path":"Example/ExampleTests/XNGInvitationsTests.m","size":1683,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/4ca9aa5b4e4ee8ee72c7cba61979b360240f8869"},{"mode":"100644","type":"blob","sha":"57ed19ae22fe1a649886f492bb5a386498bf8239","path":"Example/ExampleTests/XNGJobsTests.m","size":7059,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/57ed19ae22fe1a649886f492bb5a386498bf8239"},{"mode":"100644","type":"blob","sha":"7233ad1b75804dcea51c9fa6b4ec7d91bd1c4532","path":"Example/ExampleTests/XNGMessagesTests.m","size":13545,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/7233ad1b75804dcea51c9fa6b4ec7d91bd1c4532"},{"mode":"100644","type":"blob","sha":"06c2af66c20bb789eb3856bb0a16325ab5f87f80","path":"Example/ExampleTests/XNGNetworkFeedTests.m","size":16488,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/06c2af66c20bb789eb3856bb0a16325ab5f87f80"},{"mode":"100644","type":"blob","sha":"f281213ab8eae82e7e2efc165c818b2019fdaebc","path":"Example/ExampleTests/XNGOAuthHandlerTests.m","size":3853,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/f281213ab8eae82e7e2efc165c818b2019fdaebc"},{"mode":"100644","type":"blob","sha":"dfbacbc966c08bd4923801f74b6c195a5110baa3","path":"Example/ExampleTests/XNGProfileVisitsTests.m","size":3551,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/dfbacbc966c08bd4923801f74b6c195a5110baa3"},{"mode":"100644","type":"blob","sha":"0fc729c24f02a9ac87971318396778eb103819d2","path":"Example/ExampleTests/XNGRecommendationsTests.m","size":3895,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/0fc729c24f02a9ac87971318396778eb103819d2"},{"mode":"100644","type":"blob","sha":"b783bb86805a06194fb889cc641a2b2702edd6ca","path":"Example/ExampleTests/XNGTestHelper.h","size":1875,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/b783bb86805a06194fb889cc641a2b2702edd6ca"},{"mode":"100644","type":"blob","sha":"02dbb6e6dce771234cb62fa5279795c31810df01","path":"Example/ExampleTests/XNGTestHelper.m","size":5622,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/02dbb6e6dce771234cb62fa5279795c31810df01"},{"mode":"100644","type":"blob","sha":"b1bc69fbd83e7f872c261fcd4fa96aa6853bdd60","path":"Example/ExampleTests/XNGTestHelper_Private.h","size":1444,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/b1bc69fbd83e7f872c261fcd4fa96aa6853bdd60"},{"mode":"100644","type":"blob","sha":"3476c12ac7b889154d18b509d0a1fece30545d1d","path":"Example/ExampleTests/XNGUserProfilesTests.m","size":3428,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/3476c12ac7b889154d18b509d0a1fece30545d1d"},{"mode":"040000","type":"tree","sha":"0237597b848a1890bb30ba0ff4102f8107cafdcb","path":"Example/ExampleTests/en.lproj","url":"https://api.github.com/repos/xing/XNGAPIClient/git/trees/0237597b848a1890bb30ba0ff4102f8107cafdcb"},{"mode":"100644","type":"blob","sha":"477b28ff8f86a3158a71c4934fbd3a2456717d7a","path":"Example/ExampleTests/en.lproj/InfoPlist.strings","size":45,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/477b28ff8f86a3158a71c4934fbd3a2456717d7a"},{"mode":"100644","type":"blob","sha":"c5ac3cb9318842f94d345be681f345230bbce0d1","path":"Example/Podfile","size":223,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/c5ac3cb9318842f94d345be681f345230bbce0d1"},{"mode":"100644","type":"blob","sha":"216cd1a50220ddb5d1df2096a6de62e64c1213dd","path":"Example/Podfile.lock","size":949,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/216cd1a50220ddb5d1df2096a6de62e64c1213dd"},{"mode":"100644","type":"blob","sha":"43c41f97548ad5729121d1278f2ef65c9705ce71","path":"Gemfile","size":62,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/43c41f97548ad5729121d1278f2ef65c9705ce71"},{"mode":"100644","type":"blob","sha":"b2a9db381cef30b11f553ebf9b269e96638bc1b9","path":"Gemfile.lock","size":977,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/b2a9db381cef30b11f553ebf9b269e96638bc1b9"},{"mode":"100644","type":"blob","sha":"6269082032664992a2d6a41990655ab8f4639f9a","path":"LICENSE","size":1069,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/6269082032664992a2d6a41990655ab8f4639f9a"},{"mode":"100644","type":"blob","sha":"dbdec4bc551f447d1f488bae9a8ab1cbfb7617e8","path":"README.md","size":3597,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/dbdec4bc551f447d1f488bae9a8ab1cbfb7617e8"},{"mode":"100644","type":"blob","sha":"a556da15044ead8dfbba49db40cc73a00d8f7b1b","path":"Rakefile","size":4467,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/a556da15044ead8dfbba49db40cc73a00d8f7b1b"},{"mode":"100644","type":"blob","sha":"122ed13e9fe4c8ac88611a94e9a9333cef9e9634","path":"XNGAPIClient.podspec","size":872,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/122ed13e9fe4c8ac88611a94e9a9333cef9e9634"},{"mode":"040000","type":"tree","sha":"ad0a94ce95321d3f48304097a1cf119fb5b42177","path":"XNGAPIClient.xcworkspace","url":"https://api.github.com/repos/xing/XNGAPIClient/git/trees/ad0a94ce95321d3f48304097a1cf119fb5b42177"},{"mode":"100644","type":"blob","sha":"c99e019e9e0eefcc0bc19116ffb5ac63fd5801b7","path":"XNGAPIClient.xcworkspace/contents.xcworkspacedata","size":183,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/c99e019e9e0eefcc0bc19116ffb5ac63fd5801b7"},{"mode":"040000","type":"tree","sha":"fcd87168d3e3c3b291735fefb993513a364cd7e6","path":"XNGAPIClient","url":"https://api.github.com/repos/xing/XNGAPIClient/git/trees/fcd87168d3e3c3b291735fefb993513a364cd7e6"},{"mode":"100644","type":"blob","sha":"9d758796b970f0ce3ab6a2bc56b146755c1c9743","path":"XNGAPIClient/NSDictionary+Typecheck.h","size":1525,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/9d758796b970f0ce3ab6a2bc56b146755c1c9743"},{"mode":"100644","type":"blob","sha":"416d9c4a2c756027620cafab5c995eb4647672b2","path":"XNGAPIClient/NSDictionary+Typecheck.m","size":2849,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/416d9c4a2c756027620cafab5c995eb4647672b2"},{"mode":"100644","type":"blob","sha":"4a388c4deda1b2e7088d5aabe6b60c99b4695caa","path":"XNGAPIClient/NSError+XWS.h","size":1749,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/4a388c4deda1b2e7088d5aabe6b60c99b4695caa"},{"mode":"100644","type":"blob","sha":"a514e6dd97e467549ef7d961cdbaf58753c3ab8e","path":"XNGAPIClient/NSError+XWS.m","size":2468,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/a514e6dd97e467549ef7d961cdbaf58753c3ab8e"},{"mode":"100644","type":"blob","sha":"44cdd3ea62e0ab87445e02810d8777907b7e9c7c","path":"XNGAPIClient/NSString+URLEncoding.h","size":1520,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/44cdd3ea62e0ab87445e02810d8777907b7e9c7c"},{"mode":"100644","type":"blob","sha":"83a6817a23b432769b7264b27b3108b28e1949e0","path":"XNGAPIClient/NSString+URLEncoding.m","size":4040,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/83a6817a23b432769b7264b27b3108b28e1949e0"},{"mode":"100644","type":"blob","sha":"3231eeaa827b887f38a5eed838f32e992f1da9a9","path":"XNGAPIClient/XNGAPI.h","size":1559,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/3231eeaa827b887f38a5eed838f32e992f1da9a9"},{"mode":"100644","type":"blob","sha":"6fede4a022b5c57425c322f47b654e19aad3c7f6","path":"XNGAPIClient/XNGAPIClient+ContactPath.h","size":1752,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/6fede4a022b5c57425c322f47b654e19aad3c7f6"},{"mode":"100644","type":"blob","sha":"c0fc14cad686ca73a29539ccf218ff346ef1bad7","path":"XNGAPIClient/XNGAPIClient+ContactPath.m","size":2343,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/c0fc14cad686ca73a29539ccf218ff346ef1bad7"},{"mode":"100644","type":"blob","sha":"737d2dffe1966953eb1df6d80da5dc58682c80ae","path":"XNGAPIClient/XNGAPIClient+ContactRequests.h","size":2948,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/737d2dffe1966953eb1df6d80da5dc58682c80ae"},{"mode":"100644","type":"blob","sha":"47af16db1f02e35eb5d2a71c2f1d0b7ed9de5a46","path":"XNGAPIClient/XNGAPIClient+ContactRequests.m","size":3713,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/47af16db1f02e35eb5d2a71c2f1d0b7ed9de5a46"},{"mode":"100644","type":"blob","sha":"62a8f4e3be2adb4182e6d22527f3f098adb765ac","path":"XNGAPIClient/XNGAPIClient+Contacts.h","size":4134,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/62a8f4e3be2adb4182e6d22527f3f098adb765ac"},{"mode":"100644","type":"blob","sha":"6149efeddee5c793a881b5dce955fb2195d0bdf3","path":"XNGAPIClient/XNGAPIClient+Contacts.m","size":5295,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/6149efeddee5c793a881b5dce955fb2195d0bdf3"},{"mode":"100644","type":"blob","sha":"5743424c05397b04f7e5c8b16002e049d323ba27","path":"XNGAPIClient/XNGAPIClient+GeoLocations.h","size":2204,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/5743424c05397b04f7e5c8b16002e049d323ba27"},{"mode":"100644","type":"blob","sha":"38733d5608e75d1d38ddbec8e264e7b1f7f4660d","path":"XNGAPIClient/XNGAPIClient+GeoLocations.m","size":3164,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/38733d5608e75d1d38ddbec8e264e7b1f7f4660d"},{"mode":"100644","type":"blob","sha":"0e08e944200590448c6e2340e316516eb01152d1","path":"XNGAPIClient/XNGAPIClient+Invitations.h","size":1722,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/0e08e944200590448c6e2340e316516eb01152d1"},{"mode":"100644","type":"blob","sha":"6625286dec668dbf0d44494a7e887d9947654dd2","path":"XNGAPIClient/XNGAPIClient+Invitations.m","size":2024,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/6625286dec668dbf0d44494a7e887d9947654dd2"},{"mode":"100644","type":"blob","sha":"32c59e86cd38814e81de52ab7167aca9e629ba86","path":"XNGAPIClient/XNGAPIClient+Jobs.h","size":2539,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/32c59e86cd38814e81de52ab7167aca9e629ba86"},{"mode":"100644","type":"blob","sha":"04228121654c60d6229d889c4300aae6d65f285e","path":"XNGAPIClient/XNGAPIClient+Jobs.m","size":3900,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/04228121654c60d6229d889c4300aae6d65f285e"},{"mode":"100644","type":"blob","sha":"be1cc250edbbeb6dae71c1820fb5b978145c3985","path":"XNGAPIClient/XNGAPIClient+Messages.h","size":6529,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/be1cc250edbbeb6dae71c1820fb5b978145c3985"},{"mode":"100644","type":"blob","sha":"69ad1bd2811136cbd36f3fe736a999ab61c46b42","path":"XNGAPIClient/XNGAPIClient+Messages.m","size":8783,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/69ad1bd2811136cbd36f3fe736a999ab61c46b42"},{"mode":"100644","type":"blob","sha":"036b77226707ed17201a9ef65f5fa7f1945570be","path":"XNGAPIClient/XNGAPIClient+NetworkFeed.h","size":7099,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/036b77226707ed17201a9ef65f5fa7f1945570be"},{"mode":"100644","type":"blob","sha":"de6ddb5809cb8db1c3f916834ebb8e356f934d53","path":"XNGAPIClient/XNGAPIClient+NetworkFeed.m","size":8794,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/de6ddb5809cb8db1c3f916834ebb8e356f934d53"},{"mode":"100644","type":"blob","sha":"0d2c4c496a5561412af065a46c977e198c82bc1d","path":"XNGAPIClient/XNGAPIClient+ProfileVisits.h","size":2286,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/0d2c4c496a5561412af065a46c977e198c82bc1d"},{"mode":"100644","type":"blob","sha":"eddbebac71635872160af621330d2552254b0bbf","path":"XNGAPIClient/XNGAPIClient+ProfileVisits.m","size":2638,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/eddbebac71635872160af621330d2552254b0bbf"},{"mode":"100644","type":"blob","sha":"03020a727cdd1f84ae704f4fde8cf4559ea525a0","path":"XNGAPIClient/XNGAPIClient+Recommendations.h","size":2250,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/03020a727cdd1f84ae704f4fde8cf4559ea525a0"},{"mode":"100644","type":"blob","sha":"df0de6910791aa85ca7a0b2edfed0838ebc03b3b","path":"XNGAPIClient/XNGAPIClient+Recommendations.m","size":3029,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/df0de6910791aa85ca7a0b2edfed0838ebc03b3b"},{"mode":"100644","type":"blob","sha":"51d9ae86a3d81ec863596a65ba3fe471bb53931c","path":"XNGAPIClient/XNGAPIClient+UserProfiles.h","size":2635,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/51d9ae86a3d81ec863596a65ba3fe471bb53931c"},{"mode":"100644","type":"blob","sha":"87b81561f99af19b551289f192b42d7091d9cef8","path":"XNGAPIClient/XNGAPIClient+UserProfiles.m","size":3279,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/87b81561f99af19b551289f192b42d7091d9cef8"},{"mode":"100644","type":"blob","sha":"5a43641fab0e546558fc348388c4d0b7aaf06e5f","path":"XNGAPIClient/XNGAPIClient.h","size":6620,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/5a43641fab0e546558fc348388c4d0b7aaf06e5f"},{"mode":"100644","type":"blob","sha":"33f99d7c299cea562733f7da350bfd86ad9c3927","path":"XNGAPIClient/XNGAPIClient.m","size":20837,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/33f99d7c299cea562733f7da350bfd86ad9c3927"},{"mode":"100644","type":"blob","sha":"b0f3eb2604fcb7a48c1a4e9ee8bd86c5c730ace9","path":"XNGAPIClient/XNGJSONRequestOperation.h","size":1230,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/b0f3eb2604fcb7a48c1a4e9ee8bd86c5c730ace9"},{"mode":"100644","type":"blob","sha":"1049545c57526eb54935953ae27d49b981938753","path":"XNGAPIClient/XNGJSONRequestOperation.m","size":1974,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/1049545c57526eb54935953ae27d49b981938753"},{"mode":"100644","type":"blob","sha":"62083e36ffa34e174cf97164f0e45a807ce704b7","path":"XNGAPIClient/XNGOAuthHandler.h","size":1901,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/62083e36ffa34e174cf97164f0e45a807ce704b7"},{"mode":"100644","type":"blob","sha":"6683afdc2d16fab2054d7b82c928e504e1032e86","path":"XNGAPIClient/XNGOAuthHandler.m","size":6033,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/6683afdc2d16fab2054d7b82c928e504e1032e86"}]}'
+    http_version: 
+  recorded_at: Mon, 12 May 2014 12:10:45 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/xing/XNGAPIClient/git/blobs/c5ac3cb9318842f94d345be681f345230bbce0d1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Chrome/28(www.versioneye.com, contact@versioneye.com)
+      Connection:
+      - Keep-Alive
+      - keep-alive
+      Keep-Alive:
+      - 30
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Mon, 12 May 2014 12:10:46 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '52'
+      X-Ratelimit-Reset:
+      - '1399900115'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Etag:
+      - '"eb2a5e3fda54552c90aa0ec277975531"'
+      Vary:
+      - Accept
+      - Accept-Encoding
+      X-Github-Media-Type:
+      - github.v3; format=json
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Frame-Options:
+      - deny
+      Content-Security-Policy:
+      - default-src 'none'
+      Content-Length:
+      - '510'
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Github-Request-Id:
+      - 4E334AEF:460D:18D489:5370BA45
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Content-Type-Options:
+      - nosniff
+      X-Served-By:
+      - 132026e9262a0093e437f99db5f1e499
+    body:
+      encoding: UTF-8
+      string: '{"sha":"c5ac3cb9318842f94d345be681f345230bbce0d1","size":223,"url":"https://api.github.com/repos/xing/XNGAPIClient/git/blobs/c5ac3cb9318842f94d345be681f345230bbce0d1","content":"d29ya3NwYWNlICcuLi9YTkdBUElDbGllbnQnCnBsYXRmb3JtIDppb3MsICc3\nLjAnCgp0YXJnZXQgIkV4YW1wbGUiIGRvCiAgcG9kICdYTkdBUElDbGllbnQn\nLCA6cGF0aCA9PiAnLi4vWE5HQVBJQ2xpZW50LnBvZHNwZWMnCmVuZAoKdGFy\nZ2V0ICJFeGFtcGxlVGVzdHMiIGRvCiAgcG9kICdFeHBlY3RhJwogIHBvZCAn\nT0hIVFRQU3R1YnMnLCAnPSAzLjEuMCcKICBwb2QgJ09DTW9jaycKZW5kCg==\n","encoding":"base64"}'
+    http_version: 
+  recorded_at: Mon, 12 May 2014 12:10:46 GMT
+recorded_with: VCR 2.9.0
