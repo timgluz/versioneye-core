@@ -57,7 +57,7 @@ class ProjectService < Versioneye::Service
 
 
 =begin
-  This methods is doing 3 things
+  This methods is doing
    - Importing a project_file from GitHub
    - Parsing the project_file to a new project
    - Storing the new project to DB
@@ -70,8 +70,8 @@ class ProjectService < Versioneye::Service
 
     project_file = Github.fetch_project_file_from_branch(repo_name, filename, branch, user[:github_token] )
     if project_file.nil?
-      error_msg = " Didn't find any project file of a supported package manager."
       log.error " Can't import project file `#{filename}` from #{repo_name} branch #{branch} "
+      error_msg = " Didn't find any project file of a supported package manager."
       return error_msg
     end
 
