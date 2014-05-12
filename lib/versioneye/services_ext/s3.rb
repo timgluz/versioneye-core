@@ -2,6 +2,7 @@ require 'aws-sdk'
 
 class S3 < Versioneye::Service
 
+
   def self.set_aws_crendentials
     AWS.config(
       :s3_endpoint => Settings.instance.aws_s3_endpoint,
@@ -10,6 +11,7 @@ class S3 < Versioneye::Service
       :access_key_id => Settings.instance.aws_access_key_id,
       :secret_access_key => Settings.instance.aws_secret_access_key )
   end
+
 
   def self.url_for filename
     return nil if filename.to_s.empty?
@@ -22,6 +24,7 @@ class S3 < Versioneye::Service
     log.error e.backtrace.join '\n'
   end
 
+
   def self.infographic_url_for filename
     return nil if filename.to_s.empty?
     encoded_name = URI.encode( filename )
@@ -32,6 +35,7 @@ class S3 < Versioneye::Service
     log.error e.backtrace.join '\n'
   end
 
+
   def self.delete filename
     return nil if filename.nil? || filename.empty?
     AWS.s3.buckets[Settings.instance.s3_projects_bucket].objects[filename].delete
@@ -39,6 +43,7 @@ class S3 < Versioneye::Service
     log.error e.message
     log.error e.backtrace.join '\n'
   end
+
 
   def self.upload_fileupload file_up
     orig_filename = file_up['datafile'].original_filename
@@ -70,6 +75,7 @@ class S3 < Versioneye::Service
     log.error e.backtrace.join '\n'
   end
 
+
   def self.upload_file_content( content, filename)
     return nil if content.nil? || filename.to_s.empty?
     file_bin = content
@@ -86,6 +92,7 @@ class S3 < Versioneye::Service
     log.error e.backtrace.join '\n'
   end
 
+
   def self.store_in_project_bucket filename, bin
     bucket = AWS.s3.buckets[Settings.instance.s3_projects_bucket]
     obj    = bucket.objects[ filename ]
@@ -96,7 +103,9 @@ class S3 < Versioneye::Service
     log.error e.backtrace.join '\n'
   end
 
+
   private
+
 
     def self.sanitize_filename file_name
       just_filename = File.basename(file_name)
