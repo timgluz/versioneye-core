@@ -103,7 +103,7 @@ class ProjectService < Versioneye::Service
 
 
 =begin
-  This methods is doing 3 things
+  This methods is
    - Importing a project_file from Bitbucket
    - Parsing the project_file to a new project
    - Storing the new project to DB
@@ -115,26 +115,22 @@ class ProjectService < Versioneye::Service
       return "Please upgrade your plan to monitor the selected project."
     end
 
-    content = Bitbucket.fetch_project_file_from_branch(
+    project_file = Bitbucket.fetch_project_file_from_branch(
       repo_name, branch, filename,
       user[:bitbucket_token], user[:bitbucket_secret]
     )
-    if content.nil? or content == "error"
-      error_msg = " Didn't find any project file of a supported package manager."
+    if project_file.nil? or project_file == "error"
       log.error " Can't import project file `#{filename}` from #{repo_name} branch #{branch} "
+      error_msg = " Didn't find any project file of a supported package manager."
       return error_msg
     end
 
-    s3_info = S3.upload_file_content(content, filename)
-    if s3_info.nil? && !s3_info.has_key?('filename') && !s3_info.has_key?('s3_url')
-      error_msg = "Connectivity issues - can't import project file for parsing."
-      log.error " Can't upload file to s3: #{project_file[:name]}"
-      return error_msg
-    end
+    project_type = type_by_filename filename
+    file_name = filename.split("/").last
+    parser  = ProjectParseService.parser_for file_name
+    project = ProjectParseService.parse_content parser, project_file, file_name
 
-    project_type = ProjectService.type_by_filename( filename )
-    parsed_project = build_from_url( s3_info['s3_url'], project_type)
-    parsed_project.update_attributes({
+    project.update_attributes({
       name: repo_name,
       project_type: project_type,
       user_id: user.id.to_s,
@@ -142,11 +138,12 @@ class ProjectService < Versioneye::Service
       scm_fullname: repo_name,
       scm_branch: branch,
       private_project: private_project,
-      s3_filename: s3_info['filename'],
-      url: s3_info['s3_url']
+      s3_filename: filename,
+      url: nil
     })
 
-    return parsed_project if store( parsed_project )
+    return project if store( project )
+    return nil
   end
 
 
