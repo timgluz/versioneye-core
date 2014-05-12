@@ -16,6 +16,7 @@ require 'factory_girl'
 
 require 'vcr'
 require 'webmock/rspec'
+require 'fakeweb'
 
 require 'versioneye/domain_factories/api_factory'
 require 'versioneye/domain_factories/dependency_factory'
@@ -54,6 +55,7 @@ RSpec.configure do |config|
 
   config.before(:each) do
     DatabaseCleaner.clean
+    FakeWeb.clean_registry
   end
 
   #include FactoryGirl into test DSL

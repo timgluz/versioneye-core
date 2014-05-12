@@ -1,7 +1,6 @@
 require 'spec_helper'
 require 'vcr'
 require 'webmock/rspec'
-require 'fakeweb'
 
 VCR.configure do |c|
   c.cassette_library_dir = 'spec/fixtures/vcr_cassettes/'
@@ -62,83 +61,6 @@ describe Github do
       updated_at: "2011-01-26T19:14:43Z"
     }.to_json
   }
-  let(:repo_response1) {
-      [
-        {
-          id: 1296269,
-          owner: {
-            login: "versioneye",
-            id: 1,
-            avatar_url: "https://github.com/images/error/octocat_happy.gif",
-            gravatar_id: "somehexcode",
-            url: "https://api.github.com/users/octocat"
-          },
-          name: "spec1",
-          full_name: "versioneye/spec1",
-          description: "This your first repo!",
-          private: false,
-          fork: false,
-          url: "https://api.github.com/repos/octocat/Hello-World",
-          html_url: "https://github.com/octocat/Hello-World",
-          clone_url: "https://github.com/octocat/Hello-World.git",
-          git_url: "git://github.com/octocat/Hello-World.git",
-          ssh_url: "git@github.com:octocat/Hello-World.git",
-          svn_url: "https://svn.github.com/octocat/Hello-World",
-          mirror_url: "git://git.example.com/octocat/Hello-World",
-          homepage: "https://github.com",
-          language: "ruby",
-          forks: 9,
-          forks_count: 9,
-          watchers: 80,
-          watchers_count: 80,
-          size: 108,
-          master_branch: "master",
-          open_issues: 0,
-          pushed_at: "2011-01-26T19:06:43Z",
-          created_at: "2011-01-26T19:01:12Z",
-          updated_at: "2011-01-26T19:14:43Z"
-        }
-      ].to_json
-  }
-
-  let(:repo_response2) {
-    [
-      {
-        id: 1296269,
-        owner: {
-          login: "versioneye",
-          id: 1,
-          avatar_url: "https://github.com/images/error/octocat_happy.gif",
-          gravatar_id: "somehexcode",
-          url: "https://api.github.com/users/octocat"
-        },
-        name: "spec2",
-        full_name: "versioneye/spec2",
-        description: "This your second repo!",
-        private: false,
-        fork: false,
-        url: "https://api.github.com/repos/octocat/Hello-World",
-        html_url: "https://github.com/octocat/Hello-World",
-        clone_url: "https://github.com/octocat/Hello-World.git",
-        git_url: "git://github.com/octocat/Hello-World.git",
-        ssh_url: "git@github.com:octocat/Hello-World.git",
-        svn_url: "https://svn.github.com/octocat/Hello-World",
-        mirror_url: "git://git.example.com/octocat/Hello-World",
-        homepage: "https://github.com",
-        language: "ruby",
-        forks: 9,
-        forks_count: 9,
-        watchers: 80,
-        watchers_count: 80,
-        size: 108,
-        master_branch: "master",
-        open_issues: 0,
-        pushed_at: "2011-01-26T19:06:43Z",
-        created_at: "2011-01-26T19:01:12Z",
-        updated_at: "2011-01-26T19:14:43Z"
-      }
-    ].to_json
-  }
 
 
   describe "getting user information via API" do
@@ -174,36 +96,12 @@ describe Github do
     end
   end
 
-  describe "checkin changes of user's repositories" do
-    before :each do
-      FakeWeb.register_uri(:head, %|https://api\.github\.com/user|,
-                          [{status: ["403" "Forbidden"], body: {message: "Bad credentials"}.to_json},
-                           {status: ["200", "OK"], body: "OK"},
-                           {status: ["304", "Not Modified"], body: "Not modified"}])
-      it "should return true when cache is empty" do
-        Github.user_repo_changed?(user_with_token).should be_true
-      end
-
-      it "should return true, even when github raise exception" do
-        Github.user_repo_changed?(user_without_token).should be_true
-      end
-
-      it "should return true, when there has been changes on user account" do
-        Github.user_repo_changed?(user_with_token) #pass the first response
-        Github.user_repo_changed?(user_with_token).should be_true
-      end
-
-      it "should false, when there's no changes on user account" do
-        Github.user_repo_changed?(user_with_token) #pass the first response
-        Github.user_repo_changed?(user_with_token) #pass the second response
-        Github.user_repo_changed?(user_with_token).should be_true
-      end
-    end
-  end
 
   describe "reading repositories by following links in response headers" do
+
     let(:url_start) {"https://api.github.com/user/repos"}
     let(:url_page2) {"https://api.github.com/user/repos?page=2"}
+
     before :each do
       FakeWeb.clean_registry
       FakeWeb.register_uri(:get, %r|https://api\.github\.com/user/repos*|,
@@ -213,6 +111,10 @@ describe Github do
                               body: [].to_json}
                            ])
       FakeWeb.register_uri(:get, %r|https://api\.github\.com/repos/*/branches*|, {body: [].to_json})
+    end
+
+    after :each do
+      FakeWeb.clean_registry
     end
 
     it "should response hash-map where 'repos' are empty array when user has wrong credentials" do
@@ -232,9 +134,11 @@ describe Github do
        response[:paging].has_key?("next").should be_true
        response[:paging]["next"].should eql(url_page2)
     end
+
   end
 
   describe "reading branches for specific repository" do
+
     before :each do
       FakeWeb.clean_registry
       FakeWeb.register_uri(
@@ -250,6 +154,10 @@ describe Github do
                   }].to_json
           }
         ])
+    end
+
+    after :each do
+      FakeWeb.clean_registry
     end
 
     it "should nil when user is having wrong credentials" do
@@ -270,6 +178,7 @@ describe Github do
   end
 
   describe "reading information for specific branch of the repository" do
+
     before :each do
       FakeWeb.clean_registry
       FakeWeb.register_uri(
@@ -280,6 +189,10 @@ describe Github do
                  commit: {sha: "7fd1a60b01f91b314f59955a4e4d4e80d8edf11d"}}.to_json
          }]
       )
+    end
+
+    after :each do
+      FakeWeb.clean_registry
     end
 
     it "should return nil when user uses wrong credentials" do
@@ -299,6 +212,7 @@ describe Github do
   end
 
   describe "reading names of user's organizations with orga_names" do
+
     before :each do
       FakeWeb.clean_registry
       FakeWeb.register_uri(
@@ -319,6 +233,10 @@ describe Github do
       )
     end
 
+    after :each do
+      FakeWeb.clean_registry
+    end
+
     it "should return empty array when github returns exception"  do
       Github.orga_names(user_without_token[:github_token]).empty?.should be_true
     end
@@ -333,6 +251,7 @@ describe Github do
   end
 
   describe "getting visibility of user's github repo with private_repo?" do
+
     before :each do
       FakeWeb.register_uri(
         :get,
@@ -342,6 +261,10 @@ describe Github do
           {body: private_repo_response}
         ]
       )
+    end
+
+    after :each do
+      FakeWeb.clean_registry
     end
 
     it "should return false when github raises exception" do

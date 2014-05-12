@@ -5,12 +5,32 @@ describe PodfileParser do
   let( :parser ) { PodfileParser.new }
 
   describe '.parse' do
+
     it 'parses remote urls' do
-      project = parser.parse 'https://raw.github.com/CocoaPods/Core/master/spec/fixtures/Podfile'
-      project.should be_true
+      project = PodfileParser.new.parse 'https://raw.github.com/CocoaPods/Core/master/spec/fixtures/Podfile'
+      project.should_not be_nil
       project.language.should eq Product::A_LANGUAGE_OBJECTIVEC
       project.project_type.should eq Project::A_TYPE_COCOAPODS
     end
+
+    it "should drop subspecs and just use the main spec" do
+
+      # TODO add this before so the subspecs are actually known
+      # 'https://raw.github.com/CocoaPods/Specs/master/ShareKit/2.4.6/ShareKit.podspec'
+      # 'https://raw.github.com/CocoaPods/Specs/master/xmlrpc/2.3.3/xmlrpc.podspec'
+
+      podfile = 'https://raw.github.com/DenisDbv/OpenAuth/8d654f25d540ec865a8faeace40a810b7bdc9ff2/Podfile'
+      project = PodfileParser.new.parse( podfile )
+      project.should_not be_nil
+
+      deps = project.dependencies
+
+      deps.size.should eq(2)
+      deps.each do |dep|
+        %w{ShareKit xmlrpc}.should be_member(dep.name)
+      end
+    end
+
   end
 
   describe '.parse_file' do
@@ -198,24 +218,6 @@ describe PodfileParser do
       dep = get_dependency(project, 'CocoaLumberjack')
       test_dependency(dep, '1.6.3', '1.6.3', false)
 
-    end
-
-    it "should drop subspecs and just use the main spec" do
-
-      # TODO add this before so the subspecs are actually known
-      # 'https://raw.github.com/CocoaPods/Specs/master/ShareKit/2.4.6/ShareKit.podspec'
-      # 'https://raw.github.com/CocoaPods/Specs/master/xmlrpc/2.3.3/xmlrpc.podspec'
-
-      podfile = 'https://raw.github.com/DenisDbv/OpenAuth/8d654f25d540ec865a8faeace40a810b7bdc9ff2/Podfile'
-      parser  = PodfileParser.new
-      project = parser.parse( podfile )
-
-      deps = project.dependencies
-
-      deps.size.should eq(2)
-      deps.each do |dep|
-        %w{ShareKit xmlrpc}.should be_member(dep.name)
-      end
     end
 
   end

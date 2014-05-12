@@ -1,5 +1,11 @@
 require 'spec_helper'
 
+VCR.configure do |c|
+  c.cassette_library_dir = 'spec/fixtures/vcr_cassettes/'
+  c.ignore_localhost = true
+  c.hook_into :webmock
+end
+
 describe GithubUpdater do
 
   describe 'update' do
@@ -20,11 +26,13 @@ describe GithubUpdater do
       project.scm_fullname = 'versioneye/versioneye_maven_plugin'
       project.scm_branch = 'master'
 
+      WebMock.disable_net_connect!
       VCR.use_cassette('github_updater_pom_xml_1', allow_playback_repeats: true) do
         described_class.new.update project
         project.should_not be_nil
         project.dependencies.count.should == 11
       end
+      WebMock.allow_net_connect!
     end
 
     it 'returns the updated project / Podfile' do
@@ -34,11 +42,13 @@ describe GithubUpdater do
       project.scm_fullname = 'xing/XNGAPIClient'
       project.scm_branch = 'master'
 
+      WebMock.disable_net_connect!
       VCR.use_cassette('github_updater_podfile_1', allow_playback_repeats: true) do
         described_class.new.update project
         project.should_not be_nil
         project.dependencies.count.should == 4
       end
+      WebMock.allow_net_connect!
     end
 
   end
@@ -52,6 +62,7 @@ describe GithubUpdater do
       project.scm_fullname = 'versioneye/versioneye_maven_plugin'
       project.scm_branch = 'master'
 
+      WebMock.disable_net_connect!
       VCR.use_cassette('github_updater_pom_xml_2', allow_playback_repeats: true) do
         pf = described_class.new.fetch_project_file project
         pf.should_not be_nil
@@ -59,6 +70,7 @@ describe GithubUpdater do
         pf[:name].should eq("pom.xml")
         pf[:content].should_not be_nil
       end
+      WebMock.allow_net_connect!
     end
 
   end

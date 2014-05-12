@@ -182,8 +182,8 @@ class Github < Versioneye::Service
 
   def self.fetch_project_file_from_branch repo_name, filename, branch = "master", token = nil
     branch_info = Github.repo_branch_info repo_name, branch, token
-    if branch_info.nil?
-      log.error "fetch_project_file_from_branch - can't read branch info for [repo_name: #{repo_name}, filename: #{filename}, branch: #{branch}]"
+    if branch_info.nil? || branch_info[:commit].nil?
+      log.error "fetch_project_file_from_branch - can't read branch info for [repo_name: #{repo_name}, branch: #{branch}, token: #{token}] - branch_info: #{branch_info}"
       return nil
     end
 
