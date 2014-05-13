@@ -9,6 +9,9 @@ class UserNotificationSetting < Versioneye::Model
   # Receiving the newsletter about new features
   field :newsletter_features, type: Boolean, default: true
 
+  # Receiving notification emails to packages I follow.
+  field :notification_emails, type: Boolean, default: true
+
   belongs_to :user
 
 

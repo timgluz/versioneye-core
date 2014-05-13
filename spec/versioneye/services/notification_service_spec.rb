@@ -53,7 +53,16 @@ describe NotificationService do
       count.should eq(1)
     end
 
+    it "sends out 0 notifications, because emails are turned off" do
+      uns = UserNotificationSetting.fetch_or_create_notification_setting @user
+      uns.notification_emails = false
+      uns.save
+      Notification.count.should == 1
+      count        = NotificationService.send_notifications
+      count.should eq(0)
+      Notification.count.should == 0
+    end
+
   end
 
 end
-
