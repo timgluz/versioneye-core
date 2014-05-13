@@ -12,9 +12,12 @@ describe ProjectUpdateService do
       project.scm_branch = 'master'
       project.source = Project::A_SOURCE_GITHUB
 
-      project = described_class.update project
-      project.should_not be_nil
-      project.dependencies.count.should == 11
+      VCR.use_cassette('ProjectUpdateService_update', allow_playback_repeats: true) do
+        project = described_class.update project
+        project.should_not be_nil
+        project.dependencies.count.should == 11
+      end
+
     end
 
   end
@@ -29,7 +32,9 @@ describe ProjectUpdateService do
 
       ProjectCollaborator.count.should == 1
 
-      described_class.update_collaborators_projects Project::A_PERIOD_WEEKLY
+      VCR.use_cassette('ProjectUpdateService_update_collaborators_projects', allow_playback_repeats: true) do
+        described_class.update_collaborators_projects Project::A_PERIOD_WEEKLY
+      end
 
       ProjectCollaborator.count.should == 0
     end
@@ -58,9 +63,11 @@ describe ProjectUpdateService do
       pc.period = Project::A_PERIOD_WEEKLY
       pc.save.should be_true
 
-      described_class.update_all Project::A_PERIOD_WEEKLY
-      project.reload
-      project.dependencies.count.should == 11
+      VCR.use_cassette('ProjectUpdateService_update_all', allow_playback_repeats: true) do
+        described_class.update_all Project::A_PERIOD_WEEKLY
+        project.reload
+        project.dependencies.count.should == 11
+      end
 
       ActionMailer::Base.deliveries.size.should == 0
     end
@@ -88,9 +95,11 @@ describe ProjectUpdateService do
       pc.period = Project::A_PERIOD_WEEKLY
       pc.save.should be_true
 
-      described_class.update_all Project::A_PERIOD_WEEKLY
-      project.reload
-      project.dependencies.count.should == 11
+      VCR.use_cassette('ProjectUpdateService_update_all_2', allow_playback_repeats: true) do
+        described_class.update_all Project::A_PERIOD_WEEKLY
+        project.reload
+        project.dependencies.count.should == 11
+      end
 
       ActionMailer::Base.deliveries.size.should == 2
     end
