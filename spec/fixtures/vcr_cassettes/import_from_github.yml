@@ -1,0 +1,288 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.github.com/repos/versioneye/versioneye_maven_plugin?access_token=
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Chrome/28(www.versioneye.com, contact@versioneye.com)
+      Connection:
+      - Keep-Alive
+      - keep-alive
+      Keep-Alive:
+      - 30
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 13 May 2014 08:45:16 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Status:
+      - 401 Unauthorized
+      X-Github-Media-Type:
+      - github.v3; format=json
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '59'
+      X-Ratelimit-Reset:
+      - '1399974316'
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Frame-Options:
+      - deny
+      Content-Security-Policy:
+      - default-src 'none'
+      Content-Length:
+      - '83'
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Github-Request-Id:
+      - 2E0500BA:460F:1BE73DD:5371DB9C
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Content-Type-Options:
+      - nosniff
+    body:
+      encoding: UTF-8
+      string: '{"message":"Bad credentials","documentation_url":"https://developer.github.com/v3"}'
+    http_version: 
+  recorded_at: Tue, 13 May 2014 08:45:16 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/versioneye/versioneye_maven_plugin/branches/master
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Chrome/28(www.versioneye.com, contact@versioneye.com)
+      Connection:
+      - Keep-Alive
+      - keep-alive
+      Keep-Alive:
+      - 30
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 13 May 2014 08:45:17 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '58'
+      X-Ratelimit-Reset:
+      - '1399974316'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Etag:
+      - '"061821e6727854e9754416c4d24e56dd"'
+      Vary:
+      - Accept
+      - Accept-Encoding
+      X-Github-Media-Type:
+      - github.v3; format=json
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Frame-Options:
+      - deny
+      Content-Security-Policy:
+      - default-src 'none'
+      Content-Length:
+      - '3600'
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Github-Request-Id:
+      - 2E0500BA:4610:22B7DD0:5371DB9C
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Content-Type-Options:
+      - nosniff
+      X-Served-By:
+      - a1d8c69b807c8e21f06cad9da377d1b0
+    body:
+      encoding: UTF-8
+      string: '{"name":"master","commit":{"sha":"5748451df2d1c12df44b01d47c5aff587aac9df7","commit":{"author":{"name":"Robert
+        Reiz","email":"robert.reiz.81@gmail.com","date":"2014-04-25T05:58:24Z"},"committer":{"name":"Robert
+        Reiz","email":"robert.reiz.81@gmail.com","date":"2014-04-25T05:58:24Z"},"message":"Merge
+        pull request #29 from ascheman/fix-28\n\nImprovement to avoid warnings: Made
+        DependendyUtils completely static!","tree":{"sha":"b349c5032a0783b5474a12fb845cb6510f8130d6","url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/trees/b349c5032a0783b5474a12fb845cb6510f8130d6"},"url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/commits/5748451df2d1c12df44b01d47c5aff587aac9df7","comment_count":0},"url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/commits/5748451df2d1c12df44b01d47c5aff587aac9df7","html_url":"https://github.com/versioneye/versioneye_maven_plugin/commit/5748451df2d1c12df44b01d47c5aff587aac9df7","comments_url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/commits/5748451df2d1c12df44b01d47c5aff587aac9df7/comments","author":{"login":"reiz","id":652130,"avatar_url":"https://avatars.githubusercontent.com/u/652130?","gravatar_id":"11c3ac04d669661020cf80a822cd9620","url":"https://api.github.com/users/reiz","html_url":"https://github.com/reiz","followers_url":"https://api.github.com/users/reiz/followers","following_url":"https://api.github.com/users/reiz/following{/other_user}","gists_url":"https://api.github.com/users/reiz/gists{/gist_id}","starred_url":"https://api.github.com/users/reiz/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/reiz/subscriptions","organizations_url":"https://api.github.com/users/reiz/orgs","repos_url":"https://api.github.com/users/reiz/repos","events_url":"https://api.github.com/users/reiz/events{/privacy}","received_events_url":"https://api.github.com/users/reiz/received_events","type":"User","site_admin":false},"committer":{"login":"reiz","id":652130,"avatar_url":"https://avatars.githubusercontent.com/u/652130?","gravatar_id":"11c3ac04d669661020cf80a822cd9620","url":"https://api.github.com/users/reiz","html_url":"https://github.com/reiz","followers_url":"https://api.github.com/users/reiz/followers","following_url":"https://api.github.com/users/reiz/following{/other_user}","gists_url":"https://api.github.com/users/reiz/gists{/gist_id}","starred_url":"https://api.github.com/users/reiz/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/reiz/subscriptions","organizations_url":"https://api.github.com/users/reiz/orgs","repos_url":"https://api.github.com/users/reiz/repos","events_url":"https://api.github.com/users/reiz/events{/privacy}","received_events_url":"https://api.github.com/users/reiz/received_events","type":"User","site_admin":false},"parents":[{"sha":"d094313d85912bc0ef76f745093be9f284be3f45","url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/commits/d094313d85912bc0ef76f745093be9f284be3f45","html_url":"https://github.com/versioneye/versioneye_maven_plugin/commit/d094313d85912bc0ef76f745093be9f284be3f45"},{"sha":"b1cbdd5b28d95f0bef546e937f2c6e5619cc2c2f","url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/commits/b1cbdd5b28d95f0bef546e937f2c6e5619cc2c2f","html_url":"https://github.com/versioneye/versioneye_maven_plugin/commit/b1cbdd5b28d95f0bef546e937f2c6e5619cc2c2f"}]},"_links":{"self":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/branches/master","html":"https://github.com/versioneye/versioneye_maven_plugin/tree/master"}}'
+    http_version: 
+  recorded_at: Tue, 13 May 2014 08:45:17 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/trees/5748451df2d1c12df44b01d47c5aff587aac9df7?recursive=1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Chrome/28(www.versioneye.com, contact@versioneye.com)
+      Connection:
+      - Keep-Alive
+      - keep-alive
+      Keep-Alive:
+      - 30
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 13 May 2014 08:45:17 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '57'
+      X-Ratelimit-Reset:
+      - '1399974316'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Last-Modified:
+      - Tue, 13 May 2014 01:46:33 GMT
+      Etag:
+      - '"eb21b447fc400bf2c151abb3048cbf94"'
+      Vary:
+      - Accept
+      - Accept-Encoding
+      X-Github-Media-Type:
+      - github.v3; format=json
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Frame-Options:
+      - deny
+      Content-Security-Policy:
+      - default-src 'none'
+      Content-Length:
+      - '7024'
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Github-Request-Id:
+      - 2E0500BA:460F:1BE74EF:5371DB9D
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Content-Type-Options:
+      - nosniff
+      X-Served-By:
+      - a1d8c69b807c8e21f06cad9da377d1b0
+    body:
+      encoding: UTF-8
+      string: '{"sha":"5748451df2d1c12df44b01d47c5aff587aac9df7","url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/trees/5748451df2d1c12df44b01d47c5aff587aac9df7","tree":[{"mode":"100644","type":"blob","sha":"118ca45c400d7de95ee012272dac32fea090181e","path":".gitignore","size":286,"url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/blobs/118ca45c400d7de95ee012272dac32fea090181e"},{"mode":"100644","type":"blob","sha":"23954db06cb7a8b31b38aba5d76dd37c8f898e23","path":"README.md","size":6549,"url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/blobs/23954db06cb7a8b31b38aba5d76dd37c8f898e23"},{"mode":"100644","type":"blob","sha":"199678383685283f1ae632ae73556c486ad14da5","path":"pom.xml","size":5239,"url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/blobs/199678383685283f1ae632ae73556c486ad14da5"},{"mode":"040000","type":"tree","sha":"4e647fdf9e9958211f99b0465f670a2a3c5a01e2","path":"src","url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/trees/4e647fdf9e9958211f99b0465f670a2a3c5a01e2"},{"mode":"040000","type":"tree","sha":"2812c4b69bab5e6038b87513720b4dc2f1ae0e29","path":"src/main","url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/trees/2812c4b69bab5e6038b87513720b4dc2f1ae0e29"},{"mode":"040000","type":"tree","sha":"08019245cf7189b038409452c93f2c4e2a1e4c45","path":"src/main/java","url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/trees/08019245cf7189b038409452c93f2c4e2a1e4c45"},{"mode":"040000","type":"tree","sha":"e4ec7505b1f09925819eaf3cc5dce3fc09089788","path":"src/main/java/com","url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/trees/e4ec7505b1f09925819eaf3cc5dce3fc09089788"},{"mode":"040000","type":"tree","sha":"33a828d6db51cd5f35db18d3c20d875ba08eda0c","path":"src/main/java/com/versioneye","url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/trees/33a828d6db51cd5f35db18d3c20d875ba08eda0c"},{"mode":"100644","type":"blob","sha":"1bf84e28e4551722040df906c84fea30a85d963d","path":"src/main/java/com/versioneye/CreateMojo.java","size":2552,"url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/blobs/1bf84e28e4551722040df906c84fea30a85d963d"},{"mode":"100644","type":"blob","sha":"6a606f4bef7647135842390c5adc84052d0cfee0","path":"src/main/java/com/versioneye/JsonMojo.java","size":2242,"url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/blobs/6a606f4bef7647135842390c5adc84052d0cfee0"},{"mode":"100644","type":"blob","sha":"f334b59593800dc948dbe152aab24cb0e0540da1","path":"src/main/java/com/versioneye/ListMojo.java","size":3601,"url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/blobs/f334b59593800dc948dbe152aab24cb0e0540da1"},{"mode":"100644","type":"blob","sha":"3fcc05d8f71834b2eb53f6d95aa6a8deabb6ad3e","path":"src/main/java/com/versioneye/PingMojo.java","size":1980,"url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/blobs/3fcc05d8f71834b2eb53f6d95aa6a8deabb6ad3e"},{"mode":"100644","type":"blob","sha":"a1bb3a310fe24648dbd830961fb0018df8947d2a","path":"src/main/java/com/versioneye/ProjectMojo.java","size":1655,"url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/blobs/a1bb3a310fe24648dbd830961fb0018df8947d2a"},{"mode":"100644","type":"blob","sha":"e842a04294ad46a7436f08b58ec7a8b4b83aabbf","path":"src/main/java/com/versioneye/SuperMojo.java","size":7685,"url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/blobs/e842a04294ad46a7436f08b58ec7a8b4b83aabbf"},{"mode":"100644","type":"blob","sha":"946ea7ca8514b354e1033dff584bc2db4b577830","path":"src/main/java/com/versioneye/UpdateMojo.java","size":2683,"url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/blobs/946ea7ca8514b354e1033dff584bc2db4b577830"},{"mode":"040000","type":"tree","sha":"25847e75a06c022acbd3772c900ee4cdba61c4e3","path":"src/main/java/com/versioneye/dto","url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/trees/25847e75a06c022acbd3772c900ee4cdba61c4e3"},{"mode":"100644","type":"blob","sha":"4c6d2d9964f15abd973e4f76ca190ddeb38ab5b0","path":"src/main/java/com/versioneye/dto/ProjectJsonResponse.java","size":1147,"url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/blobs/4c6d2d9964f15abd973e4f76ca190ddeb38ab5b0"},{"mode":"040000","type":"tree","sha":"6d534b0b2b51e64380f487725182583c6054a3c6","path":"src/main/java/com/versioneye/utils","url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/trees/6d534b0b2b51e64380f487725182583c6054a3c6"},{"mode":"100644","type":"blob","sha":"8da2b0b6170fa1075676025c39ea395e9054cd1e","path":"src/main/java/com/versioneye/utils/DependencyUtils.java","size":1682,"url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/blobs/8da2b0b6170fa1075676025c39ea395e9054cd1e"},{"mode":"100644","type":"blob","sha":"b0772593ae6669d22ffec9edfc63f52103e72dea","path":"src/main/java/com/versioneye/utils/HttpUtils.java","size":1054,"url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/blobs/b0772593ae6669d22ffec9edfc63f52103e72dea"},{"mode":"100644","type":"blob","sha":"c82f7ef657968a8a50d02002ae0fd7e45684b2f6","path":"src/main/java/com/versioneye/utils/JsonUtils.java","size":3678,"url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/blobs/c82f7ef657968a8a50d02002ae0fd7e45684b2f6"},{"mode":"100644","type":"blob","sha":"b37e5f4d3b8590097290d039de4f632273b10876","path":"src/main/java/com/versioneye/utils/PropertiesUtils.java","size":758,"url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/blobs/b37e5f4d3b8590097290d039de4f632273b10876"},{"mode":"040000","type":"tree","sha":"d854dd8ff697aa2f98f4c81945d771d45f1741d4","path":"src/site","url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/trees/d854dd8ff697aa2f98f4c81945d771d45f1741d4"},{"mode":"100644","type":"blob","sha":"cd3a2cf86a516c8064df523e3cb54a7528c4c45a","path":"src/site/.DS_Store","size":6148,"url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/blobs/cd3a2cf86a516c8064df523e3cb54a7528c4c45a"},{"mode":"040000","type":"tree","sha":"661d304879af48cf08025f00bc26d6e44e324c41","path":"src/site/images","url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/trees/661d304879af48cf08025f00bc26d6e44e324c41"},{"mode":"100644","type":"blob","sha":"4a8c83dad4f4404b85dcd9d66b47c59898123d12","path":"src/site/images/VersionEyeApiKey.png","size":88178,"url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/blobs/4a8c83dad4f4404b85dcd9d66b47c59898123d12"},{"mode":"100644","type":"blob","sha":"680419b64a7b7e99053c10e814f141af9f8e04c2","path":"src/site/images/VersionEyeDependencies.png","size":164663,"url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/blobs/680419b64a7b7e99053c10e814f141af9f8e04c2"}]}'
+    http_version: 
+  recorded_at: Tue, 13 May 2014 08:45:17 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/blobs/199678383685283f1ae632ae73556c486ad14da5
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Chrome/28(www.versioneye.com, contact@versioneye.com)
+      Connection:
+      - Keep-Alive
+      - keep-alive
+      Keep-Alive:
+      - 30
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 13 May 2014 08:45:17 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '56'
+      X-Ratelimit-Reset:
+      - '1399974316'
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Etag:
+      - '"e1977998f6b874013a66d6de645eaff6"'
+      Vary:
+      - Accept
+      - Accept-Encoding
+      X-Github-Media-Type:
+      - github.v3; format=json
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Frame-Options:
+      - deny
+      Content-Security-Policy:
+      - default-src 'none'
+      Content-Length:
+      - '7440'
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Github-Request-Id:
+      - 2E0500BA:460B:33193F:5371DB9D
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Content-Type-Options:
+      - nosniff
+      X-Served-By:
+      - c046d59f93ede9ab52d5ac29f1ed70f7
+    body:
+      encoding: UTF-8
+      string: '{"sha":"199678383685283f1ae632ae73556c486ad14da5","size":5239,"url":"https://api.github.com/repos/versioneye/versioneye_maven_plugin/git/blobs/199678383685283f1ae632ae73556c486ad14da5","content":"PHByb2plY3QgeG1sbnM9Imh0dHA6Ly9tYXZlbi5hcGFjaGUub3JnL1BPTS80\nLjAuMCIgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNj\naGVtYS1pbnN0YW5jZSIKICB4c2k6c2NoZW1hTG9jYXRpb249Imh0dHA6Ly9t\nYXZlbi5hcGFjaGUub3JnL1BPTS80LjAuMCBodHRwOi8vbWF2ZW4uYXBhY2hl\nLm9yZy94c2QvbWF2ZW4tNC4wLjAueHNkIj4KICA8bW9kZWxWZXJzaW9uPjQu\nMC4wPC9tb2RlbFZlcnNpb24+CgogIDxwYXJlbnQ+CiAgICA8Z3JvdXBJZD5v\ncmcuc29uYXR5cGUub3NzPC9ncm91cElkPgogICAgPGFydGlmYWN0SWQ+b3Nz\nLXBhcmVudDwvYXJ0aWZhY3RJZD4KICAgIDx2ZXJzaW9uPjc8L3ZlcnNpb24+\nCiAgPC9wYXJlbnQ+CgogIDxncm91cElkPmNvbS52ZXJzaW9uZXllPC9ncm91\ncElkPgogIDxhcnRpZmFjdElkPnZlcnNpb25leWUtbWF2ZW4tcGx1Z2luPC9h\ncnRpZmFjdElkPgogIDx2ZXJzaW9uPjIuMC4xPC92ZXJzaW9uPgogIDxwYWNr\nYWdpbmc+bWF2ZW4tcGx1Z2luPC9wYWNrYWdpbmc+CgogIDxuYW1lPnZlcnNp\nb25leWUtbWF2ZW4tcGx1Z2luPC9uYW1lPgogIDx1cmw+aHR0cHM6Ly9naXRo\ndWIuY29tL3ZlcnNpb25leWUvdmVyc2lvbmV5ZV9tYXZlbl9wbHVnaW48L3Vy\nbD4KICA8ZGVzY3JpcHRpb24+CiAgICAgIFRoaXMgaXMgdGhlIG1hdmVuIHBs\ndWdpbiBmb3IgaHR0cDovL3d3dy5WZXJzaW9uRXllLmNvbS4gSXQgYWxsb3dz\nIHlvdSB0byBjcmVhdGUgYW5kIHVwZGF0ZQogICAgICBhIHByb2plY3QgYXQg\nVmVyc2lvbkV5ZS4gWW91IGNhbiBmaW5kIGEgY29tcGxldGUgZG9jdW1lbnRh\ndGlvbiBvZiB0aGlzIHByb2plY3Qgb24gR2l0SHViOgogICAgICBodHRwczov\nL2dpdGh1Yi5jb20vdmVyc2lvbmV5ZS92ZXJzaW9uZXllX21hdmVuX3BsdWdp\nbi4KICA8L2Rlc2NyaXB0aW9uPgoKICA8c2NtPgogICAgICA8dXJsPmh0dHBz\nOi8vZ2l0aHViLmNvbS92ZXJzaW9uZXllL3ZlcnNpb25leWVfbWF2ZW5fcGx1\nZ2luLmdpdDwvdXJsPgogIDwvc2NtPgoKICA8bGljZW5zZXM+CiAgICA8bGlj\nZW5zZT4KICAgICAgPG5hbWU+TUlUPC9uYW1lPgogICAgICA8dXJsPmh0dHA6\nLy9jaG9vc2VhbGljZW5zZS5jb20vbGljZW5zZXMvbWl0LzwvdXJsPgogICAg\nPC9saWNlbnNlPgogIDwvbGljZW5zZXM+CgogIDxkZXZlbG9wZXJzPgogICAg\nPGRldmVsb3Blcj4KICAgICAgPG5hbWU+Um9iZXJ0IFJlaXo8L25hbWU+CiAg\nICAgIDxpZD5yZWl6PC9pZD4KICAgICAgPG9yZ2FuaXphdGlvbj5WZXJzaW9u\nRXllPC9vcmdhbml6YXRpb24+CiAgICAgIDxvcmdhbml6YXRpb25Vcmw+aHR0\ncDovL3d3dy52ZXJzaW9uZXllLmNvbTwvb3JnYW5pemF0aW9uVXJsPgogICAg\nPC9kZXZlbG9wZXI+CiAgPC9kZXZlbG9wZXJzPgoKICA8cHJvcGVydGllcz4K\nICAgIDxwcm9qZWN0LmJ1aWxkLnNvdXJjZUVuY29kaW5nPlVURi04PC9wcm9q\nZWN0LmJ1aWxkLnNvdXJjZUVuY29kaW5nPgogIDwvcHJvcGVydGllcz4KCiAg\nPGRlcGVuZGVuY2llcz4KICAgIDxkZXBlbmRlbmN5PgogICAgICA8Z3JvdXBJ\nZD5vcmcuYXBhY2hlLm1hdmVuPC9ncm91cElkPgogICAgICA8YXJ0aWZhY3RJ\nZD5tYXZlbi1wbHVnaW4tYXBpPC9hcnRpZmFjdElkPgogICAgICA8dmVyc2lv\nbj4zLjIuMTwvdmVyc2lvbj4KICAgIDwvZGVwZW5kZW5jeT4KICAgIDxkZXBl\nbmRlbmN5PgogICAgICA8Z3JvdXBJZD5vcmcuYXBhY2hlLm1hdmVuLnBsdWdp\nbi10b29sczwvZ3JvdXBJZD4KICAgICAgPGFydGlmYWN0SWQ+bWF2ZW4tcGx1\nZ2luLWFubm90YXRpb25zPC9hcnRpZmFjdElkPgogICAgICA8dmVyc2lvbj4z\nLjI8L3ZlcnNpb24+CiAgICAgIDxzY29wZT5wcm92aWRlZDwvc2NvcGU+CiAg\nICA8L2RlcGVuZGVuY3k+CiAgICA8ZGVwZW5kZW5jeT4KICAgICAgPGdyb3Vw\nSWQ+b3JnLmFwYWNoZS5tYXZlbjwvZ3JvdXBJZD4KICAgICAgPGFydGlmYWN0\nSWQ+bWF2ZW4tY29tcGF0PC9hcnRpZmFjdElkPgogICAgICA8dmVyc2lvbj4z\nLjIuMTwvdmVyc2lvbj4KICAgIDwvZGVwZW5kZW5jeT4KICAgIDxkZXBlbmRl\nbmN5PgogICAgICA8Z3JvdXBJZD5vcmcuY29kZWhhdXMucGxleHVzPC9ncm91\ncElkPgogICAgICA8YXJ0aWZhY3RJZD5wbGV4dXMtdXRpbHM8L2FydGlmYWN0\nSWQ+CiAgICAgIDx2ZXJzaW9uPjMuMC4xNzwvdmVyc2lvbj4KICAgIDwvZGVw\nZW5kZW5jeT4KICAgIDxkZXBlbmRlbmN5PgogICAgICA8Z3JvdXBJZD5vcmcu\nc29uYXR5cGUuYWV0aGVyPC9ncm91cElkPgogICAgICA8YXJ0aWZhY3RJZD5h\nZXRoZXItYXBpPC9hcnRpZmFjdElkPgogICAgICA8dmVyc2lvbj4xLjEzLjE8\nL3ZlcnNpb24+CiAgICA8L2RlcGVuZGVuY3k+CiAgICA8ZGVwZW5kZW5jeT4K\nICAgICAgPGdyb3VwSWQ+b3JnLnNvbmF0eXBlLmFldGhlcjwvZ3JvdXBJZD4K\nICAgICAgPGFydGlmYWN0SWQ+YWV0aGVyLXV0aWw8L2FydGlmYWN0SWQ+CiAg\nICAgIDx2ZXJzaW9uPjEuMTMuMTwvdmVyc2lvbj4KICAgIDwvZGVwZW5kZW5j\neT4KICAgIDxkZXBlbmRlbmN5PgogICAgICA8Z3JvdXBJZD5qdW5pdDwvZ3Jv\ndXBJZD4KICAgICAgPGFydGlmYWN0SWQ+anVuaXQ8L2FydGlmYWN0SWQ+CiAg\nICAgIDx2ZXJzaW9uPjQuMTE8L3ZlcnNpb24+CiAgICAgIDxzY29wZT50ZXN0\nPC9zY29wZT4KICAgIDwvZGVwZW5kZW5jeT4KICAgIDxkZXBlbmRlbmN5Pgog\nICAgICA8Z3JvdXBJZD5vcmcuY29kZWhhdXMuamFja3NvbjwvZ3JvdXBJZD4K\nICAgICAgPGFydGlmYWN0SWQ+amFja3Nvbi1jb3JlLWxncGw8L2FydGlmYWN0\nSWQ+CiAgICAgIDx2ZXJzaW9uPjEuOS4xMzwvdmVyc2lvbj4KICAgIDwvZGVw\nZW5kZW5jeT4KICAgIDxkZXBlbmRlbmN5PgogICAgICA8Z3JvdXBJZD5vcmcu\nY29kZWhhdXMuamFja3NvbjwvZ3JvdXBJZD4KICAgICAgPGFydGlmYWN0SWQ+\namFja3Nvbi1tYXBwZXItbGdwbDwvYXJ0aWZhY3RJZD4KICAgICAgPHZlcnNp\nb24+MS45LjEzPC92ZXJzaW9uPgogICAgPC9kZXBlbmRlbmN5PgogICAgPGRl\ncGVuZGVuY3k+CiAgICAgIDxncm91cElkPm9yZy5hcGFjaGUuaHR0cGNvbXBv\nbmVudHM8L2dyb3VwSWQ+CiAgICAgIDxhcnRpZmFjdElkPmh0dHBjbGllbnQ8\nL2FydGlmYWN0SWQ+CiAgICAgIDx2ZXJzaW9uPjQuMy4zPC92ZXJzaW9uPgog\nICAgPC9kZXBlbmRlbmN5PgogICAgPGRlcGVuZGVuY3k+CiAgICAgIDxncm91\ncElkPm9yZy5hcGFjaGUuaHR0cGNvbXBvbmVudHM8L2dyb3VwSWQ+CiAgICAg\nIDxhcnRpZmFjdElkPmh0dHBtaW1lPC9hcnRpZmFjdElkPgogICAgICA8dmVy\nc2lvbj40LjMuMzwvdmVyc2lvbj4KICAgIDwvZGVwZW5kZW5jeT4KICA8L2Rl\ncGVuZGVuY2llcz4KCiAgPGJ1aWxkPgogICAgPHBsdWdpbnM+CgogICAgICA8\ncGx1Z2luPgogICAgICAgIDxncm91cElkPmNvbS52ZXJzaW9uZXllPC9ncm91\ncElkPgogICAgICAgIDxhcnRpZmFjdElkPnZlcnNpb25leWUtbWF2ZW4tcGx1\nZ2luPC9hcnRpZmFjdElkPgogICAgICAgIDx2ZXJzaW9uPjIuMC4xPC92ZXJz\naW9uPgogICAgICAgIDxjb25maWd1cmF0aW9uPgogICAgICAgICAgICA8IS0t\nIDxiYXNlVXJsPmh0dHBzOi8vd3d3LnZlcnNpb25leWUuY29tPC9iYXNlVXJs\nPiAtLT4KICAgICAgICAgICAgPCEtLTxiYXNlVXJsPmh0dHA6Ly8xMjcuMC4w\nLjE6MzAwMDwvYmFzZVVybD4tLT4KICAgICAgICAgICAgPHByb2plY3RJZD41\nMWUyYWY5M2NiZTJlYjAwMDIwM2RmMjI8L3Byb2plY3RJZD4KICAgICAgICA8\nL2NvbmZpZ3VyYXRpb24+CiAgICAgIDwvcGx1Z2luPgoKICAgICAgPHBsdWdp\nbj4KICAgICAgICA8Z3JvdXBJZD5vcmcuYXBhY2hlLm1hdmVuLnBsdWdpbnM8\nL2dyb3VwSWQ+CiAgICAgICAgPGFydGlmYWN0SWQ+bWF2ZW4tcGx1Z2luLXBs\ndWdpbjwvYXJ0aWZhY3RJZD4KICAgICAgICA8dmVyc2lvbj4zLjI8L3ZlcnNp\nb24+CiAgICAgICAgPGNvbmZpZ3VyYXRpb24+CiAgICAgICAgICA8Z29hbFBy\nZWZpeD52ZXJzaW9uZXllPC9nb2FsUHJlZml4PgogICAgICAgICAgPHNraXBF\ncnJvck5vRGVzY3JpcHRvcnNGb3VuZD50cnVlPC9za2lwRXJyb3JOb0Rlc2Ny\naXB0b3JzRm91bmQ+CiAgICAgICAgPC9jb25maWd1cmF0aW9uPgogICAgICAg\nIDxleGVjdXRpb25zPgogICAgICAgICAgPGV4ZWN1dGlvbj4KICAgICAgICAg\nICAgPGlkPm1vam8tZGVzY3JpcHRvcjwvaWQ+CiAgICAgICAgICAgIDxnb2Fs\ncz4KICAgICAgICAgICAgICA8Z29hbD5kZXNjcmlwdG9yPC9nb2FsPgogICAg\nICAgICAgICA8L2dvYWxzPgogICAgICAgICAgPC9leGVjdXRpb24+CiAgICAg\nICAgICA8ZXhlY3V0aW9uPgogICAgICAgICAgICA8aWQ+aGVscC1nb2FsPC9p\nZD4KICAgICAgICAgICAgPGdvYWxzPgogICAgICAgICAgICAgIDxnb2FsPmhl\nbHBtb2pvPC9nb2FsPgogICAgICAgICAgICA8L2dvYWxzPgogICAgICAgICAg\nPC9leGVjdXRpb24+CiAgICAgICAgPC9leGVjdXRpb25zPgogICAgICA8L3Bs\ndWdpbj4KCiAgICAgIDxwbHVnaW4+CiAgICAgIDxncm91cElkPm9yZy5hcGFj\naGUubWF2ZW4ucGx1Z2luczwvZ3JvdXBJZD4KICAgICAgICA8YXJ0aWZhY3RJ\nZD5tYXZlbi1zb3VyY2UtcGx1Z2luPC9hcnRpZmFjdElkPgogICAgICAgIDx2\nZXJzaW9uPjIuMi4xPC92ZXJzaW9uPgogICAgICAgIDxleGVjdXRpb25zPgog\nICAgICAgICAgICA8ZXhlY3V0aW9uPgogICAgICAgICAgICAgICAgPGlkPmF0\ndGFjaC1zb3VyY2VzPC9pZD4KICAgICAgICAgICAgICAgIDxnb2Fscz4KICAg\nICAgICAgICAgICAgICAgICA8Z29hbD5qYXItbm8tZm9yazwvZ29hbD4KICAg\nICAgICAgICAgICAgIDwvZ29hbHM+CiAgICAgICAgICAgIDwvZXhlY3V0aW9u\nPgogICAgICAgIDwvZXhlY3V0aW9ucz4KICAgICAgPC9wbHVnaW4+CgogICAg\nICA8cGx1Z2luPgogICAgICAgIDxncm91cElkPm9yZy5hcGFjaGUubWF2ZW4u\ncGx1Z2luczwvZ3JvdXBJZD4KICAgICAgICA8YXJ0aWZhY3RJZD5tYXZlbi1q\nYXZhZG9jLXBsdWdpbjwvYXJ0aWZhY3RJZD4KICAgICAgICA8dmVyc2lvbj4y\nLjkuMTwvdmVyc2lvbj4KICAgICAgICA8ZXhlY3V0aW9ucz4KICAgICAgICAg\nICAgPGV4ZWN1dGlvbj4KICAgICAgICAgICAgICAgIDxpZD5hdHRhY2gtamF2\nYWRvY3M8L2lkPgogICAgICAgICAgICAgICAgPGdvYWxzPgogICAgICAgICAg\nICAgICAgICAgIDxnb2FsPmphcjwvZ29hbD4KICAgICAgICAgICAgICAgIDwv\nZ29hbHM+CiAgICAgICAgICAgIDwvZXhlY3V0aW9uPgogICAgICAgIDwvZXhl\nY3V0aW9ucz4KICAgICAgPC9wbHVnaW4+CgogICAgPC9wbHVnaW5zPgogIDwv\nYnVpbGQ+Cgo8L3Byb2plY3Q+Cg==\n","encoding":"base64"}'
+    http_version: 
+  recorded_at: Tue, 13 May 2014 08:45:17 GMT
+recorded_with: VCR 2.9.0
