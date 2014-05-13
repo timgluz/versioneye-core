@@ -26,7 +26,7 @@ class ProjectUpdateService < Versioneye::Service
       end
       project = self.update( project, false )
       if project.out_number > 0
-        p "send out email notification to collaborator #{user.fullname} for #{project.name}."
+        log.info "send out email notification to collaborator #{user.fullname} for #{project.name}."
         ProjectMailer.projectnotification_email( project, user ).deliver
       end
     end
