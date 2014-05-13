@@ -13,12 +13,14 @@ describe ProjectImportService do
   describe 'import_from_github' do
 
     it 'imports from github' do
-      project = ProjectImportService.import_from_github github_user, 'versioneye/versioneye_maven_plugin', 'pom.xml', 'master'
-      project.should_not be_nil
-      project.dependencies.should_not be_empty
-      project.name.should eq('versioneye/versioneye_maven_plugin')
-      project.source.should eq(Project::A_SOURCE_GITHUB)
-      project.api_created.should be_false
+      VCR.use_cassette('import_from_github', allow_playback_repeats: true) do
+        project = ProjectImportService.import_from_github github_user, 'versioneye/versioneye_maven_plugin', 'pom.xml', 'master'
+        project.should_not be_nil
+        project.dependencies.should_not be_empty
+        project.name.should eq('versioneye/versioneye_maven_plugin')
+        project.source.should eq(Project::A_SOURCE_GITHUB)
+        project.api_created.should be_false
+      end
     end
 
     it 'does not import from github because file does not exist' do
