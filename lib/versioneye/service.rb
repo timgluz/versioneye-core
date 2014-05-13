@@ -12,6 +12,7 @@ module Versioneye
     require 'versioneye/services/notification_service'
     require 'versioneye/services/product_service'
     require 'versioneye/services/project_service'
+    require 'versioneye/services/project_import_service'
     require 'versioneye/services/project_update_service'
     require 'versioneye/services/project_parse_service'
     require 'versioneye/services/projectdependency_service'
