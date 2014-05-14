@@ -44,10 +44,19 @@ describe NotificationService do
       count.should eq(2)
     end
 
-    it "sends out 1 notifications, because 1 user is deleted" do
+    it "sends out 1 out of 2 notifications, because 1 user is deleted" do
       user         = UserFactory.create_new 3
       NotificationFactory.create_new user
       user.deleted = true
+      user.save
+      count        = NotificationService.send_notifications
+      count.should eq(1)
+    end
+
+    it "sends out 1 out of 2 notifications, because 1 user has inactive email" do
+      user         = UserFactory.create_new 3
+      NotificationFactory.create_new user
+      user.email_inactive = true
       user.save
       count        = NotificationService.send_notifications
       count.should eq(1)

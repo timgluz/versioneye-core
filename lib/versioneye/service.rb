@@ -10,6 +10,7 @@ module Versioneye
     require 'versioneye/services/dependency_service'
     require 'versioneye/services/git_hub_service'
     require 'versioneye/services/notification_service'
+    require 'versioneye/services/newsletter_service'
     require 'versioneye/services/product_service'
     require 'versioneye/services/project_service'
     require 'versioneye/services/project_import_service'

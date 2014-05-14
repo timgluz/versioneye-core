@@ -17,7 +17,7 @@ class NotificationService < Versioneye::Service
     user = User.find_by_id( id )
     return 0 if user.nil?
 
-    if user.deleted
+    if user.deleted || user.email_inactive == true
       self.remove_notifications user
       return 0
     end
