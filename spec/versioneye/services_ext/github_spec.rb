@@ -86,7 +86,7 @@ describe Github do
 
     it "should return user data when correct credentials" do
       VCR.use_cassette('github_signup', :allow_playback_repeats => true) do
-        user_data = Github.user("3974100548430f742b9716b2e26ba73437fe8028")
+        user_data = Github.user("94593468f5c9e59718a259297")
         user_data.should_not be_nil
         user_data.is_a?(Hash).should be_true
         user_data.has_key?("login").should be_true

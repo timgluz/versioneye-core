@@ -12,38 +12,51 @@ http_interactions:
       User-Agent:
       - Octokit Ruby Gem 3.1.0
       Authorization:
-      - token 3974100548430f742b9716b2e26ba73437fe8028
+      - token 94593468f5c9e59718a259297
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
   response:
     status:
-      code: 401
-      message: Unauthorized
+      code: 200
+      message: OK
     headers:
       Server:
       - GitHub.com
       Date:
-      - Tue, 13 May 2014 16:30:01 GMT
+      - Wed, 14 May 2014 05:23:29 GMT
       Content-Type:
       - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
       Status:
-      - 401 Unauthorized
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4549'
+      X-Ratelimit-Reset:
+      - '1400047207'
+      Cache-Control:
+      - private, max-age=60, s-maxage=60
+      Last-Modified:
+      - Wed, 14 May 2014 05:14:42 GMT
+      Etag:
+      - '"8f2cb5aac25bcc4878fc268cbf8c76b3"'
+      X-Oauth-Scopes:
+      - user:email
+      X-Accepted-Oauth-Scopes:
+      - ''
+      Vary:
+      - Accept, Authorization, Cookie, X-GitHub-OTP
+      - Accept-Encoding
       X-Github-Media-Type:
       - github.v3; format=json
-      X-Ratelimit-Limit:
-      - '60'
-      X-Ratelimit-Remaining:
-      - '54'
-      X-Ratelimit-Reset:
-      - '1400002095'
       X-Xss-Protection:
       - 1; mode=block
       X-Frame-Options:
       - deny
       Content-Security-Policy:
       - default-src 'none'
-      Content-Length:
-      - '83'
       Access-Control-Allow-Credentials:
       - 'true'
       Access-Control-Expose-Headers:
@@ -52,14 +65,20 @@ http_interactions:
       Access-Control-Allow-Origin:
       - "*"
       X-Github-Request-Id:
-      - 2E05132C:3A2D:3171439:53724888
+      - 2E05132C:4952:47806:5372FDD1
       Strict-Transport-Security:
       - max-age=31536000
       X-Content-Type-Options:
       - nosniff
+      X-Served-By:
+      - a1d8c69b807c8e21f06cad9da377d1b0
     body:
       encoding: UTF-8
-      string: '{"message":"Bad credentials","documentation_url":"https://developer.github.com/v3"}'
-    http_version: 
-  recorded_at: Tue, 13 May 2014 16:30:01 GMT
+      string: '{"login":"reiz","id":652130,"avatar_url":"https://avatars.githubusercontent.com/u/652130?","gravatar_id":"11c3ac04d669661020cf80a822cd9620","url":"https://api.github.com/users/reiz","html_url":"https://github.com/reiz","followers_url":"https://api.github.com/users/reiz/followers","following_url":"https://api.github.com/users/reiz/following{/other_user}","gists_url":"https://api.github.com/users/reiz/gists{/gist_id}","starred_url":"https://api.github.com/users/reiz/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/reiz/subscriptions","organizations_url":"https://api.github.com/users/reiz/orgs","repos_url":"https://api.github.com/users/reiz/repos","events_url":"https://api.github.com/users/reiz/events{/privacy}","received_events_url":"https://api.github.com/users/reiz/received_events","type":"User","site_admin":false,"name":"Robert
+        Reiz","company":"VersionEye","blog":"https://www.versioneye.com","location":"Berlin","email":null,"hireable":false,"bio":"CEO
+        @ VersionEye. http://versioneye.com keep tracks of versions. Follow your Software
+        Libraries and get notified about new versions. Follow, Rate and Comment on
+        over 100K Libraries. ","public_repos":31,"public_gists":3,"followers":22,"following":29,"created_at":"2011-03-05T05:19:20Z","updated_at":"2014-05-14T05:14:42Z"}'
+    http_version:
+  recorded_at: Wed, 14 May 2014 05:23:29 GMT
 recorded_with: VCR 2.9.0
