@@ -4,53 +4,6 @@ describe ProjectService do
 
   let(:github_user) { FactoryGirl.create(:github_user)}
 
-  describe "find" do
-    it "returns the project with dependencies" do
-      rc_1 = '200.0.0-RC1'
-      zz_1 = '0.0.1'
-
-      user    = UserFactory.create_new
-      project = ProjectFactory.create_new user
-
-      prod_1  = ProductFactory.create_new 1
-      prod_2  = ProductFactory.create_new 2
-      prod_2.versions = []
-      prod_2.add_version rc_1
-      prod_2.version = rc_1
-      prod_2.save
-      prod_3  = ProductFactory.create_new 3
-
-      dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1000.0.0'}
-      dep_2 = ProjectdependencyFactory.create_new project, prod_2, true, {:version_requested => zz_1, :version_current => rc_1}
-      dep_3 = ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => '0.0.0'}
-
-      project.dependencies.count.should eq(3)
-      project.dependencies.each do |dep|
-        dep.outdated = nil
-        dep.release = nil
-        dep.save
-      end
-
-      project.dependencies.each do |dep|
-        dep.outdated.should be_nil
-        dep.release.should be_nil
-      end
-
-      proj = ProjectService.find project.id.to_s
-      proj.dependencies.count.should eq(3)
-      proj.dependencies.each do |dep|
-        dep.outdated.should_not be_nil
-        dep.release.should_not be_nil
-      end
-
-      d1 = Projectdependency.find dep_1.id.to_s
-      d1.release.should be_true
-
-      d2 = Projectdependency.find dep_2.id.to_s
-      d2.release.should be_false
-    end
-  end
-
   describe "type_by_filename" do
     it "returns RubyGems. OK" do
       url1 = "http://localhost:4567/veye_dev_projects/i5lSWS951IxJjU1rurMg_Gemfile?AWSAccessKeyId=123&Expires=1360525084&Signature=HRPsn%2Bai%2BoSjm8zqwZFRtzxJvvE%3D"
@@ -140,6 +93,137 @@ describe ProjectService do
     it "returns nil for wrong Lein file" do
       described_class.type_by_filename("project.clja").should be_nil
       described_class.type_by_filename("app/project.clj/new").should be_nil
+    end
+
+  end
+
+
+  describe "find" do
+    it "returns the project with dependencies" do
+      rc_1 = '200.0.0-RC1'
+      zz_1 = '0.0.1'
+
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user
+
+      prod_1  = ProductFactory.create_new 1
+      prod_2  = ProductFactory.create_new 2
+      prod_2.versions = []
+      prod_2.add_version rc_1
+      prod_2.version = rc_1
+      prod_2.save
+      prod_3  = ProductFactory.create_new 3
+
+      dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1000.0.0'}
+      dep_2 = ProjectdependencyFactory.create_new project, prod_2, true, {:version_requested => zz_1, :version_current => rc_1}
+      dep_3 = ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => '0.0.0'}
+
+      project.dependencies.count.should eq(3)
+      project.dependencies.each do |dep|
+        dep.outdated = nil
+        dep.release = nil
+        dep.save
+      end
+
+      project.dependencies.each do |dep|
+        dep.outdated.should be_nil
+        dep.release.should be_nil
+      end
+
+      proj = ProjectService.find project.id.to_s
+      proj.dependencies.count.should eq(3)
+      proj.dependencies.each do |dep|
+        dep.outdated.should_not be_nil
+        dep.release.should_not be_nil
+      end
+
+      d1 = Projectdependency.find dep_1.id.to_s
+      d1.release.should be_true
+
+      d2 = Projectdependency.find dep_2.id.to_s
+      d2.release.should be_false
+    end
+  end
+
+
+  describe 'store' do
+
+    it 'stores a project' do
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user, nil, false
+
+      prod_1  = ProductFactory.create_new 1
+      prod_2  = ProductFactory.create_new 2
+      prod_3  = ProductFactory.create_new 3
+
+      dep_1 = ProjectdependencyFactory.create_new project, prod_1, false, {:version_requested => '1.0.0'}
+      dep_2 = ProjectdependencyFactory.create_new project, prod_2, false, {:version_requested => '0.1.0'}
+      dep_3 = ProjectdependencyFactory.create_new project, prod_3, false, {:version_requested => '0.0.0'}
+
+      Product.count.should == 3
+      Project.count.should == 0
+      Projectdependency.count.should == 0
+
+      resp =described_class.store project
+      resp.should be_true
+
+      Product.count.should == 3
+      Project.count.should == 1
+      Projectdependency.count.should == 3
+      Project.first.project_key.should_not be_nil
+    end
+
+    it 'doesnt stores a project' do
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user, nil, false
+
+      Product.count.should == 0
+      Project.count.should == 0
+      Projectdependency.count.should == 0
+
+      resp =described_class.store project
+      resp.should be_false
+
+      Product.count.should == 0
+      Project.count.should == 0
+      Projectdependency.count.should == 0
+    end
+
+  end
+
+
+  describe 'destroy' do
+
+    it 'destroys a project' do
+      owner   = UserFactory.create_new 1023
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user, nil, true
+
+      prod_1  = ProductFactory.create_new 1
+      prod_2  = ProductFactory.create_new 2
+      prod_3  = ProductFactory.create_new 3
+
+      dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1.0.0'}
+      dep_2 = ProjectdependencyFactory.create_new project, prod_2, true, {:version_requested => '0.1.0'}
+      dep_3 = ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => '0.0.0'}
+
+      collaborator = ProjectCollaborator.new(:project_id => project._id,
+                                              :owner_id => owner._id,
+                                              :caller_id => owner._id )
+      collaborator.save
+      project.collaborators << collaborator
+
+      Product.count.should == 3
+      Project.count.should == 1
+      Projectdependency.count.should == 3
+      ProjectCollaborator.count.should == 1
+
+      ProjectService.destroy project.id
+
+      Product.count.should == 3
+      Project.count.should == 0
+      Projectdependency.count.should == 0
+      ProjectCollaborator.count.should == 0
     end
 
   end

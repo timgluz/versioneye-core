@@ -32,7 +32,6 @@ class ProjectService < Versioneye::Service
     return false if project.nil?
 
     project.make_project_key!
-    project.save
     if project.dependencies && !project.dependencies.empty? && project.save
       project.save_dependencies
       return true
@@ -45,6 +44,8 @@ class ProjectService < Versioneye::Service
 
   def self.destroy project_id
     project = Project.find_by_id( project_id )
+    return false if project.nil?
+
     project.remove_dependencies
     project.remove_collaborators
     project.remove
