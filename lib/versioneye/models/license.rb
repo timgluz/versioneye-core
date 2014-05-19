@@ -63,47 +63,47 @@ class License < Versioneye::Model
   private
 
     def ruby_match name
-      name.match(/^Ruby$/i) || name.match(/^Ruby License$/)
+      name.match(/\ARuby\z/i) || name.match(/\ARuby License\z/)
     end
 
     def mit_match name
-      name.match(/^MIT$/i) || name.match(/^The MIT License$/) || name.match(/^MIT License$/)
+      name.match(/\AMIT\z/i) || name.match(/\AThe MIT License\z/) || name.match(/\AMIT License\z/)
     end
 
     def eclipse_match name
-      name.match(/^Eclipse$/i) || name.match(/^Eclipse Public License v1\.0$/) || name.match(/^Eclipse License$/) || name.match(/^Eclipse Public License$/) || name.match(/^Eclipse Public License \- v 1\.0$/)
+      name.match(/\AEclipse\z/i) || name.match(/\AEclipse Public License v1\.0\z/) || name.match(/\AEclipse License\z/) || name.match(/\AEclipse Public License\z/) || name.match(/\AEclipse Public License \- v 1\.0\z/)
     end
 
     def bsd_match name
-      name.match(/^BSD License$/i) || name.match(/^BSD$/)
+      name.match(/\ABSD License\z/i) || name.match(/\ABSD\z/)
     end
 
     def gpl_20_match name
-      name.match(/^GPL\-2$/i) || name.match(/^GPL\-2\.0$/i)  || name.match(/^GPL 2\.0$/i) || name.match(/^GPL 2$/i)
+      name.match(/\AGPL\-2\z/i) || name.match(/\AGPL\-2\.0\z/i)  || name.match(/\AGPL 2\.0\z/i) || name.match(/\AGPL 2\z/i)
     end
 
     def artistic_10_match name
-      name.match(/^Artistic License 1\.0$/i) || name.match(/^Artistic License$/) || name.match(/^Artistic\-1\.0$/) || name.match(/^Artistic 1\.0$/)
+      name.match(/\AArtistic License 1\.0\z/i) || name.match(/\AArtistic License\z/) || name.match(/\AArtistic\-1\.0\z/) || name.match(/\AArtistic 1\.0\z/)
     end
 
     def artistic_20_match name
-      name.match(/^Artistic License 2.0$/i) || name.match(/^Artistic 2.0$/)
+      name.match(/\AArtistic License 2.0\z/i) || name.match(/\AArtistic 2.0\z/)
     end
 
     def apache_license_match name
-      name.match(/^Apache License$/i) || name.match(/^Apache Software Licenses$/i) || name.match(/^Apache Software License$/i)
+      name.match(/\AApache License\z/i) || name.match(/\AApache Software Licenses\z/i) || name.match(/\AApache Software License\z/i)
     end
 
     def apache_license_2_match name
-      name.match(/^Apache License\, Version 2\.0$/i) ||
-      name.match(/^Apache License Version 2\.0$/i) ||
-      name.match(/^The Apache Software License\, Version 2\.0$/i) ||
-      name.match(/^Apache 2$/i) ||
-      name.match(/^Apache\-2$/i) ||
-      name.match(/^Apache\-2\.0$/i) ||
-      name.match(/^Apache 2\.0$/i) ||
-      name.match(/^Apache License 2\.0$/i) ||
-      name.match(/^Apache Software License - Version 2\.0$/i)
+      name.match(/\AApache License\, Version 2\.0\z/i) ||
+      name.match(/\AApache License Version 2\.0\z/i) ||
+      name.match(/\AThe Apache Software License\, Version 2\.0\z/i) ||
+      name.match(/\AApache 2\z/i) ||
+      name.match(/\AApache\-2\z/i) ||
+      name.match(/\AApache\-2\.0\z/i) ||
+      name.match(/\AApache 2\.0\z/i) ||
+      name.match(/\AApache License 2\.0\z/i) ||
+      name.match(/\AApache Software License - Version 2\.0\z/i)
     end
 
 end

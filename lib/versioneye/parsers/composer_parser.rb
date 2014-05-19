@@ -143,7 +143,7 @@ class ComposerParser < CommonParser
       end
       dependency.comperator = "="
 
-    when version.match(/.\*$/)
+    when version.match(/.\*\z/)
       # WildCards. 1.0.* => 1.0.0 | 1.0.2 | 1.0.20
       ver = version.gsub("*", "")
       ver = ver.gsub(" ", "")
@@ -155,7 +155,7 @@ class ComposerParser < CommonParser
       end
       dependency.comperator = "="
 
-    when version.empty? || version.match(/\A\*$/)
+    when version.empty? || version.match(/\A\*\z/)
       # This case is not allowed. But we handle it anyway. Because we are fucking awesome!
       dependency.version_requested = VersionService.newest_version_number( product.versions, dependency.stability )
       dependency.version_label = "*"

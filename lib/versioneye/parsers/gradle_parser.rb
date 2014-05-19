@@ -86,7 +86,7 @@ class GradleParser < CommonParser
       dependency.version_requested = version
       dependency.version_label = version
 
-    elsif version.match(/\.\+$/i) or version.match(/\.$/i)
+    elsif version.match(/\.\+\z/i) or version.match(/\.\z/i)
       # Newest available static version
       # http://www.gradle.org/docs/current/userguide/dependency_management.html#sec:dependency_resolution
       ver = version.gsub('+', '')

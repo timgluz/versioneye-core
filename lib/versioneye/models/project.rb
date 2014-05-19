@@ -98,7 +98,7 @@ class Project < Versioneye::Model
   end
 
   def filename
-    self.s3_filename.to_s.gsub(/^\S+\_/, "")
+    self.s3_filename.to_s.gsub(/\A\S+\_/, "")
   end
 
   def self.private_project_count_by_user user_id

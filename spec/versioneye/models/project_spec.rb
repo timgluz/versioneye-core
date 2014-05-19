@@ -65,14 +65,14 @@ describe Project do
     it "if generates unique project_key if there already exsists similar projects" do
       new_project = ProjectFactory.create_new @test_user
       new_project.valid?.should be_true
-      new_project.project_key.should =~ /(\d+)$/
+      new_project.project_key.should =~ /(\d+)\z/
       new_project.remove
     end
 
     it "if generates unique project_key only once" do
       new_project = ProjectFactory.create_new @test_user
       new_project.valid?.should be_true
-      new_project.project_key.should =~ /(\d+)$/
+      new_project.project_key.should =~ /(\d+)\z/
       project_key = new_project.project_key
       new_project.make_project_key!
       new_project.project_key.should eql(project_key)

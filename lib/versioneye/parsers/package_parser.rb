@@ -156,7 +156,7 @@ class PackageParser < CommonParser
       dependency.comperator = "^"
       dependency.version_label = version
 
-    elsif version.match(/.x$/i)
+    elsif version.match(/.x\z/i)
       # X Version Ranges
       ver = version.gsub("x", "")
       ver = ver.gsub("X", "")

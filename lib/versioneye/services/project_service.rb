@@ -4,15 +4,15 @@ class ProjectService < Versioneye::Service
   def self.type_by_filename filename
     return nil if filename.to_s.empty?
     trimmed_name = filename.split('?')[0]
-    return Project::A_TYPE_RUBYGEMS  if (!(/Gemfile$/ =~ trimmed_name).nil?)        or (!(/Gemfile.lock$/  =~ trimmed_name).nil?)
-    return Project::A_TYPE_COMPOSER  if (!(/composer.json$/ =~ trimmed_name).nil?)  or (!(/composer.lock$/ =~ trimmed_name).nil?)
-    return Project::A_TYPE_PIP       if (!(/requirements.txt$/ =~ trimmed_name).nil?)  or (!(/setup.py$/ =~ trimmed_name).nil?) or (!(/pip.log$/ =~ trimmed_name).nil?)
-    return Project::A_TYPE_NPM       if (!(/package.json$/ =~ trimmed_name).nil?)
-    return Project::A_TYPE_GRADLE    if (!(/.gradle$/ =~ trimmed_name).nil?)
-    return Project::A_TYPE_MAVEN2    if (!(/pom.xml$/ =~ trimmed_name).nil?)  or (!(/pom.json$/ =~ trimmed_name).nil?)
-    return Project::A_TYPE_LEIN      if (!(/project.clj$/ =~ trimmed_name).nil?)
-    return Project::A_TYPE_BOWER     if (!(/bower.json$/ =~ trimmed_name).nil?)
-    return Project::A_TYPE_COCOAPODS if (!(/Podfile$/ =~ trimmed_name).nil?)  or (!(/.podfile$/ =~ trimmed_name).nil?) or (!(/Podfile.lock$/ =~ trimmed_name).nil?)
+    return Project::A_TYPE_RUBYGEMS  if (!(/Gemfile\z/ =~ trimmed_name).nil?)        or (!(/Gemfile.lock\z/  =~ trimmed_name).nil?)
+    return Project::A_TYPE_COMPOSER  if (!(/composer.json\z/ =~ trimmed_name).nil?)  or (!(/composer.lock\z/ =~ trimmed_name).nil?)
+    return Project::A_TYPE_PIP       if (!(/requirements.txt\z/ =~ trimmed_name).nil?)  or (!(/setup.py\z/ =~ trimmed_name).nil?) or (!(/pip.log\z/ =~ trimmed_name).nil?)
+    return Project::A_TYPE_NPM       if (!(/package.json\z/ =~ trimmed_name).nil?)
+    return Project::A_TYPE_GRADLE    if (!(/.gradle\z/ =~ trimmed_name).nil?)
+    return Project::A_TYPE_MAVEN2    if (!(/pom.xml\z/ =~ trimmed_name).nil?)  or (!(/pom.json\z/ =~ trimmed_name).nil?)
+    return Project::A_TYPE_LEIN      if (!(/project.clj\z/ =~ trimmed_name).nil?)
+    return Project::A_TYPE_BOWER     if (!(/bower.json\z/ =~ trimmed_name).nil?)
+    return Project::A_TYPE_COCOAPODS if (!(/Podfile\z/ =~ trimmed_name).nil?)  or (!(/.podfile\z/ =~ trimmed_name).nil?) or (!(/Podfile.lock\z/ =~ trimmed_name).nil?)
     return nil
   end
 

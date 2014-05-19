@@ -50,7 +50,7 @@ class Plan < Versioneye::Model
   end
 
   def self.current_plans
-    Plan.where(name_id: /^02/)
+    Plan.where(name_id: /\A02/)
   end
 
   def self.free_plan

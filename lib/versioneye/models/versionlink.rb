@@ -64,7 +64,7 @@ class Versionlink < Versioneye::Model
 
   def self.create_versionlink language, prod_key, version_number, link, name
     return nil if link.to_s.empty?
-    if link.match(/^http.*/).nil? && link.match(/^git.*/).nil?
+    if link.match(/\Ahttp.*/).nil? && link.match(/\Agit.*/).nil?
       link = "http://#{link}"
     end
     versionlinks = Versionlink.find_version_link(language, prod_key, version_number, link)
@@ -78,7 +78,7 @@ class Versionlink < Versioneye::Model
   end
 
   def get_link
-    return "http://#{self.link}" if self.link.match(/^www.*/) != nil
+    return "http://#{self.link}" if self.link.match(/\Awww.*/) != nil
     self.link
   end
 

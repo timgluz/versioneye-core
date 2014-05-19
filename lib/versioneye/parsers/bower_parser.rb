@@ -213,7 +213,7 @@ class BowerParser < CommonParser
       if newest_version
         version_label = newest_version.version
       else
-        version_label = version_root.gsub(/\.$/, '') #just use prefix
+        version_label = version_root.gsub(/\.\z/, '') #just use prefix
       end
       version_data = {
         version: version_label,

@@ -23,7 +23,7 @@ class Settings
     self.class.class_eval { attr_reader "environment".intern }
 
     settings[environment].each { |name, value|
-      if value && value.is_a?(String) && value.match(/^env_/)
+      if value && value.is_a?(String) && value.match(/\Aenv_/)
         new_val = value.gsub("env_", "")
         if name.eql?("memcache_servers")
           value = eval ENV[new_val]

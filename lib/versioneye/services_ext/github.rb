@@ -335,7 +335,7 @@ class Github < Versioneye::Service
     heads = get_json(url, token)
 
     heads.to_a.each do |head|
-      return head[:object][:sha] if head[:url].match(/heads\/master$/)
+      return head[:object][:sha] if head[:url].match(/heads\/master\z/)
     end
     nil
   end

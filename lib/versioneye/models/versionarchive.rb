@@ -60,7 +60,7 @@ class Versionarchive < Versioneye::Model
   end
 
   def self.add_http( link )
-    if link.match(/^http.*/).nil?
+    if link.match(/\Ahttp.*/).nil?
       link = "http://#{link}"
     end
     link

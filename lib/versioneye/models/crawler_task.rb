@@ -17,6 +17,7 @@ class CrawlerTask < Versioneye::Model
   field :repo_fullname, type: String
   field :registry_name, type: String
   field :tag_name     , type: String
+  field :prod_key     , type: String 
   field :weight       , type: Integer, default: 0 # To prioritize tasks
   field :data         , type: Hash                # Subdocument to keep pre-cached data
   field :crawled_at   , type: DateTime            # When it had last successful crawl

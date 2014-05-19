@@ -91,7 +91,7 @@ class Product < Versioneye::Model
   end
 
   def self.fetch_bower name
-    Product.where(prod_type: Project::A_TYPE_BOWER, name: /^#{name}$/i).first
+    Product.where(prod_type: Project::A_TYPE_BOWER, name: /\A#{name}\z/i).first
   end
 
   # legacy, still used by fall back search and API v1.0
@@ -105,7 +105,7 @@ class Product < Versioneye::Model
 
   # This is slow!! Searches by regex are always slower than exact searches!
   def self.find_by_lang_key_case_insensitiv language, searched_key
-    result = Product.where( prod_key: /^#{searched_key}$/i, language: /^#{language}$/i ).shift
+    result = Product.where( prod_key: /\A#{searched_key}\z/i, language: /\A#{language}\z/i ).shift
   end
 
   def self.find_by_group_and_artifact group, artifact
@@ -179,15 +179,15 @@ class Product < Versioneye::Model
 
   def self.decode_language language
     return nil if language.to_s.strip.empty?
-    return A_LANGUAGE_NODEJS       if language.match(/^node/i)
-    return A_LANGUAGE_CSS          if language.match(/^CSS/i)
-    return A_LANGUAGE_PHP          if language.match(/^php/i)
-    return A_LANGUAGE_OBJECTIVEC   if language.match(/^Objective-C/i)
-    return A_LANGUAGE_JAVASCRIPT   if language.match(/^JavaScript/i)
-    return A_LANGUAGE_COFFEESCRIPT if language.match(/^CoffeeScript/i)
-    return A_LANGUAGE_ACTIONSCRIPT if language.match(/^ActionScript/i)
-    return A_LANGUAGE_TYPESCRIPT   if language.match(/^TypeScript/i)
-    return A_LANGUAGE_LIVESCRIPT   if language.match(/^LiveScript/i)
+    return A_LANGUAGE_NODEJS       if language.match(/\Anode/i)
+    return A_LANGUAGE_CSS          if language.match(/\ACSS/i)
+    return A_LANGUAGE_PHP          if language.match(/\Aphp/i)
+    return A_LANGUAGE_OBJECTIVEC   if language.match(/\AObjective-C/i)
+    return A_LANGUAGE_JAVASCRIPT   if language.match(/\AJavaScript/i)
+    return A_LANGUAGE_COFFEESCRIPT if language.match(/\ACoffeeScript/i)
+    return A_LANGUAGE_ACTIONSCRIPT if language.match(/\AActionScript/i)
+    return A_LANGUAGE_TYPESCRIPT   if language.match(/\ATypeScript/i)
+    return A_LANGUAGE_LIVESCRIPT   if language.match(/\ALiveScript/i)
     return language.capitalize
   end
 
@@ -276,11 +276,11 @@ class Product < Versioneye::Model
   end
 
   def http_links
-    Versionlink.where(language: language, prod_key: self.prod_key, version_id: nil, link: /^http*/).asc(:name)
+    Versionlink.where(language: language, prod_key: self.prod_key, version_id: nil, link: /\Ahttp*/).asc(:name)
   end
 
   def http_version_links
-    Versionlink.where(language: language, prod_key: self.prod_key, version_id: self.version, link: /^http*/ ).asc(:name)
+    Versionlink.where(language: language, prod_key: self.prod_key, version_id: self.version, link: /\Ahttp*/ ).asc(:name)
   end
 
   def archives

@@ -74,7 +74,7 @@ class User < Versioneye::Model
   validates_length_of :username, minimum: 2, maximum: 50, :message => 'length is not ok'
   validates_length_of :fullname, minimum: 2, maximum: 50, :message => 'length is not ok'
 
-  validates_format_of :username, with: /^[a-zA-Z0-9_]+$/
+  validates_format_of :username, with: /\A[a-zA-Z0-9_]+\z/
   validates_format_of :email   , :with => A_EMAIL_REGEX, :message => 'is not valid.'
 
   before_validation :downcase_email
@@ -178,14 +178,14 @@ class User < Versioneye::Model
 
   def self.find_by_username( username )
     return nil if username.nil? || username.strip.empty?
-    User.where( username: /^#{username}$/i ).shift
+    User.where( username: /\A#{username}\z/i ).shift
   end
 
   def self.find_by_email(email)
     return nil if email.nil? || email.strip.empty?
     user = User.where(email: email).shift
     if user.nil?
-      user = User.where(email: /^#{email}$/i).shift
+      user = User.where(email: /\A#{email}\z/i).shift
     end
     user
   end

@@ -16,7 +16,7 @@ class SubmittedUrl < Versioneye::Model
 
   validates :url       , presence: true
   validates :message   , presence: true
-  validates :user_email, format: {with: /^([^@\s]+)@((?:[-a-z0-9]+.)+[a-z]{2,})$/i, :allow_blank => true}
+  validates :user_email, format: {with: /\A([^@\s]+)@((?:[-a-z0-9]+.)+[a-z]{2,})\z/i, :allow_blank => true}
 
   scope :as_unchecked     , where(declined: nil)
   scope :as_checked       , where(:declined.in => [false, true])

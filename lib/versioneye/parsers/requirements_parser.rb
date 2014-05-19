@@ -129,7 +129,7 @@ class RequirementsParser < CommonParser
       dependency.comperator = "="
 
 
-    elsif version.match(/.\*$/)
+    elsif version.match(/.\*\z/)
       # WildCards. 1.0.* => 1.0.0 | 1.0.2 | 1.0.20
       ver = version.gsub("*", "")
       ver = ver.gsub(" ", "")
@@ -141,7 +141,7 @@ class RequirementsParser < CommonParser
       end
       dependency.comperator = "="
 
-    elsif version.empty? || version.match(/\A\*$/)
+    elsif version.empty? || version.match(/\A\*\z/)
       # This case is not allowed. But we handle it anyway. Because we are fucking awesome!
       dependency.version_requested = VersionService.newest_version_number( product.versions, dependency.stability )
       dependency.version_label = "*"
