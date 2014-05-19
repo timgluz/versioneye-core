@@ -58,33 +58,34 @@ class ProjectService < Versioneye::Service
   def self.user_product_index_map user, add_collaborated = true
     indexes = Hash.new
     projects = user.projects
-    return indexes if projects.nil?
 
+    if projects
+      project_prod_index projects, indexes
+    end
+
+    return indexes if add_collaborated == false
+
+    collaborated_projects = Project.by_collaborator(user)
+    if collaborated_projects
+      project_prod_index collaborated_projects, indexes
+    end
+
+    indexes
+  end
+
+  def self.project_prod_index projects, indexes
     projects.each do |project|
       next if project.nil?
+
       project.dependencies.each do |dep|
         next if dep.nil? or dep.product.nil?
+
         product = dep.product
         prod_id = "#{product.language_esc}_#{product.prod_key}"
         indexes[prod_id] = [] unless indexes.has_key?(prod_id)
         indexes[prod_id] << project[:_id].to_s
       end
     end
-
-    collaborated_projects = Project.by_collaborator(user)
-    if add_collaborated and !collaborated_projects.nil?
-      collaborated_projects.each do |project|
-        next if project.nil?
-        project.dependencies.each do |dep|
-          next if dep.nil? or dep.product.nil?
-          product = dep.product
-          prod_id = "#{product.language_esc}_#{product.prod_key}"
-          indexes[prod_id] = [] unless indexes.has_key?(prod_id)
-          indexes[prod_id] << project[:_id].to_s
-        end
-      end
-    end
-
     indexes
   end
 

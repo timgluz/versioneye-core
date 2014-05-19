@@ -319,4 +319,63 @@ describe ProjectService do
     end
   end
 
+
+  describe 'user_product_index_map' do
+
+    it 'returns an empty hash because user has no projects' do
+      user = UserFactory.create_new
+      map = ProjectService.user_product_index_map user
+      map.empty?().should be_true
+    end
+
+    it 'returns an empty hash because user has no projects' do
+      user = UserFactory.create_new
+
+      project_1 = ProjectFactory.create_new user, nil, true
+      project_2 = ProjectFactory.create_new user, nil, true
+
+      prod_1  = ProductFactory.create_new 1
+      prod_2  = ProductFactory.create_new 2
+      prod_3  = ProductFactory.create_new 3
+
+      dep_1 = ProjectdependencyFactory.create_new project_1, prod_1, true, {:version_requested => '1.0.0'}
+      dep_2 = ProjectdependencyFactory.create_new project_2, prod_2, true, {:version_requested => '0.1.0'}
+      dep_3 = ProjectdependencyFactory.create_new project_2, prod_3, true, {:version_requested => '0.0.0'}
+      dep_4 = ProjectdependencyFactory.create_new project_2, prod_1, true, {:version_requested => '0.0.0'}
+
+      map = ProjectService.user_product_index_map user
+      map.empty?().should be_false
+      map.count.should == 3
+
+      key = "#{prod_1.language_esc}_#{prod_1.prod_key}"
+      map[key].count.should == 2
+
+      key = "#{prod_2.language_esc}_#{prod_2.prod_key}"
+      map[key].count.should == 1
+    end
+
+  end
+
+
+  describe 'outdated_dependencies' do
+
+    it 'returns the outdated_dependencies' do
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user, nil, true
+
+      prod_1  = ProductFactory.create_new 1
+      prod_2  = ProductFactory.create_new 2
+      prod_3  = ProductFactory.create_new 3
+
+      dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1000000.0.0'}
+      dep_2 = ProjectdependencyFactory.create_new project, prod_2, true, {:version_requested => '0.0.0'}
+      dep_3 = ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => '0.0.0'}
+
+      outdated_deps = ProjectService.outdated_dependencies project
+      outdated_deps.should_not be_nil
+      outdated_deps.count.should == 2
+    end
+
+  end
+
 end
