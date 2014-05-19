@@ -106,4 +106,27 @@ describe ProjectUpdateService do
 
   end
 
+  describe 'update_from_upload' do
+
+    it 'updates an existing project from a file upload' do
+
+      gemfile = "spec/fixtures/files/Gemfile"
+      file_attachment = Rack::Test::UploadedFile.new(gemfile, "application/octet-stream")
+      file = {'datafile' => file_attachment}
+
+      user = UserFactory.create_new
+      project = ProjectFactory.default user
+      project.s3_filename = 'Gemfile'
+      project.source = Project::A_SOURCE_UPLOAD
+      project.save.should be_true
+      Project.count.should == 1
+
+      project = described_class.update_from_upload project, file, user
+      project.should_not be_nil
+      project.dependencies.count.should > 0
+      Project.count.should == 1
+    end
+
+  end
+
 end

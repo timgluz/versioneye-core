@@ -1,6 +1,15 @@
 class ProjectParseService < Versioneye::Service
 
 
+  def self.project_from file
+    project_name = file['datafile'].original_filename
+    content      = file['datafile'].read
+
+    parser  = parser_for project_name
+    parse_content parser, content, project_name
+  end
+
+
   def self.parser_for file_name
     type   = ProjectService.type_by_filename file_name
     parser = ParserStrategy.parser_for type, file_name

@@ -112,13 +112,13 @@ class ProjectImportService < Versioneye::Service
 
   def self.import_from_upload file, user = nil, api_created = false
     project_name = file['datafile'].original_filename
-    content      = file['datafile'].read
+    project = ProjectParseService.project_from file
 
-    parser  = ProjectParseService.parser_for project_name
-    project = ProjectParseService.parse_content parser, content, project_name
-
-    project.s3_filename = project_name
-    project.name        = project_name
+    if project.name.to_s.empty?
+      project_name = file['datafile'].original_filename
+      project.s3_filename = project_name
+      project.name        = project_name
+    end
     project.source      = Project::A_SOURCE_UPLOAD
     project.user        = user
     project.api_created = api_created
