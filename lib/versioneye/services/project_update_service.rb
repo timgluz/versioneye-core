@@ -51,6 +51,7 @@ class ProjectUpdateService < Versioneye::Service
     return nil if project.nil?
 
     new_project = ProjectParseService.project_from file
+    cache.delete( new_project.id.to_s )
     project.update_from new_project
     project.api_created = api_created
     project
