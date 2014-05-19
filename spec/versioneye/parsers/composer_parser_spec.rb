@@ -2,6 +2,18 @@ require 'spec_helper'
 
 describe ComposerParser do
 
+  describe 'parse_content' do
+
+    it 'parses the content' do
+      cp = CommonParser.new
+      response = cp.fetch_response "https://s3.amazonaws.com/veye_test_env/composer.json"
+      parser  = ComposerParser.new
+      project = parser.parse_content response.body
+      project.should_not be_nil
+    end
+
+  end
+
   describe "parse" do
 
     def fetch_by_name(dependencies, name)

@@ -17,14 +17,15 @@ class ComposerParser < CommonParser
   def parse_content( data )
     return nil if data.nil?
 
-    dependencies = fetch_dependencies data
+    json_content = JSON.parse( data )
+    dependencies = fetch_dependencies json_content
     return nil if dependencies.nil?
 
     project = init_project
     dependencies.each do |key, value|
-      self.process_dependency( key, value, project, data )
+      self.process_dependency( key, value, project, json_content )
     end
-    self.update_project( project, data )
+    self.update_project( project, json_content )
     project
   rescue => e
     print_backtrace e
@@ -33,9 +34,11 @@ class ComposerParser < CommonParser
 
   def fetch_data url
     return nil if url.nil?
+
     response = self.fetch_response(url)
     return nil if response.nil?
-    JSON.parse( response.body )
+
+    response.body
   end
 
   def fetch_dependencies data
