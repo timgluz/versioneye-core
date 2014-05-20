@@ -76,6 +76,18 @@ class UserService < Versioneye::Service
     end
   end
 
+  def self.update_languages
+    User.all.each do |user|
+      products = user.products
+      if products.nil? || products.empty?
+        user.languages = nil
+      else
+        user.languages = user.products.distinct(:language)
+      end
+      user.save
+    end
+  end
+
   def self.create_random_value
     chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
     value = ''

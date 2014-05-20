@@ -47,6 +47,8 @@ class User < Versioneye::Model
   field :stripe_token      , type: String
   field :stripe_customer_id, type: String
 
+  field :languages, type: String
+
   field :email_send_error, type: String
 
   # *** RELATIONS START ***

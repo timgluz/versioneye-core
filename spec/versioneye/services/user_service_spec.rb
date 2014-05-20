@@ -125,4 +125,28 @@ describe UserService do
 
   end
 
+  describe 'update_languages' do
+
+    it 'updates the users languages' do
+      user = UserFactory.create_new
+      user.languages.should be_nil
+      User.count.should == 1
+      UserService.update_languages
+      user.reload
+      user.languages.should be_nil
+
+      product = ProductFactory.create_new 24
+      ProductService.follow product.language, product.prod_key, user
+      UserService.update_languages
+      user.reload
+      user.languages.should_not be_nil
+
+      ProductService.unfollow product.language, product.prod_key, user
+      UserService.update_languages
+      user.reload
+      user.languages.should be_nil
+    end
+
+  end
+
 end
