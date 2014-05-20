@@ -20,6 +20,15 @@ describe NewsletterService do
       described_class.send_newsletter_features.should eq(0)
     end
 
+    it "sends out 0 because user don't want to receive this email" do
+      user = UserFactory.create_new
+      UserNotificationSetting.fetch_or_create_notification_setting user
+      user_notification_setting = user.user_notification_setting
+      user_notification_setting.newsletter_features = nil
+      user_notification_setting.save
+      described_class.send_newsletter_features.should eq(0)
+    end
+
     it "sends out 1 because user is not deleted and want to receive the email" do
       UserFactory.create_new
       described_class.send_newsletter_features.should eq(1)

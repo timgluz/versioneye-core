@@ -8,6 +8,7 @@ class NewsletterService < Versioneye::Service
       next if user.deleted || user.email_inactive
 
       uns = UserNotificationSetting.fetch_or_create_notification_setting( user )
+      next if uns.newsletter_features.nil?
       next if uns.newsletter_features == false
 
       count += self.send_email( user )
