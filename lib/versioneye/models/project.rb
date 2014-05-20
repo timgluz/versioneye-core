@@ -47,7 +47,7 @@ class Project < Versioneye::Model
   field :unknown_number, type: Integer, :default => 0
   field :public        , type: Boolean, :default => false   # visible for everybody
 
-  field :private_project, type: Boolean, :default => false  # private project from GitHub
+  field :private_project, type: Boolean, :default => false  # private project from GitHub/Bitbucket
   field :api_created    , type: Boolean, :default => false  # this project was created through the VersionEye API
 
   validates :name       , presence: true
