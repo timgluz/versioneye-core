@@ -82,8 +82,8 @@ class BowerParser < CommonParser
 
     dependencies = fetch_dependencies( data )
     return nil if dependencies.nil?
-    project = init_project( data )
 
+    project = init_project( data )
     dependencies.each do |package_name, version_label|
       parse_version_label( package_name.to_s.downcase, version_label, project )
     end
