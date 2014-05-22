@@ -23,12 +23,12 @@ describe User do
       billing = @user.fetch_or_create_billing_address
       billing.should_not be_nil
       billing.name.should eql( @user.fullname )
-      BillingAddress.count.should eq(1)
+      BillingAddress.count.should eq(0)
 
       billing_2 = @user.fetch_or_create_billing_address
       billing_2.should_not be_nil
       billing_2.id.to_s.should eql( billing.id.to_s )
-      BillingAddress.count.should eq(1)
+      BillingAddress.count.should eq(0)
     end
   end
 

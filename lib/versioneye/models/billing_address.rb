@@ -11,6 +11,12 @@ class BillingAddress < Versioneye::Model
   field :country, type: String
   field :vat    , type: String
 
+  validates_presence_of :name   , :message => 'is mandatory!'
+  validates_presence_of :street , :message => 'is mandatory!'
+  validates_presence_of :zip    , :message => 'is mandatory!'
+  validates_presence_of :city   , :message => 'is mandatory!'
+  validates_presence_of :country, :message => 'is mandatory!'
+
   belongs_to :user
 
   def update_from_params( params )

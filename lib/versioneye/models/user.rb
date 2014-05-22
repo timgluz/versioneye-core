@@ -363,7 +363,6 @@ class User < Versioneye::Model
     if self.billing_address.nil?
       self.billing_address = BillingAddress.new
       self.billing_address.name = self.fullname
-      self.billing_address.save
     end
     self.billing_address
   end
