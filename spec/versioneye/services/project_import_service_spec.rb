@@ -98,12 +98,12 @@ describe ProjectImportService do
     end
 
     it "allows because each user has 1 private project for free" do
-      Plan.create_default_plans
+      Plan.create_defaults
       described_class.allowed_to_add_project?(github_user, true).should be_true
     end
 
     it "allows because user has a plan and no projects" do
-      Plan.create_default_plans
+      Plan.create_defaults
       plan = Plan.by_name_id( Plan::A_PLAN_PERSONAL_3 )
       user = github_user
       user.plan = plan
@@ -112,7 +112,7 @@ describe ProjectImportService do
     end
 
     it "denies because user has a plan and to many private projects already" do
-      Plan.create_default_plans
+      Plan.create_defaults
       plan = Plan.by_name_id( Plan::A_PLAN_PERSONAL_3 )
       user = github_user
       user.plan = plan
@@ -122,7 +122,7 @@ describe ProjectImportService do
     end
 
     it "allows because user has a plan and to many private projects already, but 1 additional free project" do
-      Plan.create_default_plans
+      Plan.create_defaults
       plan = Plan.by_name_id( Plan::A_PLAN_PERSONAL_3 )
       user = github_user
       user.plan = plan
@@ -133,7 +133,7 @@ describe ProjectImportService do
     end
 
     it "denises because user has a plan and to many private projects already" do
-      Plan.create_default_plans
+      Plan.create_defaults
       plan = Plan.by_name_id( Plan::A_PLAN_PERSONAL_3 )
       user = github_user
       user.plan = plan
@@ -145,7 +145,7 @@ describe ProjectImportService do
     end
 
     it "allows because unlimited projects is true" do
-      Plan.create_default_plans
+      Plan.create_defaults
       plan = Plan.by_name_id( Plan::A_PLAN_PERSONAL_3 )
       user = github_user
       user.plan = plan
