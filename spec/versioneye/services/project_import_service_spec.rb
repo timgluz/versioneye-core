@@ -97,13 +97,14 @@ describe ProjectImportService do
       described_class.allowed_to_add_project?(nil, false).should be_true
     end
 
-    it "denies because user doesn't have a private plan" do
-      described_class.allowed_to_add_project?(github_user, true).should be_false
+    it "allows because each user has 1 private project for free" do
+      Plan.create_default_plans
+      described_class.allowed_to_add_project?(github_user, true).should be_true
     end
 
     it "allows because user has a plan and no projects" do
       Plan.create_default_plans
-      plan = Plan.by_name_id( Plan::A_PLAN_PERSONAL )
+      plan = Plan.by_name_id( Plan::A_PLAN_PERSONAL_3 )
       user = github_user
       user.plan = plan
       user.save
@@ -112,7 +113,7 @@ describe ProjectImportService do
 
     it "denies because user has a plan and to many private projects already" do
       Plan.create_default_plans
-      plan = Plan.by_name_id( Plan::A_PLAN_PERSONAL )
+      plan = Plan.by_name_id( Plan::A_PLAN_PERSONAL_3 )
       user = github_user
       user.plan = plan
       user.save
@@ -122,7 +123,7 @@ describe ProjectImportService do
 
     it "allows because user has a plan and to many private projects already, but 1 additional free project" do
       Plan.create_default_plans
-      plan = Plan.by_name_id( Plan::A_PLAN_PERSONAL )
+      plan = Plan.by_name_id( Plan::A_PLAN_PERSONAL_3 )
       user = github_user
       user.plan = plan
       user.free_private_projects = 1
@@ -133,7 +134,7 @@ describe ProjectImportService do
 
     it "denises because user has a plan and to many private projects already" do
       Plan.create_default_plans
-      plan = Plan.by_name_id( Plan::A_PLAN_PERSONAL )
+      plan = Plan.by_name_id( Plan::A_PLAN_PERSONAL_3 )
       user = github_user
       user.plan = plan
       user.free_private_projects = 1
@@ -145,7 +146,7 @@ describe ProjectImportService do
 
     it "allows because unlimited projects is true" do
       Plan.create_default_plans
-      plan = Plan.by_name_id( Plan::A_PLAN_PERSONAL )
+      plan = Plan.by_name_id( Plan::A_PLAN_PERSONAL_3 )
       user = github_user
       user.plan = plan
       user.free_private_projects = 1

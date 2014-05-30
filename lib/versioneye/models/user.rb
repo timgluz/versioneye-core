@@ -28,7 +28,7 @@ class User < Versioneye::Model
 
   field :promo_code, type: String
   field :refer_name, type: String
-  field :free_private_projects, type: Integer, default: 1
+  field :free_private_projects, type: Integer, default: 0
 
   field :github_id   , type: String
   field :github_login, type: String #username on github
@@ -92,6 +92,7 @@ class User < Versioneye::Model
     encrypt_password if new_record?
     return false if self.terms == false || self.terms == nil
     return false if self.datenerhebung == false || self.datenerhebung == nil
+    self.plan = Plan.free_plan if plan.nil?
     super
   end
 

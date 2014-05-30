@@ -2191,4 +2191,199 @@ http_interactions:
         b21lIG5vaXNlO1xuIiwgInJldmlzaW9uIjogbnVsbCwgInNpemUiOiAtMX19
     http_version: 
   recorded_at: Tue, 13 May 2014 16:28:10 GMT
+- request:
+    method: get
+    uri: https://bitbucket.org/api/1.0/repositories/versioneye_test/fantom_hydra/src/master/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Chrome28 (contact@versioneye.com) (OAuth gem v0.4.7)
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      Authorization:
+      - OAuth oauth_consumer_key="HgSkE62pTT3HmxFGAm", oauth_nonce="PyyPoNW3qNBtTeMVJXI4xiZcPSeiai4WVjLU5oKM8",
+        oauth_signature="ZpLOmXdgnHr2Wd4cSV%2Bdufgo5iQ%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1401434896", oauth_token="YsR6vM5qxmfZtkYt9G", oauth_version="1.0"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.5.10
+      Date:
+      - Fri, 30 May 2014 07:28:16 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Served-By:
+      - app23
+      X-Render-Time:
+      - '0.212707042694'
+      Content-Language:
+      - en
+      Cache-Control:
+      - max-age=0
+      X-Request-Count:
+      - '78'
+      Expires:
+      - Fri, 30 May 2014 07:28:16 GMT
+      Vary:
+      - Authorization, Accept-Language, Cookie
+      X-Frame-Options:
+      - SAMEORIGIN
+      Last-Modified:
+      - Fri, 30 May 2014 07:28:16 GMT
+      X-Static-Version:
+      - 9d3d19e361c2
+      X-Version:
+      - 0d5497cff680
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Content-Type-Options:
+      - nosniff
+    body:
+      encoding: UTF-8
+      string: '{"node": "20b9c1193a16", "path": "/", "directories": [], "files": [{"size":
+        1990, "path": "Gemfile", "timestamp": "2013-11-01T14:36:31Z", "utctimestamp":
+        "2013-11-01 14:36:31+00:00", "revision": "20b9c1193a16"}, {"size": 0, "path":
+        "LICENSE", "timestamp": "2013-11-01T14:29:08Z", "utctimestamp": "2013-11-01
+        14:29:08+00:00", "revision": "a3ffc834e602"}, {"size": 139, "path": "README.md",
+        "timestamp": "2013-11-01T14:36:31Z", "utctimestamp": "2013-11-01 14:36:31+00:00",
+        "revision": "20b9c1193a16"}, {"size": 215, "path": "bower.json", "timestamp":
+        "2013-11-01T14:32:25Z", "utctimestamp": "2013-11-01 14:32:25+00:00", "revision":
+        "69f219d5fd26"}]}'
+    http_version: 
+  recorded_at: Fri, 30 May 2014 07:28:17 GMT
+- request:
+    method: get
+    uri: https://bitbucket.org/api/1.0/repositories/versioneye_test/emptyrepo/branches
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Chrome28 (contact@versioneye.com) (OAuth gem v0.4.7)
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      Authorization:
+      - OAuth oauth_consumer_key="HgSkE62pTT3HmxFGAm", oauth_nonce="EYzt6NjlfIvsUzllQaPH38QzCtXkFbRCPC81mnJQ",
+        oauth_signature="pqBcPNassAiLdib9nZR%2F2mxPC54%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1401436377", oauth_token="YsR6vM5qxmfZtkYt9G", oauth_version="1.0"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.5.10
+      Date:
+      - Fri, 30 May 2014 07:52:58 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '2'
+      Connection:
+      - keep-alive
+      X-Render-Time:
+      - '0.0593547821045'
+      Content-Language:
+      - en
+      Etag:
+      - '"99914b932bd37a50b983c5e7c90ae93b"'
+      X-Request-Count:
+      - '357'
+      X-Served-By:
+      - app16
+      Vary:
+      - Authorization, Accept-Language, Cookie
+      X-Version:
+      - 0d5497cff680
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Static-Version:
+      - 9d3d19e361c2
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Content-Type-Options:
+      - nosniff
+    body:
+      encoding: UTF-8
+      string: "{}"
+    http_version: 
+  recorded_at: Fri, 30 May 2014 07:52:58 GMT
+- request:
+    method: get
+    uri: https://bitbucket.org/api/1.0/repositories/timgluz/clj-sparse/branches
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Chrome28 (contact@versioneye.com) (OAuth gem v0.4.7)
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      Authorization:
+      - OAuth oauth_consumer_key="HgSkE62pTT3HmxFGAm", oauth_nonce="pmp7mRC3ti1PwaLtqEP9z7i7XPzUIpXGkn1EzcC6tk",
+        oauth_signature="l%2B6td7UhK4JgN8zK3wLr56NIvxc%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1401436380", oauth_token="YsR6vM5qxmfZtkYt9G", oauth_version="1.0"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.5.10
+      Date:
+      - Fri, 30 May 2014 07:53:01 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Render-Time:
+      - '0.433815002441'
+      Content-Language:
+      - en
+      X-Request-Count:
+      - '99'
+      X-Served-By:
+      - app23
+      Vary:
+      - Authorization, Accept-Language, Cookie
+      X-Version:
+      - 0d5497cff680
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Static-Version:
+      - 9d3d19e361c2
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Content-Type-Options:
+      - nosniff
+    body:
+      encoding: UTF-8
+      string: '{"master": {"node": "40a6b8a4027d", "files": [{"type": "added", "file":
+        ".gitignore"}, {"type": "added", "file": "README.md"}, {"type": "added", "file":
+        "doc/intro.md"}, {"type": "added", "file": "project.clj"}, {"type": "added",
+        "file": "src/clj_sparse/core.clj"}, {"type": "added", "file": "src/clj_sparse/ops.clj"},
+        {"type": "added", "file": "test/clj_sparse/core_test.clj"}], "raw_author":
+        "TimGLuz <timgluz@gmail.com>", "utctimestamp": "2012-10-18 20:14:30+00:00",
+        "author": "timgluz", "timestamp": "2012-10-18 22:14:30", "raw_node": "40a6b8a4027dc5b9c1eb97519be2b003a21974dd",
+        "parents": [], "branch": "master", "message": "Initial commit. Added first
+        test.\n", "revision": null, "size": -1}}'
+    http_version: 
+  recorded_at: Fri, 30 May 2014 07:53:01 GMT
 recorded_with: VCR 2.9.0
