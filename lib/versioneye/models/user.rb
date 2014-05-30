@@ -28,10 +28,7 @@ class User < Versioneye::Model
 
   field :promo_code, type: String
   field :refer_name, type: String
-  field :free_private_projects, type: Integer, default: 0
-
-  # TODO refactor this in github_account, bitbucket_account
-  # create own models for that und connect them to user
+  field :free_private_projects, type: Integer, default: 1
 
   field :github_id   , type: String
   field :github_login, type: String #username on github
