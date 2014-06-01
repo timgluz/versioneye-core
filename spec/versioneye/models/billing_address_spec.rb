@@ -11,8 +11,8 @@ describe BillingAddress do
       params[:street] = 'HansStrasse 777'
       params[:zip_code] = '12345'
       params[:city] = 'HansCity'
-      params[:country] = 'HansLand'
-      params[:vat] = 'HansVat'
+      params[:country] = 'DE'
+      params[:taxid] = 'HansVat'
 
       ba = described_class.new
       ba.name.should be_nil
@@ -21,7 +21,7 @@ describe BillingAddress do
       ba.zip.should be_nil
       ba.city.should be_nil
       ba.country.should be_nil
-      ba.vat.should be_nil
+      ba.taxid.should be_nil
       ba.save.should be_false
 
       ba.update_from_params params
@@ -31,8 +31,52 @@ describe BillingAddress do
       ba.street.should eq('HansStrasse 777')
       ba.zip.should eq('12345')
       ba.city.should eq('HansCity')
-      ba.country.should eq('HansLand')
-      ba.vat.should eq('HansVat')
+      ba.country.should eq('DE')
+      ba.taxid.should eq('HansVat')
+      ba.save.should be_true
+    end
+
+  end
+
+  describe 'save' do
+
+    it 'doesnt save because company is missing for coroporate type' do
+      ba = described_class.new
+      params = Hash.new
+      params[:type]     = BillingAddress::A_TYPE_COROPORATE
+      params[:name]     = 'Hans'
+      params[:street]   = 'HansStrasse 777'
+      params[:zip_code] = '12345'
+      params[:city]     = 'HansCity'
+      params[:country]  = 'DE'
+      ba.update_from_params params
+      ba.save.should be_false
+    end
+
+    it 'saves because company is coroporate type and has company name' do
+      ba = described_class.new
+      params = Hash.new
+      params[:type]     = BillingAddress::A_TYPE_COROPORATE
+      params[:name]     = 'Hans'
+      params[:street]   = 'HansStrasse 777'
+      params[:zip_code] = '12345'
+      params[:city]     = 'HansCity'
+      params[:country]  = 'DE'
+      params[:company] = 'HansImGlueck'
+      ba.update_from_params params
+      ba.save.should be_true
+    end
+
+    it 'saves because type is individual, company is not mandatory' do
+      ba = described_class.new
+      params = Hash.new
+      params[:type]     = BillingAddress::A_TYPE_INDIVIDUAL
+      params[:name]     = 'Hans'
+      params[:street]   = 'HansStrasse 777'
+      params[:zip_code] = '12345'
+      params[:city]     = 'HansCity'
+      params[:country]  = 'DE'
+      ba.update_from_params params
       ba.save.should be_true
     end
 
