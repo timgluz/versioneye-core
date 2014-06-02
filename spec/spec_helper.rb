@@ -6,6 +6,7 @@ SimpleCov.start do
   add_filter "/spec"
 end
 
+require 'stripe'
 require 'versioneye-core'
 require 'rspec/autorun'
 require 'mongoid'
@@ -47,6 +48,8 @@ Moped.logger.level   = Logger::ERROR
 RSpec.configure do |config|
 
   AWS.config(:s3_endpoint => 'localhost', :s3_port => 4567, :use_ssl => false )
+
+  Stripe.api_key = Settings.instance.stripe_secret_key
 
   config.before(:suite) do
     DatabaseCleaner.strategy = :truncation

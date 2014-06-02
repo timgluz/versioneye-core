@@ -3,6 +3,10 @@ class StripeService < Versioneye::Service
 
   def self.fetch_customer customer_id
     Stripe::Customer.retrieve customer_id
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
   end
 
 
@@ -12,6 +16,10 @@ class StripeService < Versioneye::Service
         :plan => plan_name_id,
         :email => email
       )
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
   end
 
 
@@ -36,18 +44,25 @@ class StripeService < Versioneye::Service
   end
 
 
-  def self.get_invoice invoice_id
-    Stripe::Invoice.retrieve invoice_id
-  end
-
-
   def self.delete customer_id
-    return nil if customer_id.to_s.empty?
+    return false if customer_id.to_s.empty?
+
     customer = self.fetch_customer customer_id
     customer.delete
   rescue => e
     log.error e.message
     log.error e.backtrace.join('\n')
+    false
   end
+
+
+  def self.get_invoice invoice_id
+    Stripe::Invoice.retrieve invoice_id
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
+  end
+
 
 end
