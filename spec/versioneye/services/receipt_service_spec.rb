@@ -34,11 +34,13 @@ describe ReceiptService do
     it 'iterates' do
       token = StripeFactory.token
       token_id = token[:id]
-      personal_plan = Plan.personal_plan
+      personal_plan = Plan.personal_plan_6
       email = 'hans@wur.st'
       customer = StripeService.create_customer token_id, personal_plan.name_id, email
 
       user = UserFactory.create_new 1
+      user.plan = Plan.personal_plan_6
+      user.billing_address = BillingAddressFactory.create_new
       user.stripe_customer_id = customer.id
       user.stripe_token = token_id
       user.save

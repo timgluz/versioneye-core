@@ -69,14 +69,14 @@ class Receipt < Versioneye::Model
   end
 
   def update_from_invoice invoice
-    self.invoice_id   = invoice.id
-    self.invoice_date = Time.at invoice.date
-    self.period_start = Time.at invoice.period_start
-    self.period_end   = Time.at invoice.period_end
-    self.amount       = invoice.amount
-    self.currency     = invoice.currency
-    self.paid         = invoice.paid
-    self.closed       = invoice.closed
+    self.invoice_id   = invoice[:id]
+    self.invoice_date = Time.at invoice[:date]
+    self.period_start = Time.at invoice[:period_start]
+    self.period_end   = Time.at invoice[:period_end]
+    self.amount       = invoice[:amount]
+    self.currency     = invoice[:currency]
+    self.paid         = invoice[:paid]
+    self.closed       = invoice[:closed]
 
     first_line = invoice.lines.first
     plan = first_line[:plan]

@@ -95,6 +95,10 @@ class Plan < Versioneye::Model
     Plan.where(name_id: A_PLAN_PERSONAL_3).shift
   end
 
+  def self.personal_plan_6
+    Plan.where(name_id: A_PLAN_PERSONAL_6).shift
+  end
+
   def self.business_small_plan
     Plan.where(name_id: A_PLAN_BUSINESS_25).shift
   end

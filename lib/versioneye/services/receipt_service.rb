@@ -45,11 +45,11 @@ class ReceiptService < Versioneye::Service
 
   def self.handle_invoice user, invoice
     invoice_id = invoice[:id]
-    receipt = Receipt.where(:invoice_id => invoice_ide).shift
+    receipt = Receipt.where(:invoice_id => invoice_id).shift
     return nil if !receipt.nil?
 
-
-
+    receipt = new_receipt user, invoice
+    receipt
   end
 
 
@@ -57,7 +57,8 @@ class ReceiptService < Versioneye::Service
     receipt = Receipt.new
     receipt.update_from_billing_address user.billing_address
     receipt.update_from_invoice invoice
-
+    receipt.receipt_nr = next_receipt_nr
+    receipt
   end
 
   def self.next_receipt_nr
