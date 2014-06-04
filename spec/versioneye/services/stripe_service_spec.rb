@@ -9,7 +9,7 @@ describe StripeService do
   describe "create_customer" do
 
     it "creates a customer" do
-      token = fetch_token
+      token = StripeFactory.token
       personal_plan = Plan.personal_plan
       email = 'hans@wur.st'
 
@@ -33,7 +33,7 @@ describe StripeService do
   describe 'fetch_customer' do
 
     it 'fetches the correct customer' do
-      token = fetch_token
+      token = StripeFactory.token
       personal_plan = Plan.personal_plan
       email = 'hans@wur.st'
       customer = described_class.create_customer token[:id], personal_plan.name_id, email
@@ -60,7 +60,7 @@ describe StripeService do
   describe 'update_customer' do
 
     it 'updates the customer' do
-      token = fetch_token
+      token = StripeFactory.token
       token_id = token[:id]
       personal_plan = Plan.personal_plan
       email = 'hans@wur.st'
@@ -72,7 +72,7 @@ describe StripeService do
       user.stripe_token = token_id
       user.save.should be_true
 
-      new_token = fetch_token
+      new_token = StripeFactory.token
       token_id = new_token[:id]
       business_plan = Plan.business_small_plan
       cust = described_class.update_customer user, token_id, business_plan.name_id
@@ -92,7 +92,7 @@ describe StripeService do
     it 'creates a new customer' do
       user = UserFactory.create_new 1
       user.stripe_customer_id.should be_nil
-      token = fetch_token
+      token = StripeFactory.token
       token_id = token[:id]
       personal_plan = Plan.personal_plan.name_id
       customer = described_class.create_or_update_customer user, token_id, personal_plan
@@ -102,7 +102,7 @@ describe StripeService do
 
     it 'updates an existing customer' do
       user = UserFactory.create_new 1
-      token = fetch_token
+      token = StripeFactory.token
       token_id = token[:id]
       personal_plan = Plan.personal_plan.name_id
 
@@ -110,7 +110,7 @@ describe StripeService do
       user.stripe_customer_id = customer.id
       user.save.should be_true
 
-      token = fetch_token
+      token = StripeFactory.token
       token_id = token[:id]
       business_plan = Plan.business_small_plan.name_id
       customer = described_class.create_or_update_customer user, token_id, business_plan
@@ -131,7 +131,7 @@ describe StripeService do
     end
 
     it 'returns true' do
-      token = fetch_token
+      token = StripeFactory.token
       personal_plan = Plan.personal_plan
       email = 'hans@wur.st'
 
@@ -160,7 +160,7 @@ describe StripeService do
       described_class.get_invoice('asgasf').should be_nil
     end
     it 'returns the invoice' do
-      token = fetch_token
+      token = StripeFactory.token
       personal_plan = Plan.personal_plan
       email = 'hans@wur.st'
 
@@ -175,17 +175,6 @@ describe StripeService do
       inv.id.should eq(invoice.id)
     end
 
-  end
-
-  def fetch_token
-    Stripe::Token.create(
-        :card => {
-          :number => "4242424242424242",
-          :exp_month => 6,
-          :exp_year => 2015,
-          :cvc => "314"
-        },
-      )
   end
 
 end

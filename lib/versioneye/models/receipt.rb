@@ -15,11 +15,13 @@ class Receipt < Versioneye::Model
 
   # This fields filled from Stripe invoice object.
   field :invoice_id    , type: String
-  field :invoice_date  , type: String
-  field :period_start  , type: String
-  field :period_end    , type: String
-  field :plan_name_id  , type: String
+  field :invoice_date  , type: Time
+  field :period_start  , type: Time
+  field :period_end    , type: Time
+  field :plan_id       , type: String
+  field :plan_name     , type: String
   field :amount        , type: String
+  field :currency      , type: String
   field :paid          , type: Boolean
   field :closed        , type: Boolean
 
@@ -36,6 +38,17 @@ class Receipt < Versioneye::Model
   validates_presence_of :city   , :message => 'is mandatory!'
   validates_presence_of :country, :message => 'is mandatory!'
 
+  # validates_presence_of :invoice_date, :message => 'is mandatory!'
+  # validates_presence_of :period_start, :message => 'is mandatory!'
+  # validates_presence_of :period_end  , :message => 'is mandatory!'
+  # validates_presence_of :plan_id     , :message => 'is mandatory!'
+  # validates_presence_of :plan_name   , :message => 'is mandatory!'
+  # validates_presence_of :amount      , :message => 'is mandatory!'
+  # validates_presence_of :currency    , :message => 'is mandatory!'
+  # validates_presence_of :paid        , :message => 'is mandatory!'
+  # validates_presence_of :closed      , :message => 'is mandatory!'
+
+
   validates :receipt_nr, presence: true,
                          length: {minimum: 1, maximum: 250},
                          uniqueness: true
@@ -45,14 +58,30 @@ class Receipt < Versioneye::Model
                          uniqueness: true
 
   def update_from_billing_address ba
-    self.type = ba.type
-    self.name = ba.name
-    self.street = ba.street
-    self.zip = ba.zip
-    self.city = ba.city
+    self.type    = ba.type
+    self.name    = ba.name
+    self.street  = ba.street
+    self.zip     = ba.zip
+    self.city    = ba.city
     self.country = ba.country
     self.company = ba.company
-    self.taxid = ba.taxid
+    self.taxid   = ba.taxid
+  end
+
+  def update_from_invoice invoice
+    self.invoice_id   = invoice.id
+    self.invoice_date = Time.at invoice.date
+    self.period_start = Time.at invoice.period_start
+    self.period_end   = Time.at invoice.period_end
+    self.amount       = invoice.amount
+    self.currency     = invoice.currency
+    self.paid         = invoice.paid
+    self.closed       = invoice.closed
+
+    first_line = invoice.lines.first
+    plan = first_line.plan
+    self.plan_id      = plan.id
+    self.plan_name    = plan.name
   end
 
 end
