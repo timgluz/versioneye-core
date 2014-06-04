@@ -38,15 +38,15 @@ class Receipt < Versioneye::Model
   validates_presence_of :city   , :message => 'is mandatory!'
   validates_presence_of :country, :message => 'is mandatory!'
 
-  # validates_presence_of :invoice_date, :message => 'is mandatory!'
-  # validates_presence_of :period_start, :message => 'is mandatory!'
-  # validates_presence_of :period_end  , :message => 'is mandatory!'
-  # validates_presence_of :plan_id     , :message => 'is mandatory!'
-  # validates_presence_of :plan_name   , :message => 'is mandatory!'
-  # validates_presence_of :amount      , :message => 'is mandatory!'
-  # validates_presence_of :currency    , :message => 'is mandatory!'
-  # validates_presence_of :paid        , :message => 'is mandatory!'
-  # validates_presence_of :closed      , :message => 'is mandatory!'
+  validates_presence_of :invoice_date, :message => 'is mandatory!'
+  validates_presence_of :period_start, :message => 'is mandatory!'
+  validates_presence_of :period_end  , :message => 'is mandatory!'
+  validates_presence_of :plan_id     , :message => 'is mandatory!'
+  validates_presence_of :plan_name   , :message => 'is mandatory!'
+  validates_presence_of :amount      , :message => 'is mandatory!'
+  validates_presence_of :currency    , :message => 'is mandatory!'
+  validates_presence_of :paid        , :message => 'is mandatory!'
+  validates_presence_of :closed      , :message => 'is mandatory!'
 
 
   validates :receipt_nr, presence: true,
@@ -79,9 +79,9 @@ class Receipt < Versioneye::Model
     self.closed       = invoice.closed
 
     first_line = invoice.lines.first
-    plan = first_line.plan
-    self.plan_id      = plan.id
-    self.plan_name    = plan.name
+    plan = first_line[:plan]
+    self.plan_id      = plan[:id]
+    self.plan_name    = plan[:name]
   end
 
 end

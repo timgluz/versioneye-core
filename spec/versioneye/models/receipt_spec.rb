@@ -6,16 +6,20 @@ describe Receipt do
 
     it 'does not save becaue receipt_nr is missing' do
       ba = BillingAddressFactory.create_new
+      invoice = StripeInvoiceFactory.create_new
       receipt = described_class.new
       receipt.update_from_billing_address ba
+      receipt.update_from_invoice invoice
       receipt.invoice_id = 'tx_1'
       receipt.save.should be_false
     end
 
     it 'does save becaue receipt_nr is there' do
       ba = BillingAddressFactory.create_new
+      invoice = StripeInvoiceFactory.create_new
       receipt = described_class.new
       receipt.update_from_billing_address ba
+      receipt.update_from_invoice invoice
       receipt.invoice_id = 'tx_1'
       receipt.receipt_nr = 1
       receipt.save.should be_true
@@ -23,33 +27,39 @@ describe Receipt do
 
     it 'saves the first one and skips the 2nd because of same receipt_nr' do
       ba = BillingAddressFactory.create_new
+      invoice = StripeInvoiceFactory.create_new
 
       receipt = described_class.new
 
       receipt.update_from_billing_address ba
+      receipt.update_from_invoice invoice
       receipt.receipt_nr = 1
       receipt.invoice_id = 'tx_1'
       receipt.save.should be_true
 
       receipt_2 = described_class.new
       receipt_2.update_from_billing_address ba
+      receipt_2.update_from_invoice invoice
       receipt_2.receipt_nr = 1
-      receipt.invoice_id = 'tx_2'
+      receipt_2.invoice_id = 'tx_2'
       receipt_2.save.should be_false
     end
 
     it 'saves both' do
       ba = BillingAddressFactory.create_new
+      invoice = StripeInvoiceFactory.create_new
 
       receipt = described_class.new
 
       receipt.update_from_billing_address ba
+      receipt.update_from_invoice invoice
       receipt.receipt_nr = 1
       receipt.invoice_id = 'tx_1'
       receipt.save.should be_true
 
       receipt_2 = described_class.new
       receipt_2.update_from_billing_address ba
+      receipt_2.update_from_invoice invoice
       receipt_2.receipt_nr = 2
       receipt_2.invoice_id = 'tx_2'
       receipt_2.save.should be_true
@@ -61,6 +71,7 @@ describe Receipt do
 
     it "updates from billing address" do
       ba = BillingAddressFactory.create_new
+      invoice = StripeInvoiceFactory.create_new
 
       receipt = described_class.new
 
@@ -72,6 +83,7 @@ describe Receipt do
       receipt.taxid.should be_nil
 
       receipt.update_from_billing_address ba
+      receipt.update_from_invoice invoice
 
       receipt.name.should eq('Hans Meier')
       receipt.street.should eq('HanseStrasse 112')
