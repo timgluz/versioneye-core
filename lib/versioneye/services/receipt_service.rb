@@ -1,5 +1,6 @@
 class ReceiptService < Versioneye::Service
 
+
   def self.process_receipts
     count = User.where(:plan_id.ne => nil).count
     return nil if count == 0
@@ -10,19 +11,24 @@ class ReceiptService < Versioneye::Service
     iterations += 1
 
     (0..iterations).each do |i|
-      customers = User.where(:plan_id.ne => nil).skip(skip).limit(per_page)
-
-      handle_customers( customers )
-
+      users = User.where(:plan_id.ne => nil).skip(skip).limit(per_page)
+      handle_users( users )
       skip += per_page
     end
   end
 
-  def self.handle_customers( customers )
-    return nil if customers.nil? || customers.empty?
-    customers.each do |customer|
-      p customer
+
+  def self.handle_users( users )
+    return nil if users.nil? || users.empty?
+    users.each do |user|
+      handle_user( user )
     end
   end
+
+
+  def self.handle_user( user )
+    p user.to_s
+  end
+
 
 end
