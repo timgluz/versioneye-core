@@ -14,8 +14,7 @@ class StripeService < Versioneye::Service
     Stripe::Customer.create(
         :card => stripe_token,
         :plan => plan_name_id,
-        :email => email
-      )
+        :email => email)
   rescue => e
     log.error e.message
     log.error e.backtrace.join('\n')
