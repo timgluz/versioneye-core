@@ -8,7 +8,22 @@ describe ReceiptService do
 
   describe "process_receipts" do
 
-    it "executes without errors" do
+    it "returns nil because db is empty" do
+      customer = described_class.process_receipts
+    end
+
+    it 'iterates' do
+      token = fetch_token
+      token_id = token[:id]
+      personal_plan = Plan.personal_plan
+      email = 'hans@wur.st'
+      customer = StripeService.create_customer token_id, personal_plan.name_id, email
+
+      user = UserFactory.create_new 1
+      user.stripe_customer_id = customer.id
+      user.stripe_token = token_id
+      user.save
+
       customer = described_class.process_receipts
     end
 
