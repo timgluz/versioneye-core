@@ -93,8 +93,8 @@ class ReceiptService < Versioneye::Service
 
 
   def self.compile_html_invoice receipt, compile_pdf = false
-    content = Settings.instance.receipt_content
-    erb = ERB.new(File.read(content))
+    content_file = Settings.instance.receipt_content
+    erb = ERB.new(File.read(content_file))
     html = erb.result(receipt.get_binding)
 
     if compile_pdf
@@ -107,8 +107,8 @@ class ReceiptService < Versioneye::Service
 
   # note for me.. kit.to_file('/Users/robertreiz/invoice.pdf')
   def self.compile_pdf_invoice html, receipt = nil
-    footer  = Settings.instance.receipt_footer
-    kit = PDFKit.new(html, :footer_html => footer, :page_size => 'A4')
+    footer_file = Settings.instance.receipt_footer
+    kit = PDFKit.new(html, :footer_html => footer_file, :page_size => 'A4')
 
     if receipt
       filename = "VersionEye-#{receipt.country}_#{receipt.type}.pdf"
@@ -127,7 +127,7 @@ class ReceiptService < Versioneye::Service
 
 
   def self.email receipt, pdf
-    ReceiptMailer.receipt_email receipt, pdf
+    ReceiptMailer.receipt_email(receipt, pdf).deliver
   end
 
 
