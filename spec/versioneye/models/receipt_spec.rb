@@ -96,4 +96,72 @@ describe Receipt do
 
   end
 
+  describe 'tax_free' do
+    it 'is false for DE' do
+      receipt = described_class.new({:country => 'DE'})
+      receipt.tax_free.should be_false
+    end
+    it 'is false for FR' do
+      receipt = described_class.new({:country => 'FR'})
+      receipt.tax_free.should be_false
+    end
+    it 'is false for FR' do
+      receipt = described_class.new({:country => 'GB'})
+      receipt.tax_free.should be_false
+    end
+    it 'is true for US' do
+      receipt = described_class.new({:country => 'US'})
+      receipt.tax_free.should be_true
+    end
+  end
+
+  describe 'taxable' do
+    it 'is true for DE' do
+      receipt = described_class.new({:country => 'DE', :type => Receipt::A_TYPE_INDIVIDUAL})
+      receipt.taxable.should be_true
+      receipt = described_class.new({:country => 'DE', :type => Receipt::A_TYPE_COROPORATE})
+      receipt.taxable.should be_true
+    end
+    it 'is true for individual in FR' do
+      receipt = described_class.new({:country => 'FR', :type => Receipt::A_TYPE_INDIVIDUAL})
+      receipt.taxable.should be_true
+    end
+    it 'is false for companies in FR' do
+      receipt = described_class.new({:country => 'FR', :type => Receipt::A_TYPE_COROPORATE})
+      receipt.taxable.should be_false
+    end
+    it 'is false for US' do
+      receipt = described_class.new({:country => 'US'})
+      receipt.taxable.should be_false
+    end
+  end
+
+  describe 'reverse_charge' do
+    it 'is false for DE' do
+      receipt = described_class.new({:country => 'DE', :type => Receipt::A_TYPE_INDIVIDUAL})
+      receipt.reverse_charge.should be_false
+      receipt = described_class.new({:country => 'DE', :type => Receipt::A_TYPE_COROPORATE})
+      receipt.reverse_charge.should be_false
+    end
+    it 'is true for individual in FR' do
+      receipt = described_class.new({:country => 'FR', :type => Receipt::A_TYPE_INDIVIDUAL})
+      receipt.reverse_charge.should be_false
+    end
+    it 'is false for companies in FR' do
+      receipt = described_class.new({:country => 'FR', :type => Receipt::A_TYPE_COROPORATE})
+      receipt.reverse_charge.should be_true
+    end
+    it 'is false for US' do
+      receipt = described_class.new({:country => 'US'})
+      receipt.reverse_charge.should be_false
+    end
+  end
+
+  describe 'get_binding' do
+    it 'returns not nil' do
+      receipt = described_class.new({:country => 'US'})
+      receipt.get_binding.should_not be_nil
+    end
+  end
+
 end

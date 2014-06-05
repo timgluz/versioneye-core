@@ -95,4 +95,23 @@ class Receipt < Versioneye::Model
     binding()
   end
 
+  def tax_free
+    !A_EU.keys.include?(country)
+  end
+
+  def taxable
+    return true if country.to_s.eql?('DE')
+    if type.eql?(A_TYPE_INDIVIDUAL) && A_EU.keys.include?(country)
+      return true
+    end
+    false
+  end
+
+  def reverse_charge
+    return false if country.to_s.eql?('DE')
+    return false if !A_EU.keys.include?(country)
+    return true if type.eql?(A_TYPE_COROPORATE) && A_EU.keys.include?(country)
+    return false
+  end
+
 end
