@@ -7,25 +7,6 @@ describe ReceiptService do
     AWS.config(:s3_endpoint => 'localhost', :s3_port => 4567, :use_ssl => false )
   end
 
-  describe 'next_receipt_nr' do
-    it 'returns 1001' do
-      described_class.next_receipt_nr.should == 1001
-    end
-    it 'returns 1002' do
-      nr = described_class.next_receipt_nr
-      ba = BillingAddressFactory.create_new
-      invoice = StripeInvoiceFactory.create_new
-      receipt = Receipt.new
-      receipt.update_from_billing_address ba
-      receipt.update_from_invoice invoice
-      receipt.invoice_id = 'tx_1'
-      receipt.receipt_nr = nr
-      receipt.save.should be_true
-      nr = described_class.next_receipt_nr
-      nr.should == 1002
-    end
-  end
-
   describe "process_receipts" do
 
     it "returns nil because db is empty" do
@@ -46,7 +27,13 @@ describe ReceiptService do
       user.stripe_token = token_id
       user.save
 
-      customer = described_class.process_receipts
+      Receipt.count.should == 0
+      described_class.process_receipts
+      Receipt.count.should == 1
+      rec = Receipt.first
+      rec.plan_id = Plan.personal_plan_6.name_id
+      rec.amount.should eq('600')
+      rec.currency.should eq('eur')
     end
 
   end
@@ -54,6 +41,17 @@ describe ReceiptService do
   describe 'compile_html_invoice' do
     it 'compiles' do
       user = UserFactory.create_new
+      receipt = ReceiptFactory.create_new
+      receipt.user = user
+      described_class.compile_html_invoice receipt
+    end
+  end
+
+  describe 'next_receipt_nr' do
+    it 'returns 1001' do
+      described_class.next_receipt_nr.should == 1001
+    end
+    it 'returns 1002' do
       nr = described_class.next_receipt_nr
       ba = BillingAddressFactory.create_new
       invoice = StripeInvoiceFactory.create_new
@@ -62,8 +60,9 @@ describe ReceiptService do
       receipt.update_from_invoice invoice
       receipt.invoice_id = 'tx_1'
       receipt.receipt_nr = nr
-      receipt.user = user
-      described_class.compile_html_invoice receipt
+      receipt.save.should be_true
+      nr = described_class.next_receipt_nr
+      nr.should == 1002
     end
   end
 

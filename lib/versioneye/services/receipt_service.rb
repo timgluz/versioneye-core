@@ -1,5 +1,8 @@
 class ReceiptService < Versioneye::Service
 
+# TODO
+#  - More tests!
+
   require 'pdfkit'
 
   def self.process_receipts
@@ -41,12 +44,21 @@ class ReceiptService < Versioneye::Service
     invoices.each do |invoice|
       handle_invoice user, invoice
     end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
   end
 
 
   def self.handle_invoice user, invoice
-    invoice_id = invoice[:id]
-    receipt = Receipt.where(:invoice_id => invoice_id).shift
+    return nil if invoice[:paid].to_s.casecmp('true')   != 0 # return if paid = false
+    return nil if invoice[:closed].to_s.casecmp('true') != 0 # return if paid = false
+
+    first_line = invoice.lines.first
+    plan = first_line[:plan]
+    return nil if plan[:amount].to_s.empty?
+
+    receipt = Receipt.where(:invoice_id => invoice[:id]).shift
     return nil if !receipt.nil?
 
     receipt = new_receipt user, invoice
@@ -57,6 +69,9 @@ class ReceiptService < Versioneye::Service
     email receipt, pdf
 
     receipt
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
   end
 
 
@@ -89,6 +104,7 @@ class ReceiptService < Versioneye::Service
   def self.compile_pdf_invoice html
     footer  = 'lib/versioneye/views/receipt/footer.html'
     kit = PDFKit.new(html, :footer_html => footer, :page_size => 'Letter')
+    # kit.to_file('/Users/robertreiz/invoice.pdf')
     kit.to_pdf
   end
 

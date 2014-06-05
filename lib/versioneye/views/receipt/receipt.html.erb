@@ -106,7 +106,13 @@
             <td class="left"><%= invoice_date.strftime("%b %d, %Y") %></td>
             <td class="left"><%= plan_name %></td>
             <td class="right">
-              Price: <%= sprintf("%.2f", (amount.to_i / 100) ) %> <%= currency.upcase %>
+              <% if taxable %>
+                Price:       <%= sprintf("%.2f", (amount.to_i / 100 * 0.81) ) %> <%= currency.upcase %><br/>
+                Tax (Mwst.): <%= sprintf("%.2f", (amount.to_i / 100 * 0.19) ) %> <%= currency.upcase %><br/>
+                Total:       <%= sprintf("%.2f", (amount.to_i / 100       ) ) %> <%= currency.upcase %>
+              <% else %>
+                <%= sprintf("%.2f", (amount.to_i / 100) ) %> <%= currency.upcase %>
+              <% end %>
             </td>
           </tr>
         </tbody>
@@ -124,6 +130,17 @@
         Your VersionEye Team<br/>
         <a href="https://www.versioneye.com">https://www.versioneye.com</a>
       </p>
+
+      <% if reverse_charge %>
+        <br/>
+        <br/>
+        <br/>
+        <p>
+          <i>Reverse Charge - According to Article 194, 196 of Council Directive 2006/112/EEC, VAT liability rests with the service recipient</i>
+        </p>
+        <br/>
+      <% end %>
+
     </div>
   </body>
 </html>

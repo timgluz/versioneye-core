@@ -9,7 +9,11 @@ class StripeInvoiceFactory
     invoice[:currency]     = 'eur'
     invoice[:paid]         = true
     invoice[:closed]       = true
-    invoice[:lines]        = [plan: { :id   => Plan::A_PLAN_PERSONAL_6, :name => 'Personal / Normal' }]
+    invoice[:lines]        = [plan: {
+      :id   => Plan::A_PLAN_PERSONAL_6,
+      :name => 'Personal / Normal',
+      :amount => '600'
+    }]
     invoice
   end
 

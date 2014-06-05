@@ -86,7 +86,7 @@ describe Receipt do
       receipt.update_from_invoice invoice
 
       receipt.name.should eq('Hans Meier')
-      receipt.street.should eq('HanseStrasse 112')
+      receipt.street.should eq('Hansestrasse 112')
       receipt.zip.should eq('12345')
       receipt.city.should eq('Hamburg')
       receipt.country.should eq('DE')

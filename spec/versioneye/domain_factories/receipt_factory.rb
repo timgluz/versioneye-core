@@ -1,6 +1,6 @@
 class ReceiptFactory
 
-  def self.create_new n, persist = false
+  def self.create_new n = 1, persist = false
     nr = ReceiptService.next_receipt_nr
     ba = BillingAddressFactory.create_new
     invoice = StripeInvoiceFactory.create_new

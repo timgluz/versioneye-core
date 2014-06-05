@@ -79,7 +79,6 @@ class Receipt < Versioneye::Model
     self.invoice_date = Time.at invoice[:date]
     self.period_start = Time.at invoice[:period_start]
     self.period_end   = Time.at invoice[:period_end]
-    self.amount       = invoice[:amount]
     self.currency     = invoice[:currency]
     self.paid         = invoice[:paid]
     self.closed       = invoice[:closed]
@@ -88,6 +87,7 @@ class Receipt < Versioneye::Model
     plan = first_line[:plan]
     self.plan_id      = plan[:id]
     self.plan_name    = plan[:name]
+    self.amount       = plan[:amount]
   end
 
   # Expose private binding() method.
