@@ -108,7 +108,7 @@ class ReceiptService < Versioneye::Service
   # note for me.. kit.to_file('/Users/robertreiz/invoice.pdf')
   def self.compile_pdf_invoice html, receipt = nil
     footer  = 'lib/versioneye/views/receipt/footer.html'
-    kit = PDFKit.new(html, :footer_html => footer, :page_size => 'Letter')
+    kit = PDFKit.new(html, :footer_html => footer, :page_size => 'A4')
 
     if receipt
       filename = "VersionEye-#{receipt.country}_#{receipt.type}.pdf"
