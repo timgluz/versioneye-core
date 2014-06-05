@@ -1,5 +1,6 @@
 class ReceiptService < Versioneye::Service
 
+  require 'pdfkit'
 
   def self.process_receipts
     count = User.where(:plan_id.ne => nil).count
@@ -10,7 +11,7 @@ class ReceiptService < Versioneye::Service
     iterations = count / per_page
     iterations += 1
 
-    (0..iterations).each do |i|
+    (0..iterations).each do
       users = User.where(:plan_id.ne => nil).skip(skip).limit(per_page)
       handle_users( users )
       skip += per_page
@@ -49,6 +50,9 @@ class ReceiptService < Versioneye::Service
     return nil if !receipt.nil?
 
     receipt = new_receipt user, invoice
+    html = compile_html_invoice receipt
+    compile_pdf_invoice html
+
     receipt
   end
 
@@ -58,8 +62,10 @@ class ReceiptService < Versioneye::Service
     receipt.update_from_billing_address user.billing_address
     receipt.update_from_invoice invoice
     receipt.receipt_nr = next_receipt_nr
+    receipt.user = user
     receipt
   end
+
 
   def self.next_receipt_nr
     nr = Receipt.max(:receipt_nr)
@@ -67,6 +73,21 @@ class ReceiptService < Versioneye::Service
     nr += 1
     nr
   end
+
+
+  def self.compile_html_invoice receipt
+    content = 'lib/versioneye/views/receipt/receipt.html.erb'
+    erb = ERB.new(File.read(content))
+    erb.result(receipt.get_binding)
+  end
+
+
+  def self.compile_pdf_invoice html
+    footer  = '/Users/robertreiz/workspace/versioneye/versioneye-core/lib/versioneye/views/receipt/footer.html'
+    kit = PDFKit.new(html, :footer_html => footer, :page_size => 'Letter')
+    file = kit.to_file('/Users/robertreiz/invoice.pdf')
+  end
+
 
   # create receipt object
   # compile_html_invoice

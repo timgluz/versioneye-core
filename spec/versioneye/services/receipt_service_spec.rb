@@ -50,4 +50,20 @@ describe ReceiptService do
 
   end
 
+  describe 'compile_html_invoice' do
+    it 'compiles' do
+      user = UserFactory.create_new
+      nr = described_class.next_receipt_nr
+      ba = BillingAddressFactory.create_new
+      invoice = StripeInvoiceFactory.create_new
+      receipt = Receipt.new
+      receipt.update_from_billing_address ba
+      receipt.update_from_invoice invoice
+      receipt.invoice_id = 'tx_1'
+      receipt.receipt_nr = nr
+      receipt.user = user
+      described_class.compile_html_invoice receipt
+    end
+  end
+
 end

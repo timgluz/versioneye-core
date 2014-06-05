@@ -3,6 +3,12 @@ class Receipt < Versioneye::Model
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  require 'versioneye/models/helpers/billing_types'
+  include VersionEye::BillingTypes
+
+  require 'versioneye/models/helpers/countries'
+  include VersionEye::Countries
+
   # Billing Address.
   field :type   , type: String, :default => BillingAddress::A_TYPE_INDIVIDUAL
   field :name   , type: String
@@ -82,6 +88,11 @@ class Receipt < Versioneye::Model
     plan = first_line[:plan]
     self.plan_id      = plan[:id]
     self.plan_name    = plan[:name]
+  end
+
+  # Expose private binding() method.
+  def get_binding
+    binding()
   end
 
 end

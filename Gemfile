@@ -17,6 +17,8 @@ gem 'json'               , '~> 1.8.0'
 gem 'nokogiri'           , '~> 1.6.0'
 gem 'cocoapods-core'     , '~> 0.32.0'
 gem 'actionmailer'       , '~> 3.2.17'
+gem 'pdfkit'             , '~> 0.6.2'
+gem 'wkhtmltopdf-binary' , '~> 0.9.9.1'
 
 group :development do
   gem 'bundler', '~> 1.6.0'

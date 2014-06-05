@@ -6,8 +6,8 @@ class BillingAddress < Versioneye::Model
   require 'versioneye/models/helpers/countries'
   include VersionEye::Countries
 
-  A_TYPE_INDIVIDUAL = 'Individual'
-  A_TYPE_COROPORATE = 'Corporation'
+  require 'versioneye/models/helpers/billing_types'
+  include VersionEye::BillingTypes
 
   field :type   , type: String, :default => A_TYPE_INDIVIDUAL
   field :name   , type: String
