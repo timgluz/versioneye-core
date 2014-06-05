@@ -85,10 +85,10 @@ class ReceiptService < Versioneye::Service
   end
 
 
+  # note for me.. kit.to_file('/Users/robertreiz/invoice.pdf')
   def self.compile_pdf_invoice html
     footer  = 'lib/versioneye/views/receipt/footer.html'
     kit = PDFKit.new(html, :footer_html => footer, :page_size => 'Letter')
-    # file = kit.to_file('/Users/robertreiz/invoice.pdf')
     kit.to_pdf
   end
 
@@ -96,8 +96,6 @@ class ReceiptService < Versioneye::Service
   def self.upload receipt, pdf
     filename = "#{receipt.invoice_id}.pdf"
     S3.store_in_receipt_bucket filename, pdf
-    url = S3.url_for filename
-    p url
   end
 
 
