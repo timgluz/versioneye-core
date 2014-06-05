@@ -46,6 +46,17 @@ describe ReceiptService do
       user = UserFactory.create_new
       receipt = ReceiptFactory.create_new
       receipt.user = user
+      receipt.type = Receipt::A_TYPE_CORPORATE
+      html = described_class.compile_html_invoice receipt
+      html.match("4.86 EUR").should_not be_nil
+      html.match("1.14 EUR").should_not be_nil
+      html.match("6.00 EUR").should_not be_nil
+      html.match('Reverse Charge -').should be_nil
+    end
+    it 'compiles for German corp dude' do
+      user = UserFactory.create_new
+      receipt = ReceiptFactory.create_new
+      receipt.user = user
       html = described_class.compile_html_invoice receipt
       html.match("4.86 EUR").should_not be_nil
       html.match("1.14 EUR").should_not be_nil
