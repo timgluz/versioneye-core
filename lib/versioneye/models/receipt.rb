@@ -110,7 +110,7 @@ class Receipt < Versioneye::Model
   def reverse_charge
     return false if country.to_s.eql?('DE')
     return false if !A_EU.keys.include?(country)
-    return true if type.eql?(A_TYPE_COROPORATE) && A_EU.keys.include?(country)
+    return true if type.eql?(A_TYPE_CORPORATE) && A_EU.keys.include?(country)
     return false
   end
 

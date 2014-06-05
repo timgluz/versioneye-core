@@ -43,7 +43,7 @@ describe BillingAddress do
     it 'doesnt save because company is missing for coroporate type' do
       ba = described_class.new
       params = Hash.new
-      params[:type]     = BillingAddress::A_TYPE_COROPORATE
+      params[:type]     = BillingAddress::A_TYPE_CORPORATE
       params[:name]     = 'Hans'
       params[:street]   = 'HansStrasse 777'
       params[:zip_code] = '12345'
@@ -56,7 +56,7 @@ describe BillingAddress do
     it 'saves because company is coroporate type and has company name' do
       ba = described_class.new
       params = Hash.new
-      params[:type]     = BillingAddress::A_TYPE_COROPORATE
+      params[:type]     = BillingAddress::A_TYPE_CORPORATE
       params[:name]     = 'Hans'
       params[:street]   = 'HansStrasse 777'
       params[:zip_code] = '12345'

@@ -45,7 +45,7 @@ class BillingAddress < Versioneye::Model
 
     # For corporations the company name is mandatory
     def validate_type
-      if self.type.eql?(A_TYPE_COROPORATE) && self.company.to_s.empty?
+      if self.type.eql?(A_TYPE_CORPORATE) && self.company.to_s.empty?
         self.errors.messages[:company] = ["is mandatory"]
         return false
       end

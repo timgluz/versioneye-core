@@ -119,7 +119,7 @@ describe Receipt do
     it 'is true for DE' do
       receipt = described_class.new({:country => 'DE', :type => Receipt::A_TYPE_INDIVIDUAL})
       receipt.taxable.should be_true
-      receipt = described_class.new({:country => 'DE', :type => Receipt::A_TYPE_COROPORATE})
+      receipt = described_class.new({:country => 'DE', :type => Receipt::A_TYPE_CORPORATE})
       receipt.taxable.should be_true
     end
     it 'is true for individual in FR' do
@@ -127,7 +127,7 @@ describe Receipt do
       receipt.taxable.should be_true
     end
     it 'is false for companies in FR' do
-      receipt = described_class.new({:country => 'FR', :type => Receipt::A_TYPE_COROPORATE})
+      receipt = described_class.new({:country => 'FR', :type => Receipt::A_TYPE_CORPORATE})
       receipt.taxable.should be_false
     end
     it 'is false for US' do
@@ -140,7 +140,7 @@ describe Receipt do
     it 'is false for DE' do
       receipt = described_class.new({:country => 'DE', :type => Receipt::A_TYPE_INDIVIDUAL})
       receipt.reverse_charge.should be_false
-      receipt = described_class.new({:country => 'DE', :type => Receipt::A_TYPE_COROPORATE})
+      receipt = described_class.new({:country => 'DE', :type => Receipt::A_TYPE_CORPORATE})
       receipt.reverse_charge.should be_false
     end
     it 'is true for individual in FR' do
@@ -148,7 +148,7 @@ describe Receipt do
       receipt.reverse_charge.should be_false
     end
     it 'is false for companies in FR' do
-      receipt = described_class.new({:country => 'FR', :type => Receipt::A_TYPE_COROPORATE})
+      receipt = described_class.new({:country => 'FR', :type => Receipt::A_TYPE_CORPORATE})
       receipt.reverse_charge.should be_true
     end
     it 'is false for US' do
