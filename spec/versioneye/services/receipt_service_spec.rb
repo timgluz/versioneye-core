@@ -4,6 +4,7 @@ describe ReceiptService do
 
   before(:each) do
     Plan.create_defaults
+    AWS.config(:s3_endpoint => 'localhost', :s3_port => 4567, :use_ssl => false )
   end
 
   describe 'next_receipt_nr' do

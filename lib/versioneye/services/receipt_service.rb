@@ -50,8 +50,11 @@ class ReceiptService < Versioneye::Service
     return nil if !receipt.nil?
 
     receipt = new_receipt user, invoice
-    html = compile_html_invoice receipt
-    compile_pdf_invoice html
+    html    = compile_html_invoice receipt
+    pdf     = compile_pdf_invoice html
+    upload( receipt, pdf )
+    receipt.save
+    email receipt
 
     receipt
   end
@@ -85,16 +88,22 @@ class ReceiptService < Versioneye::Service
   def self.compile_pdf_invoice html
     footer  = 'lib/versioneye/views/receipt/footer.html'
     kit = PDFKit.new(html, :footer_html => footer, :page_size => 'Letter')
-    file = kit.to_file('/Users/robertreiz/invoice.pdf')
+    # file = kit.to_file('/Users/robertreiz/invoice.pdf')
+    kit.to_pdf
   end
 
 
-  # create receipt object
-  # compile_html_invoice
-  # compile_pdf_invoice
-  # upload pdf to s3
-  # persist receipt in db
-  # send out email with pdf receipt attachement
+  def self.upload receipt, pdf
+    filename = "#{receipt.invoice_id}.pdf"
+    S3.store_in_receipt_bucket filename, pdf
+    url = S3.url_for filename
+    p url
+  end
+
+
+  def self.email receipt
+    # TODO implement me
+  end
 
 
 end

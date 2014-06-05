@@ -60,7 +60,15 @@ class S3 < Versioneye::Service
 
 
   def self.store_in_project_bucket filename, bin
-    bucket = AWS.s3.buckets[Settings.instance.s3_projects_bucket]
+    self.store Settings.instance.s3_projects_bucket, filename, bin
+  end
+
+  def self.store_in_receipt_bucket filename, bin
+    self.store Settings.instance.s3_receipt_bucket, filename, bin
+  end
+
+  def self.store bucket, filename, bin
+    bucket = AWS.s3.buckets[ bucket   ]
     obj    = bucket.objects[ filename ]
     obj.write bin
   rescue => e
