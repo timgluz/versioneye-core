@@ -1,8 +1,5 @@
 class ReceiptService < Versioneye::Service
 
-# TODO
-#  - More tests!
-
   require 'pdfkit'
 
   def self.process_receipts
