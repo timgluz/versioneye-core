@@ -32,6 +32,7 @@ require 'versioneye/domain_factories/user_factory'
 require 'versioneye/domain_factories/license_factory'
 require 'versioneye/domain_factories/billing_address_factory'
 require 'versioneye/domain_factories/stripe_factory'
+require 'versioneye/domain_factories/receipt_factory'
 
 require 'versioneye/factories/dependency_factory'
 require 'versioneye/factories/github_repo_factory'

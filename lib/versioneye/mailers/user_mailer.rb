@@ -3,13 +3,6 @@ class UserMailer < ActionMailer::Base
   layout 'email_html_layout'
   default from: "#{Settings.instance.smtp_sender_email}"
 
-  def receipt_email(user)
-    @user = user
-    @plan = user.plan
-    @billing_address = user.billing_address
-    mail(:to => user.email, :subject => 'Receipt')
-  end
-
   def verification_email(user, verification, email)
     @user  = user
     source = fetch_source( user )

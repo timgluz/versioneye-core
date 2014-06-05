@@ -42,6 +42,7 @@ module Versioneye
     require 'versioneye/mailers/submitted_url_mailer'
     require 'versioneye/mailers/subscription_mailer'
     require 'versioneye/mailers/user_mailer'
+    require 'versioneye/mailers/receipt_mailer'
     require 'versioneye/mailers/versioncomment_mailer'
     require 'versioneye/mailers/versioncommentreply_mailer'
 

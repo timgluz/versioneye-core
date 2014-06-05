@@ -54,7 +54,7 @@ class ReceiptService < Versioneye::Service
     pdf     = compile_pdf_invoice html
     upload( receipt, pdf )
     receipt.save
-    email receipt
+    email receipt, pdf
 
     receipt
   end
@@ -94,13 +94,14 @@ class ReceiptService < Versioneye::Service
 
 
   def self.upload receipt, pdf
-    filename = "#{receipt.invoice_id}.pdf"
+    date_str = receipt.invoice_date.strftime("%Y-%M-%d")
+    filename = "#{date_str}-VersionEye-#{receipt.receipt_nr}.pdf"
     S3.store_in_receipt_bucket filename, pdf
   end
 
 
-  def self.email receipt
-    # TODO implement me
+  def self.email receipt, pdf
+    ReceiptMailer.receipt_email receipt, pdf
   end
 
 
