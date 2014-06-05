@@ -6,10 +6,10 @@
       body {
         color: #000000;
         font-family: Courier;
-        font-size: 12px;
+        font-size: 14px;
       }
       body, td, th, input, textarea, select, a {
-        font-size: 12px;
+        font-size: 14px;
       }
       h1{
         font-family: Courier;
@@ -82,6 +82,7 @@
         Receipt Nr: <b><%= receipt_nr %></b><br/>
         Invoice ID: <b><%= invoice_id %></b><br/>
         Account: <b><%= user.username %> (<%= user.email %>)</b><br/>
+        Date: <%= Time.now.strftime("%b %d, %Y") %>
         <br/>
         <br/>
       </div>
@@ -136,7 +137,7 @@
         <br/>
         <br/>
         <p>
-          <i>Reverse Charge - According to Article 194, 196 of Council Directive 2006/112/EEC, VAT liability rests with the service recipient</i>
+          <i>* Reverse Charge - According to Article 194, 196 of Council Directive 2006/112/EEC, VAT liability rests with the service recipient</i>
         </p>
         <br/>
       <% end %>
