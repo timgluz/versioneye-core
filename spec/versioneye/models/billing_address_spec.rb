@@ -62,9 +62,25 @@ describe BillingAddress do
       params[:zip_code] = '12345'
       params[:city]     = 'HansCity'
       params[:country]  = 'DE'
-      params[:company] = 'HansImGlueck'
+      params[:company]  = 'HansImGlueck'
+      params[:taxid]    = 'DE87473'
       ba.update_from_params params
-      ba.save.should be_true
+      resp = ba.save
+      resp.should be_true
+    end
+
+    it 'doesnt save because taxid is missing for coroporate type' do
+      ba = described_class.new
+      params = Hash.new
+      params[:type]     = BillingAddress::A_TYPE_CORPORATE
+      params[:name]     = 'Hans'
+      params[:street]   = 'HansStrasse 777'
+      params[:zip_code] = '12345'
+      params[:city]     = 'HansCity'
+      params[:country]  = 'DE'
+      params[:company]  = 'HansImGlueck'
+      ba.update_from_params params
+      ba.save.should be_false
     end
 
     it 'saves because type is individual, company is not mandatory' do
@@ -78,6 +94,19 @@ describe BillingAddress do
       params[:country]  = 'DE'
       ba.update_from_params params
       ba.save.should be_true
+    end
+
+    it 'does not save because country is wrong' do
+      ba = described_class.new
+      params = Hash.new
+      params[:type]     = BillingAddress::A_TYPE_INDIVIDUAL
+      params[:name]     = 'Hans'
+      params[:street]   = 'HansStrasse 777'
+      params[:zip_code] = '12345'
+      params[:city]     = 'HansCity'
+      params[:country]  = 'DD'
+      ba.update_from_params params
+      ba.save.should be_false
     end
 
   end

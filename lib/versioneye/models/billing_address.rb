@@ -27,7 +27,7 @@ class BillingAddress < Versioneye::Model
 
   belongs_to :user
 
-  before_save :validate_type, :validate_country
+  before_save :validate_country, :validate_company, :validate_taxid
 
   def update_from_params( params )
     self.type    = params[:type] if !params[:type].to_s.empty?
@@ -41,12 +41,31 @@ class BillingAddress < Versioneye::Model
     self.save
   end
 
+  def taxid_mandatory?
+    return true if type.eql?(A_TYPE_CORPORATE) && A_EU.keys.include?(country)
+    return false
+  end
+
+  def company_mandatory?
+    return true if type.eql?(A_TYPE_CORPORATE)
+    return false
+  end
+
   private
 
     # For corporations the company name is mandatory
-    def validate_type
-      if self.type.eql?(A_TYPE_CORPORATE) && self.company.to_s.empty?
+    def validate_company
+      if company_mandatory? && company.to_s.empty?
         self.errors.messages[:company] = ["is mandatory"]
+        return false
+      end
+      true
+    end
+
+    # For corporations in the EU the taxid is mandatory
+    def validate_taxid
+      if taxid_mandatory? && taxid.to_s.empty?
+        self.errors.messages[:taxid] = ["is mandatory"]
         return false
       end
       true
