@@ -104,7 +104,7 @@ class Receipt < Versioneye::Model
   end
 
   def company_mandatory?
-    return true if type.eql?(A_TYPE_CORPORATE) && company.to_s.empty?
+    return true if type.eql?(A_TYPE_CORPORATE)
     return false
   end
 
