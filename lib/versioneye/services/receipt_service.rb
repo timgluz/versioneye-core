@@ -64,8 +64,11 @@ class ReceiptService < Versioneye::Service
     html    = compile_html_invoice receipt
     pdf     = compile_pdf_invoice html
     upload( receipt, pdf )
-    receipt.save
-    email receipt, pdf
+    if receipt.save
+      email receipt, pdf
+    else
+      log.error "Could not persist receipt for user '#{user.id}' and invoice '#{invoicde[:id]}'"
+    end
 
     receipt
   rescue => e
