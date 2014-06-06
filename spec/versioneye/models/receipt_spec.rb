@@ -2,7 +2,81 @@ require 'spec_helper'
 
 describe Receipt do
 
+  describe 'taxid_mandatory?' do
+
+    it 'returns true for company in DE' do
+      receipt = Receipt.new({:country => 'DE', :type => Receipt::A_TYPE_CORPORATE })
+      receipt.taxid_mandatory?().should be_true
+    end
+    it 'returns false for individual in DE' do
+      receipt = Receipt.new({:country => 'DE', :type => Receipt::A_TYPE_INDIVIDUAL })
+      receipt.taxid_mandatory?().should be_false
+    end
+
+    it 'returns true for company in GB' do
+      receipt = Receipt.new({:country => 'GB', :type => Receipt::A_TYPE_CORPORATE })
+      receipt.taxid_mandatory?().should be_true
+    end
+    it 'returns false for individual in GB' do
+      receipt = Receipt.new({:country => 'GB', :type => Receipt::A_TYPE_INDIVIDUAL })
+      receipt.taxid_mandatory?().should be_false
+    end
+
+    it 'returns false for company in US' do
+      receipt = Receipt.new({:country => 'US', :type => Receipt::A_TYPE_CORPORATE })
+      receipt.taxid_mandatory?().should be_false
+    end
+    it 'returns false for individual in US' do
+      receipt = Receipt.new({:country => 'US', :type => Receipt::A_TYPE_INDIVIDUAL })
+      receipt.taxid_mandatory?().should be_false
+    end
+
+  end
+
   describe "save" do
+
+    it 'does not save becaue company is missing' do
+      receipt = described_class.new
+      ba = BillingAddressFactory.create_new
+      invoice = StripeInvoiceFactory.create_new
+      receipt.update_from_billing_address ba
+      receipt.update_from_invoice invoice
+      receipt.invoice_id = 'tx_1'
+      receipt.receipt_nr = 1
+      receipt.type = Receipt::A_TYPE_CORPORATE
+      receipt.country = 'DE'
+      receipt.company = nil
+      receipt.taxid = 'DE08585'
+      receipt.save.should be_false
+    end
+
+    it 'does not save becaue taxid is missing' do
+      receipt = described_class.new
+      ba = BillingAddressFactory.create_new
+      invoice = StripeInvoiceFactory.create_new
+      receipt.update_from_billing_address ba
+      receipt.update_from_invoice invoice
+      receipt.invoice_id = 'tx_1'
+      receipt.receipt_nr = 1
+      receipt.type = Receipt::A_TYPE_CORPORATE
+      receipt.country = 'DE'
+      receipt.taxid = nil
+      receipt.save.should be_false
+    end
+
+    it 'does save becaue taxid is there' do
+      receipt = described_class.new()
+      ba = BillingAddressFactory.create_new
+      invoice = StripeInvoiceFactory.create_new
+      receipt.update_from_billing_address ba
+      receipt.update_from_invoice invoice
+      receipt.invoice_id = 'tx_1'
+      receipt.receipt_nr = 1
+      receipt.type = Receipt::A_TYPE_CORPORATE
+      receipt.country = 'DE'
+      receipt.taxid = 'DE1234'
+      receipt.save.should be_true
+    end
 
     it 'does not save becaue receipt_nr is missing' do
       ba = BillingAddressFactory.create_new

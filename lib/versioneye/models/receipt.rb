@@ -63,6 +63,14 @@ class Receipt < Versioneye::Model
                          length: {minimum: 1, maximum: 250},
                          uniqueness: true
 
+  before_save :pre_process
+
+  def pre_process
+    return false if company_mandatory? && company.to_s.empty?
+    return false if taxid_mandatory? && taxid.to_s.empty?
+    true
+  end
+
   def update_from_billing_address ba
     self.type    = ba.type
     self.name    = ba.name
@@ -90,9 +98,14 @@ class Receipt < Versioneye::Model
     self.amount       = plan[:amount]
   end
 
-  # Expose private binding() method.
-  def get_binding
-    binding()
+  def taxid_mandatory?
+    return true if type.eql?(A_TYPE_CORPORATE) && A_EU.keys.include?(country)
+    return false
+  end
+
+  def company_mandatory?
+    return true if type.eql?(A_TYPE_CORPORATE) && company.to_s.empty?
+    return false
   end
 
   def tax_free
@@ -112,6 +125,11 @@ class Receipt < Versioneye::Model
     return false if !A_EU.keys.include?(country)
     return true if type.eql?(A_TYPE_CORPORATE) && A_EU.keys.include?(country)
     return false
+  end
+
+  # Expose private binding() method.
+  def get_binding
+    binding()
   end
 
 end
