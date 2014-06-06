@@ -26,60 +26,69 @@ class Versionlink < Versioneye::Model
   # false => This link was crawled
   field :manual    , type: Boolean, :default => false
 
+
   def as_json parameter
     {
       :name => self.name,
-      :link => self.link,
-      :created_at => self.created_at.strftime('%Y.%m.%d %I:%M %p'),
-      :updated_at => self.updated_at.strftime('%Y.%m.%d %I:%M %p')
+      :link => self.link
     }
   end
 
+
   def product
-    product = nil
-    if self.language
-      product = Product.find_by_lang_key( self.language, self.prod_key )
-    end
+    product = Product.find_by_lang_key( self.language, self.prod_key )
     return nil if product.nil?
+
     product.version = self.version_id
     product
   end
 
+
   def self.create_project_link( language, prod_key, url, name )
     link = Versionlink.where( language: language, prod_key: prod_key, link: url, :version_id => nil ).shift
     return link if link
+
     versionlink = Versionlink.new({:language => language, :prod_key => prod_key, :link => url, :name => name})
     versionlink.save
     versionlink
   end
 
+
   def self.remove_project_link( language, prod_key, link, manual )
-    return nil if link.nil? || link.strip.empty?
+    return nil if link.to_s.strip.empty?
     Versionlink.where( language: language, prod_key: prod_key, link: link, :version_id => nil, :manual => manual ).delete_all
   end
+
 
   def self.find_version_link(language, prod_key, version_id, link)
     Versionlink.where( language: language, prod_key: prod_key, version_id: version_id, link: link )
   end
 
+
   def self.create_versionlink language, prod_key, version_number, link, name
     return nil if link.to_s.empty?
+
     if link.match(/\Ahttp.*/).nil? && link.match(/\Agit.*/).nil?
       link = "http://#{link}"
     end
+
     versionlinks = Versionlink.find_version_link(language, prod_key, version_number, link)
     if versionlinks && !versionlinks.empty?
       log.info "-- link exist already : #{prod_key} - #{version_number} - #{link} - #{name}"
       return nil
     end
-    versionlink = Versionlink.new({:name => name, :link => link, :language => language,
-      :prod_key => prod_key, :version_id => version_number })
+
+    versionlink = Versionlink.new({:name => name, :link => link,
+      :language => language, :prod_key => prod_key,
+      :version_id => version_number })
     versionlink.save
   end
+
 
   def get_link
     return "http://#{self.link}" if self.link.match(/\Awww.*/) != nil
     self.link
   end
+
 
 end
