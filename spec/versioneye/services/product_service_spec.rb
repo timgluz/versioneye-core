@@ -4,6 +4,21 @@ describe ProductService do
 
   let( :product ) { Product.new }
 
+
+  describe 'search' do
+
+    it 'finds the product' do
+      prod = ProductFactory.create_new(34)
+      prod.save
+      EsProduct.reset
+      EsProduct.index_all
+      results = ProductService.search prod.name
+      results.count.should eq(1)
+    end
+
+  end
+
+
   describe "follow" do
 
     let(:product){ ProductFactory.create_new(34) }
@@ -219,6 +234,167 @@ describe ProductService do
       deps = prod.all_dependencies
       deps.count.should eq(2)
       deps.first.id.to_s.should eq(dep_3.id.to_s)
+    end
+
+  end
+
+
+  describe '' do
+
+    let(:prod_1) { ProductFactory.create_new(34) }
+    let(:prod_2) { ProductFactory.create_new(35) }
+    let(:prod_3) { ProductFactory.create_new(36) }
+    let(:user)   { UserFactory.create_new(34) }
+
+    it 'updates the meta data' do
+      prod_1.save
+      prod_2.save
+      prod_3.save
+      user.save
+
+      dependency = Dependency.new({ :language => prod_2.language,
+        :prod_key => prod_2.prod_key, :prod_version => prod_2.version,
+        :dep_prod_key => prod_1.prod_key, :version => prod_1.version})
+      dependency.save
+
+      Product.where(:followers => 1).count.should == 0
+      Product.where(:used_by_count => 1).count.should == 0
+
+      ProductService.follow prod_1.language, prod_1.prod_key, user
+      ProductService.follow prod_2.language, prod_2.prod_key, user
+
+      ProductService.update_meta_data_global
+
+      Product.where(:followers => 1).count.should == 2
+      Product.where(:used_by_count => 1).count.should == 1
+
+
+    end
+
+  end
+
+
+  describe 'update_followers' do
+
+    let(:prod_1) { ProductFactory.create_new(34) }
+    let(:prod_2) { ProductFactory.create_new(35) }
+    let(:prod_3) { ProductFactory.create_new(36) }
+    let(:user)   { UserFactory.create_new(34) }
+
+    it 'updates the followers' do
+      prod_1.save
+      prod_2.save
+      prod_3.save
+      user.save
+
+      Product.where(:followers => 1).count.should == 0
+
+      ProductService.follow prod_1.language, prod_1.prod_key, user
+      ProductService.follow prod_2.language, prod_2.prod_key, user
+
+      ProductService.update_followers
+
+      Product.where(:followers => 1).count.should == 2
+    end
+
+  end
+
+
+  describe "update_used_by_count" do
+
+    let(:product ) { Product.new(:language => Product::A_LANGUAGE_RUBY, :prod_key => "funny_bunny", :name => 'funny_bunny', :version => "1.0.0") }
+    let(:version1) {FactoryGirl.build(:product_version, version: "0.0.1")}
+    let(:version2) {FactoryGirl.build(:product_version, version: "0.0.2")}
+    let(:version3) {FactoryGirl.build(:product_version, version: "0.1")}
+
+    it "returns 0 because there are no deps" do
+      product_1 = ProductFactory.create_new 1
+      product_1.save
+      described_class.update_used_by_count product_1
+      product_1.used_by_count.should eq(0)
+    end
+
+    it "returns 1 because there is 1 dep" do
+      product_1 = ProductFactory.create_new 1
+      product_2 = ProductFactory.create_new 2
+      dependency = Dependency.new({ :language => product_2.language,
+        :prod_key => product_2.prod_key, :prod_version => product_2.version,
+        :dep_prod_key => product_1.prod_key, :version => product_1.version})
+      dependency.save
+      product_1.save
+      described_class.update_used_by_count product_1
+      product_1.used_by_count.should eq(1)
+    end
+
+    it "returns still 1 because there are 2 deps from 1 product" do
+      product_1 = ProductFactory.create_new 1
+      product_2 = ProductFactory.create_new 2
+      dependency = Dependency.new({ :language => product_2.language,
+        :prod_key => product_2.prod_key, :prod_version => product_2.version,
+        :dep_prod_key => product_1.prod_key, :version => product_1.version})
+      dependency.save
+      dependency2 = Dependency.new({ :language => product_2.language,
+        :prod_key => product_2.prod_key, :prod_version => "dev-master",
+        :dep_prod_key => product_1.prod_key, :version => product_1.version})
+      dependency2.save
+      product_1.save
+      described_class.update_used_by_count product_1
+      product_1.used_by_count.should eq(1)
+    end
+
+    it "returns 2 because there are 2 deps" do
+      product_1 = ProductFactory.create_new 1
+      product_2 = ProductFactory.create_new 2
+      product_3 = ProductFactory.create_new 3
+      dependency = Dependency.new({ :language => product_2.language,
+        :prod_key => product_2.prod_key, :prod_version => product_2.version,
+        :dep_prod_key => product_1.prod_key, :version => product_1.version})
+      dependency.save
+      dependency2 = Dependency.new({ :language => product_3.language,
+        :prod_key => product_3.prod_key, :prod_version => product_3.version,
+        :dep_prod_key => product_1.prod_key, :version => product_1.version})
+      dependency2.save
+      product_1.save
+      described_class.update_used_by_count product_1
+      product_1.used_by_count.should eq(2)
+    end
+
+  end
+
+
+  describe 'update_followers_for' do
+
+    let(:product){ ProductFactory.create_new(34) }
+    let(:user)   { UserFactory.create_new(34) }
+
+    it 'updates the follower count' do
+      Product.count.should == 0
+      response = ProductService.follow product.language, product.prod_key, user
+      response.should be_true
+
+      product = Product.first
+      product.followers = 0
+      product.save.should be_true
+
+      Product.count.should == 1
+      prod = Product.first
+      prod.followers.should == 0
+
+      ProductService.update_followers_for prod
+      prod = Product.first
+      prod.followers.should == 1
+    end
+
+  end
+
+  describe 'remove' do
+
+    it 'removes' do
+      prod_1 = ProductFactory.create_new(37)
+      prod_1.save.should be_true
+      Product.count.should == 1
+      ProductService.remove prod_1
+      Product.count.should == 0
     end
 
   end

@@ -198,6 +198,7 @@ class Product < Versioneye::Model
     grouped = Dependency.where(:language => self.language, :dep_prod_key => self.prod_key).group_by(&:prod_key)
     count = grouped.count
     return nil if count == self.used_by_count
+
     self.used_by_count = count
     self.save if persist
   end

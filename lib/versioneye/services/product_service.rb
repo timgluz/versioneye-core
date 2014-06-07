@@ -7,7 +7,6 @@ class ProductService < Versioneye::Service
   rescue => e
     log.error e.message
     log.error e.backtrace.join('\n')
-    log.info  "Dam. We don't give up. Not yet! Start alternative search on awesome MongoDB."
     MongoProduct.find_by(q, '', group_id, languages, 300).paginate(:page => page_count)
   end
 
@@ -103,9 +102,9 @@ class ProductService < Versioneye::Service
       skip = i * page
       products = Product.all().skip(skip).limit(page)
       products.each do |product|
-        self.update_version_data( product, true )
-        product.update_used_by_count( true )
+        self.update_version_data  product, true
         self.update_followers_for product
+        self.update_used_by_count product, true
       end
     end
   rescue => e
@@ -114,18 +113,27 @@ class ProductService < Versioneye::Service
   end
 
 
+  def self.update_used_by_count product, persist = true
+    grouped = Dependency.where(:language => product.language, :dep_prod_key => product.prod_key).group_by(&:prod_key)
+    count = grouped.count
+    return nil if count == product.used_by_count
+
+    product.used_by_count = count
+    product.save if persist
+  end
+
+
   def self.update_followers
     products = Product.where( :'user_ids.0' => {'$exists' => true} )
     products.each do |product|
-      product.followers = product.users.count
-      product.save
-      log.info "#{product.name} has #{product.followers} followers"
+      self.update_followers_for product
     end
-    log.info "#{products.count} products updated."
   end
+
 
   def self.update_followers_for product
     return nil if product.followers == product.user_ids.count
+
     product.followers = product.user_ids.count
     product.save
   end
