@@ -163,16 +163,18 @@ class User < Versioneye::Model
     self.username = name
   end
 
+
   def self.activate!(verification)
-    return false if verification.nil? || verification.strip.empty?
+    return false if verification.to_s.strip.empty?
+
     user = User.where(verification: verification).shift
-    if user
-      user.verification = nil
-      user.save
-      return true
-    end
-    return false
+    return false if user.nil?
+
+    user.verification = nil
+    user.save
+    return true
   end
+
 
   def activated?
     verification.nil?
@@ -193,16 +195,8 @@ class User < Versioneye::Model
   end
 
   def self.find_by_id( id )
-    return nil if id.nil?
+    return nil if id.to_s.empty?
     return User.find(id.to_s)
-  rescue => e
-    log.error e.message
-    log.error e.backtrace.join("\n")
-    nil
-  end
-
-  def self.find_by_ids( ids )
-    User.where(:id.in => ids)
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")

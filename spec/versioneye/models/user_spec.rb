@@ -3,6 +3,7 @@ require 'spec_helper'
 describe User do
 
   let(:github_user) { FactoryGirl.create(:github_user)}
+  let(:bitbucket_user) { FactoryGirl.create(:bitbucket_user)}
 
   before(:each) do
     User.destroy_all
@@ -24,7 +25,50 @@ describe User do
     end
   end
 
+  describe 'github_account_connected' do
+    it 'is connected' do
+      github_user.github_id = "asgas"
+      github_user.github_token = 'asgasgaga'
+      github_user.github_account_connected?().should be_true
+    end
+    it 'is not connected' do
+      github_user.github_id = nil
+      github_user.github_token = nil
+      github_user.github_account_connected?().should be_false
+    end
+  end
+
+  describe 'bitbucket_account_connected' do
+    it 'is connected' do
+      github_user.bitbucket_id = "asgas"
+      github_user.bitbucket_token = 'asgasgaga'
+      github_user.bitbucket_account_connected?().should be_true
+    end
+    it 'is not connected' do
+      github_user.bitbucket_id = nil
+      github_user.bitbucket_token = nil
+      github_user.bitbucket_account_connected?().should be_false
+    end
+  end
+
+  describe 'find_all' do
+    it 'finds something' do
+      User.destroy_all
+      User.send  :include, WillPaginateMongoid::MongoidPaginator
+      user_1 = UserFactory.create_new 1, true
+      user_2 = UserFactory.create_new 2, true
+      user_3 = UserFactory.create_new 3, true
+      users = User.find_all(1)
+      users.count.should == 3
+    end
+  end
+
   describe "activate!" do
+    it "does not activate because of false input" do
+      User.activate!(nil).should be_false
+      User.activate!('').should be_false
+      User.activate!('asgasgasga').should be_false
+    end
     it "activates a user" do
       github_user.create_verification
       github_user.save
@@ -224,6 +268,25 @@ describe User do
     end
   end
 
+  describe "find_by_bitbucket_id" do
+    it "doesn't find by bitbucket id" do
+      User.find_by_bitbucket_id("agfgasasgasfgasfg").should be_nil
+    end
+    it "returns nil for nil" do
+      User.find_by_bitbucket_id( nil ).should be_nil
+    end
+    it "returns nil for empty string" do
+      User.find_by_bitbucket_id( "   " ).should be_nil
+    end
+    it "does find by bitbucket_id" do
+      bitbucket_user
+      user = User.find_by_bitbucket_id("versioneye_test")
+      user.should_not be_nil
+      user.bitbucket_id.eql?(bitbucket_user.bitbucket_id).should be_true
+      user.id.eql?(bitbucket_user.id).should be_true
+    end
+  end
+
   describe "authenticate" do
     it "doesn't authenticate" do
       User.authenticate("agfasgasfgasfg", "agsasf").should be_nil
@@ -244,6 +307,18 @@ describe User do
       user = User.authenticate_with_salt(github_user.id, github_user.salt)
       user.should_not be_nil
       user.id.eql?(github_user.id).should be_true
+    end
+  end
+
+  describe 'authenticate_with_apikey' do
+    it 'auths' do
+      user = UserFactory.create_new 456
+      user.save.should be_true
+      api = Api.create_new user
+      api.save.should be_true
+      us = User.authenticate_with_apikey api.api_key
+      us.should_not be_nil
+      us.id.to_s.should eq(user.id.to_s)
     end
   end
 

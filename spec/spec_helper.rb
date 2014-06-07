@@ -14,6 +14,7 @@ require 'database_cleaner'
 require 'rubygems'
 require 'bundler'
 require 'factory_girl'
+require 'will_paginate_mongoid'
 
 require 'vcr'
 require 'webmock/rspec'

@@ -19,6 +19,7 @@ gem 'cocoapods-core'     , '~> 0.33.0'
 gem 'actionmailer'       , '~> 3.2.17'
 gem 'pdfkit'             , '~> 0.6.2'
 gem 'wkhtmltopdf-binary' , '~> 0.9.9.1'
+gem 'will_paginate_mongoid', '2.0.1'
 
 group :development do
   gem 'bundler', '~> 1.6.0'
