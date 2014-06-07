@@ -19,6 +19,8 @@ class ParserStrategy
       when Project::A_TYPE_COCOAPODS
         if url.match(/Podfile.lock/)
           return PodfilelockParser.new
+        elsif url.match(/\.podspec/i)
+          return CocoapodsPodspecParser.new
         else
           return PodfileParser.new
         end
@@ -46,16 +48,12 @@ class ParserStrategy
           return ComposerParser.new
         end
 
-      when Project::A_TYPE_COCOAPODS
-        if url.match(/\.podspec/i)
-          return CocoapodsPodspecParser.new
-        else
-          return PodFileParser.new
-        end
       when Project::A_TYPE_BOWER
         return BowerParser.new
+
       else
-      nil
+        nil
+
     end
   end
 end
