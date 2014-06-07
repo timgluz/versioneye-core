@@ -7,7 +7,9 @@ class UserEmail < Versioneye::Model
   field :email       , type: String
   field :verification, type: String
 
-  validates_format_of :email, with: User::A_EMAIL_REGEX
+  validates_presence_of :email, :message => 'is mandatory!'
+  validates_format_of   :email, with: User::A_EMAIL_REGEX
+
 
   def verified?
     self.verification.nil?
@@ -24,13 +26,13 @@ class UserEmail < Versioneye::Model
 
   def self.activate!(verification)
     return false if verification.nil? || verification.strip.empty?
+
     user_email = UserEmail.where(verification: verification).shift
-    if user_email
-      user_email.verification = nil
-      user_email.save
-      return true
-    end
-    return false
+    return false if user_email.nil?
+
+    user_email.verification = nil
+    user_email.save
+    return true
   end
 
   private
