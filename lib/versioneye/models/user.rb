@@ -55,7 +55,6 @@ class User < Versioneye::Model
   belongs_to :plan
   has_one    :billing_address
   has_one    :user_notification_setting
-  has_one    :testimonial
   has_many   :projects
   has_many   :github_repos
   has_many   :bitbucket_repos

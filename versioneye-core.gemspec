@@ -87,7 +87,6 @@ Gem::Specification.new do |s|
     "lib/versioneye/models/searchlog.rb",
     "lib/versioneye/models/security_notification.rb",
     "lib/versioneye/models/submitted_url.rb",
-    "lib/versioneye/models/testimonial.rb",
     "lib/versioneye/models/user.rb",
     "lib/versioneye/models/user_email.rb",
     "lib/versioneye/models/user_notification_setting.rb",
@@ -415,4 +414,3 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<jeweler>, ["~> 2.0.1"])
   end
 end
-

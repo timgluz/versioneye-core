@@ -38,7 +38,6 @@ module Versioneye
     require 'versioneye/models/searchlog'
     require 'versioneye/models/security_notification'
     require 'versioneye/models/submitted_url'
-    require 'versioneye/models/testimonial'
     require 'versioneye/models/user'
     require 'versioneye/models/user_email'
     require 'versioneye/models/user_notification_setting'

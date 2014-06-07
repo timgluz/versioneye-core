@@ -28,28 +28,6 @@ class Userlinkcollection < Versioneye::Model
     stackoverflow_empty? && twitter_empty? && facebook_empty?
   end
 
-  def convert_to_abs
-    if self.linkedin && !self.linkedin.empty?
-      self.linkedin = "#{A_LINKEDIN}#{self.linkedin}"
-    end
-    if self.xing && !self.xing.empty?
-      self.xing = "#{A_XING}#{self.xing}"
-    end
-    if self.github && !self.github.empty?
-      self.github = "#{A_GITHUB}#{self.github}"
-    end
-    if self.stackoverflow && !self.stackoverflow.empty?
-      self.stackoverflow = "#{A_STACKOVERFLOW}#{self.stackoverflow}"
-    end
-    if self.twitter && !self.twitter.empty?
-      self.twitter = "#{A_TWITTER}#{self.twitter}"
-    end
-    if self.facebook && !self.facebook.empty?
-      self.facebook = "#{A_FACEBOOK}#{self.facebook}"
-    end
-    self.save()
-  end
-
   def linkedin_empty?
     self.linkedin.nil? || self.linkedin.empty? || self.linkedin.eql?(A_LINKEDIN)
   end
