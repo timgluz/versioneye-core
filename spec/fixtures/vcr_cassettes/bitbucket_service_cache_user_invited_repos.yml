@@ -2531,4 +2531,69 @@ http_interactions:
       string: "{}"
     http_version: 
   recorded_at: Sat, 07 Jun 2014 13:12:26 GMT
+- request:
+    method: get
+    uri: https://bitbucket.org/api/1.0/repositories/timgluz/clj-sparse/branches
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Chrome28 (contact@versioneye.com) (OAuth gem v0.4.7)
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      Authorization:
+      - OAuth oauth_consumer_key="HgSkE62pTT3HmxFGAm", oauth_nonce="x0NMFYxFFOCdUleHkDnkyJ5yxwHAV4C2GanqdXB6VXA",
+        oauth_signature="9%2B9s7qEar4%2B1BAmBfMOsqQuBOWY%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1402161057", oauth_token="YsR6vM5qxmfZtkYt9G", oauth_version="1.0"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.5.10
+      Date:
+      - Sat, 07 Jun 2014 17:10:58 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Render-Time:
+      - '0.357260942459'
+      Content-Language:
+      - en
+      X-Request-Count:
+      - '460'
+      X-Served-By:
+      - app13
+      Vary:
+      - Authorization, Accept-Language, Cookie
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Static-Version:
+      - bab2ab1c12db
+      X-Version:
+      - 227c44eb44ed
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Content-Type-Options:
+      - nosniff
+    body:
+      encoding: UTF-8
+      string: '{"master": {"node": "40a6b8a4027d", "files": [{"type": "added", "file":
+        ".gitignore"}, {"type": "added", "file": "README.md"}, {"type": "added", "file":
+        "doc/intro.md"}, {"type": "added", "file": "project.clj"}, {"type": "added",
+        "file": "src/clj_sparse/core.clj"}, {"type": "added", "file": "src/clj_sparse/ops.clj"},
+        {"type": "added", "file": "test/clj_sparse/core_test.clj"}], "raw_author":
+        "TimGLuz <timgluz@gmail.com>", "utctimestamp": "2012-10-18 20:14:30+00:00",
+        "author": "timgluz", "timestamp": "2012-10-18 22:14:30", "raw_node": "40a6b8a4027dc5b9c1eb97519be2b003a21974dd",
+        "parents": [], "branch": "master", "message": "Initial commit. Added first
+        test.\n", "revision": null, "size": -1}}'
+    http_version: 
+  recorded_at: Sat, 07 Jun 2014 17:10:58 GMT
 recorded_with: VCR 2.9.2

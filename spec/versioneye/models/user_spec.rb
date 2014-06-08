@@ -360,6 +360,17 @@ describe User do
     end
   end
 
+  describe "password_valid" do
+    it "is not valid" do
+      github_user.password_valid?("passwordasgfa").should be_false
+    end
+    it "does update the password" do
+      UserService.reset_password( github_user )
+      github_user.update_password(github_user.verification, "newpassword").should be_true
+      github_user.password_valid?("newpassword").should be_true
+    end
+  end
+
   describe "create_username" do
 
     it "does create a username" do

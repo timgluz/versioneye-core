@@ -8,10 +8,6 @@ class UserService < Versioneye::Service
     return []
   end
 
-  def self.create_random_token(length = 25)
-    SecureRandom.urlsafe_base64(length)
-  end
-
   def self.valid_user?(user, flash)
     unless User.email_valid?(user.email)
       flash[:error] = 'page_signup_error_email'
@@ -88,11 +84,17 @@ class UserService < Versioneye::Service
     end
   end
 
-  def self.create_random_value
-    chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-    value = ''
-    10.times { value << chars[rand(chars.size)] }
-    value
-  end
+  private
+
+    def self.create_random_token(length = 25)
+      SecureRandom.urlsafe_base64(length)
+    end
+
+    def self.create_random_value
+      chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+      value = ''
+      10.times { value << chars[rand(chars.size)] }
+      value
+    end
 
 end
