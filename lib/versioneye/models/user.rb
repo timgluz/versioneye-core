@@ -379,8 +379,8 @@ class User < Versioneye::Model
 
   private
 
-    def create_random_token(length = 25)
-      SecureRandom.urlsafe_base64(length)
+    def downcase_email
+      self.email = self.email.downcase if self.email.present?
     end
 
     def create_random_value
@@ -388,10 +388,6 @@ class User < Versioneye::Model
       value = ""
       10.times { value << chars[rand(chars.size)] }
       value
-    end
-
-    def downcase_email
-      self.email = self.email.downcase if self.email.present?
     end
 
     def make_salt
