@@ -1,7 +1,7 @@
 class VersioncommentMailer < ActionMailer::Base
 
   layout 'email_html_layout'
-  default from: "#{Settings.instance.smtp_sender_email}"
+  default from: "\"#{Settings.instance.smtp_sender_name}\" <#{Settings.instance.smtp_sender_email}>"
 
   def versioncomment_email(product, follower, user, comment)
     @prod        = product
