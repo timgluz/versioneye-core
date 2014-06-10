@@ -123,7 +123,7 @@ class ReceiptService < Versioneye::Service
 
 
   def self.upload receipt, pdf
-    date_str = receipt.invoice_date.strftime("%Y-%M-%d")
+    date_str = receipt.invoice_date.strftime("%Y-%m-%d")
     filename = "#{date_str}-VersionEye-#{receipt.receipt_nr}.pdf"
     S3.store_in_receipt_bucket filename, pdf
   end
