@@ -13,10 +13,21 @@ class S3 < Versioneye::Service
   end
 
 
-  def self.url_for filename
-    return nil if filename.to_s.empty?
-    encoded_name = URI.encode( filename )
-    url = AWS.s3.buckets[Settings.instance.s3_projects_bucket].objects[encoded_name].url_for( :read, :secure => true )
+  def self.url_for object
+    return nil if object.to_s.empty?
+
+    encoded_name = ''
+    bucket_name  = ''
+
+    if object.is_a? Receipt
+      encoded_name = URI.encode( object.filename )
+      bucket_name  = Settings.instance.s3_receipt_bucke
+    else
+      encoded_name = URI.encode( object.to_s )
+      bucket_name  = Settings.instance.s3_projects_bucket
+    end
+
+    url = AWS.s3.buckets[ bucket_name ].objects[ encoded_name ].url_for( :read, :secure => true )
     url.to_s
   rescue => e
     log.error e.message

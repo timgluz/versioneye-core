@@ -132,4 +132,9 @@ class Receipt < Versioneye::Model
     binding()
   end
 
+  def filename
+    date_str = invoice_date.strftime("%Y-%m-%d")
+    "#{date_str}-VersionEye-#{receipt_nr}.pdf"
+  end
+
 end

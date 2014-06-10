@@ -114,8 +114,7 @@ class ReceiptService < Versioneye::Service
     kit = PDFKit.new(html, :footer_html => footer_file, :page_size => 'A4')
 
     if receipt
-      filename = "VersionEye-#{receipt.country}_#{receipt.type}.pdf"
-      kit.to_file("#{ENV['HOME']}/#{filename}")
+      kit.to_file("#{ENV['HOME']}/#{receipt.filename}")
     end
 
     kit.to_pdf
@@ -123,9 +122,7 @@ class ReceiptService < Versioneye::Service
 
 
   def self.upload receipt, pdf
-    date_str = receipt.invoice_date.strftime("%Y-%m-%d")
-    filename = "#{date_str}-VersionEye-#{receipt.receipt_nr}.pdf"
-    S3.store_in_receipt_bucket filename, pdf
+    S3.store_in_receipt_bucket receipt.filename, pdf
   end
 
 
