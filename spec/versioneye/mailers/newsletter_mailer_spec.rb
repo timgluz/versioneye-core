@@ -10,8 +10,6 @@ describe NewsletterMailer do
       email = described_class.newsletter_new_features_email( user )
 
       email.encoded.should include( "Hey Bono Tono" )
-      email.encoded.should include( "always hard at work" )
-      email.encoded.should include( 'And since we like continuous updating')
       email.encoded.should include( 'Potsdam' )
 
       ActionMailer::Base.deliveries.clear
@@ -22,4 +20,3 @@ describe NewsletterMailer do
   end
 
 end
-
