@@ -5,7 +5,7 @@ class NewsletterMailer < ActionMailer::Base
 
   def newsletter_new_features_email(user)
     @user = user
-    mail(:to => @user.email, :subject => 'Big Spring Refactoring') do |format|
+    mail(:to => @user.email, :subject => 'New Pricing') do |format|
       format.html{ render layout: 'email_html_layout' }
     end
   end
