@@ -3,6 +3,7 @@ require 'versioneye/parsers/common_parser'
 class PackageParser < CommonParser
 
   # Parser for requirements.json from npm. NodeJS
+  # https://github.com/isaacs/node-semver
   # https://npmjs.org/doc/json.html
   # http://wiki.commonjs.org/wiki/Packages/1.1
   #
