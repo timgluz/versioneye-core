@@ -27,11 +27,12 @@ describe PackageParser do
       product13 = create_product('pg_connect'   , 'pg_connect'   , '0.6.9', ['0.5.0' , '0.6.1' ] )
       product14 = create_product('mocha'        , 'mocha'        , '1.16.2', ['1.0.0' , '1.16.0', '1.16.2' ] )
       product15 = create_product('bruno'        , 'bruno'        , '1.12.1', ['1.0.0' , '1.12.0', '1.12.1' ] )
+      product15 = create_product('gulp'         , 'gulp'         , '1.12.1', ['1.0.0' , '1.12.0', '1.12.1' ] )
 
       parser = PackageParser.new
       project = parser.parse('http://s3.amazonaws.com/veye_test_env/package.json')
       project.should_not be_nil
-      project.dependencies.size.should eql(15)
+      project.dependencies.size.should eql(16)
 
       dep_01 = project.dependencies.first
       dep_01.name.should eql('connect-redis')
@@ -125,6 +126,14 @@ describe PackageParser do
       dep_15.version_current.should eql('1.12.1')
       dep_15.comperator.should eql('^')
       dep_15.version_label.should eql('^1.12')
+      dep_15.outdated?().should be_false
+
+      dep_15 = project.dependencies[15]
+      dep_15.name.should eql('gulp')
+      dep_15.version_requested.should eql('1.12.1')
+      dep_15.version_current.should eql('1.12.1')
+      dep_15.comperator.should eql('!=')
+      dep_15.version_label.should eql('1.0')
       dep_15.outdated?().should be_false
     end
 
