@@ -19,10 +19,12 @@ class VersionService < Versioneye::Service
     versions.first
   end
 
+
   def self.versions_by_whitelist(versions, whitelist)
     whitelist = Set.new whitelist.to_a
     versions.keep_if {|ver| whitelist.include? ver[:version]}
   end
+
 
   def self.newest_version_number( versions, stability = 'stable')
     version = newest_version( versions, stability )
@@ -43,6 +45,7 @@ class VersionService < Versioneye::Service
     return newest_version_number( versions_filtered, stability )
   end
 
+
   # http://guides.rubygems.org/patterns/#semantic_versioning
   # http://robots.thoughtbot.com/rubys-pessimistic-operator
   def self.version_approximately_greater_than_starter(value)
@@ -54,6 +57,7 @@ class VersionService < Versioneye::Service
     return "#{starter}."
   end
 
+
   def self.version_tilde_newest( versions, value )
     return nil if value.nil?
     value = value.gsub('~', '')
@@ -63,6 +67,7 @@ class VersionService < Versioneye::Service
     range = self.smaller_than( greater_than, upper_border, true )
     VersionService.newest_version_from( range )
   end
+
 
   def self.tile_border( value )
     if value.is_a? Integer
@@ -82,8 +87,9 @@ class VersionService < Versioneye::Service
     nil
   end
 
+
+  # Get all versions from range ( >=start <=stop )
   def self.version_range( versions, start, stop)
-    # get all versions from range ( >=start <=stop )
     range = Array.new
     versions.each do |version|
       fits_stop  = Naturalsorter::Sorter.smaller_or_equal?( version.to_s, stop  )
@@ -101,6 +107,7 @@ class VersionService < Versioneye::Service
     versions.dup.keep_if {|ver| ver[:version].to_s.match(/^#{val}/)}
   end
 
+
   def self.versions_by_comperator(versions, operator, value, range = true)
     matching_versions = case operator
     when '!=' then not_equal(versions, value, range)
@@ -112,12 +119,14 @@ class VersionService < Versioneye::Service
     end
   end
 
+
   def self.newest_but_not( versions, value, range=false, stability = "stable")
     filtered_versions = versions.dup.keep_if {|version| version.to_s.match(/^#{value}/i).nil?}
     return filtered_versions if range
     newest = VersionService.newest_version_from(filtered_versions, stability)
     return get_newest_or_value(newest, value)
   end
+
 
   def self.equal( versions, value, range = false, stability = "stable")
     filtered_versions = versions.dup.keep_if {|ver| ver[:version] == value.to_s}
