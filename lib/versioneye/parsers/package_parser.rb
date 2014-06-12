@@ -1,4 +1,5 @@
 require 'versioneye/parsers/common_parser'
+require 'semverly'
 
 class PackageParser < CommonParser
 
@@ -145,20 +146,29 @@ class PackageParser < CommonParser
       dependency.version_label = ver
 
     elsif version.match(/\A\^/)
-      # Tilde Version Ranges -> Pessimistic Version Constraint
-      # ^1.2 is similar to ~1.2.0
+      # Compatible with operator
+      dependency.comperator = "^"
+      dependency.version_label = version
+
       ver = version.gsub("\>", "")
       ver = ver.gsub("^", "")
       ver = ver.gsub(" ", "")
-      ver = "#{ver}.0"
-      highest_version = VersionService.version_tilde_newest(product.versions, ver)
-      if highest_version
-        dependency.version_requested = highest_version.to_s
-      else
+
+      semver = SemVer.parse( ver )
+      if semver.nil?
         dependency.version_requested = ver
+      else
+        start = ver
+        major = semver.major + 1
+        upper_range = "#{major}.0.0"
+        version_range   = VersionService.version_range(product.versions, start, upper_range )
+        highest_version = VersionService.newest_version_from( version_range )
+        if highest_version
+          dependency.version_requested = highest_version.to_s
+        else
+          dependency.version_requested = ver
+        end
       end
-      dependency.comperator = "^"
-      dependency.version_label = version
 
     elsif version.match(/.x\z/i)
       # X Version Ranges
