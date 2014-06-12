@@ -12,6 +12,24 @@ describe License do
 
   end
 
+  describe 'find_or_create' do
+
+    it 'creates a new one' do
+      License.count.should == 0
+      described_class.find_or_create("PHP", "doctrine/doctrine", "1.0.0", "MIT").should_not be_nil
+      License.count.should == 1
+    end
+
+    it 'creates a new one and returns it the 2nd time' do
+      License.count.should == 0
+      described_class.find_or_create("PHP", "doctrine/doctrine", "1.0.0", "MIT").should_not be_nil
+      License.count.should == 1
+      described_class.find_or_create("PHP", "doctrine/doctrine", "1.0.0", "MIT").should_not be_nil
+      License.count.should == 1
+    end
+
+  end
+
   describe 'product' do
 
     it 'returns the product' do

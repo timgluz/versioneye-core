@@ -29,6 +29,13 @@ class License < Versioneye::Model
     end
   end
 
+  def self.find_or_create language, prod_key, version, name, url = nil, comments = nil, distributions = nil
+    license = License.where(:language => language, :prod_key => prod_key, :version => version, :name => name).first
+    return license if license
+
+    License.new({ :language => language, :prod_key => prod_key, :version => version, :name => name, :url => url, :comments => comments, :distributions => distributions }).save
+  end
+
   def link
     return url if url && !url.empty?
     return 'http://www.linfo.org/bsdlicense.html' if bsd_match( name )
