@@ -130,6 +130,20 @@ describe PackageParser do
 
   end
 
+  describe 'pre_process' do
+
+    it 'returns the changed version' do
+      described_class.new.pre_process("4").should eq("4.*")
+    end
+    it 'returns the changed version' do
+      described_class.new.pre_process("4.2").should eq("4.2.*")
+    end
+    it 'returns the unchanged version' do
+      described_class.new.pre_process("4.2.2").should eq("4.2.2")
+    end
+
+  end
+
   def create_product(name, prod_key, version, versions = nil )
     product = Product.new({ :language => Product::A_LANGUAGE_NODEJS, :prod_type => Project::A_TYPE_NPM })
     product.name = name

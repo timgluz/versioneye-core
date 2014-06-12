@@ -50,6 +50,7 @@ class PackageParser < CommonParser
       self.update_requested_with_current(dependency, product)
       return
     end
+
     version = version.to_s.strip
     version = version.gsub('"', '')
     version = version.gsub("'", '')
@@ -59,6 +60,8 @@ class PackageParser < CommonParser
       dependency.version_label     = version
       return
     end
+
+    version = pre_process version
 
     if version.match(/\*/)
       # Start Matching. Matches everything.
@@ -232,6 +235,13 @@ class PackageParser < CommonParser
       dependency.version_current = product.version
     end
     dependency
+  end
+
+  def pre_process version
+    if version.match(/\A\d*\z/) || version.match(/\A\d*\.\d*\z/)
+      version = "#{version}.*"
+    end
+    version
   end
 
 end
