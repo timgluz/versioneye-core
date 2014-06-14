@@ -68,6 +68,7 @@ class User < Versioneye::Model
   validates_presence_of :encrypted_password, :message => 'is mandatory!'
   validates_presence_of :salt              , :message => 'is mandatory!'
   validates_presence_of :terms             , :message => 'is mandatory!'
+  validates_presence_of :datenerhebung     , :message => 'is mandatory!'
 
   validates_uniqueness_of :username          , :message => 'exist already.'
   validates_uniqueness_of :email             , :message => 'exist already.'
@@ -78,7 +79,9 @@ class User < Versioneye::Model
   validates_format_of :username, with: /\A[a-zA-Z0-9_]+\z/
   validates_format_of :email   , :with => A_EMAIL_REGEX, :message => 'is not valid.'
 
-  before_validation :downcase_email
+  before_validation :downcase_email, :check_password, :check_plan
+
+  before_save :check_terms, :check_np_domain
 
   scope :by_verification, ->(code){where(verification: code)}
   scope :live_users     , where(verification: nil, deleted: false)
@@ -89,14 +92,6 @@ class User < Versioneye::Model
   attr_accessor :password, :new_username
   attr_accessible :fullname, :username, :email, :password, :new_username, :terms, :datenerhebung, :verification, :terms, :datenerhebung
 
-
-  def save(*arg)
-    encrypt_password if new_record?
-    return false if self.terms == false || self.terms == nil
-    return false if self.datenerhebung == false || self.datenerhebung == nil
-    self.plan = Plan.free_plan if plan.nil?
-    super
-  end
 
   def to_param
     username
@@ -378,6 +373,40 @@ class User < Versioneye::Model
   end
 
   private
+
+    def check_terms
+      if self.terms == false || self.terms == nil
+        self.errors.messages[:terms] = ["must be accepted"]
+        return false
+      end
+
+      if self.datenerhebung == false || self.datenerhebung == nil
+        self.errors.messages[:datenerhebung] = ["must be accepted"]
+        return false
+      end
+
+      return true
+    end
+
+    def check_plan
+      return nil if !plan.nil?
+      self.plan = Plan.free_plan
+    end
+
+    def check_password
+      return nil if new_record? == false
+      encrypt_password
+    end
+
+    def check_np_domain
+      esplit = email.split("@")
+      domain = "@#{esplit.last}"
+      npd = NpDomain.where(:domain => domain).shift
+      return true if npd.nil?
+
+      self.free_private_projects = npd.free_projects
+      return true
+    end
 
     def downcase_email
       self.email = self.email.downcase if self.email.present?

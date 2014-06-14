@@ -117,6 +117,7 @@ describe User do
 
   describe "save" do
     it "saves a new user in the db" do
+      User.delete_all
       email = "h+ans2@tanz.de"
       user = User.new
       user.fullname = "Hans Tanz"
@@ -132,6 +133,7 @@ describe User do
       user.remove
     end
     it "saves a new user in the db" do
+      User.delete_all
       email = "daniele.sluijters+versioneye@gmail.com"
       user = User.new
       user.fullname = "Daniele sluijters"
@@ -146,7 +148,23 @@ describe User do
       db_user.should_not be_nil
       user.remove
     end
+    it "do not save because terms are not accepted" do
+      User.delete_all
+      email = "daniele.sluijters+versioneye@gmail.com"
+      user = User.new
+      user.fullname = "Daniele sluijters"
+      user.username = "sluijters"
+      user.email = email
+      user.password = "password"
+      user.salt = "salt"
+      user.terms = false
+      user.datenerhebung = true
+      user.save.should be_false
+      User.count.should == 0
+      user.remove
+    end
     it "test case for tobias" do
+      User.delete_all
       email = "t@blinki.st"
       user = User.new
       user.fullname = "Tobias"
@@ -162,6 +180,7 @@ describe User do
       db_user.remove
     end
     it "dosn't save. Because email is wrong" do
+      User.delete_all
       email = "h+ans+2@ta+nzde"
       user = User.new
       user.fullname = "Hans Tanz"
@@ -177,6 +196,7 @@ describe User do
       user.remove
     end
     it "dosn't save. Because email is unique" do
+      User.delete_all
       github_user
       email = "hans@tanz.de"
       user = User.new
@@ -191,6 +211,7 @@ describe User do
       user.remove
     end
     it "dosn't save. Because email is not valid" do
+      User.delete_all
       email = "hans@tanz"
       user = User.new
       user.fullname = "Hans Tanz"

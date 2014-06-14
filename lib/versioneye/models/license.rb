@@ -33,7 +33,9 @@ class License < Versioneye::Model
     license = License.where(:language => language, :prod_key => prod_key, :version => version, :name => name).first
     return license if license
 
-    License.new({ :language => language, :prod_key => prod_key, :version => version, :name => name, :url => url, :comments => comments, :distributions => distributions }).save
+    license = License.new({ :language => language, :prod_key => prod_key, :version => version, :name => name, :url => url, :comments => comments, :distributions => distributions })
+    license.save
+    license
   end
 
   def link
