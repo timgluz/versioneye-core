@@ -10,6 +10,10 @@ class NotificationService < Versioneye::Service
     NotificationMailer.status( count ).deliver
     log.info "Send out #{count} notification emails"
     count
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    0
   end
 
 
@@ -24,6 +28,10 @@ class NotificationService < Versioneye::Service
 
     return 1 if self.send_unsend_notifications user
     return 0
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    0
   end
 
 

@@ -18,6 +18,9 @@ class ReceiptService < Versioneye::Service
       handle_users( users )
       skip += per_page
     end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
   end
 
 

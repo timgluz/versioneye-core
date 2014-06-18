@@ -4,6 +4,9 @@ class ProjectUpdateService < Versioneye::Service
   def self.update_all period
     update_projects period
     update_collaborators_projects period
+  rescue => e
+    log.error e.message
+    nil
   end
 
 

@@ -83,6 +83,10 @@ class UserService < Versioneye::Service
       end
       user.save
     end
+  rescue => e
+    logger.error e.message
+    logger.error e.backtrace.join("\n")
+    false
   end
 
   private

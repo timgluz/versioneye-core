@@ -12,6 +12,9 @@ class GitHubService < Versioneye::Service
     User.all(:timeout => true).live_users.where(:github_scope => 'repo').each do |user|
       update_repos_for_user user
     end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
   def self.update_repos_for_user user

@@ -36,6 +36,9 @@ class LanguageDailyStats < Versioneye::Model
       log.debug( "Counting language_daily_stats: #{n + 1} / #{ndays}" )
       self.update_day_stats(n)
     end
+  rescue => e
+    log.error e.message
+    nil
   end
 
   def initialize_metrics_tables
