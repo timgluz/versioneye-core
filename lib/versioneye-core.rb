@@ -45,8 +45,12 @@ class VersioneyeCore
   end
 
   def init_elastic_search
+    es_url = Settings.instance.elasticsearch_url
+    if !Settings.instance.elasticsearch_addr.to_s.empty? && !Settings.instance.elasticsearch_port.to_s.empty?
+      es_url = "#{Settings.instance.elasticsearch_addr}:#{Settings.instance.elasticsearch_port}"
+    end
     Tire.configure do
-      url Settings.instance.elasticsearch_url
+      url es_url
     end
   end
 
