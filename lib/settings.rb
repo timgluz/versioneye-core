@@ -1,5 +1,6 @@
 require 'singleton'
 require 'json'
+require 'versioneye/models/global_setting'
 
 class Settings
   include Singleton
@@ -16,32 +17,34 @@ class Settings
     return nil if settings.nil?
 
     environment = ENV['RAILS_ENV']
-    if environment.to_s == ''
+    if environment.to_s.empty?
       environment = 'development'
     end
+
     instance_variable_set("@environment", environment)
     self.class.class_eval { attr_reader "environment".intern }
 
     settings[environment].each { |name, value|
       if value && value.is_a?(String) && value.match(/\Aenv_/)
         new_val = value.gsub("env_", "")
-        if name.eql?("memcache_servers")
-          value = eval ENV[new_val]
-        else
-          value = ENV[new_val]
-        end
+        value = ENV[new_val]
       end
+
+      db_val = load_from_db environment, name
+      if !db_val.to_s.empty?
+        value = db_val
+      end
+
       instance_variable_set("@#{name}", value)
       self.class.class_eval { attr_reader name.intern }
-
-      if name.eql?("smtp_sender_email") || name.eql?("smtp_sender_name") ||
-        name.eql?("server_url") || name.eql?("server_host") || name.eql?("server_port") ||
-        name.eql?("github_base_url") || name.eql?("github_api_url") || name.eql?("github_client_id") || name.eql?("github_client_secret") ||
-        name.eql?("nexus_url") || name.eql?("projects_unlimited") ||
-        name.eql?("cocoapods_spec_git") || name.eql?("cocoapods_spec_url")
-        self.class.class_eval { attr_writer name.intern }
-      end
+      self.class.class_eval { attr_writer name.intern }
     }
+  end
+
+  def load_from_db env, key
+    GlobalSetting.get env, key
+  rescue => e
+    p e.message
   end
 
 end

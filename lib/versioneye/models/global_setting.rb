@@ -3,31 +3,33 @@ class GlobalSetting < Versioneye::Model
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  field :server_url , type: String , default: 'http://localhost:3000'
-  field :server_host, type: String , default: 'localhost'
-  field :server_port, type: Integer, default: 3000
+  field :environment , type: String, default: 'development'
+  field :key         , type: String, default: 'RAILS_ENV'
+  field :value       , type: String, default: 'development'
 
-  field :github_base_url     , type: String , default: 'http://192.168.0.15'
-  field :github_api_url      , type: String , default: 'http://192.168.0.15/api/v3'
-  field :github_client_id    , type: String , default: 'client_id'
-  field :github_client_secret, type: String , default: 'client_secret'
+  index({ environment: 1, key: 1, value: 1 }, { unique: true })
 
-  field :nexus_url, type: String , default: 'https://nexus.pro'
 
-  field :cocoapods_spec_git, type: String , default: 'https://github.com/CocoaPods/Specs.git'
-  field :cocoapods_spec_url, type: String , default: 'https://github.com/CocoaPods/Specs'
+  def self.get env, key
+    return nil if env.to_s.empty? || key.to_s.empty?
 
-  validates_presence_of :server_url , :message => 'is mandatory!'
-  validates_presence_of :server_host, :message => 'is mandatory!'
-  validates_presence_of :server_port, :message => 'is mandatory!'
+    gs = GlobalSetting.where(:environment => env, :key => key.upcase).first
+    return nil if gs.nil?
 
-  def self.default
-    gs = GlobalSetting.first
-    if gs.nil?
-      gs = GlobalSetting.new
-      gs.save
-    end
-    gs
+    gs.value
   end
+
+
+  def self.set env, key, value
+    return nil if env.to_s.empty? || key.to_s.empty? || value.to_s.empty?
+
+    gs = GlobalSetting.where(:environment => env, :key => key.upcase).first
+    if gs.nil?
+      gs = GlobalSetting.new(:environment => env, :key => key.upcase)
+    end
+    gs.value = value
+    gs.save
+  end
+
 
 end

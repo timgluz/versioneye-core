@@ -2,21 +2,38 @@ require 'spec_helper'
 
 describe GlobalSetting do
 
-  describe "default" do
+  describe 'set' do
 
-    it "checks the default values" do
-      described_class.count.should == 0
+    it 'saves a new object' do
+      GlobalSetting.count.should == 0
+      described_class.set('test', 'SERVER_URL', 'http://localhost:8080').should be_true
+      GlobalSetting.count.should == 1
+    end
 
-      # creates the first entry
-      gs = described_class.default
-      gs.should_not be_nil
-      described_class.count.should == 1
+    it 'saves the object once' do
+      GlobalSetting.count.should == 0
+      described_class.set('test', 'SERVER_URL', 'http://localhost:8080').should be_true
+      GlobalSetting.count.should == 1
+      described_class.set('test', 'SERVER_URL', 'http://localhost:8080').should be_true
+      GlobalSetting.count.should == 1
+    end
 
-      # Returns the existing entry
-      gs = described_class.default
-      described_class.count.should == 1
+    it 'changes the object' do
+      GlobalSetting.count.should == 0
+      described_class.set('test', 'SERVER_URL', 'http://localhost:8080').should be_true
+      GlobalSetting.count.should == 1
+      described_class.set('test', 'SERVER_URL', 'www.heise.de').should be_true
+      GlobalSetting.count.should == 1
+      GlobalSetting.first.value.should eq('www.heise.de')
+    end
 
-      gs.server_url.should_not be_nil
+  end
+
+  describe 'get' do
+
+    it 'returns the right value' do
+      gs = described_class.new(:environment => 'test', :key => 'SERVER_URL', :value => 'http://localhost:8080').save.should be_true
+      described_class.get('test', 'SERVER_URL').should eq('http://localhost:8080')
     end
 
   end
