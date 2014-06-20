@@ -58,7 +58,7 @@ describe PodfilelockParser do
       # 'https://raw.github.com/CocoaPods/Specs/master/ShareKit/2.4.6/ShareKit.podspec'
       # 'https://raw.github.com/CocoaPods/Specs/master/xmlrpc/2.3.3/xmlrpc.podspec'
 
-      lockfile_url = 'https://raw.github.com/DenisDbv/OpenAuth/master/Podfile.lock'
+      lockfile_url = 'https://raw.githubusercontent.com/DenisDbv/OpenAuth/master/Podfile.lock'
       project = parser.parse( lockfile_url )
       deps = project.dependencies
 
