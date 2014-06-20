@@ -1,6 +1,7 @@
 require 'cocoapods-core'
 require 'versioneye/package_managers/package_manager'
 require 'versioneye/log'
+require 'open-uri'
 
 class CocoapodsPackageManager < PackageManager
 
@@ -144,6 +145,7 @@ module Pod
 
   class Lockfile
     def self.from_url(url)
+      p "load Lockfile from_url #{url}"
       open(url) do |io|
         require 'yaml'
         hash = YAML.load(io)
@@ -156,6 +158,10 @@ module Pod
         lockfile.defined_in_file = url
         lockfile
       end
+    rescue => e
+      p e.message
+      p e.backtrace.join("\n")
+      nil
     end
   end
 

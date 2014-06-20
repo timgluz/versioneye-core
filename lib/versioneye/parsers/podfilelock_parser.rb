@@ -125,4 +125,5 @@ class PodfilelockParser < CommonParser
 
     products.first
   end
+
 end
