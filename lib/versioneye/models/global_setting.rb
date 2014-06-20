@@ -10,6 +10,11 @@ class GlobalSetting < Versioneye::Model
   index({ environment: 1, key: 1, value: 1 }, { unique: true })
 
 
+  def to_s
+    "#{environment} : #{key} : #{key}"
+  end
+
+
   def self.get env, key
     return nil if env.to_s.empty? || key.to_s.empty?
 
@@ -29,6 +34,24 @@ class GlobalSetting < Versioneye::Model
     end
     gs.value = value
     gs.save
+  end
+
+
+  def self.keys env
+    GlobalSetting.where(:environment => env).distinct(:key)
+  end
+
+
+  def get env, key
+    GlobalSetting.get env, key
+  end
+
+  def set env, key, value
+    GlobalSetting.set env, key, value
+  end
+
+  def keys env
+    GlobalSetting.keys env
   end
 
 

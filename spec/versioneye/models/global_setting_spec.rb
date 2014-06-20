@@ -38,4 +38,16 @@ describe GlobalSetting do
 
   end
 
+  describe 'keys' do
+
+    it 'returns the keys' do
+      described_class.new(:environment => 'test', :key => 'SERVER_URL',  :value => 'http://localhost:8080').save.should be_true
+      described_class.new(:environment => 'test', :key => 'SERVER_PORT', :value => '8080').save.should be_true
+      keys = described_class.keys('test')
+      keys.should_not be_nil
+      keys.count.should == 2
+    end
+
+  end
+
 end

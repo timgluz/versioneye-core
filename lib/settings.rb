@@ -1,5 +1,6 @@
 require 'singleton'
 require 'json'
+require 'versioneye/model'
 require 'versioneye/models/global_setting'
 
 class Settings
@@ -30,21 +31,27 @@ class Settings
         value = ENV[new_val]
       end
 
-      db_val = load_from_db environment, name
-      if !db_val.to_s.empty?
-        value = db_val
-      end
-
       instance_variable_set("@#{name}", value)
       self.class.class_eval { attr_reader name.intern }
       self.class.class_eval { attr_writer name.intern }
     }
   end
 
-  def load_from_db env, key
-    GlobalSetting.get env, key
+  def reload_from_db gs
+    return nil if gs.nil?
+
+    keys = gs.keys self.environment
+    return nil if keys.nil? || keys.empty?
+
+    keys.each do |key|
+      value = gs.get self.environment, key
+      instance_variable_set("@#{key.downcase}", value)
+      puts "set #{key.downcase} = #{value}"
+    end
   rescue => e
     p e.message
+    p e.backtrace.join("\n")
+    nil
   end
 
 end
