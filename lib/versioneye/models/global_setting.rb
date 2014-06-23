@@ -11,7 +11,7 @@ class GlobalSetting < Versioneye::Model
 
 
   def to_s
-    "#{environment} : #{key} : #{key}"
+    "#{environment} : #{key} : #{value}"
   end
 
 
