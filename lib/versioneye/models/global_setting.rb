@@ -26,7 +26,12 @@ class GlobalSetting < Versioneye::Model
 
 
   def self.set env, key, value
-    return nil if env.to_s.empty? || key.to_s.empty? || value.to_s.empty?
+    return nil if env.to_s.empty? || key.to_s.empty?
+
+    if value.to_s.empty?
+      gs = GlobalSetting.where(:environment => env, :key => key.upcase).delete_all
+      return true
+    end
 
     gs = GlobalSetting.where(:environment => env, :key => key.upcase).first
     if gs.nil?
