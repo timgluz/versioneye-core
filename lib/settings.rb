@@ -45,7 +45,9 @@ class Settings
 
     keys.each do |key|
       value = gs.get self.environment, key
-      instance_variable_set("@#{key.downcase}", value)
+      name = key.downcase
+      instance_variable_set("@#{name}", value)
+      self.class.class_eval { attr_reader name.intern }
       puts "set #{key.downcase} = #{value}"
     end
   rescue => e
