@@ -31,6 +31,8 @@ class Projectdependency < Versioneye::Model
 
   belongs_to :project
 
+  index({project_id: 1}, { name: "project_index", background: true})
+
 
   def to_s
     "<Projectdependency: #{project} depends on #{name} (#{version_label}/#{version_requested}) current: #{version_current} >"
@@ -51,7 +53,7 @@ class Projectdependency < Versioneye::Model
       return product if product
     end
 
-    product = Product.fetch_product( language, prod_key)
+    product = Product.fetch_product( language, prod_key )
     return product if product
 
     init_product

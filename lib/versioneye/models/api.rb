@@ -7,6 +7,8 @@ class Api < Versioneye::Model
   field :api_key, type: String
   field :calls  , type: Integer, default: 0
 
+  index({ api_key: 1 }, { name: "api_key_index", unique: true, background: true })
+
   validates :user_id, presence: true
   validates :api_key, presence: true,
                       length: {minimum: 20, maximum: 20},

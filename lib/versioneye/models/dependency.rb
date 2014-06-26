@@ -46,6 +46,15 @@ class Dependency < Versioneye::Model
   field :parsed_version , type: String
   field :outdated, type: Boolean
 
+  index({ language: 1, prod_key: 1, prod_version: 1, name: 1, version: 1, dep_prod_key: 1}, { name: "very_long_index", background: true })
+  index({ language: 1, prod_key: 1, prod_version: 1, scope: 1 }, { name: "prod_key_lang_ver_scope_index", background: true })
+  index({ language: 1, prod_key: 1, prod_version: 1 },           { name: "prod_key_lang_ver_index", background: true })
+  index({ language: 1, prod_key: 1 },     { name: "language_prod_key_index" , background: true })
+  index({ language: 1, dep_prod_key: 1 }, { name: "language_dep_prod_key_index" , background: true })
+  index({ dep_prod_key: 1 }, { name: "dep_prod_key_index" , background: true })
+  index({ prod_key: 1 },     { name: "prod_key_index"     , background: true })
+
+
 
   def self.remove_dependencies language, prod_key, version_number
     Dependency.where( language: language, prod_key: prod_key, prod_version: version_number ).delete_all

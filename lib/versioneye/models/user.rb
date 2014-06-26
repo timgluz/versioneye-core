@@ -62,6 +62,12 @@ class User < Versioneye::Model
   has_and_belongs_to_many :products
   # *** RELATIONS END ***
 
+  index({ username: 1 },     { name: "username_index",     background: true, unique: true })
+  index({ email: 1 },        { name: "email_index",        background: true, unique: true })
+  index({ github_id: 1 },    { name: "github_id_index",    background: true, unique: true })
+  index({ bitbucket_id: 1 }, { name: "bitbucket_id_index", background: true, unique: true })
+  index({ verification: 1 }, { name: "verification_index", background: true })
+
   validates_presence_of :username          , :message => 'is mandatory!'
   validates_presence_of :fullname          , :message => 'is mandatory!'
   validates_presence_of :email             , :message => 'is mandatory!'

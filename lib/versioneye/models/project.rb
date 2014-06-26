@@ -57,6 +57,12 @@ class Project < Versioneye::Model
   has_many   :projectdependencies
   has_many   :collaborators, class_name: 'ProjectCollaborator'
 
+  index({project_key: 1, project_type: 1}, { name: "key_type_index",  background: true})
+  index({user_id: 1, private_project: 1},  { name: "user_id_private_index", background: true})
+  index({user_id: 1}, { name: "user_id_index", background: true})
+  index({name: 1},    { name: "name_index",    background: true})
+  index({source: 1},  { name: "source_index",  background: true})
+
   scope :by_collaborator, ->(user){ all_in(_id: ProjectCollaborator.by_user(user).to_a.map(&:project_id)) }
   scope :by_user  , ->(user)    { where(user_id: user[:_id].to_s) }
   scope :by_source, ->(source)  { where(source:  source ) }

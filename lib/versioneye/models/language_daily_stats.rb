@@ -16,7 +16,9 @@ class LanguageDailyStats < Versioneye::Model
   field :Ruby      , type: Hash
   field :Objectivec, type: Hash
 
-  index({date: -1}, {background: true})
+  index({date: -1},        {background: true})
+  index({date_string: -1}, {background: true})
+  index({created_at: -1},  {background: true})
 
   attr_accessible :language, :date, :metrics
 

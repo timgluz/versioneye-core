@@ -26,6 +26,10 @@ class Versionlink < Versioneye::Model
   # false => This link was crawled
   field :manual    , type: Boolean, :default => false
 
+  index({ language: 1, prod_key: 1, version_id: 1, link: 1 }, { name: "lang_prod_vers_link_index", background: true, unique: true })
+  index({ language: 1, prod_key: 1, version_id: 1 }, { name: "lang_prod_vers_index", background: true })
+  index({ language: 1, prod_key: 1                }, { name: "lang_prod_vers_index", background: true })
+
 
   def as_json parameter
     {

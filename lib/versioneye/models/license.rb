@@ -13,6 +13,10 @@ class License < Versioneye::Model
   field :comments     , type: String # Maven specific
   field :distributions, type: String # Maven specific
 
+  index({ language: 1, prod_key: 1, version: 1, name: 1 }, { name: "language_prod_key_version_name_index", background: true })
+  index({ language: 1, prod_key: 1, version: 1 },          { name: "language_prod_key_version_index"     , background: true })
+  index({ language: 1, prod_key: 1},                       { name: "language_prod_key_index"             , background: true })
+
   validates_presence_of :language, :message => 'language is mandatory!'
   validates_presence_of :prod_key, :message => 'prod_key is mandatory!'
   validates_presence_of :name, :message => 'name is mandatory!'

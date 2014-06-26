@@ -17,12 +17,18 @@ class CrawlerTask < Versioneye::Model
   field :repo_fullname, type: String
   field :registry_name, type: String
   field :tag_name     , type: String
-  field :prod_key     , type: String 
+  field :prod_key     , type: String
   field :weight       , type: Integer, default: 0 # To prioritize tasks
   field :data         , type: Hash                # Subdocument to keep pre-cached data
   field :crawled_at   , type: DateTime            # When it had last successful crawl
 
   scope :by_task      , ->(name){where(task: name)}
-  scope :crawlable    , where(re_crawl: true, url_exists: true)
+  scope :crawlable    , -> { where(re_crawl: true, url_exists: true) }
+
+  index({ task: 1 },          { name: "task_index"    , background: true })
+  index({ repo_fullname: 1 }, { name: "repo_fullname_index" , background: true })
+  index({ task: 1, repo_fullname: 1 }, { name: "task_repo_fullname_index" , background: true })
+  index({ task: 1, repo_fullname: 1, tag_name: 1 }, { name: "task_repo_fullname_tag_index" , background: true })
+  index({ task: 1, repo_fullname: 1, prod_key: 1 }, { name: "task_repo_fullname_prod_key_index" , background: true })
 
 end

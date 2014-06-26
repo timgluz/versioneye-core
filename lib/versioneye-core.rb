@@ -25,7 +25,7 @@ class VersioneyeCore
   end
 
   def init_mongodb
-    puts " - initialize MongoDB"
+    puts " - initialize MongoDB for #{Settings.instance.environment} "
     Mongoid.load!("config/mongoid.yml", Settings.instance.environment)
   end
 

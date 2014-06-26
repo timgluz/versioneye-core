@@ -17,9 +17,13 @@ class Newest < Versioneye::Model
 
   attr_accessible :name, :version, :language, :prod_key, :prod_type, :product_id, :created_at
 
-  index({updated_at: -1}, {background: true})
-  index({updated_at: -1, language: -1}, {background: true})
-  index({language: 1, prod_key: 1, version: 1}, { unique: true , background: true})
+  index({language: 1, prod_key: 1, version: 1}, { name: "lang_prod_vers_index",   background: true, unique: true })
+  index({updated_at: -1},                       { name: "updated_at_index",       background: true})
+  index({updated_at: -1, language: -1},         { name: "updated_language_index", background: true})
+  index({created_at: -1, language: -1},         { name: "created_language_index", background: true})
+  index({created_at: -1},                       { name: "created_at_index",       background: true})
+  index({language:   -1},                       { name: "language_index",         background: true})
+
 
   def product
     Product.fetch_product self.language, self.prod_key

@@ -18,6 +18,11 @@ class ProjectCollaborator < Versioneye::Model
 
   belongs_to :project
 
+  index({project_id: 1, user_id: 1}, { name: "project_user_index", background: true})
+  index({user_id: 1},          { name: "user_index",               background: true})
+  index({project_id: 1},       { name: "project_index",            background: true})
+  index({invitation_email: 1}, { name: "invitation_email_index",   background: true})
+
   validates_presence_of :project_id
   validates_presence_of :owner_id
   validates_presence_of :caller_id

@@ -7,7 +7,8 @@ class GlobalSetting < Versioneye::Model
   field :key         , type: String, default: 'RAILS_ENV'
   field :value       , type: String, default: 'development'
 
-  index({ environment: 1, key: 1, value: 1 }, { unique: true })
+  index({ environment: 1, key: 1, value: 1 }, { unique: true, background: true })
+  index({ environment: 1, key: 1},            { unique: true, background: true })
 
 
   def to_s

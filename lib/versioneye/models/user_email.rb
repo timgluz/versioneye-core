@@ -7,6 +7,10 @@ class UserEmail < Versioneye::Model
   field :email       , type: String
   field :verification, type: String
 
+  index({ email: 1 },        { name: "email_index",        background: true, unique: true })
+  index({ user_id: 1 },      { name: "user_id_index",      background: true })
+  index({ verification: 1 }, { name: "verification_index", background: true })
+
   validates_presence_of :email, :message => 'is mandatory!'
   validates_format_of   :email, with: User::A_EMAIL_REGEX
 

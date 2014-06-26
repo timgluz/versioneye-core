@@ -8,11 +8,14 @@ class ApiCall < Versioneye::Model
   field :fullpath, type: String
   field :ip,      type: String
 
+  index({ api_key: 1 }, { name: "api_key_index", background: true })
+  index({ user_id: 1 }, { name: "user_id_index", background: true })
+
   validates :api_key, presence: true
   validates :fullpath, presence: true
 
-  scope :by_user, ->(user){ where(user_id: user.id.to_s) }
-  scope :by_api_key, ->(api_key){ where(api_key: api_key) }
-  scope :today, where(:created_at.gte => Date.today.midnight, :created_at.lt => Date.tomorrow.midnight)
+  scope :by_user,    -> (user)   { where(user_id: user.id.to_s) }
+  scope :by_api_key, -> (api_key){ where(api_key: api_key) }
+  scope :today,      -> { where(:created_at.gte => Date.today.midnight, :created_at.lt => Date.tomorrow.midnight) }
 
 end

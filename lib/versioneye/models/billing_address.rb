@@ -27,6 +27,8 @@ class BillingAddress < Versioneye::Model
 
   belongs_to :user
 
+  index({ user_id: 1 }, { name: "user_id_index", background: true })
+
   before_save :validate_country, :validate_company, :validate_taxid
 
   def update_from_params( params )

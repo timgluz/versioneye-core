@@ -21,6 +21,13 @@ class BitbucketRepo < Versioneye::Model
 
   belongs_to :user
 
+  index({ user_id: 1 },     { name: "user_id_index"    , background: true })
+  index({ name: 1 },        { name: "name_index"       , background: true })
+  index({ fullname: 1 },    { name: "fullname_index"   , background: true })
+  index({ language: 1 },    { name: "language_index"   , background: true })
+  index({ owner_login: 1 }, { name: "owner_login_index", background: true })
+  index({ owner_type: 1 },  { name: "owner_type_index" , background: true })
+
   scope :by_language    , ->(lang){where(language: lang)}
   scope :by_user        , ->(user){where(user_id: user[:_id])}
   scope :by_owner_login , ->(owner){where(owner_login: owner)}

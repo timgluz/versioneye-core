@@ -16,6 +16,11 @@ class Versioncomment < Versioneye::Model
 
   embeds_many :versioncommentreplys
 
+  index({ language: 1, product_key: 1, version: 1 }, { name: "lang_prod_vers_index", background: true })
+  index({ language: 1, prod_key: 1                }, { name: "lang_prod_vers_index", background: true })
+  index({ user_id:  1, },     { name: "user_id_index"    , background: true })
+  index({ product_key:  1, }, { name: "product_key_index", background: true })
+
   validates_presence_of :user_id,     :message => 'User is mandatory!'
   validates_presence_of :product_key, :message => 'Product is mandatory!'
   validates_presence_of :version,     :message => 'Version is mandatory!'

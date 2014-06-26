@@ -17,6 +17,10 @@ class Developer < Versioneye::Model
   field :role            , type: String
   field :timezone        , type: String
 
+  index({ language: 1, prod_key: 1, version: 1, name: 1 }, { name: "language_prod_key_version_name_index", background: true })
+  index({ language: 1, prod_key: 1, version: 1 },          { name: "language_prod_key_version_index",      background: true })
+  index({ language: 1, prod_key: 1 },                      { name: "language_prod_key_index",              background: true })
+
   def self.find_by language, prod_key, version, name = nil
     if name.nil?
       return Developer.where( language: language, prod_key: prod_key, version: version, name: name )

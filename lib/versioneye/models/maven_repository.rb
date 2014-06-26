@@ -10,6 +10,8 @@ class MavenRepository < Versioneye::Model
 
   validates_uniqueness_of :url, :message => 'm2 repository url exist already.'
 
+  index({ name: 1 }, { name: "name_index" })
+
   def self.fill_it
     repos = Hash.new
     repos['central']            = 'http://repo.maven.apache.org/maven2'
