@@ -49,6 +49,7 @@ module Versioneye
     require 'versioneye/models/versionlink'
     require 'versioneye/models/global_setting'
     require 'versioneye/models/np_domain'
+    require 'versioneye/models/helpers/indexer'
 
     def self.log
       Versioneye::Log.instance.log

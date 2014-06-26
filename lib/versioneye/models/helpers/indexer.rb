@@ -1,0 +1,25 @@
+class Indexer
+
+
+  def self.create_indexes
+    ::Mongoid.models.each do |model|
+      index_keys = model.collection.indexes.map{ |doc| doc["name"] }
+      next if index_keys.empty?
+      next if model.embedded?
+
+      result = model.create_indexes
+      p "#{model} .. #{result}"
+    end.compact
+  end
+
+
+  def self.drop_indexes
+    ::Mongoid.models.each do |model|
+      next if model.embedded?
+      result = model.remove_indexes
+      p "#{model} .. #{result}"
+    end.compact
+  end
+
+
+end
