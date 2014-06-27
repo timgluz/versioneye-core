@@ -13,7 +13,8 @@ class License < Versioneye::Model
   field :comments     , type: String # Maven specific
   field :distributions, type: String # Maven specific
 
-  index({ language: 1, prod_key: 1, version: 1, name: 1 }, { name: "language_prod_key_version_name_index", background: true })
+  # TODO This is causing a too large index. For Python some names are containnign the license text. This need to be fixest! See -> License.where(:name => /\n/).count
+  # index({ language: 1, prod_key: 1, version: 1, name: 1 }, { name: "language_prod_key_version_name_index", background: true })
   index({ language: 1, prod_key: 1, version: 1 },          { name: "language_prod_key_version_index"     , background: true })
   index({ language: 1, prod_key: 1},                       { name: "language_prod_key_index"             , background: true })
 

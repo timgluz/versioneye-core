@@ -64,8 +64,8 @@ class User < Versioneye::Model
 
   index({ username: 1 },     { name: "username_index",     background: true, unique: true })
   index({ email: 1 },        { name: "email_index",        background: true, unique: true })
-  index({ github_id: 1 },    { name: "github_id_index",    background: true, unique: true })
-  index({ bitbucket_id: 1 }, { name: "bitbucket_id_index", background: true, unique: true })
+  index({ github_id: 1 },    { name: "github_id_index",    background: true })
+  index({ bitbucket_id: 1 }, { name: "bitbucket_id_index", background: true })
   index({ verification: 1 }, { name: "verification_index", background: true })
 
   validates_presence_of :username          , :message => 'is mandatory!'
