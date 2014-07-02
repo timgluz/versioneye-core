@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib"]
   s.authors = ["reiz"]
-  s.date = "2014-06-27"
+  s.date = "2014-07-02"
   s.description = "This project contains the Models and Services for VersionEye"
   s.email = "robert.reiz.81@gmail.com"
   s.extra_rdoc_files = [
