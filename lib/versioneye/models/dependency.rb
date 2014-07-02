@@ -97,6 +97,10 @@ class Dependency < Versioneye::Model
     )
     prod_keys = deps.map{|dep| dep['_id'] }
     {:prod_keys => prod_keys, :count => count}
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    {:prod_keys => [], :count => 0}
   end
 
   def product

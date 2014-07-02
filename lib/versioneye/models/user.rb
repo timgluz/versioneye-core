@@ -288,6 +288,8 @@ class User < Versioneye::Model
   end
 
   def self.email_valid?(email)
+    return false if email.to_s.empty?
+
     user = find_by_email(email)
     user_email = UserEmail.find_by_email(email)
     return user.nil? && user_email.nil?
