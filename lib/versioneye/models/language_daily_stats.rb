@@ -35,7 +35,9 @@ class LanguageDailyStats < Versioneye::Model
     ndays += skip
     ndays.times do |n|
       next if n < skip
-      log.debug( "Counting language_daily_stats: #{n + 1} / #{ndays}" )
+      log_msg = "Counting language_daily_stats: #{n + 1} / #{ndays}"
+      log.debug( log_msg )
+      p log_msg
       self.update_day_stats(n)
     end
   rescue => e
