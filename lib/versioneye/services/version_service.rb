@@ -3,9 +3,11 @@ class VersionService < Versioneye::Service
 
   def self.newest_version(versions, stability = 'stable')
     return nil if versions.nil? || versions.empty?
+
     filtered = Array.new
     versions.each do |version|
       next if version.to_s.eql?('dev-master')
+
       if VersionTagRecognizer.does_it_fit_stability? version.to_s, stability
         filtered << version
       end
@@ -60,6 +62,7 @@ class VersionService < Versioneye::Service
 
   def self.version_tilde_newest( versions, value )
     return nil if value.nil?
+
     value = value.gsub('~', '')
     value = value.gsub(' ', '')
     upper_border = self.tile_border( value )
@@ -123,6 +126,7 @@ class VersionService < Versioneye::Service
   def self.newest_but_not( versions, value, range=false, stability = "stable")
     filtered_versions = versions.dup.keep_if {|version| version.to_s.match(/^#{value}/i).nil?}
     return filtered_versions if range
+
     newest = VersionService.newest_version_from(filtered_versions, stability)
     return get_newest_or_value(newest, value)
   end
@@ -131,6 +135,7 @@ class VersionService < Versioneye::Service
   def self.equal( versions, value, range = false, stability = "stable")
     filtered_versions = versions.dup.keep_if {|ver| ver[:version] == value.to_s}
     return filtered_versions if range
+
     newest = VersionService.newest_version_from(filtered_versions, stability)
     return get_newest_or_value(newest, value)
   end
@@ -139,6 +144,7 @@ class VersionService < Versioneye::Service
   def self.not_equal( versions, value, range = false, stability = "stable")
      filtered_versions = versions.dup.keep_if {|ver| ver.version != value.to_s}
     return filtered_versions if range
+
     newest = VersionService.newest_version_from(filtered_versions, stability)
     return get_newest_or_value(newest, value)
   end
@@ -152,6 +158,7 @@ class VersionService < Versioneye::Service
       end
     end
     return filtered_versions if range
+
     newest = VersionService.newest_version_from(filtered_versions, stability)
     return get_newest_or_value(newest, value)
   end
@@ -165,6 +172,7 @@ class VersionService < Versioneye::Service
       end
     end
     return filtered_versions if range
+
     newest = VersionService.newest_version_from(filtered_versions, stability)
     return get_newest_or_value(newest, value)
   end
@@ -178,6 +186,7 @@ class VersionService < Versioneye::Service
       end
     end
     return filtered_versions if range
+
     newest = VersionService.newest_version_from(filtered_versions, stability)
     return get_newest_or_value(newest, value)
   end
@@ -191,6 +200,7 @@ class VersionService < Versioneye::Service
       end
     end
     return filtered_versions if range
+
     newest = VersionService.newest_version_from(filtered_versions, stability)
     return get_newest_or_value(newest, value)
   end
