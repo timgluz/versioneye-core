@@ -99,7 +99,7 @@ describe Product do
       product1.versions.push( Version.new({version: '1.4.0'}) )
       product1.save
       described_class.fetch_product( Product::A_LANGUAGE_RUBY, 'Bee' ).should_not be_nil
-      described_class.fetch_product( Product::A_LANGUAGE_RUBY.downcase, 'bee' ).should_not be_nil
+      described_class.fetch_product( Product::A_LANGUAGE_RUBY, 'bee' ).should_not be_nil
       result = described_class.fetch_product( Product::A_LANGUAGE_RUBY, 'bee' )
       result.should_not be_nil
       result.prod_key.should eql('bee')

@@ -91,8 +91,9 @@ class Product < Versioneye::Model
     return nil if lang.to_s.strip.empty? || key.to_s.strip.empty?
     return Product.find_by_key( key ) if lang.eql? 'package'
 
-    product = Product.find_by_lang_key( lang, key )
-    product = Product.find_by_lang_key_case_insensitiv( lang, key ) if product.nil?
+    product = Product.find_by_lang_key( lang, key.downcase )
+    product = Product.find_by_lang_key( lang, key ) if product.nil?
+    # product = Product.find_by_lang_key_case_insensitiv( lang, key ) if product.nil?
     product
   end
 
