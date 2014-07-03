@@ -55,6 +55,10 @@ class Versionlink < Versioneye::Model
     versionlink = Versionlink.new({:language => language, :prod_key => prod_key, :link => url, :name => name})
     versionlink.save
     versionlink
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
   end
 
 
@@ -86,6 +90,10 @@ class Versionlink < Versioneye::Model
       :language => language, :prod_key => prod_key,
       :version_id => version_number })
     versionlink.save
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
   end
 
 
