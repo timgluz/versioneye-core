@@ -1,16 +1,16 @@
 require 'spec_helper'
 
 describe ProductResource do
-  
+
   describe "validation" do
     it 'cant save when url is missing' do
       resource = ProductResource.new url: "http://versioneye.com"
-      resource.save.should_not be_true
+      resource.save.should_not be_truthy
     end
 
     it 'cant save when resource_type is missing' do
       resource = ProductResource.new resource_type: "user"
-      resource.save.should_not be_true
+      resource.save.should_not be_truthy
     end
   end
 
@@ -47,5 +47,5 @@ describe ProductResource do
       search_result.url.should eql(new_resource.url)
       new_resource.delete
     end
-  end 
+  end
 end

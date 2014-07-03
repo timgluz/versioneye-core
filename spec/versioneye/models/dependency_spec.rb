@@ -38,7 +38,7 @@ describe Dependency do
       dependency.version = "1.0.0"
       dependency.known.should be_nil
       dependency.update_known
-      dependency.known.should be_false
+      dependency.known.should be_falsey
     end
 
     it "updates known with true" do
@@ -54,7 +54,7 @@ describe Dependency do
       dependency.version = "4.0.0"
       dependency.known.should be_nil
       dependency.update_known
-      dependency.known.should be_true
+      dependency.known.should be_truthy
     end
 
   end

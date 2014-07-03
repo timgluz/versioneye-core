@@ -214,7 +214,7 @@ describe ComposerParser do
       dep_12.version_requested.should eql("2.2.x-dev")
       dep_12.version_current.should eql("2.2.x-dev")
       dep_12.comperator.should eql("=")
-      dep_12.outdated.should be_false
+      dep_12.outdated.should be_falsey
       dep_12.stability.should eql("dev")
 
       dep_13 = fetch_by_name(project.dependencies, "symfony/filesystem")
@@ -222,7 +222,7 @@ describe ComposerParser do
       dep_13.version_label.should eql("2.2.*@dev")
       dep_13.version_requested.should eql("2.2.x-dev")
       dep_13.version_current.should   eql("2.2.x-dev")
-      dep_13.outdated.should be_false
+      dep_13.outdated.should be_falsey
       dep_13.comperator.should eql("=")
 
       dep_14 = fetch_by_name(project.dependencies, "symfony/stopwatch")
@@ -230,7 +230,7 @@ describe ComposerParser do
       dep_14.version_label.should eql("2.2.*@stable")
       dep_14.version_requested.should eql("2.2.1")
       dep_14.version_current.should   eql("2.2.1")
-      dep_14.outdated.should be_false
+      dep_14.outdated.should be_falsey
       dep_14.comperator.should eql("=")
       dep_14.stability.should eql("stable")
 
@@ -276,7 +276,7 @@ describe ComposerParser do
 
     it "returns false because of nil parameters" do
       parser = ComposerParser.new
-      parser.dependency_in_repositories?(nil, nil).should be_false
+      parser.dependency_in_repositories?(nil, nil).should be_falsey
     end
 
   end

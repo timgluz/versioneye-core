@@ -1,9 +1,81 @@
 require 'spec_helper'
 
 describe LanguageDailyStats do
+
+  def create_today_products
+    newests = []
+    (0..12).each do |s|
+      name = FactoryGirl.generate(:product_name_generator)
+      name = "#{name}_#{s}"
+      newest = Newest.new({:name => name, :prod_key => name, :language => 'Ruby',
+        :prod_type => 'gem', :version => Random.rand(1..99),
+        created_at: Date.today.at_midnight })
+      newest.save
+      newests << newest
+    end
+    newests
+  end
+
+  def create_yesterday_products
+    newests = []
+    (20..36).each do |s|
+      name = FactoryGirl.generate(:product_name_generator)
+      name = "#{name}_#{s}"
+      newest = Newest.new({:name => name, :prod_key => name, :language => 'Ruby',
+        :prod_type => 'gem', :version => Random.rand(1..99),
+        created_at: 1.days.ago.at_midnight })
+      newest.save
+      newests << newest
+    end
+    newests
+  end
+
+  def create_lastweek_products
+    newests = []
+    (40..58).each do |s|
+      name = FactoryGirl.generate(:product_name_generator)
+      name = "#{name}_#{s}"
+      newest = Newest.new({:name => name, :prod_key => name, :language => 'Ruby',
+        :prod_type => 'gem', :version => Random.rand(1..99),
+        created_at: 7.days.ago.at_midnight })
+      newest.save
+      newests << newest
+    end
+    newests
+  end
+
+  def create_lastmonth_products
+    newests = []
+    (100..122).each do |s|
+      name = FactoryGirl.generate(:product_name_generator)
+      name = "#{name}_#{s}"
+      newest = Newest.new({:name => name, :prod_key => name, :language => 'Ruby',
+        :prod_type => 'gem', :version => Random.rand(1..99),
+        created_at: (Date.today << 1).at_midnight })
+      newest.save
+      newests << newest
+    end
+    newests
+  end
+
+  def create_twomonth_products
+    newests = []
+    (1000..1028).each do |s|
+      name = FactoryGirl.generate(:product_name_generator)
+      name = "#{name}_#{s}"
+      newest = Newest.new({:name => name, :prod_key => name, :language => 'Ruby',
+        :prod_type => 'gem', :version => Random.rand(1..99),
+        created_at: (Date.today << 2).at_midnight })
+      newest.save
+      newests << newest
+    end
+    newests
+  end
+
   let(:today_ruby_products){
     FactoryGirl.create_list(:newest, 13,
                              name: FactoryGirl.generate(:product_name_generator),
+                             prod_key: FactoryGirl.generate(:product_name_generator),
                              language: "Ruby",
                              version: FactoryGirl.generate(:version_generator),
                              created_at: Date.today.at_midnight)}
@@ -11,25 +83,33 @@ describe LanguageDailyStats do
   let(:yesterday_ruby_products){
     FactoryGirl.create_list(:newest, 17,
                              name: FactoryGirl.generate(:product_name_generator),
+                             prod_key: FactoryGirl.generate(:product_name_generator),
                              version: FactoryGirl.generate(:version_generator),
+                             language: "Ruby",
                              created_at: 1.days.ago.at_midnight)}
 
   let(:lastweek_ruby_products){
     FactoryGirl.create_list(:newest, 19,
                              name: FactoryGirl.generate(:product_name_generator),
+                             prod_key: FactoryGirl.generate(:product_name_generator),
                              version: FactoryGirl.generate(:version_generator),
+                             language: "Ruby",
                              created_at: 7.days.ago.at_midnight)}
 
   let(:lastmonth_ruby_products){
     FactoryGirl.create_list(:newest, 23,
                              name: FactoryGirl.generate(:product_name_generator),
+                             prod_key: FactoryGirl.generate(:product_name_generator),
                              version: FactoryGirl.generate(:version_generator),
+                             language: "Ruby",
                              created_at: (Date.today << 1).at_midnight)}
 
   let(:twomonth_ruby_products){
     FactoryGirl.create_list(:newest, 29,
                              name: FactoryGirl.generate(:product_name_generator),
+                             prod_key: FactoryGirl.generate(:product_name_generator),
                              version: FactoryGirl.generate(:version_generator),
+                             language: "Ruby",
                              created_at: (Date.today << 2).at_midnight)}
 
   after :each do
@@ -38,28 +118,28 @@ describe LanguageDailyStats do
 
   describe "today_stats" do
     before :each do
-      today_ruby_products.first.save
+      create_today_products
     end
 
    it "should return all ruby project" do
       LanguageDailyStats.update_counts
       stats = LanguageDailyStats.today_stats
       stats.should_not be_nil
-      stats.has_key?('Ruby').should be_true
+      stats.has_key?('Ruby').should be_truthy
       stats['Ruby'].has_key?("new_version")
       stats['Ruby']["new_version"].should eq(13)
     end
 
     #important! It catches double counting today
     it "shoulnt double count today's metrics" do
-      yesterday_ruby_products.first.save
-      twomonth_ruby_products.first.save
+      create_yesterday_products
+      create_twomonth_products
       LanguageDailyStats.update_counts(61)
 
       stats = LanguageDailyStats.today_stats
       stats.should_not be_nil
       stats.count.should > 0
-      stats.has_key?("Ruby").should be_true
+      stats.has_key?("Ruby").should be_truthy
       stats["Ruby"].has_key?("new_version")
       stats["Ruby"]["new_version"].should eq(13)
 
@@ -68,8 +148,8 @@ describe LanguageDailyStats do
 
   describe "yesterday_stats" do
     before :each do
-      today_ruby_products.first.save
-      yesterday_ruby_products.first.save
+      create_today_products
+      create_yesterday_products
       LanguageDailyStats.update_counts(2)
     end
 
@@ -82,7 +162,7 @@ describe LanguageDailyStats do
       stats = LanguageDailyStats.yesterday_stats
 
       stats.should_not be_nil
-      stats.has_key?("Ruby").should be_true
+      stats.has_key?("Ruby").should be_truthy
       stats["Ruby"].has_key?("new_version")
       stats["Ruby"]["new_version"].should eq(17)
     end
@@ -90,8 +170,8 @@ describe LanguageDailyStats do
 
   describe "current_week_stats" do
     before :each do
-      today_ruby_products.first.save
-      yesterday_ruby_products.first.save
+      create_today_products
+      create_yesterday_products
       LanguageDailyStats.update_counts(3)
     end
 
@@ -99,8 +179,8 @@ describe LanguageDailyStats do
       stats =  LanguageDailyStats.current_week_stats
 
       stats.should_not be_nil
-      stats.empty?.should be_false
-      stats.has_key?("Ruby").should be_true
+      stats.empty?.should be_falsey
+      stats.has_key?("Ruby").should be_truthy
       stats["Ruby"].has_key?("new_version")
       if Time.now.monday?
         # yesterday was Sunday, that's last week
@@ -113,7 +193,7 @@ describe LanguageDailyStats do
 
   describe "last_week_stats" do
     before :each do
-      lastweek_ruby_products.first.save
+      create_lastweek_products
       LanguageDailyStats.update_counts(14)
     end
 
@@ -121,8 +201,8 @@ describe LanguageDailyStats do
       stats = LanguageDailyStats.last_week_stats
 
       stats.should_not be_nil
-      stats.empty?.should be_false
-      stats.has_key?("Ruby").should be_true
+      stats.empty?.should be_falsey
+      stats.has_key?("Ruby").should be_truthy
       stats["Ruby"].has_key?("new_version")
       stats["Ruby"]["new_version"].should eq(19)
     end
@@ -131,13 +211,13 @@ describe LanguageDailyStats do
   describe "current_month_stats" do
     before :each do
       @total_counts = 13
-      today_ruby_products.first.save
+      create_today_products
       if Date.today.day > 1
-        yesterday_ruby_products.first.save
+        create_yesterday_products
         @total_counts += 17
       end
       if Date.today.day > 7
-        lastweek_ruby_products.first.save
+        create_lastweek_products
         @total_counts += 19
       end
       LanguageDailyStats.update_counts(15)
@@ -147,8 +227,8 @@ describe LanguageDailyStats do
       stats =  LanguageDailyStats.current_month_stats
 
       stats.should_not be_nil
-      stats.empty?.should be_false
-      stats.has_key?("Ruby").should be_true
+      stats.empty?.should be_falsey
+      stats.has_key?("Ruby").should be_truthy
       stats["Ruby"].has_key?("new_version")
       stats["Ruby"]["new_version"].should eq(@total_counts)
     end
@@ -156,7 +236,7 @@ describe LanguageDailyStats do
 
   describe "last_month_stats" do
     before :each do
-      lastmonth_ruby_products.first.save
+      create_lastmonth_products
       LanguageDailyStats.update_counts(32)
     end
 
@@ -164,8 +244,8 @@ describe LanguageDailyStats do
       stats =  LanguageDailyStats.last_month_stats
 
       stats.should_not be_nil
-      stats.empty?.should be_false
-      stats.has_key?("Ruby").should be_true
+      stats.empty?.should be_falsey
+      stats.has_key?("Ruby").should be_truthy
       stats["Ruby"].has_key?("new_version")
       stats["Ruby"]["new_version"].should eq(23)
     end
@@ -173,7 +253,7 @@ describe LanguageDailyStats do
 
   describe "two_months_ago_stats" do
     before :each do
-      twomonth_ruby_products.first.save
+      create_twomonth_products
       LanguageDailyStats.update_counts(64)
     end
 
@@ -181,8 +261,8 @@ describe LanguageDailyStats do
       stats =  LanguageDailyStats.two_months_ago_stats
 
       stats.should_not be_nil
-      stats.empty?.should be_false
-      stats.has_key?("Ruby").should be_true
+      stats.empty?.should be_falsey
+      stats.has_key?("Ruby").should be_truthy
       stats["Ruby"].has_key?("new_version")
       stats["Ruby"]["new_version"].should eq(29)
     end

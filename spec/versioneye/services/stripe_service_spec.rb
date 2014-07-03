@@ -70,7 +70,7 @@ describe StripeService do
       user = UserFactory.create_new 1
       user.stripe_customer_id = customer.id
       user.stripe_token = token_id
-      user.save.should be_true
+      user.save.should be_truthy
 
       new_token = StripeFactory.token
       token_id = new_token[:id]
@@ -108,7 +108,7 @@ describe StripeService do
 
       customer = described_class.create_customer token_id, personal_plan, user.email
       user.stripe_customer_id = customer.id
-      user.save.should be_true
+      user.save.should be_truthy
 
       token = StripeFactory.token
       token_id = token[:id]
@@ -123,11 +123,11 @@ describe StripeService do
   describe 'delete' do
 
     it 'returns false becasue customer id is nil' do
-      described_class.delete(nil).should be_false
+      described_class.delete(nil).should be_falsey
     end
 
     it 'returns false becasue customer id does not exist' do
-      described_class.delete('as_klas88').should be_false
+      described_class.delete('as_klas88').should be_falsey
     end
 
     it 'returns true' do
@@ -140,13 +140,13 @@ describe StripeService do
 
       cust = described_class.fetch_customer customer.id
       cust.should_not be_nil
-      cust[:deleted].should be_false
+      cust[:deleted].should be_falsey
 
-      described_class.delete(customer.id).should be_true
+      described_class.delete(customer.id).should be_truthy
 
       cust = described_class.fetch_customer customer.id
       cust.should_not be_nil
-      cust[:deleted].should be_true
+      cust[:deleted].should be_truthy
     end
 
   end

@@ -138,10 +138,10 @@ describe ProjectService do
       end
 
       d1 = Projectdependency.find dep_1.id.to_s
-      d1.release.should be_true
+      d1.release.should be_truthy
 
       d2 = Projectdependency.find dep_2.id.to_s
-      d2.release.should be_false
+      d2.release.should be_falsey
     end
   end
 
@@ -165,7 +165,7 @@ describe ProjectService do
       Projectdependency.count.should == 0
 
       resp =described_class.store project
-      resp.should be_true
+      resp.should be_truthy
 
       Product.count.should == 3
       Project.count.should == 1
@@ -182,7 +182,7 @@ describe ProjectService do
       Projectdependency.count.should == 0
 
       resp =described_class.store project
-      resp.should be_false
+      resp.should be_falsey
 
       Product.count.should == 0
       Project.count.should == 0
@@ -243,7 +243,7 @@ describe ProjectService do
       project_dep.save
       ProjectdependencyService.update_outdated!(project_dep)
       project_dep.save
-      ProjectService.outdated?(project).should be_false
+      ProjectService.outdated?(project).should be_falsey
       ProjectService.badge_for_project(project.id).should eq('up-to-date')
     end
 
@@ -260,7 +260,7 @@ describe ProjectService do
       project_dep.save
       ProjectdependencyService.update_outdated!(project_dep)
       project_dep.save
-      ProjectService.outdated?(project).should be_true
+      ProjectService.outdated?(project).should be_truthy
       ProjectService.badge_for_project(project.id).should eq('out-of-date')
     end
   end
@@ -279,7 +279,7 @@ describe ProjectService do
       project_dep.save
       ProjectdependencyService.update_outdated!(project_dep)
       project_dep.save
-      ProjectService.outdated?(project).should be_true
+      ProjectService.outdated?(project).should be_truthy
       ProjectService.badge_for_project(project.id).should eq('out-of-date')
 
       project_dep.version_current = '10.0.0'
@@ -287,7 +287,7 @@ describe ProjectService do
       project_dep.save
       ProjectdependencyService.update_outdated!(project_dep)
       project_dep.save
-      ProjectService.outdated?(project).should be_false
+      ProjectService.outdated?(project).should be_falsey
       ProjectService.update_badge_for_project(project).should eq('up-to-date')
     end
 
@@ -305,7 +305,7 @@ describe ProjectService do
       project_dep.save
       ProjectdependencyService.update_outdated!(project_dep)
       project_dep.save
-      ProjectService.outdated?(project).should be_false
+      ProjectService.outdated?(project).should be_falsey
 
       ProjectService.badge_for_project(project.id).should eq('up-to-date')
 
@@ -314,7 +314,7 @@ describe ProjectService do
       project_dep.save
       ProjectdependencyService.update_outdated!(project_dep)
       project_dep.save
-      ProjectService.outdated?(project).should be_true
+      ProjectService.outdated?(project).should be_truthy
       ProjectService.update_badge_for_project(project).should eq('out-of-date')
     end
   end
@@ -325,7 +325,7 @@ describe ProjectService do
     it 'returns an empty hash because user has no projects' do
       user = UserFactory.create_new
       map = ProjectService.user_product_index_map user
-      map.empty?().should be_true
+      map.empty?().should be_truthy
     end
 
     it 'returns an empty hash because user has no projects' do
@@ -344,7 +344,7 @@ describe ProjectService do
       dep_4 = ProjectdependencyFactory.create_new project_2, prod_1, true, {:version_requested => '0.0.0'}
 
       map = ProjectService.user_product_index_map user
-      map.empty?().should be_false
+      map.empty?().should be_falsey
       map.count.should == 3
 
       key = "#{prod_1.language_esc}_#{prod_1.prod_key}"

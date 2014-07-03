@@ -28,7 +28,7 @@ describe ProjectUpdateService do
       pc = ProjectCollaborator.new({:project_id => "87", :owner_id => "2", :user_id => "1", :caller_id => "2"})
       pc.active = true
       pc.period = Project::A_PERIOD_WEEKLY
-      pc.save.should be_true
+      pc.save.should be_truthy
 
       ProjectCollaborator.count.should == 1
 
@@ -61,7 +61,7 @@ describe ProjectUpdateService do
       pc = ProjectCollaborator.new({:project_id => project.id.to_s, :owner_id => user.id.to_s, :user_id => hans.id.to_s, :caller_id => user.id.to_s})
       pc.active = true
       pc.period = Project::A_PERIOD_WEEKLY
-      pc.save.should be_true
+      pc.save.should be_truthy
 
       VCR.use_cassette('ProjectUpdateService_update_all', allow_playback_repeats: true) do
         described_class.update_all Project::A_PERIOD_WEEKLY
@@ -76,7 +76,7 @@ describe ProjectUpdateService do
       ActionMailer::Base.deliveries.clear
 
       product = ProductFactory.create_for_maven 'org.apache.maven', 'maven-compat', '10.0.0'
-      product.save.should be_true
+      product.save.should be_truthy
 
       user = UserFactory.create_new
       hans = UserFactory.create_new 2
@@ -93,7 +93,7 @@ describe ProjectUpdateService do
       pc = ProjectCollaborator.new({:project_id => project.id.to_s, :owner_id => user.id.to_s, :user_id => hans.id.to_s, :caller_id => user.id.to_s})
       pc.active = true
       pc.period = Project::A_PERIOD_WEEKLY
-      pc.save.should be_true
+      pc.save.should be_truthy
 
       VCR.use_cassette('ProjectUpdateService_update_all_2', allow_playback_repeats: true) do
         described_class.update_all Project::A_PERIOD_WEEKLY
@@ -118,7 +118,7 @@ describe ProjectUpdateService do
       project = ProjectFactory.default user
       project.s3_filename = 'Gemfile'
       project.source = Project::A_SOURCE_UPLOAD
-      project.save.should be_true
+      project.save.should be_truthy
       Project.count.should == 1
 
       project = described_class.update_from_upload project, file, user

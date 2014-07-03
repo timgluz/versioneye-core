@@ -109,7 +109,7 @@ describe GemfileParser do
       dep_6.version_label.should eql("1.1.3")
       dep_6.comperator.should eql(">=")
       dep_6.release.should_not be_nil
-      dep_6.release.should be_true
+      dep_6.release.should be_truthy
 
       dep_7 = project.dependencies[6]
       dep_7.name.should eql("sassy")
@@ -123,7 +123,7 @@ describe GemfileParser do
       dep_8.version_requested.should eql("3.3.9")
       dep_8.version_current.should eql("3.3.9")
       dep_8.comperator.should eql("~>")
-      dep_8.outdated.should be_false
+      dep_8.outdated.should be_falsey
 
       dep_9 = project.dependencies[8]
       dep_9.name.should eql("cucumber-rails")

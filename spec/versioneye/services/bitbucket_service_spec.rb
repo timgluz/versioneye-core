@@ -33,9 +33,9 @@ describe BitbucketService do
         user.reload
         user.bitbucket_repos.count.should eq(3)
         repo_names = Set.new user.bitbucket_repos.map(&:fullname)
-        repo_names.include?("versioneye_test/emptyrepo").should be_true
-        repo_names.include?("versioneye_test/fantom_hydra").should be_true
-        repo_names.include?("versioneye_test/fantom_hydra_private").should be_true
+        repo_names.include?("versioneye_test/emptyrepo").should be_truthy
+        repo_names.include?("versioneye_test/fantom_hydra").should be_truthy
+        repo_names.include?("versioneye_test/fantom_hydra_private").should be_truthy
       end
     end
 
@@ -47,7 +47,7 @@ describe BitbucketService do
         user.reload
         user.bitbucket_repos.count.should eq(4)
         repo_names = Set.new user.bitbucket_repos.map(&:fullname)
-        repo_names.include?("timgluz/clj-sparse").should be_true
+        repo_names.include?("timgluz/clj-sparse").should be_truthy
       end
     end
   end

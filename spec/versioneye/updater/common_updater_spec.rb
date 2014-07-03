@@ -7,8 +7,8 @@ describe CommonUpdater do
     it 'updates old project with new values, clears the cache and dont send email' do
       ActionMailer::Base.deliveries.clear
       user = UserFactory.create_new
-      old_project = ProjectFactory.default user
-      new_project = ProjectFactory.default user
+      old_project = ProjectFactory.default user, 10
+      new_project = ProjectFactory.default user, 11
 
       CommonUpdater.cache.set( old_project.id.to_s, "out-of-date", 21600) # TTL = 6.hour
       CommonUpdater.cache.get( old_project.id.to_s).should_not be_nil

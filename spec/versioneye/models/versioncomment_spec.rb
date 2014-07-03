@@ -28,13 +28,13 @@ describe Versioncomment do
   describe "save" do
 
     it "does not save. Because mandatory fields are empty" do
-      @vc.save.should be_false
+      @vc.save.should be_falsey
     end
 
     it "does save. Because mandatory fields are not empty" do
       @vc.comment = "Jo. Voll geil eh!"
       @vc.version = "1.0"
-      @vc.save.should be_true
+      @vc.save.should be_truthy
     end
 
   end

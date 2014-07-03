@@ -7,7 +7,7 @@ describe Product do
   describe "versions_empty?" do
 
     it "returns true" do
-      product.versions_empty?.should be_true
+      product.versions_empty?.should be_truthy
     end
 
     it "returns false" do
@@ -15,7 +15,7 @@ describe Product do
       product.prod_key = "gasgagasgj8623_junit/junit23"
       product.versions = Array.new
       product.versions.push( Version.new({ :version => "1.0" }) )
-      product.versions_empty?.should be_false
+      product.versions_empty?.should be_falsey
     end
 
     it "returns false" do
@@ -25,7 +25,7 @@ describe Product do
       product.save
       product.versions.push( Version.new({ :version => "1.0" }) )
       prod = Product.find_by_key("gasgagasgj8623_junit/junit23")
-      prod.versions_empty?.should be_false
+      prod.versions_empty?.should be_falsey
     end
 
   end

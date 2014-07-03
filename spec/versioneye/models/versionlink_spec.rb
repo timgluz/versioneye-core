@@ -38,11 +38,11 @@ describe Versionlink do
 
       link = Versionlink.new({:language => lang, :version_id => version,
         :prod_key => prod_key, :link => url, :name => prod_key})
-      link.save.should be_true
+      link.save.should be_truthy
 
       link2 = Versionlink.new({:language => lang, :version_id => version,
         :prod_key => prod_key, :link => "afaff", :name => prod_key})
-      link2.save.should be_true
+      link2.save.should be_truthy
 
       links = Versionlink.find_version_link lang, prod_key, version, url
       links.should_not be_nil
@@ -62,7 +62,7 @@ describe Versionlink do
 
     it 'returns nil because there is no product' do
       product = ProductFactory.create_new
-      product.save.should be_true
+      product.save.should be_truthy
       link = Versionlink.new({:language => product.language,
         :prod_key => product.prod_key, :link => "asgas", :name => "name"})
       link.product.should_not be_nil
@@ -130,7 +130,7 @@ describe Versionlink do
       Versionlink.count.should eq(0)
       link = Versionlink.new({:language => Product::A_LANGUAGE_RUBY, :prod_key => prod_key, :link => url, :name => prod_key})
       id   = link.id.to_s
-      link.save.should be_true
+      link.save.should be_truthy
       link_db = Versionlink.create_project_link Product::A_LANGUAGE_RUBY, prod_key, url, prod_key
       link_db.should_not be_nil
       link_db.id.to_s.should eq(id)
@@ -150,7 +150,7 @@ describe Versionlink do
       prod_key = 'rails'
       Versionlink.count.should eq(0)
       link = Versionlink.new({:language => Product::A_LANGUAGE_RUBY, :prod_key => prod_key, :version_id => '3.0.0', :link => url, :name => prod_key})
-      link.save.should be_true
+      link.save.should be_truthy
       id = link.id.to_s
       link_db = Versionlink.create_project_link Product::A_LANGUAGE_RUBY, prod_key, url, prod_key
       link_db.should_not be_nil
@@ -167,16 +167,16 @@ describe Versionlink do
     end
 
     it 'returns true' do
-      Versionlink.create_versionlink("Ruby", "rails", "1.0.0", "http://rails.com", "Homepage").should be_true
+      Versionlink.create_versionlink("Ruby", "rails", "1.0.0", "http://rails.com", "Homepage").should be_truthy
     end
 
     it 'returns true and adds http to link' do
-      Versionlink.create_versionlink("Ruby", "rails", "1.0.0", "rails.com", "Homepage").should be_true
+      Versionlink.create_versionlink("Ruby", "rails", "1.0.0", "rails.com", "Homepage").should be_truthy
       Versionlink.first.link.should eq("http://rails.com")
     end
 
     it 'returns nil because it exist already' do
-      Versionlink.create_versionlink("Ruby", "rails", "1.0.0", "rails.com", "Homepage").should be_true
+      Versionlink.create_versionlink("Ruby", "rails", "1.0.0", "rails.com", "Homepage").should be_truthy
       Versionlink.count.should == 1
       Versionlink.create_versionlink("Ruby", "rails", "1.0.0", "rails.com", "Homepage").should be_nil
       Versionlink.count.should == 1

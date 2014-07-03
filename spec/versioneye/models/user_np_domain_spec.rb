@@ -5,7 +5,7 @@ describe User do
   describe "save with np domain" do
 
     it "saves a new user with np domain" do
-      NpDomain.new.save.should be_true
+      NpDomain.new.save.should be_truthy
 
       email = "daniele@etna-alternance.net"
       user = User.new
@@ -16,7 +16,7 @@ describe User do
       user.salt = "salt"
       user.terms = true
       user.datenerhebung = true
-      user.save.should be_true
+      user.save.should be_truthy
       db_user = User.find_by_email( email )
       db_user.should_not be_nil
       db_user.free_private_projects.should == 50
@@ -33,7 +33,7 @@ describe User do
       user.salt = "salt"
       user.terms = true
       user.datenerhebung = true
-      user.save.should be_true
+      user.save.should be_truthy
       db_user = User.find_by_email( email )
       db_user.should_not be_nil
       db_user.free_private_projects.should == 0

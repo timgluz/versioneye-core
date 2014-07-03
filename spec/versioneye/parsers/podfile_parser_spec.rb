@@ -64,7 +64,7 @@ describe PodfileParser do
 
     def parse_and_check podfile_path
       project = parser.parse_file podfile_path
-      project.should be_true
+      project.should be_truthy
       project.language.should eq Product::A_LANGUAGE_OBJECTIVEC
       project.project_type.should eq Project::A_TYPE_COCOAPODS
       project
@@ -94,29 +94,29 @@ describe PodfileParser do
       dep_ssl_tool_kit = get_dependency(project, "SSToolkit")
       dep_ssl_tool_kit.version_current.should eq "2.3.4"
       dep_ssl_tool_kit.version_requested.should eq "2.3.4"
-      dep_ssl_tool_kit.outdated.should be_false
+      dep_ssl_tool_kit.outdated.should be_falsey
 
       dep_afnetworking = get_dependency(project, "AFNetworking")
       dep_afnetworking.version_current.should eq "0.2.1"
       dep_afnetworking.version_requested.should eq "0.2.1"
-      dep_afnetworking.outdated.should be_false
+      dep_afnetworking.outdated.should be_falsey
 
       dep_lumberjack = get_dependency(project, "CocoaLumberjack")
       dep_lumberjack.version_current.should eq "1.2.3"
       dep_lumberjack.version_requested.should eq "1.2.3"
-      dep_lumberjack.outdated.should be_false
+      dep_lumberjack.outdated.should be_falsey
 
       dep_jsonkit = get_dependency(project, "JSONKit")
       dep_jsonkit.version_current.should eq "1.2.0"
       dep_jsonkit.version_requested.should eq "1.1.0"
-      dep_jsonkit.outdated.should be_true
+      dep_jsonkit.outdated.should be_truthy
 
       dep_jsonkit = get_dependency(project, "Objection")
       dep_jsonkit.version_current.should eq "1.0.0"
       dep_jsonkit.version_requested.should eq "1.0.0"
       dep_jsonkit.version_label.should eq ">= 0"
       dep_jsonkit.comperator.should eq ">="
-      dep_jsonkit.outdated.should be_false
+      dep_jsonkit.outdated.should be_falsey
     end
 
     it "should parse a podfile with target definitions" do

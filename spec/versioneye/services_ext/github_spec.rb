@@ -88,8 +88,8 @@ describe Github do
       VCR.use_cassette('github_signup', :allow_playback_repeats => true) do
         user_data = Github.user("94593468f5c9e59718a259297")
         user_data.should_not be_nil
-        user_data.is_a?(Hash).should be_true
-        user_data.has_key?("login").should be_true
+        user_data.is_a?(Hash).should be_truthy
+        user_data.has_key?("login").should be_truthy
         user_data['login'].should eql("reiz")
         user_data['company'].should eql('VersionEye')
       end
@@ -120,8 +120,8 @@ describe Github do
     it "should response hash-map where 'repos' are empty array when user has wrong credentials" do
       response = Github.read_repos(user_without_token, url_start)
       response.should_not be_nil
-      response.has_key?(:repos).should be_true
-      response[:repos].empty?.should be_true
+      response.has_key?(:repos).should be_truthy
+      response[:repos].empty?.should be_truthy
     end
 
     it "should parse correctly url from response header" do
@@ -130,8 +130,8 @@ describe Github do
 
        response = Github.read_repos(user_with_token, url_start)
        response.should_not be_nil
-       response.has_key?(:paging).should be_true
-       response[:paging].has_key?("next").should be_true
+       response.has_key?(:paging).should be_truthy
+       response[:paging].has_key?("next").should be_truthy
        response[:paging]["next"].should eql(url_page2)
     end
 
@@ -171,7 +171,7 @@ describe Github do
       branches.should_not be_nil
       branches.count.should eql(1)
 
-      branches.first.has_key?(:name).should be_true
+      branches.first.has_key?(:name).should be_truthy
       branches.first[:name].should eql('master')
       branches.first[:commit][:sha].should eql("6dcb09b5b57875f334f61aebed695e2e4193db5e")
     end
@@ -238,14 +238,14 @@ describe Github do
     end
 
     it "should return empty array when github returns exception"  do
-      Github.orga_names(user_without_token[:github_token]).empty?.should be_true
+      Github.orga_names(user_without_token[:github_token]).empty?.should be_truthy
     end
 
     it "should return list with right names" do
-      Github.orga_names(user_without_token.github_token).empty?.should be_true
+      Github.orga_names(user_without_token.github_token).empty?.should be_truthy
 
       names = Github.orga_names(user_with_token.github_token)
-      names.empty?.should be_false
+      names.empty?.should be_falsey
       names.first.should eql('versioneye')
     end
   end
@@ -268,12 +268,12 @@ describe Github do
     end
 
     it "should return false when github raises exception" do
-      Github.private_repo?(user_without_token.github_token, "versioneye").should be_false
+      Github.private_repo?(user_without_token.github_token, "versioneye").should be_falsey
     end
 
     it "should be true when everything goes as planned and fakeweb returns correct response" do
-      Github.private_repo?(user_without_token.github_token, "versioneye").should be_false
-      Github.private_repo?(user_without_token.github_token, "versioneye").should be_true
+      Github.private_repo?(user_without_token.github_token, "versioneye").should be_falsey
+      Github.private_repo?(user_without_token.github_token, "versioneye").should be_truthy
     end
   end
 

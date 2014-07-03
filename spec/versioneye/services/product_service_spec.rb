@@ -26,7 +26,7 @@ describe ProductService do
 
     it "creates a follower" do
       response = ProductService.follow product.language, product.prod_key, user
-      response.should be_true
+      response.should be_truthy
       prod = Product.fetch_product( product.language, product.prod_key )
       prod.users.count.should eq(1)
       prod.followers.should eq(1)
@@ -45,9 +45,9 @@ describe ProductService do
 
     it "unfollows successfully" do
       response = ProductService.follow   product.language, product.prod_key, user
-      response.should be_true
+      response.should be_truthy
       response = ProductService.unfollow product.language, product.prod_key, user
-      response.should be_true
+      response.should be_truthy
       prod = Product.fetch_product( product.language, product.prod_key )
       prod.followers.should eq(0)
       subscribers = prod.users
@@ -57,7 +57,7 @@ describe ProductService do
 
     it "destroys returns error because product does not exist" do
       unfollow = ProductService.unfollow "lang", "_does_not_exist_", user
-      unfollow.should be_false
+      unfollow.should be_falsey
     end
 
   end
@@ -116,7 +116,7 @@ describe ProductService do
       ProductService.update_dependencies product
       product.all_dependencies.each do |dep|
         dep.outdated.should_not be_nil
-        dep.outdated.should be_false
+        dep.outdated.should be_falsey
       end
     end
 
@@ -370,11 +370,11 @@ describe ProductService do
     it 'updates the follower count' do
       Product.count.should == 0
       response = ProductService.follow product.language, product.prod_key, user
-      response.should be_true
+      response.should be_truthy
 
       product = Product.first
       product.followers = 0
-      product.save.should be_true
+      product.save.should be_truthy
 
       Product.count.should == 1
       prod = Product.first
@@ -391,7 +391,7 @@ describe ProductService do
 
     it 'removes' do
       prod_1 = ProductFactory.create_new(37)
-      prod_1.save.should be_true
+      prod_1.save.should be_truthy
       Product.count.should == 1
       ProductService.remove prod_1
       Product.count.should == 0

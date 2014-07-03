@@ -54,24 +54,24 @@ describe Project do
   describe "make_project_key" do
     before(:each) do
       @test_user = UserFactory.create_new 1001
-      @test_user.nil?.should be_false
+      @test_user.nil?.should be_falsey
       @test_project = ProjectFactory.create_new @test_user
     end
 
     it "project factory generated project_key passes validation" do
-      @test_project.errors.full_messages.empty?.should be_true
+      @test_project.errors.full_messages.empty?.should be_truthy
     end
 
     it "if generates unique project_key if there already exsists similar projects" do
       new_project = ProjectFactory.create_new @test_user
-      new_project.valid?.should be_true
+      new_project.valid?.should be_truthy
       new_project.project_key.should =~ /(\d+)\z/
       new_project.remove
     end
 
     it "if generates unique project_key only once" do
       new_project = ProjectFactory.create_new @test_user
-      new_project.valid?.should be_true
+      new_project.valid?.should be_truthy
       new_project.project_key.should =~ /(\d+)\z/
       project_key = new_project.project_key
       new_project.make_project_key!
@@ -83,7 +83,7 @@ describe Project do
   describe "collaborator" do
     before(:each) do
       @test_user = UserFactory.create_new 10021
-      @test_user.nil?.should be_false
+      @test_user.nil?.should be_falsey
       @test_project = ProjectFactory.create_new @test_user
     end
 
@@ -98,16 +98,16 @@ describe Project do
       @test_project.collaborator( @test_user ).should be_nil
       @test_project.collaborator( nil ).should be_nil
 
-      @test_project.collaborator?( col_user ).should be_false
-      @test_project.collaborator?( nil ).should be_false
-      @test_project.collaborator?( @test_user ).should be_true
+      @test_project.collaborator?( col_user ).should be_falsey
+      @test_project.collaborator?( nil ).should be_falsey
+      @test_project.collaborator?( @test_user ).should be_truthy
 
       collaborator.user_id = col_user._id
       collaborator.save
       collaborator_db = @test_project.collaborator( col_user )
       collaborator_db.should_not be_nil
       collaborator_db.user.username.should eql( col_user.username )
-      @test_project.collaborator?( col_user ).should be_true
+      @test_project.collaborator?( col_user ).should be_truthy
 
       @test_project.remove_collaborators
       @test_project.collaborators.size.should eq(0)
@@ -119,7 +119,7 @@ describe Project do
   describe "visible_for_user?" do
     before(:each) do
       @test_user = UserFactory.create_new 1023
-      @test_user.nil?.should be_false
+      @test_user.nil?.should be_falsey
       @test_project = ProjectFactory.create_new @test_user
       @test_project.public = false
       @test_project.save
@@ -137,27 +137,27 @@ describe Project do
                                              :caller_id => @test_user._id )
       collaborator.save
       @test_project.collaborators << collaborator
-      @test_project.visible_for_user?( col_user ).should be_false
-      @test_project.visible_for_user?( nil ).should be_false
-      @test_project.visible_for_user?( @test_user ).should be_true
+      @test_project.visible_for_user?( col_user ).should be_falsey
+      @test_project.visible_for_user?( nil ).should be_falsey
+      @test_project.visible_for_user?( @test_user ).should be_truthy
       @test_project.public = true
       @test_project.save
-      @test_project.visible_for_user?( col_user ).should be_true
+      @test_project.visible_for_user?( col_user ).should be_truthy
       @test_project.public = false
       @test_project.save
-      @test_project.visible_for_user?( col_user ).should be_false
-      @test_project.visible_for_user?( @test_user ).should be_true
+      @test_project.visible_for_user?( col_user ).should be_falsey
+      @test_project.visible_for_user?( @test_user ).should be_truthy
       collaborator.user_id = col_user._id
       collaborator.save
-      @test_project.visible_for_user?( col_user ).should be_true
-      @test_project.visible_for_user?( @test_user ).should be_true
+      @test_project.visible_for_user?( col_user ).should be_truthy
+      @test_project.visible_for_user?( @test_user ).should be_truthy
     end
   end
 
   describe "unmuted_dependencies" do
     it "returns muted and unmuted dependencies" do
       user = UserFactory.create_new 1066
-      user.nil?.should be_false
+      user.nil?.should be_falsey
       project = ProjectFactory.create_new user
       project.public = false
       project.save
@@ -200,7 +200,7 @@ describe Project do
   describe "overwrite_dependencies" do
     it "overwrites dependencies" do
       user = UserFactory.create_new 1066
-      user.nil?.should be_false
+      user.nil?.should be_falsey
       project = ProjectFactory.create_new user
       project.save
 
@@ -265,7 +265,7 @@ describe Project do
       muted.first.prod_key.should eql( dep_6.prod_key )
 
       proj_db.dependencies.each do |dep|
-        old_deps.include?( dep.id.to_s ).should be_false
+        old_deps.include?( dep.id.to_s ).should be_falsey
       end
     end
   end

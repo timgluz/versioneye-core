@@ -22,7 +22,7 @@ describe PodfilelockParser do
   # parse and check for the right language and project type
   def parse_and_check filepath
     project = parser.parse_file filepath
-    project.should be_true
+    project.should be_truthy
     project.language.should eq Product::A_LANGUAGE_OBJECTIVEC
     project.project_type.should eq Project::A_TYPE_COCOAPODS
     project
@@ -39,7 +39,7 @@ describe PodfilelockParser do
   # test the versions and if the requested version is outdated
   def test_dependency dep, version_latest, version_requested, outdated
     # puts "dependency #{dep.name} version #{dep.version_current}"
-    dep.should be_true
+    dep.should be_truthy
     dep.version_current.should eq(version_latest)
     dep.version_requested.should eq(version_requested)
     dep.outdated.should eq(outdated)
@@ -126,7 +126,7 @@ describe PodfilelockParser do
       project = parse_and_check 'spec/fixtures/files/podfilelock/example2/Podfile.lock'
 
       # compare
-      project.should be_true
+      project.should be_truthy
 
       dep = get_dependency(project, "JRSwizzle")
       test_dependency(dep, "1.0",  "1.0", false)

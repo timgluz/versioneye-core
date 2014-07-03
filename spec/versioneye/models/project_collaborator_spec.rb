@@ -14,10 +14,10 @@ describe ProjectCollaborator do
       collaborator.save
       project.collaborators << collaborator
 
-      ProjectCollaborator.collaborator?(project.id, user.id).should be_false
+      ProjectCollaborator.collaborator?(project.id, user.id).should be_falsey
       collaborator.user_id = user.id.to_s
       collaborator.save
-      ProjectCollaborator.collaborator?(project.id, user.id).should be_true
+      ProjectCollaborator.collaborator?(project.id, user.id).should be_truthy
     end
 
   end

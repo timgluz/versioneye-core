@@ -31,7 +31,7 @@ describe ProjectdependencyService do
       dep.release.should be_nil
       ProjectdependencyService.release?(dep).should_not be_nil
       dep.release.should_not be_nil
-      dep.release.should be_true
+      dep.release.should be_truthy
     end
 
     it 'updates the release to false' do
@@ -40,7 +40,7 @@ describe ProjectdependencyService do
       dep.release.should be_nil
       ProjectdependencyService.release?(dep).should_not be_nil
       dep.release.should_not be_nil
-      dep.release.should be_false
+      dep.release.should be_falsey
     end
 
   end
@@ -54,41 +54,41 @@ describe ProjectdependencyService do
     it "is up to date" do
       dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.version_requested = "1.0"
-      ProjectdependencyService.outdated?(dep).should be_false
-      dep.unknown?.should  be_false
+      ProjectdependencyService.outdated?(dep).should be_falsey
+      dep.unknown?.should  be_falsey
     end
 
     it "is outdated" do
       dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.version_requested = "0.9"
-      ProjectdependencyService.outdated?(dep).should be_true
-      dep.unknown?.should  be_false
+      ProjectdependencyService.outdated?(dep).should be_truthy
+      dep.unknown?.should  be_falsey
     end
 
     it "is up to date" do
       dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.version_requested = "1.9"
-      ProjectdependencyService.outdated?(dep).should be_false
-      dep.unknown?.should  be_false
+      ProjectdependencyService.outdated?(dep).should be_falsey
+      dep.unknown?.should  be_falsey
     end
 
     it "is up to date because it is GIT" do
       dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.version_requested = "GIT"
-      ProjectdependencyService.outdated?(dep).should be_false
+      ProjectdependencyService.outdated?(dep).should be_falsey
     end
 
     it "is up to date because it is PATH" do
       dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.version_requested = "PATH"
-      ProjectdependencyService.outdated?(dep).should be_false
+      ProjectdependencyService.outdated?(dep).should be_falsey
     end
 
     it "is up to date because it is unknown" do
       dep = ProjectdependencyFactory.create_new(@project, nil)
       dep.version_requested = "2.0.0"
-      ProjectdependencyService.outdated?(dep).should be_false
-      dep.unknown?.should  be_true
+      ProjectdependencyService.outdated?(dep).should be_falsey
+      dep.unknown?.should  be_truthy
     end
 
     it "is up to date" do
@@ -103,7 +103,7 @@ describe ProjectdependencyService do
       dep.stability         = "dev"
       dep.language          = Product::A_LANGUAGE_PHP
 
-      ProjectdependencyService.outdated?(dep).should be_false
+      ProjectdependencyService.outdated?(dep).should be_falsey
       dep.version_current.should eql("2.2.x-dev")
     end
 
@@ -121,45 +121,45 @@ describe ProjectdependencyService do
       dep.version_requested = "3.2.13.rc2"
       dep.language          = Product::A_LANGUAGE_RUBY
       dep.stability         = VersionTagRecognizer.stability_tag_for dep.version_requested
-      ProjectdependencyService.outdated?(dep).should be_true
+      ProjectdependencyService.outdated?(dep).should be_truthy
     end
 
     it "checks the cache" do
       dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.version_requested = "1.0"
-      ProjectdependencyService.outdated?(dep).should be_false
-      dep.unknown?.should  be_false
+      ProjectdependencyService.outdated?(dep).should be_falsey
+      dep.unknown?.should  be_falsey
 
       dep.version_requested = "0.1"
       dep.release = nil
-      ProjectdependencyService.outdated?(dep).should be_false
+      ProjectdependencyService.outdated?(dep).should be_falsey
       ProjectdependencyService.update_outdated!(dep)
-      ProjectdependencyService.outdated?(dep).should be_true
+      ProjectdependencyService.outdated?(dep).should be_truthy
       dep.release.should_not be_nil
-      dep.release.should be_true
+      dep.release.should be_truthy
     end
 
 
     it "checks if the cache updates after a time period" do
       dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.version_requested = "1.0"
-      ProjectdependencyService.outdated?(dep).should be_false
-      dep.unknown?.should be_false
+      ProjectdependencyService.outdated?(dep).should be_falsey
+      dep.unknown?.should be_falsey
 
       dep.version_requested = "0.1"
       dep.release = nil
       dep.save
       # Should fetch value from catch and return false
-      ProjectdependencyService.outdated?(dep).should be_false
+      ProjectdependencyService.outdated?(dep).should be_falsey
 
       day_before = dep.outdated_updated_at - 1
       dep.outdated_updated_at = day_before
       dep.save
 
       # Should update the cached value and return true
-      ProjectdependencyService.outdated?(dep).should be_true
+      ProjectdependencyService.outdated?(dep).should be_truthy
       dep.release.should_not be_nil
-      dep.release.should be_true
+      dep.release.should be_truthy
     end
 
   end

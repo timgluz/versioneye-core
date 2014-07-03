@@ -22,7 +22,7 @@ describe BillingAddress do
       ba.city.should be_nil
       ba.country.should be_nil
       ba.taxid.should be_nil
-      ba.save.should be_false
+      ba.save.should be_falsey
 
       ba.update_from_params params
 
@@ -33,7 +33,7 @@ describe BillingAddress do
       ba.city.should eq('HansCity')
       ba.country.should eq('DE')
       ba.taxid.should eq('HansVat')
-      ba.save.should be_true
+      ba.save.should be_truthy
     end
 
   end
@@ -50,7 +50,7 @@ describe BillingAddress do
       params[:city]     = 'HansCity'
       params[:country]  = 'DE'
       ba.update_from_params params
-      ba.save.should be_false
+      ba.save.should be_falsey
     end
 
     it 'saves because company is coroporate type and has company name' do
@@ -66,7 +66,7 @@ describe BillingAddress do
       params[:taxid]    = 'DE87473'
       ba.update_from_params params
       resp = ba.save
-      resp.should be_true
+      resp.should be_truthy
     end
 
     it 'doesnt save because taxid is missing for coroporate type' do
@@ -80,7 +80,7 @@ describe BillingAddress do
       params[:country]  = 'DE'
       params[:company]  = 'HansImGlueck'
       ba.update_from_params params
-      ba.save.should be_false
+      ba.save.should be_falsey
     end
 
     it 'saves because type is individual, company is not mandatory' do
@@ -93,7 +93,7 @@ describe BillingAddress do
       params[:city]     = 'HansCity'
       params[:country]  = 'DE'
       ba.update_from_params params
-      ba.save.should be_true
+      ba.save.should be_truthy
     end
 
     it 'does not save because country is wrong' do
@@ -106,7 +106,7 @@ describe BillingAddress do
       params[:city]     = 'HansCity'
       params[:country]  = 'DD'
       ba.update_from_params params
-      ba.save.should be_false
+      ba.save.should be_falsey
     end
 
   end

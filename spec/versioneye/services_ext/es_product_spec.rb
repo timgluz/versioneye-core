@@ -42,8 +42,8 @@ describe EsProduct do
   context "With no indexes: " do
 
     it "does clean_all successfull" do
-      EsProduct.clean_all.should be_true
-      EsProduct.clean_all.should be_false
+      EsProduct.clean_all.should be_truthy
+      EsProduct.clean_all.should be_falsey
     end
 
     it "empty result because no index" do
@@ -65,7 +65,7 @@ describe EsProduct do
     it "Finds the only element in the index by name" do
       EsProduct.reset
       product = Product.new(:name => "rails", :prod_type => 'RubyGems', :language => 'Ruby', :prod_key => 'rails')
-      product.save.should be_true
+      product.save.should be_truthy
       EsProduct.index product
       sleep 3 # sleep for 2 seconds until the product gets indexed via REST.
       results = EsProduct.search "rails"

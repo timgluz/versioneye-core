@@ -132,7 +132,7 @@ describe ReceiptService do
       receipt.update_from_invoice invoice
       receipt.invoice_id = 'tx_1'
       receipt.receipt_nr = nr
-      receipt.save.should be_true
+      receipt.save.should be_truthy
       nr = described_class.next_receipt_nr
       nr.should == 1002
     end

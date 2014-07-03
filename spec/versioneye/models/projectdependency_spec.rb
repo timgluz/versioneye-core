@@ -99,7 +99,7 @@ describe Projectdependency do
       dep_1.save
       project.dependencies.count.should eq(1)
 
-      dep_1.known?().should be_true
+      dep_1.known?().should be_truthy
       pr = dep_1.product
       pr.should_not be_nil
       pr.prod_key.should eq('log4r')

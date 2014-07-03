@@ -57,37 +57,37 @@ describe GemfilelockParser do
       dep1 = fetch_by_name(project.dependencies, product1.name)
       dep1.name.should eql(product1.name)
       dep1.version_requested.should eql(product1.version)
-      dep1.outdated.should be_false
+      dep1.outdated.should be_falsey
 
       dep2 = fetch_by_name(project.dependencies, product2.name)
       dep2.name.should eql(product2.name)
       dep2.version_requested.should eql(product2.version)
-      dep2.outdated.should be_false
+      dep2.outdated.should be_falsey
 
       dep3 = fetch_by_name(project.dependencies, product3.name)
       dep3.name.should eql(product3.name)
       dep3.version_requested.should eql(product3.version)
-      dep3.outdated.should be_false
+      dep3.outdated.should be_falsey
 
       dep4 = fetch_by_name(project.dependencies, product4.name)
       dep4.name.should eql(product4.name)
       dep4.version_requested.should eql(product4.version)
-      dep4.outdated.should be_false
+      dep4.outdated.should be_falsey
 
       dep5 = fetch_by_name(project.dependencies, product5.name)
       dep5.name.should eql(product5.name)
       dep5.version_requested.should eql(product5.version)
-      dep5.outdated.should be_false
+      dep5.outdated.should be_falsey
 
       dep6 = fetch_by_name(project.dependencies, product6.name)
       dep6.name.should eql(product6.name)
       dep6.version_requested.should eql(product6.version)
-      dep6.outdated.should be_false
+      dep6.outdated.should be_falsey
 
       dep7 = fetch_by_name(project.dependencies, product7.name)
       dep7.name.should eql(product7.name)
       dep7.version_requested.should eql("1.3.1")
-      dep7.outdated.should be_true
+      dep7.outdated.should be_truthy
     end
 
   end

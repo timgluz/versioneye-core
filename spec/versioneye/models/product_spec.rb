@@ -12,12 +12,12 @@ describe Product do
 
     it "downcases the name" do
       product = described_class.new({:language => 'Java', :prod_type => 'Maven', :prod_key => 'junit', :name => 'JUnit'})
-      product.save.should be_true
+      product.save.should be_truthy
       product.name_downcase.should eq('junit')
     end
     it "downcases the name !" do
       product = described_class.new({:language => 'Java', :prod_type => 'Maven', :prod_key => 'junit', :name => 'JUnit'})
-      product.save!.should be_true
+      product.save!.should be_truthy
       product.name_downcase.should eq('junit')
     end
 
@@ -42,7 +42,7 @@ describe Product do
 
     it "returns the product for string id" do
       product = described_class.new({:language => 'Java', :prod_type => 'Maven', :prod_key => 'junit', :name => 'junit'})
-      product.save.should be_true
+      product.save.should be_truthy
       result = described_class.find_by_id( product.id.to_s )
       result.should_not be_nil
       result.name.should eq('junit')
@@ -50,7 +50,7 @@ describe Product do
 
     it "returns the product for object id" do
       product = described_class.new({:language => 'Java', :prod_type => 'Maven', :prod_key => 'junit', :name => 'junit'})
-      product.save.should be_true
+      product.save.should be_truthy
       result = described_class.find_by_id( product.id )
       result.should_not be_nil
       result.name.should eq('junit')
@@ -123,7 +123,7 @@ describe Product do
     end
     it "return searched product" do
       product = described_class.new({:language => 'JavaScript', :prod_type => 'Bower', :prod_key => 'moment/moment', :name => 'moment'})
-      product.save.should be_true
+      product.save.should be_truthy
       result = described_class.fetch_bower('moment')
       result.should_not be_nil
       result.prod_key.should eq('moment/moment')
@@ -131,9 +131,9 @@ describe Product do
     end
     it "return searched product, the first one" do
       product  = described_class.new({:language => 'JavaScript', :prod_type => 'Bower', :prod_key => 'moment/moment', :name => 'moment'})
-      product.save.should be_true
+      product.save.should be_truthy
       product2 = described_class.new({:language => 'JavaScript', :prod_type => 'Bower', :prod_key => 'moment/', :name => 'moment'})
-      product2.save.should be_true
+      product2.save.should be_truthy
       result = described_class.fetch_bower('moment')
       result.should_not be_nil
       result.prod_key.should eq('moment/moment')
@@ -158,7 +158,7 @@ describe Product do
     end
     it "return searched product" do
       product = described_class.new({:language => 'Java', :prod_type => 'Maven', :prod_key => 'junit', :name => 'junit'})
-      product.save.should be_true
+      product.save.should be_truthy
       result = described_class.find_by_key('junit')
       result.should_not be_nil
       result.prod_key.should eq('junit')
@@ -348,18 +348,18 @@ describe Product do
     it 'returns true if versions nil' do
       product = Product.new
       product.versions = nil
-      product.versions_empty?().should be_true
+      product.versions_empty?().should be_truthy
     end
     it 'returns true if versions empty' do
       product = Product.new
       product.versions = Array.new
-      product.versions_empty?().should be_true
+      product.versions_empty?().should be_truthy
     end
     it 'returns false if versions not empty' do
       product = Product.new
       product.versions = Array.new
       product.versions.push(Version.new({:version => '1.0.0'}))
-      product.versions_empty?().should be_false
+      product.versions_empty?().should be_falsey
     end
 
   end
@@ -371,7 +371,7 @@ describe Product do
       product = Product.new
       product.add_version('1.0.0')
       product.versions.size.should eq(1)
-      product.versions_empty?().should be_false
+      product.versions_empty?().should be_falsey
       product.version_by_number('1.0.0').should_not be_nil
     end
 
@@ -381,7 +381,7 @@ describe Product do
       product.versions.size.should eq(1)
       product.add_version('1.0.0')
       product.versions.size.should eq(1)
-      product.versions_empty?().should be_false
+      product.versions_empty?().should be_falsey
       product.version_by_number('1.0.0').should_not be_nil
     end
 
@@ -546,7 +546,7 @@ describe Product do
       link = Versionlink.new({language: product.language, prod_key: product.prod_key})
       link.link = "http://link.de"
       link.name = "Name"
-      link.save.should be_true
+      link.save.should be_truthy
       db_link = Versionlink.find(link.id)
       db_link.should_not be_nil
       links = product.http_links
@@ -592,7 +592,8 @@ describe Product do
       license = License.new({:language => product1.language, :prod_key => product1.prod_key,
         :version => product1.version, :name => "GLP"})
       license.save
-      product1.license_info.should eql("MIT, GLP")
+      product1.license_info.should match("MIT")
+      product1.license_info.should match("GLP")
     end
   end
 
@@ -604,8 +605,8 @@ describe Product do
       product_3 = ProductFactory.create_new 3, Project::A_TYPE_COMPOSER
       languages = described_class.unique_languages_for_product_ids( [product_1.id, product_2.id, product_3.id] )
       languages.size.should eq(2)
-      languages.include?("PHP").should be_true
-      languages.include?("Java").should be_true
+      languages.include?("PHP").should be_truthy
+      languages.include?("Java").should be_truthy
     end
 
   end

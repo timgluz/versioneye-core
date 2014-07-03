@@ -118,7 +118,7 @@ describe PackageParser do
       dep_14.version_current.should eql('1.16.2')
       dep_14.comperator.should eql('=')
       dep_14.version_label.should eql('latest')
-      dep_14.outdated?().should be_false
+      dep_14.outdated?().should be_falsey
 
       dep_15 = project.dependencies[14]
       dep_15.name.should eql('bruno')
@@ -126,7 +126,7 @@ describe PackageParser do
       dep_15.version_current.should eql('1.12.1')
       dep_15.comperator.should eql('^')
       dep_15.version_label.should eql('^1.12')
-      dep_15.outdated?().should be_false
+      dep_15.outdated?().should be_falsey
 
       dep_15 = project.dependencies[15]
       dep_15.name.should eql('gulp')
@@ -134,7 +134,7 @@ describe PackageParser do
       dep_15.version_current.should eql('1.12.1')
       dep_15.comperator.should eql('!=')
       dep_15.version_label.should eql('1.0')
-      dep_15.outdated?().should be_false
+      dep_15.outdated?().should be_falsey
     end
 
   end

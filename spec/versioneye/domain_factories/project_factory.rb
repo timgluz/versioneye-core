@@ -33,12 +33,15 @@ class ProjectFactory
   end
 
 
-  def self.default user
+  def self.default user, m = 1
     project = ProjectFactory.create_new user
 
-    prod_1  = ProductFactory.create_new 1
-    prod_2  = ProductFactory.create_new 2
-    prod_3  = ProductFactory.create_new 3
+    p1 = 1 * m
+    p2 = 2 * m
+    p3 = 3 * m
+    prod_1  = ProductFactory.create_new p1
+    prod_2  = ProductFactory.create_new p2
+    prod_3  = ProductFactory.create_new p3
 
     dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1000.0.0'}
     dep_2 = ProjectdependencyFactory.create_new project, prod_2, true, {:version_requested => '0.0.0'}

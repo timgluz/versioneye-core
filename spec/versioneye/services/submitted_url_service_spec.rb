@@ -22,20 +22,20 @@ describe SubmittedUrlService do
 
     it 'returns false because because the parameter type is wrong.' do
       ActionMailer::Base.deliveries.clear
-      SubmittedUrlService.update_integration_status( 'fake' ).should be_false
+      SubmittedUrlService.update_integration_status( 'fake' ).should be_falsey
       ActionMailer::Base.deliveries.size.should == 0
     end
 
     it 'returns false because there is no product_resource attached.' do
       ActionMailer::Base.deliveries.clear
       submitted_url = SubmittedUrlFactory.create_new(user_email: "t1@test.com")
-      SubmittedUrlService.update_integration_status( submitted_url ).should be_false
+      SubmittedUrlService.update_integration_status( submitted_url ).should be_falsey
       ActionMailer::Base.deliveries.size.should == 0
     end
 
     it 'returns false because the product_resource doesnt has a prod_key. Its not attached to a product yet.' do
       ActionMailer::Base.deliveries.clear
-      SubmittedUrlService.update_integration_status(@submitted_url_1).should be_false
+      SubmittedUrlService.update_integration_status(@submitted_url_1).should be_falsey
       ActionMailer::Base.deliveries.size.should == 0
     end
 
@@ -43,15 +43,15 @@ describe SubmittedUrlService do
       ActionMailer::Base.deliveries.clear
       @submitted_url_2.url = nil
       @submitted_url_2.save
-      SubmittedUrlService.update_integration_status(@submitted_url_2).should be_false
+      SubmittedUrlService.update_integration_status(@submitted_url_2).should be_falsey
       ActionMailer::Base.deliveries.size.should == 0
     end
 
     it 'returns true when updating is successful' do
       ActionMailer::Base.deliveries.clear
-      @submitted_url_2.integrated.should be_false
-      SubmittedUrlService.update_integration_status(@submitted_url_2).should be_true
-      @submitted_url_2.integrated.should be_true
+      @submitted_url_2.integrated.should be_falsey
+      SubmittedUrlService.update_integration_status(@submitted_url_2).should be_truthy
+      @submitted_url_2.integrated.should be_truthy
       ActionMailer::Base.deliveries.size.should == 1
     end
 

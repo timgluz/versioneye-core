@@ -19,7 +19,7 @@ describe ProjectImportService do
         project.dependencies.should_not be_empty
         project.name.should eq('versioneye/versioneye_maven_plugin')
         project.source.should eq(Project::A_SOURCE_GITHUB)
-        project.api_created.should be_false
+        project.api_created.should be_falsey
       end
     end
 
@@ -43,7 +43,7 @@ describe ProjectImportService do
         project.dependencies.should_not be_empty
         project.name.should eq('versioneye_test/fantom_hydra')
         project.source.should eq(Project::A_SOURCE_BITBUCKET)
-        project.api_created.should be_false
+        project.api_created.should be_falsey
       end
     end
 
@@ -86,7 +86,7 @@ describe ProjectImportService do
       project.name.should eq('Gemfile')
       project.source.should eq(Project::A_SOURCE_UPLOAD)
       project.url.should be_nil
-      project.api_created.should be_false
+      project.api_created.should be_falsey
     end
 
   end
@@ -94,12 +94,12 @@ describe ProjectImportService do
   describe "allowed_to_add_project?" do
 
     it "allows because its a public project" do
-      described_class.allowed_to_add_project?(nil, false).should be_true
+      described_class.allowed_to_add_project?(nil, false).should be_truthy
     end
 
     it "allows because each user has 1 private project for free" do
       Plan.create_defaults
-      described_class.allowed_to_add_project?(github_user, true).should be_true
+      described_class.allowed_to_add_project?(github_user, true).should be_truthy
     end
 
     it "allows because user has a plan and no projects" do
@@ -108,7 +108,7 @@ describe ProjectImportService do
       user = github_user
       user.plan = plan
       user.save
-      described_class.allowed_to_add_project?(github_user, true).should be_true
+      described_class.allowed_to_add_project?(github_user, true).should be_truthy
     end
 
     it "denies because user has a plan and to many private projects already" do
@@ -118,7 +118,7 @@ describe ProjectImportService do
       user.plan = plan
       user.save
       plan.private_projects.times { ProjectFactory.create_new( user, {:private_project => true} ) }
-      described_class.allowed_to_add_project?(github_user, true).should be_false
+      described_class.allowed_to_add_project?(github_user, true).should be_falsey
     end
 
     it "allows because user has a plan and to many private projects already, but 1 additional free project" do
@@ -129,7 +129,7 @@ describe ProjectImportService do
       user.free_private_projects = 1
       user.save
       plan.private_projects.times { ProjectFactory.create_new( user, {:private_project => true} ) }
-      described_class.allowed_to_add_project?(github_user, true).should be_true
+      described_class.allowed_to_add_project?(github_user, true).should be_truthy
     end
 
     it "denises because user has a plan and to many private projects already" do
@@ -141,7 +141,7 @@ describe ProjectImportService do
       user.save
       max = plan.private_projects + user.free_private_projects
       max.times { ProjectFactory.create_new( user, {:private_project => true} ) }
-      described_class.allowed_to_add_project?(github_user, true).should be_false
+      described_class.allowed_to_add_project?(github_user, true).should be_falsey
     end
 
     it "allows because unlimited projects is true" do
@@ -154,7 +154,7 @@ describe ProjectImportService do
       max = plan.private_projects + user.free_private_projects
       max.times { ProjectFactory.create_new( user, {:private_project => true} ) }
       Settings.instance.projects_unlimited = true
-      described_class.allowed_to_add_project?(github_user, true).should be_true
+      described_class.allowed_to_add_project?(github_user, true).should be_truthy
     end
 
   end

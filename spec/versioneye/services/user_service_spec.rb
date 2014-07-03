@@ -18,11 +18,11 @@ describe UserService do
       user.bitbucket_id = "456"
       user.bitbucket_token = "asgfasgfa"
       user.bitbucket_secret = "asgasgasgas"
-      user.save.should be_true
+      user.save.should be_truthy
       Notification.count.should eql(0)
       NotificationFactory.create_new user, true
       Notification.count.should eql(1)
-      UserService.delete(user).should be_true
+      UserService.delete(user).should be_truthy
       Notification.count.should eql(0)
       user.fullname.should eql("Deleted")
       user.email.should_not eql(email)

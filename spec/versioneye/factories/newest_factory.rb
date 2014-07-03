@@ -1,6 +1,7 @@
 FactoryGirl.define do
   sequence :product_name_generator do |n|
-    "spec_product_#{n}"
+    r = Random.rand(0..10000)
+    "spec_product_#{n}_#{r}"
   end
 
   sequence :version_generator do |n|

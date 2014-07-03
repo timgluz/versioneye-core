@@ -28,14 +28,14 @@ describe PromoCode do
     it "is valid" do
       promo = PromoCode.new({:name => "changelog_weekly_1", :free_private_projects => 3})
       promo.save
-      promo.is_valid?().should be_true
+      promo.is_valid?().should be_truthy
     end
 
     it "is not valid" do
       past = DateTime.now - 7.days
       promo = PromoCode.new({:name => "changelog_weekly_1", :free_private_projects => 3, :end_date => past})
       promo.save
-      promo.is_valid?().should be_false
+      promo.is_valid?().should be_falsey
     end
 
   end

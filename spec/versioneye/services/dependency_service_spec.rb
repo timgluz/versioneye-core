@@ -23,7 +23,7 @@ describe DependencyService do
                                   dep_prod_key: product.prod_key,
                                   prod_type:    product.prod_type,
                                   language:     product.language
-      DependencyService.outdated?( dependency ).should be_true
+      DependencyService.outdated?( dependency ).should be_truthy
     end
 
     it "is not outdated, because it's equal" do
@@ -36,7 +36,7 @@ describe DependencyService do
       dependency.dep_prod_key = product.prod_key
       dependency.prod_type    = product.prod_type
       dependency.language     = product.language
-      DependencyService.outdated?( dependency ).should be_false
+      DependencyService.outdated?( dependency ).should be_falsey
     end
 
     it "is not outdated, because it's a range" do
@@ -49,7 +49,7 @@ describe DependencyService do
                                   prod_type: product.prod_type,
                                   language: product.language
 
-      DependencyService.outdated?( dependency ).should be_false
+      DependencyService.outdated?( dependency ).should be_falsey
       dependency.version.should eql(">= 0.9.0")
     end
 
@@ -62,12 +62,12 @@ describe DependencyService do
                                   language: product.language,
                                   dep_prod_key: product.prod_key
 
-      DependencyService.outdated?( dependency ).should be_false
+      DependencyService.outdated?( dependency ).should be_falsey
     end
 
     it "is not outdated, because unknown dep" do
       dependency         = Dependency.new version: "0.1"
-      DependencyService.outdated?( dependency ).should be_false
+      DependencyService.outdated?( dependency ).should be_falsey
     end
 
   end
@@ -93,7 +93,7 @@ describe DependencyService do
       DependencyFactory.create_new(product, prod_4)
 
       product.dependencies(nil).size.should eq(4)
-      DependencyService.dependencies_outdated?( product.dependencies(nil) ).should be_false
+      DependencyService.dependencies_outdated?( product.dependencies(nil) ).should be_falsey
     end
 
     it "is outdated" do
@@ -117,7 +117,7 @@ describe DependencyService do
       dep_4.save
 
       product.dependencies(nil).size.should eq(4)
-      DependencyService.dependencies_outdated?( product.dependencies(nil) ).should be_true
+      DependencyService.dependencies_outdated?( product.dependencies(nil) ).should be_truthy
     end
 
   end
@@ -133,7 +133,7 @@ describe DependencyService do
       product.versions.push(Version.new({:version => "1.1"}))
       product.versions.push(Version.new({:version => "1.2"}))
       product.versions.push(Version.new({:version => "2.0"}))
-      product.save.should be_true
+      product.save.should be_truthy
 
       dependency = Dependency.new
       dependency.language = product.language
@@ -156,7 +156,7 @@ describe DependencyService do
       product.versions.push(Version.new({:version => "2.2.2"}))
       product.versions.push(Version.new({:version => "2.2.9"}))
       product.versions.push(Version.new({:version => "2.3"}))
-      product.save.should be_true
+      product.save.should be_truthy
 
       dependency = Dependency.new
       dependency.version = "~> 2.2"
@@ -187,7 +187,7 @@ describe DependencyService do
       product.versions.push(Version.new({:version => "1.1"}))
       product.versions.push(Version.new({:version => "1.2"}))
       product.versions.push(Version.new({:version => "2.0"}))
-      product.save.should be_true
+      product.save.should be_truthy
 
       dependency = Dependency.new
       dependency.language = product.language
@@ -242,7 +242,7 @@ describe DependencyService do
       product.versions.push(Version.new({:version => "1.1"}))
       product.versions.push(Version.new({:version => "1.2"}))
       product.versions.push(Version.new({:version => "2.0"}))
-      product.save.should be_true
+      product.save.should be_truthy
 
       dependency = Dependency.new({:prod_type => Project::A_TYPE_COMPOSER})
       dependency.language = product.language
@@ -289,7 +289,7 @@ describe DependencyService do
       product.versions.push(Version.new({:version => "1.1"}))
       product.versions.push(Version.new({:version => "1.2"}))
       product.versions.push(Version.new({:version => "2.0"}))
-      product.save.should be_true
+      product.save.should be_truthy
 
       dependency = Dependency.new({:prod_type => Project::A_TYPE_NPM})
       dependency.language = product.language
