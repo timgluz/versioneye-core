@@ -7,6 +7,7 @@ class BitbucketService < Versioneye::Service
   A_TASK_RUNNING = 'running'
   A_TASK_DONE    = 'done'
   A_MAX_WORKERS  = 16
+  A_TTL = 600 # 600 seconds = 10 minutes
 
 
   def self.update_repo_info(user, repo_fullname)
@@ -27,9 +28,8 @@ class BitbucketService < Versioneye::Service
 
 
   def self.cached_user_repos user
-    memcache = memcache_client
     user_task_key = "#{user[:username]}-bitbucket"
-    task_status = memcache.get(user_task_key)
+    task_status = cache.get(user_task_key)
 
     if task_status == A_TASK_RUNNING
       log.debug "Still importing data for #{user[:username]} from bitbucket"
@@ -39,10 +39,10 @@ class BitbucketService < Versioneye::Service
     if user[:bitbucket_token] and user.bitbucket_repos.all.count == 0
       log.info "Going to import bitbucket data for #{user[:username]}"
       task_status =  A_TASK_RUNNING
-      memcache.set(user_task_key, task_status)
+      cache.set( user_task_key, task_status, A_TTL )
       Thread.new do
         cache_user_all_repos(user)
-        memcache.set(user_task_key, A_TASK_DONE)
+        cache.set( user_task_key, A_TASK_DONE, A_TTL )
       end
     else
       log.info "Nothing to import - maybe clean user's repo?"
@@ -127,20 +127,5 @@ class BitbucketService < Versioneye::Service
     repo = BitbucketRepo.create_new(user, repo, read_branches[:val], read_files[:val])
     repo
   end
-
-
-  private
-
-
-    def self.memcache_client
-      Dalli::Client.new(
-        'localhost:11211',
-        {
-          :namespace  => 'github_app',
-          :compress   => true,
-          :expires_in => 10.minutes # Only allows import after X min; unless task unlocks!
-        }
-      )
-    end
 
 end
