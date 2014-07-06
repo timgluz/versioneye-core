@@ -116,12 +116,11 @@ class Project < Versioneye::Model
   end
 
   def visible_for_user?(user)
-    return true if self[:public]
+    return true  if self[:public]
     return false if user.nil?
-
-    is_collaborator = ProjectCollaborator.collaborator?(self[:_id], user[:_id])
-    return true if self.user_id.to_s == user[:_id].to_s or is_collaborator
-    false
+    return true  if self.user_id.to_s == user[:_id].to_s
+    return true  if ProjectCollaborator.collaborator?(self[:_id], user[:_id])
+    return false
   end
 
   def collaborator( user )
