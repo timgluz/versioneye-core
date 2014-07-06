@@ -6,6 +6,7 @@ class GitHubService < Versioneye::Service
   A_TASK_NIL     = nil
   A_TASK_RUNNING = 'running'
   A_TASK_DONE    = 'done'
+  A_TASK_TTL     = 1800 # 1800 seconds = 30 minutes
 
 
   def self.update_all_repos
@@ -53,14 +54,14 @@ class GitHubService < Versioneye::Service
       if n_repos == 0 && orga_names.empty?
         log.debug 'user has no repositories;'
         task_status = A_TASK_DONE
-        cache.set( user_task_key, task_status, 1800 )
+        cache.set( user_task_key, task_status, A_TASK_TTL )
         return task_status
       end
       task_status = A_TASK_RUNNING
-      cache.set( user_task_key, task_status, 1800 )
+      cache.set( user_task_key, task_status, A_TASK_TTL )
       Thread.new do
         self.cache_user_all_repos(user, orga_names)
-        cache.set( user_task_key, A_TASK_DONE, 1800 )
+        cache.set( user_task_key, A_TASK_DONE, A_TASK_TTL )
       end
     else
       log.info 'Nothing is changed - skipping update.'
