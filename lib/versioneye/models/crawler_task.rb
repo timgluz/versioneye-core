@@ -23,7 +23,7 @@ class CrawlerTask < Versioneye::Model
   field :crawled_at   , type: DateTime            # When it had last successful crawl
 
   scope :by_task      , ->(name){where(task: name)}
-  scope :crawlable    , -> { where(re_crawl: true, url_exists: true) }
+  scope :crawlable    , ->{ where(re_crawl: true, url_exists: true) }
 
   index({ task: 1 },          { name: "task_index"    , background: true })
   index({ repo_fullname: 1 }, { name: "repo_fullname_index" , background: true })
