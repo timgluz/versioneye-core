@@ -94,8 +94,7 @@ class GitHubService < Versioneye::Service
       puts "Going to cache users repositories."
       user_info = Github.user(user.github_token)
       user[:user_login] = user_info['login'] if user_info.is_a?(Hash)
-      #load data
-      threads = []
+
       log.info "reading user repos"
       cache_user_repos(user)
       orga_names.each do |orga_name|
