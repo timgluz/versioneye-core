@@ -52,6 +52,7 @@ class UserService < Versioneye::Service
     user.username       = "#{random}_#{user.username}"
 
     user.github_id      = nil
+    user.github_login   = nil
     user.github_token   = nil
     user.github_scope   = nil
 
