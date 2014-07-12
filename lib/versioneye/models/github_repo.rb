@@ -37,6 +37,7 @@ class GithubRepo < Versioneye::Model
   index({ owner_login: 1 }, { name: "owner_login_index", background: true })
   index({ owner_type: 1 },  { name: "owner_type_index" , background: true })
   index({ owner_login: 1, owner_type: 1 }, { name: "login_typ_index", background: true })
+  index({ github_id: 1, fullname: 1 }, { name: "githubid_fullname_index", background: true })
 
   scope :by_language   , ->(lang){where(language: lang)}
   scope :by_user       , ->(user){where(user_id: user._id)}
