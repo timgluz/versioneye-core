@@ -84,9 +84,10 @@ class GithubRepo < Versioneye::Model
     nil
   end
 
-
-  def self.build_new(user, repo_data, etag = nil)
+  # This dataset is incomplete. It will be completed by github_repo_import_worker
+  def self.build_or_update user, repo_data, etag = nil
     return nil if repo_data.nil? || repo_data.empty?
+
     repo_data = repo_data.deep_symbolize_keys
 
     owner_info = repo_data[:owner]
@@ -94,14 +95,11 @@ class GithubRepo < Versioneye::Model
 
     repo = GithubRepo.find_or_create_by(:github_id => user.github_id, :fullname => repo_data[:full_name])
     repo.update_attributes!({
-      user_id: user.id,
-      github_id: repo_data[:id],
       name: repo_data[:name],
       fullname: repo_data[:full_name],
-      user_login: user[:user_login],
       owner_login: owner_info[:login],
-      owner_type: owner_type,
       owner_avatar: owner_info[:avatar_url],
+      owner_type: owner_type,
       language: repo_data[:language].to_s.downcase,
       description: repo_data[:description],
       private: repo_data[:private],
@@ -114,23 +112,22 @@ class GithubRepo < Versioneye::Model
       watchers: repo_data[:watchers],
       size: repo_data[:size],
       etag: etag.to_s,
-      branches: repo_data[:branches],
-      project_files: repo_data[:project_files],
       created_at: repo_data[:created_at],
       updated_at: repo_data[:updated_at],
       pushed_at: repo_data[:pushed_at],
       cached_at: DateTime.now
-    })
 
+      # This will be completed by github_repo_import_worker or have to be set from extern.
+      # user_id: user.id,
+      # user_login: user[:user_login],
+      # branches: repo_data[:branches],
+      # project_files: repo_data[:project_files],
+    })
     repo
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
     nil
-  end
-
-  def self.create_new(user, repo, etag = nil)
-    build_new(user, repo, etag)
   end
 
 end

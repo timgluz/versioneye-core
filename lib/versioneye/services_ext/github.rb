@@ -98,20 +98,20 @@ class Github < Versioneye::Service
 
   def self.read_repo_data repo, token, try_n = 3
     return nil if repo.nil?
+
+    self.update_branches repo, token
+    self.update_project_files repo, token, try_n
+  end
+
+  def self.update_project_files repo, token, try_n = 3
     project_files = nil
-    repo = repo.deep_symbolize_keys
+    repo = repo.deep_symbolize_keys if repo.respond_to? "deep_symbolize_keys"
     fullname = repo[:full_name]
-    branch_docs = self.repo_branches(fullname, token)
-    if branch_docs and !branch_docs.nil?
-      branches = branch_docs.map {|x| x[:name]}
-      repo[:branches] = branches
-    else
-      repo[:branches] = ["master"]
-    end
+    fullname = repo[:fullname] if fullname.to_s.empty?
 
     #adds project files
     try_n.times do
-      project_files = repo_project_files(fullname, token, branch_docs)
+      project_files = repo_project_files(fullname, token, nil)
       break unless project_files.nil? or project_files.empty?
       log.info "Trying to read `#{fullname}` again"
       sleep 3
@@ -124,37 +124,47 @@ class Github < Versioneye::Service
 
     repo[:project_files] = project_files
     repo
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    repo
   end
 
-  def self.execute_job workers
-    workers.each {|worker| worker.join}
+  def self.update_branches repo, token
+    repo = repo.deep_symbolize_keys if repo.respond_to? "deep_symbolize_keys"
+    fullname = repo[:full_name]
+    fullname = repo[:fullname] if fullname.to_s.empty?
+
+    branch_docs = self.repo_branches(fullname, token)
+    if branch_docs
+      branches = branch_docs.map {|x| x[:name]}
+      repo[:branches] = branches
+    else
+      repo[:branches] = ["master"]
+    end
+    repo
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    repo[:branches] = ["master"]
+    repo
   end
 
   def self.read_repos user, url, page = 1, per_page = 30
-    response        = get(url, headers: A_DEFAULT_HEADERS)
-    data            = catch_github_exception JSON.parse(response.body, symbolize_names: true)
-    data            = [] if data.nil?
-    workers         = []
-    repo_docs       = []
+    response = get(url, headers: A_DEFAULT_HEADERS)
+    data     = catch_github_exception JSON.parse(response.body, symbolize_names: true)
+    data     = [] if data.nil?
+
     data.each do |repo|
       next if repo.nil? or repo[:full_name].to_s.empty?
-      workers << Thread.new do
-        time = Benchmark.measure do
-          repo_data = read_repo_data(repo, user.github_token)
-          new_repo  = GithubRepo.create_new( user, repo_data )
-          repo_docs << new_repo
-        end
-        puts "Reading `#{repo[:full_name]}` took: #{time}"
-        sleep 1/100.0
-      end
-      execute_job(workers) if workers.count == A_WORKERS_COUNT
+
+      git_repo = GithubRepo.build_or_update user, repo
+      msg = "#{user.id}:::#{git_repo.id}"
+      GithubRepoImportProducer.new( msg )
     end
 
-    # execute & wait reduntant tasks
-    execute_job(workers)
     paging_links = parse_paging_links(response.headers)
     repos = {
-      repos: repo_docs,
       paging: {
         start: page,
         per_page: per_page
@@ -271,11 +281,12 @@ class Github < Versioneye::Service
 
   # Returns all project files in the given repos grouped by branches
   def self.repo_project_files(repo_name, token, branch_docs = nil)
+    return nil if repo_name.to_s.empty?
 
     branches = branch_docs ? branch_docs : repo_branches(repo_name, token)
 
     if branches.nil? or branches.empty?
-      msg = "#{repo_name} doesnt have any branches."
+      msg = "Repo #{repo_name} doesnt have any branches."
       log.error(msg) and return
     end
 

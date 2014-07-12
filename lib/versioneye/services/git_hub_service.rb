@@ -79,11 +79,16 @@ class GitHubService < Versioneye::Service
       return nil
     end
 
-    repo_info = Github.repo_info repo_fullname, user[:github_token]
-    repo_info = Github.read_repo_data repo_info, user[:github_token]
-    updated_repo = GithubRepo.build_new(user, repo_info)
-    current_repo.update_attributes(updated_repo.attributes)
-    current_repo
+    token = user[:github_token]
+    repo_info = Github.repo_info repo_fullname, token
+    git_repo  = GithubRepo.build_or_update user, repo_info
+    git_repo  = Github.update_branches git_repo, token
+    git_repo  = Github.update_project_files git_repo, token
+    git_repo.user_id = user.id
+    git_repo.user_login = user.github_login
+    git_repo.save
+
+    git_repo
   end
 
 

@@ -70,6 +70,10 @@ module Versioneye
     require 'versioneye/updaters/upload_updater'
     require 'versioneye/updaters/url_updater'
 
+    require 'versioneye/producers/github_repo_import_producer.rb'
+
+    require 'versioneye/workers/github_repo_import_worker.rb'
+
     def self.log
       Versioneye::Log.instance.log
     end
