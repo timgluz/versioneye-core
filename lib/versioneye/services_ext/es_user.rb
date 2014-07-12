@@ -37,6 +37,9 @@ class EsUser < Versioneye::Service
   def self.reset
     self.clean_all
     self.create_index_with_mappings
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
   end
 
   def self.refresh
@@ -46,6 +49,9 @@ class EsUser < Versioneye::Service
   def self.index_all
     User.live_users.each {|user| self.index(user) }
     self.refresh
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
   end
 
   def self.index(user)

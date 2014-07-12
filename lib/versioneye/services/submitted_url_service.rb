@@ -4,6 +4,9 @@ class SubmittedUrlService < Versioneye::Service
     SubmittedUrl.as_not_integrated.each do |submitted_url|
       update_integration_status submitted_url
     end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
   end
 
   def self.update_integration_status( submitted_url )

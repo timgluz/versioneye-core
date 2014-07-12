@@ -107,6 +107,9 @@ class EsProduct < Versioneye::Service
       index product
     end
     self.refresh
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
   end
 
   def self.remove( product )

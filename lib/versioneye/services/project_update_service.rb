@@ -6,6 +6,7 @@ class ProjectUpdateService < Versioneye::Service
     update_collaborators_projects period
   rescue => e
     log.error e.message
+    log.error e.backtrace.join('\n')
     nil
   end
 
