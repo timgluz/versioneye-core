@@ -5,7 +5,6 @@ require 'tire'
 require 'dalli'
 require 'httparty'
 require 'action_mailer'
-# require 'will_paginate'
 
 require 'settings'
 require 'versioneye/model'
