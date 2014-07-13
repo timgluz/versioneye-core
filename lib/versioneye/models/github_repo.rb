@@ -95,6 +95,7 @@ class GithubRepo < Versioneye::Model
 
     repo = GithubRepo.find_or_create_by(:github_id => user.github_id, :fullname => repo_data[:full_name])
     repo.update_attributes!({
+      user_id: user.id,
       name: repo_data[:name],
       fullname: repo_data[:full_name],
       owner_login: owner_info[:login],
@@ -118,7 +119,6 @@ class GithubRepo < Versioneye::Model
       cached_at: DateTime.now
 
       # This will be completed by github_repo_import_worker or have to be set from extern.
-      # user_id: user.id,
       # user_login: user[:user_login],
       # branches: repo_data[:branches],
       # project_files: repo_data[:project_files],
