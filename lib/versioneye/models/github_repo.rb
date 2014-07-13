@@ -72,7 +72,7 @@ class GithubRepo < Versioneye::Model
     if user[:github_login].nil?
       user_info = Github.user(user.github_token)
       if user_info
-        user_info.deep_symbolize_keys
+        user_info.deep_symbolize_keys!
         user[:github_login] = user_info[:login]
         user.save
       end
@@ -91,7 +91,7 @@ class GithubRepo < Versioneye::Model
     repo_data = repo_data.deep_symbolize_keys
 
     owner_info = repo_data[:owner]
-    owner_type = get_owner_type(user, repo_data[:owner])
+    owner_type = get_owner_type(user, owner_info)
 
     repo = GithubRepo.find_or_create_by(:github_id => user.github_id, :fullname => repo_data[:full_name])
     repo.update_attributes!({
