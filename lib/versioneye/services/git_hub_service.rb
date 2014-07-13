@@ -48,21 +48,9 @@ class GitHubService < Versioneye::Service
     end
 
     if user[:github_token] and user.github_repos.all.count == 0
-      log.info 'Fetch Repositories from GitHub and cache them in DB.'
-      n_repos    = Github.count_user_repos user
-      orga_names = Github.orga_names(user.github_token)
-      if n_repos == 0 && orga_names.empty?
-        log.debug 'user has no repositories;'
-        task_status = A_TASK_DONE
-        cache.set( user_task_key, task_status, A_TASK_TTL )
-        return task_status
-      end
       task_status = A_TASK_RUNNING
       cache.set( user_task_key, task_status, A_TASK_TTL )
-      Thread.new do
-        self.cache_user_all_repos(user, orga_names)
-        cache.set( user_task_key, A_TASK_DONE, A_TASK_TTL )
-      end
+      GithubReposImportProducer.new("#{user.id.to_s}")
     else
       log.info 'Nothing is changed - skipping update.'
       task_status = A_TASK_DONE
@@ -92,21 +80,21 @@ class GitHubService < Versioneye::Service
   end
 
 
-  private
+  def self.cache_user_all_repos(user, orga_names)
+    puts "Going to cache repositories for #{user.username}."
+    user_info = Github.user(user.github_token)
+    user[:user_login] = user_info['login'] if user_info.is_a?(Hash)
 
-
-    def self.cache_user_all_repos(user, orga_names)
-      puts "Going to cache users repositories."
-      user_info = Github.user(user.github_token)
-      user[:user_login] = user_info['login'] if user_info.is_a?(Hash)
-
-      log.info "reading user repos"
-      cache_user_repos(user)
-      orga_names.each do |orga_name|
-        log.info "reading repos for orga: #{orga_name}"
-        cache_user_orga_repos(user, orga_name)
-      end
+    log.info "reading user repos"
+    cache_user_repos(user)
+    orga_names.each do |orga_name|
+      log.info "reading repos for orga: #{orga_name}"
+      cache_user_orga_repos(user, orga_name)
     end
+  end
+
+
+  private
 
 
     def self.cache_user_repos( user )
@@ -126,4 +114,6 @@ class GitHubService < Versioneye::Service
       end while not url.nil?
     end
 
+
 end
+

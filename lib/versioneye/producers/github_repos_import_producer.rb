@@ -1,4 +1,4 @@
-class GithubRepoImportProducer < Producer
+class GithubReposImportProducer < Producer
 
 
   def initialize msg
@@ -6,7 +6,7 @@ class GithubRepoImportProducer < Producer
     connection.start
 
     channel = connection.create_channel
-    queue   = channel.queue("github_repo_import", :durable => true)
+    queue   = channel.queue("github_repos_import", :durable => true)
 
     queue.publish(msg, :persistent => true)
 
