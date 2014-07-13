@@ -1,14 +1,16 @@
-class GithubRepoImportWorker
+class GithubRepoImportWorker < Worker
 
-  require 'bunny'
 
   def work
-    connection = Bunny.new("amqp://#{Settings.instance.rabbitmq_addr}:#{Settings.instance.rabbitmq_port}")
+    connection = get_connection
     connection.start
     channel = connection.create_channel
     queue   = channel.queue("github_repo_import", :durable => true)
 
-    puts " [*] Waiting for messages in #{queue.name}. To exit press CTRL+C"
+    log_msg = " [*] Waiting for messages in #{queue.name}. To exit press CTRL+C"
+    puts log_msg
+    log.info log_msg
+
     begin
       queue.subscribe(:ack => true, :block => true) do |delivery_info, properties, body|
         puts " [x] Received #{body}"
@@ -20,10 +22,12 @@ class GithubRepoImportWorker
         channel.ack(delivery_info.delivery_tag)
       end
     rescue => e
-      p e.message
+      log.error e.message
+      log.error e.backtrace.join('\n')
       connection.close
     end
   end
+
 
   def update_repo user, repo
     time = Benchmark.measure do
@@ -35,7 +39,11 @@ class GithubRepoImportWorker
     end
     name = repo[:full_name]
     name = repo[:fullname] if name.to_s.empty?
-    puts "Reading `#{name}` took: #{time}"
+
+    log_msg = "Reading `#{name}` took: #{time}"
+    puts log_msg
+    log.info log_msg
   end
+
 
 end

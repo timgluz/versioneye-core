@@ -321,6 +321,7 @@ class Github < Versioneye::Service
     organisations = catch_github_exception JSON.parse(response.body, symbolize_names: true )
     names = Array.new
     return names if organisations.nil? || organisations.empty?
+
     names = organisations.map {|x| x[:login]}
     names
   rescue => e

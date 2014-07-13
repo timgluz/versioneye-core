@@ -70,9 +70,13 @@ module Versioneye
     require 'versioneye/updaters/upload_updater'
     require 'versioneye/updaters/url_updater'
 
+    require 'versioneye/producers/producer.rb'
     require 'versioneye/producers/github_repo_import_producer.rb'
+    require 'versioneye/producers/github_repos_import_producer.rb'
 
+    require 'versioneye/workers/worker.rb'
     require 'versioneye/workers/github_repo_import_worker.rb'
+    require 'versioneye/workers/github_repos_import_worker.rb'
 
     def self.log
       Versioneye::Log.instance.log
@@ -86,5 +90,10 @@ module Versioneye
       Versioneye::Cache.instance.mc
     end
 
+    def cache
+      Versioneye::Cache.instance.mc
+    end
+
   end
+
 end
