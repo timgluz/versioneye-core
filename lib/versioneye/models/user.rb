@@ -407,12 +407,15 @@ class User < Versioneye::Model
     end
 
     def check_np_domain
+      return true if self.new_record? == false
+
       esplit = email.split("@")
       domain = "@#{esplit.last}"
       npd = NpDomain.where(:domain => domain).shift
       return true if npd.nil?
 
       self.free_private_projects = npd.free_projects
+      UserMailer.non_profit_signup(self, npd).deliver
       return true
     end
 

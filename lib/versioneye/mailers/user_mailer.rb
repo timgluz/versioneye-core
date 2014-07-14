@@ -55,6 +55,12 @@ class UserMailer < ActionMailer::Base
     mail(:to => user[:email], :subject => "Follow popular software packages on VersionEye")
   end
 
+  def non_profit_signup( user, np_domain )
+    @user = user
+    @npd  = np_domain
+    mail(:to => user[:email], :subject => "You got #{np_domain.free_projects} private projects at VersionEye for free!")
+  end
+
   def fetch_source( user )
     source = "email"
     source = "bitbucket" if user.bitbucket_id
