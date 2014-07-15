@@ -1,4 +1,4 @@
-class UploadUpdater
+class UploadUpdater < CommonUpdater
 
   def update( project, send_email = false )
     project.dependencies.each do |dep|
