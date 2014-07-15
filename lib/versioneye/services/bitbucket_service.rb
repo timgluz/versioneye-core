@@ -17,9 +17,9 @@ class BitbucketService < Versioneye::Service
       return nil
     end
 
-    repo_info = Bitbucket.repo_info repo_fullname, user[:bitbucket_token], user[:bitbucket_secret]
+    repo_info     = Bitbucket.repo_info repo_fullname, user[:bitbucket_token], user[:bitbucket_secret]
     repo_branches = Bitbucket.repo_branches repo_fullname, user[:bitbucket_token], user[:bitbucket_secret]
-    repo_files = Bitbucket.repo_project_files repo_fullname, user[:bitbucket_token], user[:bitbucket_secret]
+    repo_files    = Bitbucket.repo_project_files repo_fullname, user[:bitbucket_token], user[:bitbucket_secret]
 
     updated_repo = BitbucketRepo.build_new(user, repo_info, repo_branches, repo_files)
     current_repo.update_attributes(updated_repo.attributes)
@@ -37,13 +37,9 @@ class BitbucketService < Versioneye::Service
     end
 
     if user[:bitbucket_token] and user.bitbucket_repos.all.count == 0
-      log.info "Going to import bitbucket data for #{user[:username]}"
       task_status =  A_TASK_RUNNING
       cache.set( user_task_key, task_status, A_TTL )
-      Thread.new do
-        cache_user_all_repos(user)
-        cache.set( user_task_key, A_TASK_DONE, A_TTL )
-      end
+      BitbucketReposImportProducer.new("#{user.id.to_s}")
     else
       log.info "Nothing to import - maybe clean user's repo?"
       task_status = A_TASK_DONE
@@ -55,54 +51,50 @@ class BitbucketService < Versioneye::Service
 
   def self.cache_user_all_repos(user)
     puts "Going to cache users repositories."
-    #load data
-    user_orgs = Bitbucket.user_orgs(user)
-    threads = []
-    threads << Thread.new {self.cache_repos(user, user[:bitbucket_id])}
-    user_orgs.each do |org|
-      threads << Thread.new { self.cache_repos(user, org) }
-    end
-    threads.each { |worker| worker.join }
 
-    #import missing invited repos
+    cache_repos( user, user[:bitbucket_id] )
+
+    user_orgs = Bitbucket.user_orgs(user)
+    user_orgs.each do |org|
+      self.cache_repos(user, org)
+    end
+
+    # Import missing invited repos
     cache_invited_repos(user)
   end
 
+
   def self.cache_repos(user, owner_name)
-    token = user[:bitbucket_token]
+    token  = user[:bitbucket_token]
     secret = user[:bitbucket_secret]
-    repos = Bitbucket.read_repos(owner_name, token, secret)
+    repos  = Bitbucket.read_repos(owner_name, token, secret)
 
-    tasks = []
-    #add information about branches and project files
+    # Add information about branches and project files
     repos.each do |repo|
-      tasks << Thread.new {add_repo(user, repo, token, secret)}
+      add_repo( user, repo, token, secret )
     end
 
-    #simple workpool
-    while not tasks.empty?
-      workers = tasks.shift(A_MAX_WORKERS)
-      workers.each {|task| task.join}
-    end
     return true
   end
 
+
   def self.cache_invited_repos(user)
-    token = user[:bitbucket_token]
+    token  = user[:bitbucket_token]
     secret = user[:bitbucket_secret]
-    repos = Bitbucket.read_repos_v1(token, secret)
+    repos  = Bitbucket.read_repos_v1( token, secret )
     if repos.nil? or repos.empty?
       log.error "cache_invited_repos | didnt get any repos from APIv1."
       return false
     end
-    user.reload #pull newest updates
+
+    user.reload
     existing_repo_fullnames  = Set.new user.bitbucket_repos.map(&:fullname)
     missing_repos = repos.keep_if {|repo| existing_repo_fullnames.include?(repo[:full_name]) == false}
     invited_repos = missing_repos.delete_if do |repo|
-      #remove other people forks
+      # Remove other people forks
       repo.has_key?(:fork_of) and repo[:fork_of].is_a?(Hash) and repo[:fork_of][:owner] == user[:bitbucket_id]
     end
-    #add missing repos
+    # Add missing repos
     invited_repos.each do |old_repo|
       repo = Bitbucket.repo_info(old_repo[:full_name], token, secret) #fetch repo info from api2
       if repo.nil?
@@ -114,18 +106,13 @@ class BitbucketService < Versioneye::Service
     return true
   end
 
+
   def self.add_repo(user, repo, token, secret)
     repo_name = repo[:full_name]
-    read_branches = Thread.new do
-      Thread.current[:val] = Bitbucket.repo_branches(repo_name, token, secret)
-    end
-    read_files = Thread.new do
-      Thread.current[:val] = Bitbucket.repo_project_files(repo_name, token, secret)
-    end
-    bm = Benchmark.measure {read_branches.join; read_files.join; }
-    log.info("#-- Added #{repo_name}\n#{bm}\n")
-    repo = BitbucketRepo.create_new(user, repo, read_branches[:val], read_files[:val])
-    repo
+    branches  = Bitbucket.repo_branches(repo_name, token, secret)
+    files     = Bitbucket.repo_project_files(repo_name, token, secret)
+    BitbucketRepo.create_new(user, repo, branches, files )
   end
+
 
 end
