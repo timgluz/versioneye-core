@@ -21,7 +21,9 @@ class ProductService < Versioneye::Service
     product.check_nil_version
     product.version = version if version
 
-    unless lang.eql?( Product::A_LANGUAGE_JAVA ) update_dependencies( product )
+    if !lang.eql?( Product::A_LANGUAGE_JAVA )
+      update_dependencies( product )
+    end
 
     update_average_release_time( product )
     product
