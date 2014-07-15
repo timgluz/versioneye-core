@@ -18,10 +18,11 @@ class ProductService < Versioneye::Service
       product = Product.fetch_product Product::A_LANGUAGE_JAVA, prod_key
     end
     return nil if product.nil?
-
     product.check_nil_version
     product.version = version if version
-    update_dependencies( product )
+
+    unless lang.eql?( Product::A_LANGUAGE_JAVA ) update_dependencies( product )
+
     update_average_release_time( product )
     product
   end
