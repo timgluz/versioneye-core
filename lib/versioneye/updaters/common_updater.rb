@@ -14,12 +14,21 @@ class CommonUpdater < Versioneye::Service
 
   private
 
+
     def log
-      CommonUpdater.log
+      Versioneye::Log.instance.log
+    end
+
+    def self.log
+      Versioneye::Log.instance.log
     end
 
     def cache
-      CommonUpdater.cache
+      Versioneye::Cache.instance.mc
+    end
+
+    def self.cache
+      Versioneye::Cache.instance.mc
     end
 
     def parser_for file_name
@@ -29,5 +38,6 @@ class CommonUpdater < Versioneye::Service
     def parse_content parser, content, file_name
       ProjectParseService.parse_content parser, content, file_name
     end
+
 
 end
