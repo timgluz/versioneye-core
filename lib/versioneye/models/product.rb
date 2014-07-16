@@ -98,7 +98,7 @@ class Product < Versioneye::Model
   end
 
   def self.fetch_bower name
-    Product.where(prod_type: Project::A_TYPE_BOWER, name: /\A#{name}\z/i).first
+    Product.where(prod_type: Project::A_TYPE_BOWER, name: name).first
   end
 
   # legacy, still used by fall back search and API v1.0
