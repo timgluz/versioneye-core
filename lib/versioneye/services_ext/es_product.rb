@@ -41,7 +41,11 @@ class EsProduct < Versioneye::Service
           :properties => {
             :_id  => { :type => 'string', :analyzer => 'keyword', :include_in_all => false },
             :name => { :type => 'multi_field', :fields => {
-                :name    => {:type => 'string', :analyzer => 'product_name', :include_in_all => false},
+                :name    => {
+                  :type => 'string',
+                  :analyzer => 'product_name',
+                  :include_in_all => false
+                },
                 :partial => {
                   :search_analyzer => 'product_name',
                   :index_analyzer  => 'ngram_name',
