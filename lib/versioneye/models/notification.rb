@@ -23,7 +23,7 @@ class Notification < Versioneye::Model
 
 
   def self.unsent_user_notifications( user )
-    Notification.where( sent_email: 'false', user_id: user.id )
+    Notification.where( sent_email: 'false', user_id: user.id.to_s )
   end
 
 end

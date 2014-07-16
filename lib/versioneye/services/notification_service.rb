@@ -57,7 +57,7 @@ class NotificationService < Versioneye::Service
 
 
   def self.remove_notifications user
-    notifications = Notification.where( :user_id => user.id )
+    notifications = Notification.where( :user_id => user.id.to_s )
     notifications.each do |notification|
       log.info " ---- Remove notification for user id: #{user.id} "
       notification.remove
