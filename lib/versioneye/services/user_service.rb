@@ -43,6 +43,12 @@ class UserService < Versioneye::Service
         project_collaborator.remove
       end
     end
+    emails = user.emails
+    if emails && !emails.empty?
+      emails.each do |email|
+        email.delete
+      end
+    end
     StripeService.delete user.stripe_customer_id
     random              = create_random_value
     user.deleted        = true

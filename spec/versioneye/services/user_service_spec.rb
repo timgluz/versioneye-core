@@ -7,6 +7,7 @@ describe UserService do
     let(:user)   { UserFactory.create_new(34) }
 
     it "deletes the user in the right way" do
+
       email = String.new( user.email )
       username = String.new( user.username )
       user.email.should_not be_nil
@@ -19,11 +20,14 @@ describe UserService do
       user.bitbucket_token = "asgfasgfa"
       user.bitbucket_secret = "asgasgasgas"
       user.save.should be_truthy
+      UserEmail.new({:email => "afa@bafa.de", :user_id => user.id.to_s}).save
+      user.emails.count.should eq(1)
       Notification.count.should eql(0)
       NotificationFactory.create_new user, true
       Notification.count.should eql(1)
       UserService.delete(user).should be_truthy
       Notification.count.should eql(0)
+      user.emails.count.should eq(0)
       user.fullname.should eql("Deleted")
       user.email.should_not eql(email)
       user.username.should_not eql(username)
