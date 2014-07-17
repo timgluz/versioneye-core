@@ -26,6 +26,7 @@ class CrawlerTask < Versioneye::Model
   scope :crawlable    , ->{ where(re_crawl: true, url_exists: true) }
 
   index({ task: 1 },          { name: "task_index"    , background: true })
+  index({ task: 1, re_crawl: 1, url_exists: 1 }, { name: "task_recrawl_urlexists_index", background: true })
   index({ repo_fullname: 1 }, { name: "repo_fullname_index" , background: true })
   index({ task: 1, repo_fullname: 1 }, { name: "task_repo_fullname_index" , background: true })
   index({ task: 1, repo_fullname: 1, tag_name: 1 }, { name: "task_repo_fullname_tag_index" , background: true })
