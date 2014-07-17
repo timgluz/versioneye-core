@@ -93,7 +93,6 @@ class Product < Versioneye::Model
 
     product = Product.find_by_lang_key( lang, key.downcase )
     product = Product.find_by_lang_key( lang, key ) if product.nil?
-    # product = Product.find_by_lang_key_case_insensitiv( lang, key ) if product.nil?
     product
   end
 
@@ -108,11 +107,6 @@ class Product < Versioneye::Model
 
   def self.find_by_lang_key language, searched_key
     Product.where(language: language, prod_key: searched_key).shift
-  end
-
-  # This is slow!! Searches by regex are always slower than exact searches!
-  def self.find_by_lang_key_case_insensitiv language, searched_key
-    result = Product.where( prod_key: /\A#{searched_key}\z/i, language: /\A#{language}\z/i ).shift
   end
 
   def self.find_by_group_and_artifact group, artifact

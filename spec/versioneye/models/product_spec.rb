@@ -197,35 +197,6 @@ describe Product do
   end
 
 
-  describe "find_by_lang_key_case_insensitiv" do
-
-    it "return nil. Because all inputs are nil" do
-      described_class.find_by_lang_key_case_insensitiv(nil, nil).should be_nil
-    end
-    it "return nil. Because all inputs are empty" do
-      described_class.find_by_lang_key_case_insensitiv('', '').should be_nil
-    end
-    it "return nil. Because prod_key is nil" do
-      described_class.find_by_lang_key_case_insensitiv('ruby', nil).should be_nil
-    end
-    it "return nil. Because language is nil" do
-      described_class.find_by_lang_key_case_insensitiv(nil, 'xiki').should be_nil
-    end
-    it "returns the searched product" do
-      product1 = ProductFactory.create_for_gemfile('bee', '1.4.0')
-      product1.versions.push( Version.new({version: '1.4.0'}) )
-      product1.save
-      described_class.find_by_lang_key_case_insensitiv( Product::A_LANGUAGE_JAVA, "bee" ).should be_nil
-      described_class.find_by_lang_key_case_insensitiv( Product::A_LANGUAGE_RUBY, "Bee" ).should_not be_nil
-      described_class.find_by_lang_key_case_insensitiv( Product::A_LANGUAGE_RUBY.downcase, "bee" ).should_not be_nil
-      result = described_class.find_by_lang_key_case_insensitiv( Product::A_LANGUAGE_RUBY, "bee" )
-      result.should_not be_nil
-      result.prod_key.should eql("bee")
-    end
-
-  end
-
-
   describe "find_by_group_and_artifact" do
 
     it "returns nil because of wrong parameters" do
