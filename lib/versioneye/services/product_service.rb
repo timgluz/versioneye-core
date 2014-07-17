@@ -109,6 +109,10 @@ class ProductService < Versioneye::Service
         self.update_followers_for product
         self.update_used_by_count product, true
       end
+      co = i * page
+      log_msg = "update_meta_data_global iteration: #{i} - products processed: #{co}"
+      p log_msg
+      log.info log_msg
     end
   rescue => e
     log.error e.message
@@ -117,8 +121,8 @@ class ProductService < Versioneye::Service
 
 
   def self.update_used_by_count product, persist = true
-    grouped = Dependency.where(:language => product.language, :dep_prod_key => product.prod_key).group_by(&:prod_key)
-    count = grouped.count
+    prod_keys = Dependency.where(:language => product.language, :dep_prod_key => product.prod_key).distinct(:prod_key)
+    count = prod_keys.count
     return nil if count == product.used_by_count
 
     product.used_by_count = count
