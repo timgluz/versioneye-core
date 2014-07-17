@@ -26,6 +26,9 @@ class VersioneyeCore
   def init_mongodb
     puts " - initialize MongoDB for #{Settings.instance.environment} "
     Mongoid.load!("config/mongoid.yml", Settings.instance.environment)
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
   end
 
   def init_email
@@ -42,6 +45,9 @@ class VersioneyeCore
        :enable_starttls_auto => true
       }
     ActionMailer::Base.view_paths = File.expand_path('../versioneye/views/', __FILE__)
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
   end
 
   def init_logger
@@ -58,16 +64,31 @@ class VersioneyeCore
     Tire.configure do
       url es_url
     end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
   end
 
   def init_settings
     puts " - reload Settings from DB!"
     Settings.instance.reload_from_db GlobalSetting.new
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
   end
 
   def init_memcached
     puts " - initialize init_memcached!"
     Versioneye::Cache.instance.mc
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
   end
+
+  private
+
+    def log
+      Versioneye::Log.instance.log
+    end
 
 end
