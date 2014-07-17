@@ -15,10 +15,6 @@ class EmailSetting < Versioneye::Model
 
   validates_presence_of :address , :message => 'is mandatory!'
   validates_presence_of :port    , :message => 'is mandatory!'
-  validates_presence_of :username, :message => 'is mandatory!'
-  validates_presence_of :password, :message => 'is mandatory!'
-  validates_presence_of :domain  , :message => 'is mandatory!'
-  validates_presence_of :authentication, :message => 'is mandatory!'
   validates_presence_of :enable_starttls_auto, :message => 'is mandatory!'
   validates_presence_of :sender_email, :message => 'is mandatory!'
 

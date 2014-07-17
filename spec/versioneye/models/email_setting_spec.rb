@@ -20,4 +20,15 @@ describe EmailSetting do
 
   end
 
+  describe "check validation" do
+
+    it "checks the default values" do
+      EmailSetting.create_default.should be_truthy
+      es = EmailSetting.first
+      es.password = ""
+      es.save.should be_truthy
+    end
+
+  end
+
 end
