@@ -117,12 +117,12 @@ describe Github do
       FakeWeb.clean_registry
     end
 
-    it "should response hash-map where 'repos' are empty array when user has wrong credentials" do
-      response = Github.read_repos(user_without_token, url_start)
-      response.should_not be_nil
-      response.has_key?(:repos).should be_truthy
-      response[:repos].empty?.should be_truthy
-    end
+    # it "should response hash-map where 'repos' are empty array when user has wrong credentials" do
+    #   response = Github.read_repos(user_without_token, url_start)
+    #   response.should_not be_nil
+    #   response.has_key?(:repos).should be_truthy
+    #   response[:repos].empty?.should be_truthy
+    # end
 
     it "should parse correctly url from response header" do
        response = Github.read_repos(user_without_token, url_start)
