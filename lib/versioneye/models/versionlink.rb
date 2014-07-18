@@ -26,6 +26,8 @@ class Versionlink < Versioneye::Model
   # false => This link was crawled
   field :manual    , type: Boolean, :default => false
 
+  validates_presence_of :link, :message => 'is mandatory!'
+
   index({ language: 1, prod_key: 1, version_id: 1, link: 1 }, { name: "lang_prod_vers_link_index", background: true, unique: true, drop_dups: true })
   index({ language: 1, prod_key: 1, version_id: 1 }, { name: "lang_prod_vers_index", background: true })
   index({ language: 1, prod_key: 1                }, { name: "lang_prod_index", background: true })
