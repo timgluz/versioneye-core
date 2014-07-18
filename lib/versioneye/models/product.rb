@@ -278,11 +278,13 @@ class Product < Versioneye::Model
   end
 
   def http_links
-    Versionlink.where(language: language, prod_key: self.prod_key, version_id: nil, link: /\Ahttp*/).asc(:name)
+    links = Versionlink.where(language: language, prod_key: self.prod_key, version_id: nil).asc(:name)
+    get_http_links links
   end
 
   def http_version_links
-    Versionlink.where(language: language, prod_key: self.prod_key, version_id: self.version, link: /\Ahttp*/ ).asc(:name)
+    links = Versionlink.where(language: language, prod_key: self.prod_key, version_id: self.version ).asc(:name)
+    get_http_links links
   end
 
   def archives
@@ -311,6 +313,15 @@ class Product < Versioneye::Model
       return '' if text.nil?
       return "#{text[0..size]}..." if text.size > size
       text[0..size]
+    end
+
+    def get_http_links links
+      result = []
+      links.each do |link|
+        next if link.link.match(/\Ahttp*/) == nil
+        result << link
+      end
+      result
     end
 
 end
