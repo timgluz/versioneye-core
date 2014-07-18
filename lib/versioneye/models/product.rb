@@ -306,7 +306,11 @@ class Product < Versioneye::Model
 
     def get_http_links links
       result = []
+      return result if links.nil? || links.empty?
+
       links.each do |link|
+        next if link.nil?
+        next if link.link.to_s.empty?
         next if link.link.match(/\Ahttp*/) == nil
         result << link
       end
