@@ -24,6 +24,21 @@ describe Product do
   end
 
 
+  describe "to_s" do
+    it 'returns the correct to_s' do
+      prod = Product.new({:language => 'Clojure', :prod_key => 'storm', :version => '1.0.0'})
+      prod.to_s.should eq('<Product Clojure / storm (1.0.0) >')
+    end
+  end
+
+  describe "name_and_version" do
+    it 'returns the correct name and version' do
+      prod = Product.new({:language => 'Clojure', :name => 'storm', :version => '1.0.0'})
+      prod.name_and_version.should eq('storm : 1.0.0')
+    end
+  end
+
+
   describe "find_by_id" do
 
     it "return nil. Because input is nil" do
