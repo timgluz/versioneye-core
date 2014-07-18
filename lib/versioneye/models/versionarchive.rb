@@ -14,6 +14,8 @@ class Versionarchive < Versioneye::Model
   field :link      , type: String # URL
   field :name      , type: String # Label for the link/URL
 
+  index({ language: 1, prod_key: 1, version_id: 1, link: 1 }, { name: "lang_prod_vers_link_index", background: true, unique: true })
+  index({ language: 1, prod_key: 1, version_id: 1, name: 1 }, { name: "lang_prod_vers_name_index", background: true })
   index({ language: 1, prod_key: 1, version_id: 1 }, { name: "lang_prod_vers_index", background: true })
   index({ language: 1, prod_key: 1                }, { name: "lang_prod_index", background: true })
 
@@ -38,15 +40,19 @@ class Versionarchive < Versioneye::Model
 
   def self.create_archive_if_not_exist archive
     return nil if archive.link.nil? || archive.link.empty?
+
     archive.link = add_http( archive.link )
     return nil if exist_with_link?(archive.language, archive.prod_key, archive.version_id, archive.link)
+
     archive.save
   end
 
   def self.create_if_not_exist_by_name archive
     return nil if archive.link.nil? || archive.link.empty?
+
     archive.link = add_http( archive.link )
     return nil if exist_with_name?(archive.language, archive.prod_key, archive.version_id, archive.name)
+
     archive.save
   end
 
