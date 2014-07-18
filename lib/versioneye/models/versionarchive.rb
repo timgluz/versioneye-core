@@ -14,7 +14,7 @@ class Versionarchive < Versioneye::Model
   field :link      , type: String # URL
   field :name      , type: String # Label for the link/URL
 
-  index({ language: 1, prod_key: 1, version_id: 1, link: 1 }, { name: "lang_prod_vers_link_index", background: true, unique: true })
+  index({ language: 1, prod_key: 1, version_id: 1, link: 1 }, { name: "lang_prod_vers_link_index", background: true, unique: true, drop_dups: true })
   index({ language: 1, prod_key: 1, version_id: 1, name: 1 }, { name: "lang_prod_vers_name_index", background: true })
   index({ language: 1, prod_key: 1, version_id: 1 }, { name: "lang_prod_vers_index", background: true })
   index({ language: 1, prod_key: 1                }, { name: "lang_prod_index", background: true })
