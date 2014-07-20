@@ -46,29 +46,30 @@ class Dependency < Versioneye::Model
   field :parsed_version , type: String
   field :outdated, type: Boolean
 
-  index({ language: 1, prod_key: 1, prod_version: 1, name: 1, version: 1, dep_prod_key: 1}, { name: "very_long_index", background: true })
-  index({ language: 1, prod_key: 1, prod_version: 1, scope: 1 }, { name: "prod_key_lang_ver_scope_index", background: true })
-  index({ language: 1, prod_key: 1, prod_version: 1 },           { name: "prod_key_lang_ver_index", background: true })
-  index({ language: 1, prod_key: 1 },     { name: "language_prod_key_index" , background: true })
+  # index({ language: 1, prod_key: 1, prod_version: 1, name: 1, version: 1, dep_prod_key: 1}, { name: "very_long_index", background: true })
+  # index({ language: 1, prod_key: 1, prod_version: 1, scope: 1 }, { name: "prod_key_lang_ver_scope_index", background: true })
+  # index({ language: 1, prod_key: 1 },     { name: "language_prod_key_index" , background: true })
+  # index({ dep_prod_key: 1 }, { name: "dep_prod_key_index" , background: true })
+  # index({ prod_key: 1 },     { name: "prod_key_index"     , background: true })
+
+  index({ language: 1, prod_key: 1, prod_version: 1 }, { name: "prod_key_lang_ver_index", background: true })
   index({ language: 1, dep_prod_key: 1 }, { name: "language_dep_prod_key_index" , background: true })
-  index({ dep_prod_key: 1 }, { name: "dep_prod_key_index" , background: true })
-  index({ prod_key: 1 },     { name: "prod_key_index"     , background: true })
 
 
 
-  def self.remove_dependencies language, prod_key, version_number
-    Dependency.where( language: language, prod_key: prod_key, prod_version: version_number ).delete_all
+  def self.remove_dependencies language, prod_key, version
+    Dependency.where( language: language, prod_key: prod_key, prod_version: version ).delete_all
   end
 
-  def self.find_by_lang_key_and_version( lang, prod_key, version)
-    Dependency.where( language: lang, prod_key: prod_key, prod_version: version )
+  def self.find_by_lang_key_and_version( language, prod_key, version)
+    Dependency.where( language: language, prod_key: prod_key, prod_version: version )
   end
 
-  def self.find_by_lang_key_version_scope(lang, prod_key, version, scope)
+  def self.find_by_lang_key_version_scope(language, prod_key, version, scope)
     if scope
-      return Dependency.where( language: lang, prod_key: prod_key, prod_version: version, scope: scope )
+      return Dependency.where( language: language, prod_key: prod_key, prod_version: version, scope: scope )
     else
-      return Dependency.where( language: lang, prod_key: prod_key, prod_version: version )
+      return Dependency.where( language: language, prod_key: prod_key, prod_version: version )
     end
   end
 
@@ -76,31 +77,6 @@ class Dependency < Versioneye::Model
     dependencies = Dependency.where(language: language, prod_key: prod_key, prod_version: prod_version, name: dep_name, version: dep_version, dep_prod_key: dep_prod_key)
     return nil if dependencies.nil? || dependencies.empty?
     dependencies[0]
-  end
-
-  def self.references language, prod_key, page
-    per_page = 30
-    page     = 0 if page.to_s.empty?
-    page     = page.to_i - 1 if page.to_i > 0
-    skip     = page.to_i * per_page
-
-    count = Dependency.collection.aggregate(
-      { '$match' => { :language => language, :dep_prod_key => prod_key } },
-      { '$group' => { :_id => '$prod_key' } }
-    ).count
-
-    deps = Dependency.collection.aggregate(
-      { '$match' => { :language => language, :dep_prod_key => prod_key } },
-      { '$group' => { :_id => '$prod_key' } },
-      { '$skip'  => skip },
-      { '$limit' => per_page }
-    )
-    prod_keys = deps.map{|dep| dep['_id'] }
-    {:prod_keys => prod_keys, :count => count}
-  rescue => e
-    log.error e.message
-    log.error e.backtrace.join('\n')
-    {:prod_keys => [], :count => 0}
   end
 
   def product

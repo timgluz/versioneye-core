@@ -105,6 +105,7 @@ class ProductService < Versioneye::Service
       skip = i * page
       products = Product.all().skip(skip).limit(page)
       products.each do |product|
+        p " -- update #{product.language} - #{product.prod_key}"
         self.update_version_data  product, true
         self.update_followers_for product
         self.update_used_by_count product, true
@@ -123,7 +124,11 @@ class ProductService < Versioneye::Service
   def self.update_used_by_count product, persist = true
     prod_keys = Dependency.where(:language => product.language, :dep_prod_key => product.prod_key).distinct(:prod_key)
     count = prod_keys.count
-    return nil if count == product.used_by_count
+    # return nil if count == product.used_by_count
+
+    reference = Reference.find_or_create_by(:language => product.language, :prod_key => product.prod_key )
+    reference.update_from prod_keys
+    reference.save
 
     product.used_by_count = count
     product.save if persist
