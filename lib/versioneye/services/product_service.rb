@@ -18,6 +18,7 @@ class ProductService < Versioneye::Service
       product = Product.fetch_product Product::A_LANGUAGE_JAVA, prod_key
     end
     return nil if product.nil?
+
     product.check_nil_version
     product.version = version if version
 
@@ -34,10 +35,14 @@ class ProductService < Versioneye::Service
   # It updates the parsed_version and the outdated field.
   def self.update_dependencies( product )
     deps = product.all_dependencies
+    return if deps.nil? || deps.empty?
+
     deps.each do |dependency|
       dependency.outdated = DependencyService.cache_outdated?( dependency )
       dependency.save
     end
+    product.dep_count = deps.count
+    product.save
   end
 
 

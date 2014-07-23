@@ -25,7 +25,8 @@ class Product < Versioneye::Model
 
   field :downloads         , type: Integer, default: 0
   field :followers         , type: Integer, default: 0
-  field :used_by_count     , type: Integer, default: 0 # Number of projects using this one.
+  field :used_by_count     , type: Integer, default: 0 # Number of references, projects using this one.
+  field :dep_count         , type: Integer, default: 0 # Number of direct dependencies.
 
   field :twitter_name, type: String
 
