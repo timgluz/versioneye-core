@@ -32,4 +32,8 @@ class Reference  < Versioneye::Model
     nil
   end
 
+  def self.find_by language, prod_key
+    Reference.where(:language => language, :prod_key => prod_key).shift
+  end
+
 end
