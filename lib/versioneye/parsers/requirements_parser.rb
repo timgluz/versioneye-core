@@ -38,8 +38,13 @@ class RequirementsParser < CommonParser
 
 
   def parse_line( line, project )
-    line.gsub!(' ', '')
-    return false if !line.match(/\A#/).nil? || line.empty?
+    return false if line.to_s.strip.empty?
+
+    sp = line.split("#")
+    return false if sp.nil? || sp.empty?
+
+    line = sp.first
+    return false if line.to_s.strip.empty?
 
     comparator  = extract_comparator line
     requirement = line.split(comparator)
