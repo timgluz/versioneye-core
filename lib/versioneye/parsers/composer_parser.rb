@@ -104,6 +104,17 @@ class ComposerParser < CommonParser
     end
 
     case
+    when version.match(/\|/)
+      versions = []
+      parts = version.split("|")
+      parts.each do |verso|
+        project_dependency = init_projectdependency product.name, product
+        parse_requested_version verso, project_dependency, product
+        versions << project_dependency.version_requested
+      end
+      highest_version = VersionService.newest_version_from( versions, dependency.stability )
+      dependency.version_requested = highest_version
+
     when version.match(/,/)
       # Version Ranges
       version_splitted = version.split(",")
