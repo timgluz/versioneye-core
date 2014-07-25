@@ -11,15 +11,15 @@ class EmailSettingService < Versioneye::Service
   end
 
   def self.update_action_mailer emailSetting
-    ActionMailer::Base.smtp_settings = {
-        :address  => emailSetting.address,
-        :port  => emailSetting.port,
-        :user_name => emailSetting.username,
-        :password => emailSetting.password,
-        :domain => emailSetting.domain,
-        :authentication => emailSetting.authentication,
-        :enable_starttls_auto => emailSetting.enable_starttls_auto
-      }
+    settings = {:address  => emailSetting.address, :port  => emailSetting.port}
+
+    settings[:user_name] = emailSetting.username if !emailSetting.username.to_s.empty?
+    settings[:password] = emailSetting.password if !emailSetting.password.to_s.empty?
+    settings[:domain] = emailSetting.domain if !emailSetting.domain.to_s.empty?
+    settings[:authentication] = emailSetting.authentication if !emailSetting.authentication.to_s.empty?
+    settings[:enable_starttls_auto] = emailSetting.enable_starttls_auto if !emailSetting.enable_starttls_auto.to_s.empty?
+
+    ActionMailer::Base.smtp_settings = settings
   rescue => e
     log.error e.message
     log.error e.messages.join '/n'
