@@ -212,8 +212,9 @@ class Product < Versioneye::Model
   end
 
   def short_summary
-    return get_summary(description, 125) if description
-    get_summary(description_manual, 125)
+    desc = description
+    desc = description_manual if description_manual.to_s.length > description.to_s.length
+    return get_summary( desc , 125)
   end
 
   def name_and_version
