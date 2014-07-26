@@ -7,7 +7,7 @@ class NotificationService < Versioneye::Service
     user_ids.each do |id|
       count += process_user( id )
     end
-    NotificationMailer.status( count ).deliver
+    # NotificationMailer.status( count ).deliver
     log.info "Send out #{count} notification emails"
     count
   rescue => e
