@@ -161,4 +161,9 @@ class ProductService < Versioneye::Service
     product.remove
   end
 
+
+  def self.most_referenced(language, page)
+    Product.by_language( language ).desc(:used_by_count).paginate(:page => page)
+  end
+
 end
