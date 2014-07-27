@@ -15,31 +15,33 @@ class PackageParser < CommonParser
     parse_content body
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     nil
   end
 
   def parse_content( content )
     data = JSON.parse( content )
+    return nil if data.nil?
+
     dependencies = fetch_dependencies( data )
     return nil if dependencies.nil?
 
     project = init_project( data )
-    dependencies.each do |key, value|
-      parse_line( key, value, project )
+    dependencies.each do |package_name, version_label|
+      parse_line( package_name, version_label, project )
     end
     project.dep_number = project.dependencies.size
     project
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     nil
   end
 
-  def parse_line( key, value, project )
-    product    = Product.fetch_product( Product::A_LANGUAGE_NODEJS, key )
-    dependency = init_dependency( product, key )
-    parse_requested_version( value, dependency, product )
+  def parse_line( package_name, version_label, project )
+    product    = Product.fetch_product( Product::A_LANGUAGE_NODEJS, package_name )
+    dependency = init_dependency( product, package_name )
+    parse_requested_version( version_label, dependency, product )
     project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
     project.unknown_number += 1 if product.nil?
     project.projectdependencies.push dependency
@@ -56,6 +58,9 @@ class PackageParser < CommonParser
     version = version.to_s.strip
     version = version.gsub('"', '')
     version = version.gsub("'", '')
+    if version.match(/\Av\d.*/)
+      version = version[1..version.length]
+    end
 
     if product.nil?
       dependency.version_requested = version
@@ -65,7 +70,20 @@ class PackageParser < CommonParser
 
     version = pre_process version
 
-    if version.match(/\*/)
+    if version.match(/\|\|/)
+      parsed_versions = []
+      versions = version.split("||")
+      versions.each do |verso|
+        proj_dep = init_dependency product, dependency.name
+        parse_requested_version verso, proj_dep, product
+        parsed_versions << proj_dep.version_requested
+      end
+      highest_version = VersionService.newest_version_from( parsed_versions )
+      dependency.version_requested = highest_version
+      dependency.version_label = version
+      dependency.comperator = '||'
+
+    elsif version.match(/\A\*\z/)
       # Start Matching. Matches everything.
       dependency.version_requested = product.version
       dependency.version_label = '*'
@@ -170,12 +188,11 @@ class PackageParser < CommonParser
         end
       end
 
-    elsif version.match(/.x\z/i)
-      # X Version Ranges
-      ver = version.gsub("x", "")
-      ver = ver.gsub("X", "")
-      ver = ver.gsub(" ", "")
-      versions        = VersionService.versions_start_with( product.versions, ver )
+    elsif version.match(/\.x\z/i) || version.match(/\.\*\z/i)
+      # X Version Ranges or .* version range
+      ver = version[0..version.length - 2]
+      versions = VersionService.versions_start_with( product.versions, ver )
+      versions << version[0..version.length - 3]
       highest_version = VersionService.newest_version_from(versions)
       if highest_version
         dependency.version_requested = highest_version.to_s
