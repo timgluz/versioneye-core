@@ -62,6 +62,7 @@ class License < Versioneye::Model
     return 'BSD' if bsd_match( name )
     return 'Ruby' if ruby_match( name )
     return 'GPL-2.0' if gpl_20_match( name )
+    return 'LGPL 3' if lgpl_3_match( name )
     return 'Apache License, Version 2.0' if apache_license_2_match( name )
     return 'Apache License' if apache_license_match( name )
     return 'Eclipse Public License v1.0' if eclipse_match( name )
@@ -94,6 +95,10 @@ class License < Versioneye::Model
 
     def gpl_20_match name
       name.match(/\AGPL\-2\z/i) || name.match(/\AGPL\-2\.0\z/i)  || name.match(/\AGPL 2\.0\z/i) || name.match(/\AGPL 2\z/i)
+    end
+
+    def lgpl_3_match name
+      name.match(/\ALGPL 3\z/i) || name.match(/\ALGPL\-3\z/i)  || name.match(/\ALGPLv3\z/i)
     end
 
     def artistic_10_match name
