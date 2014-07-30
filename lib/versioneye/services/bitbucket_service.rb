@@ -16,15 +16,13 @@ class BitbucketService < Versioneye::Service
       return nil
     end
 
-    repo_info     = Bitbucket.repo_info repo_fullname, user[:bitbucket_token], user[:bitbucket_secret]
+    token  = user[:bitbucket_token]
+    secret = user[:bitbucket_secret]
 
-    # TODO double check this
-    repo_branches = Bitbucket.repo_branches repo_fullname, user[:bitbucket_token], user[:bitbucket_secret]
-    repo_files    = Bitbucket.repo_project_files repo_fullname, user[:bitbucket_token], user[:bitbucket_secret]
+    repo = Bitbucket.update_branches      current_repo, token, secret
+    repo = Bitbucket.update_project_files current_repo, token, secret
 
-    updated_repo = BitbucketRepo.build_new(user, repo_info, repo_branches, repo_files)
-    current_repo.update_attributes(updated_repo.attributes)
-    current_repo
+    repo
   end
 
 
