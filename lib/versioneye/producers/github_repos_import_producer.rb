@@ -17,7 +17,7 @@ class GithubReposImportProducer < Producer
     connection.close
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
   end
 
 

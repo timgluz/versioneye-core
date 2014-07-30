@@ -20,7 +20,7 @@ class GithubReposImportWorker < Worker
       end
     rescue => e
       log.error e.message
-      log.error e.backtrace.join('\n')
+      log.error e.backtrace.join("\n")
       connection.close
     end
   end
@@ -44,6 +44,9 @@ class GithubReposImportWorker < Worker
     cache.set( user_task_key, GitHubService::A_TASK_RUNNING, GitHubService::A_TASK_TTL )
     GitHubService.cache_user_all_repos(user, orga_names)
     cache.set( user_task_key, GitHubService::A_TASK_DONE, GitHubService::A_TASK_TTL )
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
 

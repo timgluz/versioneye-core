@@ -20,7 +20,7 @@ class BitbucketReposImportWorker < Worker
       end
     rescue => e
       log.error e.message
-      log.error e.backtrace.join('\n')
+      log.error e.backtrace.join("\n")
       connection.close
     end
   end
@@ -36,6 +36,9 @@ class BitbucketReposImportWorker < Worker
     BitbucketService.cache_user_all_repos( user )
     cache.set( user_task_key, BitbucketService::A_TASK_DONE, BitbucketService::A_TASK_TTL )
     log.info "Job done for #{user_task_key}"
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
 
