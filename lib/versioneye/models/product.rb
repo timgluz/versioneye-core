@@ -128,7 +128,7 @@ class Product < Versioneye::Model
     Naturalsorter::Sorter.sort_version_by_method( versions, "version", false )
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     versions
   end
 

@@ -17,7 +17,7 @@ class ReferenceService < Versioneye::Service
     ProductService.update_used_by_count product, true
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
   end
 
 

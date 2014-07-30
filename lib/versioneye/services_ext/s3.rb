@@ -32,7 +32,7 @@ class S3 < Versioneye::Service
   rescue => e
     log.error e.message
     log.error "AWS.config: #{AWS.config.s3_endpoint} - #{AWS.config.s3_port} - #{AWS.config.use_ssl} - #{AWS.config.access_key_id} -  #{AWS.config.secret_access_key}"
-    log.error e.backtrace.join '\n'
+    log.error e.backtrace.join "\n"
   end
 
 
@@ -43,7 +43,7 @@ class S3 < Versioneye::Service
     url.to_s
   rescue => e
     log.error e.message
-    log.error e.backtrace.join '\n'
+    log.error e.backtrace.join "\n"
   end
 
 
@@ -52,7 +52,7 @@ class S3 < Versioneye::Service
     AWS.s3.buckets[Settings.instance.s3_projects_bucket].objects[filename].delete
   rescue => e
     log.error e.message
-    log.error e.backtrace.join '\n'
+    log.error e.backtrace.join "\n"
   end
 
 
@@ -65,7 +65,7 @@ class S3 < Versioneye::Service
     filename
   rescue => e
     log.error "Exception in S3.upload_fileupload(file_up) #{e.message}"
-    log.error e.backtrace.join '\n'
+    log.error e.backtrace.join "\n"
     nil
   end
 
@@ -85,7 +85,7 @@ class S3 < Versioneye::Service
   rescue => e
     log.error "Error in store_in_project_bucket"
     log.error e.message
-    log.error e.backtrace.join '\n'
+    log.error e.backtrace.join "\n"
   end
 
 

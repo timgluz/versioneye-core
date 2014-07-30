@@ -204,7 +204,7 @@ class Bitbucket < Versioneye::Service
     repo
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     repo
   end
 

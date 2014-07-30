@@ -13,7 +13,7 @@ class RequirementsParser < CommonParser
     parse_content response.body
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     nil
   end
 
@@ -32,7 +32,7 @@ class RequirementsParser < CommonParser
     return project
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     nil
   end
 

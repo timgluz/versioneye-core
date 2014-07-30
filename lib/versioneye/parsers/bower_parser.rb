@@ -14,7 +14,7 @@ class BowerParser < PackageParser
     parse_content( body )
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     nil
   end
 
@@ -34,7 +34,7 @@ class BowerParser < PackageParser
     project
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     nil
   end
 

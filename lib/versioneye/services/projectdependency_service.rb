@@ -52,7 +52,7 @@ class ProjectdependencyService < Versioneye::Service
     projectdependency.outdated
   rescue => e
     log.error e.message
-    log.error e.backtrace.join '\n'
+    log.error e.backtrace.join "\n"
     out_value
   end
 

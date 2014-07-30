@@ -6,7 +6,7 @@ class SubmittedUrlService < Versioneye::Service
     end
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
   end
 
   def self.update_integration_status( submitted_url )
@@ -27,7 +27,7 @@ class SubmittedUrlService < Versioneye::Service
     false
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     false
   end
 

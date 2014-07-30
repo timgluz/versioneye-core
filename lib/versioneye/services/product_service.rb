@@ -6,7 +6,7 @@ class ProductService < Versioneye::Service
     EsProduct.search(q, group_id, languages, page_count)
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     MongoProduct.find_by(q, '', group_id, languages, 300).paginate(:page => page_count)
   end
 
@@ -97,7 +97,7 @@ class ProductService < Versioneye::Service
     product.save if persist
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
   end
 
 
@@ -122,7 +122,7 @@ class ProductService < Versioneye::Service
     end
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
   end
 
 

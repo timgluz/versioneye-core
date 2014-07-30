@@ -120,7 +120,7 @@ class User < Versioneye::Model
     UserMailer.verification_email(self, self.verification, self.email).deliver
   rescue => e
     User.log.error e.message
-    User.log.error e.backtrace.join('\n')
+    User.log.error e.backtrace.join("\n")
   end
 
   def self.send_verification_reminders
@@ -137,7 +137,7 @@ class User < Versioneye::Model
     end
   rescue => e
     User.log.error e.message
-    User.log.error e.backtrace.join('\n')
+    User.log.error e.backtrace.join("\n")
   end
 
   def send_suggestions
@@ -145,7 +145,7 @@ class User < Versioneye::Model
     UserMailer.suggest_packages_email(self).deliver
   rescue => e
     User.log.error e.message
-    User.log.error e.backtrace.join('\n')
+    User.log.error e.backtrace.join("\n")
     nil
   end
 

@@ -34,7 +34,7 @@ class StatisticService < Versioneye::Service
     self.update_language_project_trend
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
   end
 
   def self.update_language_project_count

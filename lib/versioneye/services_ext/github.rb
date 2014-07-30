@@ -44,7 +44,7 @@ class Github < Versioneye::Service
     JSON.parse client.user.to_json
   rescue => e
     log.error e.message
-    log.error e.backtrace.join( '\n' )
+    log.error e.backtrace.join( "\n" )
     nil
   end
 
@@ -53,7 +53,7 @@ class Github < Versioneye::Service
     client.emails
   rescue => e
     log.error e.message
-    log.error e.backtrace.join( '\n' )
+    log.error e.backtrace.join( "\n" )
     nil
   end
 
@@ -62,7 +62,7 @@ class Github < Versioneye::Service
     client.scopes token
   rescue => e
     log.error e.message
-    log.error e.backtrace.join( '\n' )
+    log.error e.backtrace.join( "\n" )
     ''
   end
 
@@ -126,7 +126,7 @@ class Github < Versioneye::Service
     repo
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     repo
   end
 
@@ -145,7 +145,7 @@ class Github < Versioneye::Service
     repo
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     repo[:branches] = ["master"]
     repo
   end
@@ -409,7 +409,7 @@ class Github < Versioneye::Service
       # by default here should be no message or nil
       # We expect that everything is ok and there is no error message
       log.error e.message
-      log.error e.backtrace.join('\n')
+      log.error e.backtrace.join("\n")
       nil
     end
 

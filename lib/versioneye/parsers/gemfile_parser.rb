@@ -15,7 +15,7 @@ class GemfileParser < CommonParser
     parse_content( gemfile )
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     nil
   end
 
@@ -28,7 +28,7 @@ class GemfileParser < CommonParser
     project
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     nil
   end
 

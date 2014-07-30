@@ -14,7 +14,7 @@ class LeinParser < CommonParser
     parse_content(content)
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     nil
   end
 
@@ -38,7 +38,7 @@ class LeinParser < CommonParser
     project
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     nil
   end
 

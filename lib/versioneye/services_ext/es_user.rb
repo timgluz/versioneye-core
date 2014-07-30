@@ -39,7 +39,7 @@ class EsUser < Versioneye::Service
     self.create_index_with_mappings
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
   end
 
   def self.refresh
@@ -51,7 +51,7 @@ class EsUser < Versioneye::Service
     self.refresh
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
   end
 
   def self.index(user)

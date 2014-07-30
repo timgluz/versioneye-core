@@ -21,7 +21,7 @@ class PodfileParser < CommonParser
     create_project pod_file
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     nil
   end
 
@@ -33,7 +33,7 @@ class PodfileParser < CommonParser
   rescue => e
     log.error "Cant'parse #{url}"
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     nil
   end
 

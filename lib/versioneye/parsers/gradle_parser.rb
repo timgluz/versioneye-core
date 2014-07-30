@@ -9,7 +9,7 @@ class GradleParser < CommonParser
     parse_content( content )
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     nil
   end
 
@@ -33,7 +33,7 @@ class GradleParser < CommonParser
     project
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     nil
   end
 

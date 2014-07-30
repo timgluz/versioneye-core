@@ -100,7 +100,7 @@ class Project < Versioneye::Model
     Project.find( id )
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     nil
   end
 

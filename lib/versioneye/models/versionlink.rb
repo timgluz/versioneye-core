@@ -59,7 +59,7 @@ class Versionlink < Versioneye::Model
     versionlink
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     nil
   end
 
@@ -94,7 +94,7 @@ class Versionlink < Versioneye::Model
     versionlink.save
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     nil
   end
 

@@ -5,7 +5,7 @@ class StripeService < Versioneye::Service
     Stripe::Customer.retrieve customer_id, api_key
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     nil
   end
 
@@ -17,7 +17,7 @@ class StripeService < Versioneye::Service
         :email => email)
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     nil
   end
 
@@ -38,7 +38,7 @@ class StripeService < Versioneye::Service
     self.create_customer stripe_token, plan_name_id, user.email
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     nil
   end
 
@@ -50,7 +50,7 @@ class StripeService < Versioneye::Service
     customer.delete
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     false
   end
 
@@ -59,7 +59,7 @@ class StripeService < Versioneye::Service
     Stripe::Invoice.retrieve invoice_id, api_key
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     nil
   end
 

@@ -15,7 +15,7 @@ class GemfilelockParser < GemfileParser
     parse_content( content )
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     nil
   end
 
@@ -32,7 +32,7 @@ class GemfilelockParser < GemfileParser
     project
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
     nil
   end
 

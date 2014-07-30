@@ -11,7 +11,7 @@ class UrlUpdater < CommonUpdater
     update_old_with_new project, new_project, send_email
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
   end
 
 end
