@@ -14,12 +14,11 @@ class BitbucketRepoImportWorker < Worker
 
     begin
       queue.subscribe(:ack => true, :block => true) do |delivery_info, properties, body|
-        puts " [x] Received #{body}"
-        user_id = body.split(":::").first
-        repo_id = body.split(":::").last
-        user = User.find user_id
-        repo = BitbucketRepo.find repo_id
-        update_repo user, repo
+        msg = " [x] Received #{body}"
+        puts msg
+        log.info msg
+
+        handle body
         cache.set( body, BitbucketService::A_TASK_DONE, A_TASK_TTL )
         channel.ack(delivery_info.delivery_tag)
       end
@@ -28,6 +27,18 @@ class BitbucketRepoImportWorker < Worker
       log.error e.backtrace.join("\n")
       connection.close
     end
+  end
+
+
+  def handle message
+    user_id = message.split(":::").first
+    repo_id = message.split(":::").last
+    user = User.find user_id
+    repo = BitbucketRepo.find repo_id
+    update_repo user, repo
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
 
