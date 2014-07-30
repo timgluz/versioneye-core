@@ -6,8 +6,7 @@ class BitbucketService < Versioneye::Service
   A_TASK_NIL     = nil
   A_TASK_RUNNING = 'running'
   A_TASK_DONE    = 'done'
-  A_MAX_WORKERS  = 16
-  A_TTL = 600 # 600 seconds = 10 minutes
+  A_TASK_TTL     = 600 # 600 seconds = 10 minutes
 
 
   def self.update_repo_info(user, repo_fullname)
@@ -18,6 +17,8 @@ class BitbucketService < Versioneye::Service
     end
 
     repo_info     = Bitbucket.repo_info repo_fullname, user[:bitbucket_token], user[:bitbucket_secret]
+
+    # TODO double check this
     repo_branches = Bitbucket.repo_branches repo_fullname, user[:bitbucket_token], user[:bitbucket_secret]
     repo_files    = Bitbucket.repo_project_files repo_fullname, user[:bitbucket_token], user[:bitbucket_secret]
 
@@ -38,10 +39,35 @@ class BitbucketService < Versioneye::Service
 
     if user[:bitbucket_token] and user.bitbucket_repos.all.count == 0
       task_status =  A_TASK_RUNNING
-      cache.set( user_task_key, task_status, A_TTL )
+      cache.set( user_task_key, task_status, A_TASK_TTL )
       BitbucketReposImportProducer.new("#{user.id.to_s}")
     else
       log.info "Nothing to import - maybe clean user's repo?"
+      task_status = A_TASK_DONE
+    end
+
+    task_status
+  end
+
+
+  def self.status_for user, current_repo
+    repo_fullname = current_repo.fullname
+    return A_TASK_DONE if current_repo.nil?
+
+    repo_task_key = "#{user.id.to_s}:::#{current_repo.id.to_s}"
+    task_status   = cache.get( repo_task_key )
+
+    if task_status == A_TASK_RUNNING
+      log.debug "We are still importing branches and project files for `#{repo_fullname}.`"
+      return task_status
+    end
+
+    if current_repo and ( current_repo.branches.nil? || current_repo.branches.empty? )
+      task_status = A_TASK_RUNNING
+      cache.set( repo_task_key, task_status, A_TASK_TTL )
+      BitbucketRepoImportProducer.new( repo_task_key )
+    else
+      log.info 'Nothing is changed - skipping update.'
       task_status = A_TASK_DONE
     end
 
@@ -56,7 +82,7 @@ class BitbucketService < Versioneye::Service
 
     user_orgs = Bitbucket.user_orgs(user)
     user_orgs.each do |org|
-      self.cache_repos(user, org)
+      self.cache_repos( user, org )
     end
 
     # Import missing invited repos
@@ -68,17 +94,12 @@ class BitbucketService < Versioneye::Service
     token  = user[:bitbucket_token]
     secret = user[:bitbucket_secret]
     repos  = Bitbucket.read_repos(owner_name, token, secret)
-
-    # Add information about branches and project files
-    repos.each do |repo|
-      add_repo( user, repo, token, secret )
-    end
-
+    persist user, repos
     return true
   end
 
 
-  def self.cache_invited_repos(user)
+  def self.cache_invited_repos( user )
     token  = user[:bitbucket_token]
     secret = user[:bitbucket_secret]
     repos  = Bitbucket.read_repos_v1( token, secret )
@@ -94,24 +115,28 @@ class BitbucketService < Versioneye::Service
       # Remove other people forks
       repo.has_key?(:fork_of) and repo[:fork_of].is_a?(Hash) and repo[:fork_of][:owner] == user[:bitbucket_id]
     end
+
     # Add missing repos
+    searched_repos = []
     invited_repos.each do |old_repo|
       repo = Bitbucket.repo_info(old_repo[:full_name], token, secret) #fetch repo info from api2
       if repo.nil?
         log.error "cache_invited_repos | didnt get repo info for `#{old_repo[:full_name]}`"
         next
       end
-      add_repo(user, repo, token, secret)
+      searched_repos << repo
     end
-    return true
+    persist user, searched_repos
+    true
   end
 
 
-  def self.add_repo(user, repo, token, secret)
-    repo_name = repo[:full_name]
-    branches  = Bitbucket.repo_branches(repo_name, token, secret)
-    files     = Bitbucket.repo_project_files(repo_name, token, secret)
-    BitbucketRepo.create_new(user, repo, branches, files )
+  def self.persist user, repos
+    return false if repos.nil? || repos.empty?
+
+    repos.each do |repo|
+      BitbucketRepo.build_or_update user, repo
+    end
   end
 
 

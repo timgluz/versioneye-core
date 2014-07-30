@@ -1,4 +1,4 @@
-class GithubRepoImportWorker < Worker
+class BitbucketRepoImportWorker < Worker
 
   A_TASK_TTL = 180 # 180 seconds = 3 minutes
 
@@ -6,7 +6,7 @@ class GithubRepoImportWorker < Worker
     connection = get_connection
     connection.start
     channel = connection.create_channel
-    queue   = channel.queue("github_repo_import", :durable => true)
+    queue   = channel.queue("bitbucket_repo_import", :durable => true)
 
     log_msg = " [*] Waiting for messages in #{queue.name}. To exit press CTRL+C"
     puts log_msg
@@ -18,9 +18,9 @@ class GithubRepoImportWorker < Worker
         user_id = body.split(":::").first
         repo_id = body.split(":::").last
         user = User.find user_id
-        repo = GithubRepo.find repo_id
+        repo = BitbucketRepo.find repo_id
         update_repo user, repo
-        cache.set( body, GitHubService::A_TASK_DONE, A_TASK_TTL )
+        cache.set( body, BitbucketService::A_TASK_DONE, A_TASK_TTL )
         channel.ack(delivery_info.delivery_tag)
       end
     rescue => e
@@ -33,10 +33,9 @@ class GithubRepoImportWorker < Worker
 
   def update_repo user, repo
     time = Benchmark.measure do
-      repo = Github.update_branches      repo, user.github_token
-      repo = Github.update_project_files repo, user.github_token
+      repo = Bitbucket.update_branches      repo, user.bitbucket_token, user.bitbucket_secret
+      repo = Bitbucket.update_project_files repo, user.bitbucket_token, user.bitbucket_secret
       repo.user_id = user.id
-      repo.user_login = user.github_login
       repo.save
     end
     name = repo[:full_name]

@@ -60,6 +60,31 @@ class GitHubService < Versioneye::Service
   end
 
 
+  def self.status_for user, current_repo
+    repo_fullname = current_repo.fullname
+    return A_TASK_DONE if current_repo.nil?
+
+    repo_task_key = "#{user.id.to_s}:::#{current_repo.id.to_s}"
+    task_status   = cache.get( repo_task_key )
+
+    if task_status == A_TASK_RUNNING
+      log.debug "We are still importing branches and project files for `#{repo_fullname}.`"
+      return task_status
+    end
+
+    if current_repo and ( current_repo.branches.nil? || current_repo.branches.empty? )
+      task_status = A_TASK_RUNNING
+      cache.set( repo_task_key, task_status, A_TASK_TTL )
+      GithubRepoImportProducer.new( repo_task_key )
+    else
+      log.info 'Nothing is changed - skipping update.'
+      task_status = A_TASK_DONE
+    end
+
+    task_status
+  end
+
+
   def self.update_repo_info user, repo_fullname
     current_repo = GithubRepo.by_user(user).by_fullname(repo_fullname).shift
     if current_repo.nil?
@@ -81,7 +106,6 @@ class GitHubService < Versioneye::Service
 
 
   def self.cache_user_all_repos(user, orga_names)
-    puts "Going to cache repositories for #{user.username}."
     user_info = Github.user(user.github_token)
     user[:user_login] = user_info['login'] if user_info.is_a?(Hash)
 

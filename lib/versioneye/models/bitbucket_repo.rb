@@ -11,13 +11,14 @@ class BitbucketRepo < Versioneye::Model
   field :description  , type: String
   field :private      , type: Boolean, default: false
   field :scm          , type: String
-  field :html_url     , type: String #web url
-  field :clone_url    , type: String #clone url
+  field :html_url     , type: String # web url
+  field :clone_url    , type: String # clone url
   field :size         , type: Integer
+  field :branches     , type: Array
   field :project_files, type: Hash, default: nil
-  field :created_at   , type: DateTime, default: DateTime.new
-  field :updated_at   , type: DateTime, default: DateTime.new
-  field :cached_at    , type: DateTime, default: DateTime.new
+  field :created_at   , type: DateTime, default: DateTime.now
+  field :updated_at   , type: DateTime, default: DateTime.now
+  field :cached_at    , type: DateTime, default: DateTime.now
 
   belongs_to :user
 
@@ -33,6 +34,7 @@ class BitbucketRepo < Versioneye::Model
   scope :by_owner_login , ->(owner){where(owner_login: owner)}
   scope :by_fullname    , ->(name){where(fullname: name)}
 
+
   def self.get_owner_type(user, owner_info)
     owner_type = 'team'
     if user[:bitbucket_id] == owner_info[:username]
@@ -42,17 +44,21 @@ class BitbucketRepo < Versioneye::Model
     return owner_type
   end
 
-  def self.build_new(user, repo, repo_branches = nil, project_files = nil)
-    return if repo.nil? || repo.empty?
+  def self.build_or_update( user, repo )
+    return nil if repo.nil? || repo.empty?
+
+    repo = repo.deep_symbolize_keys if repo.respond_to?("deep_symbolize_keys")
+
     owner_info = repo[:owner]
     owner_type = get_owner_type(user, owner_info)
     repo_links = repo[:links]
+    fullname = repo[:full_name]
+    fullname = repo[:fullname] if fullname.to_s.empty?
 
-    new_repo = BitbucketRepo.new({
-      user_id: user[:_id],
+    repo = BitbucketRepo.find_or_create_by(:user_id => user.id.to_s, :fullname => fullname)
+    repo.update_attributes!({
       user_login: user[:bitbucket_id],
       name: repo[:name],
-      fullname: repo[:full_name],
       scm: repo[:scm],
       owner_login: owner_info[:username],
       owner_type: owner_type,
@@ -61,25 +67,18 @@ class BitbucketRepo < Versioneye::Model
       private: repo[:is_private],
       html_url: repo_links[:html][:href],
       clone_url: repo_links[:clone].to_a.last[:href],
-      size: repo[:size],
-      branches: repo_branches,
-      project_files: project_files,
-      created_at: DateTime.parse(repo[:created_on]),
-      updated_at: DateTime.parse(repo[:updated_on]),
-      cached_at: DateTime.now
+      size: repo[:size]
+
+      # This will be completed by bitbucket_repo_import_worker or have to be set from extern.
+      # branches: repo_branches,
+      # project_files: project_files,
     })
 
-    new_repo
-  end
-
-  def self.create_new(user, repo, repo_branches = nil, project_files = nil)
-    new_repo = build_new(user, repo, repo_branches, project_files)
-    unless new_repo.save
-      log.error "Cant save new repo: ..." # #{new_repo.errors.full_messages.to_sentence}
-    end
-    new_repo
+    repo
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
+    nil
   end
+
 end

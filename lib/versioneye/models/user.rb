@@ -31,12 +31,12 @@ class User < Versioneye::Model
   field :free_private_projects, type: Integer, default: 0
 
   field :github_id   , type: String
-  field :github_login, type: String #username on github
+  field :github_login, type: String # Username on github
   field :github_token, type: String
   field :github_scope, type: String
 
   field :bitbucket_id,     type: String
-  field :bitbucket_login,  type: String #username on bitbucket
+  field :bitbucket_login,  type: String # Username on bitbucket
   field :bitbucket_token,  type: String
   field :bitbucket_secret, type: String
   field :bitbucket_scope,  type: String

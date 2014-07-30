@@ -156,11 +156,11 @@ class Github < Versioneye::Service
     data     = [] if data.nil?
 
     data.each do |repo|
-      next if repo.nil? or repo[:full_name].to_s.empty?
-
-      git_repo = GithubRepo.build_or_update user, repo
-      msg = "#{user.id}:::#{git_repo.id}"
-      GithubRepoImportProducer.new( msg )
+      next if repo.nil?
+      fullname = repo[:full_name]
+      fullname = repo[:fullname] if fullname.to_s.empty?
+      next if fullname.to_s.empty?
+      GithubRepo.build_or_update user, repo
     end
 
     paging_links = parse_paging_links(response.headers)

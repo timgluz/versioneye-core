@@ -37,14 +37,14 @@ class GithubRepo < Versioneye::Model
   index({ owner_login: 1 }, { name: "owner_login_index", background: true })
   index({ owner_type: 1 },  { name: "owner_type_index" , background: true })
   index({ owner_login: 1, owner_type: 1 }, { name: "login_typ_index", background: true })
-  index({ github_id: 1, fullname: 1 }, { name: "githubid_fullname_index", background: true })
+  index({ github_id: 1, fullname: 1 },     { name: "githubid_fullname_index", background: true })
 
   scope :by_language   , ->(lang){where(language: lang)}
   scope :by_user       , ->(user){where(user_id: user._id)}
   scope :by_owner_login, ->(login){where(owner_login: login)}
+  scope :by_fullname   , ->(fullname){where(fullname: fullname)}
   scope :by_owner_type , ->(type_name){where(owner_type: type_name)}
   scope :by_org        , ->(org_name){where(owner_login: org_name, owner_type: 'organization')}
-  scope :by_fullname   , ->(fullname){where(fullname: fullname)}
 
 
   def self.get_owner_type(user, owner_info)
@@ -96,6 +96,7 @@ class GithubRepo < Versioneye::Model
     repo = GithubRepo.find_or_create_by(:github_id => user.github_id, :fullname => repo_data[:full_name])
     repo.update_attributes!({
       user_id: user.id,
+      user_login: user[:user_login],
       name: repo_data[:name],
       fullname: repo_data[:full_name],
       owner_login: owner_info[:login],
@@ -115,11 +116,9 @@ class GithubRepo < Versioneye::Model
       etag: etag.to_s,
       created_at: repo_data[:created_at],
       updated_at: repo_data[:updated_at],
-      pushed_at: repo_data[:pushed_at],
-      cached_at: DateTime.now
+      pushed_at: repo_data[:pushed_at]
 
       # This will be completed by github_repo_import_worker or have to be set from extern.
-      # user_login: user[:user_login],
       # branches: repo_data[:branches],
       # project_files: repo_data[:project_files],
     })

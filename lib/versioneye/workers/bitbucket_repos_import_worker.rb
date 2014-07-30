@@ -32,9 +32,9 @@ class BitbucketReposImportWorker < Worker
     user_task_key = "#{user[:username]}-bitbucket"
     log.info "Fetch Repositories for #{user_task_key} from Bitbucket and cache them in DB."
 
-    cache.set( user_task_key, BitbucketService::A_TASK_RUNNING, BitbucketService::A_TTL )
+    cache.set( user_task_key, BitbucketService::A_TASK_RUNNING, BitbucketService::A_TASK_TTL )
     BitbucketService.cache_user_all_repos( user )
-    cache.set( user_task_key, BitbucketService::A_TASK_DONE, BitbucketService::A_TTL )
+    cache.set( user_task_key, BitbucketService::A_TASK_DONE, BitbucketService::A_TASK_TTL )
     log.info "Job done for #{user_task_key}"
   end
 
