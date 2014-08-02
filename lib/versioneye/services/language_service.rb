@@ -1,6 +1,8 @@
 class LanguageService < Versioneye::Service
 
+
   A_TTL = 7200 # 2 hours
+
 
   def self.language_for lang_string
     languages = distinct_languages

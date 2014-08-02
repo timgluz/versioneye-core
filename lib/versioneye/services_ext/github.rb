@@ -180,8 +180,14 @@ class Github < Versioneye::Service
   end
 
   def self.repo_branches repo_name, token
+    branches = []
     url = "#{Settings.instance.github_api_url}/repos/#{repo_name}/branches"
-    get_json(url, token)
+    begin
+      data = get_json(url, token)
+      branches << data
+      url = data[:paging]["next"]
+    end while not url.nil?
+    branches
   end
 
   def self.repo_branch_info repo_name, branch = "master", token = nil
