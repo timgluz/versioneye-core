@@ -80,12 +80,12 @@ class Github < Versioneye::Service
 
   def self.user_repos user, url = nil, page = 1, per_page = 30
     url = "#{Settings.instance.github_api_url}/user/repos?page=#{page}&per_page=#{per_page}&access_token=#{user.github_token}" if url.nil?
-    read_repos(user, url, page, per_page)
+    persist_repos(user, url, page, per_page)
   end
 
   def self.user_orga_repos user, orga_name, url = nil, page = 1, per_page = 30
     url = "#{Settings.instance.github_api_url}/orgs/#{orga_name}/repos?access_token=#{user.github_token}&page=#{page}&per_page=#{per_page}" if url.nil?
-    read_repos(user, url, page, per_page)
+    persist_repos(user, url, page, per_page)
   end
 
   def self.repo_info(repo_fullname, token, raw = false, updated_since = nil)
@@ -150,21 +150,30 @@ class Github < Versioneye::Service
     repo
   end
 
-  def self.read_repos user, url, page = 1, per_page = 30
+  def self.persist_repos user, url, page = 1, per_page = 30
     response = get(url, headers: A_DEFAULT_HEADERS)
-    data     = catch_github_exception JSON.parse(response.body, symbolize_names: true)
-    data     = [] if data.nil?
+    content  = JSON.parse(response.body, symbolize_names: true)
+    data     = catch_github_exception( content )
+    create_or_update_repos user, data
+    paging_for response
+  end
+
+  def self.create_or_update_repos user, data
+    return nil if data.nil?
 
     data.each do |repo|
       next if repo.nil?
+
       fullname = repo[:full_name]
       fullname = repo[:fullname] if fullname.to_s.empty?
       next if fullname.to_s.empty?
+
       GithubRepo.build_or_update user, repo
     end
+  end
 
-    paging_links = parse_paging_links(response.headers)
-    repos = {
+  def self.paging_for response, page = 1, per_page = 30
+    paging = {
       paging: {
         start: page,
         per_page: per_page
@@ -175,19 +184,29 @@ class Github < Versioneye::Service
         remaining: response.headers["x-ratelimit-remaining"]
       }
     }
-    repos[:paging].merge! paging_links unless paging_links.nil?
-    repos
+    paging_links = parse_paging_links(response.headers)
+    paging[:paging].merge! paging_links unless paging_links.nil?
+    paging
   end
+
 
   def self.repo_branches repo_name, token
     branches = []
     url = "#{Settings.instance.github_api_url}/repos/#{repo_name}/branches"
     begin
-      data = get_json(url, token)
-      branches << data
-      url = data[:paging]["next"]
+      request_headers = build_request_headers token
+      response = get(url, headers: request_headers)
+      content  = JSON.parse( response.body, symbolize_names: true )
+      data     = catch_github_exception( content )
+      branches += data if !data.nil?
+      paging = paging_for response
+      url = paging[:paging]["next"]
     end while not url.nil?
+    branches = nil if branches.empty?
     branches
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
   def self.repo_branch_info repo_name, branch = "master", token = nil
@@ -266,7 +285,7 @@ class Github < Versioneye::Service
       branch_tree = repo_branch_tree(repo_name, token, branch_sha)
       break unless branch_tree.nil?
       log.error "Going to read tree of branch `#{branch}` for #{repo_name} again after little pause."
-      sleep 1 #it's required to prevent bombing Github's api after our request got rejected
+      sleep 1 # it's required to prevent bombing Github's api after our request got rejected
     end
 
     if branch_tree.nil? or !branch_tree.has_key?('tree')
@@ -313,6 +332,7 @@ class Github < Versioneye::Service
 
   def self.fetch_file( url, token )
     return nil if url.to_s.empty?
+
     uri = URI(url)
     get_json(uri.path, token)
   rescue => e
@@ -364,14 +384,14 @@ class Github < Versioneye::Service
     return response if raw
 
     content = JSON.parse(response.body, symbolize_names: true)
-    catch_github_exception(content)
+    catch_github_exception( content )
   rescue => e
     log.error e.message
     log.error e.backtrace.first
     return nil
   end
 
-  def self.build_request_headers token, updated_at
+  def self.build_request_headers token, updated_at = nil
     request_headers = A_DEFAULT_HEADERS
     if token
       request_headers["Authorization"] = " token #{token}"
@@ -421,6 +441,7 @@ class Github < Versioneye::Service
 
     def self.parse_paging_links( headers )
       return nil unless headers.has_key? "link"
+
       links = []
       headers["link"].split(",").each do |link_token|
         matches = link_token.strip.match /<([\w|\/|\.|:|=|?|\&]+)>;\s+rel=\"(\w+)\"/m

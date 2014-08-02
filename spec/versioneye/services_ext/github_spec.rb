@@ -118,17 +118,17 @@ describe Github do
     end
 
     # it "should response hash-map where 'repos' are empty array when user has wrong credentials" do
-    #   response = Github.read_repos(user_without_token, url_start)
+    #   response = Github.persist_repos(user_without_token, url_start)
     #   response.should_not be_nil
     #   response.has_key?(:repos).should be_truthy
     #   response[:repos].empty?.should be_truthy
     # end
 
     it "should parse correctly url from response header" do
-       response = Github.read_repos(user_without_token, url_start)
+       response = Github.persist_repos( user_without_token, url_start )
        # TODO TG condition is here missing on response.
 
-       response = Github.read_repos(user_with_token, url_start)
+       response = Github.persist_repos(user_with_token, url_start)
        response.should_not be_nil
        response.has_key?(:paging).should be_truthy
        response[:paging].has_key?("next").should be_truthy

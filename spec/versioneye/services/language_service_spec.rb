@@ -13,6 +13,8 @@ describe LanguageService do
     end
 
     it 'returns Java' do
+      LanguageService.cache.delete "distinct_languages"
+
       prod = ProductFactory.create_new 1
       prod.language = "Java"
       prod.save

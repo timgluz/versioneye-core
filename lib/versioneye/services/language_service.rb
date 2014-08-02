@@ -11,6 +11,7 @@ class LanguageService < Versioneye::Service
       return lang if /\A#{lang}\z/i =~ lang_string || /\A#{lang}\/.*\z/i =~ lang_string
       return lang if lang_string.match(/c\+\+/i)
     end
+    nil
   end
 
 
