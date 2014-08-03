@@ -578,8 +578,24 @@ describe Product do
       license = License.new({:language => product1.language, :prod_key => product1.prod_key,
         :version => product1.version, :name => "GLP"})
       license.save
+      product1.licenses.count.should eq(2)
       product1.license_info.should match("MIT")
       product1.license_info.should match("GLP")
+    end
+
+    it "returns unified licenses" do
+      product1 = ProductFactory.create_for_gemfile("bee", "1.4.0")
+      product1.versions.push( Version.new({version: "1.4.0"}) )
+      product1.save
+      license = License.new({:language => product1.language, :prod_key => product1.prod_key,
+        :version => product1.version, :name => "MIT"})
+      license.save
+      product1.license_info.should eql("MIT")
+      license = License.new({:language => product1.language, :prod_key => product1.prod_key,
+        :version => product1.version, :name => "The MIT License"})
+      license.save
+      product1.licenses.count.should eq(1)
+      product1.licenses.first.name_substitute.should eq("MIT")
     end
   end
 

@@ -248,7 +248,16 @@ class Product < Versioneye::Model
   # An artifact (product + version) can have multiple licenses
   # at the same time. That's not a bug!
   def licenses ignore_version = false
-    License.for_product self, ignore_version
+    substitute_names = []
+    licenses = []
+    lics = License.for_product self, ignore_version
+    lics.each do |license|
+      if !substitute_names.include?( license.name_substitute )
+        substitute_names << license.name_substitute
+        licenses << license
+      end
+    end
+    licenses
   end
 
   def developers
