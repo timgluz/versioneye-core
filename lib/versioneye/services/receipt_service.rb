@@ -8,7 +8,7 @@ class ReceiptService < Versioneye::Service
     count = User.where(:plan_id.ne => nil).count
     return nil if count == 0
 
-    per_page = 50
+    per_page = 10
     skip = 0
     iterations = count / per_page
     iterations += 1
@@ -40,6 +40,8 @@ class ReceiptService < Versioneye::Service
 
   def self.handle_user( user )
     customer = StripeService.fetch_customer user.stripe_customer_id
+    return nil if customer.nil?
+
     invoices = customer.invoices
     return nil if invoices.nil? || invoices.count == 0
 
@@ -111,7 +113,7 @@ class ReceiptService < Versioneye::Service
   end
 
 
-  # note for me.. kit.to_file('/Users/robertreiz/invoice.pdf')
+  # Note for me.. kit.to_file('/Users/robertreiz/invoice.pdf')
   def self.compile_pdf_invoice html, receipt = nil
     footer_file = Settings.instance.receipt_footer
     kit = PDFKit.new(html, :footer_html => footer_file, :page_size => 'A4')
