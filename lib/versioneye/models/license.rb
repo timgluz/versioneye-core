@@ -48,9 +48,12 @@ class License < Versioneye::Model
     return 'http://www.linfo.org/bsdlicense.html' if bsd_match( name )
     return 'http://choosealicense.com/licenses/mit/' if mit_match( name )
     return 'http://www.ruby-lang.org/en/about/license.txt' if ruby_match( name )
+    return 'http://opensource.org/licenses/apachepl.php' if apache_license_match( name )
     return 'http://www.apache.org/licenses/LICENSE-2.0.txt' if apache_license_2_match( name )
     return 'http://choosealicense.com/licenses/eclipse/' if eclipse_match( name )
+    return 'http://www.gnu.org/copyleft/gpl.html' if gpl_match( name )
     return 'http://opensource.org/licenses/gpl-2.0.php' if gpl_20_match( name )
+    return 'http://opensource.org/licenses/LGPL-3.0' if lgpl_3_match( name )
     return 'http://opensource.org/licenses/artistic-license-1.0' if artistic_10_match( name )
     return 'http://opensource.org/licenses/artistic-license-2.0' if artistic_20_match( name )
     nil
@@ -78,39 +81,66 @@ class License < Versioneye::Model
   private
 
     def ruby_match name
-      name.match(/\ARuby\z/i) || name.match(/\ARuby License\z/)
+      name.match(/\ARuby\z/i) ||
+      name.match(/\ARuby License\z/) ||
+      name.match(/\ARuby 1\.8\z/)
     end
 
     def mit_match name
-      name.match(/\AMIT\z/i) || name.match(/\AThe MIT License\z/) || name.match(/\AMIT License\z/)
+      name.match(/\AMIT\z/i) ||
+      name.match(/\AThe MIT License\z/) ||
+      name.match(/\AMIT License\z/)
     end
 
     def eclipse_match name
-      name.match(/\AEclipse\z/i) || name.match(/\AEclipse Public License v1\.0\z/) || name.match(/\AEclipse License\z/) || name.match(/\AEclipse Public License\z/) || name.match(/\AEclipse Public License \- v 1\.0\z/)
+      name.match(/\AEclipse\z/i) ||
+      name.match(/\AEclipse Public License v1\.0\z/) ||
+      name.match(/\AEclipse License\z/) ||
+      name.match(/\AEclipse Public License\z/) ||
+      name.match(/\AEclipse Public License \- v 1\.0\z/)
     end
 
     def bsd_match name
-      name.match(/\ABSD License\z/i) || name.match(/\ABSD\z/)
+      name.match(/\AThe BSD License\z/i) ||
+      name.match(/\ABSD License\z/i) ||
+      name.match(/\ABSD\z/)
+    end
+
+    def gpl_match name
+      name.match(/\AGPL\z/i)
     end
 
     def gpl_20_match name
-      name.match(/\AGPL\-2\z/i) || name.match(/\AGPL\-2\.0\z/i)  || name.match(/\AGPL 2\.0\z/i) || name.match(/\AGPL 2\z/i)
+      name.match(/\AGPL\-2\z/i) ||
+      name.match(/\AGPL\-2\.0\z/i)  ||
+      name.match(/\AGPL 2\.0\z/i) ||
+      name.match(/\AGPL 2\z/i) ||
+      name.match(/\AGPLv2\+\z/i)
     end
 
     def lgpl_3_match name
-      name.match(/\ALGPL 3\z/i) || name.match(/\ALGPL\-3\z/i)  || name.match(/\ALGPLv3\z/i)
+      name.match(/\ALGPL 3\z/i) ||
+      name.match(/\ALGPL\-3\z/i) ||
+      name.match(/\ALGPLv3\z/i)
     end
 
     def artistic_10_match name
-      name.match(/\AArtistic License 1\.0\z/i) || name.match(/\AArtistic License\z/) || name.match(/\AArtistic\-1\.0\z/) || name.match(/\AArtistic 1\.0\z/)
+      name.match(/\AArtistic License 1\.0\z/i) ||
+      name.match(/\AArtistic License\z/) ||
+      name.match(/\AArtistic\-1\.0\z/) ||
+      name.match(/\AArtistic 1\.0\z/)
     end
 
     def artistic_20_match name
-      name.match(/\AArtistic License 2.0\z/i) || name.match(/\AArtistic 2.0\z/)
+      name.match(/\AArtistic License 2.0\z/i) ||
+      name.match(/\AArtistic 2.0\z/)
     end
 
     def apache_license_match name
-      name.match(/\AApache License\z/i) || name.match(/\AApache Software Licenses\z/i) || name.match(/\AApache Software License\z/i)
+      name.match(/\AApache\z/i) ||
+      name.match(/\AApache License\z/i) ||
+      name.match(/\AApache Software Licenses\z/i) ||
+      name.match(/\AApache Software License\z/i)
     end
 
     def apache_license_2_match name
