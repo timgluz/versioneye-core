@@ -119,6 +119,8 @@ class ReceiptService < Versioneye::Service
     footer_file = Settings.instance.receipt_footer
     kit = PDFKit.new(html, :footer_html => footer_file, :page_size => 'A4')
 
+    raise "PDFKit.new returned nil!" if kit.nil?
+
     if receipt
       kit.to_file("#{ENV['HOME']}/#{receipt.filename}")
     end
