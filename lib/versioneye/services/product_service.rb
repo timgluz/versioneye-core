@@ -1,7 +1,7 @@
 class ProductService < Versioneye::Service
 
 
-  # languages have to be an array of strings.
+  # Languages have to be an array of strings.
   def self.search(q, group_id = nil, languages = nil, page_count = 1)
     EsProduct.search(q, group_id, languages, page_count)
   rescue => e
@@ -22,16 +22,40 @@ class ProductService < Versioneye::Service
     product.check_nil_version
     product.version = version if version
 
-    if !lang.eql?( Product::A_LANGUAGE_JAVA )
-      update_dependencies( product )
-    end
-
     update_average_release_time( product )
     product
   end
 
 
-  def self.update_dependencies_global()
+  def self.follow language, prod_key, user
+    result = false
+    product = Product.fetch_product language, prod_key
+    product.users = Array.new if product && product.users.nil?
+    if product && user && !product.users.include?( user )
+      product.users.push user
+      product.followers = 0 if product.followers.nil?
+      product.followers += 1
+      result = product.save
+    end
+    result
+  end
+
+
+  def self.unfollow language, prod_key, user
+    result = false
+    product = Product.fetch_product language, prod_key
+    product.users = Array.new if product && product.users.nil?
+    if product && user && product.users.include?( user )
+      product.users.delete(user)
+      product.followers = 0 if product.followers.nil?
+      product.followers -= 1
+      result = product.save
+    end
+    result
+  end
+
+
+  def self.all_products_paged
     count = Product.count()
     page = 100
     iterations = count / page
@@ -39,9 +63,11 @@ class ProductService < Versioneye::Service
     (0..iterations).each do |i|
       skip = i * page
       products = Product.all().skip(skip).limit(page)
-      update_deps products
+
+      yield products
+
       co = i * page
-      log_msg = "update_dependencies_global iteration: #{i} - products processed: #{co}"
+      log_msg = "all_products_paged iteration: #{i} - products processed: #{co}"
       p log_msg
       log.info log_msg
     end
@@ -77,34 +103,6 @@ class ProductService < Versioneye::Service
   end
 
 
-  def self.follow language, prod_key, user
-    result = false
-    product = Product.fetch_product language, prod_key
-    product.users = Array.new if product && product.users.nil?
-    if product && user && !product.users.include?( user )
-      product.users.push user
-      product.followers = 0 if product.followers.nil?
-      product.followers += 1
-      result = product.save
-    end
-    result
-  end
-
-
-  def self.unfollow language, prod_key, user
-    result = false
-    product = Product.fetch_product language, prod_key
-    product.users = Array.new if product && product.users.nil?
-    if product && user && product.users.include?( user )
-      product.users.delete(user)
-      product.followers = 0 if product.followers.nil?
-      product.followers -= 1
-      result = product.save
-    end
-    result
-  end
-
-
   # Updates product.version with the newest version number from product.versions
   def self.update_version_data( product, persist = true )
     return nil if product.nil?
@@ -117,26 +115,6 @@ class ProductService < Versioneye::Service
 
     product.version = newest_stable_version.to_s
     product.save if persist
-  rescue => e
-    log.error e.message
-    log.error e.backtrace.join("\n")
-  end
-
-
-  def self.update_meta_data_global
-    count = Product.count()
-    page = 100
-    iterations = count / page
-    iterations += 1
-    (0..iterations).each do |i|
-      skip = i * page
-      products = Product.all().skip(skip).limit(page)
-      update_products products
-      co = i * page
-      log_msg = "update_meta_data_global iteration: #{i} - products processed: #{co}"
-      p log_msg
-      log.info log_msg
-    end
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
@@ -170,6 +148,26 @@ class ProductService < Versioneye::Service
 
     product.followers = product.user_ids.count
     product.save
+  end
+
+
+  def self.update_dependencies_global()
+    all_products_paged do |products|
+      update_deps products
+    end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+  end
+
+
+  def self.update_meta_data_global
+    all_products_paged do |products|
+      update_products products
+    end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
 
