@@ -22,6 +22,7 @@ class VersioneyeCore
     init_memcached
     init_email
     init_stripe
+    init_s3
     puts "end initialize versioneye-core"
   end
 
@@ -45,7 +46,16 @@ class VersioneyeCore
   end
 
   def init_stripe
+    puts " - initialize Stripe"
     Stripe.api_key = Settings.instance.stripe_secret_key
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+  end
+
+  def init_s3
+    puts " - initialize Amazon S3"
+    S3.set_aws_crendentials
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")

@@ -77,7 +77,7 @@ class ReceiptService < Versioneye::Service
 
     receipt
   rescue => e
-    log.error e.message
+    log.error "#{user.username} - #{e.message}"
     log.error e.backtrace.join("\n")
   end
 
@@ -104,6 +104,7 @@ class ReceiptService < Versioneye::Service
     content_file = Settings.instance.receipt_content
     erb = ERB.new(File.read(content_file))
     html = erb.result(receipt.get_binding)
+    html = html.force_encoding(Encoding::UTF_8)
 
     if compile_pdf
       compile_pdf_invoice html, receipt
