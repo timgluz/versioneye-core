@@ -5,6 +5,7 @@ require 'tire'
 require 'dalli'
 require 'httparty'
 require 'action_mailer'
+require 'stripe'
 
 require 'settings'
 require 'versioneye/model'
@@ -20,6 +21,7 @@ class VersioneyeCore
     init_elastic_search
     init_memcached
     init_email
+    init_stripe
     puts "end initialize versioneye-core"
   end
 
@@ -28,7 +30,7 @@ class VersioneyeCore
     Mongoid.load!("config/mongoid.yml", Settings.instance.environment)
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
   end
 
   def init_email
@@ -39,7 +41,14 @@ class VersioneyeCore
     EmailSettingService.update_action_mailer_from_db
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
+  end
+
+  def init_stripe
+    Stripe.api_key = Settings.instance.stripe_secret_key
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
   def init_logger
@@ -58,7 +67,7 @@ class VersioneyeCore
     end
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
   end
 
   def init_settings
@@ -66,7 +75,7 @@ class VersioneyeCore
     Settings.instance.reload_from_db GlobalSetting.new
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
   end
 
   def init_memcached
@@ -74,7 +83,7 @@ class VersioneyeCore
     Versioneye::Cache.instance.mc
   rescue => e
     log.error e.message
-    log.error e.backtrace.join('\n')
+    log.error e.backtrace.join("\n")
   end
 
   private

@@ -1,5 +1,6 @@
 class StripeService < Versioneye::Service
 
+  require 'stripe'
 
   def self.fetch_customer customer_id, api_key = nil
     Stripe::Customer.retrieve customer_id, api_key
