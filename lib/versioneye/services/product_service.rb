@@ -31,6 +31,25 @@ class ProductService < Versioneye::Service
   end
 
 
+  def self.update_dependencies_global()
+    count = Product.count()
+    page = 100
+    iterations = count / page
+    iterations += 1
+    (0..iterations).each do |i|
+      skip = i * page
+      products = Product.all().skip(skip).limit(page)
+      update_deps products
+      co = i * page
+      log_msg = "update_dependencies_global iteration: #{i} - products processed: #{co}"
+      p log_msg
+      log.info log_msg
+    end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+  end
+
   # This method updates the dependencies of a product.
   # It updates the parsed_version and the outdated field.
   def self.update_dependencies( product )
@@ -43,6 +62,9 @@ class ProductService < Versioneye::Service
     end
     product.dep_count = deps.count
     product.save
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
 
@@ -109,12 +131,7 @@ class ProductService < Versioneye::Service
     (0..iterations).each do |i|
       skip = i * page
       products = Product.all().skip(skip).limit(page)
-      products.each do |product|
-        p " -- update #{product.language} - #{product.prod_key}"
-        self.update_version_data  product, true
-        self.update_followers_for product
-        self.update_used_by_count product, true
-      end
+      update_products products
       co = i * page
       log_msg = "update_meta_data_global iteration: #{i} - products processed: #{co}"
       p log_msg
@@ -165,5 +182,31 @@ class ProductService < Versioneye::Service
   def self.most_referenced(language, page)
     Product.by_language( language ).desc(:used_by_count).paginate(:page => page)
   end
+
+
+  private
+
+
+    def self.update_products products
+      products.each do |product|
+        p " -- update #{product.language} - #{product.prod_key}"
+        self.update_version_data  product, true
+        self.update_followers_for product
+        self.update_used_by_count product, true
+      end
+    rescue => e
+      log.error e.message
+      log.error e.backtrace.join("\n")
+    end
+
+    def self.update_deps products
+      products.each do |product|
+        p " -- update dependencies for #{product.language} - #{product.prod_key}"
+        self.update_dependencies product
+      end
+    rescue => e
+      log.error e.message
+      log.error e.backtrace.join("\n")
+    end
 
 end
