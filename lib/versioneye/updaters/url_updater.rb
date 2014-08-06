@@ -8,6 +8,7 @@ class UrlUpdater < CommonUpdater
     end
 
     new_project = parser.parse project.url
+    new_project.url = project.url
     update_old_with_new project, new_project, send_email
   rescue => e
     log.error e.message
