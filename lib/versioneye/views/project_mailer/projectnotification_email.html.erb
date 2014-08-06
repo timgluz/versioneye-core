@@ -23,7 +23,9 @@
           <img src= "<%= @base_url %>/assets/language/<%= product.language.downcase %>.png" style = "width: 48px; height: 48px;"/>
         </td>
         <td style = "vertical-align: middle; border-bottom: 1px dotted gray; padding: 5px;">
-          <a href="<%= @base_url %>/<%= product.language_esc %>/<%= product.to_param %>?utm_medium=email&amp;utm_source=project_notification"><%= product.name %></a>
+          <a href="<%= @base_url %>/<%= product.language_esc %>/<%= product.to_param %>?utm_medium=email&amp;utm_source=project_notification">
+            <%= product.long_name %>
+          </a>
         </td>
         <td style = "vertical-align: middle; border-bottom: 1px dotted gray; padding: 5px;">
           <%= dep.version_requested %>

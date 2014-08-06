@@ -79,6 +79,13 @@ class Product < Versioneye::Model
     Product.encode_prod_key self.prod_key
   end
 
+  def long_name
+    if !group_id.to_s.empty? && !artifact_id.to_s.empty?
+      return "#{group_id}:#{artifact_id}"
+    end
+    return name
+  end
+
   ######## SEARCH METHODS ####################
 
   def self.find_by_id id

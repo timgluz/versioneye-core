@@ -39,6 +39,18 @@ describe Product do
   end
 
 
+  describe "long_name" do
+    it 'returns the long name' do
+      prod = Product.new({:group_id => "org", :artifact_id => "apache"})
+      prod.long_name.should eq("org:apache")
+    end
+    it 'returns the name' do
+      prod = Product.new({:name => "org"})
+      prod.long_name.should eq("org")
+    end
+  end
+
+
   describe "find_by_id" do
 
     it "return nil. Because input is nil" do
