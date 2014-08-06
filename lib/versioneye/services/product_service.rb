@@ -22,6 +22,12 @@ class ProductService < Versioneye::Service
     product.check_nil_version
     product.version = version if version
 
+    max_count = Settings.instance.max_dep_update
+    max_count = 10 if max_count.to_s.empty?
+    if product.all_dependencies.count < max_count.to_i
+      update_dependencies( product )
+    end
+
     update_average_release_time( product )
     product
   end
