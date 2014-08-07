@@ -82,18 +82,14 @@ class DependencyService < Versioneye::Service
   end
 
 
-  private
-
-
-    def self.find_product prod_type, language, dep_prod_key
-      if dep_prod_key.eql?("php/php") or dep_prod_key.eql?("php")
-        language = Product::A_LANGUAGE_C
-      end
-      if prod_type.eql?(Project::A_TYPE_BOWER)
-        return Product.fetch_bower dep_prod_key
-      else
-        return Product.fetch_product( language, dep_prod_key )
-      end
+  def self.find_product prod_type, language, dep_prod_key
+    if dep_prod_key.eql?("php/php") or dep_prod_key.eql?("php")
+      language = Product::A_LANGUAGE_C
     end
+    if prod_type.eql?(Project::A_TYPE_BOWER)
+      return Product.fetch_bower dep_prod_key
+    end
+    Product.fetch_product( language, dep_prod_key )
+  end
 
 end
