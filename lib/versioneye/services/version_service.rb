@@ -1,6 +1,19 @@
 class VersionService < Versioneye::Service
 
 
+  def self.equal(ver_1, ver_2)
+    return true if ver_1.to_s.eql?( ver_2.to_s )
+
+    sem_1 = SemVer.parse( ver_1 )
+    sem_2 = SemVer.parse( ver_2 )
+    if sem_1 && sem_2
+      return sem_1 == sem_2
+    end
+
+    return false
+  end
+
+
   def self.newest_version(versions, stability = 'stable')
     return nil if versions.nil? || versions.empty?
 

@@ -42,14 +42,15 @@ class DependencyService < Versioneye::Service
     dependency.current_version = newest_product_version
     self.update_parsed_version( dependency, product )
 
-    if newest_product_version.eql?( dependency.parsed_version )
+    parsed_version = dependency.parsed_version
+    if VersionService.equal(newest_product_version, parsed_version)
       dependency.outdated = false
       dependency.save
       return false
     end
 
     newest_version = Naturalsorter::Sorter.sort_version([dependency.parsed_version, newest_product_version]).last
-    if newest_version.eql?( dependency.parsed_version )
+    if VersionService.equal(newest_version, parsed_version)
       dependency.outdated = false
       dependency.save
       return false

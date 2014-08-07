@@ -4,6 +4,22 @@ describe VersionService do
 
   let( :product ) { Product.new }
 
+
+  describe "equal" do
+
+    it "is equal" do
+      VersionService.equal("0.4.0", "0.4.0").should be_truthy
+    end
+    it "is equal" do
+      VersionService.equal("0.4", "0.4.0").should be_truthy
+    end
+    it "is not equal" do
+      VersionService.equal("1.4", "0.4.0").should be_falsy
+    end
+
+  end
+
+
   describe "newest_version" do
 
     it "returns the newest stable version" do
