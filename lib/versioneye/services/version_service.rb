@@ -111,38 +111,8 @@ class VersionService < Versioneye::Service
   end
 
 
-  def self.versions_by_comperator(versions, operator, value, range = true)
-    matching_versions = case operator
-    when '!=' then not_equal(versions, value, range)
-    when '<'  then smaller_than(versions, value, range)
-    when '<=' then smaller_than_or_equal(versions, value, range)
-    when '>'  then greater_than(versions, value, range)
-    when '>=' then greater_than_or_equal(versions, value, range)
-    else equal(versions, value, range)
-    end
-  end
-
-
   def self.newest_but_not( versions, value, range=false, stability = "stable")
     filtered_versions = versions.dup.keep_if {|version| version.to_s.match(/^#{value}/i).nil?}
-    return filtered_versions if range
-
-    newest = VersionService.newest_version_from(filtered_versions, stability)
-    return get_newest_or_value(newest, value)
-  end
-
-
-  def self.equal( versions, value, range = false, stability = "stable")
-    filtered_versions = versions.dup.keep_if {|ver| ver[:version] == value.to_s}
-    return filtered_versions if range
-
-    newest = VersionService.newest_version_from(filtered_versions, stability)
-    return get_newest_or_value(newest, value)
-  end
-
-
-  def self.not_equal( versions, value, range = false, stability = "stable")
-     filtered_versions = versions.dup.keep_if {|ver| ver.version != value.to_s}
     return filtered_versions if range
 
     newest = VersionService.newest_version_from(filtered_versions, stability)
