@@ -162,6 +162,18 @@ class Product < Versioneye::Model
     end
   end
 
+  def remove_version version_string
+    versions.each do |version|
+      if version.to_s.eql?( version_string )
+        version.remove
+        self.version = sorted_versions.first.to_s
+        self.save
+        return true
+      end
+    end
+    false
+  end
+
   def check_nil_version
     if versions && !versions.empty? && (version.nil? || version.eql?('0.0.0+NA'))
       self.version = sorted_versions.first

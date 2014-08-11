@@ -386,6 +386,22 @@ describe Product do
   end
 
 
+  describe 'remove_version' do
+
+    it 'removes a version' do
+      product = Product.new
+      product.add_version('1.0.0')
+      product.add_version('1.1.0')
+      product.versions.size.should eq(2)
+      product.versions_empty?().should be_falsey
+      product.remove_version('0.0.0').should be_falsey
+      product.remove_version('1.1.0').should be_truthy
+      product.version.should eq('1.0.0')
+    end
+
+  end
+
+
   describe 'check_nil_version' do
 
     it 'returns nil' do
