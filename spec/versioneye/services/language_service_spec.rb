@@ -4,6 +4,10 @@ describe LanguageService do
 
   describe 'language_for' do
 
+    before :each do
+      LanguageService.cache.delete "distinct_languages"
+    end
+
     it 'returns Java' do
       prod = ProductFactory.create_new 1
       prod.language = "Java"
@@ -13,8 +17,6 @@ describe LanguageService do
     end
 
     it 'returns Java' do
-      LanguageService.cache.delete "distinct_languages"
-
       prod = ProductFactory.create_new 1
       prod.language = "Java"
       prod.save
