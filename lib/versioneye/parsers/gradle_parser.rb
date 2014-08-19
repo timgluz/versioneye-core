@@ -2,6 +2,7 @@ require 'versioneye/parsers/common_parser'
 
 class GradleParser < CommonParser
 
+
   def parse(url)
     return nil if url.nil?
 
@@ -13,10 +14,11 @@ class GradleParser < CommonParser
     nil
   end
 
+
   def parse_content( content )
     return nil if content.nil?
 
-    dependecies_matcher = /
+    dep_matcher_short = /
       ^(\s)* #filter out comments
       (\w+) #scope
       [\s|\(]?[\'|\"]+ #scope separator
@@ -25,9 +27,40 @@ class GradleParser < CommonParser
         :([\w|\d|\.|\-|_]+) #version number
     /xi
 
-    matches = content.scan( dependecies_matcher )
-    deps    = self.build_dependencies(matches)
-    project              = Project.new deps
+    dep_matcher_long = /
+      ^[\s]*              #filter out comments
+      (\w+)               #scope
+      [\s]*               #scope separator
+      (\w+\:)             #group
+      [\s]*[\'|\"]+       #separator
+      ([\w|\d|\.|\-|\_]+) #group_id
+      [\'|\"]+,[\s]*      #separator
+      (\w+\:)             #name
+      [\s]*[\'|\"]+       #separator
+      ([\w|\d|\.|\-|\_]+) #artifact_id
+      [\'|\"]+,[\s]*      #separator
+      (\w+\:)             #version
+      [\s]*[\'|\"]+       #separator
+      ([\w|\d|\.|\-|\_]+) #version_id
+    /xi
+
+    # ^[\s]* (\w+) [\s]* (\w+\:) [\s]*[\'|\"]+ ([\w|\d|\.|\-|\_]+) [\'|\"]+,[\s]* (\w+\:) [\s]*[\'|\"]+ ([\w|\d|\.|\-|\_]+) [\'|\"]+,[\s]* (\w+\:) [\s]*[\'|\"]+ ([\w|\d|\.|\-|\_]+)
+
+    matches_short = content.scan( dep_matcher_short )
+    deps_short    = self.build_dependencies(matches_short)
+
+    matches_long = content.scan( dep_matcher_long )
+    deps_long    = self.build_dependencies_extd(matches_long)
+
+    deps_long[:unknown_number] += deps_short[:unknown_number]
+    deps_long[:out_number]     += deps_short[:out_number]
+    if deps_short[:projectdependencies] && !deps_short[:projectdependencies].empty?
+      deps_short[:projectdependencies].each do |dep|
+        deps_long[:projectdependencies] << dep
+      end
+    end
+
+    project              = Project.new deps_long
     project.project_type = Project::A_TYPE_GRADLE
     project.language     = Product::A_LANGUAGE_JAVA
     project.dep_number   = project.dependencies.size
@@ -37,6 +70,7 @@ class GradleParser < CommonParser
     log.error e.backtrace.join("\n")
     nil
   end
+
 
   def build_dependencies( matches )
     # build and initiliaze array of dependencies.
@@ -55,24 +89,51 @@ class GradleParser < CommonParser
         :comperator => '='
       })
 
-      product = Product.find_by_group_and_artifact(dependency.group_id, dependency.artifact_id)
-      if product
-        dependency.prod_key = product.prod_key
-      else
-        unknowns += 1
-      end
-
-      parse_requested_version( version, dependency, product )
-
-      dependency.stability = VersionTagRecognizer.stability_tag_for version
-      VersionTagRecognizer.remove_minimum_stability version
-
-      out_number += 1 if ProjectdependencyService.outdated?( dependency )
-      data << dependency
+      process_dep version, dependency, unknowns, out_number, data
     end
 
     {:unknown_number => unknowns, :out_number => out_number, :projectdependencies => data}
   end
+
+
+  def build_dependencies_extd( matches )
+    data = []
+    unknowns, out_number = 0, 0
+    matches.each do |row|
+      version = row[6]
+      dependency = Projectdependency.new({
+        :scope => row[0],
+        :group_id => row[2],
+        :artifact_id => row[4],
+        :name => row[4],
+        :language => Product::A_LANGUAGE_JAVA,
+        :comperator => '='
+      })
+
+      process_dep version, dependency, unknowns, out_number, data
+    end
+
+    {:unknown_number => unknowns, :out_number => out_number, :projectdependencies => data}
+  end
+
+
+  def process_dep version, dependency, unknowns, out_number, data
+    product = Product.find_by_group_and_artifact(dependency.group_id, dependency.artifact_id)
+    if product
+      dependency.prod_key = product.prod_key
+    else
+      unknowns += 1
+    end
+
+    parse_requested_version( version, dependency, product )
+
+    dependency.stability = VersionTagRecognizer.stability_tag_for version
+    VersionTagRecognizer.remove_minimum_stability version
+
+    out_number += 1 if ProjectdependencyService.outdated?( dependency )
+    data << dependency
+  end
+
 
   def parse_requested_version(version, dependency, product)
     if version.nil? || version.empty?
@@ -110,4 +171,6 @@ class GradleParser < CommonParser
     end
   end
 
+
 end
+
