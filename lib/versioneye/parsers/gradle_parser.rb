@@ -17,6 +17,7 @@ class GradleParser < CommonParser
     return nil if content.nil?
 
     dependecies_matcher = /
+      ^(\s)* #filter out comments
       (\w+) #scope
       [\s|\(]?[\'|\"]+ #scope separator
         ([\w|\d|\.|\-|\_]+) #group_id
@@ -37,19 +38,19 @@ class GradleParser < CommonParser
     nil
   end
 
-  def build_dependencies(matches)
+  def build_dependencies( matches )
     # build and initiliaze array of dependencies.
     # Arguments array of matches, should be [[scope, group_id, artifact_id, version],...]
     # Returns map {:unknowns => 0 , dependencies => []}
     data = []
     unknowns, out_number = 0, 0
     matches.each do |row|
-      version = row[3]
+      version = row[4]
       dependency = Projectdependency.new({
-        :scope => row[0],
-        :group_id => row[1],
-        :artifact_id => row[2],
-        :name => row[2],
+        :scope => row[1],
+        :group_id => row[2],
+        :artifact_id => row[3],
+        :name => row[3],
         :language => Product::A_LANGUAGE_JAVA,
         :comperator => '='
       })

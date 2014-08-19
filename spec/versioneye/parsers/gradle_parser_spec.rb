@@ -52,8 +52,9 @@ describe GradleParser do
       product_13.save
 
       parser = GradleParser.new
-      project = parser.parse(test_case_url)
+      project = parser.parse( test_case_url )
       project.should_not be_nil
+      expect(project.dependencies.size).to eq(13)
 
       dependency_01 = fetch_by_name( project.dependencies, product_1.artifact_id)
       dependency_01.name.should eql(product_1.artifact_id)
