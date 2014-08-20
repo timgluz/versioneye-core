@@ -73,8 +73,6 @@ class GradleParser < CommonParser
     matches_br = content.scan( A_DEP_BR_MATCHER )
     deps_br    = self.build_dependencies_br( matches_br, vars )
 
-    deps_long[:unknown_number] += deps_short[:unknown_number]
-    deps_long[:out_number]     += deps_short[:out_number]
     if deps_short[:projectdependencies] && !deps_short[:projectdependencies].empty?
       deps_short[:projectdependencies].each do |dep|
         deps_long[:projectdependencies] << dep
@@ -90,6 +88,12 @@ class GradleParser < CommonParser
     project.project_type = Project::A_TYPE_GRADLE
     project.language     = Product::A_LANGUAGE_JAVA
     project.dep_number   = project.dependencies.size
+
+    project.dependencies.each do |dependency|
+      project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
+      project.unknown_number += 1 if dependency.product.nil?
+    end
+
     project
   rescue => e
     log.error e.message
@@ -119,7 +123,6 @@ class GradleParser < CommonParser
     # Arguments array of matches, should be [[scope, group_id, artifact_id, version],...]
     # Returns map {:unknowns => 0 , dependencies => []}
     data = []
-    unknowns, out_number = 0, 0
     matches.each do |row|
       version = row[4]
       dependency = Projectdependency.new({
@@ -131,16 +134,15 @@ class GradleParser < CommonParser
         :comperator => '='
       })
 
-      process_dep version, dependency, unknowns, out_number, data
+      process_dep version, dependency, data
     end
 
-    {:unknown_number => unknowns, :out_number => out_number, :projectdependencies => data}
+    {:projectdependencies => data}
   end
 
 
   def build_dependencies_extd( matches )
     data = []
-    unknowns, out_number = 0, 0
     matches.each do |row|
       version = row[6]
       dependency = Projectdependency.new({
@@ -152,16 +154,15 @@ class GradleParser < CommonParser
         :comperator => '='
       })
 
-      process_dep version, dependency, unknowns, out_number, data
+      process_dep version, dependency, data
     end
 
-    {:unknown_number => unknowns, :out_number => out_number, :projectdependencies => data}
+    {:projectdependencies => data}
   end
 
 
   def build_dependencies_br( matches, vars )
     data = []
-    unknowns, out_number = 0, 0
     matches.each do |row|
       version = calc_version( row[5], vars )
       dependency = Projectdependency.new({
@@ -173,10 +174,10 @@ class GradleParser < CommonParser
         :comperator => '='
       })
 
-      process_dep version, dependency, unknowns, out_number, data
+      process_dep version, dependency, data
     end
 
-    {:unknown_number => unknowns, :out_number => out_number, :projectdependencies => data}
+    {:projectdependencies => data}
   end
 
 
@@ -190,20 +191,16 @@ class GradleParser < CommonParser
   end
 
 
-  def process_dep version, dependency, unknowns, out_number, data
+  def process_dep version, dependency, data
     product = Product.find_by_group_and_artifact(dependency.group_id, dependency.artifact_id)
-    if product
-      dependency.prod_key = product.prod_key
-    else
-      unknowns += 1
-    end
+
+    dependency.prod_key = product.prod_key if product
 
     parse_requested_version( version, dependency, product )
 
     dependency.stability = VersionTagRecognizer.stability_tag_for version
     VersionTagRecognizer.remove_minimum_stability version
 
-    out_number += 1 if ProjectdependencyService.outdated?( dependency )
     data << dependency
   end
 
