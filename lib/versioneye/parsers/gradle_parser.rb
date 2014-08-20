@@ -2,23 +2,9 @@ require 'versioneye/parsers/common_parser'
 
 class GradleParser < CommonParser
 
+  A_GLOBAL_VARS_MATCHER = /^\s*(project.ext..*)/xi
 
-  def parse(url)
-    return nil if url.nil?
-
-    content = self.fetch_response(url).body
-    parse_content( content )
-  rescue => e
-    log.error e.message
-    log.error e.backtrace.join("\n")
-    nil
-  end
-
-
-  def parse_content( content )
-    return nil if content.nil?
-
-    dep_matcher_short = /
+  A_DEP_SHORT_MATCHER = /
       ^(\s)* #filter out comments
       (\w+) #scope
       [\s|\(]?[\'|\"]+ #scope separator
@@ -27,7 +13,8 @@ class GradleParser < CommonParser
         :([\w|\d|\.|\-|_]+) #version number
     /xi
 
-    dep_matcher_long = /
+  # ^[\s]* (\w+) [\s]* (\w+\:) [\s]*[\'|\"]+ ([\w|\d|\.|\-|\_]+) [\'|\"]+,[\s]* (\w+\:) [\s]*[\'|\"]+ ([\w|\d|\.|\-|\_]+) [\'|\"]+,[\s]* (\w+\:) [\s]*[\'|\"]+ ([\w|\d|\.|\-|\_]+)
+  A_DEP_LONG_MATCHER = /
       ^[\s]*              #filter out comments
       (\w+)               #scope
       [\s]*               #scope separator
@@ -44,18 +31,57 @@ class GradleParser < CommonParser
       ([\w|\d|\.|\-|\_]+) #version_id
     /xi
 
-    # ^[\s]* (\w+) [\s]* (\w+\:) [\s]*[\'|\"]+ ([\w|\d|\.|\-|\_]+) [\'|\"]+,[\s]* (\w+\:) [\s]*[\'|\"]+ ([\w|\d|\.|\-|\_]+) [\'|\"]+,[\s]* (\w+\:) [\s]*[\'|\"]+ ([\w|\d|\.|\-|\_]+)
+  # (\[\w+\:)   [\s]*[\'|\"]+   ([\w|\d|\.|\-|\_]+)  [\'|\"]+,[\s]*  (\w+\:)  [\s]*[\'|\"]+   ([\w|\d|\.|\-|\_]+)  [\'|\"]+,[\s]*   (\w+\:)   [\s]*[\'|\"]*   ([\w|\d|\.|\-|\_]+)
+  A_DEP_BR_MATCHER = /
+      (\[\w+\:)             #separator
+        [\s]*[\'|\"]+       #group
+        ([\w|\d|\.|\-|\_]+) #group_id
+        [\'|\"]+,[\s]*      #separator
+        (\w+\:)             #name
+        [\s]*[\'|\"]+       #separator
+        ([\w|\d|\.|\-|\_]+) #artifact_id
+        [\'|\"]+,[\s]*      #separator
+        (\w+\:)             #version
+        [\s]*[\'|\"]*       #separator
+        ([\w|\d|\.|\-|\_]+) #version_id
+    /xi
 
-    matches_short = content.scan( dep_matcher_short )
+
+  def parse(url)
+    return nil if url.nil?
+
+    content = self.fetch_response(url).body
+    parse_content( content )
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    nil
+  end
+
+
+  def parse_content( content )
+    return nil if content.nil?
+
+    vars = extract_vars content
+
+    matches_short = content.scan( A_DEP_SHORT_MATCHER )
     deps_short    = self.build_dependencies(matches_short)
 
-    matches_long = content.scan( dep_matcher_long )
+    matches_long = content.scan( A_DEP_LONG_MATCHER )
     deps_long    = self.build_dependencies_extd(matches_long)
+
+    matches_br = content.scan( A_DEP_BR_MATCHER )
+    deps_br    = self.build_dependencies_br( matches_br, vars )
 
     deps_long[:unknown_number] += deps_short[:unknown_number]
     deps_long[:out_number]     += deps_short[:out_number]
     if deps_short[:projectdependencies] && !deps_short[:projectdependencies].empty?
       deps_short[:projectdependencies].each do |dep|
+        deps_long[:projectdependencies] << dep
+      end
+    end
+    if deps_br[:projectdependencies] && !deps_br[:projectdependencies].empty?
+      deps_br[:projectdependencies].each do |dep|
         deps_long[:projectdependencies] << dep
       end
     end
@@ -69,6 +95,22 @@ class GradleParser < CommonParser
     log.error e.message
     log.error e.backtrace.join("\n")
     nil
+  end
+
+
+  def extract_vars content
+    vars = {}
+    matches = content.scan(A_GLOBAL_VARS_MATCHER)
+    if matches && !matches.empty?
+      matches.each do |match|
+        mat = match.first
+        mat.gsub!("project.ext.", "")
+        mat.gsub!(" ", "")
+        sps = mat.split("=")
+        vars[sps[0]] = sps[1].gsub("\"", "").gsub("'", "")
+      end
+    end
+    vars
   end
 
 
@@ -114,6 +156,37 @@ class GradleParser < CommonParser
     end
 
     {:unknown_number => unknowns, :out_number => out_number, :projectdependencies => data}
+  end
+
+
+  def build_dependencies_br( matches, vars )
+    data = []
+    unknowns, out_number = 0, 0
+    matches.each do |row|
+      version = calc_version( row[5], vars )
+      dependency = Projectdependency.new({
+        :scope => nil,
+        :group_id => row[1],
+        :artifact_id => row[3],
+        :name => row[3],
+        :language => Product::A_LANGUAGE_JAVA,
+        :comperator => '='
+      })
+
+      process_dep version, dependency, unknowns, out_number, data
+    end
+
+    {:unknown_number => unknowns, :out_number => out_number, :projectdependencies => data}
+  end
+
+
+  def calc_version( version_string, vars )
+    return version_string if vars.nil? || vars.empty?
+
+    if vars.keys.include?( version_string )
+      version_string = vars[version_string]
+    end
+    version_string
   end
 
 
