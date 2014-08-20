@@ -4,13 +4,14 @@ class GradleParser < CommonParser
 
   A_GLOBAL_VARS_MATCHER = /^\s*(project.ext..*)/xi
 
+  # ^(\s)* (\w+) [\s|\(]?[\'|\"]+  ([\w|\d|\.|\-|\_]+)  :([\w|\d|\.|\-|_]+)  :([$\w|\d|\.|\-|_]+)
   A_DEP_SHORT_MATCHER = /
       ^(\s)* #filter out comments
       (\w+) #scope
       [\s|\(]?[\'|\"]+ #scope separator
         ([\w|\d|\.|\-|\_]+) #group_id
         :([\w|\d|\.|\-|_]+) #artifact
-        :([\w|\d|\.|\-|_]+) #version number
+        :([$\w|\d|\.|\-|_]+) #version number
     /xi
 
   # ^[\s]* (\w+) [\s]* (\w+\:) [\s]*[\'|\"]+ ([\w|\d|\.|\-|\_]+) [\'|\"]+,[\s]* (\w+\:) [\s]*[\'|\"]+ ([\w|\d|\.|\-|\_]+) [\'|\"]+,[\s]* (\w+\:) [\s]*[\'|\"]+ ([\w|\d|\.|\-|\_]+)
@@ -65,10 +66,10 @@ class GradleParser < CommonParser
     vars = extract_vars content
 
     matches_short = content.scan( A_DEP_SHORT_MATCHER )
-    deps_short    = self.build_dependencies(matches_short)
+    deps_short    = self.build_dependencies(matches_short, vars)
 
     matches_long = content.scan( A_DEP_LONG_MATCHER )
-    deps_long    = self.build_dependencies_extd(matches_long)
+    deps_long    = self.build_dependencies_extd(matches_long, vars)
 
     matches_br = content.scan( A_DEP_BR_MATCHER )
     deps_br    = self.build_dependencies_br( matches_br, vars )
@@ -118,13 +119,13 @@ class GradleParser < CommonParser
   end
 
 
-  def build_dependencies( matches )
+  def build_dependencies( matches, vars )
     # build and initiliaze array of dependencies.
     # Arguments array of matches, should be [[scope, group_id, artifact_id, version],...]
     # Returns map {:unknowns => 0 , dependencies => []}
     data = []
     matches.each do |row|
-      version = row[4]
+      version = calc_version( row[4], vars )
       dependency = Projectdependency.new({
         :scope => row[1],
         :group_id => row[2],
@@ -141,10 +142,10 @@ class GradleParser < CommonParser
   end
 
 
-  def build_dependencies_extd( matches )
+  def build_dependencies_extd( matches, vars )
     data = []
     matches.each do |row|
-      version = row[6]
+      version = calc_version( row[6], vars )
       dependency = Projectdependency.new({
         :scope => row[0],
         :group_id => row[2],
@@ -184,6 +185,7 @@ class GradleParser < CommonParser
   def calc_version( version_string, vars )
     return version_string if vars.nil? || vars.empty?
 
+    version_string = version_string.gsub("$", "")
     if vars.keys.include?( version_string )
       version_string = vars[version_string]
     end
