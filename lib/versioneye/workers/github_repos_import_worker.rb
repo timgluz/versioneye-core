@@ -13,7 +13,9 @@ class GithubReposImportWorker < Worker
 
     begin
       queue.subscribe(:ack => true, :block => true) do |delivery_info, properties, body|
-        puts " [x] Received #{body}"
+        msg = " [x] Received #{body}"
+        puts msg
+        log.info msg
         user = User.find body
         import_all_repos_for user
         channel.ack(delivery_info.delivery_tag)
@@ -36,7 +38,9 @@ class GithubReposImportWorker < Worker
     orga_names = Github.orga_names(user.github_token)
 
     if n_repos == 0 && orga_names.empty?
-      log.debug "User #{user.username} has no repositories;"
+      msg = "User #{user.username} has no repositories;"
+      puts msg
+      log.info msg
       cache.set( user_task_key, GitHubService::A_TASK_DONE, GitHubService::A_TASK_TTL )
       return
     end
