@@ -55,6 +55,11 @@ class MavenRepository < Versioneye::Model
     repos['jfrog']              = 'http://repo.jfrog.org/artifactory/libs-releases/'
     repos['eviware']            = 'http://www.eviware.com/repository/maven2/'
     repos['devzendo']           = 'http://devzendo-org-repo.googlecode.com/svn/trunk/releases/'
+    repos['pentaho']            = 'http://repository.pentaho.org/artifactory/pentaho/'
+    repos['bintray']            = 'http://jcenter.bintray.com'
+
+    # repo = MavenRepository.new( { :name => 'pentaho', :url => 'http://repository.pentaho.org/artifactory/pentaho/', :language => Product::A_LANGUAGE_JAVA } )
+    # repo = MavenRepository.new( { :name => 'bintray', :url => 'http://jcenter.bintray.com', :language => Product::A_LANGUAGE_JAVA } )
 
     repos.keys.each do |key|
       repo = MavenRepository.new( { :name => key, :url => repos[key], :language => Product::A_LANGUAGE_JAVA } )
