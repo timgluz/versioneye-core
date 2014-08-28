@@ -17,6 +17,7 @@ class BillingAddress < Versioneye::Model
   field :country, type: String
   field :company, type: String
   field :taxid  , type: String
+  field :email  , type: String
 
   validates_presence_of :type   , :message => 'is mandatory!'
   validates_presence_of :name   , :message => 'is mandatory!'
@@ -40,6 +41,7 @@ class BillingAddress < Versioneye::Model
     self.country = params[:country]
     self.company = params[:company]
     self.taxid   = params[:taxid]
+    self.email   = params[:email]
     self.save
   end
 

@@ -18,6 +18,7 @@ class Receipt < Versioneye::Model
   field :country, type: String
   field :company, type: String
   field :taxid  , type: String
+  field :email  , type: String
 
   # This fields filled from Stripe invoice object.
   field :invoice_id    , type: String
@@ -80,6 +81,7 @@ class Receipt < Versioneye::Model
     self.country = ba.country
     self.company = ba.company
     self.taxid   = ba.taxid
+    self.email   = ba.email
   end
 
   def update_from_invoice invoice
