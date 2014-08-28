@@ -69,7 +69,7 @@ class CommonParser
 
   def update_requested_with_current( dependency, product )
     if product && product.version
-      dependency.version_requested = product.version
+      dependency.version_requested = VersionService.newest_version product.versions
     else
       dependency.version_requested = 'UNKNOWN'
     end
