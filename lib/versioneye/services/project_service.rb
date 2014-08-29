@@ -21,9 +21,6 @@ class ProjectService < Versioneye::Service
     project = Project.find_by_id( id )
     return nil if project.nil?
 
-    project.dependencies.each do |dep|
-      ProjectdependencyService.outdated?( dep )
-    end
     project
   end
 
