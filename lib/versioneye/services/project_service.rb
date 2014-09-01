@@ -118,12 +118,15 @@ class ProjectService < Versioneye::Service
     false
   end
 
-  def self.outdated_dependencies( project )
+
+  def self.outdated_dependencies( project, force_update = false )
     outdated_dependencies = Array.new
     project.projectdependencies.each do |dep|
+      ProjectdependencyService.update_outdated!( dep ) if force_update
       outdated_dependencies << dep if ProjectdependencyService.outdated?( dep )
     end
     outdated_dependencies
   end
+
 
 end

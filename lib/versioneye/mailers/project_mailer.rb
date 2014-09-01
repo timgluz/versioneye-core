@@ -11,7 +11,7 @@ class ProjectMailer < ActionMailer::Base
     @user         = user ? user : project.user
     @dependencies = Hash.new
 
-    deps  = ProjectService.outdated_dependencies( project )
+    deps  = ProjectService.outdated_dependencies( project, true )
     deps.each do |dep|
       @dependencies[dep.name] = dep
     end
