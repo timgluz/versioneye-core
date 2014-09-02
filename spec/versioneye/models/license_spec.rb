@@ -150,19 +150,19 @@ describe License do
 
     it "should return Apache License version 2 name" do
       license = License.new({:name => "The Apache Software License\, Version 2\.0"})
-      license.name_substitute.should eq("Apache License, Version 2.0")
+      license.name_substitute.should eq("Apache License 2.0")
     end
     it "should return Apache License version 2 name" do
       license = License.new({:name => "Apache License, Version 2.0"})
-      license.name_substitute.should eq("Apache License, Version 2.0")
+      license.name_substitute.should eq("Apache License 2.0")
     end
     it "should return Apache License version 2 name" do
       license = License.new({:name => "Apache License Version 2.0"})
-      license.name_substitute.should eq("Apache License, Version 2.0")
+      license.name_substitute.should eq("Apache License 2.0")
     end
     it "should return Apache License version 2 name" do
       license = License.new({:name => "Apache-2.0"})
-      license.name_substitute.should eq("Apache License, Version 2.0")
+      license.name_substitute.should eq("Apache License 2.0")
     end
 
     it "should return Apache License name" do
@@ -176,15 +176,15 @@ describe License do
 
     it "should return eclipse public license name" do
       license = License.new({:name => "Eclipse"})
-      license.name_substitute.should eq("Eclipse Public License v1.0")
+      license.name_substitute.should eq("Eclipse Public License 1.0")
     end
     it "should return eclipse public license name" do
       license = License.new({:name => "Eclipse License"})
-      license.name_substitute.should eq("Eclipse Public License v1.0")
+      license.name_substitute.should eq("Eclipse Public License 1.0")
     end
     it "should return eclipse public license name" do
-      license = License.new({:name => "Eclipse Public License v1.0"})
-      license.name_substitute.should eq("Eclipse Public License v1.0")
+      license = License.new({:name => "Eclipse Public License 1.0"})
+      license.name_substitute.should eq("Eclipse Public License 1.0")
     end
 
     it "should return Artistic License 1.0 license name" do
