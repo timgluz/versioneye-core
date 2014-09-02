@@ -76,10 +76,17 @@ class EsProduct < Versioneye::Service
   end
 
   def self.index_all
-    Product.all.each do |product|
-      index product
+    ProductService.all_products_paged do |products|
+      bulk_index products
     end
     self.refresh
+  end
+
+  def self.bulk_index products
+    Tire.index Settings.instance.elasticsearch_product_index do
+      json_product = products.map{|product| product.to_indexed_json}
+      import json_product
+    end
   end
 
   def self.index( product )
