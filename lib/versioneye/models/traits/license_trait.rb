@@ -9,8 +9,10 @@ module VersionEye
       return 'CDDL' if cddl_match( name )
       return 'GPL-2.0' if gpl_20_match( name )
       return 'LGPL 3' if lgpl_3_match( name )
-      return 'Apache License, Version 2.0' if apache_license_2_match( name )
+
+      return 'Apache License 2.0' if apache_license_2_match( name )
       return 'Apache License' if apache_license_match( name )
+
       return 'Eclipse Public License v1.0' if eclipse_match( name )
       return 'Artistic License 1.0' if artistic_10_match( name )
       return 'Artistic License 2.0' if artistic_20_match( name )
@@ -84,12 +86,13 @@ module VersionEye
     def apache_license_2_match name
       name.match(/\AApache License\, Version 2\.0\z/i) ||
       name.match(/\AApache License Version 2\.0\z/i) ||
+      name.match(/\AApache License 2\.0\z/i) ||
+      name.match(/\AApache License 2\z/i) ||
       name.match(/\AThe Apache Software License\, Version 2\.0\z/i) ||
       name.match(/\AApache 2\z/i) ||
       name.match(/\AApache\-2\z/i) ||
       name.match(/\AApache\-2\.0\z/i) ||
       name.match(/\AApache 2\.0\z/i) ||
-      name.match(/\AApache License 2\.0\z/i) ||
       name.match(/\AApache Software License - Version 2\.0\z/i)
     end
 
