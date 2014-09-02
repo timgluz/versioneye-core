@@ -47,11 +47,20 @@ class EsUser < Versioneye::Service
   end
 
   def self.index_all
-    User.live_users.each {|user| self.index(user) }
+    UserService.all_users_paged do |users|
+      bulk_index users
+    end
     self.refresh
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
+  end
+
+  def self.bulk_index users
+    Tire.index Settings.instance.elasticsearch_user_index do
+      json_users = users.map{|user| user.to_indexed_json}
+      import json_users
+    end
   end
 
   def self.index(user)
