@@ -9,6 +9,24 @@ describe LicenseWhitelist do
     end
   end
 
+  describe 'to_param' do
+    it 'returns the name' do
+      license = LicenseWhitelist.new({:name => 'MIT'})
+      expect(license.to_param).to eq('MIT')
+    end
+  end
+
+  describe 'find_by' do
+    it 'returns the search element' do
+      user = UserFactory.create_new
+      license = LicenseWhitelist.new({:name => 'MIT'})
+      license.user = user
+      license.save
+      lw = LicenseWhitelist.fetch_by user, 'MIT'
+      expect(license).not_to be_nil
+    end
+  end
+
   describe 'update_from' do
     it 'updates from params' do
       params = {:name => 'MIT'}
@@ -19,10 +37,38 @@ describe LicenseWhitelist do
     end
   end
 
-  describe 'name_substitute' do
-    it 'substitutes the name' do
-      license = LicenseWhitelist.new :name => 'Ruby license'
-      expect( license.name_substitute ).to eq('Ruby')
+  describe 'add_license_element' do
+    it 'adds 1 element' do
+      license = LicenseWhitelist.new :name => 'OpenSource'
+      expect( license.license_elements_empty? ).to be_truthy
+      license.add_license_element( 'MIT' )
+      expect( license.license_elements_empty? ).to be_falsy
+      expect( license.license_elements.size ).to eq(1)
+      expect( license.license_elements.count ).to eq(0)
+      license.save
+      expect( license.license_elements.count ).to eq(1)
+    end
+    it 'adds 2 element, but only stores 1 because uniq' do
+      license = LicenseWhitelist.new :name => 'OpenSource'
+      expect( license.license_elements_empty? ).to be_truthy
+      license.add_license_element( 'MIT' )
+      license.add_license_element( 'MIT' )
+      expect( license.license_elements_empty? ).to be_falsy
+      expect( license.license_elements.size ).to eq(1)
+      expect( license.license_elements.count ).to eq(0)
+      license.save
+      expect( license.license_elements.count ).to eq(1)
+    end
+    it 'adds 2 element' do
+      license = LicenseWhitelist.new :name => 'OpenSource'
+      expect( license.license_elements_empty? ).to be_truthy
+      license.add_license_element( 'MIT' )
+      license.add_license_element( 'Ruby' )
+      expect( license.license_elements_empty? ).to be_falsy
+      expect( license.license_elements.size ).to eq(2)
+      expect( license.license_elements.count ).to eq(0)
+      license.save
+      expect( license.license_elements.count ).to eq(2)
     end
   end
 
