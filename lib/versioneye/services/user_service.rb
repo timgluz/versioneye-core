@@ -96,6 +96,27 @@ class UserService < Versioneye::Service
     false
   end
 
+  def self.all_users_paged
+    count = User.count()
+    page = 100
+    iterations = count / page
+    iterations += 1
+    (0..iterations).each do |i|
+      skip = i * page
+      users = User.all().skip(skip).limit(page)
+
+      yield users
+
+      co = i * page
+      log_msg = "all_users_paged iteration: #{i} - users processed: #{co}"
+      p log_msg
+      log.info log_msg
+    end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+  end
+
   private
 
     def self.create_random_token(length = 25)
