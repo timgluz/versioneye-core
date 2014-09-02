@@ -55,4 +55,15 @@ class LicenseWhitelist < Versioneye::Model
     end
   end
 
+  def remove_license_element name
+    license_elements.each do |license_element|
+      if license_element.to_s.eql?( name )
+        license_element.remove
+        self.save
+        return true
+      end
+    end
+    false
+  end
+
 end

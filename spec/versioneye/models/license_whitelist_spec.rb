@@ -72,4 +72,17 @@ describe LicenseWhitelist do
     end
   end
 
+  describe 'remove_license_element' do
+    it 'removes 1 element' do
+      license = LicenseWhitelist.new :name => 'OpenSource'
+      expect( license.license_elements_empty? ).to be_truthy
+      license.add_license_element( 'MIT' )
+      license.add_license_element( 'Ruby' )
+      license.save
+      expect( license.license_elements.count ).to eq(2)
+      license.remove_license_element 'Ruby'
+      expect( license.license_elements.count ).to eq(1)
+    end
+  end
+
 end
