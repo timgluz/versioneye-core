@@ -63,7 +63,7 @@ class ProductService < Versioneye::Service
 
   def self.all_products_paged
     count = Product.count()
-    page = 100
+    page = 1000
     iterations = count / page
     iterations += 1
     (0..iterations).each do |i|
