@@ -12,7 +12,6 @@ class LicenseService < Versioneye::Service
     content.split("\r").each do |line|
       cols = line.split(";")
       create_spdx_license cols[0], cols[1], cols[2]
-      p "#{cols[0]} - #{cols[1]} - #{cols[2]}"
     end
   end
 
