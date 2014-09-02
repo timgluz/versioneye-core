@@ -21,6 +21,7 @@ module Versioneye
     require 'versioneye/models/language_daily_stats'
     require 'versioneye/models/language_feed'
     require 'versioneye/models/license'
+    require 'versioneye/models/license_whitelist'
     require 'versioneye/models/lottery'
     require 'versioneye/models/maven_repository'
     require 'versioneye/models/newest'
