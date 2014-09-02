@@ -53,7 +53,7 @@ class License < Versioneye::Model
     return 'http://choosealicense.com/licenses/mit/' if mit_match( name )
     return 'http://www.ruby-lang.org/en/about/license.txt' if ruby_match( name )
     return 'http://opensource.org/licenses/apachepl.php' if apache_license_match( name )
-    return 'http://www.apache.org/licenses/LICENSE-2.0.txt' if apache_license_2_match( name )
+    return 'http://www.apache.org/licenses/LICENSE-2.0.txt' if apache_license_20_match( name )
     return 'http://choosealicense.com/licenses/eclipse/' if eclipse_match( name )
     return 'http://www.gnu.org/copyleft/gpl.html' if gpl_match( name )
     return 'http://opensource.org/licenses/gpl-2.0.php' if gpl_20_match( name )
