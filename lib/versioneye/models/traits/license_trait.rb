@@ -8,7 +8,9 @@ module VersionEye
       return 'Ruby' if ruby_match( name )
       return 'CDDL' if cddl_match( name )
       return 'GPL-2.0' if gpl_20_match( name )
-      return 'LGPL 3' if lgpl_3_match( name )
+
+      return 'LGPL-3.0' if lgpl_3_match( name )
+      return 'LGPL-3.0+' if lgpl_3_or_later_match( name )
 
       return 'Apache License 1.0' if apache_license_10_match( name )
       return 'Apache License 1.1' if apache_license_11_match( name )
@@ -30,8 +32,8 @@ module VersionEye
 
     def mit_match name
       name.match(/\AMIT\z/i) ||
-      name.match(/\AMIT License\z/) ||
-      name.match(/\AThe MIT License\z/)
+      name.match(/\AMIT License\z/i) ||
+      name.match(/\AThe MIT License\z/i)
     end
 
     def eclipse_match name
@@ -66,7 +68,15 @@ module VersionEye
     def lgpl_3_match name
       name.match(/\ALGPL 3\z/i) ||
       name.match(/\ALGPLv3\z/i) ||
-      name.match(/\ALGPL\-3\z/i)
+      name.match(/\ALGPL\-3\z/i) ||
+      name.match(/\AGNU Lesser General Public License v3\.0 only\z/i)
+    end
+
+    def lgpl_3_or_later_match name
+      name.match(/\ALGPL 3\+\z/i) ||
+      name.match(/\ALGPLv3\+\z/i) ||
+      name.match(/\ALGPL\-3\+\z/i) ||
+      name.match(/\AGNU Lesser General Public License v3\.0 or later\z/i)
     end
 
     def artistic_10_match name
