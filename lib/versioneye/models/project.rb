@@ -50,6 +50,8 @@ class Project < Versioneye::Model
   field :private_project, type: Boolean, :default => false  # private project from GitHub/Bitbucket
   field :api_created    , type: Boolean, :default => false  # this project was created through the VersionEye API
 
+  field :license_whitelist_id, type: String
+
   validates :name       , presence: true
   validates :project_key, presence: true
 
@@ -130,6 +132,13 @@ class Project < Versioneye::Model
     collaborators.each do |collaborator|
       return collaborator if user._id.to_s.eql?( collaborator.user_id.to_s )
     end
+    nil
+  end
+
+  def license_whitelist
+    LicenseWhitelist.find license_whitelist_id
+  rescue => e
+    log.error e.message
     nil
   end
 
