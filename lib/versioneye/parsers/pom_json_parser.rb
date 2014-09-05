@@ -27,7 +27,7 @@ class PomJsonParser < CommonParser
       group_id    = spliti[0]
       artifact_id = spliti[1]
       dependency  = init_dependency(name, group_id, artifact_id, version)
-      product     = Product.find_by_group_and_artifact(dependency.group_id, dependency.artifact_id)
+      product     = Product.find_by_group_and_artifact(dependency.group_id, dependency.artifact_id, Product::A_LANGUAGE_JAVA )
       dependency.prod_key     = product.prod_key if product
       project.unknown_number += 1 if product.nil?
       project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )

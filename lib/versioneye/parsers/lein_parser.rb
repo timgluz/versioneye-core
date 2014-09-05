@@ -77,7 +77,7 @@ class LeinParser < CommonParser
         :language => Product::A_LANGUAGE_CLOJURE
       })
 
-      product = Product.find_by_group_and_artifact(dependency.group_id, dependency.artifact_id)
+      product = Product.find_by_group_and_artifact(dependency.group_id, dependency.artifact_id, Product::A_LANGUAGE_CLOJURE)
       if product
         dependency.prod_key = product.prod_key
         dependency.version_current = product.version

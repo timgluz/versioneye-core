@@ -49,7 +49,7 @@ class PomParser < CommonParser
     if dependency.scope.nil?
       dependency.scope = Dependency::A_SCOPE_COMPILE
     end
-    product = Product.find_by_group_and_artifact(dependency.group_id, dependency.artifact_id)
+    product = Product.find_by_group_and_artifact(dependency.group_id, dependency.artifact_id, Product::A_LANGUAGE_JAVA)
     parse_requested_version( dependency.version_requested, dependency, product )
     dependency.prod_key    = product.prod_key if product
     project.unknown_number += 1 if product.nil?

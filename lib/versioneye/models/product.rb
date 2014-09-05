@@ -117,9 +117,17 @@ class Product < Versioneye::Model
     Product.where(language: language, prod_key: searched_key).shift
   end
 
-  def self.find_by_group_and_artifact group, artifact
+  def self.find_by_group_and_artifact group, artifact, language = nil
     return nil if group.to_s.strip.empty? || artifact.to_s.strip.empty?
-    Product.where( group_id: group, artifact_id: artifact ).shift
+
+    product = nil
+    if language
+      product = Product.where( group_id: group, artifact_id: artifact, language: language ).first
+    end
+    if product.nil?
+      product = Product.where( group_id: group, artifact_id: artifact ).first
+    end
+    product
   end
 
   def self.by_prod_keys language, prod_keys

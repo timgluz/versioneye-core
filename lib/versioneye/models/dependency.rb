@@ -81,7 +81,7 @@ class Dependency < Versioneye::Model
 
   # In the world of Maven (Java) every package is identified by a group_id and artifact_id.
   def maven_product( group_id, artifact_id )
-    Product.find_by_group_and_artifact( group_id, artifact_id )
+    Product.find_by_group_and_artifact( group_id, artifact_id, language )
   end
 
   # prod_key for bower packages are assembled by 'owner/bower_name'. We did it that way
