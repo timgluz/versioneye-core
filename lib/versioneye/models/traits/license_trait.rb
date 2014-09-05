@@ -7,8 +7,13 @@ module VersionEye
       tmp_name = name.gsub(/The /i, "").gsub(" - ", " ").gsub(", ", " ")
 
       return 'MIT' if mit_match( tmp_name )
-      return 'BSD' if bsd_match( tmp_name )
       return 'Ruby' if ruby_match( tmp_name )
+
+      return 'BSD 3-clause Revised License'  if bsd_3_clause_match( tmp_name )
+      return 'BSD style' if bsd_style_match( tmp_name )
+      return 'New BSD' if new_bsd_match( tmp_name )
+      return 'BSD' if bsd_match( tmp_name )
+
       return 'CDDL' if cddl_match( tmp_name )
       return 'GPL-2.0' if gpl_20_match( tmp_name )
 
@@ -64,6 +69,25 @@ module VersionEye
     def bsd_match name
       name.match(/\ABSD\z/) ||
       name.match(/\ABSD License\z/i)
+    end
+
+    def bsd_style_match name
+      name.match(/\BSD style\z/i) ||
+      name.match(/\BSD style License\z/i) ||
+      name.match(/\BSD-style License\z/i)
+    end
+
+    def new_bsd_match name
+      name.match(/\New BSD\z/i) ||
+      name.match(/\New BSD License\z/i)
+    end
+
+    def bsd_3_clause_match name
+      name.match(/\BSD 3-Clause\z/) ||
+      name.match(/\BSD 3-Clause License\z/) ||
+      name.match(/\ARevised BSD\z/i) ||
+      name.match(/\ABSD Revised\z/i) ||
+      name.match(/\ABSD New\z/i)
     end
 
     def gpl_match name

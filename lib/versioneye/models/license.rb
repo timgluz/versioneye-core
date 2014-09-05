@@ -49,12 +49,23 @@ class License < Versioneye::Model
 
   def link
     return url if url && !url.empty?
-    return 'http://www.linfo.org/bsdlicense.html' if bsd_match( name )
-    return 'http://choosealicense.com/licenses/mit/' if mit_match( name )
+
+    return 'http://mit-license.org/' if mit_match( name )
+
     return 'http://www.ruby-lang.org/en/about/license.txt' if ruby_match( name )
-    return 'http://opensource.org/licenses/apachepl.php' if apache_license_match( name )
+
+    return 'http://www.apache.org/licenses/LICENSE-1.0.txt' if apache_license_10_match( name )
+    return 'http://www.apache.org/licenses/LICENSE-1.1.txt' if apache_license_11_match( name )
     return 'http://www.apache.org/licenses/LICENSE-2.0.txt' if apache_license_20_match( name )
-    return 'http://choosealicense.com/licenses/eclipse/' if eclipse_match( name )
+
+    return 'http://www.eclipse.org/legal/epl-v10.html' if eclipse_match( name )
+    return 'http://www.eclipse.org/org/documents/edl-v10.php' if eclipse_distribution_match( name )
+
+    return 'http://opensource.org/licenses/BSD-3-Clause' if bsd_3_clause_match( name )
+    return 'http://opensource.org/licenses/bsd-license.php' if new_bsd_match( name )
+    return 'http://www.linfo.org/bsdlicense.html' if bsd_style_match( name )
+    return 'http://www.linfo.org/bsdlicense.html' if bsd_match( name )
+
     return 'http://www.gnu.org/copyleft/gpl.html' if gpl_match( name )
     return 'http://opensource.org/licenses/gpl-2.0.php' if gpl_20_match( name )
     return 'http://opensource.org/licenses/LGPL-3.0' if lgpl_3_match( name )
