@@ -4,18 +4,11 @@ module VersionEye
     def name_substitute
       return 'unknown' if name.to_s.empty?
 
-      tmp_name = name.gsub(/The /i, "").gsub(" - ", " ").gsub(", ", " ").strip
+      tmp_name = name.gsub(/The /i, "").gsub(" - ", " ").gsub(", ", " ").gsub("Licence", "License").strip
 
       return 'MIT' if mit_match( tmp_name )
+
       return 'Ruby' if ruby_match( tmp_name )
-
-      return 'BSD 3-clause Revised License'  if bsd_3_clause_match( tmp_name )
-      return 'BSD style' if bsd_style_match( tmp_name )
-      return 'New BSD' if new_bsd_match( tmp_name )
-      return 'BSD' if bsd_match( tmp_name )
-
-      return 'CDDL' if cddl_match( tmp_name )
-      return 'GPL-2.0' if gpl_20_match( tmp_name )
 
       return 'Common Public License 1.0' if cpl_10_match( tmp_name )
 
@@ -23,10 +16,19 @@ module VersionEye
       return 'MPL-1.1'  if mpl_11_match( tmp_name )
       return 'MPL-2.0'  if mpl_20_match( tmp_name )
 
+      return 'CDDL-1.0' if cddl_match( tmp_name )
+      return 'CDDL-1.1' if cddl_11_match(  tmp_name )
+      return 'CDDL+GPL' if cddl_plus_gpl( tmp_name )
+
       return 'LGPL-2.0'  if lgpl_20_match( tmp_name )
       return 'LGPL-2.1'  if lgpl_21_match( tmp_name )
       return 'LGPL-3.0'  if lgpl_3_match( tmp_name )
       return 'LGPL-3.0+' if lgpl_3_or_later_match( tmp_name )
+
+      return 'GPL'     if gpl_match( tmp_name )
+      return 'GPL-1.0' if gpl_10_match( tmp_name )
+      return 'GPL-2.0' if gpl_20_match( tmp_name )
+      return 'GPL-3.0' if gpl_30_match( tmp_name )
 
       return 'Apache License 1.0' if apache_license_10_match( tmp_name )
       return 'Apache License 1.1' if apache_license_11_match( tmp_name )
@@ -37,7 +39,13 @@ module VersionEye
 
       return 'Artistic License 1.0' if artistic_10_match( tmp_name )
       return 'Artistic License 2.0' if artistic_20_match( tmp_name )
-      name
+
+      return 'BSD 3-clause Revised License'  if bsd_3_clause_match( tmp_name )
+      return 'BSD style' if bsd_style_match( tmp_name )
+      return 'New BSD' if new_bsd_match( tmp_name )
+      return 'BSD' if bsd_match( tmp_name )
+
+      name.gsub("Licence", "License")
     end
 
     def mpl_10_match name
@@ -72,6 +80,7 @@ module VersionEye
     end
 
     def eclipse_match name
+      name.match(/\AEPL\z/i) ||
       name.match(/\AEclipse\z/i) ||
       name.match(/\AEclipse License\z/i) ||
       name.match(/\AEclipse Public License\z/i) ||
@@ -117,7 +126,21 @@ module VersionEye
     end
 
     def gpl_match name
-      name.match(/\AGPL\z/i)
+      name.match(/\AGPL\z/i) ||
+      name.match(/\AGNU General Public Library\z/i)
+    end
+
+    def gpl_10_match name
+      name.match(/\AGPL 1\z/i) ||
+      name.match(/\AGPL\-1\z/i) ||
+      name.match(/\AGPLv1\+\z/i) ||
+      name.match(/\AGPL 1\.0\z/i) ||
+      name.match(/\AGPL\-1\.0\z/i) ||
+      name.match(/\AGNU General Public License version 1 \(GPL\-1\.0\)\z/i) ||
+      name.match(/\AGNU General Public License \(GPL\-1\.0\)\z/i) ||
+      name.match(/\AGNU General Public License 1\.0\z/i) ||
+      name.match(/\AGNU General Public License Version 1\z/i) ||
+      name.match(/\AGeneral Public License 1\.0\z/i)
     end
 
     def gpl_20_match name
@@ -125,7 +148,26 @@ module VersionEye
       name.match(/\AGPL\-2\z/i) ||
       name.match(/\AGPLv2\+\z/i) ||
       name.match(/\AGPL 2\.0\z/i) ||
-      name.match(/\AGPL\-2\.0\z/i)
+      name.match(/\AGPL\-2\.0\z/i) ||
+      name.match(/\AGNU General Public License version 2 \(GPL\-2\.0\)\z/i) ||
+      name.match(/\AGNU General Public License \(GPL\-2\.0\)\z/i) ||
+      name.match(/\AGNU General Public License 2\.0\z/i) ||
+      name.match(/\AGNU General Public License Version 2\z/i) ||
+      name.match(/\AGeneral Public License 2\.0\z/i)
+    end
+
+    def gpl_30_match name
+      name.match(/\AGPL 3\z/i) ||
+      name.match(/\AGPL\-3\z/i) ||
+      name.match(/\AGPLv3\+\z/i) ||
+      name.match(/\AGPL 3\.0\z/i) ||
+      name.match(/\AGPL\-3\.0\z/i) ||
+      name.match(/\AGNU General Public License version 3 \(GPL\-3\.0\)\z/i) ||
+      name.match(/\AGNU General Public License version 3 \(GPL\-3\.0\)\z/i) ||
+      name.match(/\AGNU General Public License \(GPL\-3\.0\)\z/i) ||
+      name.match(/\AGNU General Public License 3\.0\z/i) ||
+      name.match(/\AGNU General Public License Version 3\z/i) ||
+      name.match(/\AGeneral Public License 3\.0\z/i)
     end
 
     def lgpl_2_match name
@@ -161,9 +203,7 @@ module VersionEye
       name.match(/\ALGPL\-3\z/i) ||
       name.match(/\ALGPL\z/i) ||
       name.match(/\AGnu Lesser Public License\z/i) ||
-      name.match(/\AGNU Lesser General Public Licence\z/i) ||
       name.match(/\AGNU LESSER GENERAL PUBLIC LICENSE\z/i) ||
-      name.match(/\AGNU Lesser General Public Licence v3\.0 only\z/i) ||
       name.match(/\AGNU Lesser General Public License v3\.0 only\z/i)
     end
 
@@ -206,6 +246,10 @@ module VersionEye
     end
 
     def apache_license_20_match name
+      name.match(/\AASF 2\.0\z/i) ||
+      name.match(/\AASF-2\.0\z/i) ||
+      name.match(/\AASF-2\z/i) ||
+      name.match(/\AASF 2\z/i) ||
       name.match(/\AApache\z/i) ||
       name.match(/\AApache 2\z/i) ||
       name.match(/\AApache\-2\z/i) ||
@@ -222,8 +266,22 @@ module VersionEye
 
     def cddl_match name
       name.match(/\ACDDL\z/i) ||
-      name.match(/\ACOMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0\z/i) ||
-      name.match(/\ACommon Development and Distribution License (CDDL) v1.0\z/i)
+      name.match(/\ACDDL 1\.0\z/i) ||
+      name.match(/\ACOMMON DEVELOPMENT AND DISTRIBUTION LICENSE \(CDDL\) Version 1\.0\z/i) ||
+      name.match(/\ACommon Development and Distribution License \(CDDL\-1\.0\)\z/i) ||
+      name.match(/\ACommon Development and Distribution License \(CDDL\) v1\.0\z/i)
+    end
+
+    def cddl_11_match name
+      name.match(/\ACDDL 1\.1\z/i) ||
+      name.match(/\ACOMMON DEVELOPMENT AND DISTRIBUTION LICENSE \(CDDL\) Version 1\.1\z/i) ||
+      name.match(/\ACommon Development and Distribution License \(CDDL\-1\.1\)\z/i) ||
+      name.match(/\ACommon Development and Distribution License \(CDDL\) v1\.1\z/i)
+    end
+
+    def cddl_plus_gpl name
+      name.match(/\ACOMMON DEVELOPMENT AND DISTRIBUTION LICENSE \(CDDL\) plus GPL\z/i) ||
+      name.match(/\ACDDL\+GPL License\z/i)
     end
 
     def cpl_10_match name

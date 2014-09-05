@@ -50,7 +50,7 @@ class License < Versioneye::Model
   def link
     return url if url && !url.empty?
 
-    tmp_name = name.gsub(/The /i, "").gsub(" - ", " ").gsub(", ", " ").strip
+    tmp_name = name.gsub(/The /i, "").gsub(" - ", " ").gsub(", ", " ").gsub("Licence", "License").strip
 
     return 'http://mit-license.org/' if mit_match( tmp_name )
 
@@ -70,12 +70,14 @@ class License < Versioneye::Model
     return 'http://www.eclipse.org/org/documents/edl-v10.php' if eclipse_distribution_match( tmp_name )
 
     return 'http://opensource.org/licenses/BSD-3-Clause' if bsd_3_clause_match( tmp_name )
-    return 'http://opensource.org/licenses/bsd-license.php' if new_bsd_match( tmp_name )
+    return 'http://opensource.org/licenses/bsd-license' if new_bsd_match( tmp_name )
     return 'http://www.linfo.org/bsdlicense.html' if bsd_style_match( tmp_name )
     return 'http://www.linfo.org/bsdlicense.html' if bsd_match( tmp_name )
 
-    return 'http://www.gnu.org/copyleft/gpl.html' if gpl_match( tmp_name )
-    return 'http://opensource.org/licenses/gpl-2.0.php' if gpl_20_match( tmp_name )
+    return 'http://www.gnu.org/copyleft/gpl.html'                             if gpl_match( tmp_name )
+    return 'http://www.gnu.org/licenses/old-licenses/gpl-1.0-standalone.html' if gpl_10_match( tmp_name )
+    return 'http://opensource.org/licenses/gpl-2.0'                           if gpl_20_match( tmp_name )
+    return 'http://opensource.org/licenses/GPL-3.0'                           if gpl_30_match( tmp_name )
 
     return 'http://spdx.org/licenses/LGPL-2.0' if lgpl_20_match( tmp_name )
     return 'http://opensource.org/licenses/LGPL-2.1' if lgpl_21_match( tmp_name )
@@ -84,7 +86,11 @@ class License < Versioneye::Model
 
     return 'http://opensource.org/licenses/artistic-license-1.0' if artistic_10_match( tmp_name )
     return 'http://opensource.org/licenses/artistic-license-2.0' if artistic_20_match( tmp_name )
-    return 'https://glassfish.java.net/public/CDDLv1.0.html' if cddl_match( tmp_name )
+
+    return 'http://opensource.org/licenses/cddl1' if cddl_match( tmp_name )
+    return 'https://glassfish.java.net/public/CDDL+GPL_1_1.html' if cddl_11_match( tmp_name )
+    return 'https://glassfish.java.net/nonav/public/CDDL+GPL.html' if cddl_plus_gpl( tmp_name )
+
     nil
   end
 
