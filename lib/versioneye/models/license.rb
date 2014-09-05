@@ -58,6 +58,7 @@ class License < Versioneye::Model
     return 'http://www.gnu.org/copyleft/gpl.html' if gpl_match( name )
     return 'http://opensource.org/licenses/gpl-2.0.php' if gpl_20_match( name )
     return 'http://opensource.org/licenses/LGPL-3.0' if lgpl_3_match( name )
+    return 'http://spdx.org/licenses/LGPL-3.0+' if lgpl_3_or_later_match( name )
     return 'http://opensource.org/licenses/artistic-license-1.0' if artistic_10_match( name )
     return 'http://opensource.org/licenses/artistic-license-2.0' if artistic_20_match( name )
     return 'https://glassfish.java.net/public/CDDLv1.0.html' if cddl_match( name )

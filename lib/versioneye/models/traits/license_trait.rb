@@ -9,6 +9,8 @@ module VersionEye
       return 'CDDL' if cddl_match( name )
       return 'GPL-2.0' if gpl_20_match( name )
 
+      return 'Common Public License 1.0' if cpl_10_match( name )
+
       return 'LGPL-3.0' if lgpl_3_match( name )
       return 'LGPL-3.0+' if lgpl_3_or_later_match( name )
 
@@ -69,6 +71,8 @@ module VersionEye
       name.match(/\ALGPL 3\z/i) ||
       name.match(/\ALGPLv3\z/i) ||
       name.match(/\ALGPL\-3\z/i) ||
+      name.match(/\ALGPL\z/i) ||
+      name.match(/\AGNU LESSER GENERAL PUBLIC LICENSE\z/i) ||
       name.match(/\AGNU Lesser General Public License v3\.0 only\z/i)
     end
 
@@ -139,6 +143,15 @@ module VersionEye
       name.match(/\ACOMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0\z/i) ||
       name.match(/\ACommon Development and Distribution License (CDDL) v1.0\z/i)
     end
+
+    def cpl_10_match name
+      name.match(/\ACPL\-1\.0\z/i) ||
+      name.match(/\ACommon Public License 1\z/i) ||
+      name.match(/\ACommon Public License 1\.0\z/i) ||
+      name.match(/\ACommon Public License Version 1\z/i) ||
+      name.match(/\ACommon Public License Version 1\.0\z/i)
+    end
+
 
   end
 
