@@ -4,7 +4,7 @@ module VersionEye
     def name_substitute
       return 'unknown' if name.to_s.empty?
 
-      tmp_name = name.gsub(/The /i, "").gsub(" - ", " ").gsub(", ", " ")
+      tmp_name = name.gsub(/The /i, "").gsub(" - ", " ").gsub(", ", " ").strip
 
       return 'MIT' if mit_match( tmp_name )
       return 'Ruby' if ruby_match( tmp_name )
@@ -19,7 +19,13 @@ module VersionEye
 
       return 'Common Public License 1.0' if cpl_10_match( tmp_name )
 
-      return 'LGPL-3.0' if lgpl_3_match( tmp_name )
+      return 'MPL-1.0'  if mpl_10_match( tmp_name )
+      return 'MPL-1.1'  if mpl_11_match( tmp_name )
+      return 'MPL-2.0'  if mpl_20_match( tmp_name )
+
+      return 'LGPL-2.0'  if lgpl_20_match( tmp_name )
+      return 'LGPL-2.1'  if lgpl_21_match( tmp_name )
+      return 'LGPL-3.0'  if lgpl_3_match( tmp_name )
       return 'LGPL-3.0+' if lgpl_3_or_later_match( tmp_name )
 
       return 'Apache License 1.0' if apache_license_10_match( tmp_name )
@@ -32,6 +38,26 @@ module VersionEye
       return 'Artistic License 1.0' if artistic_10_match( tmp_name )
       return 'Artistic License 2.0' if artistic_20_match( tmp_name )
       name
+    end
+
+    def mpl_10_match name
+      name.match(/\AMozilla Public License Version 1\.0\z/i) ||
+      name.match(/\AMPL\-1\.0\z/i) ||
+      name.match(/\AMPL 1\.0\z/i)
+    end
+
+    def mpl_11_match name
+      name.match(/\AMozilla Public License Version 1\.1\z/i) ||
+      name.match(/\AMozilla Public License 1\.1 \(MPL 1\.1\)\z/i) ||
+      name.match(/\AMPL\-1\.1\z/i) ||
+      name.match(/\AMPL 1\.1\z/i)
+    end
+
+    def mpl_20_match name
+      name.match(/\AMozilla Public License Version 2\.0\z/i) ||
+      name.match(/\AMozilla Public License 2\.0 \(MPL 2\.0\)\z/i) ||
+      name.match(/\AMPL\-2\.0\z/i) ||
+      name.match(/\AMPL 2\.0\z/i)
     end
 
     def ruby_match name
@@ -51,8 +77,8 @@ module VersionEye
       name.match(/\AEclipse Public License\z/i) ||
       name.match(/\AEclipse Public License 1\.0\z/i) ||
       name.match(/\AEclipse Public License v1\.0\z/i) ||
-      name.match(/\AEclipse Public License \- v 1\.0\z/i) ||
-      name.match(/\AEclipse Public License \- Version 1\.0\z/i) ||
+      name.match(/\AEclipse Public License v 1\.0\z/i) ||
+      name.match(/\AEclipse Public License Version 1\.0\z/i) ||
       name.match(/\AEclipse Public License Version 1\.0\z/i)
     end
 
@@ -61,8 +87,8 @@ module VersionEye
       name.match(/\AEclipse Distribution License v\. 1\.0\z/i) ||
       name.match(/\AEclipse Distribution License 1\.0\z/i) ||
       name.match(/\AEclipse Distribution License v1\.0\z/i) ||
-      name.match(/\AEclipse Distribution License \- v 1\.0\z/i) ||
-      name.match(/\AEclipse Distribution License \- Version 1\.0\z/i) ||
+      name.match(/\AEclipse Distribution License v 1\.0\z/i) ||
+      name.match(/\AEclipse Distribution License Version 1\.0\z/i) ||
       name.match(/\AEclipse Distribution License Version 1\.0\z/i)
     end
 
@@ -102,12 +128,42 @@ module VersionEye
       name.match(/\AGPL\-2\.0\z/i)
     end
 
+    def lgpl_2_match name
+      name.match(/\ALGPL 2\z/i) ||
+      name.match(/\ALGPLv2\z/i) ||
+      name.match(/\ALGPL\-2\z/i) ||
+      name.match(/\AGNU Lesser General Public License v2\.0 only\z/i)
+    end
+
+    def lgpl_20_match name
+      name.match(/\ALGPL version 2\.0\z/i) ||
+      name.match(/\ALGPL v2.0\z/i) ||
+      name.match(/\ALGPL 2\.0\z/i) ||
+      name.match(/\ALGPLv2\.0\z/i) ||
+      name.match(/\ALGPL\-2\.0\z/i) ||
+      name.match(/\AGNU Lesser General Public License v2\.0 only\z/i) ||
+      name.match(/\AGNU Lesser General Public License Version 2\.0\z/i)
+    end
+
+    def lgpl_21_match name
+      name.match(/\ALGPL version 2\.1\z/i) ||
+      name.match(/\ALGPL v2.1\z/i) ||
+      name.match(/\ALGPL 2\.1\z/i) ||
+      name.match(/\ALGPLv2\.1\z/i) ||
+      name.match(/\ALGPL\-2\.1\z/i) ||
+      name.match(/\AGNU Lesser General Public License v2\.1 only\z/i) ||
+      name.match(/\AGNU Lesser General Public License Version 2\.1\z/i)
+    end
+
     def lgpl_3_match name
       name.match(/\ALGPL 3\z/i) ||
       name.match(/\ALGPLv3\z/i) ||
       name.match(/\ALGPL\-3\z/i) ||
       name.match(/\ALGPL\z/i) ||
+      name.match(/\AGnu Lesser Public License\z/i) ||
+      name.match(/\AGNU Lesser General Public Licence\z/i) ||
       name.match(/\AGNU LESSER GENERAL PUBLIC LICENSE\z/i) ||
+      name.match(/\AGNU Lesser General Public Licence v3\.0 only\z/i) ||
       name.match(/\AGNU Lesser General Public License v3\.0 only\z/i)
     end
 
@@ -172,11 +228,15 @@ module VersionEye
 
     def cpl_10_match name
       name.match(/\ACPL\-1\.0\z/i) ||
+      name.match(/\ACPL 1\.0\z/i) ||
       name.match(/\ACommon Public License 1\z/i) ||
       name.match(/\ACommon Public License 1\.0\z/i) ||
-      name.match(/\ACommon Public License \- v 1\.0\z/i)
+      name.match(/\ACommon Public License v 1\.0\z/i)
       name.match(/\ACommon Public License Version 1\z/i) ||
       name.match(/\ACommon Public License Version 1\.0\z/i)
+      name.match(/\ACommon Public License Version 1\.0\z/i) ||
+      name.match(/\ACommon Public License 1\.0\z/i) ||
+      name.match(/\ACommon Public License v 1\.0\z/i)
     end
 
 
