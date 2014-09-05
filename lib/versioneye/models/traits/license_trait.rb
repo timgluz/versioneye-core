@@ -130,6 +130,7 @@ module VersionEye
       name.match(/\AApache\-2\z/i) ||
       name.match(/\AApache 2\.0\z/i) ||
       name.match(/\AApache\-2\.0\z/i) ||
+      name.match(/\AApache License\z/i) ||
       name.match(/\AApache License 2\z/i) ||
       name.match(/\AApache License 2\.0\z/i) ||
       name.match(/\AApache License Version 2\.0\z/i) ||
@@ -148,6 +149,7 @@ module VersionEye
       name.match(/\ACPL\-1\.0\z/i) ||
       name.match(/\ACommon Public License 1\z/i) ||
       name.match(/\ACommon Public License 1\.0\z/i) ||
+      name.match(/\ACommon Public License \- v 1\.0\z/i)
       name.match(/\ACommon Public License Version 1\z/i) ||
       name.match(/\ACommon Public License Version 1\.0\z/i)
     end
