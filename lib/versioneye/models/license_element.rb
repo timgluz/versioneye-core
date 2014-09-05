@@ -8,6 +8,8 @@ class LicenseElement < Versioneye::Model
 
   field :name, type: String
 
+  validates_presence_of :name, :message => 'is mandatory!'
+
   embedded_in :license_whitelist
 
   def to_s

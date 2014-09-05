@@ -9,6 +9,8 @@ class LicenseWhitelist < Versioneye::Model
 
   belongs_to :user
 
+  validates_presence_of :name, :message => 'is mandatory!'
+
   index({user_id: 1, name: 1},  { name: "user_id_name", background: true, unique: true })
 
   scope :by_user, ->(user) { where(user_id: user[:_id].to_s) }
