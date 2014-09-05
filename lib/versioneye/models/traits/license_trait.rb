@@ -3,26 +3,29 @@ module VersionEye
 
     def name_substitute
       return 'unknown' if name.to_s.empty?
-      return 'MIT' if mit_match( name )
-      return 'BSD' if bsd_match( name )
-      return 'Ruby' if ruby_match( name )
-      return 'CDDL' if cddl_match( name )
-      return 'GPL-2.0' if gpl_20_match( name )
 
-      return 'Common Public License 1.0' if cpl_10_match( name )
+      tmp_name = name.gsub(/The /i, "").gsub(" - ", " ").gsub(", ", " ")
 
-      return 'LGPL-3.0' if lgpl_3_match( name )
-      return 'LGPL-3.0+' if lgpl_3_or_later_match( name )
+      return 'MIT' if mit_match( tmp_name )
+      return 'BSD' if bsd_match( tmp_name )
+      return 'Ruby' if ruby_match( tmp_name )
+      return 'CDDL' if cddl_match( tmp_name )
+      return 'GPL-2.0' if gpl_20_match( tmp_name )
 
-      return 'Apache License 1.0' if apache_license_10_match( name )
-      return 'Apache License 1.1' if apache_license_11_match( name )
-      return 'Apache License 2.0' if apache_license_20_match( name )
-      return 'Apache License' if apache_license_match( name )
+      return 'Common Public License 1.0' if cpl_10_match( tmp_name )
 
-      return 'Eclipse Public License 1.0' if eclipse_match( name )
+      return 'LGPL-3.0' if lgpl_3_match( tmp_name )
+      return 'LGPL-3.0+' if lgpl_3_or_later_match( tmp_name )
 
-      return 'Artistic License 1.0' if artistic_10_match( name )
-      return 'Artistic License 2.0' if artistic_20_match( name )
+      return 'Apache License 1.0' if apache_license_10_match( tmp_name )
+      return 'Apache License 1.1' if apache_license_11_match( tmp_name )
+      return 'Apache License 2.0' if apache_license_20_match( tmp_name )
+
+      return 'Eclipse Public License 1.0' if eclipse_match( tmp_name )
+      return 'Eclipse Distribution License 1.0' if eclipse_distribution_match( tmp_name )
+
+      return 'Artistic License 1.0' if artistic_10_match( tmp_name )
+      return 'Artistic License 2.0' if artistic_20_match( tmp_name )
       name
     end
 
@@ -34,8 +37,7 @@ module VersionEye
 
     def mit_match name
       name.match(/\AMIT\z/i) ||
-      name.match(/\AMIT License\z/i) ||
-      name.match(/\AThe MIT License\z/i)
+      name.match(/\AMIT License\z/i)
     end
 
     def eclipse_match name
@@ -45,14 +47,23 @@ module VersionEye
       name.match(/\AEclipse Public License 1\.0\z/i) ||
       name.match(/\AEclipse Public License v1\.0\z/i) ||
       name.match(/\AEclipse Public License \- v 1\.0\z/i) ||
-      name.match(/\AEclipse Public License Version 1\.0\z/i) ||
-      name.match(/\AEclipse Public License, Version 1\.0\z/i)
+      name.match(/\AEclipse Public License \- Version 1\.0\z/i) ||
+      name.match(/\AEclipse Public License Version 1\.0\z/i)
+    end
+
+    def eclipse_distribution_match name
+      name.match(/\AEclipse Distribution\z/i) ||
+      name.match(/\AEclipse Distribution License v\. 1\.0\z/i) ||
+      name.match(/\AEclipse Distribution License 1\.0\z/i) ||
+      name.match(/\AEclipse Distribution License v1\.0\z/i) ||
+      name.match(/\AEclipse Distribution License \- v 1\.0\z/i) ||
+      name.match(/\AEclipse Distribution License \- Version 1\.0\z/i) ||
+      name.match(/\AEclipse Distribution License Version 1\.0\z/i)
     end
 
     def bsd_match name
       name.match(/\ABSD\z/) ||
-      name.match(/\ABSD License\z/i) ||
-      name.match(/\AThe BSD License\z/i)
+      name.match(/\ABSD License\z/i)
     end
 
     def gpl_match name
@@ -95,13 +106,6 @@ module VersionEye
       name.match(/\AArtistic License 2.0\z/i)
     end
 
-    def apache_license_match name
-      name.match(/\AApache\z/i) ||
-      name.match(/\AApache License\z/i) ||
-      name.match(/\AApache Software License\z/i) ||
-      name.match(/\AApache Software Licenses\z/i)
-    end
-
     def apache_license_10_match name
       name.match(/\AApache 1\z/i) ||
       name.match(/\AApache\-1\z/i) ||
@@ -110,9 +114,7 @@ module VersionEye
       name.match(/\AApache License 1\z/i) ||
       name.match(/\AApache License 1\.0\z/i) ||
       name.match(/\AApache License Version 1\.0\z/i) ||
-      name.match(/\AApache License\, Version 1\.0\z/i) ||
-      name.match(/\AApache Software License - Version 1\.0\z/i) ||
-      name.match(/\AThe Apache Software License\, Version 1\.0\z/i)
+      name.match(/\AApache Software License Version 1\.0\z/i)
     end
 
     def apache_license_11_match name
@@ -120,12 +122,11 @@ module VersionEye
       name.match(/\AApache\-1\.1\z/i) ||
       name.match(/\AApache License 1\.1\z/i) ||
       name.match(/\AApache License Version 1\.1\z/i) ||
-      name.match(/\AApache License\, Version 1\.1\z/i) ||
-      name.match(/\AApache Software License - Version 1\.1\z/i) ||
-      name.match(/\AThe Apache Software License\, Version 1\.1\z/i)
+      name.match(/\AApache Software License Version 1\.1\z/i)
     end
 
     def apache_license_20_match name
+      name.match(/\AApache\z/i) ||
       name.match(/\AApache 2\z/i) ||
       name.match(/\AApache\-2\z/i) ||
       name.match(/\AApache 2\.0\z/i) ||
@@ -134,9 +135,9 @@ module VersionEye
       name.match(/\AApache License 2\z/i) ||
       name.match(/\AApache License 2\.0\z/i) ||
       name.match(/\AApache License Version 2\.0\z/i) ||
-      name.match(/\AApache License\, Version 2\.0\z/i) ||
-      name.match(/\AApache Software License - Version 2\.0\z/i) ||
-      name.match(/\AThe Apache Software License\, Version 2\.0\z/i)
+      name.match(/\AApache Software License\z/i) ||
+      name.match(/\AApache Software Licenses\z/i) ||
+      name.match(/\AApache Software License Version 2\.0\z/i)
     end
 
     def cddl_match name
