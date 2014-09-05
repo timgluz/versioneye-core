@@ -133,15 +133,9 @@ describe ProjectService do
       proj = ProjectService.find project.id.to_s
       proj.dependencies.count.should eq(3)
       proj.dependencies.each do |dep|
-        dep.outdated.should_not be_nil
-        dep.release.should_not be_nil
+        dep.outdated.should be_nil
+        dep.release.should be_nil
       end
-
-      d1 = Projectdependency.find dep_1.id.to_s
-      d1.release.should be_truthy
-
-      d2 = Projectdependency.find dep_2.id.to_s
-      d2.release.should be_falsey
     end
   end
 
@@ -377,5 +371,149 @@ describe ProjectService do
     end
 
   end
+
+
+  describe 'unknown_licenses' do
+
+    it 'returns an empty list' do
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user, nil, true
+      unknown = described_class.unknown_licenses( project )
+      unknown.should be_empty
+    end
+    it 'returns an empty list' do
+      unknown = described_class.unknown_licenses( nil )
+      unknown.should be_empty
+    end
+    it 'returns a list with 1 element, because the according product doesnt has a license' do
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user, nil, true
+
+      prod_1  = ProductFactory.create_new 1
+      dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1000000.0.0'}
+
+      unknown = described_class.unknown_licenses( project )
+      unknown.should_not be_empty
+      unknown.size.should eq(1)
+      unknown.first.name.should eq(prod_1.name)
+    end
+    it 'returns a list with 1 element, because the according product is unknown.' do
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user, nil, true
+
+      dep_1 = ProjectdependencyFactory.create_new project, nil, true, {:version_requested => '1000000.0.0'}
+
+      unknown = described_class.unknown_licenses( project )
+      unknown.should_not be_empty
+      unknown.size.should eq(1)
+      unknown.first.id.should eq(dep_1.id)
+    end
+    it 'returns a list with 1 element' do
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user, nil, true
+
+      prod_1  = ProductFactory.create_new 1
+      prod_2  = ProductFactory.create_new 2
+      prod_3  = ProductFactory.create_new 3
+
+      liz_1 = LicenseFactory.create_new prod_1, 'MIT'
+      liz_2 = LicenseFactory.create_new prod_2, 'MIT'
+
+      dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => prod_1.version}
+      dep_2 = ProjectdependencyFactory.create_new project, prod_2, true, {:version_requested => prod_2.version}
+      dep_3 = ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => prod_3.version}
+
+      unknown = described_class.unknown_licenses( project )
+      unknown.should_not be_empty
+      unknown.size.should eq(1)
+      unknown.first.id.should eq(dep_3.id)
+    end
+    it 'returns a list with 2 elements. One requested version of the product has no license.' do
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user, nil, true
+
+      prod_1  = ProductFactory.create_new 1
+      prod_2  = ProductFactory.create_new 2
+      prod_3  = ProductFactory.create_new 3
+
+      liz_1 = LicenseFactory.create_new prod_1, 'MIT'
+      liz_2 = LicenseFactory.create_new prod_2, 'MIT'
+
+      dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => prod_1.version}
+      dep_2 = ProjectdependencyFactory.create_new project, prod_2, true, {:version_requested => '0.0.NA'}
+      dep_3 = ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => prod_3.version}
+
+      unknown = described_class.unknown_licenses( project )
+      unknown.should_not be_empty
+      unknown.size.should eq(2)
+    end
+
+  end
+
+
+  describe 'red_licenses' do
+
+    it 'returns an empty list because project is nil' do
+      red = ProjectService.red_licenses nil
+      red.should be_empty
+    end
+    it 'returns an empty list because project dependencies is empty' do
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user, nil, true
+      red = ProjectService.red_licenses project
+      red.should be_empty
+    end
+    it 'returns an empty list because project has no whitelist assigned.' do
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user, nil, true
+
+      prod_1  = ProductFactory.create_new 1
+      liz_1 = LicenseFactory.create_new prod_1, 'MIT'
+      dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => prod_1.version}
+
+      red = ProjectService.red_licenses project
+      red.should be_empty
+    end
+    it 'returns an empty list because Projectdependency is on whitelist' do
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user, nil, true
+
+      prod_1 = ProductFactory.create_new 1
+      liz_1  = LicenseFactory.create_new prod_1, 'MIT'
+      dep_1  = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => prod_1.version}
+      whitelist = LicenseWhitelistFactory.create_new 'OSS', ['MiT']
+      whitelist.save
+      project.license_whitelist_id = whitelist.id
+      project.save
+
+      red = ProjectService.red_licenses project
+      red.should be_empty
+    end
+    it 'returns a list with 1 element' do
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user, nil, true
+
+      prod_1 = ProductFactory.create_new 1
+      prod_2  = ProductFactory.create_new 2
+
+      liz_1  = LicenseFactory.create_new prod_1, 'MIT'
+      liz_2 = LicenseFactory.create_new prod_2, 'BSD'
+
+      dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => prod_1.version}
+      dep_2 = ProjectdependencyFactory.create_new project, prod_2, true, {:version_requested => prod_2.version}
+
+      whitelist = LicenseWhitelistFactory.create_new 'OSS', ['MiT']
+      whitelist.save
+      project.license_whitelist_id = whitelist.id
+      project.save
+
+      red = ProjectService.red_licenses project
+      red.should_not be_empty
+      red.count.should eq(1)
+      red.first.name.should eq(dep_2.name)
+    end
+
+  end
+
 
 end

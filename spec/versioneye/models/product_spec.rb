@@ -252,7 +252,52 @@ describe Product do
       prod.group_id.should eql(group)
       prod.artifact_id.should eql(artifact)
     end
+    it "returns the fallback product" do
+      group = "junit56"
+      artifact = "junit23"
+      product.versions = Array.new
+      product.name = artifact
+      product.prod_key = "#{group}/#{artifact}"
+      product.language = 'Java'
+      product.prod_type = 'Maven'
+      product.group_id = group
+      product.artifact_id = artifact
+      product.save
 
+      prod = described_class.find_by_group_and_artifact(group, artifact, "Clojure")
+      prod.should_not be_nil
+      prod.group_id.should eql(group)
+      prod.artifact_id.should eql(artifact)
+      prod.language.should eql('Java')
+    end
+    it "returns the clojure product" do
+      group = "junit56"
+      artifact = "junit23"
+      product.versions = Array.new
+      product.name = artifact
+      product.prod_key = "#{group}/#{artifact}"
+      product.language = 'Java'
+      product.prod_type = 'Maven'
+      product.group_id = group
+      product.artifact_id = artifact
+      product.save
+
+      product_2 = Product.new
+      product_2.versions = Array.new
+      product_2.name = artifact
+      product_2.prod_key = "#{group}/#{artifact}"
+      product_2.language = 'Clojure'
+      product_2.prod_type = 'Maven'
+      product_2.group_id = group
+      product_2.artifact_id = artifact
+      product_2.save.should be_truthy
+
+      prod = described_class.find_by_group_and_artifact(group, artifact, "Clojure")
+      prod.should_not be_nil
+      prod.group_id.should eql(group)
+      prod.artifact_id.should eql(artifact)
+      prod.language.should eql('Clojure')
+    end
   end
 
 

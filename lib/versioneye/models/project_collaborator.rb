@@ -32,7 +32,10 @@ class ProjectCollaborator < Versioneye::Model
                                    {invitation_email: user[:email]}) }
 
   def self.find_by_id(id)
-    self.where(_id: id).shift
+    self.find(id)
+  rescue => e
+    log.error e.message
+    nil
   end
 
   def self.collaborator?(project_id, user_id)
@@ -52,7 +55,7 @@ class ProjectCollaborator < Versioneye::Model
   end
 
   def owner?(current_user)
-    return false if current_user.nil? or !current_user.has_attribute?(:_id)
+    return false if current_user.nil? || !current_user.has_attribute?(:_id)
     self.owner_id == current_user.id.to_s
   end
 

@@ -18,10 +18,10 @@ class ProjectService < Versioneye::Service
 
 
   def self.find id
-    project = Project.find_by_id( id )
-    return nil if project.nil?
-
-    project
+    Project.find_by_id( id )
+  rescue => e
+    log.error e.message
+    nil
   end
 
 
@@ -126,6 +126,52 @@ class ProjectService < Versioneye::Service
       outdated_dependencies << dep if ProjectdependencyService.outdated?( dep )
     end
     outdated_dependencies
+  end
+
+
+  # Returns the projectdependencies which have unknown licenses
+  def self.unknown_licenses( project )
+    unknown = Array.new
+    return unknown if project.nil? || project.projectdependencies.empty?
+
+    project.projectdependencies.each do |dep|
+      product = dep.product
+      if product.nil?
+        unknown << dep
+        next
+      end
+      product.version = dep.version_requested
+      unknown << dep if product.licenses.nil? || product.licenses.empty?
+    end
+    unknown
+  end
+
+
+  # Returns the projectdependencies which violate the license whitelist.
+  def self.red_licenses( project )
+    red = Array.new
+    return red if project.nil? || project.projectdependencies.empty? || project.license_whitelist_id.nil?
+
+    whitelist = project.license_whitelist
+    project.projectdependencies.each do |dep|
+      product = dep.product
+      next if product.nil?
+
+      product.version = dep.version_requested
+      next if product.licenses.nil? || product.licenses.empty?
+
+      product.licenses.each do |lic|
+        on_white_list = false
+        whitelist.license_elements.each do |le|
+          if le.name_substitute.eql?(lic.name_substitute)
+            on_white_list = true
+            break
+          end
+        end
+        red << dep if !on_white_list
+      end
+    end
+    red
   end
 
 

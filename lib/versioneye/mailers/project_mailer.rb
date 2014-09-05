@@ -16,6 +16,9 @@ class ProjectMailer < ActionMailer::Base
       @dependencies[dep.name] = dep
     end
 
+    @unknown = ProjectService.unknown_licenses( project )
+    @red     = ProjectService.red_licenses( project )
+
     email = user ? user.email : Project.email_for(project, @user)
 
     mail(:to => email, :subject => "Project Notification for #{project.name}") do |format|
