@@ -194,7 +194,8 @@ module VersionEye
       name.match(/\ALGPLv2\.1\z/i) ||
       name.match(/\ALGPL\-2\.1\z/i) ||
       name.match(/\AGNU Lesser General Public License v2\.1 only\z/i) ||
-      name.match(/\AGNU Lesser General Public License Version 2\.1\z/i)
+      name.match(/\AGNU Lesser General Public License Version 2\.1\z/i) ||
+      name.match(/\AGNU Lesser General Public License \(LGPL\) Version 2\.1\z/i)
     end
 
     def lgpl_3_match name
