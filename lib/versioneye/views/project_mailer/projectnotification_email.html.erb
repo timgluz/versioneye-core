@@ -4,6 +4,8 @@
 <p>
   This is a notification E-Mail for your project <a href="<%= @projectlink %>?utm_medium=email&amp;utm_source=version_comment"><%= @project_name %></a>. Some of your dependencies are outdated.
 </p>
+
+<% if @dependencies && !@dependencies.empty? %>
 <p>
   <table>
     <thead>
@@ -36,6 +38,7 @@
     <% end %>
   </table>
 </p>
+<% end %>
 
 <% if @unknown && !@unknown.empty? %>
 <p>
@@ -85,7 +88,7 @@
         <th style="font-weight: bold; width: 110px;">License</th>
       </tr>
     </thead>
-    <% @unknown.each do |dep| %>
+    <% @red.each do |dep| %>
       <tr >
         <td style="border-bottom: 1px dotted gray; padding: 5px;">
           <% product = Product.fetch_product( dep.language, dep.prod_key ) %>
