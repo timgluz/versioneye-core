@@ -2,113 +2,26 @@
   Hello <%= @user.fullname %>
 </p>
 <p>
-  This is a notification E-Mail for your project <a href="<%= @projectlink %>?utm_medium=email&amp;utm_source=version_comment"><%= @project_name %></a>. Some of your dependencies are outdated.
+  This is a notification E-Mail for your project <a href="<%= @projectlink %>?utm_medium=email&amp;utm_source=version_comment"><%= @project_name %></a>.
 </p>
 
-<% if @dependencies && !@dependencies.empty? %>
-<p>
-  <table>
-    <thead>
-      <tr>
-        <th ></th>
-        <th ></th>
-        <th style="font-weight: bold; width: 110px;">Project Version</th>
-        <th style="font-weight: bold;">Current Version</th>
-      </tr>
-    </thead>
-    <% @dependencies.each do |key, val| %>
-      <% dep = val %>
-      <tr >
-        <td style="border-bottom: 1px dotted gray; padding: 5px;">
-          <% product = Product.fetch_product( dep.language, dep.prod_key ) %>
-          <img src= "<%= @base_url %>/assets/language/<%= product.language.downcase %>.png" style = "width: 48px; height: 48px;"/>
-        </td>
-        <td style = "vertical-align: middle; border-bottom: 1px dotted gray; padding: 5px;">
-          <a href="<%= @base_url %>/<%= product.language_esc %>/<%= product.to_param %>?utm_medium=email&amp;utm_source=project_notification">
-            <%= product.long_name %>
-          </a>
-        </td>
-        <td style = "vertical-align: middle; border-bottom: 1px dotted gray; padding: 5px;">
-          <%= dep.version_requested %>
-        </td>
-        <td style = "vertical-align: middle; border-bottom: 1px dotted gray; padding: 5px;">
-          <%= dep.version_current %>
-        </td>
-      </tr>
-    <% end %>
-  </table>
-</p>
-<% end %>
-
-<% if @unknown && !@unknown.empty? %>
-<p>
-  For these dependencies the license is unknown!
-  <table>
-    <thead>
-      <tr>
-        <th ></th>
-        <th ></th>
-        <th style="font-weight: bold; width: 110px;">License</th>
-      </tr>
-    </thead>
-    <% @unknown.each do |dep| %>
-      <tr >
-        <td style="border-bottom: 1px dotted gray; padding: 5px;">
-          <% product = Product.fetch_product( dep.language, dep.prod_key ) %>
-          <% if product %>
-            <img src= "<%= @base_url %>/assets/language/<%= product.language.downcase %>.png" style = "width: 48px; height: 48px;"/>
-          <% end %>
-        </td>
-        <td style = "vertical-align: middle; border-bottom: 1px dotted gray; padding: 5px;">
-          <% if product %>
-            <a href="<%= @base_url %>/<%= product.language_esc %>/<%= product.to_param %>?utm_medium=email&amp;utm_source=project_notification">
-              <%= product.long_name %>
-            </a>
-          <% else %>
-            <%= dep.name %>
-          <% end %>
-        </td>
-        <td style = "vertical-align: middle; border-bottom: 1px dotted gray; padding: 5px;">
-          UNKNOWN
-        </td>
-      </tr>
-    <% end %>
-  </table>
-</p>
-<% end %>
-
-<% if @red && !@red.empty? %>
-<p>
-  For these dependencies the licenses are not on the projects whitelist!
-  <table>
-    <thead>
-      <tr>
-        <th ></th>
-        <th ></th>
-        <th style="font-weight: bold; width: 110px;">License</th>
-      </tr>
-    </thead>
-    <% @red.each do |dep| %>
-      <tr >
-        <td style="border-bottom: 1px dotted gray; padding: 5px;">
-          <% product = Product.fetch_product( dep.language, dep.prod_key ) %>
-          <img src= "<%= @base_url %>/assets/language/<%= product.language.downcase %>.png" style = "width: 48px; height: 48px;"/>
-        </td>
-        <td style = "vertical-align: middle; border-bottom: 1px dotted gray; padding: 5px;">
-          <a href="<%= @base_url %>/<%= product.language_esc %>/<%= product.to_param %>?utm_medium=email&amp;utm_source=project_notification">
-            <%= product.long_name %>
-          </a>
-        </td>
-        <td style = "vertical-align: middle; border-bottom: 1px dotted gray; padding: 5px;">
-          <% product.licenses.each do |license| %>
-            <%= license.name_substitute %>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </table>
-</p>
-<% end %>
+<div style="padding-top: 15px; padding-bottom: 15px;">
+  <div style="padding-bottom: 15px;">
+    <span style="border-bottom: 1px dotted gray; font-size: 18px; font-weight: bold;">
+      Outdated Dependencies: <a href="<%= @projectlink %>?utm_medium=email&amp;utm_source=version_comment"><%= @outdated_dependencies_count %></a>
+    </span>
+  </div>
+  <div style="padding-bottom: 15px;">
+    <span style="border-bottom: 1px dotted gray; font-size: 18px; font-weight: bold;">
+      Dependencies with unknown licenses: <a href="<%= @projectlink %>?utm_medium=email&amp;utm_source=version_comment"><%= @unknown_licenses_count %></a>
+    </span>
+  </div>
+  <div style="padding-bottom: 15px;">
+    <span style="border-bottom: 1px dotted gray; font-size: 18px; font-weight: bold;">
+      Dependencies with licenses not on the project whitelist: <a href="<%= @projectlink %>?utm_medium=email&amp;utm_source=version_comment"><%= @red_licenses_count %></a>
+    </span>
+  </div>
+</div>
 
 <p>
   We keep you informed. <br/>

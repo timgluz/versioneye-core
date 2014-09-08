@@ -24,8 +24,8 @@ describe ProjectMailer do
       email.encoded.should include( '?utm_medium=email' )
       email.encoded.should include( 'utm_source=project_notification' )
       email.encoded.should include( "/user/projects/#{project._id.to_s}" )
-      email.encoded.should include( product_1.name )
-      email.encoded.should include( "#{Settings.instance.server_url}/#{product_1.language_esc}/#{product_1.to_param}" )
+      email.encoded.should include( "Outdated Dependencies:" )
+      email.encoded.should include( ">1<" )
 
       ActionMailer::Base.deliveries.clear
       email.deliver!
@@ -57,10 +57,8 @@ describe ProjectMailer do
       email.encoded.should include( '?utm_medium=email' )
       email.encoded.should include( 'utm_source=project_notification' )
       email.encoded.should include( "/user/projects/#{project._id.to_s}" )
-      email.encoded.should include( product_1.name )
-      email.encoded.should include( product_2.name )
-      email.encoded.should include( "#{Settings.instance.server_url}/#{product_1.language_esc}/#{product_1.to_param}" )
-      email.encoded.should include( "#{Settings.instance.server_url}/#{product_2.language_esc}/#{product_2.to_param}" )
+      email.encoded.should include( "Outdated Dependencies:" )
+      email.encoded.should include( ">2<" )
 
       ActionMailer::Base.deliveries.clear
       email.deliver!
