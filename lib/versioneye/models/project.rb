@@ -136,6 +136,7 @@ class Project < Versioneye::Model
   end
 
   def license_whitelist
+    return nil if license_whitelist_id.to_s.empty?
     LicenseWhitelist.find license_whitelist_id
   rescue => e
     log.error e.message
