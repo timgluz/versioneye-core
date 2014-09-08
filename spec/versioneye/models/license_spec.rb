@@ -72,19 +72,19 @@ describe License do
 
     it "should return mit link" do
       license = License.new({:name => "MIT"})
-      license.link.should eq("http://choosealicense.com/licenses/mit/")
+      license.link.should eq("http://mit-license.org/")
     end
     it "should return mit link" do
       license = License.new({:name => "mit"})
-      license.link.should eq("http://choosealicense.com/licenses/mit/")
+      license.link.should eq("http://mit-license.org/")
     end
     it "should return mit link" do
       license = License.new({:name => "The MIT License"})
-      license.link.should eq("http://choosealicense.com/licenses/mit/")
+      license.link.should eq("http://mit-license.org/")
     end
     it "should return mit link" do
       license = License.new({:name => "MIT License"})
-      license.link.should eq("http://choosealicense.com/licenses/mit/")
+      license.link.should eq("http://mit-license.org/")
     end
 
     it "should return apache 2 link" do
@@ -167,11 +167,11 @@ describe License do
 
     it "should return Apache License name" do
       license = License.new({:name => "Apache License"})
-      license.name_substitute.should eq("Apache License")
+      license.name_substitute.should eq("Apache License 2.0")
     end
     it "should return Apache License name" do
       license = License.new({:name => "Apache Software License"})
-      license.name_substitute.should eq("Apache License")
+      license.name_substitute.should eq("Apache License 2.0")
     end
 
     it "should return eclipse public license name" do

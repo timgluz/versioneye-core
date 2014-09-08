@@ -5,9 +5,17 @@ class CommonUpdater < Versioneye::Service
     old_project.update_from new_project
     old_project.reload
     cache.delete( old_project.id.to_s ) # Delete badge status for project
-    if send_email && old_project.out_number > 0 && old_project.user.email_inactive == false
+
+    unknown_licenses = ProjectService.unknown_licenses( old_project )
+    red_licenses     = ProjectService.red_licenses( old_project )
+
+    active_email   = send_email && old_project.user.email_inactive == false
+    outdated_deps  = old_project.out_number > 0
+    license_alerts = !unknown_licenses.empty? && !red_licenses.empty?
+
+    if active_email && ( outdated_deps || license_alerts )
       log.info "Send out email notification for project #{old_project.name} to user #{old_project.user.fullname}"
-      ProjectMailer.projectnotification_email( old_project ).deliver
+      ProjectMailer.projectnotification_email( old_project, nil, unknown_licenses, red_licenses ).deliver
     end
   end
 
