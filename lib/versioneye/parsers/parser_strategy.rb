@@ -31,6 +31,9 @@ class ParserStrategy
       when Project::A_TYPE_GRADLE
         return GradleParser.new
 
+      when Project::A_TYPE_SBT
+        return SbtParser.new
+
       when Project::A_TYPE_LEIN
         return LeinParser.new
 

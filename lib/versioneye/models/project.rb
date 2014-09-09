@@ -8,6 +8,7 @@ class Project < Versioneye::Model
   A_TYPE_NPM       = 'npm'
   A_TYPE_COMPOSER  = 'composer'
   A_TYPE_GRADLE    = 'gradle'
+  A_TYPE_SBT       = 'sbt'
   A_TYPE_MAVEN2    = 'Maven2'
   A_TYPE_LEIN      = 'Lein'
   A_TYPE_BOWER     = 'Bower'

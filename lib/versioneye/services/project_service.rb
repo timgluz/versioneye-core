@@ -9,6 +9,7 @@ class ProjectService < Versioneye::Service
     return Project::A_TYPE_PIP       if (!(/requirements.txt\z/ =~ trimmed_name).nil?)  or (!(/setup.py\z/ =~ trimmed_name).nil?) or (!(/pip.log\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_NPM       if (!(/package.json\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_GRADLE    if (!(/.gradle\z/ =~ trimmed_name).nil?)
+    return Project::A_TYPE_SBT       if (!(/.sbt\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_MAVEN2    if (!(/pom.xml\z/ =~ trimmed_name).nil?)  or (!(/pom.json\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_LEIN      if (!(/project.clj\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_BOWER     if (!(/bower.json\z/ =~ trimmed_name).nil?)

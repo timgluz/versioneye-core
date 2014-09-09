@@ -56,6 +56,7 @@ module Versioneye
     require 'versioneye/parsers/gemfile_parser'
     require 'versioneye/parsers/gemfilelock_parser'
     require 'versioneye/parsers/gradle_parser'
+    require 'versioneye/parsers/sbt_parser'
     require 'versioneye/parsers/lein_parser'
     require 'versioneye/parsers/package_parser'
     require 'versioneye/parsers/parser_strategy'
