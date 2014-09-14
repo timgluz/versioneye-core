@@ -18,5 +18,4 @@ module Versioneye
     end
 
   end
-
 end
