@@ -19,11 +19,9 @@ class GitHubService < Versioneye::Service
   end
 
   def self.update_repos_for_user user
-    log.debug "Importing repos for #{user.fullname}."
-    user.github_repos.delete_all
+    log.debug "Fetch GitHub Repos for #{user.fullname}."
+    # user.github_repos.delete_all
     GitHubService.cached_user_repos user
-    log.debug  "Got #{user.github_repos.count} repos for #{user.fullname}."
-    user.github_repos.all
   rescue => e
     log.error "Cant import repos for #{user.fullname} \n #{e.message}"
     log.error e.backtrace.join("\n")
@@ -140,4 +138,3 @@ class GitHubService < Versioneye::Service
 
 
 end
-
