@@ -20,7 +20,7 @@ class GitHubService < Versioneye::Service
 
   def self.update_repos_for_user user
     log.debug "Fetch GitHub Repos for #{user.fullname}."
-    # user.github_repos.delete_all
+    user.github_repos.delete_all
     GitHubService.cached_user_repos user
   rescue => e
     log.error "Cant import repos for #{user.fullname} \n #{e.message}"
