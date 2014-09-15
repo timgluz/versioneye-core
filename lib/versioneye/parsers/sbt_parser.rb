@@ -18,7 +18,9 @@ class SbtParser < CommonParser
 
 
   def parse_content( content )
-    return nil if content.nil?
+    return nil if content.to_s.empty?
+
+    content = content.gsub(/\/\/.*$/, "") # remove comments
 
     matches    = content.scan( A_DEP_MATCHER )
     deps_short = self.build_dependencies(matches)
