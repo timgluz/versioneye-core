@@ -2,7 +2,7 @@ require 'versioneye/parsers/common_parser'
 
 class GradleParser < CommonParser
 
-  A_GLOBAL_VARS_MATCHER = /^\s*(project.ext..*)/xi
+  A_GLOBAL_VARS_MATCHER = /^\s*(\S*ext.\S*\s*\=\s*.*)/xi
 
   # ^(\s)* (\w+) [\s|\(]?[\'|\"]+  ([\w|\d|\.|\-|\_]+)  :([\w|\d|\.|\-|_]+)  :([$\w|\d|\.|\-|_]+)
   A_DEP_SHORT_MATCHER = /
@@ -63,6 +63,8 @@ class GradleParser < CommonParser
   def parse_content( content )
     return nil if content.nil?
 
+    content = content.gsub(/\/\/.*$/, "") # remove comments
+
     vars = extract_vars content
 
     matches_short = content.scan( A_DEP_SHORT_MATCHER )
@@ -110,6 +112,7 @@ class GradleParser < CommonParser
       matches.each do |match|
         mat = match.first
         mat.gsub!("project.ext.", "")
+        mat.gsub!("ext.", "")
         mat.gsub!(" ", "")
         sps = mat.split("=")
         vars[sps[0]] = sps[1].gsub("\"", "").gsub("'", "")
