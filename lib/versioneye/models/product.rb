@@ -350,6 +350,11 @@ class Product < Versioneye::Model
         next if link.nil?
         next if link.link.to_s.empty?
         next if link.link.match(/\Ahttp*/) == nil
+
+        if !self.group_id.to_s.empty? && link.to_s.match(self.group_id)
+          link.link = link.to_s.gsub( self.group_id , self.group_id.gsub(/\./, "/") )
+        end
+
         result << link
       end
       result

@@ -33,6 +33,10 @@ class Versionlink < Versioneye::Model
   index({ language: 1, prod_key: 1                }, { name: "lang_prod_index", background: true })
 
 
+  def to_s
+    self.link
+  end
+
   def as_json parameter
     {
       :name => self.name,
