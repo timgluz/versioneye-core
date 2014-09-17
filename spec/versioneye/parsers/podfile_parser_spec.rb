@@ -7,7 +7,7 @@ describe PodfileParser do
   describe '.parse' do
 
     it 'parses remote urls' do
-      project = PodfileParser.new.parse 'https://raw.github.com/CocoaPods/Core/master/spec/fixtures/Podfile'
+      project = PodfileParser.new.parse 'https://raw.githubusercontent.com/CocoaPods/Core/master/spec/fixtures/Podfile'
       project.should_not be_nil
       project.language.should eq Product::A_LANGUAGE_OBJECTIVEC
       project.project_type.should eq Project::A_TYPE_COCOAPODS
@@ -19,7 +19,7 @@ describe PodfileParser do
       # 'https://raw.github.com/CocoaPods/Specs/master/ShareKit/2.4.6/ShareKit.podspec'
       # 'https://raw.github.com/CocoaPods/Specs/master/xmlrpc/2.3.3/xmlrpc.podspec'
 
-      podfile = 'https://raw.github.com/DenisDbv/OpenAuth/8d654f25d540ec865a8faeace40a810b7bdc9ff2/Podfile'
+      podfile = 'https://raw.githubusercontent.com/DenisDbv/OpenAuth/8d654f25d540ec865a8faeace40a810b7bdc9ff2/Podfile'
       project = PodfileParser.new.parse( podfile )
       project.should_not be_nil
 
