@@ -224,6 +224,7 @@ module VersionEye
 
     def artistic_20_match name
       name.match(/\AArtistic 2.0\z/) ||
+      name.match(/\AArtistic\-2.0\z/) ||
       name.match(/\AArtistic License 2.0\z/i)
     end
 
@@ -234,6 +235,7 @@ module VersionEye
       name.match(/\AApache\-1\.0\z/i) ||
       name.match(/\AApache License 1\z/i) ||
       name.match(/\AApache License 1\.0\z/i) ||
+      name.match(/\AApache License V1\.0\z/i) ||
       name.match(/\AApache License Version 1\.0\z/i) ||
       name.match(/\AApache Software License Version 1\.0\z/i)
     end
@@ -242,6 +244,7 @@ module VersionEye
       name.match(/\AApache 1\.1\z/i) ||
       name.match(/\AApache\-1\.1\z/i) ||
       name.match(/\AApache License 1\.1\z/i) ||
+      name.match(/\AApache License V1\.1\z/i) ||
       name.match(/\AApache License Version 1\.1\z/i) ||
       name.match(/\AApache Software License Version 1\.1\z/i)
     end
@@ -259,6 +262,7 @@ module VersionEye
       name.match(/\AApache License\z/i) ||
       name.match(/\AApache License 2\z/i) ||
       name.match(/\AApache License 2\.0\z/i) ||
+      name.match(/\AApache License V2\.0\z/i) ||
       name.match(/\AApache License Version 2\.0\z/i) ||
       name.match(/\AApache Software License\z/i) ||
       name.match(/\AApache Software Licenses\z/i) ||
@@ -268,6 +272,7 @@ module VersionEye
     def cddl_match name
       name.match(/\ACDDL\z/i) ||
       name.match(/\ACDDL 1\.0\z/i) ||
+      name.match(/\ACDDL\-1\.0\z/i) ||
       name.match(/\ACOMMON DEVELOPMENT AND DISTRIBUTION LICENSE \(CDDL\) Version 1\.0\z/i) ||
       name.match(/\ACommon Development and Distribution License \(CDDL\-1\.0\)\z/i) ||
       name.match(/\ACommon Development and Distribution License \(CDDL\) v1\.0\z/i)
@@ -275,6 +280,7 @@ module VersionEye
 
     def cddl_11_match name
       name.match(/\ACDDL 1\.1\z/i) ||
+      name.match(/\ACDDL\-1\.1\z/i) ||
       name.match(/\ACOMMON DEVELOPMENT AND DISTRIBUTION LICENSE \(CDDL\) Version 1\.1\z/i) ||
       name.match(/\ACommon Development and Distribution License \(CDDL\-1\.1\)\z/i) ||
       name.match(/\ACommon Development and Distribution License \(CDDL\) v1\.1\z/i)
@@ -286,8 +292,8 @@ module VersionEye
     end
 
     def cpl_10_match name
-      name.match(/\ACPL\-1\.0\z/i) ||
       name.match(/\ACPL 1\.0\z/i) ||
+      name.match(/\ACPL\-1\.0\z/i) ||
       name.match(/\ACommon Public License 1\z/i) ||
       name.match(/\ACommon Public License 1\.0\z/i) ||
       name.match(/\ACommon Public License v 1\.0\z/i)
