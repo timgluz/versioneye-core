@@ -351,7 +351,7 @@ class Product < Versioneye::Model
         next if link.link.to_s.empty?
         next if link.link.match(/\Ahttp*/) == nil
 
-        if !link.match("search.maven.org") && !self.group_id.to_s.empty? && link.to_s.match(self.group_id)
+        if !link.to_s.match("search.maven.org") && !self.group_id.to_s.empty? && link.to_s.match(self.group_id)
           link.link = link.to_s.gsub( self.group_id , self.group_id.gsub(/\./, "/") )
         end
 
