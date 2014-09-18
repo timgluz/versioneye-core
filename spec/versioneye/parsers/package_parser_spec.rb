@@ -28,11 +28,12 @@ describe PackageParser do
       product14 = create_product('mocha'        , 'mocha'        , '1.16.2', ['1.0.0' , '1.16.0', '1.16.2' ] )
       product15 = create_product('bruno'        , 'bruno'        , '1.12.1', ['1.0.0' , '1.12.0', '1.12.1' ] )
       product15 = create_product('gulp'         , 'gulp'         , '1.12.1', ['1.0.0' , '1.12.0', '1.12.1' ] )
+      product15 = create_product('async'        , 'async'        , '0.0.0', ['0.0.0' , '0.8.0', '0.9.0' ] )
 
       parser = PackageParser.new
       project = parser.parse('http://s3.amazonaws.com/veye_test_env/package.json')
       project.should_not be_nil
-      project.dependencies.size.should eql(16)
+      project.dependencies.size.should eql(17)
 
       dep_01 = project.dependencies.first
       dep_01.name.should eql('connect-redis')
@@ -135,6 +136,14 @@ describe PackageParser do
       dep_15.comperator.should eql('!=')
       dep_15.version_label.should eql('1.0')
       dep_15.outdated?().should be_falsey
+
+      dep_16 = project.dependencies[16]
+      dep_16.name.should eql('async')
+      dep_16.version_requested.should eql('0.9.0')
+      dep_16.version_current.should eql('0.9.0')
+      dep_16.comperator.should eql('=')
+      dep_16.version_label.should eql('0.x')
+      dep_16.outdated?().should be_falsey
     end
 
   end

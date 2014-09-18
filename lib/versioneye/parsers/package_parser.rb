@@ -58,9 +58,11 @@ class PackageParser < CommonParser
     version = version.to_s.strip
     version = version.gsub('"', '')
     version = version.gsub("'", '')
+    version = version.gsub(/x\.x/i, "x")
     if version.match(/\Av\d.*/)
       version = version[1..version.length]
     end
+
 
     if product.nil?
       dependency.version_requested = version
@@ -87,6 +89,12 @@ class PackageParser < CommonParser
       # Start Matching. Matches everything.
       dependency.version_requested = product.version
       dependency.version_label = '*'
+      dependency.comperator = '='
+
+    elsif version.match(/\A\*\z/)
+      # Start Matching. Matches everything.
+      dependency.version_requested = product.version
+      dependency.version_label = 'X'
       dependency.comperator = '='
 
     elsif version.casecmp('latest') == 0
