@@ -25,9 +25,11 @@ describe PackageParser do
       product11 = create_product('mu2'          , 'mu2'          , '0.6.0', ['0.5.10', '0.5.0', '0.6.0' ] )
       product12 = create_product('pg'           , 'pg'           , '0.6.6', ['0.5.0' , '0.6.1' ] )
       product13 = create_product('pg_connect'   , 'pg_connect'   , '0.6.9', ['0.5.0' , '0.6.1' ] )
+
       product14 = create_product('mocha'        , 'mocha'        , '1.16.2', ['1.0.0' , '1.16.0', '1.16.2' ] )
       product15 = create_product('bruno'        , 'bruno'        , '1.12.1', ['1.0.0' , '1.12.0', '1.12.1' ] )
       product15 = create_product('gulp'         , 'gulp'         , '1.12.1', ['1.0.0' , '1.12.0', '1.12.1' ] )
+
       product15 = create_product('async'        , 'async'        , '0.0.0', ['0.0.0' , '0.8.0', '0.9.0' ] )
 
       parser = PackageParser.new
