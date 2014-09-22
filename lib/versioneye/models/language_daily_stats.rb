@@ -133,7 +133,8 @@ class LanguageDailyStats < Versioneye::Model
       n_artifacts = 0
 
       language_key = LanguageDailyStats.language_to_sym(lang)
-      n_artifacts = LanguageDailyStats.count_artifacts( lang, that_day ).count
+      mr = LanguageDailyStats.count_artifacts( lang, that_day )
+      n_artifacts = mr.nil? ? 0 : mr.count
       self.inc_total_artifact(language_key, n_artifacts)
     end
   rescue => e
@@ -154,7 +155,7 @@ class LanguageDailyStats < Versioneye::Model
         for (var version in this.versions){
           created = this.versions[version].created_at
           if (created != null && created.getTime() < that_day.getTime()){
-            emit( this.language + ":" + this.prod_key + ":" + this.versions[version].version, { count: 1 });
+            emit( this.versions[version]._id, { count: 1 } );
           }
         }
       }
