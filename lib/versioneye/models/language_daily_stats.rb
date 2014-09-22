@@ -24,10 +24,10 @@ class LanguageDailyStats < Versioneye::Model
 
   def self.initial_metrics_table
     {
-      'new_version'    => 0, #new   versions  publised
-      'novel_package'  => 0, #new   libraries published
-      'total_package'  => 0, #total packages  upto this date
-      'total_artifact' => 0  #total artifacts upto this date
+      'new_version'    => 0, # new   versions  publised
+      'novel_package'  => 0, # new   libraries published
+      'total_package'  => 0, # total packages  upto this date
+      'total_artifact' => 0  # total artifacts upto this date
     }
   end
 
@@ -66,7 +66,7 @@ class LanguageDailyStats < Versioneye::Model
 
   def self.new_document(that_day, save = false)
     day_string = self.to_date_string(that_day)
-    self.where(date_string: day_string).delete_all #remove previous  document
+    self.where(date_string: day_string).delete_all # remove previous document
 
     new_doc  = LanguageDailyStats.new date: that_day.at_midnight
     new_doc[:date_string] = self.to_date_string(that_day)
@@ -84,13 +84,15 @@ class LanguageDailyStats < Versioneye::Model
     that_day_doc.count_language_artifacts
   end
 
+
   def count_releases
     that_day = self[:date]
-    that_day_releases = Newest.since_to(that_day.at_midnight, (that_day + 1.day).at_midnight)
-    return if that_day_releases.nil?
+    next_day = (that_day + 1.day)
+    that_day_releases = Newest.since_to( that_day.at_midnight, next_day.at_midnight )
+    return if that_day_releases.nil? || that_day_releases.empty?
 
     that_day_releases.each do |release|
-      self.count_release(release)
+      self.count_release( release )
     end
   end
 
@@ -105,11 +107,15 @@ class LanguageDailyStats < Versioneye::Model
       return nil
     end
 
-    prod_info = Product.fetch_product(release[:language], release[:prod_key])
     metric_key = LanguageDailyStats.language_to_sym(release[:language])
-
     self.inc_version(metric_key)
-    self.inc_novel(metric_key) if LanguageDailyStats.novel?(release, prod_info)
+
+    that_day_midnight = self[:date].at_midnight
+    next_day_midnight = that_day_midnight + 1.day
+    count = Product.where(:language => release.language, :prod_key => release.prod_key,
+      :created_at.gte => that_day_midnight, :created_at.lte => next_day_midnight).count
+
+    self.inc_novel(metric_key) if count > 0
   end
 
   def count_language_packages
@@ -125,14 +131,52 @@ class LanguageDailyStats < Versioneye::Model
     that_day = self[:date]
     Product::A_LANGS_SUPPORTED.each do |lang|
       n_artifacts = 0
-      Product.by_language(lang).where(:created_at.lt => that_day.at_midnight).each do |prod|
-        n_artifacts += prod.versions.where(:created_at.lt => that_day.at_midnight).count
-      end
 
       language_key = LanguageDailyStats.language_to_sym(lang)
+      n_artifacts = LanguageDailyStats.count_artifacts( lang, that_day ).count
       self.inc_total_artifact(language_key, n_artifacts)
     end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    nil
   end
+
+
+  def self.count_artifacts language, until_date
+    border = until_date.at_midnight + 1.day
+
+    map = %Q{
+      function() {
+        if ( this.versions == null || this.versions.count == 0 ) return;
+
+        that_day = new ISODate("#{border.iso8601}");
+        for (var version in this.versions){
+          created = this.versions[version].created_at
+          if (created != null && created.getTime() < that_day.getTime()){
+            emit( this.language + ":" + this.prod_key + ":" + this.versions[version].version, { count: 1 });
+          }
+        }
+      }
+    }
+
+    reduce = %Q{
+      function(key, values) {
+        var result = { count: 0 };
+        values.forEach(function(value) {
+          result.count += value.count;
+        });
+        return result;
+      }
+    }
+
+    Product.where(:language => language, :created_at.lt => border ).map_reduce(map, reduce).out(inline: true)
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    nil
+  end
+
 
   def inc_version(metric_key, val = 1)
      self.inc("#{metric_key}.new_version", val)
@@ -148,22 +192,6 @@ class LanguageDailyStats < Versioneye::Model
 
   def inc_total_artifact(metric_key, val = 1)
     self.inc("#{metric_key}.total_artifact", val)
-  end
-
-  def self.novel?( release_info, prod_info)
-    if release_info.nil? or prod_info.nil?
-      return false
-    end
-
-    if release_info.attributes.has_key?('created_at')
-      unless prod_info[:created_at].nil? or release_info[:created_at].nil?
-        product_date = self.to_date_string(prod_info[:created_at])
-        release_date = self.to_date_string(release_info[:created_at])
-        return release_date == product_date
-      end
-    end
-
-    false
   end
 
   def metrics

@@ -9,7 +9,7 @@ describe LanguageDailyStats do
       name = "#{name}_#{s}"
       newest = Newest.new({:name => name, :prod_key => name, :language => 'Ruby',
         :prod_type => 'gem', :version => Random.rand(1..99),
-        created_at: Date.today.at_midnight })
+        created_at: Date.today })
       newest.save
       newests << newest
     end
@@ -122,6 +122,7 @@ describe LanguageDailyStats do
     end
 
    it "should return all ruby project" do
+      Newest.all.count.should eq(13)
       LanguageDailyStats.update_counts
       stats = LanguageDailyStats.today_stats
       stats.should_not be_nil
@@ -267,4 +268,28 @@ describe LanguageDailyStats do
       stats["Ruby"]["new_version"].should eq(29)
     end
   end
+
+  describe "count_artifacts" do
+    it 'returns all artifacts' do
+      prod = ProductFactory.create_new 1
+      version = prod.version
+      prod.remove_version( version )
+      prod.add_version("10.10.10")
+      prod.add_version("11.11.11")
+      prod.save
+
+      # This is 2 days in the Future
+      after_tomorrow = prod.versions.first.created_at + 2.days
+      version = Version.new({:version => '1.1.1', :created_at => after_tomorrow, :updated_at => after_tomorrow })
+      prod.versions.push version
+      prod.save
+
+      prod.versions.count.should eq(3)
+
+      that_day = prod.created_at
+      vals = LanguageDailyStats.count_artifacts(prod.language, that_day)
+      vals.count.should eq(2) # Found only 2 because 3rd is in future!
+    end
+  end
+
 end

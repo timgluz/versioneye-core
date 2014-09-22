@@ -29,7 +29,6 @@ class ProductFactory
 
 
   def self.create_for_maven(group_id, artifact_id, version)
-    version_obj = Version.new :version => version
     product = Product.new(
       {
         :name          => artifact_id,
@@ -41,7 +40,7 @@ class ProductFactory
         :prod_type     => Project::A_TYPE_MAVEN2,
         :version       => version
       })
-    product.versions.push(version_obj)
+    product.add_version( version )
     product
   end
 

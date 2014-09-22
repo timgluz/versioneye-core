@@ -25,6 +25,10 @@ class Newest < Versioneye::Model
   index({language:   -1},                       { name: "language_index",         background: true})
 
 
+  def to_s
+    "#{language} : #{prod_key} : #{version}"
+  end
+
   def product
     Product.fetch_product self.language, self.prod_key
   end
