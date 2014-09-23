@@ -10,6 +10,9 @@ class Indexer
       result = model.create_indexes
       p "#{model} .. #{result}"
     end.compact
+  rescue => e
+    p e.message
+    p e.backtrace.join("\n")
   end
 
 
@@ -19,6 +22,9 @@ class Indexer
       result = model.remove_indexes
       p "#{model} .. #{result}"
     end.compact
+  rescue => e
+    p e.message
+    p e.backtrace.join("\n")
   end
 
 
