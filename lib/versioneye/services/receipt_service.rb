@@ -5,7 +5,7 @@ class ReceiptService < Versioneye::Service
 
 
   def self.process_receipts
-    return nil if !Settings.instance.environment.eql?("production")
+    return nil if Settings.instance.environment.eql?("enterprise")
 
     count = User.where(:plan_id.ne => nil).count
     return nil if count == 0
