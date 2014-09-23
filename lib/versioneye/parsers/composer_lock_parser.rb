@@ -13,11 +13,22 @@ class ComposerLockParser < ComposerParser
     return nil if data.to_s.empty?
 
     content = JSON.parse( data )
-    dependencies = self.fetch_project_dependencies( content )
     project = init_project
-    dependencies.each do |package|
-      self.process_package project, package
+
+    dependencies = self.fetch_project_dependencies( content )
+    if dependencies
+      dependencies.each do |package|
+        self.process_package project, package
+      end
     end
+
+    dependencies = self.fetch_project_dev_dependencies( content )
+    if dependencies
+      dependencies.each do |package|
+        self.process_package project, package
+      end
+    end
+
     project.dep_number = project.dependencies.size
     project
   end
@@ -59,6 +70,11 @@ class ComposerLockParser < ComposerParser
   def fetch_project_dependencies( data )
     return nil if data.nil? || data['packages'].nil?
     data['packages']
+  end
+
+  def fetch_project_dev_dependencies( data )
+    return nil if data.nil? || data['packages-dev'].nil?
+    data['packages-dev']
   end
 
 end
