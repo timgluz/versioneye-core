@@ -56,6 +56,14 @@ class EsUser < Versioneye::Service
     log.error e.backtrace.join("\n")
   end
 
+  def self.reindex_all
+    self.reset
+    self.index_all
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+  end
+
   def self.bulk_index users
     Tire.index Settings.instance.elasticsearch_user_index do
       json_users = users.map{|user| user.to_indexed_json}
