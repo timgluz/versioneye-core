@@ -80,6 +80,7 @@ module Versioneye
     require 'versioneye/producers/bitbucket_repos_import_producer.rb'
     require 'versioneye/producers/bitbucket_repo_import_producer.rb'
     require 'versioneye/producers/language_daily_stats_producer.rb'
+    require 'versioneye/producers/project_update_producer.rb'
 
     require 'versioneye/workers/worker.rb'
     require 'versioneye/workers/github_repo_import_worker.rb'
@@ -87,6 +88,7 @@ module Versioneye
     require 'versioneye/workers/bitbucket_repos_import_worker.rb'
     require 'versioneye/workers/bitbucket_repo_import_worker.rb'
     require 'versioneye/workers/language_daily_stats_worker.rb'
+    require 'versioneye/workers/project_update_worker.rb'
 
     def self.log
       Versioneye::Log.instance.log
