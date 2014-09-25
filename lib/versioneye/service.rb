@@ -82,7 +82,7 @@ module Versioneye
     require 'versioneye/producers/language_daily_stats_producer.rb'
     require 'versioneye/producers/project_update_producer.rb'
     require 'versioneye/producers/update_meta_data_producer.rb'
-    require 'versioneye/producers/update_dependencies_worker.rb'
+    require 'versioneye/producers/update_dependencies_producer.rb'
 
     require 'versioneye/workers/worker.rb'
     require 'versioneye/workers/github_repo_import_worker.rb'
