@@ -92,8 +92,7 @@ class ProductService < Versioneye::Service
       dependency.outdated = DependencyService.cache_outdated?( dependency )
       dependency.save
     end
-    product.dep_count = deps.count
-    product.save
+    product.update_attribute(:dep_count, deps.count)
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
