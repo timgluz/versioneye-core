@@ -1,10 +1,10 @@
-class UpdateIndexWorker < Worker
+class SendNotificationEmailsWorker < Worker
 
   def work
     connection = get_connection
     connection.start
     channel = connection.create_channel
-    queue   = channel.queue("update_index", :durable => true)
+    queue   = channel.queue("send_notification_emails", :durable => true)
 
     log_msg = " [*] Waiting for messages in #{queue.name}. To exit press CTRL+C"
     puts log_msg
@@ -16,7 +16,7 @@ class UpdateIndexWorker < Worker
         puts msg
         log.info msg
 
-        update_index msg
+        send_notification_emails msg
 
         channel.ack(delivery_info.delivery_tag)
       end
@@ -27,10 +27,8 @@ class UpdateIndexWorker < Worker
     end
   end
 
-
-  def update_index msg
-    EsProduct.index_newest if msg.eql?("product")
-    EsUser.reindex_all if msg.eql?("user")
+  def send_notification_emails msg
+    NotificationService.send_notifications
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
