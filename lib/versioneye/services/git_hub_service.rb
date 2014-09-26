@@ -107,7 +107,7 @@ class GitHubService < Versioneye::Service
     user_info = Github.user(user.github_token)
     user[:user_login] = user_info['login'] if user_info.is_a?(Hash)
 
-    log.info "reading user repos"
+    log.info "reading user repos for user: #{user.fullname}"
     cache_user_repos(user)
     orga_names.each do |orga_name|
       log.info "reading repos for orga: #{orga_name}"
