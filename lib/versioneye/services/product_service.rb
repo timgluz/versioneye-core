@@ -137,6 +137,10 @@ class ProductService < Versioneye::Service
 
     product.used_by_count = count
     product.save if persist
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    false
   end
 
 
@@ -153,6 +157,10 @@ class ProductService < Versioneye::Service
 
     product.followers = product.user_ids.count
     product.save
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    false
   end
 
 
