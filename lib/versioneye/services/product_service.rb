@@ -29,6 +29,7 @@ class ProductService < Versioneye::Service
     end
 
     update_average_release_time( product )
+    update_newest_version( product )
     product
   end
 
@@ -105,6 +106,13 @@ class ProductService < Versioneye::Service
       average_release_time = VersionService.estimated_average_release_time( product.versions )
     end
     product[:average_release_time] = average_release_time
+  end
+
+
+  def self.update_newest_version product
+    newest = VersionService.newest_version( product.versions )
+    product.version_newest = newest
+    product.update_attribute(:version, newest)
   end
 
 

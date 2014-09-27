@@ -2,6 +2,7 @@ source "http://rubygems.org"
 
 gem 'naturalsorter'      , '~> 3.0.0'
 
+gem 'bundler'            , '1.7.3'
 gem 'mongoid'            , '~> 3.1.0'
 gem 'log4r'              , '~> 1.1.0'
 gem 'dalli'              , '~> 2.7.0'
@@ -24,7 +25,6 @@ gem 'wkhtmltopdf-binary' , '~> 0.9.9.1'
 gem 'will_paginate_mongoid', '2.0.1'
 
 group :development do
-  gem 'bundler', '~> 1.7.0'
   gem 'jeweler', '~> 2.0.1'
 end
 

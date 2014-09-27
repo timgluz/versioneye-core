@@ -56,6 +56,7 @@ class Product < Versioneye::Model
   index({ updated_at: -1, language: -1}, { name: "updated_language_index", background: true})
 
   attr_accessor :average_release_time
+  attr_accessor :version_newest
   attr_accessor :released_days_ago, :released_ago_in_words, :released_ago_text
   attr_accessor :in_my_products, :dependencies_cache
 
