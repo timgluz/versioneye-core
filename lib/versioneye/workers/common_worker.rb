@@ -40,6 +40,8 @@ class CommonWorker < Worker
       StatisticService.update_all
     elsif message.eql?("send_verification_reminders")
       User.send_verification_reminders
+    elsif message.eql?("process_receipts")
+      ReceiptService.process_receipts
     end
 
     log.info "Job done for #{message}"
