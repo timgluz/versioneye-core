@@ -86,6 +86,7 @@ module Versioneye
     require 'versioneye/producers/update_index_producer.rb'
     require 'versioneye/producers/send_notification_emails_producer.rb'
     require 'versioneye/producers/process_receipts_producer.rb'
+    require 'versioneye/producers/common_producer.rb'
 
     require 'versioneye/workers/worker.rb'
     require 'versioneye/workers/github_repo_import_worker.rb'
@@ -99,6 +100,7 @@ module Versioneye
     require 'versioneye/workers/update_index_worker.rb'
     require 'versioneye/workers/send_notification_emails_worker.rb'
     require 'versioneye/workers/process_receipts_worker.rb'
+    require 'versioneye/workers/common_worker.rb'
 
     def self.log
       Versioneye::Log.instance.log
