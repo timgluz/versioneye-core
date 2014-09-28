@@ -33,7 +33,6 @@ class MavenRepository < Versioneye::Model
     repos['atlassian']          = 'https://maven.atlassian.com/content/repositories/atlassian-public/'
     repos['atlassianContrib']   = 'https://maven.atlassian.com/content/repositories/atlassian-contrib/'
     repos['selenium']           = 'http://nexus.openqa.org/content/repositories/releases/'
-    repos['seleniumThirdParty'] = 'http://archiva.openqa.org/repository/thirdparty/'
     repos['jbossPublic']        = 'http://repository.jboss.org/nexus/content/groups/public-jboss/'
     repos['appFuse']            = 'http://static.appfuse.org/repository/'
     repos['fuse']               = 'http://repo.fusesource.com/maven2/'
@@ -48,7 +47,6 @@ class MavenRepository < Versioneye::Model
     repos['objectweb']          = 'http://repository.ow2.org/nexus/content/repositories/releases/'
     repos['restlet']            = 'http://maven.restlet.org/'
     repos['seasar']             = 'http://maven.seasar.org/maven2/'
-    repos['slick']              = 'http://slick.cokeandcode.com/mavenrepo/'
     repos['smartclient']        = 'http://www.smartclient.com/maven2/'
     repos['abl']                = 'http://resources.automatedbusinesslogic.com/maven2/'
     repos['carbonfive']         = 'http://mvn.carbonfive.com/nexus/content/groups/public/'
@@ -56,10 +54,10 @@ class MavenRepository < Versioneye::Model
     repos['eviware']            = 'http://www.eviware.com/repository/maven2/'
     repos['devzendo']           = 'http://devzendo-org-repo.googlecode.com/svn/trunk/releases/'
     repos['pentaho']            = 'http://repository.pentaho.org/artifactory/pentaho/'
-    repos['bintray']            = 'http://jcenter.bintray.com'
+    repos['jcenter']            = 'http://jcenter.bintray.com'
 
     # repo = MavenRepository.new( { :name => 'pentaho', :url => 'http://repository.pentaho.org/artifactory/pentaho/', :language => Product::A_LANGUAGE_JAVA } )
-    # repo = MavenRepository.new( { :name => 'bintray', :url => 'http://jcenter.bintray.com', :language => Product::A_LANGUAGE_JAVA } )
+    # repo = MavenRepository.new( { :name => 'jcenter', :url => 'http://jcenter.bintray.com', :language => Product::A_LANGUAGE_JAVA } )
 
     repos.keys.each do |key|
       repo = MavenRepository.new( { :name => key, :url => repos[key], :language => Product::A_LANGUAGE_JAVA } )
