@@ -2,11 +2,21 @@ require 'versioneye/parsers/common_parser'
 
 class GradleParser < CommonParser
 
+  # Matches definitions like this;
+  # project.ext.springVersion = '4.0.7.RELEASE'
   A_GLOBAL_VARS_MATCHER = /^\s*(\S*ext.\S*\s*\=\s*.*)/xi
 
-  # ^(\s)* (\w+) [\s|\(]?[\'|\"]+  ([\w|\d|\.|\-|\_]+)  :([\w|\d|\.|\-|_]+)  :([$\w|\d|\.|\-|_]+)
+  # Matches definitions like this;
+  # def tomcatVersion = '7.0.54'
+  A_GLOBAL_VARS_MATCHER_2 = /^\s*(def\s+\S+\s*=\s*["']\S*["']$)/xi
+
+  # ('\S+\:\S+\:\S+\')
+  # Matches this 'junit:junit-dep:4.0.0'
+  A_DEP_SIMPLE_MATCHER = /(["|']\S+\:\S+\:\S+["|'])/xi
+
+
+  # (\w+) [\s|\(]?[\'|\"]+  ([\w|\d|\.|\-|\_]+)  :([\w|\d|\.|\-|_]+)  :([$\w|\d|\.|\-|_]+)
   A_DEP_SHORT_MATCHER = /
-      ^(\s)* #filter out comments
       (\w+) #scope
       [\s|\(]?[\'|\"]+ #scope separator
         ([\w|\d|\.|\-|\_]+) #group_id
@@ -67,14 +77,21 @@ class GradleParser < CommonParser
 
     vars = extract_vars content
 
+    matches_simple = content.scan( A_DEP_SIMPLE_MATCHER )
+    deps_simple = self.build_dependencies_simple(matches_simple, vars)
+    content = content.gsub(A_DEP_SIMPLE_MATCHER, "")
+
     matches_short = content.scan( A_DEP_SHORT_MATCHER )
     deps_short    = self.build_dependencies(matches_short, vars)
+    content = content.gsub(A_DEP_SHORT_MATCHER, "")
 
     matches_long = content.scan( A_DEP_LONG_MATCHER )
     deps_long    = self.build_dependencies_extd(matches_long, vars)
+    content = content.gsub(A_DEP_LONG_MATCHER, "")
 
     matches_br = content.scan( A_DEP_BR_MATCHER )
     deps_br    = self.build_dependencies_br( matches_br, vars )
+    content = content.gsub(A_DEP_BR_MATCHER, "")
 
     if deps_short[:projectdependencies] && !deps_short[:projectdependencies].empty?
       deps_short[:projectdependencies].each do |dep|
@@ -83,6 +100,11 @@ class GradleParser < CommonParser
     end
     if deps_br[:projectdependencies] && !deps_br[:projectdependencies].empty?
       deps_br[:projectdependencies].each do |dep|
+        deps_long[:projectdependencies] << dep
+      end
+    end
+    if deps_simple[:projectdependencies] && !deps_simple[:projectdependencies].empty?
+      deps_simple[:projectdependencies].each do |dep|
         deps_long[:projectdependencies] << dep
       end
     end
@@ -115,7 +137,22 @@ class GradleParser < CommonParser
         mat.gsub!("ext.", "")
         mat.gsub!(" ", "")
         sps = mat.split("=")
-        vars[sps[0]] = sps[1].gsub("\"", "").gsub("'", "")
+        var_key = sps[0]
+        var_val = sps[1].gsub("\"", "").gsub("'", "")
+        vars[var_key] = var_val
+      end
+    end
+
+    matches = content.scan(A_GLOBAL_VARS_MATCHER_2)
+    if matches && !matches.empty?
+      matches.each do |match|
+        mat = match.first
+        mat.gsub!("def", "")
+        sps = mat.split("=")
+        var_key = sps[0].gsub(" ", "")
+        var_val = sps[1].gsub(" ", "")
+        var_val = var_val.gsub("\"", "").gsub("'", "")
+        vars[var_key] = var_val
       end
     end
     vars
@@ -134,6 +171,30 @@ class GradleParser < CommonParser
         :group_id => row[2],
         :artifact_id => row[3],
         :name => row[3],
+        :language => Product::A_LANGUAGE_JAVA,
+        :comperator => '='
+      })
+
+      process_dep version, dependency, data
+    end
+
+    {:projectdependencies => data}
+  end
+
+
+  def build_dependencies_simple( matches, vars )
+    # build and initiliaze array of dependencies.
+    # Arguments array of matches, should be [[scope, group_id, artifact_id, version],...]
+    # Returns map {:unknowns => 0 , dependencies => []}
+    data = []
+    matches.each do |row|
+      spliti = row.first.gsub("'", "").split(":")
+      version = calc_version( spliti[2], vars )
+      dependency = Projectdependency.new({
+        :scope => 'compile',
+        :group_id => spliti[0],
+        :artifact_id => spliti[1],
+        :name => spliti[1],
         :language => Product::A_LANGUAGE_JAVA,
         :comperator => '='
       })
@@ -186,9 +247,13 @@ class GradleParser < CommonParser
 
 
   def calc_version( version_string, vars )
-    return version_string if vars.nil? || vars.empty?
+    return version_string if vars.nil? || vars.empty? || version_string.to_s.empty?
 
     version_string = version_string.gsub("$", "")
+    version_string = version_string.gsub("{", "")
+    version_string = version_string.gsub("}", "")
+    version_string = version_string.gsub("\"", "")
+    version_string = version_string.gsub(" ", "")
     if vars.keys.include?( version_string )
       version_string = vars[version_string]
     end
@@ -200,7 +265,6 @@ class GradleParser < CommonParser
     product = Product.find_by_group_and_artifact(dependency.group_id, dependency.artifact_id, dependency.language)
 
     dependency.prod_key = product.prod_key if product
-
     parse_requested_version( version, dependency, product )
 
     dependency.stability = VersionTagRecognizer.stability_tag_for version
