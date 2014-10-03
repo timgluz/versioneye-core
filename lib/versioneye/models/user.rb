@@ -41,6 +41,10 @@ class User < Versioneye::Model
   field :bitbucket_secret, type: String
   field :bitbucket_scope,  type: String
 
+  field :stash_slug,   type: String # Username on stash
+  field :stash_token,  type: String
+  field :stash_secret, type: String
+
   field :stripe_token      , type: String
   field :stripe_customer_id, type: String
 
@@ -232,6 +236,11 @@ class User < Versioneye::Model
   def self.find_by_bitbucket_id(bitbucket_id)
     return nil if bitbucket_id.to_s.strip.empty?
     User.where(bitbucket_id: bitbucket_id).shift
+  end
+
+  def self.find_by_stash_slug( slug )
+    return nil if slug.to_s.strip.empty?
+    User.where( stash_slug: slug ).shift
   end
 
   def github_account_connected?
