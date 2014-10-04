@@ -73,11 +73,8 @@ class Stash < Versioneye::Service
   def self.all_repos( token, secret )
     repos = []
     projects = self.projects_all( token, secret )
-    p "found #{projects.count} projects"
     projects.each do |project|
-      p "fetch repos for #{project[:key]}"
       reps = project_repos( project[:key], token, secret )
-      p "- got: #{reps}"
       repos << reps[:values] if reps[:values] && !reps[:values].empty?
     end
     repos.flatten
@@ -87,6 +84,44 @@ class Stash < Versioneye::Service
   def self.project_repos( projectKey, token, secret )
     path = "#{A_API_V1_PATH}/projects/#{projectKey}/repos"
     get_json(path, token, secret)
+  end
+
+
+  def self.branches( projectKey, repo, token, secret )
+    path = "#{A_API_V1_PATH}/projects/#{projectKey}/repos/#{repo}/branches"
+    get_json(path, token, secret)
+  end
+
+  def self.branche_names( projectKey, repo, token, secret )
+    names = []
+    path = "#{A_API_V1_PATH}/projects/#{projectKey}/repos/#{repo}/branches?start=0&limit=1000"
+    response = get_json(path, token, secret)
+    response[:values].each do |branch|
+       names << branch[:displayId]
+    end
+    names
+  end
+
+
+  def self.files( projectKey, repo, branch = 'master', token, secret )
+    path = "#{A_API_V1_PATH}/projects/#{projectKey}/repos/#{repo}/files?at=#{branch}&start=0&limit=10000"
+    get_json(path, token, secret)
+  end
+
+
+  def self.browse( projectKey, repo, path = '', token, secret )
+    path = "#{A_API_V1_PATH}/projects/#{projectKey}/repos/#{repo}/browse#{path}?start=0&limit=1000"
+    get_json(path, token, secret)
+  end
+
+
+  def self.root_files( projectKey, repo, path = '', token, secret )
+    response = []
+    files = self.browse(projectKey, repo, path, token, secret)
+    files[:children][:values].each do |file|
+      response << file[:path][:name] if file[:type].eql?("FILE")
+    end
+    response
   end
 
 
