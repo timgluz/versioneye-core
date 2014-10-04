@@ -109,22 +109,6 @@ class Stash < Versioneye::Service
   end
 
 
-  def self.browse( projectKey, repo, path = '', token, secret )
-    path = "#{A_API_V1_PATH}/projects/#{projectKey}/repos/#{repo}/browse#{path}?start=0&limit=1000"
-    get_json(path, token, secret)
-  end
-
-
-  def self.root_files( projectKey, repo, path = '', token, secret )
-    response = []
-    files = self.browse(projectKey, repo, path, token, secret)
-    files[:children][:values].each do |file|
-      response << file[:path][:name] if file[:type].eql?("FILE")
-    end
-    response
-  end
-
-
   def self.get_json(path, token, secret, raw = false, params = {}, headers = {})
     url = "#{A_API_URL}#{path}"
     oauth = init_oauth_client
