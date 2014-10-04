@@ -92,7 +92,7 @@ class Stash < Versioneye::Service
     get_json(path, token, secret)
   end
 
-  def self.branche_names( projectKey, repo, token, secret )
+  def self.branch_names( projectKey, repo, token, secret )
     names = []
     path = "#{A_API_V1_PATH}/projects/#{projectKey}/repos/#{repo}/branches?start=0&limit=1000"
     response = get_json(path, token, secret)
@@ -141,6 +141,15 @@ class Stash < Versioneye::Service
     log.error "Fuck up in get_json"
     log.error e.message
     log.error e.backtrace.join("\n")
+  end
+
+
+  def self.encode_db_key(key_val)
+    URI.escape(key_val.to_s, /\.|\$/)
+  end
+
+  def self.decode_db_key(key_val)
+    URI.unescape key_val.to_s
   end
 
 

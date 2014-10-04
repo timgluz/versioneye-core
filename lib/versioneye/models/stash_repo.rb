@@ -13,6 +13,7 @@ class StashRepo < Versioneye::Model
   field :forkable     , type: Boolean
   field :public_repo  , type: Boolean
   field :branches     , type: Array
+  field :project_files, type: Hash
 
   belongs_to :user
 
@@ -20,6 +21,7 @@ class StashRepo < Versioneye::Model
   index({ fullname: 1 }, { name: "fullname_index", background: true })
 
   scope :by_user, ->(user){where(user_id: user._id)}
+  scope :by_fullname, ->(name){where(fullname: name)}
 
 
   def self.build_or_update user, repo_data
