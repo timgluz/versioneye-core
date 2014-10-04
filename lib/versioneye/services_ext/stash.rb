@@ -109,6 +109,14 @@ class Stash < Versioneye::Service
   end
 
 
+  # path = Path to file. For example "Gemfile"
+  # revision = "refs/heads/<BRANCH>" -> "refs/heads/feature/nine"
+  def self.content( projectKey, repo, path, revision, token, secret )
+    path = "#{A_API_V1_PATH}/projects/#{projectKey}/repos/#{repo}/browse/#{path}?at=#{revision}"
+    get_json(path, token, secret)
+  end
+
+
   def self.get_json(path, token, secret, raw = false, params = {}, headers = {})
     url = "#{A_API_URL}#{path}"
     oauth = init_oauth_client
