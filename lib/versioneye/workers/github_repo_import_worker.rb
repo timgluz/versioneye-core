@@ -20,6 +20,7 @@ class GithubRepoImportWorker < Worker
 
         handle body
         cache.set( body, GitHubService::A_TASK_DONE, A_TASK_TTL )
+
         channel.ack(delivery_info.delivery_tag)
       end
     rescue => e
