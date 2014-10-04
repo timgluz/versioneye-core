@@ -13,9 +13,13 @@ class BitbucketReposImportWorker < Worker
 
     begin
       queue.subscribe(:ack => true, :block => true) do |delivery_info, properties, body|
-        puts " [x] Received #{body}"
+        msg = " [x] Received #{body}"
+        puts msg
+        log.info msg
+
         user = User.find body
         import_all_repos_for user
+
         channel.ack(delivery_info.delivery_tag)
       end
     rescue => e
