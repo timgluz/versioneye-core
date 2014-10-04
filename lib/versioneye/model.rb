@@ -16,6 +16,7 @@ module Versioneye
     require 'versioneye/models/event'
     require 'versioneye/models/email_setting'
     require 'versioneye/models/github_repo'
+    require 'versioneye/models/stash_repo'
     require 'versioneye/models/json_cache'
     require 'versioneye/models/language'
     require 'versioneye/models/language_daily_stats'

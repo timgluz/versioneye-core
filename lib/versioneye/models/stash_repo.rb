@@ -5,18 +5,19 @@ class StashRepo < Versioneye::Model
   field :stash_id     , type: String
   field :slug         , type: String
   field :name         , type: String
+  field :fullname     , type: String
   field :scmId        , type: String
   field :state        , type: String
   field :statusMessage, type: String
+  field :project_key  , type: String
   field :forkable     , type: Boolean
   field :public_repo  , type: Boolean
-  field :project_key  , type: Boolean
   field :branches     , type: Array
 
   belongs_to :user
 
-  index({ user_id: 1 }, { name: "user_id_index", background: true })
-  index({ name: 1 },    { name: "name_index"   , background: true })
+  index({ user_id: 1 },  { name: "user_id_index", background: true })
+  index({ fullname: 1 }, { name: "fullname_index", background: true })
 
   scope :by_user, ->(user){where(user_id: user._id)}
 
@@ -25,17 +26,20 @@ class StashRepo < Versioneye::Model
     return nil if repo_data.nil? || repo_data.empty? || user.nil?
 
     repo_data = repo_data.deep_symbolize_keys
+    project_key = repo_data[:project][:key]
+    fullname = "#{project_key}/#{repo_data[:name]}"
 
     repo = StashRepo.find_or_create_by(:user_id => user._id.to_s, :stash_id => repo_data[:id])
     repo.update_attributes!({
       slug: repo_data[:slug],
       name: repo_data[:name],
+      fullname: fullname,
       scmId: repo_data[:scmId],
       state: repo_data[:state],
       statusMessage: repo_data[:statusMessage],
       forkable: repo_data[:forkable],
-      public_repo:, repo_data[:public],
-      project_key:, repo_data[:project][:key]
+      public_repo: repo_data[:public],
+      project_key: project_key
     })
     repo
   rescue => e

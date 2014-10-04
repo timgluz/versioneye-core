@@ -17,7 +17,7 @@ class GitReposImportWorker < Worker
         puts msg
         log.info msg
 
-        import_all_repos msg
+        import_all_repos body
 
         channel.ack(delivery_info.delivery_tag)
       end
@@ -36,6 +36,10 @@ class GitReposImportWorker < Worker
       user_id = msg.split(":::").last
       user = User.find user_id
 
+      log_msg = "going to import repos for #{user.username} from provider #{provider}"
+      log.info log_msg
+      p log_msg
+
       if provider.eql?("stash")
         import_stash_repos user
       end
@@ -46,12 +50,18 @@ class GitReposImportWorker < Worker
       return nil if user.nil?
 
       user_task_key = "#{user[:username]}-stash"
-      log.info "Fetch Repositories for #{user_task_key} from Stash and cache them in DB."
 
-      cache.set( user_task_key, BitbucketService::A_TASK_RUNNING, BitbucketService::A_TASK_TTL )
-      BitbucketService.cache_user_all_repos( user )
-      cache.set( user_task_key, BitbucketService::A_TASK_DONE, BitbucketService::A_TASK_TTL )
-      log.info "Job done for #{user_task_key}"
+      log_msg = "Fetch Repositories for #{user_task_key} from Stash and cache them in DB."
+      log.info log_msg
+      p log_msg
+
+      cache.set( user_task_key, StashService::A_TASK_RUNNING, StashService::A_TASK_TTL )
+      StashService.cache_user_all_repos( user )
+      cache.set( user_task_key, StashService::A_TASK_DONE, StashService::A_TASK_TTL )
+
+      log_msg = "Job done for #{user_task_key}"
+      log.info log_msg
+      p log_msg
     rescue => e
       log.error e.message
       log.error e.backtrace.join("\n")

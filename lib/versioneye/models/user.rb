@@ -62,6 +62,7 @@ class User < Versioneye::Model
   has_many   :projects
   has_many   :github_repos
   has_many   :bitbucket_repos
+  has_many   :stash_repos
 
   has_and_belongs_to_many :products
   # *** RELATIONS END ***
@@ -249,6 +250,10 @@ class User < Versioneye::Model
 
   def bitbucket_account_connected?
     !self.bitbucket_id.to_s.empty? && !self.bitbucket_token.to_s.empty?
+  end
+
+  def stash_account_connected?
+    !self.stash_slug.to_s.empty? && !self.stash_token.to_s.empty?
   end
 
 
