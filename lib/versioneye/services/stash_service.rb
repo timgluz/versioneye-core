@@ -99,7 +99,7 @@ class StashService < Versioneye::Service
       type = ProjectService.type_by_filename file
       next if type.to_s.empty?
 
-      supported << file
+      supported << {"path" => file}
     end
     supported
   end

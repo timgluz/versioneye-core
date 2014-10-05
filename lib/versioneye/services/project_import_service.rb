@@ -90,6 +90,48 @@ class ProjectImportService < Versioneye::Service
   end
 
 
+=begin
+  This methods is
+   - Importing a project_file from Stash
+   - Parsing the project_file to a new project
+   - Storing the new project to DB
+=end
+  def self.import_from_stash(user, repo_name, filename, branch = "master")
+    repo = StashRepo.by_user(user).by_fullname(repo_name).shift
+    private_project = !repo[:public_repo]
+    unless allowed_to_add_project?(user, private_project)
+      return "Please upgrade your plan to monitor the selected project."
+    end
+
+    project_file = fetch_file_from_stash(user, repo, filename, branch)
+    if project_file.nil? || project_file.empty? || project_file == "error" || project_file.eql?("Not Found")
+      log.error " Can't import project file `#{filename}` from #{repo_name} branch #{branch} "
+      return " Didn't find any project file of a supported package manager."
+    end
+
+    content = pure_text_from project_file
+    project_type = ProjectService.type_by_filename filename
+    file_name = filename.split("/").last
+    parser  = ProjectParseService.parser_for file_name
+    project = ProjectParseService.parse_content parser, content, file_name
+
+    project.update_attributes({
+      name: repo_name,
+      project_type: project_type,
+      user_id: user.id.to_s,
+      source: Project::A_SOURCE_STASH,
+      scm_fullname: repo_name,
+      scm_branch: branch,
+      private_project: private_project,
+      s3_filename: filename,
+      url: nil
+    })
+
+    return project if ProjectService.store( project )
+    return nil
+  end
+
+
   def self.import_from_url( url, project_name, user )
     project = build_from_url( url )
     return nil if project.nil?
@@ -132,8 +174,8 @@ class ProjectImportService < Versioneye::Service
 
 
     def self.allowed_to_add_project?( user, private_project )
-      return true if !private_project
       return true if Settings.instance.projects_unlimited
+      return true if !private_project
 
       private_project_count = Project.private_project_count_by_user( user.id )
       max = user.free_private_projects
@@ -153,6 +195,26 @@ class ProjectImportService < Versioneye::Service
       log.error "Error in build_from_url( #{url} ) -> #{e.message}"
       log.error e.backtrace.join("\n")
       nil
+    end
+
+
+    def self.fetch_file_from_stash(user, repo, filename, branch)
+      token = user.stash_token
+      secret = user.stash_secret
+      project_key = repo.project_key
+      slug = repo.slug
+      revision = "refs/heads/#{branch}"
+      Stash.content(project_key, slug, filename, revision, token, secret)
+    end
+
+
+    def self.pure_text_from project_file
+      content = ""
+      project_file[:lines].each do |line|
+        content += line[:text]
+        content += "\n"
+      end
+      content
     end
 
 
