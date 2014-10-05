@@ -318,6 +318,12 @@ describe User do
       user.should_not be_nil
       user.id.eql?(github_user.id).should be_truthy
     end
+    it "does authenticate" do
+      github_user
+      user = User.authenticate("hans_tanz", "password")
+      user.should_not be_nil
+      user.id.eql?(github_user.id).should be_truthy
+    end
   end
 
   describe "authenticate_with_salt" do

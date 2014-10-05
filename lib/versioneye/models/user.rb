@@ -188,15 +188,15 @@ class User < Versioneye::Model
 
   def self.find_by_username( username )
     return nil if username.nil? || username.strip.empty?
-    User.where( username: /\A#{username}\z/i ).shift
+    user = User.where( username: username ).shift
+    user = User.where( username: /\A#{username}\z/i ).shift if user.nil?
+    user
   end
 
   def self.find_by_email(email)
-    return nil if email.nil? || email.strip.empty?
-    user = User.where(email: email).shift
-    if user.nil?
-      user = User.where(email: /\A#{email}\z/i).shift
-    end
+    return nil if email.to_s.strip.empty?
+    user = User.where(email: email.downcase).shift  if user.nil?
+    user = User.where(email: /\A#{email}\z/i).shift if user.nil?
     user
   end
 
@@ -270,7 +270,8 @@ class User < Versioneye::Model
   end
 
   def self.authenticate(email, submitted_password)
-    user = User.where( email: email.downcase ).shift
+    user = User.find_by_email( email )
+    user = User.find_by_username( email ) if user.nil?
     return nil  if user.nil? || user.deleted
     return user if user.has_password?(submitted_password)
     return nil
