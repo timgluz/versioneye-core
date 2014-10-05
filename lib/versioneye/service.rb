@@ -6,6 +6,7 @@ module Versioneye
 
     require 'versioneye/services/analytics_service'
     require 'versioneye/services/bitbucket_service'
+    require 'versioneye/services/stash_service'
     require 'versioneye/services/circle_element_service'
     require 'versioneye/services/dependency_service'
     require 'versioneye/services/git_hub_service'
@@ -30,6 +31,7 @@ module Versioneye
     require 'versioneye/services/license_service'
 
     require 'versioneye/services_ext/bitbucket'
+    require 'versioneye/services_ext/stash'
     require 'versioneye/services_ext/es_product'
     require 'versioneye/services_ext/es_user'
     require 'versioneye/services_ext/github'
@@ -79,6 +81,8 @@ module Versioneye
     require 'versioneye/producers/github_repos_import_producer.rb'
     require 'versioneye/producers/bitbucket_repos_import_producer.rb'
     require 'versioneye/producers/bitbucket_repo_import_producer.rb'
+    require 'versioneye/producers/git_repos_import_producer.rb'
+    require 'versioneye/producers/git_repo_import_producer.rb'
     require 'versioneye/producers/language_daily_stats_producer.rb'
     require 'versioneye/producers/project_update_producer.rb'
     require 'versioneye/producers/update_meta_data_producer.rb'
@@ -94,6 +98,8 @@ module Versioneye
     require 'versioneye/workers/github_repos_import_worker.rb'
     require 'versioneye/workers/bitbucket_repos_import_worker.rb'
     require 'versioneye/workers/bitbucket_repo_import_worker.rb'
+    require 'versioneye/workers/git_repos_import_worker.rb'
+    require 'versioneye/workers/git_repo_import_worker.rb'
     require 'versioneye/workers/language_daily_stats_worker.rb'
     require 'versioneye/workers/project_update_worker.rb'
     require 'versioneye/workers/update_meta_data_worker.rb'

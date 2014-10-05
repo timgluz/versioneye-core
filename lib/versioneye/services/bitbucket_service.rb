@@ -49,13 +49,12 @@ class BitbucketService < Versioneye::Service
 
 
   def self.status_for user, current_repo
-    repo_fullname = current_repo.fullname
     return A_TASK_DONE if current_repo.nil?
 
     repo_task_key = "#{user.id.to_s}:::#{current_repo.id.to_s}"
     task_status   = cache.get( repo_task_key )
-
     if task_status == A_TASK_RUNNING
+      repo_fullname = current_repo.fullname
       log.debug "We are still importing branches and project files for `#{repo_fullname}.`"
       return task_status
     end

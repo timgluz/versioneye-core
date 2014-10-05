@@ -18,8 +18,8 @@ class Bitbucket < Versioneye::Service
     OAuth::Consumer.new(Settings.instance.bitbucket_token, Settings.instance.bitbucket_secret,
                        site: A_API_URL,
                        request_token_path: "/api/1.0/oauth/request_token",
-                       authorize_path: "/api/1.0/oauth/authenticate",
-                       access_token_url: "/api/1.0/oauth/access_token")
+                       access_token_url: "/api/1.0/oauth/access_token",
+                       authorize_path: "/api/1.0/oauth/authenticate")
   end
 
 
@@ -158,6 +158,10 @@ class Bitbucket < Versioneye::Service
       log.error "Got status: #{response.code} #{response.message} body: #{response.body}"
       log.error e.backtrace.join("\n")
     end
+  rescue => e
+    log.error "Fuck up in get_json"
+    log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
 

@@ -3,7 +3,8 @@ class Producer
   require 'bunny'
 
   def get_connection
-    Bunny.new("amqp://#{Settings.instance.rabbitmq_addr}:#{Settings.instance.rabbitmq_port}")
+    connection_url = "amqp://#{Settings.instance.rabbitmq_addr}:#{Settings.instance.rabbitmq_port}"
+    Bunny.new( connection_url )
   end
 
   def self.log

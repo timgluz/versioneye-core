@@ -1,3 +1,5 @@
+
+# TODO remove this class
 class GithubRepoImportWorker < Worker
 
   A_TASK_TTL = 180 # 180 seconds = 3 minutes
@@ -20,6 +22,7 @@ class GithubRepoImportWorker < Worker
 
         handle body
         cache.set( body, GitHubService::A_TASK_DONE, A_TASK_TTL )
+
         channel.ack(delivery_info.delivery_tag)
       end
     rescue => e
