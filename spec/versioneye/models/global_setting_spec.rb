@@ -32,7 +32,7 @@ describe GlobalSetting do
       described_class.set('test', 'SERVER_URL', 'http://localhost:8080').should be_truthy
       GlobalSetting.count.should == 1
       described_class.set('test', 'SERVER_URL', nil).should be_truthy
-      GlobalSetting.count.should == 0
+      GlobalSetting.count.should == 1
     end
 
   end
