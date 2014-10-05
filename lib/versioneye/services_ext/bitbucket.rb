@@ -3,7 +3,6 @@ require 'oauth'
 class Bitbucket < Versioneye::Service
 
 
-  A_API_URL = "https://bitbucket.org"
   A_API_V2_PATH = "/api/2.0"
   A_API_V1_PATH = "/api/1.0"
   A_DEFAULT_HEADERS = {"User-Agent" => "Chrome28 (contact@versioneye.com)"}
@@ -16,7 +15,7 @@ class Bitbucket < Versioneye::Service
 
   def self.init_oauth_client
     OAuth::Consumer.new(Settings.instance.bitbucket_token, Settings.instance.bitbucket_secret,
-                       site: A_API_URL,
+                       site: Settings.instance.bitbucket_base_url,
                        request_token_path: "/api/1.0/oauth/request_token",
                        access_token_url: "/api/1.0/oauth/access_token",
                        authorize_path: "/api/1.0/oauth/authenticate")
@@ -139,7 +138,7 @@ class Bitbucket < Versioneye::Service
 
 
   def self.get_json(path, token, secret, raw = false, params = {}, headers = {})
-    url = "#{A_API_URL}#{path}"
+    url = "#{Settings.instance.bitbucket_base_url}#{path}"
     oauth = init_oauth_client
     token = OAuth::AccessToken.new(oauth, token, secret)
     oauth_params = {consumer: oauth, token: token, request_uri: url}
