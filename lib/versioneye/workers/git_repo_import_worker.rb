@@ -49,7 +49,7 @@ class GitRepoImportWorker < Worker
       elsif provider.eql?("github")
         update_github_repo( user, repo_id )
       elsif provider.eql?("bitbucket")
-
+        update_bitbucket_repo( user, repo_id )
       end
     rescue => e
       log.error e.message
@@ -68,6 +68,26 @@ class GitRepoImportWorker < Worker
       name = repo[:fullname]
 
       log_msg = "Reading Stash / `#{name}` took: #{time}"
+      puts log_msg
+      log.info log_msg
+    rescue => e
+      log.error e.message
+      log.error e.backtrace.join("\n")
+    end
+
+
+    def update_bitbucket_repo user, repo_id
+      repo = BitbucketRepo.find repo_id
+      time = Benchmark.measure do
+        repo = Bitbucket.update_branches      repo, user.bitbucket_token, user.bitbucket_secret
+        repo = Bitbucket.update_project_files repo, user.bitbucket_token, user.bitbucket_secret
+        repo.user_id = user.id
+        repo.save
+      end
+      name = repo[:full_name]
+      name = repo[:fullname] if name.to_s.empty?
+
+      log_msg = "Reading `#{name}` took: #{time}"
       puts log_msg
       log.info log_msg
     rescue => e

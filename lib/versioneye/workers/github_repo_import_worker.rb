@@ -1,3 +1,5 @@
+
+# TODO remove this class
 class GithubRepoImportWorker < Worker
 
   A_TASK_TTL = 180 # 180 seconds = 3 minutes
