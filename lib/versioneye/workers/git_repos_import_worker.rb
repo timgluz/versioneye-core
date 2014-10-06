@@ -41,10 +41,17 @@ class GitReposImportWorker < Worker
       p log_msg
 
       if provider.eql?("stash")
-        import_stash_repos user
+        import_stash_repos( user )
+      elsif provider.eql?("github")
+        import_github_repos( user )
+      elsif provider.eql?("bitbucket")
+        import_bitbucket_repos( user )
       end
-
+    rescue => e
+      log.error e.message
+      log.error e.backtrace.join("\n")
     end
+
 
     def import_stash_repos user
       return nil if user.nil?
@@ -62,6 +69,48 @@ class GitReposImportWorker < Worker
       log_msg = "Job done for #{user_task_key}"
       log.info log_msg
       p log_msg
+    rescue => e
+      log.error e.message
+      log.error e.backtrace.join("\n")
+    end
+
+
+    def import_github_repos user
+      return nil if user.nil?
+
+      user_task_key = "#{user[:username]}-#{user[:github_id]}"
+      log.info "Fetch Repositories for #{user_task_key} from GitHub and cache them in DB."
+
+      n_repos    = Github.count_user_repos user # Repos without Orgas
+      orga_names = Github.orga_names(user.github_token)
+
+      if n_repos == 0 && orga_names.empty?
+        msg = "User #{user.username} has no repositories;"
+        puts msg
+        log.info msg
+        cache.set( user_task_key, GitHubService::A_TASK_DONE, GitHubService::A_TASK_TTL )
+        return
+      end
+
+      cache.set( user_task_key, GitHubService::A_TASK_RUNNING, GitHubService::A_TASK_TTL )
+      GitHubService.cache_user_all_repos(user, orga_names)
+      cache.set( user_task_key, GitHubService::A_TASK_DONE, GitHubService::A_TASK_TTL )
+    rescue => e
+      log.error e.message
+      log.error e.backtrace.join("\n")
+    end
+
+
+    def import_bitbucket_repos user
+      return nil if user.nil?
+
+      user_task_key = "#{user[:username]}-bitbucket"
+      log.info "Fetch Repositories for #{user_task_key} from Bitbucket and cache them in DB."
+
+      cache.set( user_task_key, BitbucketService::A_TASK_RUNNING, BitbucketService::A_TASK_TTL )
+      BitbucketService.cache_user_all_repos( user )
+      cache.set( user_task_key, BitbucketService::A_TASK_DONE, BitbucketService::A_TASK_TTL )
+      log.info "Job done for #{user_task_key}"
     rescue => e
       log.error e.message
       log.error e.backtrace.join("\n")

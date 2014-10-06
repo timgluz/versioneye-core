@@ -48,7 +48,7 @@ class GitHubService < Versioneye::Service
     if user[:github_token] and user.github_repos.all.count == 0
       task_status = A_TASK_RUNNING
       cache.set( user_task_key, task_status, A_TASK_TTL )
-      GithubReposImportProducer.new("#{user.id.to_s}")
+      GitReposImportProducer.new("github:::#{user.id.to_s}")
     else
       log.info 'Nothing is changed - skipping update.'
       task_status = A_TASK_DONE
@@ -62,7 +62,7 @@ class GitHubService < Versioneye::Service
     repo_fullname = current_repo.fullname
     return A_TASK_DONE if current_repo.nil?
 
-    repo_task_key = "#{user.id.to_s}:::#{current_repo.id.to_s}"
+    repo_task_key = "github:::#{user.id.to_s}:::#{current_repo.id.to_s}"
     task_status   = cache.get( repo_task_key )
 
     if task_status == A_TASK_RUNNING
@@ -73,7 +73,7 @@ class GitHubService < Versioneye::Service
     if current_repo and ( current_repo.branches.nil? || current_repo.branches.empty? )
       task_status = A_TASK_RUNNING
       cache.set( repo_task_key, task_status, A_TASK_TTL )
-      GithubRepoImportProducer.new( repo_task_key )
+      GitRepoImportProducer.new( repo_task_key )
     else
       log.info 'Nothing is changed - skipping update.'
       task_status = A_TASK_DONE

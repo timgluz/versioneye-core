@@ -77,10 +77,6 @@ module Versioneye
     require 'versioneye/updaters/url_updater'
 
     require 'versioneye/producers/producer.rb'
-    require 'versioneye/producers/github_repo_import_producer.rb'
-    require 'versioneye/producers/github_repos_import_producer.rb'
-    require 'versioneye/producers/bitbucket_repos_import_producer.rb'
-    require 'versioneye/producers/bitbucket_repo_import_producer.rb'
     require 'versioneye/producers/git_repos_import_producer.rb'
     require 'versioneye/producers/git_repo_import_producer.rb'
     require 'versioneye/producers/language_daily_stats_producer.rb'
@@ -94,10 +90,6 @@ module Versioneye
     require 'versioneye/producers/common_crawl_producer.rb'
 
     require 'versioneye/workers/worker.rb'
-    require 'versioneye/workers/github_repo_import_worker.rb'
-    require 'versioneye/workers/github_repos_import_worker.rb'
-    require 'versioneye/workers/bitbucket_repos_import_worker.rb'
-    require 'versioneye/workers/bitbucket_repo_import_worker.rb'
     require 'versioneye/workers/git_repos_import_worker.rb'
     require 'versioneye/workers/git_repo_import_worker.rb'
     require 'versioneye/workers/language_daily_stats_worker.rb'
