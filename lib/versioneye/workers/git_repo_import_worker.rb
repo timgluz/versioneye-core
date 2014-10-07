@@ -38,6 +38,7 @@ class GitRepoImportWorker < Worker
 
 
     def handle message
+      reload_settings()
       sps = message.split(":::")
       provider = sps[0]
       user_id = sps[1]

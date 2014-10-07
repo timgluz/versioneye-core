@@ -21,7 +21,7 @@ class BitbucketService < Versioneye::Service
 
     repo = Bitbucket.update_branches      current_repo, token, secret
     repo = Bitbucket.update_project_files current_repo, token, secret
-
+    repo.save
     repo
   end
 
@@ -60,9 +60,9 @@ class BitbucketService < Versioneye::Service
     end
 
     if current_repo and ( current_repo.branches.nil? || current_repo.branches.empty? )
+      GitRepoImportProducer.new( repo_task_key )
       task_status = A_TASK_RUNNING
       cache.set( repo_task_key, task_status, A_TASK_TTL )
-      GitRepoImportProducer.new( repo_task_key )
     else
       log.info 'Nothing is changed - skipping update.'
       task_status = A_TASK_DONE

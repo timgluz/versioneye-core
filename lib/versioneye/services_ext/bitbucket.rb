@@ -98,9 +98,10 @@ class Bitbucket < Versioneye::Service
   def self.repo_project_files(repo_name, token, secret)
     branches = repo_branches(repo_name, token, secret)
     return if branches.to_a.empty?
+
     files = {}
     branches.each do |branch|
-      files[branch] =  project_files_from_branch(repo_name, branch, token, secret)
+      files[branch] = project_files_from_branch(repo_name, branch, token, secret)
     end
     files
   end
@@ -124,7 +125,6 @@ class Bitbucket < Versioneye::Service
     end
     project_files.each {|file| file[:uuid] = SecureRandom.hex }
     project_files
-
   rescue => e
     log.error e.message
     log.error e.backtrace.join('/n')
@@ -194,6 +194,7 @@ class Bitbucket < Versioneye::Service
     try_n.times do
       project_files = Bitbucket.repo_project_files( fullname, token, secret )
       break unless project_files.nil? or project_files.empty?
+
       log.info "Trying to read `#{fullname}` again"
       sleep 3
     end

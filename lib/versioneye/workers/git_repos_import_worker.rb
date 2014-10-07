@@ -32,6 +32,7 @@ class GitReposImportWorker < Worker
   private
 
     def import_all_repos msg
+      reload_settings()
       provider = msg.split(":::").first
       user_id = msg.split(":::").last
       user = User.find user_id

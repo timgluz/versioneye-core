@@ -22,4 +22,13 @@ class Worker
     Versioneye::Cache.instance.mc
   end
 
+  private
+
+    def reload_settings
+      Settings.instance.reload_from_db GlobalSetting.new
+    rescue => e
+      log.error e.message
+      log.error e.backtrace.join("\n")
+    end
+
 end
