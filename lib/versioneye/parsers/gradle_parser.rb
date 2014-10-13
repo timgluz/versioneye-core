@@ -12,7 +12,7 @@ class GradleParser < CommonParser
 
   # ('\S+\:\S+\:\S+\')
   # Matches this 'junit:junit-dep:4.0.0'
-  A_DEP_SIMPLE_MATCHER = /(["|']\S+\:\S+\:\S+["|'])/xi
+  A_DEP_SIMPLE_MATCHER = /["|'](\S+\:\S+\:\S+)["|']/xi
 
 
   # (\w+) [\s|\(]?[\'|\"]+  ([\w|\d|\.|\-|\_]+)  :([\w|\d|\.|\-|_]+)  :([$\w|\d|\.|\-|_]+)
@@ -74,6 +74,7 @@ class GradleParser < CommonParser
     return nil if content.nil?
 
     content = content.gsub(/\/\/.*$/, "") # remove comments
+    content = content.gsub(/.*classpath.*$/, "")
 
     vars = extract_vars content
 
