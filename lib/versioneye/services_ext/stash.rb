@@ -2,7 +2,6 @@ require 'oauth'
 
 class Stash < Versioneye::Service
 
-  A_API_URL = "http://localhost:7990"
   A_API_V1_PATH = "/rest/api/1.0"
   A_DEFAULT_HEADERS = {"User-Agent" => "Chrome28 (contact@versioneye.com)"}
 
@@ -18,7 +17,7 @@ class Stash < Versioneye::Service
       consumer_key,
       OpenSSL::PKey::RSA.new( private_rsa_key ),
       {
-      :site => A_API_URL,
+      :site => Settings.instance.stash_base_url,
       :signature_method => 'RSA-SHA1',
       :scheme => :header,
       :http_method => :post,
@@ -118,7 +117,7 @@ class Stash < Versioneye::Service
 
 
   def self.get_json(path, token, secret, raw = false, params = {}, headers = {})
-    url = "#{A_API_URL}#{path}"
+    url = "#{Settings.instance.stash_base_url}#{path}"
     oauth = init_oauth_client
     token = OAuth::AccessToken.new(oauth, token, secret)
     oauth_params = {consumer: oauth, token: token, request_uri: url}
