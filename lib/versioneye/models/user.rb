@@ -333,12 +333,10 @@ class User < Versioneye::Model
     if self.username.nil? || self.username.empty?
       self.username = create_random_value
     end
-    user = User.find_by_username(self.username)
-    unless user.nil?
-      random_value = create_random_value
-      self.username = "#{self.username}_#{random_value}"
-    end
+
     self.username = replacements_for_username( self.username )
+    User.ensure_unique_username( self )
+
     if self.fullname.nil? || self.fullname.empty?
       self.fullname = self.username
     end
@@ -351,11 +349,8 @@ class User < Versioneye::Model
       self.username = "unknown_#{SecureRandom.hex(8)}"
     end
 
-    user = User.find_by_username(self[:username])
-    unless user.nil?
-      random_value = SecureRandom.hex(8)
-      self.username = "#{self[:username]}_#{random_value}"
-    end
+    self.username = replacements_for_username( self.username )
+    User.ensure_unique_username( self )
 
     self[:fullname]         = user_info[:display_name]
     self[:bitbucket_id]     = user_info[:username]
@@ -365,9 +360,20 @@ class User < Versioneye::Model
     self[:bitbucket_scope]  = scopes
   end
 
+  def self.ensure_unique_username user
+    user_db = User.find_by_username( user.username )
+    unless user_db.nil?
+      random_value = create_random_value
+      user.username = "#{user.username}_#{random_value}"
+    end
+    user
+  end
+
   def replacements_for_username( username )
+    username = username.gsub(" ", "")
     username = username.gsub(".", "")
     username = username.gsub("-", "")
+    username = username.gsub("@", "")
     username.gsub("_", "")
   end
 
