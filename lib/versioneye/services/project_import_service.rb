@@ -40,8 +40,7 @@ class ProjectImportService < Versioneye::Service
       url: project_file[:url]
     })
 
-    return project if ProjectService.store( project )
-    return nil
+    ProjectService.store( project )
   end
 
 
@@ -85,8 +84,7 @@ class ProjectImportService < Versioneye::Service
       url: nil
     })
 
-    return project if ProjectService.store( project )
-    return nil
+    ProjectService.store( project )
   end
 
 
@@ -127,8 +125,7 @@ class ProjectImportService < Versioneye::Service
       url: nil
     })
 
-    return project if ProjectService.store( project )
-    return nil
+    ProjectService.store( project )
   end
 
 
@@ -147,8 +144,7 @@ class ProjectImportService < Versioneye::Service
       url: url
     })
 
-    return project if ProjectService.store( project )
-    return nil
+    ProjectService.store( project )
   end
 
 
@@ -165,8 +161,7 @@ class ProjectImportService < Versioneye::Service
     project.user        = user
     project.api_created = api_created
 
-    return project if ProjectService.store( project )
-    return nil
+    ProjectService.store( project )
   end
 
 

@@ -20,19 +20,23 @@ describe User do
   describe "replacements_for_username" do
     it "replaces @ characters with empty" do
       github_user.username = "hans@tanz"
-      github_user.replacements_for_username( github_user.username ).should eql("hanstanz")
+      github_user.cleanup_username
+      github_user.username.should eql("hanstanz")
     end
     it "replaces white space characters with empty" do
       github_user.username = "hans@tanz de"
-      github_user.replacements_for_username( github_user.username ).should eql("hanstanzde")
+      github_user.cleanup_username
+      github_user.username.should eql("hanstanzde")
     end
     it "replaces . characters with empty" do
       github_user.username = "hans@tanz.de"
-      github_user.replacements_for_username( github_user.username ).should eql("hanstanzde")
+      github_user.cleanup_username
+      github_user.username.should eql("hanstanzde")
     end
     it "replaces - characters with empty" do
       github_user.username = "t-hans@tanz.de"
-      github_user.replacements_for_username( github_user.username ).should eql("thanstanzde")
+      github_user.cleanup_username
+      github_user.username.should eql("thanstanzde")
     end
   end
 

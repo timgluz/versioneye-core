@@ -175,8 +175,7 @@ describe ProjectService do
       Project.count.should == 0
       Projectdependency.count.should == 0
 
-      resp =described_class.store project
-      resp.should be_falsey
+      expect { described_class.store(project) }.to raise_exception
 
       Product.count.should == 0
       Project.count.should == 0

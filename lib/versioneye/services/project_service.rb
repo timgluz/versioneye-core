@@ -27,16 +27,21 @@ class ProjectService < Versioneye::Service
 
 
   def self.store project
-    return false if project.nil?
+    raise "project is nil." if project.nil?
 
     project.make_project_key!
-    if project.dependencies && !project.dependencies.empty? && project.save
-      project.save_dependencies
-      return true
-    else
-      log.error "Can't save project: #{project.errors.full_messages.to_json}"
-      return false
+    if project.dependencies.nil? || project.dependencies.empty?
+      raise "Could not find a single dependency in the project."
     end
+
+    if project.save
+      project.save_dependencies
+    else
+      err_msg = "Can't save project: #{project.errors.full_messages.to_json}"
+      log.error err_msg
+      raise err_msg
+    end
+    project
   end
 
 

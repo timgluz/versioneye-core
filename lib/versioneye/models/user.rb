@@ -324,57 +324,79 @@ class User < Versioneye::Model
   end
 
   def update_from_github_json(json_user, token)
-    self.fullname     = json_user['name']
-    self.username     = json_user['login']
+    self.username = json_user['login']
+    if self.username.to_s.empty?
+      self.username = create_random_value
+    end
+    self.cleanup_username
+    self.ensure_unique_username
+
+    self.fullname = json_user['name']
+    if self.fullname.to_s.empty?
+      self.fullname = self.username
+    end
+
     self.github_id    = json_user['id']
     self.github_login = json_user['login']
     self.github_token = token
     self.password     = create_random_value
-    if self.username.nil? || self.username.empty?
-      self.username = create_random_value
-    end
-
-    self.username = replacements_for_username( self.username )
-    User.ensure_unique_username( self )
-
-    if self.fullname.nil? || self.fullname.empty?
-      self.fullname = self.username
-    end
   end
 
   def update_from_bitbucket_json(user_info, token, secret, scopes = "read_write")
     self[:username] = user_info[:username]
+    if self.username.to_s.empty?
+      self.username = create_random_value
+    end
+    self.cleanup_username
+    self.ensure_unique_username
 
-    if self[:username].to_s.empty?
-      self.username = "unknown_#{SecureRandom.hex(8)}"
+    self[:fullname] = user_info[:display_name]
+    if self.fullname.to_s.empty?
+      self.fullname = self.username
     end
 
-    self.username = replacements_for_username( self.username )
-    User.ensure_unique_username( self )
-
-    self[:fullname]         = user_info[:display_name]
-    self[:bitbucket_id]     = user_info[:username]
-    self[:bitbucket_login]  = user_info[:username]
-    self[:bitbucket_token]  = token
-    self[:bitbucket_secret] = secret
-    self[:bitbucket_scope]  = scopes
+    self.bitbucket_id     = user_info[:username]
+    self.bitbucket_login  = user_info[:username]
+    self.bitbucket_token  = token
+    self.bitbucket_secret = secret
+    self.bitbucket_scope  = scopes
   end
 
-  def self.ensure_unique_username user
-    user_db = User.find_by_username( user.username )
+  def update_from_stash_json( user_info, token, secret )
+    self.username = user_info[:slug]
+    if self.username.to_s.empty?
+      self.username = create_random_value
+    end
+    self.cleanup_username
+    self.ensure_unique_username
+
+    self.fullname = user_info[:name]
+    if self.fullname.to_s.empty?
+      self.fullname = self.username
+    end
+
+    self.stash_slug = user_info[:slug]
+    self.email = user_info[:emailAddress]
+    self.stash_token = token
+    self.stash_secret = secret
+    self.terms = true
+    self.datenerhebung = true
+  end
+
+  def ensure_unique_username
+    user_db = User.find_by_username( self.username )
     unless user_db.nil?
       random_value = create_random_value
-      user.username = "#{user.username}_#{random_value}"
+      self.username = "#{self.username}_#{random_value}"
     end
-    user
   end
 
-  def replacements_for_username( username )
-    username = username.gsub(" ", "")
-    username = username.gsub(".", "")
-    username = username.gsub("-", "")
-    username = username.gsub("@", "")
-    username.gsub("_", "")
+  def cleanup_username
+    self.username = self.username.gsub(" ", "")
+    self.username = self.username.gsub(".", "")
+    self.username = self.username.gsub("-", "")
+    self.username = self.username.gsub("@", "")
+    self.username.gsub("_", "")
   end
 
   def fetch_or_create_billing_address
