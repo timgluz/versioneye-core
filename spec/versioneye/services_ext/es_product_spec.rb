@@ -97,6 +97,19 @@ describe EsProduct do
     end
   end
 
+  context "bulk index. After indexing all reindex is false." do
+    it "bulk_index_all" do
+      EsProduct.clean_all
+      @products.each do |product|
+        product.update_attribute(:reindex, true)
+      end
+      EsProduct.index_all
+      get_index_count.should equal @products.count
+
+      Product.where(reindex: true).count.should eql(0)
+    end
+  end
+
   context " - index all documents in `products` collection" do
     it "index_all" do
       EsProduct.clean_all

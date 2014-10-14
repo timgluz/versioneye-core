@@ -86,6 +86,7 @@ class EsProduct < Versioneye::Service
     Tire.index Settings.instance.elasticsearch_product_index do
       json_product = products.map{|product| product.to_indexed_json}
       import json_product
+      products.map{|product| product.update_attribute(:reindex, false) }
     end
   end
 
