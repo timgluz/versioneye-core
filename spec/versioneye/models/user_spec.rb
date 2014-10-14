@@ -36,6 +36,23 @@ describe User do
     end
   end
 
+  describe "update_from_bitbucket_json" do
+    it "update_from_bitbucket_json" do
+      bitbucket_user = {}
+      bitbucket_user[:username] = "supi@ha.de"
+      bitbucket_user[:display_name] = "Super Hans"
+
+      user = User.new
+      user.update_from_bitbucket_json bitbucket_user, "token", "secret"
+      user.username.should eq("supihade")
+      user.fullname.should eq("Super Hans")
+      user.bitbucket_id.should eq("supi@ha.de")
+      user.bitbucket_login.should eq("supi@ha.de")
+      user.bitbucket_token.should eq("token")
+      user.bitbucket_secret.should eq("secret")
+    end
+  end
+
   describe "create_verification" do
     it "generates a verification string" do
       github_user.verification.should be_nil

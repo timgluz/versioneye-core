@@ -188,14 +188,20 @@ class Project < Versioneye::Model
   end
 
   def make_project_key!
-    self.project_key = make_project_key unless self.project_key
+    if self.project_key.to_s.empty?
+      self.project_key = make_project_key
+    end
   end
 
   def make_project_key
     return Project.create_random_value() if self.user.nil?
+
     project_nr = 1
     project_key_text = "#{self.project_type}_#{self.name}".downcase
     project_key_text.gsub!(/[\s|\W|\_]+/, "_")
+    if project_key_text.to_s.empty?
+      project_key_text = Project.create_random_value()
+    end
 
     similar_projects = Project.by_user(self.user).where(
                         project_key: Regexp.new("#{project_key_text}"),
@@ -203,6 +209,10 @@ class Project < Versioneye::Model
                       )
     project_nr += similar_projects.count unless similar_projects.nil?
     "#{project_key_text}_#{project_nr}"
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    Project.create_random_value
   end
 
   def update_from new_project
