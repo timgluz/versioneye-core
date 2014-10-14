@@ -47,6 +47,9 @@ class VersioneyeCore
 
   def init_stripe
     puts " - initialize Stripe"
+    env = Settings.instance.environment
+    return nil if env.to_s.eql?("enterprise")
+
     Stripe.api_key = Settings.instance.stripe_secret_key
   rescue => e
     log.error e.message
@@ -55,6 +58,9 @@ class VersioneyeCore
 
   def init_s3
     puts " - initialize Amazon S3"
+    env = Settings.instance.environment
+    return nil if env.to_s.eql?("enterprise")
+
     S3.set_aws_crendentials
   rescue => e
     log.error e.message
