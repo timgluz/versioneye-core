@@ -227,6 +227,12 @@ class Product < Versioneye::Model
 
   ########## ELSE #############
 
+  def released_string
+    ver = version_by_number version
+    return ver.released_string if ver
+    ""
+  end
+
   def description_summary
     if description && description_manual
       "#{description} \n \n #{description_manual}"

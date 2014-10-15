@@ -29,6 +29,7 @@ module Versioneye
     require 'versioneye/services/reference_service'
     require 'versioneye/services/language_service'
     require 'versioneye/services/license_service'
+    require 'versioneye/services/sync_service'
 
     require 'versioneye/services_ext/bitbucket'
     require 'versioneye/services_ext/stash'
@@ -75,6 +76,8 @@ module Versioneye
     require 'versioneye/updaters/github_updater'
     require 'versioneye/updaters/upload_updater'
     require 'versioneye/updaters/url_updater'
+
+    require 'versioneye/remote_api/product_client'
 
     require 'versioneye/producers/producer.rb'
     require 'versioneye/producers/git_repos_import_producer.rb'
