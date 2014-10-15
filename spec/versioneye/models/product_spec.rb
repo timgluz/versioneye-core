@@ -636,6 +636,24 @@ describe Product do
       link.remove
     end
 
+    it "returns 2 link2 for combined results" do
+      link = Versionlink.new({language: product.language, prod_key: product.prod_key})
+      link.link = "http://link1.de"
+      link.name = "Name1"
+      link.save
+
+      link2 = Versionlink.new({language: product.language, prod_key: product.prod_key})
+      link2.link = "http://link2.de"
+      link2.version_id = "1.1"
+      link2.name = "Name2"
+      link2.save
+
+      product.version = "1.1"
+      product.http_version_links_combined.size.should eq(2)
+      link.remove
+      link2.remove
+    end
+
   end
 
 

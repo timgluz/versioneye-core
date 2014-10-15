@@ -288,6 +288,10 @@ class Product < Versioneye::Model
     licenses
   end
 
+  def license_list
+    License.for_product self, false
+  end
+
   def developers
     Developer.find_by self.language, self.prod_key, version
   end
@@ -305,18 +309,33 @@ class Product < Versioneye::Model
     Dependency.find_by_lang_key_and_version( language, prod_key, version)
   end
 
+  # Returns the links which belong to the product and are not
+  # bounded to a specific verison of the product.
+  # For example link to project homepage.
   def http_links
     links = Versionlink.where(language: language, prod_key: self.prod_key, version_id: nil).asc(:name)
     get_http_links links
   end
 
+  # Returns the links which are bounded to a specific version
+  # of the product.
+  # For example link to an artifact or a migration path.
   def http_version_links
     links = Versionlink.where(language: language, prod_key: self.prod_key, version_id: self.version ).asc(:name)
     get_http_links links
   end
 
+  # Returns all links which are bounded to a specific version AND
+  # the product links which are not bounded to a specific version.
+  def http_version_links_combined
+    links_1 = http_links
+    links_2 = http_version_links
+    links_1 << links_2
+    links_1.flatten!
+  end
+
   def archives
-    downloads = Versionarchive.archives( self.language, self.prod_key, version.to_s )
+    downloads = Versionarchive.archives( self.language, self.prod_key, self.version.to_s )
   end
 
   def self.unique_languages_for_product_ids(product_ids)
