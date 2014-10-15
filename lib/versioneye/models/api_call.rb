@@ -6,7 +6,7 @@ class ApiCall < Versioneye::Model
   field :api_key    , type: String
   field :user_id    , type: String
   field :fullpath   , type: String
-  filed :http_method, type: String
+  field :http_method, type: String
   field :ip         , type: String
 
   index({ api_key: 1 }, { name: "api_key_index", background: true })
