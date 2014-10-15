@@ -64,6 +64,8 @@ class SyncService < Versioneye::Service
     handle_links json
     handle_archives json
     handle_dependencies json
+  rescue => e
+    log.error e.message
   end
 
 
@@ -102,6 +104,8 @@ class SyncService < Versioneye::Service
       license.deep_symbolize_keys!
       create_license_if_not_exist json, license[:name], license[:url]
     end
+  rescue => e
+    log.error e.message
   end
 
 
@@ -121,6 +125,8 @@ class SyncService < Versioneye::Service
       link.deep_symbolize_keys!
       create_link_if_not_exist json, link[:name], link[:link]
     end
+  rescue => e
+    log.error e.message
   end
 
 
@@ -140,6 +146,8 @@ class SyncService < Versioneye::Service
       archive.deep_symbolize_keys!
       create_archive_if_not_exist json, archive[:name], archive[:link]
     end
+  rescue => e
+    log.error e.message
   end
 
 
@@ -159,6 +167,8 @@ class SyncService < Versioneye::Service
       dependency.deep_symbolize_keys!
       create_dependency_if_not_exist json, dependency
     end
+  rescue => e
+    log.error e.message
   end
 
 

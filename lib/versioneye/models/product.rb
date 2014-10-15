@@ -227,9 +227,9 @@ class Product < Versioneye::Model
 
   ########## ELSE #############
 
-  def released_string
+  def released_at
     ver = version_by_number version
-    return ver.released_string if ver
+    return ver.released_at if ver
     ""
   end
 
