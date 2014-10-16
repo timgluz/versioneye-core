@@ -15,7 +15,7 @@ class SyncService < Versioneye::Service
 
     lang_keys.each do |lk|
       lks = lk.split("::")
-      language = lks[0]
+      language = lks[0].gsub(".", "")
       prod_key = lks[1]
       sync_product language, prod_key
     end
