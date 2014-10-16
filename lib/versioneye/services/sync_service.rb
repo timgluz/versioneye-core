@@ -8,7 +8,8 @@ class SyncService < Versioneye::Service
       if dependency.group_id && dependency.artifact_id
         prod_key = "#{dependency.group_id}/dependency.artifact_id"
       end
-      lang_keys << "#{dependency.language}::#{prod_key}"
+      lang_key = "#{dependency.language}::#{prod_key}"
+      lang_keys << lang_key if !lang_keys.include?(lang_key)
     end
 
     p "lang_keys: #{lang_keys.count}"
@@ -32,6 +33,7 @@ class SyncService < Versioneye::Service
     json[:versions].each do |ver|
       sync_version language, prod_key, ver[:version]
     end
+    p "synced #{language}:#{prod_key}"
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
@@ -188,6 +190,7 @@ class SyncService < Versioneye::Service
 
 
   private
+
 
     def self.parsed_date released_at
       DateTime.parse( released_at )

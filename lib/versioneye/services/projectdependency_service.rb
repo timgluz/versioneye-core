@@ -78,4 +78,25 @@ class ProjectdependencyService < Versioneye::Service
     log.error e.message
   end
 
+
+  def self.update_prod_key dependency
+    prod_key = dependency.name
+    if dependency.group_id && dependency.artifact_id
+      prod_key = "#{dependency.group_id}/#{dependency.artifact_id}"
+    end
+    product = Product.fetch_product dependency.language, prod_key
+    return if product.nil?
+
+    dependency.prod_key = prod_key
+    dependency.save
+    ProjectdependencyService.update_outdated! dependency
+  end
+
+
+  def self.update_prod_keys
+    Projectdependency.all.each do |dependency|
+      update_prod_key dependency
+    end
+  end
+
 end
