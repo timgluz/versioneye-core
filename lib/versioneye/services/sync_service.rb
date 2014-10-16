@@ -74,7 +74,7 @@ class SyncService < Versioneye::Service
 
     product = Product.fetch_product json[:language], json[:prod_key]
     if product
-      product.add_version json[:version], {:released_string => json[:released_string]}
+      product.add_version json[:version], {:released_at => parsed_date(json[:released_at]) }
       product.save
       ProductService.update_newest_version product
       return
@@ -91,7 +91,7 @@ class SyncService < Versioneye::Service
     product.artifact_id   = json[:artifact_id]
     product.description   = json[:description]
     product.save
-    product.add_version json[:version], {:released_string => json[:released_string]}
+    product.add_version json[:version], {:released_at => parsed_date(json[:released_at]) }
     product.save
     ProductService.update_newest_version product
   end
@@ -193,6 +193,15 @@ class SyncService < Versioneye::Service
     new_dep.save
     DependencyService.outdated? new_dep
   end
+
+
+  private
+
+    def self.parsed_date released_at
+      DateTime.parse( released_at )
+    rescue => e
+      nil
+    end
 
 
 end

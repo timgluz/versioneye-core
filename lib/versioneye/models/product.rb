@@ -165,7 +165,7 @@ class Product < Versioneye::Model
   def add_version(version_string, hash = {})
     unless version_by_number(version_string)
       version_hash = {:version => version_string}
-      version_hash.merge(hash) if !hash.nil? and !hash.empty?
+      version_hash = version_hash.merge(hash) if !hash.nil? and !hash.empty?
       version = Version.new(version_hash)
       versions.push( version )
     end
