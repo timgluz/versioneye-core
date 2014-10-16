@@ -9,7 +9,7 @@ class SyncService < Versioneye::Service
 
 
   def self.handle_project project
-    return if project.nil? || project.dependencies.empty?
+    return nil if project.nil? || project.dependencies.empty?
 
     project.dependencies.each do |dep|
       handle_project_dep dep
@@ -18,7 +18,7 @@ class SyncService < Versioneye::Service
 
 
   def self.handle_project_dep dependency
-    return if dependency.nil?
+    return nil if dependency.nil?
 
     if dependency.unknown?
       check_for_update dependency
@@ -32,9 +32,8 @@ class SyncService < Versioneye::Service
       prod_key = "#{dependency.group_id}/dependency.artifact_id"
     end
     json = ProductClient.show dependency.language, prod_key
-    return nil if json.to_s.empty?
-
-    return nil if json["version"].eql?( dependency.version_requested )
+    return nil if json.nil?
+    return nil if json["version"].nil?
 
     sync_product dependency.language, prod_key
   rescue => e
@@ -45,17 +44,24 @@ class SyncService < Versioneye::Service
 
   def self.sync_product language, prod_key
     json = ProductClient.versions language, prod_key
+    return nil if json.nil?
+
     json.deep_symbolize_keys!
-    return if json[:versions].empty?
+    return nil if json[:versions].empty?
 
     json[:versions].each do |ver|
       sync_version language, prod_key, ver[:version]
     end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
 
   def self.sync_version language, prod_key, version
     json = ProductClient.show language, prod_key, version
+    return nil if json.nil?
+
     json.deep_symbolize_keys!
 
     create_product_if_not_exist json
@@ -66,6 +72,7 @@ class SyncService < Versioneye::Service
     handle_dependencies json
   rescue => e
     log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
 
@@ -94,6 +101,9 @@ class SyncService < Versioneye::Service
     product.add_version json[:version], {:released_at => parsed_date(json[:released_at]) }
     product.save
     ProductService.update_newest_version product
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
 
@@ -106,6 +116,7 @@ class SyncService < Versioneye::Service
     end
   rescue => e
     log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
 
@@ -127,6 +138,7 @@ class SyncService < Versioneye::Service
     end
   rescue => e
     log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
 
