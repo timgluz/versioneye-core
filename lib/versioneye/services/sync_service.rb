@@ -6,7 +6,7 @@ class SyncService < Versioneye::Service
     Projectdependency.all.each do |dependency|
       prod_key = dependency.name
       if dependency.group_id && dependency.artifact_id
-        prod_key = "#{dependency.group_id}/dependency.artifact_id"
+        prod_key = "#{dependency.group_id}/#{dependency.artifact_id}"
       end
       lang_key = "#{dependency.language}::#{prod_key}"
       lang_keys << lang_key if !lang_keys.include?(lang_key)
