@@ -2,43 +2,23 @@ class SyncService < Versioneye::Service
 
 
   def self.sync
-    Project.all.each do |project|
-      handle_project project
+    lang_keys = []
+    Projectdependency.all.each do |dependency|
+      prod_key = dependency.name
+      if dependency.group_id && dependency.artifact_id
+        prod_key = "#{dependency.group_id}/dependency.artifact_id"
+      end
+      lang_keys << "#{dependency.language}::#{prod_key}"
     end
-  end
 
+    p "lang_keys: #{lang_keys.count}"
 
-  def self.handle_project project
-    return nil if project.nil? || project.dependencies.empty?
-
-    project.dependencies.each do |dep|
-      handle_project_dep dep
+    lang_keys.each do |lk|
+      lks = lk.split("::")
+      language = lks[0]
+      prod_key = lks[1]
+      sync_product language, prod_key
     end
-  end
-
-
-  def self.handle_project_dep dependency
-    return nil if dependency.nil?
-
-    if dependency.unknown?
-      check_for_update dependency
-    end
-  end
-
-
-  def self.check_for_update dependency
-    prod_key = dependency.name
-    if dependency.group_id && dependency.artifact_id
-      prod_key = "#{dependency.group_id}/dependency.artifact_id"
-    end
-    json = ProductClient.show dependency.language, prod_key
-    return nil if json.nil?
-    return nil if json["version"].nil?
-
-    sync_product dependency.language, prod_key
-  rescue => e
-    p e.message
-    log.error e.message
   end
 
 
@@ -47,7 +27,7 @@ class SyncService < Versioneye::Service
     return nil if json.nil?
 
     json.deep_symbolize_keys!
-    return nil if json[:versions].empty?
+    return nil if json[:versions].nil?
 
     json[:versions].each do |ver|
       sync_version language, prod_key, ver[:version]
@@ -108,7 +88,7 @@ class SyncService < Versioneye::Service
 
 
   def self.handle_licenses json
-    return nil if json[:licenses].empty?
+    return nil if json[:licenses].nil?
 
     json[:licenses].each do |license|
       license.deep_symbolize_keys!
@@ -130,7 +110,7 @@ class SyncService < Versioneye::Service
 
 
   def self.handle_links json
-    return nil if json[:links].empty?
+    return nil if json[:links].nil?
 
     json[:links].each do |link|
       link.deep_symbolize_keys!
@@ -152,7 +132,7 @@ class SyncService < Versioneye::Service
 
 
   def self.handle_archives json
-    return nil if json[:archives].empty?
+    return nil if json[:archives].nil?
 
     json[:archives].each do |archive|
       archive.deep_symbolize_keys!
@@ -173,7 +153,7 @@ class SyncService < Versioneye::Service
 
 
   def self.handle_dependencies json
-    return nil if json[:dependencies].empty?
+    return nil if json[:dependencies].nil?
 
     json[:dependencies].each do |dependency|
       dependency.deep_symbolize_keys!
