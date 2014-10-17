@@ -1,0 +1,3834 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr/versions
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:04 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '6205'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"f76311e17d1a9ad42288fcc2de88ff18"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 9655ee11a2072e8f16a8bc2ebbde3321
+      X-Runtime:
+      - '0.066547'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"2.9.3","prod_type":"RubyGem","versions":[{"version":"2.0.0","released_at":"2012-03-01T23:00:00+00:00","released_string":"2012-03-02T00:00:00Z"},{"version":"2.0.0.rc2","released_at":"2012-02-23T23:00:00+00:00","released_string":"2012-02-24T00:00:00Z"},{"version":"2.0.0.rc1","released_at":"2011-12-08T23:00:00+00:00","released_string":"2011-12-09T00:00:00Z"},{"version":"2.0.0.beta2","released_at":"2011-11-06T23:00:00+00:00","released_string":"2011-11-07T00:00:00Z"},{"version":"2.0.0.beta1","released_at":"2011-10-08T22:00:00+00:00","released_string":"2011-10-09T00:00:00Z"},{"version":"1.11.3","released_at":"2011-08-31T22:00:00+00:00","released_string":"2011-09-01T00:00:00Z"},{"version":"1.11.2","released_at":"2011-08-28T22:00:00+00:00","released_string":"2011-08-29T00:00:00Z"},{"version":"1.11.1","released_at":"2011-08-18T22:00:00+00:00","released_string":"2011-08-19T00:00:00Z"},{"version":"1.10.3","released_at":"2011-07-21T05:00:00+00:00","released_string":"2011-07-21T07:00:00Z"},{"version":"1.10.2","released_at":"2011-07-16T05:00:00+00:00","released_string":"2011-07-16T07:00:00Z"},{"version":"1.10.0","released_at":"2011-05-18T22:00:00+00:00","released_string":"2011-05-19T00:00:00Z"},{"version":"1.9.0","released_at":"2011-04-14T05:00:00+00:00","released_string":"2011-04-14T07:00:00Z"},{"version":"1.8.0","released_at":"2011-03-31T05:00:00+00:00","released_string":"2011-03-31T07:00:00Z"},{"version":"1.7.2","released_at":"2011-03-26T06:00:00+00:00","released_string":"2011-03-26T07:00:00Z"},{"version":"1.7.1","released_at":"2011-03-19T06:00:00+00:00","released_string":"2011-03-19T07:00:00Z"},{"version":"1.7.0","released_at":"2011-03-01T07:00:00+00:00","released_string":"2011-03-01T08:00:00Z"},{"version":"1.6.0","released_at":"2011-02-03T07:00:00+00:00","released_string":"2011-02-03T08:00:00Z"},{"version":"1.5.1","released_at":"2011-01-21T07:00:00+00:00","released_string":"2011-01-21T08:00:00Z"},{"version":"1.5.0","released_at":"2011-01-12T07:00:00+00:00","released_string":"2011-01-12T08:00:00Z"},{"version":"1.4.0","released_at":"2010-12-03T07:00:00+00:00","released_string":"2010-12-03T08:00:00Z"},{"version":"1.3.3","released_at":"2010-11-21T07:00:00+00:00","released_string":"2010-11-21T08:00:00Z"},{"version":"1.3.2","released_at":"2010-11-16T07:00:00+00:00","released_string":"2010-11-16T08:00:00Z"},{"version":"1.3.1","released_at":"2010-11-11T07:00:00+00:00","released_string":"2010-11-11T08:00:00Z"},{"version":"1.3.0","released_at":"2010-11-11T07:00:00+00:00","released_string":"2010-11-11T08:00:00Z"},{"version":"1.2.0","released_at":"2010-10-13T05:00:00+00:00","released_string":"2010-10-13T07:00:00Z"},{"version":"1.1.2","released_at":"2010-09-09T05:00:00+00:00","released_string":"2010-09-09T07:00:00Z"},{"version":"1.1.1","released_at":"2010-08-26T05:00:00+00:00","released_string":"2010-08-26T07:00:00Z"},{"version":"1.1.0","released_at":"2010-08-22T05:00:00+00:00","released_string":"2010-08-22T07:00:00Z"},{"version":"1.0.3","released_at":"2010-08-05T05:00:00+00:00","released_string":"2010-08-05T07:00:00Z"},{"version":"1.0.2","released_at":"2010-07-06T05:00:00+00:00","released_string":"2010-07-06T07:00:00Z"},{"version":"1.0.1","released_at":"2010-07-01T05:00:00+00:00","released_string":"2010-07-01T07:00:00Z"},{"version":"1.0.0","released_at":"2010-06-22T05:00:00+00:00","released_string":"2010-06-22T07:00:00Z"},{"version":"0.4.1","released_at":"2010-05-11T05:00:00+00:00","released_string":"2010-05-11T07:00:00Z"},{"version":"0.4.0","released_at":"2010-04-28T05:00:00+00:00","released_string":"2010-04-28T07:00:00Z"},{"version":"0.3.1","released_at":"2010-04-10T05:00:00+00:00","released_string":"2010-04-10T07:00:00Z"},{"version":"0.3.0","released_at":"2010-03-24T06:00:00+00:00","released_string":"2010-03-24T07:00:00Z"},{"version":"0.2.0","released_at":"2010-03-09T07:00:00+00:00","released_string":"2010-03-09T08:00:00Z"},{"version":"0.1.2","released_at":"2010-03-04T07:00:00+00:00","released_string":"2010-03-04T08:00:00Z"},{"version":"0.1.1","released_at":"2010-02-25T07:00:00+00:00","released_string":"2010-02-25T08:00:00Z"},{"version":"0.1.0","released_at":"2010-02-25T07:00:00+00:00","released_string":"2010-02-25T08:00:00Z"},{"version":"2.0.1","released_at":"2012-03-29T22:00:00+00:00","released_string":"2012-03-30T00:00:00Z"},{"version":"2.1.0","released_at":"2012-04-18T22:00:00+00:00","released_string":"2012-04-19T00:00:00Z"},{"version":"2.1.1","released_at":"2012-04-24T22:00:00+00:00","released_string":"2012-04-25T00:00:00Z"},{"version":"2.2.0","released_at":"2012-05-30T22:00:00+00:00","released_string":"2012-05-31T00:00:00Z"},{"version":"2.2.1","released_at":"2012-06-12T22:00:00+00:00","released_string":"2012-06-13T00:00:00Z"},{"version":"2.2.2","released_at":"2012-06-14T22:00:00+00:00","released_string":"2012-06-15T00:00:00Z"},{"version":"2.2.3","released_at":"2012-07-09T22:00:00+00:00","released_string":"2012-07-10T00:00:00Z"},{"version":"2.2.4","released_at":"2012-07-19T22:00:00+00:00","released_string":"2012-07-20T00:00:00Z"},{"version":"2.2.5","released_at":"2012-09-07T22:00:00+00:00","released_string":"2012-09-08T00:00:00Z"},{"version":"2.3.0","released_at":"2012-10-29T23:00:00+00:00","released_string":"2012-10-30T00:00:00Z"},{"version":"2.4.0","released_at":"2013-01-04T23:00:00+00:00","released_string":"2013-01-05T00:00:00Z"},{"version":"2.5.0","released_at":"2013-05-17T22:00:00+00:00","released_string":"2013-05-18T00:00:00Z"},{"version":"2.6.0","released_at":"2013-09-25T22:00:00+00:00","released_string":"2013-09-26T00:00:00Z"},{"version":"2.7.0","released_at":"2013-10-30T23:00:00+00:00","released_string":"2013-10-31T00:00:00Z"},{"version":"2.8.0","released_at":"2013-11-23T23:00:00+00:00","released_string":"2013-11-24T00:00:00Z"},{"version":"2.9.0","released_at":"2014-03-27T00:00:00+00:00","released_string":"2014-03-27T00:00:00Z"},{"version":"2.9.1","released_at":"2014-05-23T00:00:00+00:00","released_string":"2014-05-23T00:00:00Z"},{"version":"2.9.2","released_at":"2014-05-28T00:00:00+00:00","released_string":"2014-05-28T00:00:00Z"},{"version":"2.9.3","released_at":"2014-09-08T00:00:00+00:00","released_string":"2014-09-08T00:00:00Z"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:20 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=2.0.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:04 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"812bf193401551c6659357607d3a77b7"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - c805b0a90559813600ef5d102d767709
+      X-Runtime:
+      - '0.059844'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"2.0.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2012-03-01T23:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-2.0.0.gem","link":"http://rubygems.org/gems/vcr-2.0.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:20 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=2.0.0.rc2
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:04 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1415'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"ecb67294a91f2991f1649f9b15bcacc5"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 367782d6564902154dbcf4c2a08af418
+      X-Runtime:
+      - '0.068341'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"2.0.0.rc2","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2012-02-23T23:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-2.0.0.rc2.gem","link":"http://rubygems.org/gems/vcr-2.0.0.rc2.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:20 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=2.0.0.rc1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:04 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1415'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"ccdbaa479cf6fb3309ba54cada976054"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 3b72683a0287286656a207dcea833c57
+      X-Runtime:
+      - '0.060909'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"2.0.0.rc1","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2011-12-08T23:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-2.0.0.rc1.gem","link":"http://rubygems.org/gems/vcr-2.0.0.rc1.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:20 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=2.0.0.beta2
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:05 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1421'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"6207b33c111981bde7dc084882d96e8c"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - c32309f9918eb67d675f5285b60c1c32
+      X-Runtime:
+      - '0.058947'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"2.0.0.beta2","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2011-11-06T23:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-2.0.0.beta2.gem","link":"http://rubygems.org/gems/vcr-2.0.0.beta2.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:21 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=2.0.0.beta1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:05 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1421'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"fe5d29d068154c96778e9987b2bcbc7b"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 7549c221da0997d146104eccbb2eaf45
+      X-Runtime:
+      - '0.072634'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"2.0.0.beta1","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2011-10-08T22:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-2.0.0.beta1.gem","link":"http://rubygems.org/gems/vcr-2.0.0.beta1.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:21 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.11.3
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:05 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1406'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"6746ee8c3a53d2ff5d0dadfa461bbedf"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - f8d4dc7850ee8c4c86fedaabd2f0cb90
+      X-Runtime:
+      - '0.061136'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.11.3","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2011-08-31T22:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.11.3.gem","link":"http://rubygems.org/gems/vcr-1.11.3.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:21 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.11.2
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:05 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1406'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"f2dc86d5d337d24925c99697eae8c8b5"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 7ab11fd2064633d30977fa8fdf124c02
+      X-Runtime:
+      - '0.060541'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.11.2","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2011-08-28T22:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.11.2.gem","link":"http://rubygems.org/gems/vcr-1.11.2.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:21 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.11.1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:05 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1406'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"0db68460f67fbdfa2c35886d0680c732"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - a3c86ac73b58876ca21792f712447592
+      X-Runtime:
+      - '0.060766'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.11.1","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2011-08-18T22:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.11.1.gem","link":"http://rubygems.org/gems/vcr-1.11.1.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:21 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.10.3
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:06 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1406'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"5000009efc5356be1885a623e84c117e"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - ef9b9aec40cbb2eb8c1aa562679b05d9
+      X-Runtime:
+      - '0.056782'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.10.3","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2011-07-21T05:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.10.3.gem","link":"http://rubygems.org/gems/vcr-1.10.3.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:22 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.10.2
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:06 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1406'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"a27e1f63ef559161af109da2cb42dc87"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - c50580b511bc4bfb7b67ba1c87c7b80f
+      X-Runtime:
+      - '0.054978'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.10.2","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2011-07-16T05:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.10.2.gem","link":"http://rubygems.org/gems/vcr-1.10.2.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:22 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.10.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:06 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1406'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"b00793a690da21463f31bd2c5d49023e"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - b8f42cc4fcabebfe2e65fca19fad3c9d
+      X-Runtime:
+      - '0.058761'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.10.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2011-05-18T22:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.10.0.gem","link":"http://rubygems.org/gems/vcr-1.10.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:22 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.9.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:07 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"1e94c618fc64ef832e00151ed324119f"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - dc39bac57a2ea852fad3ac114aba064e
+      X-Runtime:
+      - '0.059361'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.9.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2011-04-14T05:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.9.0.gem","link":"http://rubygems.org/gems/vcr-1.9.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:23 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.8.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:07 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"832a1695894a351adb9463e3ce77d46d"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 99cddc115726fedba64e88ea00936409
+      X-Runtime:
+      - '0.059283'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.8.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2011-03-31T05:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.8.0.gem","link":"http://rubygems.org/gems/vcr-1.8.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:23 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.7.2
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:07 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"d602118c58f7373175a63f583d7a25d4"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - daf9bd1973dcddaffa9099148af6ea78
+      X-Runtime:
+      - '0.058908'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.7.2","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2011-03-26T06:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.7.2.gem","link":"http://rubygems.org/gems/vcr-1.7.2.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:23 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.7.1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:07 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"3487349420ad0654e367e7d353d154e7"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - cbfbf8ad5b463bc327b5e6b213ad8ef4
+      X-Runtime:
+      - '0.057573'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.7.1","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2011-03-19T06:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.7.1.gem","link":"http://rubygems.org/gems/vcr-1.7.1.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:23 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.7.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:08 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"7eff4d45ed3ce0a4f577fce4b874cf29"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 10fc9595dabea21e2002db8e09bd61a8
+      X-Runtime:
+      - '0.092454'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.7.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2011-03-01T07:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.7.0.gem","link":"http://rubygems.org/gems/vcr-1.7.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:24 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.6.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:08 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"585f07ce7c76b00af52c6cb78624796b"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 4e8f86bcef21a7adfdfe0ea4eaa09fa2
+      X-Runtime:
+      - '0.061072'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.6.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2011-02-03T07:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.6.0.gem","link":"http://rubygems.org/gems/vcr-1.6.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:24 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.5.1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:08 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"612cde5d2eaaf44cff04349d90235831"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 91b2c63a2c4fce7285ceee7627d74f15
+      X-Runtime:
+      - '0.058667'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.5.1","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2011-01-21T07:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.5.1.gem","link":"http://rubygems.org/gems/vcr-1.5.1.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:24 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.5.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:08 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"6fc8cb238a041133439add99383bf022"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 226955e694f05d233c2f5afefb9bf502
+      X-Runtime:
+      - '0.062039'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.5.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2011-01-12T07:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.5.0.gem","link":"http://rubygems.org/gems/vcr-1.5.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:24 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.4.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:09 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"3ab5e51c526575fbd4f9b7b0d2d3dc13"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - ea5cf54d3434a67ad99fc2ade3b813cc
+      X-Runtime:
+      - '0.058458'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.4.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2010-12-03T07:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.4.0.gem","link":"http://rubygems.org/gems/vcr-1.4.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:25 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.3.3
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:09 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"3bb018a4a2394dd38999139a05f83e9c"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - d50d73cfd996c6d3270e0bdbb0eb1345
+      X-Runtime:
+      - '0.058272'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.3.3","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2010-11-21T07:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.3.3.gem","link":"http://rubygems.org/gems/vcr-1.3.3.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:25 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.3.2
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:09 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"69087a35f21ff411a30f975c1f871572"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - e2a82665afbd31a540b7fa93073ad5f1
+      X-Runtime:
+      - '0.059957'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.3.2","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2010-11-16T07:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.3.2.gem","link":"http://rubygems.org/gems/vcr-1.3.2.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:25 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.3.1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:09 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"cfb7275726688f5fe9888c527afa0cce"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 390b8512b0446be5bb34a3c785a4122b
+      X-Runtime:
+      - '0.066217'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.3.1","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2010-11-11T07:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.3.1.gem","link":"http://rubygems.org/gems/vcr-1.3.1.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:25 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.3.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:09 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"72d998ff6e7dc5b395d9ca4fcf0c10f8"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 24f4cfb85119888624d9a347a620ee9c
+      X-Runtime:
+      - '0.057171'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.3.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2010-11-11T07:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.3.0.gem","link":"http://rubygems.org/gems/vcr-1.3.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:25 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.2.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:10 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"34ef1bfdbf23d930081f0e02ec3e62a7"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 71b02a20623e20ea0d557f37b9d2a1dc
+      X-Runtime:
+      - '0.057285'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.2.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2010-10-13T05:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.2.0.gem","link":"http://rubygems.org/gems/vcr-1.2.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:26 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.1.2
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:10 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"f5cb2c753d7a4a8dea6ddf023e878fec"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - b4ee8c7e3e0a2840875c8349e52c4618
+      X-Runtime:
+      - '0.054586'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.1.2","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2010-09-09T05:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.1.2.gem","link":"http://rubygems.org/gems/vcr-1.1.2.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:26 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.1.1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:10 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"6788206b61f70460b87ab0ce395bbaef"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 24885931948eab047ea01a47f712dcd8
+      X-Runtime:
+      - '0.053924'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.1.1","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2010-08-26T05:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.1.1.gem","link":"http://rubygems.org/gems/vcr-1.1.1.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:26 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.1.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:10 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"c3b167581d443fb7129067c72fe9ff1d"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 38e36ba59f60c9584a45d7c6aba472a3
+      X-Runtime:
+      - '0.056498'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.1.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2010-08-22T05:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.1.0.gem","link":"http://rubygems.org/gems/vcr-1.1.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:26 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.0.3
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:11 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"f181625abce75b5f2239ee12acc90ed3"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 4b5b74a887b6a5bd2ab06069917a5097
+      X-Runtime:
+      - '0.055782'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.0.3","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2010-08-05T05:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.0.3.gem","link":"http://rubygems.org/gems/vcr-1.0.3.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:27 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.0.2
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:11 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"33b817a81f775e0a9907e534907ffd2d"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - af9baeb9b014e9a47d66de7c057b211e
+      X-Runtime:
+      - '0.068200'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.0.2","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2010-07-06T05:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.0.2.gem","link":"http://rubygems.org/gems/vcr-1.0.2.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:27 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.0.1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:11 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"293989e9a7825a94bbc452d770bf67f9"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 2f771e89ff361bde6b7bb5c8515e004c
+      X-Runtime:
+      - '0.058480'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.0.1","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2010-07-01T05:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.0.1.gem","link":"http://rubygems.org/gems/vcr-1.0.1.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:27 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=1.0.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:11 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"8000adb968fc3b89702a62416793fb86"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - ec33cce8551e6523a79705713af1f92b
+      X-Runtime:
+      - '0.056211'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"1.0.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2010-06-22T05:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-1.0.0.gem","link":"http://rubygems.org/gems/vcr-1.0.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:27 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=0.4.1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:12 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"50ed586574b277d14b42a098202d7cd0"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - eac7a8d6f86dc5a0367113b06bd79dc3
+      X-Runtime:
+      - '0.093040'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"0.4.1","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2010-05-11T05:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-0.4.1.gem","link":"http://rubygems.org/gems/vcr-0.4.1.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:28 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=0.4.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:12 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"20e86b3925fce9b49b1fb005616f54e6"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 8f8fdc312747854464097b6935b88f2e
+      X-Runtime:
+      - '0.065070'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"0.4.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2010-04-28T05:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-0.4.0.gem","link":"http://rubygems.org/gems/vcr-0.4.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:28 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=0.3.1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:12 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"729b61703ac1989700effbf91c30f7be"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 289dabd96d35c842f79ce587307aacf0
+      X-Runtime:
+      - '0.058902'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"0.3.1","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2010-04-10T05:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-0.3.1.gem","link":"http://rubygems.org/gems/vcr-0.3.1.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:28 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=0.3.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:13 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"af322e2f7c056224f41965841c4ef035"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 20cd5d85baf86a7234966ca9793db252
+      X-Runtime:
+      - '0.058414'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"0.3.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2010-03-24T06:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-0.3.0.gem","link":"http://rubygems.org/gems/vcr-0.3.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:29 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=0.2.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:13 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"56b55d76f31cffa42c78a17dfbf8d5a6"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 98bf47272e3cc6588fa815694b3c4a87
+      X-Runtime:
+      - '0.058906'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"0.2.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2010-03-09T07:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-0.2.0.gem","link":"http://rubygems.org/gems/vcr-0.2.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:29 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=0.1.2
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:13 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"53e1fc19a434a154b96cf400558c510b"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - d58dad4ebe493a8d20aa6e91319b4431
+      X-Runtime:
+      - '0.060001'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"0.1.2","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2010-03-04T07:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-0.1.2.gem","link":"http://rubygems.org/gems/vcr-0.1.2.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:29 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=0.1.1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:13 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"ad06df4377701a94a8a2fc23e3bdebf8"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - c4536b24385e1ce6c9fdae97e5c9de94
+      X-Runtime:
+      - '0.067040'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"0.1.1","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2010-02-25T07:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-0.1.1.gem","link":"http://rubygems.org/gems/vcr-0.1.1.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:29 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=0.1.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:14 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"d7f2f656ca87d4e02cc0dc4f8a404571"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - a120c874a24f93b282ea0427d29fc2aa
+      X-Runtime:
+      - '0.068186'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"0.1.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2010-02-25T07:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-0.1.0.gem","link":"http://rubygems.org/gems/vcr-0.1.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:30 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=2.0.1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:14 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"90301ee1b86330f8851f1a9328e0ba5b"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 82b79f632a8081db47fc344ab489b8bc
+      X-Runtime:
+      - '0.066765'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"2.0.1","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2012-03-29T22:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-2.0.1.gem","link":"http://rubygems.org/gems/vcr-2.0.1.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:30 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=2.1.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:14 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"240596460237e0f1b8c9f4dd8c22c012"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 91d49b6bbd2b2e9d908f1a00375c63c8
+      X-Runtime:
+      - '0.060672'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"2.1.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2012-04-18T22:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-2.1.0.gem","link":"http://rubygems.org/gems/vcr-2.1.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:30 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=2.1.1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:14 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"6958d603bfb03237fb56ad9844e19f5a"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - b8f5beab06c03ecc5c280b13d997e784
+      X-Runtime:
+      - '0.058522'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"2.1.1","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2012-04-24T22:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-2.1.1.gem","link":"http://rubygems.org/gems/vcr-2.1.1.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:30 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=2.2.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:15 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"848a7f577deaffc6117792cc77a19633"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - bbb0a522fb395597ff2a97a0b8ff3e88
+      X-Runtime:
+      - '0.058627'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"2.2.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2012-05-30T22:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-2.2.0.gem","link":"http://rubygems.org/gems/vcr-2.2.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:31 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=2.2.1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:15 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"3d88e562d4f31bdc468a934f4262e438"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - b969cb0cab899af75faf7140260c6e6d
+      X-Runtime:
+      - '0.054845'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"2.2.1","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2012-06-12T22:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-2.2.1.gem","link":"http://rubygems.org/gems/vcr-2.2.1.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:31 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=2.2.2
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:15 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"ee35278c790b81d757f462d8aed42a53"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 270aa80c935b775a86e1d4a2fa6302ac
+      X-Runtime:
+      - '0.056198'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"2.2.2","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2012-06-14T22:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-2.2.2.gem","link":"http://rubygems.org/gems/vcr-2.2.2.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:31 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=2.2.3
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:15 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"bc3b430c3b969bbbb081af296ef4a523"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - eebc6bcac1c599a32d9e3a3bc2e82993
+      X-Runtime:
+      - '0.054639'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"2.2.3","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2012-07-09T22:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-2.2.3.gem","link":"http://rubygems.org/gems/vcr-2.2.3.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:31 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=2.2.4
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:16 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"b306436a2efc0ac8473e5a064511d3d1"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 1da1b486deda07519fce4fed4e9effc7
+      X-Runtime:
+      - '0.055881'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"2.2.4","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2012-07-19T22:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-2.2.4.gem","link":"http://rubygems.org/gems/vcr-2.2.4.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:32 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=2.2.5
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:16 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"8c5d8c21dff8a2fb7977a1a67e00dd8e"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - e72b1fcaaae85e4f4da4e67faaaad645
+      X-Runtime:
+      - '0.076064'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"2.2.5","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2012-09-07T22:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-2.2.5.gem","link":"http://rubygems.org/gems/vcr-2.2.5.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:32 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=2.3.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:16 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"2eb2eb31fcf624045ba215ae4e23242e"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 2948b12047ebac9ad83dbd4d095a554a
+      X-Runtime:
+      - '0.067073'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"2.3.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2012-10-29T23:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-2.3.0.gem","link":"http://rubygems.org/gems/vcr-2.3.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:32 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=2.4.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:17 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"fea5028eeac83bc92c87ad6e15415652"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - f51b4d92095e03bd5d00085be9a7b035
+      X-Runtime:
+      - '0.067677'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"2.4.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2013-01-04T23:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-2.4.0.gem","link":"http://rubygems.org/gems/vcr-2.4.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:33 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=2.5.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:17 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1403'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"0adf654948448cced60371e3fb48ec19"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 9a0baa81a05fbf7d385934f444563f94
+      X-Runtime:
+      - '0.059634'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"2.5.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2013-05-17T22:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":"http://opensource.org/licenses/mit-license.html"}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-2.5.0.gem","link":"http://rubygems.org/gems/vcr-2.5.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:33 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=2.6.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:17 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1358'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"bfed48dbefbd92d6497eb2488a7b52fb"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 849dc90b2576b147e52af8bc9f95ea44
+      X-Runtime:
+      - '0.059080'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"2.6.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2013-09-25T22:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":null}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-2.6.0.gem","link":"http://rubygems.org/gems/vcr-2.6.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:33 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=2.7.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:18 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1358'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"649a14fc9f57ca3d9373a7112aa3b1df"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 4a288b75578c7aefafd92bb5221853ab
+      X-Runtime:
+      - '0.059335'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"2.7.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2013-10-30T23:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":null}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-2.7.0.gem","link":"http://rubygems.org/gems/vcr-2.7.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:34 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=2.8.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:18 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1358'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"c796752f05209c49f00c9b82bdeebf0a"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 63f43421b9d4caa61a92470dfc5bf197
+      X-Runtime:
+      - '0.056761'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"2.8.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2013-11-23T23:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":null}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-2.8.0.gem","link":"http://rubygems.org/gems/vcr-2.8.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:34 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=2.9.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:18 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1358'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"b30eeb5c2994abf83e9df524b6aac1c5"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - f43ebee205ea778e41b8b7996b68ac75
+      X-Runtime:
+      - '0.077157'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"2.9.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2014-03-27T00:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":null}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-2.9.0.gem","link":"http://rubygems.org/gems/vcr-2.9.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:34 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=2.9.1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:18 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1358'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"2ca0e50f37f2cdff1f3b9f2b5a7cf9e1"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - bf5dd8e9bc387971f244f890266de93c
+      X-Runtime:
+      - '0.064777'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"2.9.1","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2014-05-23T00:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":null}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-2.9.1.gem","link":"http://rubygems.org/gems/vcr-2.9.1.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:34 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=2.9.2
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:19 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1358'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"e1ef7db318c41e00172cc911e2a796a9"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 3f08e3ea0fb0383895076c7780507ce3
+      X-Runtime:
+      - '0.062012'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"2.9.2","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2014-05-28T00:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":null}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-2.9.2.gem","link":"http://rubygems.org/gems/vcr-2.9.2.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:35 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/vcr?prod_version=2.9.3
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:19 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1358'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"bc196917edce6fdbb8c276efb1efa1f6"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - db30315f2c55fc2d128d001ec0a24c49
+      X-Runtime:
+      - '0.059908'
+    body:
+      encoding: UTF-8
+      string: '{"name":"vcr","language":"Ruby","prod_key":"vcr","version":"2.9.3","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"MIT","description":"VCR
+        provides a simple API to record and replay your test suite''s HTTP interactions.  It
+        works with a variety of HTTP client libraries, HTTP stubbing libraries and
+        testing frameworks.","updated_at":"2014-10-16T18:28:01Z","released_at":"2014-09-08T00:00:00+00:00","dependencies":[],"licenses":[{"name":"MIT","url":null}],"links":[{"name":"Bug
+        Tracker","link":"https://github.com/myronmarston/vcr/issues"},{"name":"Bug
+        Tracker","link":"https://github.com/vcr/vcr/issues"},{"name":"Documentation","link":"http://relishapp.com/myronmarston/vcr"},{"name":"Documentation","link":"https://www.relishapp.com/vcr/vcr"},{"name":"Homepage","link":"http://github.com/myronmarston/vcr"},{"name":"Homepage","link":"http://github.com/vcr/vcr"},{"name":"Homepage","link":"https://github.com/vcr/vcr"},{"name":"Mailing
+        List","link":"http://groups.google.com/group/vcr-ruby"},{"name":"Project","link":"http://rubygems.org/gems/vcr"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/vcr"},{"name":"Source Code","link":"https://github.com/myronmarston/vcr"},{"name":"Wiki","link":"https://github.com/myronmarston/vcr/wiki"}],"archives":[{"name":"vcr-2.9.3.gem","link":"http://rubygems.org/gems/vcr-2.9.3.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:35 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/log4r/versions
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:19 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1510'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"30a358167b007fc47d49d27d23332502"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 7c9ce09dbe4deb267ed42ac244e7e854
+      X-Runtime:
+      - '0.020041'
+    body:
+      encoding: UTF-8
+      string: '{"name":"log4r","language":"Ruby","prod_key":"log4r","version":"1.1.11","prod_type":"RubyGem","versions":[{"version":"1.1.10","released_at":"2012-01-01T23:00:00+00:00","released_string":"2012-01-02T00:00:00Z"},{"version":"1.1.9","released_at":"2010-10-28T05:00:00+00:00","released_string":"2010-10-28T07:00:00Z"},{"version":"1.1.8","released_at":"2010-06-08T05:00:00+00:00","released_string":"2010-06-08T07:00:00Z"},{"version":"1.1.7","released_at":"2010-03-12T07:00:00+00:00","released_string":"2010-03-12T08:00:00Z"},{"version":"1.1.6","released_at":"2010-03-11T07:00:00+00:00","released_string":"2010-03-11T08:00:00Z"},{"version":"1.1.5","released_at":"2010-02-08T07:00:00+00:00","released_string":"2010-02-08T08:00:00Z"},{"version":"1.1.4","released_at":"2010-01-12T07:00:00+00:00","released_string":"2010-01-12T08:00:00Z"},{"version":"1.1.3","released_at":"2010-01-11T07:00:00+00:00","released_string":"2010-01-11T08:00:00Z"},{"version":"1.1.2","released_at":"2009-09-25T08:00:00+00:00","released_string":"2009-09-25T10:00:00Z"},{"version":"1.1.1","released_at":"2009-09-23T08:00:00+00:00","released_string":"2009-09-23T10:00:00Z"},{"version":"1.1.0","released_at":"2009-09-22T08:00:00+00:00","released_string":"2009-09-22T10:00:00Z"},{"version":"1.0.6","released_at":"2009-09-18T08:00:00+00:00","released_string":"2009-09-18T10:00:00Z"},{"version":"0.1-4","released_at":null,"released_string":null},{"version":"1.1.11","released_at":"2014-01-04T00:00:00+00:00","released_string":"2014-01-04T00:00:00Z"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:35 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/log4r?prod_version=1.1.10
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:19 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '830'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"c96adb19d39c9b282b6747d771d8e5f1"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - a2460cd6be4fe5ea55dfc5935c0653e2
+      X-Runtime:
+      - '0.032625'
+    body:
+      encoding: UTF-8
+      string: '{"name":"log4r","language":"Ruby","prod_key":"log4r","version":"1.1.10","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"unknown","description":"See
+        also: http://logging.apache.org/log4j","updated_at":"2014-10-16T18:25:53Z","released_at":"2012-01-01T23:00:00+00:00","dependencies":[],"licenses":[],"links":[{"name":"Bug
+        Tracker","link":"http://rubyforge.org/tracker/index.php?group_id=203&atid=851"},{"name":"Documentation","link":"http://log4r.rubyforge.org/"},{"name":"Homepage","link":"http://log4r.rubyforge.org"},{"name":"Project","link":"http://rubygems.org/gems/log4r"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/log4r"},{"name":"Source Code","link":"http://rubyforge.org/scm/?group_id=203"}],"archives":[{"name":"log4r-1.1.10.gem","link":"http://rubygems.org/gems/log4r-1.1.10.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:35 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/log4r?prod_version=1.1.9
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:20 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '827'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"cbb35505c265d6286f119818e0d58413"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 3b6b44f8d7c2f8db7d25d00294a0ecf4
+      X-Runtime:
+      - '0.032982'
+    body:
+      encoding: UTF-8
+      string: '{"name":"log4r","language":"Ruby","prod_key":"log4r","version":"1.1.9","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"unknown","description":"See
+        also: http://logging.apache.org/log4j","updated_at":"2014-10-16T18:25:53Z","released_at":"2010-10-28T05:00:00+00:00","dependencies":[],"licenses":[],"links":[{"name":"Bug
+        Tracker","link":"http://rubyforge.org/tracker/index.php?group_id=203&atid=851"},{"name":"Documentation","link":"http://log4r.rubyforge.org/"},{"name":"Homepage","link":"http://log4r.rubyforge.org"},{"name":"Project","link":"http://rubygems.org/gems/log4r"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/log4r"},{"name":"Source Code","link":"http://rubyforge.org/scm/?group_id=203"}],"archives":[{"name":"log4r-1.1.9.gem","link":"http://rubygems.org/gems/log4r-1.1.9.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:36 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/log4r?prod_version=1.1.8
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:20 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '827'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"27f9372fe34adffeeba357e335441495"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - d4d239663072a65c90c2b9d58be83fea
+      X-Runtime:
+      - '0.033676'
+    body:
+      encoding: UTF-8
+      string: '{"name":"log4r","language":"Ruby","prod_key":"log4r","version":"1.1.8","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"unknown","description":"See
+        also: http://logging.apache.org/log4j","updated_at":"2014-10-16T18:25:53Z","released_at":"2010-06-08T05:00:00+00:00","dependencies":[],"licenses":[],"links":[{"name":"Bug
+        Tracker","link":"http://rubyforge.org/tracker/index.php?group_id=203&atid=851"},{"name":"Documentation","link":"http://log4r.rubyforge.org/"},{"name":"Homepage","link":"http://log4r.rubyforge.org"},{"name":"Project","link":"http://rubygems.org/gems/log4r"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/log4r"},{"name":"Source Code","link":"http://rubyforge.org/scm/?group_id=203"}],"archives":[{"name":"log4r-1.1.8.gem","link":"http://rubygems.org/gems/log4r-1.1.8.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:36 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/log4r?prod_version=1.1.7
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:20 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '827'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"f2b60ffd12eed31678ede9cc1d3e8a6f"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 1da1da12bf3a7b64e4451d4066bc9858
+      X-Runtime:
+      - '0.031708'
+    body:
+      encoding: UTF-8
+      string: '{"name":"log4r","language":"Ruby","prod_key":"log4r","version":"1.1.7","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"unknown","description":"See
+        also: http://logging.apache.org/log4j","updated_at":"2014-10-16T18:25:53Z","released_at":"2010-03-12T07:00:00+00:00","dependencies":[],"licenses":[],"links":[{"name":"Bug
+        Tracker","link":"http://rubyforge.org/tracker/index.php?group_id=203&atid=851"},{"name":"Documentation","link":"http://log4r.rubyforge.org/"},{"name":"Homepage","link":"http://log4r.rubyforge.org"},{"name":"Project","link":"http://rubygems.org/gems/log4r"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/log4r"},{"name":"Source Code","link":"http://rubyforge.org/scm/?group_id=203"}],"archives":[{"name":"log4r-1.1.7.gem","link":"http://rubygems.org/gems/log4r-1.1.7.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:36 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/log4r?prod_version=1.1.6
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:20 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '827'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"f26083bfd15d780acaa2f6b423e49c4b"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 1e79a8389b49f4c670688b73ee1ac9c8
+      X-Runtime:
+      - '0.029537'
+    body:
+      encoding: UTF-8
+      string: '{"name":"log4r","language":"Ruby","prod_key":"log4r","version":"1.1.6","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"unknown","description":"See
+        also: http://logging.apache.org/log4j","updated_at":"2014-10-16T18:25:53Z","released_at":"2010-03-11T07:00:00+00:00","dependencies":[],"licenses":[],"links":[{"name":"Bug
+        Tracker","link":"http://rubyforge.org/tracker/index.php?group_id=203&atid=851"},{"name":"Documentation","link":"http://log4r.rubyforge.org/"},{"name":"Homepage","link":"http://log4r.rubyforge.org"},{"name":"Project","link":"http://rubygems.org/gems/log4r"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/log4r"},{"name":"Source Code","link":"http://rubyforge.org/scm/?group_id=203"}],"archives":[{"name":"log4r-1.1.6.gem","link":"http://rubygems.org/gems/log4r-1.1.6.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:36 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/log4r?prod_version=1.1.5
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:20 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '827'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"6e96ab789785887c705db0bc456d3fb1"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - c3dd030bd2d122531d91f95f012fc72d
+      X-Runtime:
+      - '0.035900'
+    body:
+      encoding: UTF-8
+      string: '{"name":"log4r","language":"Ruby","prod_key":"log4r","version":"1.1.5","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"unknown","description":"See
+        also: http://logging.apache.org/log4j","updated_at":"2014-10-16T18:25:53Z","released_at":"2010-02-08T07:00:00+00:00","dependencies":[],"licenses":[],"links":[{"name":"Bug
+        Tracker","link":"http://rubyforge.org/tracker/index.php?group_id=203&atid=851"},{"name":"Documentation","link":"http://log4r.rubyforge.org/"},{"name":"Homepage","link":"http://log4r.rubyforge.org"},{"name":"Project","link":"http://rubygems.org/gems/log4r"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/log4r"},{"name":"Source Code","link":"http://rubyforge.org/scm/?group_id=203"}],"archives":[{"name":"log4r-1.1.5.gem","link":"http://rubygems.org/gems/log4r-1.1.5.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:36 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/log4r?prod_version=1.1.4
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:20 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '827'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"269db06c21d13fc3679177a0743ce957"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - af4b2b65c74086aecd8d0d36aef99897
+      X-Runtime:
+      - '0.030298'
+    body:
+      encoding: UTF-8
+      string: '{"name":"log4r","language":"Ruby","prod_key":"log4r","version":"1.1.4","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"unknown","description":"See
+        also: http://logging.apache.org/log4j","updated_at":"2014-10-16T18:25:53Z","released_at":"2010-01-12T07:00:00+00:00","dependencies":[],"licenses":[],"links":[{"name":"Bug
+        Tracker","link":"http://rubyforge.org/tracker/index.php?group_id=203&atid=851"},{"name":"Documentation","link":"http://log4r.rubyforge.org/"},{"name":"Homepage","link":"http://log4r.rubyforge.org"},{"name":"Project","link":"http://rubygems.org/gems/log4r"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/log4r"},{"name":"Source Code","link":"http://rubyforge.org/scm/?group_id=203"}],"archives":[{"name":"log4r-1.1.4.gem","link":"http://rubygems.org/gems/log4r-1.1.4.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:36 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/log4r?prod_version=1.1.3
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:21 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '827'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"454b16c74557ff1cc4a2c5adf6bfe84f"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - f791167125520581ea6341d0eaf81457
+      X-Runtime:
+      - '0.031732'
+    body:
+      encoding: UTF-8
+      string: '{"name":"log4r","language":"Ruby","prod_key":"log4r","version":"1.1.3","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"unknown","description":"See
+        also: http://logging.apache.org/log4j","updated_at":"2014-10-16T18:25:53Z","released_at":"2010-01-11T07:00:00+00:00","dependencies":[],"licenses":[],"links":[{"name":"Bug
+        Tracker","link":"http://rubyforge.org/tracker/index.php?group_id=203&atid=851"},{"name":"Documentation","link":"http://log4r.rubyforge.org/"},{"name":"Homepage","link":"http://log4r.rubyforge.org"},{"name":"Project","link":"http://rubygems.org/gems/log4r"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/log4r"},{"name":"Source Code","link":"http://rubyforge.org/scm/?group_id=203"}],"archives":[{"name":"log4r-1.1.3.gem","link":"http://rubygems.org/gems/log4r-1.1.3.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:37 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/log4r?prod_version=1.1.2
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:21 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '827'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"69d5a22927ff0cce7846ca5a98e87187"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 1fd1c30917619beb272ea1761659ceaa
+      X-Runtime:
+      - '0.031856'
+    body:
+      encoding: UTF-8
+      string: '{"name":"log4r","language":"Ruby","prod_key":"log4r","version":"1.1.2","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"unknown","description":"See
+        also: http://logging.apache.org/log4j","updated_at":"2014-10-16T18:25:53Z","released_at":"2009-09-25T08:00:00+00:00","dependencies":[],"licenses":[],"links":[{"name":"Bug
+        Tracker","link":"http://rubyforge.org/tracker/index.php?group_id=203&atid=851"},{"name":"Documentation","link":"http://log4r.rubyforge.org/"},{"name":"Homepage","link":"http://log4r.rubyforge.org"},{"name":"Project","link":"http://rubygems.org/gems/log4r"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/log4r"},{"name":"Source Code","link":"http://rubyforge.org/scm/?group_id=203"}],"archives":[{"name":"log4r-1.1.2.gem","link":"http://rubygems.org/gems/log4r-1.1.2.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:37 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/log4r?prod_version=1.1.1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:21 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '827'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"27cc2e3defa78da1a113119bce28357a"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 7b2cc9c5ccd609f0a5c6e69b638adf86
+      X-Runtime:
+      - '0.031355'
+    body:
+      encoding: UTF-8
+      string: '{"name":"log4r","language":"Ruby","prod_key":"log4r","version":"1.1.1","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"unknown","description":"See
+        also: http://logging.apache.org/log4j","updated_at":"2014-10-16T18:25:53Z","released_at":"2009-09-23T08:00:00+00:00","dependencies":[],"licenses":[],"links":[{"name":"Bug
+        Tracker","link":"http://rubyforge.org/tracker/index.php?group_id=203&atid=851"},{"name":"Documentation","link":"http://log4r.rubyforge.org/"},{"name":"Homepage","link":"http://log4r.rubyforge.org"},{"name":"Project","link":"http://rubygems.org/gems/log4r"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/log4r"},{"name":"Source Code","link":"http://rubyforge.org/scm/?group_id=203"}],"archives":[{"name":"log4r-1.1.1.gem","link":"http://rubygems.org/gems/log4r-1.1.1.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:37 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/log4r?prod_version=1.1.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:21 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '827'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"4918cf6a682d2ee3fb7f614f37c75178"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - db5d73ca009472e3cfd0db640cbf3aca
+      X-Runtime:
+      - '0.030653'
+    body:
+      encoding: UTF-8
+      string: '{"name":"log4r","language":"Ruby","prod_key":"log4r","version":"1.1.0","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"unknown","description":"See
+        also: http://logging.apache.org/log4j","updated_at":"2014-10-16T18:25:53Z","released_at":"2009-09-22T08:00:00+00:00","dependencies":[],"licenses":[],"links":[{"name":"Bug
+        Tracker","link":"http://rubyforge.org/tracker/index.php?group_id=203&atid=851"},{"name":"Documentation","link":"http://log4r.rubyforge.org/"},{"name":"Homepage","link":"http://log4r.rubyforge.org"},{"name":"Project","link":"http://rubygems.org/gems/log4r"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/log4r"},{"name":"Source Code","link":"http://rubyforge.org/scm/?group_id=203"}],"archives":[{"name":"log4r-1.1.0.gem","link":"http://rubygems.org/gems/log4r-1.1.0.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:37 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/log4r?prod_version=1.0.6
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:21 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '827'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"a59198fea71deb6c3a8118a493e6f88e"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 31d67ae5d80155f9e89fef8ff743dace
+      X-Runtime:
+      - '0.032919'
+    body:
+      encoding: UTF-8
+      string: '{"name":"log4r","language":"Ruby","prod_key":"log4r","version":"1.0.6","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"unknown","description":"See
+        also: http://logging.apache.org/log4j","updated_at":"2014-10-16T18:25:53Z","released_at":"2009-09-18T08:00:00+00:00","dependencies":[],"licenses":[],"links":[{"name":"Bug
+        Tracker","link":"http://rubyforge.org/tracker/index.php?group_id=203&atid=851"},{"name":"Documentation","link":"http://log4r.rubyforge.org/"},{"name":"Homepage","link":"http://log4r.rubyforge.org"},{"name":"Project","link":"http://rubygems.org/gems/log4r"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/log4r"},{"name":"Source Code","link":"http://rubyforge.org/scm/?group_id=203"}],"archives":[{"name":"log4r-1.0.6.gem","link":"http://rubygems.org/gems/log4r-1.0.6.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:37 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/log4r?prod_version=0.1-4
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:22 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '813'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"f4cdd413fe77c8cb65d12ff074655574"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 50339f3717236e93caf458cecf741372
+      X-Runtime:
+      - '0.033020'
+    body:
+      encoding: UTF-8
+      string: '{"name":"log4r","language":"Ruby","prod_key":"log4r","version":"0.1-4","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"unknown","description":"See
+        also: http://logging.apache.org/log4j","updated_at":"2014-10-16T18:25:53Z","released_at":null,"dependencies":[],"licenses":[],"links":[{"name":"Bug
+        Tracker","link":"http://rubyforge.org/tracker/index.php?group_id=203&atid=851"},{"name":"Documentation","link":"http://log4r.rubyforge.org/"},{"name":"Homepage","link":"http://log4r.rubyforge.org"},{"name":"Project","link":"http://rubygems.org/gems/log4r"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/log4r"},{"name":"Source Code","link":"http://rubyforge.org/scm/?group_id=203"},{"name":"ChangeLog","link":"http://cran.r-project.org/web/packages/log4r/ChangeLog"}],"archives":[]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:38 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/log4r?prod_version=1.1.11
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:22 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '896'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"2947912472e7bc8825e937580eff4b1e"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 837076de1e28aaf36fb0801f4bbb30c9
+      X-Runtime:
+      - '0.043342'
+    body:
+      encoding: UTF-8
+      string: '{"name":"log4r","language":"Ruby","prod_key":"log4r","version":"1.1.11","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"LGPLv3
+        ","description":"See also: http://logging.apache.org/log4j","updated_at":"2014-10-16T18:25:53Z","released_at":"2014-01-04T00:00:00+00:00","dependencies":[],"licenses":[{"name":"LGPLv3
+        ","url":"http://log4r.rubyforge.org/license.html"}],"links":[{"name":"Bug
+        Tracker","link":"http://rubyforge.org/tracker/index.php?group_id=203&atid=851"},{"name":"Documentation","link":"http://log4r.rubyforge.org/"},{"name":"Homepage","link":"http://log4r.rubyforge.org"},{"name":"Project","link":"http://rubygems.org/gems/log4r"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/log4r"},{"name":"Source Code","link":"http://rubyforge.org/scm/?group_id=203"}],"archives":[{"name":"log4r-1.1.11.gem","link":"http://rubygems.org/gems/log4r-1.1.11.gem"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:38 GMT
+recorded_with: VCR 2.9.3

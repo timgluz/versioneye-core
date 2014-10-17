@@ -1,0 +1,1285 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Java/junit:junit/versions
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:20:58 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '2413'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"93834de2fff959b93b85679d2b60da22"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 80c502e117bfcfd5b061110d7311ec2e
+      X-Runtime:
+      - '0.025726'
+    body:
+      encoding: UTF-8
+      string: '{"name":"junit","language":"Java","prod_key":"junit/junit","version":"4.11","prod_type":"Maven2","versions":[{"version":"4.6","released_at":"2009-05-09T19:56:03+00:00","released_string":"2009-05-09
+        07:56:03"},{"version":"4.7","released_at":"2009-08-04T02:07:43+00:00","released_string":"2009-08-04
+        02:07:43"},{"version":"4.8.1","released_at":"2010-02-25T12:21:58+00:00","released_string":"2010-02-25
+        12:21:58"},{"version":"3.8.1","released_at":"2004-03-05T10:50:06+00:00","released_string":"2004-03-05
+        10:50:06"},{"version":"3.7","released_at":"2005-08-01T09:42:48+00:00","released_string":"2005-08-01
+        09:42:48"},{"version":"3.8","released_at":"2005-08-01T09:42:49+00:00","released_string":"2005-08-01
+        09:42:49"},{"version":"3.8.2","released_at":"2006-03-04T22:34:13+00:00","released_string":"2006-03-04
+        10:34:13"},{"version":"4.0","released_at":"2006-02-18T19:16:52+00:00","released_string":"2006-02-18
+        07:16:52"},{"version":"4.1","released_at":"2006-10-06T12:30:27+00:00","released_string":"2006-10-06
+        12:30:27"},{"version":"4.10","released_at":"2011-09-29T19:12:23+00:00","released_string":"2011-09-29
+        07:12:23"},{"version":"4.2","released_at":"2007-02-01T23:55:36+00:00","released_string":"2007-02-01
+        11:55:36"},{"version":"4.3","released_at":"2007-03-21T16:55:52+00:00","released_string":"2007-03-21
+        04:55:52"},{"version":"4.3.1","released_at":"2007-03-29T21:42:46+00:00","released_string":"2007-03-29
+        09:42:46"},{"version":"4.4","released_at":"2007-08-21T17:43:32+00:00","released_string":"2007-08-21
+        05:43:32"},{"version":"4.5","released_at":"2008-08-19T12:12:16+00:00","released_string":"2008-08-19
+        12:12:16"},{"version":"4.8","released_at":"2010-10-05T08:50:56+00:00","released_string":"2010-10-05
+        08:50:56"},{"version":"4.8.2","released_at":"2010-10-05T08:51:27+00:00","released_string":"2010-10-05
+        08:51:27"},{"version":"4.9","released_at":"2011-08-22T18:15:46+00:00","released_string":"2011-08-22
+        06:15:46"},{"version":"3.8.2-brew","released_at":null,"released_string":null},{"version":"4.11-beta-1","released_at":"2012-10-15T19:45:51+00:00","released_string":"2012-10-15
+        07:45:51"},{"version":"4.11","released_at":"2012-11-14T19:21:45+00:00","released_string":"2012-11-14
+        07:21:45"},{"version":"4.12-beta-1","released_at":"2014-07-27T20:41:29+00:00","released_string":"2014-07-27
+        08:41:29"},{"version":"4.12-beta-2","released_at":"2014-09-25T05:54:40+00:00","released_string":"2014-09-25
+        05:54:40"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:14 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Java/junit:junit?prod_version=4.6
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:20:58 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1492'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"b165e169886844d3c9dcfdc2868035dc"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - a2466646f8f844e8871d6e6965b0fc7b
+      X-Runtime:
+      - '0.056236'
+    body:
+      encoding: UTF-8
+      string: '{"name":"junit","language":"Java","prod_key":"junit/junit","version":"4.6","prod_type":"Maven2","group_id":"junit","artifact_id":"junit","license_info":"Common
+        Public License Version 1.0","description":"JUnit is a regression testing framework
+        written by Erich Gamma and Kent Beck.\n        It is used by the developer
+        who implements unit tests in Java.","updated_at":"2014-10-17T14:10:20Z","released_at":"2009-05-09T19:56:03+00:00","dependencies":[],"licenses":[{"name":"Common
+        Public License Version 1.0","url":"http://www.opensource.org/licenses/cpl1.0.txt"}],"links":[{"name":"JUnit","link":"http://www.junit.org"},{"name":"Link
+        to Repo","link":"http://mvn.carbonfive.com/nexus/content/groups/public/junit/junit/"},{"name":"Link
+        to Repository","link":"http://download.osgeo.org/webdav/geotools/junit/junit/"},{"name":"Link
+        to Repository","link":"http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22junit%22%20AND%20a%3A%22junit%22"},{"name":"Link
+        to Repository","link":"http://mirrors.ibiblio.org/maven2/junit/junit"},{"name":"SCM","link":"http://github.com/KentBeck/junit/tree/master"},{"name":"URL","link":"http://junit.org"}],"archives":[{"name":"junit-4.6-sources.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.6/junit-4.6-sources.jar"},{"name":"junit-4.6.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.6/junit-4.6.jar"},{"name":"junit-4.6.pom","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.6/junit-4.6.pom"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:14 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Java/junit:junit?prod_version=4.7
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:20:59 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1626'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"5bc51ca2e3914291e46e63ea7cfafbd9"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 764294a958833899b8d708bc1d0e0fc3
+      X-Runtime:
+      - '0.040081'
+    body:
+      encoding: UTF-8
+      string: '{"name":"junit","language":"Java","prod_key":"junit/junit","version":"4.7","prod_type":"Maven2","group_id":"junit","artifact_id":"junit","license_info":"Common
+        Public License Version 1.0","description":"JUnit is a regression testing framework
+        written by Erich Gamma and Kent Beck.\n        It is used by the developer
+        who implements unit tests in Java.","updated_at":"2014-10-17T14:10:20Z","released_at":"2009-08-04T02:07:43+00:00","dependencies":[],"licenses":[{"name":"Common
+        Public License Version 1.0","url":"http://www.opensource.org/licenses/cpl1.0.txt"}],"links":[{"name":"JUnit","link":"http://www.junit.org"},{"name":"Link
+        to Repo","link":"http://mvn.carbonfive.com/nexus/content/groups/public/junit/junit/"},{"name":"Link
+        to Repository","link":"http://download.osgeo.org/webdav/geotools/junit/junit/"},{"name":"Link
+        to Repository","link":"http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22junit%22%20AND%20a%3A%22junit%22"},{"name":"Link
+        to Repository","link":"http://mirrors.ibiblio.org/maven2/junit/junit"},{"name":"SCM","link":"http://github.com/KentBeck/junit/tree/master"},{"name":"URL","link":"http://junit.org"}],"archives":[{"name":"junit-4.7-javadoc.jar","link":"http://mvn.carbonfive.com/nexus/content/groups/public/junit/junit/4.7/junit-4.7-javadoc.jar"},{"name":"junit-4.7-sources.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.7/junit-4.7-sources.jar"},{"name":"junit-4.7.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.7/junit-4.7.jar"},{"name":"junit-4.7.pom","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.7/junit-4.7.pom"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:15 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Java/junit:junit?prod_version=4.8.1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:20:59 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1652'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"4a1a3ca7cbc561cfda523c27ee77a09a"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 005a92eb9cfc64617af944ca2291c313
+      X-Runtime:
+      - '0.039872'
+    body:
+      encoding: UTF-8
+      string: '{"name":"junit","language":"Java","prod_key":"junit/junit","version":"4.8.1","prod_type":"Maven2","group_id":"junit","artifact_id":"junit","license_info":"Common
+        Public License Version 1.0","description":"JUnit is a regression testing framework
+        written by Erich Gamma and Kent Beck.\n        It is used by the developer
+        who implements unit tests in Java.","updated_at":"2014-10-17T14:10:20Z","released_at":"2010-02-25T12:21:58+00:00","dependencies":[],"licenses":[{"name":"Common
+        Public License Version 1.0","url":"http://www.opensource.org/licenses/cpl1.0.txt"}],"links":[{"name":"JUnit","link":"http://www.junit.org"},{"name":"Link
+        to Repo","link":"http://mvn.carbonfive.com/nexus/content/groups/public/junit/junit/"},{"name":"Link
+        to Repository","link":"http://download.osgeo.org/webdav/geotools/junit/junit/"},{"name":"Link
+        to Repository","link":"http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22junit%22%20AND%20a%3A%22junit%22"},{"name":"Link
+        to Repository","link":"http://mirrors.ibiblio.org/maven2/junit/junit"},{"name":"SCM","link":"http://github.com/KentBeck/junit/tree/master"},{"name":"URL","link":"http://junit.org"}],"archives":[{"name":"junit-4.8.1-javadoc.jar","link":"http://mvn.carbonfive.com/nexus/content/groups/public/junit/junit/4.8.1/junit-4.8.1-javadoc.jar"},{"name":"junit-4.8.1-sources.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.8.1/junit-4.8.1-sources.jar"},{"name":"junit-4.8.1.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.8.1/junit-4.8.1.jar"},{"name":"junit-4.8.1.pom","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.8.1/junit-4.8.1.pom"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:15 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Java/junit:junit?prod_version=3.8.1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:20:59 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1507'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"5fcd9c57b98bc09875e7bc813296cd6a"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 90736ae4a0d015138842398691c315e8
+      X-Runtime:
+      - '0.039459'
+    body:
+      encoding: UTF-8
+      string: '{"name":"junit","language":"Java","prod_key":"junit/junit","version":"3.8.1","prod_type":"Maven2","group_id":"junit","artifact_id":"junit","license_info":"Common
+        Public License Version 1.0","description":"JUnit is a regression testing framework
+        written by Erich Gamma and Kent Beck.\n        It is used by the developer
+        who implements unit tests in Java.","updated_at":"2014-10-17T14:10:20Z","released_at":"2004-03-05T10:50:06+00:00","dependencies":[],"licenses":[{"name":"Common
+        Public License Version 1.0","url":"http://www.opensource.org/licenses/cpl1.0.txt"}],"links":[{"name":"JUnit","link":"http://www.junit.org"},{"name":"Link
+        to Repo","link":"http://mvn.carbonfive.com/nexus/content/groups/public/junit/junit/"},{"name":"Link
+        to Repository","link":"http://download.osgeo.org/webdav/geotools/junit/junit/"},{"name":"Link
+        to Repository","link":"http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22junit%22%20AND%20a%3A%22junit%22"},{"name":"Link
+        to Repository","link":"http://mirrors.ibiblio.org/maven2/junit/junit"},{"name":"SCM","link":"http://junit.cvs.sourceforge.net/junit/"},{"name":"URL","link":"http://junit.org"}],"archives":[{"name":"junit-3.8.1-sources.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/3.8.1/junit-3.8.1-sources.jar"},{"name":"junit-3.8.1.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/3.8.1/junit-3.8.1.jar"},{"name":"junit-3.8.1.pom","link":"http://search.maven.org/remotecontent?filepath=junit/junit/3.8.1/junit-3.8.1.pom"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:15 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Java/junit:junit?prod_version=3.7
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:20:59 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1360'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"e70aae4aa5d73ef99baf2a376d6f35ed"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 7c9c715d48a3127814d41cb07737e5d9
+      X-Runtime:
+      - '0.037736'
+    body:
+      encoding: UTF-8
+      string: '{"name":"junit","language":"Java","prod_key":"junit/junit","version":"3.7","prod_type":"Maven2","group_id":"junit","artifact_id":"junit","license_info":"Common
+        Public License Version 1.0","description":"JUnit is a regression testing framework
+        written by Erich Gamma and Kent Beck.\n        It is used by the developer
+        who implements unit tests in Java.","updated_at":"2014-10-17T14:10:20Z","released_at":"2005-08-01T09:42:48+00:00","dependencies":[],"licenses":[{"name":"Common
+        Public License Version 1.0","url":"http://www.opensource.org/licenses/cpl1.0.txt"}],"links":[{"name":"JUnit","link":"http://www.junit.org"},{"name":"Link
+        to Repo","link":"http://mvn.carbonfive.com/nexus/content/groups/public/junit/junit/"},{"name":"Link
+        to Repository","link":"http://download.osgeo.org/webdav/geotools/junit/junit/"},{"name":"Link
+        to Repository","link":"http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22junit%22%20AND%20a%3A%22junit%22"},{"name":"Link
+        to Repository","link":"http://mirrors.ibiblio.org/maven2/junit/junit"},{"name":"SCM","link":"http://junit.cvs.sourceforge.net/junit/"},{"name":"URL","link":"http://junit.org"}],"archives":[{"name":"junit-3.7.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/3.7/junit-3.7.jar"},{"name":"junit-3.7.pom","link":"http://search.maven.org/remotecontent?filepath=junit/junit/3.7/junit-3.7.pom"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:15 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Java/junit:junit?prod_version=3.8
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:00 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1360'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"756781d871fb09d067d1aa5267861a40"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - d5190c24148fc904a26374523eb8470d
+      X-Runtime:
+      - '0.040447'
+    body:
+      encoding: UTF-8
+      string: '{"name":"junit","language":"Java","prod_key":"junit/junit","version":"3.8","prod_type":"Maven2","group_id":"junit","artifact_id":"junit","license_info":"Common
+        Public License Version 1.0","description":"JUnit is a regression testing framework
+        written by Erich Gamma and Kent Beck.\n        It is used by the developer
+        who implements unit tests in Java.","updated_at":"2014-10-17T14:10:20Z","released_at":"2005-08-01T09:42:49+00:00","dependencies":[],"licenses":[{"name":"Common
+        Public License Version 1.0","url":"http://www.opensource.org/licenses/cpl1.0.txt"}],"links":[{"name":"JUnit","link":"http://www.junit.org"},{"name":"Link
+        to Repo","link":"http://mvn.carbonfive.com/nexus/content/groups/public/junit/junit/"},{"name":"Link
+        to Repository","link":"http://download.osgeo.org/webdav/geotools/junit/junit/"},{"name":"Link
+        to Repository","link":"http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22junit%22%20AND%20a%3A%22junit%22"},{"name":"Link
+        to Repository","link":"http://mirrors.ibiblio.org/maven2/junit/junit"},{"name":"SCM","link":"http://junit.cvs.sourceforge.net/junit/"},{"name":"URL","link":"http://junit.org"}],"archives":[{"name":"junit-3.8.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/3.8/junit-3.8.jar"},{"name":"junit-3.8.pom","link":"http://search.maven.org/remotecontent?filepath=junit/junit/3.8/junit-3.8.pom"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:16 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Java/junit:junit?prod_version=3.8.2
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:00 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1640'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"68d260ca436c10ea867a784f5757f49b"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - bbb160856b1df789b834b2db0aa5ca48
+      X-Runtime:
+      - '0.039021'
+    body:
+      encoding: UTF-8
+      string: '{"name":"junit","language":"Java","prod_key":"junit/junit","version":"3.8.2","prod_type":"Maven2","group_id":"junit","artifact_id":"junit","license_info":"Common
+        Public License Version 1.0","description":"JUnit is a regression testing framework
+        written by Erich Gamma and Kent Beck.\n        It is used by the developer
+        who implements unit tests in Java.","updated_at":"2014-10-17T14:10:20Z","released_at":"2006-03-04T22:34:13+00:00","dependencies":[],"licenses":[{"name":"Common
+        Public License Version 1.0","url":"http://www.opensource.org/licenses/cpl1.0.txt"}],"links":[{"name":"JUnit","link":"http://www.junit.org"},{"name":"Link
+        to Repo","link":"http://mvn.carbonfive.com/nexus/content/groups/public/junit/junit/"},{"name":"Link
+        to Repository","link":"http://download.osgeo.org/webdav/geotools/junit/junit/"},{"name":"Link
+        to Repository","link":"http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22junit%22%20AND%20a%3A%22junit%22"},{"name":"Link
+        to Repository","link":"http://mirrors.ibiblio.org/maven2/junit/junit"},{"name":"SCM","link":"http://junit.cvs.sourceforge.net/junit/"},{"name":"URL","link":"http://junit.org"}],"archives":[{"name":"junit-3.8.2-javadoc.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/3.8.2/junit-3.8.2-javadoc.jar"},{"name":"junit-3.8.2-sources.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/3.8.2/junit-3.8.2-sources.jar"},{"name":"junit-3.8.2.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/3.8.2/junit-3.8.2.jar"},{"name":"junit-3.8.2.pom","link":"http://search.maven.org/remotecontent?filepath=junit/junit/3.8.2/junit-3.8.2.pom"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:16 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Java/junit:junit?prod_version=4.0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:00 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1426'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"b02b04d027278d51a86c92bb1dc316e5"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - ad206a77ad39252e80d8a139d73be697
+      X-Runtime:
+      - '0.048530'
+    body:
+      encoding: UTF-8
+      string: '{"name":"junit","language":"Java","prod_key":"junit/junit","version":"4.0","prod_type":"Maven2","group_id":"junit","artifact_id":"junit","license_info":"unknown","description":"JUnit
+        is a regression testing framework written by Erich Gamma and Kent Beck.\n        It
+        is used by the developer who implements unit tests in Java.","updated_at":"2014-10-17T14:10:20Z","released_at":"2006-02-18T19:16:52+00:00","dependencies":[],"licenses":[],"links":[{"name":"JUnit","link":"http://www.junit.org"},{"name":"Link
+        to Repo","link":"http://mvn.carbonfive.com/nexus/content/groups/public/junit/junit/"},{"name":"Link
+        to Repository","link":"http://download.osgeo.org/webdav/geotools/junit/junit/"},{"name":"Link
+        to Repository","link":"http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22junit%22%20AND%20a%3A%22junit%22"},{"name":"Link
+        to Repository","link":"http://mirrors.ibiblio.org/maven2/junit/junit"},{"name":"URL","link":"http://junit.org"}],"archives":[{"name":"junit-4.0-javadoc.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.0/junit-4.0-javadoc.jar"},{"name":"junit-4.0-sources.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.0/junit-4.0-sources.jar"},{"name":"junit-4.0.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.0/junit-4.0.jar"},{"name":"junit-4.0.pom","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.0/junit-4.0.pom"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:16 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Java/junit:junit?prod_version=4.1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:00 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1550'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"b70d5ad5ac3b4eda2c6ed8b677c041dc"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 2edf2af992dea479d5df6072afb00367
+      X-Runtime:
+      - '0.038421'
+    body:
+      encoding: UTF-8
+      string: '{"name":"junit","language":"Java","prod_key":"junit/junit","version":"4.1","prod_type":"Maven2","group_id":"junit","artifact_id":"junit","license_info":"Common
+        Public License Version 1.0","description":"JUnit is a regression testing framework
+        written by Erich Gamma and Kent Beck.\n        It is used by the developer
+        who implements unit tests in Java.","updated_at":"2014-10-17T14:10:20Z","released_at":"2006-10-06T12:30:27+00:00","dependencies":[],"licenses":[{"name":"Common
+        Public License Version 1.0","url":"http://www.opensource.org/licenses/cpl1.0.txt"}],"links":[{"name":"JUnit","link":"http://www.junit.org"},{"name":"Link
+        to Repo","link":"http://mvn.carbonfive.com/nexus/content/groups/public/junit/junit/"},{"name":"Link
+        to Repository","link":"http://download.osgeo.org/webdav/geotools/junit/junit/"},{"name":"Link
+        to Repository","link":"http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22junit%22%20AND%20a%3A%22junit%22"},{"name":"Link
+        to Repository","link":"http://mirrors.ibiblio.org/maven2/junit/junit"},{"name":"URL","link":"http://junit.org"}],"archives":[{"name":"junit-4.1-javadoc.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.1/junit-4.1-javadoc.jar"},{"name":"junit-4.1-sources.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.1/junit-4.1-sources.jar"},{"name":"junit-4.1.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.1/junit-4.1.jar"},{"name":"junit-4.1.pom","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.1/junit-4.1.pom"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:16 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Java/junit:junit?prod_version=4.10
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:00 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1813'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"dec51f4c9ee25b0e6d8946bae1f18eea"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 18a41f72aaf13198a3a78d9b24e37898
+      X-Runtime:
+      - '0.042840'
+    body:
+      encoding: UTF-8
+      string: '{"name":"junit","language":"Java","prod_key":"junit/junit","version":"4.10","prod_type":"Maven2","group_id":"junit","artifact_id":"junit","license_info":"Common
+        Public License Version 1.0","description":"JUnit is a regression testing framework
+        written by Erich Gamma and Kent Beck.\n        It is used by the developer
+        who implements unit tests in Java.","updated_at":"2014-10-17T14:10:20Z","released_at":"2011-09-29T19:12:23+00:00","dependencies":[{"name":"hamcrest-core","dep_prod_key":"org.hamcrest/hamcrest-core","version":"1.1","parsed_version":"1.1","group_id":"org.hamcrest","artifact_id":"hamcrest-core","scope":"compile"}],"licenses":[{"name":"Common
+        Public License Version 1.0","url":"http://www.opensource.org/licenses/cpl1.0.txt"}],"links":[{"name":"JUnit","link":"http://www.junit.org"},{"name":"Link
+        to Repo","link":"http://mvn.carbonfive.com/nexus/content/groups/public/junit/junit/"},{"name":"Link
+        to Repository","link":"http://download.osgeo.org/webdav/geotools/junit/junit/"},{"name":"Link
+        to Repository","link":"http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22junit%22%20AND%20a%3A%22junit%22"},{"name":"Link
+        to Repository","link":"http://mirrors.ibiblio.org/maven2/junit/junit"},{"name":"SCM","link":"http://github.com/KentBeck/junit/tree/master"},{"name":"URL","link":"http://junit.org"}],"archives":[{"name":"junit-4.10-javadoc.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.10/junit-4.10-javadoc.jar"},{"name":"junit-4.10-sources.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.10/junit-4.10-sources.jar"},{"name":"junit-4.10.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.10/junit-4.10.jar"},{"name":"junit-4.10.pom","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.10/junit-4.10.pom"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:16 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Java/junit:junit?prod_version=4.2
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:01 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1614'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"7b3227e17316b857b331a44fe4735c57"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 047469f40d52d8600d1e6af7cb67b163
+      X-Runtime:
+      - '0.042069'
+    body:
+      encoding: UTF-8
+      string: '{"name":"junit","language":"Java","prod_key":"junit/junit","version":"4.2","prod_type":"Maven2","group_id":"junit","artifact_id":"junit","license_info":"Common
+        Public License Version 1.0","description":"JUnit is a regression testing framework
+        written by Erich Gamma and Kent Beck.\n        It is used by the developer
+        who implements unit tests in Java.","updated_at":"2014-10-17T14:10:20Z","released_at":"2007-02-01T23:55:36+00:00","dependencies":[],"licenses":[{"name":"Common
+        Public License Version 1.0","url":"http://www.opensource.org/licenses/cpl1.0.txt"}],"links":[{"name":"JUnit","link":"http://www.junit.org"},{"name":"Link
+        to Repo","link":"http://mvn.carbonfive.com/nexus/content/groups/public/junit/junit/"},{"name":"Link
+        to Repository","link":"http://download.osgeo.org/webdav/geotools/junit/junit/"},{"name":"Link
+        to Repository","link":"http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22junit%22%20AND%20a%3A%22junit%22"},{"name":"Link
+        to Repository","link":"http://mirrors.ibiblio.org/maven2/junit/junit"},{"name":"SCM","link":"http://junit.cvs.sourceforge.net/junit/"},{"name":"URL","link":"http://junit.org"}],"archives":[{"name":"junit-4.2-javadoc.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.2/junit-4.2-javadoc.jar"},{"name":"junit-4.2-sources.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.2/junit-4.2-sources.jar"},{"name":"junit-4.2.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.2/junit-4.2.jar"},{"name":"junit-4.2.pom","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.2/junit-4.2.pom"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:17 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Java/junit:junit?prod_version=4.3
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:01 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1614'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"1bbe60d5ddf5b25d9f0306c14e1751b0"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 023031f5728a143c33efcdcddea2fc7a
+      X-Runtime:
+      - '0.038306'
+    body:
+      encoding: UTF-8
+      string: '{"name":"junit","language":"Java","prod_key":"junit/junit","version":"4.3","prod_type":"Maven2","group_id":"junit","artifact_id":"junit","license_info":"Common
+        Public License Version 1.0","description":"JUnit is a regression testing framework
+        written by Erich Gamma and Kent Beck.\n        It is used by the developer
+        who implements unit tests in Java.","updated_at":"2014-10-17T14:10:20Z","released_at":"2007-03-21T16:55:52+00:00","dependencies":[],"licenses":[{"name":"Common
+        Public License Version 1.0","url":"http://www.opensource.org/licenses/cpl1.0.txt"}],"links":[{"name":"JUnit","link":"http://www.junit.org"},{"name":"Link
+        to Repo","link":"http://mvn.carbonfive.com/nexus/content/groups/public/junit/junit/"},{"name":"Link
+        to Repository","link":"http://download.osgeo.org/webdav/geotools/junit/junit/"},{"name":"Link
+        to Repository","link":"http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22junit%22%20AND%20a%3A%22junit%22"},{"name":"Link
+        to Repository","link":"http://mirrors.ibiblio.org/maven2/junit/junit"},{"name":"SCM","link":"http://junit.cvs.sourceforge.net/junit/"},{"name":"URL","link":"http://junit.org"}],"archives":[{"name":"junit-4.3-javadoc.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.3/junit-4.3-javadoc.jar"},{"name":"junit-4.3-sources.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.3/junit-4.3-sources.jar"},{"name":"junit-4.3.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.3/junit-4.3.jar"},{"name":"junit-4.3.pom","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.3/junit-4.3.pom"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:17 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Java/junit:junit?prod_version=4.3.1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:01 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1640'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"25a76069ef5e56d964b2de60b98ec346"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - b290f7881f190a7931ef0a856305541f
+      X-Runtime:
+      - '0.038105'
+    body:
+      encoding: UTF-8
+      string: '{"name":"junit","language":"Java","prod_key":"junit/junit","version":"4.3.1","prod_type":"Maven2","group_id":"junit","artifact_id":"junit","license_info":"Common
+        Public License Version 1.0","description":"JUnit is a regression testing framework
+        written by Erich Gamma and Kent Beck.\n        It is used by the developer
+        who implements unit tests in Java.","updated_at":"2014-10-17T14:10:20Z","released_at":"2007-03-29T21:42:46+00:00","dependencies":[],"licenses":[{"name":"Common
+        Public License Version 1.0","url":"http://www.opensource.org/licenses/cpl1.0.txt"}],"links":[{"name":"JUnit","link":"http://www.junit.org"},{"name":"Link
+        to Repo","link":"http://mvn.carbonfive.com/nexus/content/groups/public/junit/junit/"},{"name":"Link
+        to Repository","link":"http://download.osgeo.org/webdav/geotools/junit/junit/"},{"name":"Link
+        to Repository","link":"http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22junit%22%20AND%20a%3A%22junit%22"},{"name":"Link
+        to Repository","link":"http://mirrors.ibiblio.org/maven2/junit/junit"},{"name":"SCM","link":"http://junit.cvs.sourceforge.net/junit/"},{"name":"URL","link":"http://junit.org"}],"archives":[{"name":"junit-4.3.1-javadoc.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.3.1/junit-4.3.1-javadoc.jar"},{"name":"junit-4.3.1-sources.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.3.1/junit-4.3.1-sources.jar"},{"name":"junit-4.3.1.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.3.1/junit-4.3.1.jar"},{"name":"junit-4.3.1.pom","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.3.1/junit-4.3.1.pom"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:17 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Java/junit:junit?prod_version=4.4
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:01 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1614'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"e14229ff74ecb5f4e196a037f025086f"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 5245e3e15b10d48f62a3d5312945f28b
+      X-Runtime:
+      - '0.037840'
+    body:
+      encoding: UTF-8
+      string: '{"name":"junit","language":"Java","prod_key":"junit/junit","version":"4.4","prod_type":"Maven2","group_id":"junit","artifact_id":"junit","license_info":"Common
+        Public License Version 1.0","description":"JUnit is a regression testing framework
+        written by Erich Gamma and Kent Beck.\n        It is used by the developer
+        who implements unit tests in Java.","updated_at":"2014-10-17T14:10:20Z","released_at":"2007-08-21T17:43:32+00:00","dependencies":[],"licenses":[{"name":"Common
+        Public License Version 1.0","url":"http://www.opensource.org/licenses/cpl1.0.txt"}],"links":[{"name":"JUnit","link":"http://www.junit.org"},{"name":"Link
+        to Repo","link":"http://mvn.carbonfive.com/nexus/content/groups/public/junit/junit/"},{"name":"Link
+        to Repository","link":"http://download.osgeo.org/webdav/geotools/junit/junit/"},{"name":"Link
+        to Repository","link":"http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22junit%22%20AND%20a%3A%22junit%22"},{"name":"Link
+        to Repository","link":"http://mirrors.ibiblio.org/maven2/junit/junit"},{"name":"SCM","link":"http://junit.cvs.sourceforge.net/junit/"},{"name":"URL","link":"http://junit.org"}],"archives":[{"name":"junit-4.4-javadoc.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.4/junit-4.4-javadoc.jar"},{"name":"junit-4.4-sources.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.4/junit-4.4-sources.jar"},{"name":"junit-4.4.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.4/junit-4.4.jar"},{"name":"junit-4.4.pom","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.4/junit-4.4.pom"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:17 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Java/junit:junit?prod_version=4.5
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:01 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1487'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"a5fe2054d84813c480b60757ea1f8dff"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 0e6e3a6b8c458b2e4e5b904ae8de530a
+      X-Runtime:
+      - '0.038772'
+    body:
+      encoding: UTF-8
+      string: '{"name":"junit","language":"Java","prod_key":"junit/junit","version":"4.5","prod_type":"Maven2","group_id":"junit","artifact_id":"junit","license_info":"Common
+        Public License Version 1.0","description":"JUnit is a regression testing framework
+        written by Erich Gamma and Kent Beck.\n        It is used by the developer
+        who implements unit tests in Java.","updated_at":"2014-10-17T14:10:20Z","released_at":"2008-08-19T12:12:16+00:00","dependencies":[],"licenses":[{"name":"Common
+        Public License Version 1.0","url":"http://www.opensource.org/licenses/cpl1.0.txt"}],"links":[{"name":"JUnit","link":"http://www.junit.org"},{"name":"Link
+        to Repo","link":"http://mvn.carbonfive.com/nexus/content/groups/public/junit/junit/"},{"name":"Link
+        to Repository","link":"http://download.osgeo.org/webdav/geotools/junit/junit/"},{"name":"Link
+        to Repository","link":"http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22junit%22%20AND%20a%3A%22junit%22"},{"name":"Link
+        to Repository","link":"http://mirrors.ibiblio.org/maven2/junit/junit"},{"name":"SCM","link":"http://junit.cvs.sourceforge.net/junit/"},{"name":"URL","link":"http://junit.org"}],"archives":[{"name":"junit-4.5-sources.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.5/junit-4.5-sources.jar"},{"name":"junit-4.5.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.5/junit-4.5.jar"},{"name":"junit-4.5.pom","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.5/junit-4.5.pom"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:17 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Java/junit:junit?prod_version=4.8
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:02 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1607'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"21e3619b65d57fd53309b03dc54dc777"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - eb83e262052eaa73302127bc86a1ee65
+      X-Runtime:
+      - '0.047033'
+    body:
+      encoding: UTF-8
+      string: '{"name":"junit","language":"Java","prod_key":"junit/junit","version":"4.8","prod_type":"Maven2","group_id":"junit","artifact_id":"junit","license_info":"Common
+        Public License Version 1.0","description":"JUnit is a regression testing framework
+        written by Erich Gamma and Kent Beck.\n        It is used by the developer
+        who implements unit tests in Java.","updated_at":"2014-10-17T14:10:20Z","released_at":"2010-10-05T08:50:56+00:00","dependencies":[],"licenses":[{"name":"Common
+        Public License Version 1.0","url":"http://www.opensource.org/licenses/cpl1.0.txt"}],"links":[{"name":"JUnit","link":"http://www.junit.org"},{"name":"Link
+        to Repo","link":"http://mvn.carbonfive.com/nexus/content/groups/public/junit/junit/"},{"name":"Link
+        to Repository","link":"http://download.osgeo.org/webdav/geotools/junit/junit/"},{"name":"Link
+        to Repository","link":"http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22junit%22%20AND%20a%3A%22junit%22"},{"name":"Link
+        to Repository","link":"http://mirrors.ibiblio.org/maven2/junit/junit"},{"name":"SCM","link":"http://github.com/KentBeck/junit"},{"name":"URL","link":"http://junit.org"}],"archives":[{"name":"junit-4.8-javadoc.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.8/junit-4.8-javadoc.jar"},{"name":"junit-4.8-sources.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.8/junit-4.8-sources.jar"},{"name":"junit-4.8.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.8/junit-4.8.jar"},{"name":"junit-4.8.pom","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.8/junit-4.8.pom"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:18 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Java/junit:junit?prod_version=4.8.2
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:02 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1633'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"2aa4ecadfc44085a80545bd4fc42fdd1"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - dc069144703df571c0d1ac0b0f375b79
+      X-Runtime:
+      - '0.037732'
+    body:
+      encoding: UTF-8
+      string: '{"name":"junit","language":"Java","prod_key":"junit/junit","version":"4.8.2","prod_type":"Maven2","group_id":"junit","artifact_id":"junit","license_info":"Common
+        Public License Version 1.0","description":"JUnit is a regression testing framework
+        written by Erich Gamma and Kent Beck.\n        It is used by the developer
+        who implements unit tests in Java.","updated_at":"2014-10-17T14:10:20Z","released_at":"2010-10-05T08:51:27+00:00","dependencies":[],"licenses":[{"name":"Common
+        Public License Version 1.0","url":"http://www.opensource.org/licenses/cpl1.0.txt"}],"links":[{"name":"JUnit","link":"http://www.junit.org"},{"name":"Link
+        to Repo","link":"http://mvn.carbonfive.com/nexus/content/groups/public/junit/junit/"},{"name":"Link
+        to Repository","link":"http://download.osgeo.org/webdav/geotools/junit/junit/"},{"name":"Link
+        to Repository","link":"http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22junit%22%20AND%20a%3A%22junit%22"},{"name":"Link
+        to Repository","link":"http://mirrors.ibiblio.org/maven2/junit/junit"},{"name":"SCM","link":"http://github.com/KentBeck/junit"},{"name":"URL","link":"http://junit.org"}],"archives":[{"name":"junit-4.8.2-javadoc.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.8.2/junit-4.8.2-javadoc.jar"},{"name":"junit-4.8.2-sources.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.8.2/junit-4.8.2-sources.jar"},{"name":"junit-4.8.2.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.8.2/junit-4.8.2.jar"},{"name":"junit-4.8.2.pom","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.8.2/junit-4.8.2.pom"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:18 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Java/junit:junit?prod_version=4.9
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:02 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1800'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"2e792659a680e79bc282f7b3f75cfa4e"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 24a44a1ecfb1c3971805bf1b64c0717c
+      X-Runtime:
+      - '0.040555'
+    body:
+      encoding: UTF-8
+      string: '{"name":"junit","language":"Java","prod_key":"junit/junit","version":"4.9","prod_type":"Maven2","group_id":"junit","artifact_id":"junit","license_info":"Common
+        Public License Version 1.0","description":"JUnit is a regression testing framework
+        written by Erich Gamma and Kent Beck.\n        It is used by the developer
+        who implements unit tests in Java.","updated_at":"2014-10-17T14:10:20Z","released_at":"2011-08-22T18:15:46+00:00","dependencies":[{"name":"hamcrest-core","dep_prod_key":"org.hamcrest/hamcrest-core","version":"1.1","parsed_version":"1.1","group_id":"org.hamcrest","artifact_id":"hamcrest-core","scope":"compile"}],"licenses":[{"name":"Common
+        Public License Version 1.0","url":"http://www.opensource.org/licenses/cpl1.0.txt"}],"links":[{"name":"JUnit","link":"http://www.junit.org"},{"name":"Link
+        to Repo","link":"http://mvn.carbonfive.com/nexus/content/groups/public/junit/junit/"},{"name":"Link
+        to Repository","link":"http://download.osgeo.org/webdav/geotools/junit/junit/"},{"name":"Link
+        to Repository","link":"http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22junit%22%20AND%20a%3A%22junit%22"},{"name":"Link
+        to Repository","link":"http://mirrors.ibiblio.org/maven2/junit/junit"},{"name":"SCM","link":"http://github.com/KentBeck/junit/tree/master"},{"name":"URL","link":"http://junit.org"}],"archives":[{"name":"junit-4.9-javadoc.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.9/junit-4.9-javadoc.jar"},{"name":"junit-4.9-sources.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.9/junit-4.9-sources.jar"},{"name":"junit-4.9.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.9/junit-4.9.jar"},{"name":"junit-4.9.pom","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.9/junit-4.9.pom"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:18 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Java/junit:junit?prod_version=3.8.2-brew
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:02 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1187'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"7b22dbcb432847aa788e4d61884f1c9c"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - c3b47e611f6e9288e6828dee01cee58a
+      X-Runtime:
+      - '0.036791'
+    body:
+      encoding: UTF-8
+      string: '{"name":"junit","language":"Java","prod_key":"junit/junit","version":"3.8.2-brew","prod_type":"Maven2","group_id":"junit","artifact_id":"junit","license_info":"unknown","description":"JUnit
+        is a regression testing framework written by Erich Gamma and Kent Beck.\n        It
+        is used by the developer who implements unit tests in Java.","updated_at":"2014-10-17T14:10:20Z","released_at":null,"dependencies":[],"licenses":[],"links":[{"name":"JUnit","link":"http://www.junit.org"},{"name":"Link
+        to Repo","link":"http://mvn.carbonfive.com/nexus/content/groups/public/junit/junit/"},{"name":"Link
+        to Repository","link":"http://download.osgeo.org/webdav/geotools/junit/junit/"},{"name":"Link
+        to Repository","link":"http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22junit%22%20AND%20a%3A%22junit%22"},{"name":"Link
+        to Repository","link":"http://mirrors.ibiblio.org/maven2/junit/junit"}],"archives":[{"name":"junit-3.8.2-brew.jar","link":"http://repository.jboss.org/nexus/content/groups/public-jboss/junit/junit/3.8.2-brew/junit-3.8.2-brew.jar"},{"name":"junit-3.8.2-brew.pom","link":"http://repository.jboss.org/nexus/content/groups/public-jboss/junit/junit/3.8.2-brew/junit-3.8.2-brew.pom"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:18 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Java/junit:junit?prod_version=4.11-beta-1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:02 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1904'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"0bdb50a5a8b8e5c3b93d1e4bc9577316"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 281d7b8f7bc2ee1a07c35be288ee8868
+      X-Runtime:
+      - '0.039569'
+    body:
+      encoding: UTF-8
+      string: '{"name":"junit","language":"Java","prod_key":"junit/junit","version":"4.11-beta-1","prod_type":"Maven2","group_id":"junit","artifact_id":"junit","license_info":"Common
+        Public License Version 1.0","description":"JUnit is a regression testing framework
+        written by Erich Gamma and Kent Beck.\n        It is used by the developer
+        who implements unit tests in Java.","updated_at":"2014-10-17T14:10:20Z","released_at":"2012-10-15T19:45:51+00:00","dependencies":[{"name":"hamcrest-core","dep_prod_key":"org.hamcrest/hamcrest-core","version":"1.3","parsed_version":"1.3","group_id":"org.hamcrest","artifact_id":"hamcrest-core","scope":"compile"}],"licenses":[{"name":"Common
+        Public License Version 1.0","url":"http://www.opensource.org/licenses/cpl1.0.txt"}],"links":[{"name":"JUnit","link":"http://www.junit.org"},{"name":"Link
+        to Repo","link":"http://mvn.carbonfive.com/nexus/content/groups/public/junit/junit/"},{"name":"Link
+        to Repository","link":"http://download.osgeo.org/webdav/geotools/junit/junit/"},{"name":"Link
+        to Repository","link":"http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22junit%22%20AND%20a%3A%22junit%22"},{"name":"Link
+        to Repository","link":"http://mirrors.ibiblio.org/maven2/junit/junit"},{"name":"SCM","link":"http://github.com/KentBeck/junit/tree/master"},{"name":"URL","link":"http://junit.org"}],"archives":[{"name":"junit-4.11-beta-1-javadoc.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.11-beta-1/junit-4.11-beta-1-javadoc.jar"},{"name":"junit-4.11-beta-1-sources.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.11-beta-1/junit-4.11-beta-1-sources.jar"},{"name":"junit-4.11-beta-1.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.11-beta-1/junit-4.11-beta-1.jar"},{"name":"junit-4.11-beta-1.pom","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.11-beta-1/junit-4.11-beta-1.pom"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:18 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Java/junit:junit?prod_version=4.11
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:03 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1813'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"c08a691798229f8492c63b6cc26c8584"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 4dde268b5d9143b1e050b0aebbcb51fc
+      X-Runtime:
+      - '0.059570'
+    body:
+      encoding: UTF-8
+      string: '{"name":"junit","language":"Java","prod_key":"junit/junit","version":"4.11","prod_type":"Maven2","group_id":"junit","artifact_id":"junit","license_info":"Common
+        Public License Version 1.0","description":"JUnit is a regression testing framework
+        written by Erich Gamma and Kent Beck.\n        It is used by the developer
+        who implements unit tests in Java.","updated_at":"2014-10-17T14:10:20Z","released_at":"2012-11-14T19:21:45+00:00","dependencies":[{"name":"hamcrest-core","dep_prod_key":"org.hamcrest/hamcrest-core","version":"1.3","parsed_version":"1.3","group_id":"org.hamcrest","artifact_id":"hamcrest-core","scope":"compile"}],"licenses":[{"name":"Common
+        Public License Version 1.0","url":"http://www.opensource.org/licenses/cpl1.0.txt"}],"links":[{"name":"JUnit","link":"http://www.junit.org"},{"name":"Link
+        to Repo","link":"http://mvn.carbonfive.com/nexus/content/groups/public/junit/junit/"},{"name":"Link
+        to Repository","link":"http://download.osgeo.org/webdav/geotools/junit/junit/"},{"name":"Link
+        to Repository","link":"http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22junit%22%20AND%20a%3A%22junit%22"},{"name":"Link
+        to Repository","link":"http://mirrors.ibiblio.org/maven2/junit/junit"},{"name":"SCM","link":"http://github.com/KentBeck/junit/tree/master"},{"name":"URL","link":"http://junit.org"}],"archives":[{"name":"junit-4.11-javadoc.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.11/junit-4.11-javadoc.jar"},{"name":"junit-4.11-sources.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.11/junit-4.11-sources.jar"},{"name":"junit-4.11.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.11/junit-4.11.jar"},{"name":"junit-4.11.pom","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.11/junit-4.11.pom"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:19 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Java/junit:junit?prod_version=4.12-beta-1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:03 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1847'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"7bbbfb64f510cbe66209abdf351aa436"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - fd9a4f4166eb6210848f4b89343e3ca5
+      X-Runtime:
+      - '0.060143'
+    body:
+      encoding: UTF-8
+      string: '{"name":"junit","language":"Java","prod_key":"junit/junit","version":"4.12-beta-1","prod_type":"Maven2","group_id":"junit","artifact_id":"junit","license_info":"Eclipse
+        Public License 1.0","description":"JUnit is a regression testing framework
+        written by Erich Gamma and Kent Beck.\n        It is used by the developer
+        who implements unit tests in Java.","updated_at":"2014-10-17T14:10:20Z","released_at":"2014-07-27T20:41:29+00:00","dependencies":[{"name":"hamcrest-core","dep_prod_key":"org.hamcrest/hamcrest-core","version":"1.3","parsed_version":"1.3","group_id":"org.hamcrest","artifact_id":"hamcrest-core","scope":"compile"}],"licenses":[{"name":"Eclipse
+        Public License 1.0","url":"http://www.eclipse.org/legal/epl-v10.html"}],"links":[{"name":"JUnit","link":"http://www.junit.org"},{"name":"Link
+        to Repo","link":"http://mvn.carbonfive.com/nexus/content/groups/public/junit/junit/"},{"name":"Link
+        to Repository","link":"http://download.osgeo.org/webdav/geotools/junit/junit/"},{"name":"Link
+        to Repository","link":"http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22junit%22%20AND%20a%3A%22junit%22"},{"name":"Link
+        to Repository","link":"http://mirrors.ibiblio.org/maven2/junit/junit"},{"name":"SCM","link":"http://github.com/junit-team/junit/tree/master"}],"archives":[{"name":"junit-4.12-beta-1-javadoc.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.12-beta-1/junit-4.12-beta-1-javadoc.jar"},{"name":"junit-4.12-beta-1-sources.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.12-beta-1/junit-4.12-beta-1-sources.jar"},{"name":"junit-4.12-beta-1.jar","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.12-beta-1/junit-4.12-beta-1.jar"},{"name":"junit-4.12-beta-1.pom","link":"http://search.maven.org/remotecontent?filepath=junit/junit/4.12-beta-1/junit-4.12-beta-1.pom"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:19 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Java/junit:junit?prod_version=4.12-beta-2
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Fri, 17 Oct 2014 16:21:03 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1724'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"acb7e3da28bc270933db28a0a093b87a"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - a65366f4ebb3c15d2959c9d03ef182fd
+      X-Runtime:
+      - '0.042410'
+    body:
+      encoding: UTF-8
+      string: '{"name":"junit","language":"Java","prod_key":"junit/junit","version":"4.12-beta-2","prod_type":"Maven2","group_id":"junit","artifact_id":"junit","license_info":"Eclipse
+        Public License 1.0","description":"JUnit is a regression testing framework
+        written by Erich Gamma and Kent Beck.\n        It is used by the developer
+        who implements unit tests in Java.","updated_at":"2014-10-17T14:10:20Z","released_at":"2014-09-25T05:54:40+00:00","dependencies":[{"name":"hamcrest-core","dep_prod_key":"org.hamcrest/hamcrest-core","version":"1.3","parsed_version":"1.3","group_id":"org.hamcrest","artifact_id":"hamcrest-core","scope":"compile"}],"licenses":[{"name":"Eclipse
+        Public License 1.0","url":"http://www.eclipse.org/legal/epl-v10.html"}],"links":[{"name":"JUnit","link":"http://www.junit.org"},{"name":"Link
+        to Repo","link":"http://mvn.carbonfive.com/nexus/content/groups/public/junit/junit/"},{"name":"Link
+        to Repository","link":"http://download.osgeo.org/webdav/geotools/junit/junit/"},{"name":"Link
+        to Repository","link":"http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22junit%22%20AND%20a%3A%22junit%22"},{"name":"Link
+        to Repository","link":"http://mirrors.ibiblio.org/maven2/junit/junit"}],"archives":[{"name":"junit-4.12-beta-2-javadoc.jar","link":"http://mirrors.ibiblio.org/maven2/junit/junit/4.12-beta-2/junit-4.12-beta-2-javadoc.jar"},{"name":"junit-4.12-beta-2-sources.jar","link":"http://mirrors.ibiblio.org/maven2/junit/junit/4.12-beta-2/junit-4.12-beta-2-sources.jar"},{"name":"junit-4.12-beta-2.jar","link":"http://mirrors.ibiblio.org/maven2/junit/junit/4.12-beta-2/junit-4.12-beta-2.jar"},{"name":"junit-4.12-beta-2.pom","link":"http://mirrors.ibiblio.org/maven2/junit/junit/4.12-beta-2/junit-4.12-beta-2.pom"}]}'
+    http_version: 
+  recorded_at: Fri, 17 Oct 2014 16:18:19 GMT
+recorded_with: VCR 2.9.3

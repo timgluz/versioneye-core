@@ -84,6 +84,21 @@ describe Projectdependency do
     end
   end
 
+  describe 'possible_prod_key' do
+    it 'returns the name' do
+      dep = Projectdependency.new
+      dep.name = "AhA"
+      dep.possible_prod_key.should eql("AhA")
+    end
+    it 'returns the group_id/artifact_id' do
+      dep = Projectdependency.new
+      dep.name = "AhA"
+      dep.group_id = "org.junit"
+      dep.artifact_id = "testng"
+      dep.possible_prod_key.should eql("org.junit/testng")
+    end
+  end
+
   describe 'product' do
 
     it 'returns the right product' do

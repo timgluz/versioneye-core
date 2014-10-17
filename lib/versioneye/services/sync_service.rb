@@ -2,12 +2,19 @@ class SyncService < Versioneye::Service
 
 
   def self.sync
+    sync_projectdependencies Projectdependency.all
+  end
+
+
+  def self.sync_project project
+    sync_projectdependencies project.dependencies
+  end
+
+
+  def self.sync_projectdependencies dependencies
     lang_keys = []
-    Projectdependency.all.each do |dependency|
-      prod_key = dependency.name
-      if dependency.group_id && dependency.artifact_id
-        prod_key = "#{dependency.group_id}/#{dependency.artifact_id}"
-      end
+    dependencies.each do |dependency|
+      prod_key = dependency.possible_prod_key
       lang_key = "#{dependency.language}::#{prod_key}"
       lang_keys << lang_key if !lang_keys.include?(lang_key)
     end
@@ -31,6 +38,7 @@ class SyncService < Versioneye::Service
     return nil if json[:versions].nil?
 
     json[:versions].each do |ver|
+      # TODO check if version exist already in DB.
       sync_version language, prod_key, ver[:version]
     end
     p "synced #{language}:#{prod_key}"

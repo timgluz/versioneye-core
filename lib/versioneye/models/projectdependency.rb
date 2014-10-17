@@ -59,6 +59,14 @@ class Projectdependency < Versioneye::Model
     init_product
   end
 
+  def possible_prod_key
+    possible_prod_key = self.name
+    if self.group_id && self.artifact_id
+      possible_prod_key = "#{self.group_id}/#{self.artifact_id}"
+    end
+    possible_prod_key
+  end
+
   def unknown?
     prod_key.nil? && ext_link.nil?
   end
