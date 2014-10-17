@@ -12,7 +12,6 @@ class ApiCall < Versioneye::Model
   index({ api_key: 1 }, { name: "api_key_index", background: true })
   index({ user_id: 1 }, { name: "user_id_index", background: true })
 
-  validates :api_key , presence: true
   validates :fullpath, presence: true
 
   scope :by_user,    ->(user)   { where(user_id: user.id.to_s) }
