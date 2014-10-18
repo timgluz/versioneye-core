@@ -1,5 +1,6 @@
 class StashUpdater < CommonUpdater
 
+
   def update project, send_email = false
     project_file = fetch_project_file project
     if project_file.to_s.strip.empty?
@@ -7,24 +8,27 @@ class StashUpdater < CommonUpdater
       return nil
     end
 
-    new_project = parse project_file
+    filename    = fetch_filename project
+    new_project = StashService.parse_content project_file, filename
     update_old_with_new project, new_project, send_email
   end
 
 
   def fetch_project_file project
-    user        = project.user
-    repo_name   = project.scm_fullname
-    repo        = StashRepo.by_user( user ).by_fullname( repo_name ).shift
-    project_key = repo.project_key
-    slug        = repo.slug
-    token       = user.stash_token
-    secret      = user.stash_secret
-    filename    = project.filename
-    filename    = 'pom.xml' if filename.eql? 'pom.json'
-    branch      = project.scm_branch
-    revision = "refs/heads/#{branch}"
-    Stash.content(project_key, slug, filename, revision, token, secret)
+    user         = project.user
+    repo_name    = project.scm_fullname
+    repo         = StashRepo.by_user( user ).by_fullname( repo_name ).shift
+    filename     = fetch_filename project
+    branch       = project.scm_branch
+    project_file = StashService.fetch_file_from_stash(user, repo, filename, branch)
+    StashService.pure_text_from project_file
+  end
+
+
+  def fetch_filename project
+    filename = project.filename
+    filename = 'pom.xml' if filename.eql? 'pom.json'
+    filename
   end
 
 

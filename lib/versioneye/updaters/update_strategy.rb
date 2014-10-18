@@ -14,6 +14,9 @@ class UpdateStrategy
     when Project::A_SOURCE_BITBUCKET
       return BitbucketUpdater.new
 
+    when Project::A_SOURCE_STASH
+      return StashUpdater.new
+
     when Project::A_SOURCE_API
       return UrlUpdater.new
 

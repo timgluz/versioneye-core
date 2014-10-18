@@ -105,4 +105,37 @@ class StashService < Versioneye::Service
   end
 
 
+  # Returns the file as JSON.
+  # Use the `pure_text_from` method to get the text content.
+  def self.fetch_file_from_stash( user, repo, filename, branch )
+    token       = user.stash_token
+    secret      = user.stash_secret
+    project_key = repo.project_key
+    slug        = repo.slug
+    revision    = "refs/heads/#{branch}"
+    Stash.content( project_key, slug, filename, revision, token, secret )
+  end
+
+
+  def self.pure_text_from project_file
+    content = ""
+    project_file[:lines].each do |line|
+      content += line[:text]
+      content += "\n"
+    end
+    content
+  end
+
+
+  # Parses the content of a project file and returns a
+  # project created out of the project file content!
+  def self.parse_content content, filename
+    project_type = ProjectService.type_by_filename filename
+    file_name    = filename.split("/").last
+    parser       = ProjectParseService.parser_for file_name
+    project      = ProjectParseService.parse_content parser, content, file_name
+    project
+  end
+
+
 end

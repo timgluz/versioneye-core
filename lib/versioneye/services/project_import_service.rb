@@ -101,17 +101,15 @@ class ProjectImportService < Versioneye::Service
       return "Please upgrade your plan to monitor the selected project."
     end
 
-    project_file = fetch_file_from_stash(user, repo, filename, branch)
+    project_file = StashService.fetch_file_from_stash(user, repo, filename, branch)
     if project_file.nil? || project_file.empty? || project_file == "error" || project_file.eql?("Not Found")
       log.error " Can't import project file `#{filename}` from #{repo_name} branch #{branch} "
       return " Didn't find any project file of a supported package manager."
     end
 
-    content = pure_text_from project_file
     project_type = ProjectService.type_by_filename filename
-    file_name = filename.split("/").last
-    parser  = ProjectParseService.parser_for file_name
-    project = ProjectParseService.parse_content parser, content, file_name
+    content = StashService.pure_text_from project_file
+    project = StashService.parse_content content, filename
 
     project.update_attributes({
       name: repo_name,
@@ -190,26 +188,6 @@ class ProjectImportService < Versioneye::Service
       log.error "Error in build_from_url( #{url} ) -> #{e.message}"
       log.error e.backtrace.join("\n")
       nil
-    end
-
-
-    def self.fetch_file_from_stash(user, repo, filename, branch)
-      token = user.stash_token
-      secret = user.stash_secret
-      project_key = repo.project_key
-      slug = repo.slug
-      revision = "refs/heads/#{branch}"
-      Stash.content(project_key, slug, filename, revision, token, secret)
-    end
-
-
-    def self.pure_text_from project_file
-      content = ""
-      project_file[:lines].each do |line|
-        content += line[:text]
-        content += "\n"
-      end
-      content
     end
 
 
