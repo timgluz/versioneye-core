@@ -9,8 +9,9 @@ class ProductClient < Versioneye::Service
   def self.show language, prod_key, version = nil
     return nil if language.to_s.empty? || prod_key.to_s.empty?
 
+    encoded_language = encod_language language
     encoded_prod_key = encode prod_key
-    url = "#{A_API}#{A_API_VERSION}#{A_API_ENDPOINT_PRODUCT}/#{language}/#{encoded_prod_key}"
+    url = "#{A_API}#{A_API_VERSION}#{A_API_ENDPOINT_PRODUCT}/#{encoded_language}/#{encoded_prod_key}"
     if version
       url += "?prod_version=#{version}"
     end
@@ -21,8 +22,9 @@ class ProductClient < Versioneye::Service
   def self.versions language, prod_key
     return nil if language.to_s.empty? || prod_key.to_s.empty?
 
+    encoded_language = encod_language language
     encoded_prod_key = encode prod_key
-    url = "#{A_API}#{A_API_VERSION}#{A_API_ENDPOINT_PRODUCT}/#{language}/#{encoded_prod_key}/versions"
+    url = "#{A_API}#{A_API_VERSION}#{A_API_ENDPOINT_PRODUCT}/#{encoded_language}/#{encoded_prod_key}/versions"
     json = fetch_json url
   end
 
@@ -40,6 +42,10 @@ class ProductClient < Versioneye::Service
 
     def self.encode value
       value.gsub("/", ":").gsub(".", "~")
+    end
+
+    def self.encod_language language
+      language.gsub('.', '')
     end
 
 end
