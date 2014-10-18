@@ -160,6 +160,9 @@ class ProjectService < Versioneye::Service
     return red if project.nil? || project.projectdependencies.empty? || project.license_whitelist_id.nil?
 
     whitelist = project.license_whitelist
+    return red if whitelist.nil?
+    return red if whitelist.license_elements.nil? || whitelist.license_elements.empty?
+
     project.projectdependencies.each do |dep|
       product = dep.product
       next if product.nil?
