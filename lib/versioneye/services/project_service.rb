@@ -36,6 +36,7 @@ class ProjectService < Versioneye::Service
 
     if project.save
       project.save_dependencies
+      SyncService.sync_project_async project
     else
       err_msg = "Can't save project: #{project.errors.full_messages.to_json}"
       log.error err_msg

@@ -92,6 +92,7 @@ module Versioneye
     require 'versioneye/producers/process_receipts_producer.rb'
     require 'versioneye/producers/common_producer.rb'
     require 'versioneye/producers/common_crawl_producer.rb'
+    require 'versioneye/producers/sync_producer.rb'
 
     require 'versioneye/workers/worker.rb'
     require 'versioneye/workers/git_repos_import_worker.rb'
@@ -105,6 +106,7 @@ module Versioneye
     require 'versioneye/workers/process_receipts_worker.rb'
     require 'versioneye/workers/common_worker.rb'
     require 'versioneye/workers/common_crawl_worker.rb'
+    require 'versioneye/workers/sync_worker.rb'
 
     def self.log
       Versioneye::Log.instance.log

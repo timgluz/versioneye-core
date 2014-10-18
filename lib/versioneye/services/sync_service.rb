@@ -11,22 +11,33 @@ class SyncService < Versioneye::Service
   end
 
 
+  def self.sync_project_async project
+    env = Settings.instance.environment
+    return nil if !env.to_s.eql?("enterprise")
+
+    project_id = project.id.to_s
+    SyncProducer.new "project::#{project_id}"
+  end
+
+
   def self.sync_projectdependencies dependencies
-    lang_keys = []
+    lang_prod_keys = []
     dependencies.each do |dependency|
       prod_key = dependency.possible_prod_key
       lang_key = "#{dependency.language}::#{prod_key}"
-      lang_keys << lang_key if !lang_keys.include?(lang_key)
-    end
+      next if lang_prod_keys.include?(lang_key)
 
-    p "lang_keys: #{lang_keys.count}"
+      lang_prod_keys << lang_key
+      sync_product dependency.language, prod_key
 
-    lang_keys.each do |lk|
-      lks = lk.split("::")
-      language = lks[0].gsub(".", "")
-      prod_key = lks[1]
-      sync_product language, prod_key
+      product = Product.fetch_product dependency.language, prod_key
+      next if product.nil?
+
+      dependency.prod_key = prod_key
+      ProjectdependencyService.update_outdated!( dependency )
+      p dependency.to_s
     end
+    p "-- sync done for projectdependencies --"
   end
 
 
@@ -37,8 +48,10 @@ class SyncService < Versioneye::Service
     json.deep_symbolize_keys!
     return nil if json[:versions].nil?
 
+    product = Product.fetch_product language, prod_key
+
     json[:versions].each do |ver|
-      # TODO check if version exist already in DB.
+      next if product && product.version_by_number(ver[:version])
       sync_version language, prod_key, ver[:version]
     end
     p "synced #{language}:#{prod_key}"
