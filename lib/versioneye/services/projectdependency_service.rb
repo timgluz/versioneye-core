@@ -63,6 +63,11 @@ class ProjectdependencyService < Versioneye::Service
     product = projectdependency.find_or_init_product
     return false if product.nil? || product.prod_key.nil?
 
+    if projectdependency.prod_key.to_s.empty?
+      projectdependency.prod_key = product.prod_key
+      projectdependency.save
+    end
+
     newest_version = VersionService.newest_version_number( product.versions, projectdependency.stability )
     return false if newest_version.nil? || newest_version.empty?
 
@@ -85,14 +90,10 @@ class ProjectdependencyService < Versioneye::Service
 
 
   def self.update_prod_key dependency
-    prod_key = dependency.name
-    if dependency.group_id && dependency.artifact_id
-      prod_key = "#{dependency.group_id}/#{dependency.artifact_id}"
-    end
-    product = Product.fetch_product dependency.language, prod_key
+    product = dependency.find_or_init_product
     return if product.nil?
 
-    dependency.prod_key = prod_key
+    dependency.prod_key = product.prod_key
     dependency.save
     ProjectdependencyService.update_outdated! dependency
   end
