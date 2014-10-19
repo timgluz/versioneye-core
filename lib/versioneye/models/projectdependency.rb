@@ -39,6 +39,11 @@ class Projectdependency < Versioneye::Model
   end
 
   def product
+    if project && project.project_type.to_s.eql?( Project::A_TYPE_BOWER )
+      product = Product.fetch_bower name
+      return product if product
+    end
+
     Product.fetch_product( self.language, self.prod_key.to_s.downcase )
   end
 
