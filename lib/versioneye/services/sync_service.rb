@@ -23,21 +23,26 @@ class SyncService < Versioneye::Service
   def self.sync_projectdependencies dependencies
     lang_prod_keys = []
     dependencies.each do |dependency|
-      prod_key = dependency.possible_prod_key
-      lang_key = "#{dependency.language}::#{prod_key}"
-      next if lang_prod_keys.include?(lang_key)
-
-      lang_prod_keys << lang_key
-      sync_product dependency.language, prod_key
-
-      product = Product.fetch_product dependency.language, prod_key
-      next if product.nil?
-
-      dependency.prod_key = prod_key
-      ProjectdependencyService.update_outdated!( dependency )
-      p dependency.to_s
+      sync_projectdependency dependency, lang_prod_keys
     end
-    p "-- sync done for projectdependencies --"
+    log.info "-- sync done for projectdependencies --"
+  end
+
+
+  def self.sync_projectdependency dependency, lang_prod_keys = []
+    prod_key = dependency.possible_prod_key
+    lang_key = "#{dependency.language}::#{prod_key}"
+    return nil if lang_prod_keys.include?(lang_key)
+
+    lang_prod_keys << lang_key
+    sync_product dependency.language, prod_key
+
+    product = Product.fetch_product dependency.language, prod_key
+    return nil if product.nil?
+
+    dependency.prod_key = prod_key
+    ProjectdependencyService.update_outdated!( dependency )
+    log.info dependency.to_s
   end
 
 
@@ -54,7 +59,7 @@ class SyncService < Versioneye::Service
       next if product && product.version_by_number(ver[:version])
       sync_version language, prod_key, ver[:version]
     end
-    p "synced #{language}:#{prod_key}"
+    log.info "synced #{language}:#{prod_key}"
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
