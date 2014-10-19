@@ -106,7 +106,11 @@ class Product < Versioneye::Model
   end
 
   def self.fetch_bower name
-    Product.where(prod_type: Project::A_TYPE_BOWER, name: name).first
+    return nil if name.to_s.empty?
+
+    product = Product.where(prod_type: Project::A_TYPE_BOWER, name: name).first
+    product = Product.where(prod_type: Project::A_TYPE_BOWER, name_downcase: name.to_s.downcase).first if product.nil?
+    product
   end
 
   # legacy, still used by fall back search and API v1.0
