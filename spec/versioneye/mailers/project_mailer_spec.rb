@@ -11,9 +11,11 @@ describe ProjectMailer do
       project   = ProjectFactory.create_new user
       project_dep_1 = Projectdependency.new({:language => product_1.language, :prod_key => product_1.prod_key, :project_id => project.id })
       project_dep_1.version_requested = '0.0.0'
+      project_dep_1.version_label = '0.0.0'
       project_dep_1.save
       project_dep_2 = Projectdependency.new({:language => product_2.language, :prod_key => product_2.prod_key, :project_id => project.id })
       project_dep_2.version_requested = '100.100.100'
+      project_dep_2.version_label = '100.100.100'
       project_dep_2.save
 
       email = described_class.projectnotification_email(project, user)
@@ -40,13 +42,15 @@ describe ProjectMailer do
       project   = ProjectFactory.create_new user
       project_dep_1 = Projectdependency.new({:language => product_1.language, :prod_key => product_1.prod_key, :project_id => project.id, :name => product_1.name })
       project_dep_1.version_requested = '0.0.0'
+      project_dep_1.version_label = '0.0.0'
       project_dep_1.save
       project_dep_2 = Projectdependency.new({:language => product_2.language, :prod_key => product_2.prod_key, :project_id => project.id, :name => product_2.name })
       project_dep_2.version_requested = '0.0.0'
+      project_dep_2.version_label = '0.0.0'
       project_dep_2.save
 
       project.projectdependencies.count.should eq(2)
-      deps = ProjectService.outdated_dependencies( project )
+      deps = ProjectService.outdated_dependencies( project, true )
       deps.count.should eq(2)
 
       email = described_class.projectnotification_email(project)

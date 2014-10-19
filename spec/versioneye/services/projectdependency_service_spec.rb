@@ -54,14 +54,15 @@ describe ProjectdependencyService do
     it "is up to date" do
       dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.version_requested = "1.0"
-      ProjectdependencyService.outdated?(dep).should be_falsey
-      dep.unknown?.should  be_falsey
+      ProjectdependencyService.outdated?( dep ).should be_falsey
+      dep.unknown?.should be_falsey
     end
 
     it "is outdated" do
       dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.version_requested = "0.9"
-      ProjectdependencyService.outdated?(dep).should be_truthy
+      dep.version_requested = "0.9"
+      ProjectdependencyService.outdated?( dep ).should be_truthy
       dep.unknown?.should  be_falsey
     end
 
@@ -121,7 +122,7 @@ describe ProjectdependencyService do
       dep.version_requested = "3.2.13.rc2"
       dep.language          = Product::A_LANGUAGE_RUBY
       dep.stability         = VersionTagRecognizer.stability_tag_for dep.version_requested
-      ProjectdependencyService.outdated?(dep).should be_truthy
+      ProjectdependencyService.outdated?( dep ).should be_falsey
     end
 
     it "checks the cache" do
@@ -170,6 +171,7 @@ describe ProjectdependencyService do
       dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.prod_key          = nil
       dep.version_requested = '0.1'
+      dep.version_current   = nil
       ProjectdependencyService.update_version_current( dep )
       dep.version_current.should eq(nil)
     end
@@ -178,6 +180,7 @@ describe ProjectdependencyService do
       dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.prod_key          = ''
       dep.version_requested = '0.1'
+      dep.version_current   = nil
       ProjectdependencyService.update_version_current( dep )
       dep.version_current.should eq(nil)
     end
@@ -188,6 +191,7 @@ describe ProjectdependencyService do
       dep.group_id          = 'gibts_doch_net'
       dep.artifact_id       = 'gibts_doch_net'
       dep.version_requested = '0.1'
+      dep.version_current   = nil
       ProjectdependencyService.update_version_current( dep )
       dep.version_current.should eq(nil)
     end
