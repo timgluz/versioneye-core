@@ -6,6 +6,20 @@ class SyncService < Versioneye::Service
   end
 
 
+  def self.sync_all_products
+    SyncService.all_products_paged do |products|
+      sync_products products
+    end
+  end
+
+
+  def self.sync_products products
+    products.each do |product|
+      sync_product product.language, product.prod_key
+    end
+  end
+
+
   def self.sync_project project
     sync_projectdependencies project.dependencies
   end
