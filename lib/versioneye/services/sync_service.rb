@@ -7,9 +7,11 @@ class SyncService < Versioneye::Service
 
 
   def self.sync_all_products
+    log.info "START sync ALL products"
     ProductService.all_products_paged do |products|
       sync_products products
     end
+    log.info "STOP sync ALL products"
   end
 
 
