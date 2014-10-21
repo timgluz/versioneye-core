@@ -7,7 +7,7 @@ require 'cocoapods-core'
 #
 # use like this:
 #
-#    PodfileParser.new.parse 'https://raw.github.com/CocoaPods/CocoaPods/master/spec/fixtures/Podfile'
+#    PodfileParser.new.parse 'https://raw.githubusercontent.com/CocoaPods/CocoaPods/master/spec/fixtures/Podfile'
 #
 # or parse a single Podfile on the filesystem
 #
