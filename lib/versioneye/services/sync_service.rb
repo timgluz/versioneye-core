@@ -7,7 +7,7 @@ class SyncService < Versioneye::Service
 
 
   def self.sync_all_products
-    SyncService.all_products_paged do |products|
+    ProductService.all_products_paged do |products|
       sync_products products
     end
   end
