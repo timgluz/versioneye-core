@@ -12,10 +12,10 @@ describe RequirementsParser do
 
     it "parse from http the file correctly" do
 
-      product1  = create_product('South'  , 'South'  , '1.0.0', ['0.7.3', '0.7.2', '1.0.0' ])
+      product1  = create_product('South'  , 'south'  , '1.0.0', ['0.7.3', '0.7.2', '1.0.0' ])
       product2  = create_product('amqplib', 'amqplib', '2.0.0', ['1.0.2', '1.0.0', '2.0.0' ])
       product3  = create_product('Django' , 'django' , '1.4.0', ['1.3.1', '1.3.5', '1.4.0' ])
-      product4  = create_product('PIL'    , 'PIL'    , '1.1.7' )
+      product4  = create_product('PIL'    , 'pil'    , '1.1.7' )
       product5  = create_product('jsmin'  , 'jsmin'  , '1.1.7' )
 
       parser = RequirementsParser.new
