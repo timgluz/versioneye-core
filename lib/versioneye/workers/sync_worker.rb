@@ -34,6 +34,8 @@ class SyncWorker < Worker
       project_id = message.split("::")[1]
       project = Project.find project_id
       SyncService.sync_project project
+    elsif message.match(/\Aall_products/)
+      SyncService.sync_all_products
     end
   end
 
