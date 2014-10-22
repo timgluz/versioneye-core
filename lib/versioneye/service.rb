@@ -28,6 +28,7 @@ module Versioneye
     require 'versioneye/services/email_setting_service'
     require 'versioneye/services/reference_service'
     require 'versioneye/services/language_service'
+    require 'versioneye/services/license_whitelist_service'
     require 'versioneye/services/license_service'
     require 'versioneye/services/sync_service'
 
