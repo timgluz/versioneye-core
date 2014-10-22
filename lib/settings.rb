@@ -45,6 +45,8 @@ class Settings
 
     keys.each do |key|
       value = gs.get self.environment, key
+      value = true  if value.eql?("true")
+      value = false if value.eql?("false")
       name = key.downcase
       instance_variable_set("@#{name}", value)
       self.class.class_eval { attr_reader name.intern }
