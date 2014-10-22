@@ -190,8 +190,8 @@ class SyncService < Versioneye::Service
   def self.create_archive_if_not_exist json, name, link
     language = json[:language]
     prod_key = json[:prod_key]
-    version = json[:version]
-    archive = Versionarchive.new({:language => language, :prod_key => prod_key, :version_id => version, :link => link, :name => name})
+    version  = json[:version]
+    archive  = Versionarchive.new({:language => language, :prod_key => prod_key, :version_id => version, :link => link, :name => name})
     Versionarchive.create_archive_if_not_exist archive
   end
 
