@@ -37,7 +37,9 @@ class ProjectImportService < Versioneye::Service
       scm_fullname: repo_name,
       scm_branch: branch,
       s3_filename: filename,
-      url: project_file[:url]
+      url: project_file[:url],
+      period: Settings.instance.default_project_period,
+      public: Settings.instance.default_project_public
     })
 
     ProjectService.store( project )
@@ -81,7 +83,9 @@ class ProjectImportService < Versioneye::Service
       scm_branch: branch,
       private_project: private_project,
       s3_filename: filename,
-      url: nil
+      url: nil,
+      period: Settings.instance.default_project_period,
+      public: Settings.instance.default_project_public
     })
 
     ProjectService.store( project )
@@ -120,7 +124,9 @@ class ProjectImportService < Versioneye::Service
       scm_branch: branch,
       private_project: private_project,
       s3_filename: filename,
-      url: nil
+      url: nil,
+      period: Settings.instance.default_project_period,
+      public: Settings.instance.default_project_public
     })
 
     ProjectService.store( project )
@@ -139,7 +145,9 @@ class ProjectImportService < Versioneye::Service
       user_id: user.id.to_s,
       source: Project::A_SOURCE_URL,
       s3_filename: project_name,
-      url: url
+      url: url,
+      period: Settings.instance.default_project_period,
+      public: Settings.instance.default_project_public
     })
 
     ProjectService.store( project )
@@ -158,6 +166,8 @@ class ProjectImportService < Versioneye::Service
     project.source      = Project::A_SOURCE_UPLOAD
     project.user        = user
     project.api_created = api_created
+    project.period      = Settings.instance.default_project_period
+    project.public      = Settings.instance.default_project_public
 
     ProjectService.store( project )
   end

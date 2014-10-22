@@ -88,7 +88,7 @@ describe Projectdependency do
     it 'returns the name' do
       dep = Projectdependency.new
       dep.name = "AhA"
-      dep.possible_prod_key.should eql("AhA")
+      dep.possible_prod_key.should eql("aha")
     end
     it 'returns the group_id/artifact_id' do
       dep = Projectdependency.new

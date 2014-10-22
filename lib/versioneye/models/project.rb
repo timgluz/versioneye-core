@@ -34,7 +34,7 @@ class Project < Versioneye::Model
   field :project_type  , type: String,  :default => A_TYPE_MAVEN2
   field :language      , type: String
   field :project_key   , type: String
-  field :period        , type: String,  :default => A_PERIOD_WEEKLY
+  field :period        , type: String,  :default => A_PERIOD_DAILY
   field :notify_after_api_update, type: Boolean, :default => false
   field :email         , type: String
   field :url           , type: String
