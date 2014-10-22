@@ -14,6 +14,27 @@ class LicenseWhitelistService < Versioneye::Service
     list
   end
 
+  def self.create user, name
+    env = Settings.instance.environment
+    success = create_for_enterprise( user, name ) if env.eql?("enterprise")
+    success = create_for( user, name )            if not env.eql?("enterprise")
+    success
+  end
+
+  def self.add user, list_name, license_name
+    env = Settings.instance.environment
+    success = add_license_for_enterprise( user, list_name, license_name ) if env.eql?("enterprise")
+    success = add_license( user, list_name, license_name )                if not env.eql?("enterprise")
+    success
+  end
+
+  def self.remove user, list_name, license_name
+    env = Settings.instance.environment
+    success = remove_license_for_enterprise( user, list_name, license_name ) if env.eql?("enterprise")
+    success = remove_license( user, list_name, license_name )                if not env.eql?("enterprise")
+    success
+  end
+
   private
 
     def self.index_enterprise
@@ -30,6 +51,43 @@ class LicenseWhitelistService < Versioneye::Service
 
     def self.fetch_by_user_name user, name
       LicenseWhitelist.fetch_by user, name
+    end
+
+    def self.create_for user, name
+      whitelist = LicenseWhitelist.new( {:name => name} )
+      whitelist.user = user
+      whitelist.save
+    end
+
+    def self.create_for_enterprise user, name
+      return false if user.nil? || user.admin != true
+      create_for user, name
+    end
+
+    def self.add_license user, list_name, license_name
+      license_whitelist = LicenseWhitelist.fetch_by user, list_name
+      license_whitelist.add_license_element license_name
+      license_whitelist.save
+    end
+
+    def self.add_license_for_enterprise user, list_name, license_name
+      return false if user.nil? || user.admin != true
+      license_whitelist = LicenseWhitelist.by_name( list_name ).first
+      license_whitelist.add_license_element license_name
+      license_whitelist.save
+    end
+
+    def self.remove_license user, list_name, license_name
+      license_whitelist = LicenseWhitelist.fetch_by user, list_name
+      license_whitelist.remove_license_element license_name
+      license_whitelist.save
+    end
+
+    def self.remove_license_for_enterprise user, list_name, license_name
+      return false if user.nil? || user.admin != true
+      license_whitelist = LicenseWhitelist.by_name( list_name ).first
+      license_whitelist.remove_license_element license_name
+      license_whitelist.save
     end
 
 end

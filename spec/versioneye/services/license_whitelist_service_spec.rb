@@ -70,4 +70,111 @@ describe LicenseWhitelistService do
 
   end
 
+  describe 'create_for' do
+
+    it 'create a list for a user' do
+      user = UserFactory.create_new 1
+      resp = LicenseWhitelistService.create user, 'SuperList'
+      resp.should be_truthy
+    end
+
+    it 'returns the list with given name, even if user is not owner of the list (Enterprise env)' do
+      user  = UserFactory.create_new 1
+      admin = UserFactory.create_new 2
+      admin.admin = true
+      admin.save
+
+      Settings.instance.instance_variable_set(:@environment, 'enterprise')
+
+      resp = LicenseWhitelistService.create user, 'SuperList'
+      resp.should be_falsy
+
+      resp = LicenseWhitelistService.create admin, 'SuperList'
+      resp.should be_truthy
+
+      Settings.instance.instance_variable_set(:@environment, 'test')
+    end
+
+  end
+
+  describe 'add' do
+
+    it 'add new license to list for a user' do
+      user = UserFactory.create_new 1
+      resp = LicenseWhitelistService.create user, 'SuperList'
+      resp.should be_truthy
+      resp = LicenseWhitelistService.add user, 'SuperList', 'MIT'
+      resp.should be_truthy
+      list = LicenseWhitelistService.fetch_by user, 'SuperList'
+      list.license_elements.count.should eq(1)
+      list.license_elements.first.name.should eq('MIT')
+    end
+
+    it 'add new license to list for user (Enterprise env)' do
+      user  = UserFactory.create_new 1
+      admin = UserFactory.create_new 2
+      admin.admin = true
+      admin.save
+
+      Settings.instance.instance_variable_set(:@environment, 'enterprise')
+
+      resp = LicenseWhitelistService.create admin, 'SuperList'
+      resp.should be_truthy
+
+      resp = LicenseWhitelistService.add user, 'SuperList', 'MIT'
+      resp.should be_falsy
+
+      resp = LicenseWhitelistService.add admin, 'SuperList', 'MIT'
+      resp.should be_truthy
+
+      Settings.instance.instance_variable_set(:@environment, 'test')
+    end
+
+  end
+
+  describe 'remove' do
+
+    it 'remove license from list for a user' do
+      user = UserFactory.create_new 1
+
+      resp = LicenseWhitelistService.create user, 'SuperList'
+      resp = LicenseWhitelistService.add user, 'SuperList', 'MIT'
+      list = LicenseWhitelistService.fetch_by user, 'SuperList'
+      list.license_elements.count.should eq(1)
+      resp = LicenseWhitelistService.remove user, 'SuperList', 'MIT'
+      resp.should be_truthy
+      list = LicenseWhitelistService.fetch_by user, 'SuperList'
+      list.license_elements.count.should eq(0)
+    end
+
+    it 'remove license from list for a user (Enterprise env)' do
+      user  = UserFactory.create_new 1
+      admin = UserFactory.create_new 2
+      admin.admin = true
+      admin.save
+
+      Settings.instance.instance_variable_set(:@environment, 'enterprise')
+
+      resp = LicenseWhitelistService.create admin, 'SuperList'
+      resp = LicenseWhitelistService.add admin, 'SuperList', 'MIT'
+      list = LicenseWhitelistService.fetch_by admin, 'SuperList'
+      list.license_elements.count.should eq(1)
+
+      resp = LicenseWhitelistService.remove user, 'SuperList', 'MIT'
+      resp.should be_falsy
+
+      list = LicenseWhitelistService.fetch_by admin, 'SuperList'
+      list.license_elements.count.should eq(1)
+
+      resp = LicenseWhitelistService.remove admin, 'SuperList', 'MIT'
+      resp.should be_truthy
+
+      list = LicenseWhitelistService.fetch_by admin, 'SuperList'
+      list.license_elements.count.should eq(0)
+
+      Settings.instance.instance_variable_set(:@environment, 'test')
+    end
+
+  end
+
 end
