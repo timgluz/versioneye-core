@@ -3,6 +3,10 @@ class UserMailer < ActionMailer::Base
   layout 'email_html_layout'
   default from: "\"#{Settings.instance.smtp_sender_name}\" <#{Settings.instance.smtp_sender_email}>"
 
+  def test_email( email )
+    mail( :to => email, :subject => 'VersionEye Test Email' )
+  end
+
   def verification_email(user, verification, email)
     @user  = user
     source = fetch_source( user )
