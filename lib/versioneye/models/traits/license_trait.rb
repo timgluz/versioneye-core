@@ -266,7 +266,9 @@ module VersionEye
       name.match(/\AApache License Version 2\.0\z/i) ||
       name.match(/\AApache Software License\z/i) ||
       name.match(/\AApache Software Licenses\z/i) ||
-      name.match(/\AApache Software License Version 2\.0\z/i)
+      name.match(/\AApache Software License Version 2\.0\z/i) ||
+      name.match(/\AApache License ASL Version 2\.0/i) ||
+      name.match(/\AApache License ASL Version 2/i)
     end
 
     def cddl_match name
