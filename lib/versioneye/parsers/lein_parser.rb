@@ -73,6 +73,7 @@ class LeinParser < CommonParser
         :artifact_id => name,
         :name => name,
         :version_requested => version,
+        :version_label => version,
         :comperator => '=',
         :language => Product::A_LANGUAGE_CLOJURE
       })
