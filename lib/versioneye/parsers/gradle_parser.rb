@@ -305,8 +305,8 @@ class GradleParser < CommonParser
 
     else
       dependency.version_requested = version
-      dependency.comperator = "="
       dependency.version_label = version
+      dependency.comperator = "="
 
     end
   end
