@@ -75,9 +75,11 @@ class ProjectdependencyService < Versioneye::Service
       projectdependency.release = VersionTagRecognizer.release? projectdependency.version_current
       projectdependency.muted = false
     end
-    if projectdependency.version_requested.to_s.empty? || projectdependency.version_label.to_s.empty?
+    if projectdependency.version_requested.to_s.empty?
       projectdependency.version_requested = newest_version
-      projectdependency.version_label = newest_version
+    end
+    if projectdependency.version_label.to_s.empty?
+      projectdependency.version_label = projectdependency.version_requested
     end
     projectdependency.save()
   rescue => e
