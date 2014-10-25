@@ -112,17 +112,34 @@ describe ProjectdependencyService do
       prod_key           = "rails"
       product            = ProductFactory.create_for_gemfile(prod_key, "3.2.13")
       version_01         = Version.new
-      version_01.version = "3.2.13.rc2"
+      version_01.version = "3.2.13"
       product.versions.push( version_01 )
       product.language   = Product::A_LANGUAGE_RUBY
       product.save
 
       dep                   = Projectdependency.new
       dep.prod_key          = "rails"
-      dep.version_requested = "3.2.13.rc2"
+      dep.version_requested = "3.2.13"
       dep.language          = Product::A_LANGUAGE_RUBY
       dep.stability         = VersionTagRecognizer.stability_tag_for dep.version_requested
       ProjectdependencyService.outdated?( dep ).should be_falsey
+    end
+
+    it "is not up to date" do
+      prod_key           = "rails"
+      product            = ProductFactory.create_for_gemfile(prod_key, "3.2.13")
+      version_01         = Version.new
+      version_01.version = "3.2.13-rc1"
+      product.versions.push( version_01 )
+      product.language   = Product::A_LANGUAGE_RUBY
+      product.save
+
+      dep                   = Projectdependency.new
+      dep.prod_key          = "rails"
+      dep.version_requested = "3.2.13-rc1"
+      dep.language          = Product::A_LANGUAGE_RUBY
+      dep.stability         = VersionTagRecognizer.stability_tag_for dep.version_requested
+      ProjectdependencyService.outdated?( dep ).should be_truthy
     end
 
     it "checks the cache" do
