@@ -46,6 +46,7 @@ class PomJsonParser < CommonParser
     dependency.group_id    = group_id
     dependency.artifact_id = artifact_id
     dependency.version_requested = version
+    dependency.version_label = version
     dependency
   end
 
