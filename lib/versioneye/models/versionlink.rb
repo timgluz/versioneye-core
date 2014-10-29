@@ -46,7 +46,7 @@ class Versionlink < Versioneye::Model
 
 
   def product
-    product = Product.find_by_lang_key( self.language, self.prod_key )
+    product = Product.fetch_product( self.language, self.prod_key )
     return nil if product.nil?
 
     product.version = self.version_id if !self.version_id.to_s.empty?
