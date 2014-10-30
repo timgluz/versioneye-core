@@ -289,12 +289,11 @@ class Product < Versioneye::Model
     substitute_names = []
     licenses = []
     lics = License.for_product self, ignore_version
-    lics.each do |license|
-      if !substitute_names.include?( license.name_substitute )
-        substitute_names << license.name_substitute
-        licenses << license
-      end
-    end
+    consolidate_licenses lics, substitute_names, licenses
+
+    lics = License.for_product_global self
+    consolidate_licenses lics, substitute_names, licenses
+
     licenses
   end
 
@@ -365,6 +364,17 @@ class Product < Versioneye::Model
   end
 
   private
+
+    def consolidate_licenses lics, substitute_names, licenses
+      return if lics.nil? || lics.empty?
+
+      lics.each do |license|
+        if !substitute_names.include?( license.name_substitute )
+          substitute_names << license.name_substitute
+          licenses << license
+        end
+      end
+    end
 
     def get_summary text, size
       return '' if text.nil?
