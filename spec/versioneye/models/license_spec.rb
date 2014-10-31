@@ -166,6 +166,15 @@ describe License do
       license.name_substitute.should eq("GPL-2.0")
     end
 
+    it "should return AGPL 3.0 name" do
+      license = License.new({:name => "GNU AFFERO GENERAL PUBLIC LICENSE Version 3"})
+      license.name_substitute.should eq("AGPL-3.0")
+    end
+    it "should return AGPL 3.0 name" do
+      license = License.new({:name => "AGPL 3.0"})
+      license.name_substitute.should eq("AGPL-3.0")
+    end
+
     it "should return Apache License version 2 name" do
       license = License.new({:name => "The Apache Software License\, Version 2\.0"})
       license.name_substitute.should eq("Apache License 2.0")

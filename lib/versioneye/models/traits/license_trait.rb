@@ -30,6 +30,8 @@ module VersionEye
       return 'GPL-2.0' if gpl_20_match( tmp_name )
       return 'GPL-3.0' if gpl_30_match( tmp_name )
 
+      return 'AGPL-3.0' if agpl_30_match( tmp_name )
+
       return 'Apache License 1.0' if apache_license_10_match( tmp_name )
       return 'Apache License 1.1' if apache_license_11_match( tmp_name )
       return 'Apache License 2.0' if apache_license_20_match( tmp_name )
@@ -174,6 +176,21 @@ module VersionEye
       name.match(/\AGNU General Public License 3\.0\z/i) ||
       name.match(/\AGNU General Public License Version 3\z/i) ||
       name.match(/\AGeneral Public License 3\.0\z/i)
+    end
+
+    def agpl_30_match name
+      name.match(/\AAGPL 3\z/i) ||
+      name.match(/\AAGPL\-3\z/i) ||
+      name.match(/\AAGPLv3\+\z/i) ||
+      name.match(/\AAGPL 3\.0\z/i) ||
+      name.match(/\AAGPL\-3\.0\z/i) ||
+      name.match(/\AGNU AFFERO General Public License version 3 \(AGPL\-3\.0\)\z/i) ||
+      name.match(/\AGNU AFFERO General Public License version 3 \(AGPL\-3\.0\)\z/i) ||
+      name.match(/\AGNU AFFERO General Public License \(AGPL\-3\.0\)\z/i) ||
+      name.match(/\AGNU AFFERO General Public License 3\.0\z/i) ||
+      name.match(/\AGNU AFFERO General Public License Version 3\z/i) ||
+      name.match(/\AAFFERO General Public License 3\.0\z/i) ||
+      name.match(/\AAFFERO General Public License 3\z/i)
     end
 
     def lgpl_2_match name
