@@ -126,6 +126,24 @@ describe License do
       license.name_substitute.should eq("BSD")
     end
 
+    it "should return BSD 2-Clause name" do
+      license = License.new({:name => "The BSD 2 clause"})
+      license.name_substitute.should eq("BSD 2-clause")
+    end
+    it "should return BSD 2-Clause name" do
+      license = License.new({:name => "The BSD 2 clause revised license"})
+      license.name_substitute.should eq("BSD 2-clause")
+    end
+
+    it "should return BSD 3-Clause name" do
+      license = License.new({:name => "The BSD 3-clause"})
+      license.name_substitute.should eq("BSD 3-clause Revised License")
+    end
+    it "should return BSD 3-Clause name" do
+      license = License.new({:name => "The BSD 3 clause revised license"})
+      license.name_substitute.should eq("BSD 3-clause Revised License")
+    end
+
     it "should return Ruby name" do
       license = License.new({:name => "Ruby"})
       license.name_substitute.should eq("Ruby")

@@ -40,7 +40,8 @@ module VersionEye
       return 'Artistic License 1.0' if artistic_10_match( tmp_name )
       return 'Artistic License 2.0' if artistic_20_match( tmp_name )
 
-      return 'BSD 3-clause Revised License'  if bsd_3_clause_match( tmp_name )
+      return 'BSD 2-clause'  if bsd_2_clause_match( tmp_name )
+      return 'BSD 3-clause Revised License' if bsd_3_clause_match( tmp_name )
       return 'BSD style' if bsd_style_match( tmp_name )
       return 'New BSD' if new_bsd_match( tmp_name )
       return 'BSD' if bsd_match( tmp_name )
@@ -107,19 +108,24 @@ module VersionEye
     end
 
     def bsd_style_match name
-      name.match(/\BSD style\z/i) ||
-      name.match(/\BSD style License\z/i) ||
-      name.match(/\BSD-style License\z/i)
+      name.match(/\ABSD style\z/i) ||
+      name.match(/\ABSD style License\z/i) ||
+      name.match(/\ABSD-style License\z/i)
     end
 
     def new_bsd_match name
-      name.match(/\New BSD\z/i) ||
-      name.match(/\New BSD License\z/i)
+      name.match(/\ANew BSD\z/i) ||
+      name.match(/\ANew BSD License\z/i)
+    end
+
+    def bsd_2_clause_match name
+      name.match(/BSD 2-Clause/i) ||
+      name.match(/BSD 2 Clause/i)
     end
 
     def bsd_3_clause_match name
-      name.match(/\BSD 3-Clause\z/) ||
-      name.match(/\BSD 3-Clause License\z/) ||
+      name.match(/BSD 3-Clause/i) ||
+      name.match(/BSD 3 Clause/i) ||
       name.match(/\ARevised BSD\z/i) ||
       name.match(/\ABSD Revised\z/i) ||
       name.match(/\ABSD New\z/i)
