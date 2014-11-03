@@ -59,6 +59,7 @@ class SyncService < Versioneye::Service
     dependency.prod_key = prod_key
     ProjectdependencyService.update_outdated!( dependency )
     log.info dependency.to_s
+    true
   end
 
 
@@ -76,9 +77,11 @@ class SyncService < Versioneye::Service
       sync_version language, prod_key, ver[:version]
     end
     log.info "synced #{language}:#{prod_key}"
+    true
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
+    nil
   end
 
 

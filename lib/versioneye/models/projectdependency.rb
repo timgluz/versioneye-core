@@ -65,6 +65,8 @@ class Projectdependency < Versioneye::Model
   end
 
   def possible_prod_key
+    return self.prod_key if !self.prod_key.to_s.empty?
+
     possible_prod_key = self.name.to_s.downcase
     if self.group_id && self.artifact_id
       possible_prod_key = "#{self.group_id}/#{self.artifact_id}"
