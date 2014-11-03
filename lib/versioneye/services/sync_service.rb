@@ -6,7 +6,7 @@ class SyncService < Versioneye::Service
   end
 
 
-  def self.sync_all_products, skip_known_versions = true
+  def self.sync_all_products skip_known_versions = true
     log.info "START sync ALL products"
     ProductService.all_products_paged do |products|
       sync_products products, skip_known_versions
@@ -51,7 +51,7 @@ class SyncService < Versioneye::Service
     return nil if lang_prod_keys.include?(lang_key)
 
     lang_prod_keys << lang_key
-    sync_product dependency.language, prod_key
+    sync_product dependency.language, prod_key, false
 
     product = Product.fetch_product dependency.language, prod_key
     return nil if product.nil?
