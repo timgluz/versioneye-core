@@ -167,12 +167,12 @@ class Product < Versioneye::Model
   end
 
   def add_version(version_string, hash = {})
-    unless version_by_number(version_string)
-      version_hash = {:version => version_string}
-      version_hash = version_hash.merge(hash) if !hash.nil? and !hash.empty?
-      version = Version.new(version_hash)
-      versions.push( version )
-    end
+    return nil if version_by_number(version_string)
+
+    version_hash = {:version => version_string}
+    version_hash = version_hash.merge(hash) if !hash.nil? and !hash.empty?
+    version = Version.new(version_hash)
+    versions.push( version )
   end
 
   def remove_version version_string
@@ -295,10 +295,6 @@ class Product < Versioneye::Model
     consolidate_licenses lics, substitute_names, licenses
 
     licenses
-  end
-
-  def license_list
-    License.for_product self, false
   end
 
   def developers
