@@ -6,18 +6,18 @@ class SyncService < Versioneye::Service
   end
 
 
-  def self.sync_all_products
+  def self.sync_all_products, skip_known_versions = true
     log.info "START sync ALL products"
     ProductService.all_products_paged do |products|
-      sync_products products
+      sync_products products, skip_known_versions
     end
     log.info "STOP sync ALL products"
   end
 
 
-  def self.sync_products products
+  def self.sync_products products, skip_known_versions = true
     products.each do |product|
-      sync_product product.language, product.prod_key
+      sync_product product.language, product.prod_key, skip_known_versions
     end
   end
 
@@ -63,7 +63,7 @@ class SyncService < Versioneye::Service
   end
 
 
-  def self.sync_product language, prod_key
+  def self.sync_product language, prod_key, skip_known_versions = true
     json = ProductClient.versions language, prod_key
     return nil if json.nil?
 
@@ -73,7 +73,7 @@ class SyncService < Versioneye::Service
     product = Product.fetch_product language, prod_key
 
     json[:versions].each do |ver|
-      next if product && product.version_by_number(ver[:version])
+      next if product && product.version_by_number(ver[:version]) && skip_known_versions
       sync_version language, prod_key, ver[:version]
     end
     log.info "synced #{language}:#{prod_key}"
