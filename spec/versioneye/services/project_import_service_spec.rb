@@ -144,19 +144,6 @@ describe ProjectImportService do
       described_class.allowed_to_add_project?(github_user, true).should be_falsey
     end
 
-    it "allows because unlimited projects is true" do
-      Plan.create_defaults
-      plan = Plan.by_name_id( Plan::A_PLAN_PERSONAL_3 )
-      user = github_user
-      user.plan = plan
-      user.free_private_projects = 1
-      user.save
-      max = plan.private_projects + user.free_private_projects
-      max.times { ProjectFactory.create_new( user, {:private_project => true} ) }
-      Settings.instance.projects_unlimited = true
-      described_class.allowed_to_add_project?(github_user, true).should be_truthy
-    end
-
   end
 
 end
