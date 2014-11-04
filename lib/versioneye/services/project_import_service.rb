@@ -1,5 +1,6 @@
 class ProjectImportService < Versioneye::Service
 
+  A_ENV_ENTERPRISE = "enterprise"
 
 =begin
   This methods is
@@ -134,6 +135,10 @@ class ProjectImportService < Versioneye::Service
 
 
   def self.import_from_url( url, project_name, user )
+    unless allowed_to_add_project?(user, false )
+      return "Please upgrade your plan to monitor the selected project."
+    end
+
     project = build_from_url( url )
     return nil if project.nil?
 
@@ -155,6 +160,10 @@ class ProjectImportService < Versioneye::Service
 
 
   def self.import_from_upload file, user = nil, api_created = false
+    unless allowed_to_add_project?(user, false )
+      return "Please upgrade your plan to monitor the selected project."
+    end
+
     project_name = file['datafile'].original_filename
     project = ProjectParseService.project_from file
 
@@ -177,8 +186,26 @@ class ProjectImportService < Versioneye::Service
 
 
     def self.allowed_to_add_project?( user, private_project )
-      return true if Settings.instance.projects_unlimited
-      return true if !private_project
+      env = Settings.instance.environment
+      if env.eql?( A_ENV_ENTERPRISE )
+        allowed_to_add_e_project?
+      else
+        return allowed_to_add? user, private_project
+      end
+    end
+
+    # Allowed to add Enterprise project?
+    def self.allowed_to_add_e_project?
+      api_key = GlobalSetting.get env, 'API-KEY'
+      e_projects = GlobalSetting.get env, 'E-PROJECTS'
+
+      project_count = Project.count
+
+    end
+
+
+    def self.allowed_to_add?( user, private_project )
+      return true if private_project == false
 
       private_project_count = Project.private_project_count_by_user( user.id )
       max = user.free_private_projects
