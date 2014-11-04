@@ -1,37 +1,39 @@
 class LicenseWhitelistService < Versioneye::Service
 
+  A_ENV_ENTERPRISE = "enterprise"
+
   def self.index user
     env  = Settings.instance.environment
-    list = index_enterprise() if env.eql?("enterprise")
-    list = index_for( user )  if not env.eql?("enterprise")
+    list = index_enterprise() if env.eql?( A_ENV_ENTERPRISE )
+    list = index_for( user )  if not env.eql?( A_ENV_ENTERPRISE )
     list
   end
 
   def self.fetch_by user, name
     env  = Settings.instance.environment
-    list = fetch_by_enterprise( name )      if env.eql?("enterprise")
-    list = fetch_by_user_name( user, name ) if not env.eql?("enterprise")
+    list = fetch_by_enterprise( name )      if env.eql?(A_ENV_ENTERPRISE)
+    list = fetch_by_user_name( user, name ) if not env.eql?(A_ENV_ENTERPRISE)
     list
   end
 
   def self.create user, name
     env = Settings.instance.environment
-    success = create_for_enterprise( user, name ) if env.eql?("enterprise")
-    success = create_for( user, name )            if not env.eql?("enterprise")
+    success = create_for_enterprise( user, name ) if env.eql?(A_ENV_ENTERPRISE)
+    success = create_for( user, name )            if not env.eql?(A_ENV_ENTERPRISE)
     success
   end
 
   def self.add user, list_name, license_name
     env = Settings.instance.environment
-    success = add_license_for_enterprise( user, list_name, license_name ) if env.eql?("enterprise")
-    success = add_license( user, list_name, license_name )                if not env.eql?("enterprise")
+    success = add_license_for_enterprise( user, list_name, license_name ) if env.eql?(A_ENV_ENTERPRISE)
+    success = add_license( user, list_name, license_name )                if not env.eql?(A_ENV_ENTERPRISE)
     success
   end
 
   def self.remove user, list_name, license_name
     env = Settings.instance.environment
-    success = remove_license_for_enterprise( user, list_name, license_name ) if env.eql?("enterprise")
-    success = remove_license( user, list_name, license_name )                if not env.eql?("enterprise")
+    success = remove_license_for_enterprise( user, list_name, license_name ) if env.eql?(A_ENV_ENTERPRISE)
+    success = remove_license( user, list_name, license_name )                if not env.eql?(A_ENV_ENTERPRISE)
     success
   end
 
