@@ -297,6 +297,10 @@ class User < Versioneye::Model
     user
   end
 
+  def api
+    Api.by_user self
+  end
+
   def self.username_valid?(username)
     user = User.find_by_username(username)
     return user.nil?

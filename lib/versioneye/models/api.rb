@@ -16,6 +16,10 @@ class Api < Versioneye::Model
                       length: {minimum: 20, maximum: 20},
                       uniqueness: true
 
+  def self.by_user(user)
+    Api.where(user_id: user[:_id].to_s).first
+  end
+
   def self.create_new(user)
     new_api = Api.new(user_id: user[:_id].to_s)
     new_api.generate_api_key!
