@@ -182,30 +182,35 @@ class ProjectImportService < Versioneye::Service
   end
 
 
+  def self.allowed_to_add_project?( user, private_project )
+    env = Settings.instance.environment
+    if env.eql?( A_ENV_ENTERPRISE )
+      allowed_to_add_e_project?
+    else
+      return allowed_to_add? user, private_project
+    end
+  end
+
+
   private
 
 
-    def self.allowed_to_add_project?( user, private_project )
-      env = Settings.instance.environment
-      if env.eql?( A_ENV_ENTERPRISE )
-        allowed_to_add_e_project?
-      else
-        return allowed_to_add? user, private_project
-      end
-    end
-
     # Allowed to add Enterprise project?
     def self.allowed_to_add_e_project?
-      api_key = GlobalSetting.get env, 'API-KEY'
+      env        = Settings.instance.environment
+      api_key    = GlobalSetting.get env, 'API-KEY'
       e_projects = GlobalSetting.get env, 'E-PROJECTS'
+      return false if e_projects.to_s.empty?
 
       project_count = Project.count
+      return false if project_count.to_i >= e_projects.to_i
 
+      return true
     end
 
 
     def self.allowed_to_add?( user, private_project )
-      return true if private_project == false
+      return true if private_project == false || private_project.to_s.empty?
 
       private_project_count = Project.private_project_count_by_user( user.id )
       max = user.free_private_projects
