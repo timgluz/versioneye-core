@@ -3,9 +3,11 @@ class Api < Versioneye::Model
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  field :user_id, type: String
-  field :api_key, type: String
-  field :calls  , type: Integer, default: 0
+  field :user_id   , type: String
+  field :api_key   , type: String
+  field :calls     , type: Integer, default: 0
+  field :e_projects, type: Integer, default: 1 # Enterprise projects
+  field :active    , type: Boolean, default: true
 
   index({ api_key: 1 }, { name: "api_key_index", unique: true, background: true })
 
