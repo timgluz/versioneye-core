@@ -24,7 +24,7 @@ class Settings
 
     instance_variable_set("@environment", environment)
     self.class.class_eval { attr_reader "environment".intern }
-    self.class.class_eval { attr_writer "environment".intern }
+    self.class.class_eval { attr_writer "environment".intern } # This is for testing!
 
     settings[environment].each { |name, value|
       if value && value.is_a?(String) && value.match(/\Aenv_/)
