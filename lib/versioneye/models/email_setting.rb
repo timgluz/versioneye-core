@@ -3,11 +3,11 @@ class EmailSetting < Versioneye::Model
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  field :address             , type: String , default: 'email-smtp.eu-west-1.amazonaws.com'
+  field :address             , type: String , default: 'your.smtp.server.com'
   field :port                , type: Integer, default: 587
   field :username            , type: String , default: 'username'
   field :password            , type: String , default: 'password'
-  field :domain              , type: String , default: 'versioneye.com'
+  field :domain              , type: String , default: 'your.domain.com'
   field :authentication      , type: String , default: 'plain'
   field :enable_starttls_auto, type: Boolean, default: true
   field :sender_name         , type: String , default: 'VersionEye'
