@@ -198,7 +198,6 @@ class ProjectImportService < Versioneye::Service
     # Allowed to add Enterprise project?
     def self.allowed_to_add_e_project?
       env        = Settings.instance.environment
-      api_key    = GlobalSetting.get env, 'API-KEY'
       e_projects = GlobalSetting.get env, 'E-PROJECTS'
       return false if e_projects.to_s.empty?
 
