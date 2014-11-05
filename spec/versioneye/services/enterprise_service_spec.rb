@@ -21,24 +21,24 @@ describe EnterpriseService do
     end
     it 'returns false because project count is missing' do
       env        = Settings.instance.environment
-      GlobalSetting.set env, 'API-KEY', 'asgasfasfgs'
+      GlobalSetting.set env, 'API_KEY', 'asgasfasfgs'
       EnterpriseService.activated?().should be_falsey
     end
-    it 'returns false because API-KEY is missing' do
+    it 'returns false because API_KEY is missing' do
       env        = Settings.instance.environment
-      GlobalSetting.set env, 'E-PROJECTS', '8'
+      GlobalSetting.set env, 'E_PROJECTS', '8'
       EnterpriseService.activated?().should be_falsey
     end
     it 'returns true' do
       env        = Settings.instance.environment
-      GlobalSetting.set env, 'API-KEY', 'asgasfasfgs'
-      GlobalSetting.set env, 'E-PROJECTS', '8'
+      GlobalSetting.set env, 'API_KEY', 'asgasfasfgs'
+      GlobalSetting.set env, 'E_PROJECTS', '8'
       EnterpriseService.activated?().should be_truthy
     end
     it 'returns false' do
       env        = Settings.instance.environment
-      GlobalSetting.set env, 'API-KEY', 'asgasfasfgs'
-      GlobalSetting.set env, 'E-PROJECTS', '0'
+      GlobalSetting.set env, 'API_KEY', 'asgasfasfgs'
+      GlobalSetting.set env, 'E_PROJECTS', '0'
       EnterpriseService.activated?().should be_falsey
     end
     it 'returns true' do
@@ -55,10 +55,10 @@ describe EnterpriseService do
       VCR.use_cassette('enterprise_activate_1', allow_playback_repeats: true) do
         env = Settings.instance.environment
         api_key = "fanzy_nanzy_api_key_fanzy"
-        GlobalSetting.get( env, 'API-KEY' ).should be_nil
+        GlobalSetting.get( env, 'API_KEY' ).should be_nil
         EnterpriseService.activate!( api_key ).should be_truthy
-        GlobalSetting.get( env, 'API-KEY' ).should_not be_nil
-        GlobalSetting.get( env, 'API-KEY' ).should eq( api_key )
+        GlobalSetting.get( env, 'API_KEY' ).should_not be_nil
+        GlobalSetting.get( env, 'API_KEY' ).should eq( api_key )
       end
     end
   end
