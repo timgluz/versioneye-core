@@ -14,7 +14,10 @@ describe EnterpriseService do
 
   describe 'activated?' do
     before :each do
-      Settings.instance.environment = 'enterprise'
+      Settings.instance.instance_variable_set(:@environment, 'enterprise')
+    end
+    after :each do
+      Settings.instance.instance_variable_set(:@environment, 'test')
     end
     it 'returns false' do
       EnterpriseService.activated?().should be_falsey
