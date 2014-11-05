@@ -81,6 +81,7 @@ module Versioneye
     require 'versioneye/updaters/url_updater'
 
     require 'versioneye/remote_api/product_client'
+    require 'versioneye/remote_api/me_client'
 
     require 'versioneye/migrations/versionlink_migration'
 

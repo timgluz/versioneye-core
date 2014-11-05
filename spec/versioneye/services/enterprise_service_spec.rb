@@ -1,4 +1,14 @@
 require 'spec_helper'
+require 'vcr'
+require 'webmock'
+
+require 'capybara/rspec'
+
+VCR.configure do |c|
+  c.cassette_library_dir = 'spec/fixtures/vcr_cassettes/'
+  c.ignore_localhost = true
+  c.hook_into :webmock
+end
 
 describe EnterpriseService do
 
@@ -34,6 +44,22 @@ describe EnterpriseService do
     it 'returns true' do
       Settings.instance.environment = 'production'
       EnterpriseService.activated?().should be_truthy
+    end
+  end
+
+  describe 'activate!' do
+    before :each do
+      Settings.instance.environment = 'enterprise'
+    end
+    it 'returns true' do
+      VCR.use_cassette('enterprise_activate_1', allow_playback_repeats: true) do
+        env = Settings.instance.environment
+        api_key = "fanzy_nanzy_api_key_fanzy"
+        GlobalSetting.get( env, 'API-KEY' ).should be_nil
+        EnterpriseService.activate!( api_key ).should be_truthy
+        GlobalSetting.get( env, 'API-KEY' ).should_not be_nil
+        GlobalSetting.get( env, 'API-KEY' ).should eq( api_key )
+      end
     end
   end
 

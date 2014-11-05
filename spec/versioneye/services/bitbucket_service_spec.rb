@@ -2,7 +2,6 @@ require 'spec_helper'
 require 'vcr'
 require 'webmock'
 
-# require 'capybara/rails'
 require 'capybara/rspec'
 
 VCR.configure do |c|

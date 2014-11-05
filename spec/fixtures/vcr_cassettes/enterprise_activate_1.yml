@@ -1,0 +1,50 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/me?api_key=fanzy_nanzy_api_key_fanzy
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1 (Ubuntu)
+      Date:
+      - Wed, 05 Nov 2014 11:55:23 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '186'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000
+      Set-Cookie:
+      - api_key=fanzy_nanzy_api_key_fanzy; secure
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"7f8f9bead00214a3e236bbcf670b4a83"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 7d82a361248a57277cc894a59c501cd1
+      X-Runtime:
+      - '0.026540'
+    body:
+      encoding: UTF-8
+      string: '{"fullname":"Robert Reiz","username":"reiz","email":"robert.reiz.81@gmail.com","admin":false,"deleted":false,"notifications":{"new":1,"total":3651},"enterprise_projects":1,"active":true}'
+    http_version:
+  recorded_at: Wed, 05 Nov 2014 11:52:10 GMT
+recorded_with: VCR 2.9.3
