@@ -68,9 +68,13 @@ class Versionlink < Versioneye::Model
   end
 
 
-  def self.remove_project_link( language, prod_key, link, manual )
+  def self.remove_project_link( language, prod_key, link, manual = nil )
     return nil if link.to_s.strip.empty?
-    Versionlink.where( language: language, prod_key: prod_key, link: link, :version_id => nil, :manual => manual ).delete_all
+    if manual
+      Versionlink.where( language: language, prod_key: prod_key, link: link, :version_id => nil, :manual => manual ).delete_all
+    else
+      Versionlink.where( language: language, prod_key: prod_key, link: link, :version_id => nil ).delete_all
+    end
   end
 
 
