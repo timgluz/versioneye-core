@@ -297,6 +297,19 @@ class Product < Versioneye::Model
     licenses
   end
 
+  def licenses_all ignore_version = false
+    licenses = []
+    lics1 = License.for_product self, true
+    lics2 = License.for_product_global self
+    lics1.each do |license|
+      licenses << license
+    end
+    lics2.each do |license|
+      licenses << license
+    end
+    licenses
+  end
+
   def developers
     Developer.find_by self.language, self.prod_key, version
   end
