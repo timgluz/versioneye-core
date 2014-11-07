@@ -145,17 +145,19 @@ describe ProjectImportService do
     end
 
     it "is not allowed in Enterprise" do
-      Settings.instance.environment = 'enterprise'
+      Settings.instance.instance_variable_set(:@environment, 'enterprise')
       user = github_user
       GlobalSetting.set 'enterprise', 'E-PROJECTS', '0'
       ProjectImportService.allowed_to_add_project?( user, true ).should be_falsey
+      Settings.instance.instance_variable_set(:@environment, 'test')
     end
 
     it "is not allowed in Enterprise" do
-      Settings.instance.environment = 'enterprise'
+      Settings.instance.instance_variable_set(:@environment, 'enterprise')
       user = github_user
       GlobalSetting.set 'enterprise', 'E-PROJECTS', '1'
       ProjectImportService.allowed_to_add_project?( user, true ).should be_truthy
+      Settings.instance.instance_variable_set(:@environment, 'test')
     end
 
   end

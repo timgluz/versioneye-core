@@ -17,7 +17,7 @@ require 'factory_girl'
 require 'will_paginate_mongoid'
 
 require 'vcr'
-require 'webmock/rspec'
+require 'webmock'
 require 'fakeweb'
 
 require 'versioneye/domain_factories/api_factory'

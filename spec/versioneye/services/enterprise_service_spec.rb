@@ -45,14 +45,17 @@ describe EnterpriseService do
       EnterpriseService.activated?().should be_falsey
     end
     it 'returns true' do
-      Settings.instance.environment = 'production'
+      Settings.instance.instance_variable_set(:@environment, 'production')
       EnterpriseService.activated?().should be_truthy
     end
   end
 
   describe 'activate!' do
     before :each do
-      Settings.instance.environment = 'enterprise'
+      Settings.instance.instance_variable_set(:@environment, 'enterprise')
+    end
+    after :each do
+      Settings.instance.instance_variable_set(:@environment, 'test')
     end
     it 'returns true' do
       VCR.use_cassette('enterprise_activate_1', allow_playback_repeats: true) do

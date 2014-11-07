@@ -20,7 +20,7 @@ gem 'nokogiri'           , '~> 1.6.0'
 gem 'cocoapods-core'     , '~> 0.34.0.rc2'
 gem 'actionmailer'       , '~> 3.2.17'
 gem 'pdfkit'             , '~> 0.6.2'
-gem 'bunny'              , '~> 1.4.0'
+gem 'bunny'              , '~> 1.6.0'
 gem 'wkhtmltopdf-binary' , '~> 0.9.9.1'
 gem 'will_paginate_mongoid', '2.0.1'
 
@@ -29,7 +29,7 @@ group :development do
 end
 
 group :test do
-  gem 'fakes3'          , '0.1.5.2'
+  gem 'fakes3'          , '0.1.6.0'
   gem 'rdoc'            , '~> 4.1.0'
   gem 'simplecov'       , '~> 0.9.0'
   gem 'rspec'           , '~> 3.1.0'
@@ -37,7 +37,7 @@ group :test do
   gem 'factory_girl'    , '~> 4.4.0'
   gem 'capybara'        , '~> 2.4.1'
   gem 'capybara-firebug', '~> 2.1.0'
-  gem 'vcr'             , '~> 2.9.2',  :require => false
-  gem 'webmock'         , '~> 1.18.0', :require => false
+  gem 'vcr'             , '~> 2.9.3',  :require => false
+  gem 'webmock'         , '~> 1.20.3', :require => false
   gem 'fakeweb'         , '~> 1.3.0'
 end
