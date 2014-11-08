@@ -139,6 +139,7 @@ module VersionEye
     end
 
     def gpl_10_match name
+      name.match(/\AGPL1\z/i) ||
       name.match(/\AGPL 1\z/i) ||
       name.match(/\AGPL\-1\z/i) ||
       name.match(/\AGPLv1\+\z/i) ||
@@ -152,6 +153,7 @@ module VersionEye
     end
 
     def gpl_20_match name
+      name.match(/\AGPL2\z/i) ||
       name.match(/\AGPL 2\z/i) ||
       name.match(/\AGPL\-2\z/i) ||
       name.match(/\AGPLv2\+\z/i) ||
@@ -165,6 +167,7 @@ module VersionEye
     end
 
     def gpl_30_match name
+      name.match(/\AGPL3\z/i) ||
       name.match(/\AGPL 3\z/i) ||
       name.match(/\AGPL\-3\z/i) ||
       name.match(/\AGPLv3\+\z/i) ||
@@ -179,6 +182,7 @@ module VersionEye
     end
 
     def agpl_30_match name
+      name.match(/\AAGPL3\z/i) ||
       name.match(/\AAGPL 3\z/i) ||
       name.match(/\AAGPL\-3\z/i) ||
       name.match(/\AAGPLv3\+\z/i) ||
@@ -193,14 +197,11 @@ module VersionEye
       name.match(/\AAFFERO General Public License 3\z/i)
     end
 
-    def lgpl_2_match name
+    def lgpl_20_match name
+      name.match(/\ALGPL2\z/i) ||
       name.match(/\ALGPL 2\z/i) ||
       name.match(/\ALGPLv2\z/i) ||
       name.match(/\ALGPL\-2\z/i) ||
-      name.match(/\AGNU Lesser General Public License v2\.0 only\z/i)
-    end
-
-    def lgpl_20_match name
       name.match(/\ALGPL version 2\.0\z/i) ||
       name.match(/\ALGPL v2.0\z/i) ||
       name.match(/\ALGPL 2\.0\z/i) ||
