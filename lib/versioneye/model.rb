@@ -6,6 +6,7 @@ module Versioneye
     require 'versioneye/models/docker_image'
     require 'versioneye/models/api'
     require 'versioneye/models/api_call'
+    require 'versioneye/models/auditlog'
     require 'versioneye/models/billing_address'
     require 'versioneye/models/bitbucket_repo'
     require 'versioneye/models/circle_element'
