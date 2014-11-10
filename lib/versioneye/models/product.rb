@@ -372,6 +372,10 @@ class Product < Versioneye::Model
     Dependency.main_scope self.language
   end
 
+  def auditlogs
+    Auditlog.where(:domain_id => self.id.to_s).desc(:created_at)
+  end
+
   private
 
     def consolidate_licenses lics, substitute_names, licenses

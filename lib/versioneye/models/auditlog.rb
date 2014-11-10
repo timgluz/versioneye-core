@@ -23,4 +23,8 @@ class Auditlog < Versioneye::Model
     Auditlog.new({:user_id => user.id.to_s, :domain => domain, :domain_id => id, :action => action }).save
   end
 
+  def user
+    User.find user_id
+  end
+
 end
