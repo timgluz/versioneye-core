@@ -311,7 +311,7 @@ class Product < Versioneye::Model
   end
 
   def developers
-    Developer.find_by self.language, self.prod_key, version
+    Developer.find_by self.language, self.prod_key, self.version
   end
 
   def dependencies scope = nil

@@ -27,9 +27,9 @@ class Developer < Versioneye::Model
 
   def self.find_by language, prod_key, version, name = nil
     if name.nil?
-      return Developer.where( language: language, prod_key: prod_key, version: version, name: name )
-    else
       return Developer.where( language: language, prod_key: prod_key, version: version )
+    else
+      return Developer.where( language: language, prod_key: prod_key, version: version, name: name )
     end
   end
 
