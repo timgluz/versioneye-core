@@ -21,6 +21,10 @@ class Developer < Versioneye::Model
   index({ language: 1, prod_key: 1, version: 1 },          { name: "language_prod_key_version_index",      background: true })
   index({ language: 1, prod_key: 1 },                      { name: "language_prod_key_index",              background: true })
 
+  def to_s
+    "#{name} - #{email}"
+  end
+
   def self.find_by language, prod_key, version, name = nil
     if name.nil?
       return Developer.where( language: language, prod_key: prod_key, version: version, name: name )
