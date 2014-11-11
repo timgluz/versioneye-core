@@ -75,4 +75,8 @@ class LicenseWhitelist < Versioneye::Model
     false
   end
 
+  def auditlogs
+    Auditlog.where(:domain => "LicenseWhitelist", :domain_id => self.id.to_s).desc(:created_at)
+  end
+
 end
