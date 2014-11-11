@@ -4,24 +4,30 @@ Hey <%= @user.fullname %>,
 </p>
 <ul>
   <li>
-    <b>License Whitelists:</b> Ensure your License Policy with a License Whitelist. Put all the Licenses
-    on a Whitelist which are allowed in your organization and VersionEye will notify you about License
-    violations in your projects.
-    Read more <a href="http://blog.versioneye.com/2014/09/15/license-whitelist/">here</a>.
-    <br/><br/>
-    <a href="http://blog.versioneye.com/2014/09/15/license-whitelist/"><img src="https://versioneye.files.wordpress.com/2014/09/screen-shot-2014-09-15-at-12-57-35.png" /></a>
+    <b>VersionEye Maven Plugin 3.1.0:</b> Version 3.1.0 of the VersionEye Maven Plugin is out.
+    It contains many small improvements and support for running the plugin behind a proxy server.
+    Read more <a href="http://blog.versioneye.com/2014/11/11/versioneye-maven-plugin-3-1-0/">here</a>.
     <br/><br/>
   </li>
   <li>
-    <b>Scala SBT Support:</b> Now VersionEye supports Scala SBT, the build tool for Scala. Get notified about out-dated dependencies in your build.sbt. Read more <a href="http://blog.versioneye.com/2014/09/15/scala-sbt-support/">here</a>.
+    <b>New License Crawler:</b> VersionEye has a new crawler which detects licenses in git repositories.
+    It finds license information which is not available on package managers, such as Bower or NPM. Now VersionEye has license information to even more open source libraries.
+    Read more <a href="http://blog.versioneye.com/2014/11/11/new-license-crawler-finds-licenses-in-git-repositories/">here</a>.
     <br/><br/>
   </li>
   <li>
-    <b>VersionEye-PHP:</b> VersionEye-PHP is a PHP wrapper around the VersionEye API. Just fetch it into your project via Composer and use the VersionEye API in your project. Read more <a href="http://digitalkaoz.github.io/versioneye-php/">here</a>.
+    <b>Audit Logs:</b> Now there is an audit log for the license whitelist. Every action on a license whitelist is documented in the database. The audit log is displayed on the bottom of the license whitelist page.
+    Read more <a href="http://digitalkaoz.github.io/versioneye-php/">here</a>.
     <br/><br/>
   </li>
   <li>
-    <b>Improved Gradle Support:</b> We just improved our Support for the popular build tool Gralde. Read more <a href="http://blog.versioneye.com/2014/08/20/improved-support-for-gradle/">here</a>.
+    <b>Update Single Git Repo:</b> Now it's possible to update a single git repository on VersionEye, instead of reimporting all.
+    Read more <a href="http://blog.versioneye.com/2014/11/11/update-single-git-repository/">here</a>.
+    <br/><br/>
+  </li>
+  <li>
+    <b>Update for PHP Branches:</b> VersionEye will not send you anymore notifications to new branches on PHP git repos!
+    Read more <a href="http://blog.versioneye.com/2014/11/11/update-for-php-branches/">here</a>.
     <br/><br/>
   </li>
 </ul>
