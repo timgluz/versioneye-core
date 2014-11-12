@@ -198,7 +198,7 @@ class ProjectImportService < Versioneye::Service
     # Allowed to add Enterprise project?
     def self.allowed_to_add_e_project?
       env        = Settings.instance.environment
-      e_projects = GlobalSetting.get env, 'E-PROJECTS'
+      e_projects = GlobalSetting.get env, 'e_projects'
       return false if e_projects.to_s.empty?
 
       project_count = Project.count
