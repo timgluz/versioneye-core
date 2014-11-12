@@ -171,7 +171,8 @@ class Project < Versioneye::Model
     prod_keys = Array.new
     muted_deps = muted_dependencies
     muted_deps.each do |dep|
-      prod_keys.push "#{dep.language}_#{dep.prod_key}_#{dep.version_current}"
+      key = dep_key(dep)
+      prod_keys.push key
     end
     prod_keys
   end
@@ -180,8 +181,8 @@ class Project < Versioneye::Model
     muted_keys = muted_prod_keys
     remove_dependencies
     new_dependencies.each do |dep|
-      dep_key = "#{dep.language}_#{dep.prod_key}_#{dep.version_current}"
-      dep.muted = true if muted_keys.include?( dep_key )
+      key = dep_key(dep)
+      dep.muted = true if muted_keys.include?( key )
       projectdependencies.push dep
       dep.save
     end
@@ -248,5 +249,11 @@ class Project < Versioneye::Model
     20.times { value << chars[rand(chars.size)] }
     value
   end
+
+  private
+
+    def dep_key dep
+      "#{dep.language}_#{dep.prod_key}_#{dep.version_current}"
+    end
 
 end
