@@ -61,9 +61,17 @@ describe ProjectdependencyService do
     it "is outdated" do
       dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.version_requested = "0.9"
-      dep.version_requested = "0.9"
       ProjectdependencyService.outdated?( dep ).should be_truthy
-      dep.unknown?.should  be_falsey
+      dep.unknown?.should be_falsey
+    end
+
+    it "is up-to-date because its muted" do
+      dep = ProjectdependencyFactory.create_new(@project, @product)
+      dep.version_requested = "0.9"
+      dep.muted = true
+      dep.save
+      ProjectdependencyService.outdated?( dep ).should be_falsey
+      dep.unknown?.should be_falsey
     end
 
     it "is up to date" do
@@ -237,6 +245,40 @@ describe ProjectdependencyService do
       dep.version_requested = '0.1'
       ProjectdependencyService.update_version_current( dep )
       dep.version_current.should eq('1.0')
+    end
+
+  end
+
+  describe 'mute!' do
+
+    it 'does not mute because project does not exist' do
+      ProjectdependencyService.mute!( 'does_not_exist', 'does_not_exist', true ).should be_falsey
+    end
+
+    it 'does not mute because project has no dependencies' do
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new( user )
+      ProjectdependencyService.mute!( project.id.to_s, 'does_not_exist', true ).should be_falsey
+    end
+
+    it 'does mute like expected' do
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new( user )
+      product = Product.new({:name => 'rails', :prod_key => 'rails', :language => Product::A_LANGUAGE_RUBY, :version => '1.0.0' })
+      product.versions = Array.new
+      product.versions.push(Version.new({:version => '1.0.0'}))
+      product.version  = product.versions.first.to_s
+      product.save
+      dependency = ProjectdependencyFactory.create_new(project, product)
+      dependency.muted.should be_falsey
+
+      ProjectdependencyService.mute!( project.id.to_s, dependency.id.to_s, true ).should be_truthy
+      dependency.reload
+      dependency.muted.should be_truthy
+
+      ProjectdependencyService.mute!( project.id.to_s, dependency.id.to_s, false ).should be_truthy
+      dependency.reload
+      dependency.muted.should be_falsey
     end
 
   end

@@ -5,6 +5,26 @@ class ProjectdependencyService < Versioneye::Service
   A_SECONDS_PER_DAY = 24 * 60 * 60 # 24h * 60min * 60s = 86400
 
 
+  def self.mute! project_id, dependency_id, mute_status
+    project = Project.find_by_id( project_id )
+    return false if project.nil?
+
+    dependency = Projectdependency.find_by_id dependency_id
+    return false if dependency.nil?
+    return false if !dependency.project_id.to_s.eql? project_id
+    return false if dependency.project.nil?
+
+    dependency.muted = mute_status
+    if mute_status == true
+      dependency.outdated = false
+      dependency.outdated_updated_at = DateTime.now
+    else
+      update_outdated! dependency
+    end
+    dependency.save
+  end
+
+
   def self.release?( projectdependency )
     return nil if projectdependency.nil? || projectdependency.version_current.nil?
 
@@ -31,6 +51,7 @@ class ProjectdependencyService < Versioneye::Service
 
     if ( projectdependency.prod_key.nil? && projectdependency.version_current.nil? ) ||
        ( projectdependency.version_requested.eql?( 'GIT' ) || projectdependency.version_requested.eql?('PATH') ) ||
+       ( projectdependency.muted == true ) ||
        ( projectdependency.version_requested.eql?( projectdependency.version_current) )
       return update_outdated( projectdependency, false )
     end

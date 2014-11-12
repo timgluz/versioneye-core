@@ -38,6 +38,12 @@ class Projectdependency < Versioneye::Model
     "<Projectdependency: #{project} depends on #{name} (#{version_label}/#{version_requested}) current: #{version_current} >"
   end
 
+  def self.find_by_id id
+    Projectdependency.find id
+  rescue => e
+    nil
+  end
+
   def product
     if project && project.project_type.to_s.eql?( Project::A_TYPE_BOWER )
       product = Product.fetch_bower name
