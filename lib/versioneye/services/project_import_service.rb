@@ -184,11 +184,8 @@ class ProjectImportService < Versioneye::Service
 
   def self.allowed_to_add_project?( user, private_project )
     env = Settings.instance.environment
-    if env.eql?( A_ENV_ENTERPRISE )
-      allowed_to_add_e_project?
-    else
-      return allowed_to_add? user, private_project
-    end
+    return allowed_to_add_e_project?() if env.eql?( A_ENV_ENTERPRISE )
+    return allowed_to_add?( user, private_project )
   end
 
 
