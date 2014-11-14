@@ -101,7 +101,8 @@ class Bitbucket < Versioneye::Service
 
     files = {}
     branches.each do |branch|
-      files[branch] = project_files_from_branch(repo_name, branch, token, secret)
+      files = project_files_from_branch(repo_name, branch, token, secret)
+      files[branch] = files if files
     end
     files
   end
@@ -128,6 +129,7 @@ class Bitbucket < Versioneye::Service
   rescue => e
     log.error e.message
     log.error e.backtrace.join('/n')
+    nil
   end
 
 
@@ -138,7 +140,7 @@ class Bitbucket < Versioneye::Service
 
 
   def self.get_json(path, token, secret, raw = false, params = {}, headers = {})
-    url = "#{Settings.instance.bitbucket_base_url}#{path}"
+    url = URI.encode "#{Settings.instance.bitbucket_base_url}#{path}"
     oauth = init_oauth_client
     token = OAuth::AccessToken.new(oauth, token, secret)
     oauth_params = {consumer: oauth, token: token, request_uri: url}
