@@ -1,6 +1,8 @@
 class UrlUpdater < CommonUpdater
 
   def update( project, send_email = false )
+    return nil if project.nil?
+
     parser = parser_for project.url
     if parser.nil?
       log.error "No parser found for project (#{project.id}) url: #{project.url}"
@@ -11,7 +13,7 @@ class UrlUpdater < CommonUpdater
     new_project.url = project.url
     update_old_with_new project, new_project, send_email
   rescue => e
-    log.error e.message
+    log.error "ERROR occured by parsing #{project.url} - #{e.message}"
     log.error e.backtrace.join("\n")
   end
 
