@@ -29,7 +29,7 @@ class ProjectUpdateWorker < Worker
   end
 
   def process msg
-    if msg.eql?( Project::A_PERIOD_MONTHLY ) || msg.eql?( Project::A_PERIOD_WEEKLY ) || msg.eql?( A_PERIOD_DAILY )
+    if msg.eql?( Project::A_PERIOD_MONTHLY ) || msg.eql?( Project::A_PERIOD_WEEKLY ) || msg.eql?( Project::A_PERIOD_DAILY )
       update_projects msg
     elsif msg.match(/project_/)
       update_project msg
