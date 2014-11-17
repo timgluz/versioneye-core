@@ -17,7 +17,7 @@ class ProjectUpdateWorker < Worker
         puts msg
         log.info msg
 
-        process msg
+        process body
 
         channel.ack(delivery_info.delivery_tag)
       end
@@ -31,9 +31,12 @@ class ProjectUpdateWorker < Worker
   def process msg
     if msg.eql?( Project::A_PERIOD_MONTHLY ) || msg.eql?( Project::A_PERIOD_WEEKLY ) || msg.eql?( Project::A_PERIOD_DAILY )
       update_projects msg
+      return
     elsif msg.match(/project_/)
       update_project msg
+      return
     end
+    log.info "Nothing matched for #{msg}"
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")

@@ -15,7 +15,7 @@ class ProjectUpdateService < Versioneye::Service
     projects = Project.by_period period
     projects.each do |project|
       msg = "project_#{project.id.to_s}"
-      ProjectUpdateProducer.new(msg)
+      ProjectUpdateProducer.new( msg )
       # self.update( project, true )
     end
   end
