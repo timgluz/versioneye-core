@@ -28,6 +28,17 @@ class ProjectUpdateWorker < Worker
     end
   end
 
+  def process msg
+    if msg.eql?( Project::A_PERIOD_MONTHLY ) || msg.eql?( Project::A_PERIOD_WEEKLY ) || msg.eql?( A_PERIOD_DAILY )
+      update_projects msg
+    elsif msg.match(/project_/)
+      update_project msg
+    end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+  end
+
   # msg should have these values:
   # - Project::A_PERIOD_DAILY
   # - Project::A_PERIOD_WEEKLY
@@ -35,6 +46,15 @@ class ProjectUpdateWorker < Worker
   #
   def update_projects msg
     ProjectUpdateService.update_all( msg )
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+  end
+
+  def update_project msg
+    project_id = msg.gsub("project_", "")
+    project = Project.find project_id
+    ProjectUpdateService.update project, true
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")

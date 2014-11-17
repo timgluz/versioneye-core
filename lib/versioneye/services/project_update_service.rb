@@ -3,7 +3,7 @@ class ProjectUpdateService < Versioneye::Service
 
   def self.update_all period
     update_projects period
-    update_collaborators_projects period
+    # update_collaborators_projects period
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
@@ -14,7 +14,9 @@ class ProjectUpdateService < Versioneye::Service
   def self.update_projects period
     projects = Project.by_period period
     projects.each do |project|
-      self.update( project, true )
+      msg = "project_#{project.id.to_s}"
+      ProjectUpdateProducer.new(msg)
+      # self.update( project, true )
     end
   end
 
@@ -28,10 +30,14 @@ class ProjectUpdateService < Versioneye::Service
         collaborator.remove
         next
       end
+
       project = self.update( project, false )
-      if project.out_number > 0
+      unknown_licenses = ProjectService.unknown_licenses( project )
+      red_licenses     = ProjectService.red_licenses( project )
+      license_alerts   = !unknown_licenses.empty? || !red_licenses.empty?
+      if project.out_number > 0 || license_alerts
         log.info "send out email notification to collaborator #{user.fullname} for #{project.name}."
-        ProjectMailer.projectnotification_email( project, user ).deliver
+        ProjectMailer.projectnotification_email( project, user, unknown_licenses, red_licenses ).deliver
       end
     end
   end
