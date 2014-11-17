@@ -17,7 +17,7 @@ class ProjectUpdateWorker < Worker
         puts msg
         log.info msg
 
-        update_projects msg
+        process msg
 
         channel.ack(delivery_info.delivery_tag)
       end
@@ -45,6 +45,7 @@ class ProjectUpdateWorker < Worker
   # - Project::A_PERIOD_MONTHLY
   #
   def update_projects msg
+    log.info "ProjectUpdateService.update_all( #{msg} )"
     ProjectUpdateService.update_all( msg )
   rescue => e
     log.error e.message
@@ -54,6 +55,7 @@ class ProjectUpdateWorker < Worker
   def update_project msg
     project_id = msg.gsub("project_", "")
     project = Project.find project_id
+    log.info "ProjectUpdateService.update #{project_id}"
     ProjectUpdateService.update project, true
   rescue => e
     log.error e.message
