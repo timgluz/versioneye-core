@@ -35,14 +35,17 @@ class PomParser < CommonParser
     dependency.language = Product::A_LANGUAGE_JAVA
     node.children.each do |child|
       if child.name.casecmp('groupId') == 0
-        dependency.group_id = child.text.strip
+        groupId_text = get_variable_value_from_pom(properties, child.text.strip)
+        dependency.group_id = groupId_text
       elsif child.name.casecmp('artifactId') == 0
-        dependency.artifact_id = child.text.strip
+        artifactId_text = get_variable_value_from_pom(properties, child.text.strip)
+        dependency.artifact_id = artifactId_text
       elsif child.name.casecmp('version') == 0
         version_text = get_variable_value_from_pom(properties, child.text.strip)
         dependency.version_requested = version_text
       elsif child.name.casecmp('scope') == 0
-        dependency.scope = child.text.strip
+        scope_text = get_variable_value_from_pom(properties, child.text.strip)
+        dependency.scope = scope_text
       end
     end
     dependency.name = dependency.artifact_id
@@ -75,17 +78,17 @@ class PomParser < CommonParser
   end
 
   def get_variable_value_from_pom( properties, val )
-    if val.include?('${') && val.include?('}')
-      new_val = String.new(val)
-      new_val.gsub!('${', '')
-      new_val.gsub!('}', '')
-      new_val.downcase!
-      value = properties[new_val]
-      return val if value.nil? || value.empty?
-      value
-    else
-      val
+    return val if !val.include?('${') || !val.include?('}')
+
+    value = String.new val
+    val.scan(/\$\{([^\}]*)\}/xi).each do |match|
+      m_val = match[0]
+      replacement = properties[ m_val.downcase ]
+      next if replacement.to_s.empty?
+
+      value.gsub!("${#{ m_val }}", replacement)
     end
+    value
   end
 
   def parse_requested_version(version_number, dependency, product)
