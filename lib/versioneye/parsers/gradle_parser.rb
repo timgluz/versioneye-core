@@ -10,9 +10,8 @@ class GradleParser < CommonParser
   # def tomcatVersion = '7.0.54'
   A_GLOBAL_VARS_MATCHER_2 = /^\s*(def\s+\S+\s*=\s*["']\S*["']$)/xi
 
-  # ('\S+\:\S+\:\S+\')
   # Matches this 'junit:junit-dep:4.0.0'
-  A_DEP_SIMPLE_MATCHER = /["|'](\S+\:\S+\:\S+)["|']/xi
+  A_DEP_SIMPLE_MATCHER = /["|']\s*(\S+\:\S+\:\S+)\s*["|']/xi
 
 
   # (\w+) [\s|\(]?[\'|\"]+  ([\w|\d|\.|\-|\_]+)  :([\w|\d|\.|\-|_]+)  :([$\w|\d|\.|\-|_]+)
