@@ -49,7 +49,8 @@ class ProjectUpdateWorker < Worker
   #
   def update_projects msg
     log.info "ProjectUpdateService.update_all( #{msg} )"
-    ProjectUpdateService.update_all( msg )
+    # ProjectUpdateService.update_all( msg )
+    ProjectBatchUpdateService.update_all( msg )
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
