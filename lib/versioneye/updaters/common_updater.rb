@@ -6,10 +6,14 @@ class CommonUpdater < Versioneye::Service
     old_project.reload
     cache.delete( old_project.id.to_s ) # Delete badge status for project
 
-    SyncService.sync_project_async old_project
+    SyncService.sync_project_async old_project # For Enterprise environment
 
     unknown_licenses = ProjectService.unknown_licenses( old_project )
     red_licenses     = ProjectService.red_licenses( old_project )
+
+    old_project.licenses_red = red_licenses.count
+    old_project.licenses_unknown = unknown_licenses.count
+    old_project.save
 
     active_email   = send_email && old_project.user.email_inactive == false
     outdated_deps  = old_project.out_number > 0

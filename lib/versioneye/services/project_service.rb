@@ -36,7 +36,8 @@ class ProjectService < Versioneye::Service
 
     if project.save
       project.save_dependencies
-      SyncService.sync_project_async project
+      update_license_numbers!( project )
+      SyncService.sync_project_async project # For Enterprise environment
     else
       err_msg = "Can't save project: #{project.errors.full_messages.to_json}"
       log.error err_msg
@@ -182,6 +183,15 @@ class ProjectService < Versioneye::Service
       end
     end
     red
+  end
+
+
+  def self.update_license_numbers!( project )
+    return nil if project.nil? || project.projectdependencies.empty?
+
+    project.licenses_unknown = unknown_licenses( project ).count
+    project.licenses_red = red_licenses( project ).count
+    project.save
   end
 
 

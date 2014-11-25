@@ -58,15 +58,18 @@ describe ProjectUpdateService do
       project.dependencies.count.should == 3
       project.save
 
-      pc = ProjectCollaborator.new({:project_id => project.id.to_s, :owner_id => user.id.to_s, :user_id => hans.id.to_s, :caller_id => user.id.to_s})
+      pc = ProjectCollaborator.new({:project_id => project.id.to_s,
+        :owner_id => user.id.to_s, :user_id => hans.id.to_s,
+        :caller_id => user.id.to_s})
       pc.active = true
       pc.period = Project::A_PERIOD_WEEKLY
       pc.save.should be_truthy
 
       VCR.use_cassette('ProjectUpdateService_update_all', allow_playback_repeats: true) do
         described_class.update_all Project::A_PERIOD_WEEKLY
+        sleep 5
         project.reload
-        project.dependencies.count.should == 11
+        project.dependencies.count.should == 7
       end
 
       ActionMailer::Base.deliveries.size.should == 0
@@ -97,11 +100,14 @@ describe ProjectUpdateService do
 
       VCR.use_cassette('ProjectUpdateService_update_all_2', allow_playback_repeats: true) do
         described_class.update_all Project::A_PERIOD_WEEKLY
+        sleep 5
         project.reload
-        project.dependencies.count.should == 11
+        project.dependencies.count.should == 7
       end
 
-      ActionMailer::Base.deliveries.size.should == 2
+      # ActionMailer::Base.deliveries.size.should == 2
+      # It's 0 because everything is up-to-date and all licenses are known.
+      ActionMailer::Base.deliveries.size.should == 0
     end
 
   end
