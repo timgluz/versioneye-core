@@ -73,11 +73,11 @@ class VersioneyeCore
   end
 
   def init_elastic_search
-    puts " - initialize ElasticSearch"
     es_url = 'localhost:9200'
     if !Settings.instance.elasticsearch_addr.to_s.empty? && !Settings.instance.elasticsearch_port.to_s.empty?
       es_url = "#{Settings.instance.elasticsearch_addr}:#{Settings.instance.elasticsearch_port}"
     end
+    puts " - initialize ElasticSearch with #{es_url} for env: #{Settings.instance.environment}"
     Tire.configure do
       url es_url
     end

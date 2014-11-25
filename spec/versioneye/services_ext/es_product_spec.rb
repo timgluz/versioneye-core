@@ -7,7 +7,11 @@ def add_local_products
 end
 
 def get_index_count
-  response = RestClient.get("http://localhost:9200/product_test/_count")
+  es_url = 'localhost:9200'
+  if !Settings.instance.elasticsearch_addr.to_s.empty? && !Settings.instance.elasticsearch_port.to_s.empty?
+    es_url = "#{Settings.instance.elasticsearch_addr}:#{Settings.instance.elasticsearch_port}"
+  end
+  response = RestClient.get("http://#{es_url}/product_test/_count")
   JSON.parse(response)["count"]
 end
 
