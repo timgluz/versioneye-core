@@ -33,6 +33,7 @@ class ProjectBatchUpdateService < Versioneye::Service
     col_projects = fetch_collaboration_projects user, period
     return nil if (projects.nil? || projects.empty?) && col_projects.empty?
 
+    log.info "process #{period} projects for #{user.fullname}"
     update_projects projects
     update_projects col_projects
 
@@ -66,7 +67,7 @@ class ProjectBatchUpdateService < Versioneye::Service
         if collab.project
           projects << collab.project
         else
-          logger.error "Collaborated project doesnt exists: `#{collab.to_json}`"
+          log.error "Collaborated project doesnt exists: `#{collab.to_json}`"
           collab.remove
         end
       end

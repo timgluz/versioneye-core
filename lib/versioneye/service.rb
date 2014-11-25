@@ -118,7 +118,15 @@ module Versioneye
       Versioneye::Log.instance.log
     end
 
+    def self.logger
+      Versioneye::Log.instance.log
+    end
+
     def log
+      Versioneye::Log.instance.log
+    end
+
+    def logger
       Versioneye::Log.instance.log
     end
 

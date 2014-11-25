@@ -3,8 +3,8 @@ class UserService < Versioneye::Service
   def self.search(term)
     EsUser.search( term )
   rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join("\n")
+    log.error e.message
+    log.error e.backtrace.join("\n")
     return []
   end
 
@@ -91,8 +91,8 @@ class UserService < Versioneye::Service
       user.save
     end
   rescue => e
-    logger.error e.message
-    logger.error e.backtrace.join("\n")
+    log.error e.message
+    log.error e.backtrace.join("\n")
     false
   end
 
