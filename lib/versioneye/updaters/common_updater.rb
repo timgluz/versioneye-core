@@ -13,7 +13,9 @@ class CommonUpdater < Versioneye::Service
 
     active_email   = send_email && old_project.user.email_inactive == false
     outdated_deps  = old_project.out_number > 0
-    license_alerts = !unknown_licenses.empty? || !red_licenses.empty?
+    # The next line is commented out because right now the user can not edit licenses
+    # license_alerts = !unknown_licenses.empty? || !red_licenses.empty?
+    license_alerts = !red_licenses.empty?
 
     if active_email && ( outdated_deps || license_alerts )
       log.info "Send out email notification for project #{old_project.name} to user #{old_project.user.fullname}"
