@@ -46,7 +46,7 @@ class ProjectUpdateService < Versioneye::Service
   def self.update project, send_email = false
     return nil if project.nil?
     return nil if project.user_id.nil? || project.user.nil?
-    return nil if project.user.deleted
+    return nil if project.user.deleted == true
 
     updater = UpdateStrategy.updater_for project.source
     updater.update project, send_email
