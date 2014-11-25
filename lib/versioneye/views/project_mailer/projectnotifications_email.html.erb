@@ -2,7 +2,7 @@
   Hello <%= @user.fullname %>
 </p>
 <p>
-  This is your <%= @period %> notification Email.
+  This is your <%= @period %> notification email.
 </p>
 
 <% if @projects && !@projects.empty? %>
@@ -19,8 +19,8 @@
         <tr>
           <th></th>
           <th></th>
-          <th>Outdated</th>
-          <th>Unknown</th>
+          <th style="text-align: left">Dependencies</th>
+          <th style="text-align: left">Licenses</th>
         </tr>
       </thead>
 
@@ -32,14 +32,20 @@
           <td>
             <a href="<%= @projectlink %>/<%= project.id.to_s %>?utm_medium=email&amp;utm_source=project_notifications"><%= project.name %></a>
           </td>
-          <td>
+          <td style="text-align: left">
             <span style="font-size: 14px; font-weight: bold;" >
-              <span title="out-dated dependencies"><%= project.out_number %></span> / <span title="unknown dependencies"><%= project.unknown_number %></span>
+              <% color = project.out_number.to_i == 0 ? "green" : "red" %>
+              <span title="out-dated dependencies" style="text-color: <%= color %>"><%= project.out_number %></span> /
+              <% color = project.unknown_number.to_i == 0 ? "green" : "yellow" %>
+              <span title="unknown dependencies" style="text-color: <%= color %>"><%= project.unknown_number %></span>
             </span>
           </td>
-          <td>
+          <td style="text-align: left">
             <span style="font-weight: bold; font-size: 14px;" >
-              <span title="licenses violating the license whitelist"><%= project.licenses_red %></span> / <span title="unknown licenses"><%= project.licenses_unknown %></span>
+              <% color = project.licenses_red.to_i == 0 ? "green" : "red" %>
+              <span title="licenses violating the license whitelist" style="text-color: <%= color %>"><%= project.licenses_red %></span> /
+              <% color = project.licenses_unknown.to_i == 0 ? "green" : "yellow" %>
+              <span title="unknown licenses" style="text-color: <%= color %>"><%= project.licenses_unknown %></span>
             </span>
           </td>
         </tr>
@@ -67,8 +73,8 @@
         <tr>
           <th></th>
           <th></th>
-          <th>Outdated</th>
-          <th>Unknown</th>
+          <th style="text-align: left">Dependencies</th>
+          <th style="text-align: left">Licenses</th>
         </tr>
       </thead>
 
@@ -80,14 +86,20 @@
         <td>
           <a href="<%= @projectlink %>/<%= project.id.to_s %>?utm_medium=email&amp;utm_source=project_notifications"><%= project.name %></a>
         </td>
-        <td>
+        <td style="text-align: left">
           <span style="font-size: 14px; font-weight: bold;" >
-            <span title="out-dated dependencies"><%= project.out_number %></span> / <span title="unknown dependencies"><%= project.unknown_number %></span>
+            <% color = project.out_number.to_i == 0 ? "green" : "red" %>
+            <span title="out-dated dependencies" style="text-color: <%= color %>"><%= project.out_number %></span> /
+            <% color = project.unknown_number.to_i == 0 ? "green" : "yellow" %>
+            <span title="unknown dependencies" style="text-color: <%= color %>"><%= project.unknown_number %></span>
           </span>
         </td>
-        <td>
+        <td style="text-align: left">
           <span style="font-weight: bold; font-size: 14px;" >
-            <span title="licenses violating the license whitelist"><%= project.licenses_red %></span> / <span title="unknown licenses"><%= project.licenses_unknown %></span>
+            <% color = project.licenses_red.to_i == 0 ? "green" : "red" %>
+            <span title="licenses violating the license whitelist" style="text-color: <%= color %>"><%= project.licenses_red %></span> /
+            <% color = project.licenses_unknown.to_i == 0 ? "green" : "yellow" %>
+            <span title="unknown licenses" style="text-color: <%= color %>"><%= project.licenses_unknown %></span>
           </span>
         </td>
       </tr>
