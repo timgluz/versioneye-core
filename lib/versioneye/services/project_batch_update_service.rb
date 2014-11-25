@@ -1,5 +1,6 @@
 class ProjectBatchUpdateService < Versioneye::Service
 
+
   def self.update_all period
     UserService.all_users_paged do |users|
       update_for users, period
@@ -25,19 +26,26 @@ class ProjectBatchUpdateService < Versioneye::Service
     return nil if user.deleted == true
     return nil if user.email_inactive == true
 
+    uns = UserNotificationSetting.fetch_or_create_notification_setting( user )
+    return nil if uns.project_emails == false
+
     projects = fetch_projects user, period
     col_projects = fetch_collaboration_projects user, period
     return nil if (projects.nil? || projects.empty?) && col_projects.empty?
 
+    update_projects projects
+    update_projects col_projects
+
+    ProjectMailer.projectnotifications_email( user, projects, col_projects, period ).deliver
+  end
+
+
+  def self.update_projects projects, send_email = false
+    return nil if projects.nil? || projects.empty?
+
     projects.each do |project|
-      ProjectUpdateService.update project, false
+      ProjectUpdateService.update project, send_email
     end
-
-    col_projects.each do |project|
-      ProjectUpdateService.update project, false
-    end
-
-    ProjectMailer.projectnotifications_email(user, projects, col_projects, period).deliver
   end
 
 
