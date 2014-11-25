@@ -30,4 +30,17 @@ class ProjectMailer < ActionMailer::Base
     end
   end
 
+
+  def projectnotifications_email user, projects, col_projects, period
+    @user = user
+    @projects = projects
+    @col_projects = col_projects
+    @period = period
+    @projectlink = "#{Settings.instance.server_url}/user/projects"
+
+    mail(:to => user.email, :subject => "#{period.capitalize} Project Notifications") do |format|
+      format.html{ render layout: 'email_html_layout' }
+    end
+  end
+
 end

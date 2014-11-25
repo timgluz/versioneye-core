@@ -1,0 +1,108 @@
+<p>
+  Hello <%= @user.fullname %>
+</p>
+<p>
+  This is your <%= @period %> notification Email.
+</p>
+
+<% if @projects && !@projects.empty? %>
+<div style="padding-top: 15px; padding-bottom: 15px;">
+  <div id="projects" >
+    <table class="table table-striped" style="width: 100%">
+      <colgroup>
+        <col width="35px;"j />
+        <col width="*" />
+        <col width="*" />
+        <col width="*" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th></th>
+          <th></th>
+          <th>Outdated</th>
+          <th>Unknown</th>
+        </tr>
+      </thead>
+
+      <% @projects.each do |project| %>
+        <tr>
+          <td>
+            <img src= "<%= Settings.instance.server_url %>/assets/language/<%= project.language.downcase %>.png" style = "width: 48px; height: 48px;"/>
+          </td>
+          <td>
+            <a href="<%= @projectlink %>/<%= project.id.to_s %>?utm_medium=email&amp;utm_source=project_notifications"><%= project.name %></a>
+          </td>
+          <td>
+            <span style="font-size: 14px; font-weight: bold;" >
+              <span title="out-dated dependencies"><%= project.out_number %></span> / <span title="unknown dependencies"><%= project.unknown_number %></span>
+            </span>
+          </td>
+          <td>
+            <span style="font-weight: bold; font-size: 14px;" >
+              <span title="licenses violating the license whitelist"><%= project.licenses_red %></span> / <span title="unknown licenses"><%= project.licenses_unknown %></span>
+            </span>
+          </td>
+        </tr>
+      <% end %>
+
+    </table>
+  </div>
+</div>
+<% end %>
+
+<% if @col_projects && !@col_projects.empty? %>
+<div style="padding-top: 15px; padding-bottom: 15px;">
+  <p>
+    Projects shared with you.
+  </p>
+  <div id="projects" >
+    <table class="table table-striped" style="width: 100%">
+      <colgroup>
+        <col width="35px;"j />
+        <col width="*" />
+        <col width="*" />
+        <col width="*" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th></th>
+          <th></th>
+          <th>Outdated</th>
+          <th>Unknown</th>
+        </tr>
+      </thead>
+
+      <% @col_projects.each do |project| %>
+      <tr>
+        <td>
+          <img src= "<%= Settings.instance.server_url %>/assets/language/<%= project.language.downcase %>.png" style = "width: 48px; height: 48px;"/>
+        </td>
+        <td>
+          <a href="<%= @projectlink %>/<%= project.id.to_s %>?utm_medium=email&amp;utm_source=project_notifications"><%= project.name %></a>
+        </td>
+        <td>
+          <span style="font-size: 14px; font-weight: bold;" >
+            <span title="out-dated dependencies"><%= project.out_number %></span> / <span title="unknown dependencies"><%= project.unknown_number %></span>
+          </span>
+        </td>
+        <td>
+          <span style="font-weight: bold; font-size: 14px;" >
+            <span title="licenses violating the license whitelist"><%= project.licenses_red %></span> / <span title="unknown licenses"><%= project.licenses_unknown %></span>
+          </span>
+        </td>
+      </tr>
+      <% end %>
+
+    </table>
+  </div>
+</div>
+<% end %>
+
+<p>
+  We keep you informed. <br/>
+  Have a great day!
+</p>
+<p>
+  Your VersionEye Team<br/>
+  <a href="<%= Settings.instance.server_url %>?utm_medium=email&amp;utm_source=project_notification"><%= Settings.instance.server_url %></a>
+</p>
