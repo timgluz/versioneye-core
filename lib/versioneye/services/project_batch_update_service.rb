@@ -22,6 +22,8 @@ class ProjectBatchUpdateService < Versioneye::Service
 
   def self.process user, period
     return nil if user.nil?
+    return nil if user.deleted == true
+    return nil if user.email_inactive == true
 
     projects = fetch_projects user, period
     col_projects = fetch_collaboration_projects user, period
