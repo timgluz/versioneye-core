@@ -45,6 +45,10 @@ class ProductService < Versioneye::Service
       result = product.save
     end
     result
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    false
   end
 
 
@@ -59,6 +63,10 @@ class ProductService < Versioneye::Service
       result = product.save
     end
     result
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    false
   end
 
 
