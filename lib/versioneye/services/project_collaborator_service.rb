@@ -4,6 +4,7 @@ class ProjectCollaboratorService < Versioneye::Service
   # collaborator_info is either a username or a email address! 
   def self.add_new project, caller_user, collaborator_info 
     user = User.find_by_username( collaborator_info )
+    user = User.find_by_email( collaborator_info ) if user.nil? 
     if user && ProjectCollaborator.collaborator?(project[:_id].to_s, user[:_id].to_s)
       raise "#{user[:fullname]} is already a collaborator in your project."
     end
