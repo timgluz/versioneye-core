@@ -40,7 +40,7 @@ class BowerParser < PackageParser
 
 
   def parse_line( package_name, version_label, project )
-    product    = fetch_product package_name
+    product    = Product.fetch_bower package_name
     dependency = init_dependency( product, package_name )
     parse_requested_version( version_label, dependency, product )
     project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
@@ -73,18 +73,12 @@ class BowerParser < PackageParser
   end
 
 
-  def fetch_product package_name
-    name = package_name.downcase
-    Product.where(prod_type: Project::A_TYPE_BOWER, name: name).first
-  end
-
-
   def init_dependency( product, name )
     dependency          = Projectdependency.new
     dependency.name     = name
-    dependency.language = Product::A_LANGUAGE_JAVASCRIPT # Not sure about that, it can be CSS as well !!
-
+    dependency.language = Product::A_LANGUAGE_JAVASCRIPT
     if product
+      dependency.language        = product.language
       dependency.prod_key        = product.prod_key
       dependency.version_current = product.version
     end
