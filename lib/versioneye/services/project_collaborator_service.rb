@@ -5,7 +5,7 @@ class ProjectCollaboratorService < Versioneye::Service
   def self.add_new project, caller_user, collaborator_info 
     user = User.find_by_username( collaborator_info )
     if user && ProjectCollaborator.collaborator?(project[:_id].to_s, user[:_id].to_s)
-      raise "Warning: #{user[:fullname]} is already a collaborator in your project."
+      raise "#{user[:fullname]} is already a collaborator in your project."
     end
 
     new_collaborator = ProjectCollaborator.new project_id: project[:_id].to_s,
@@ -44,7 +44,7 @@ class ProjectCollaboratorService < Versioneye::Service
     project.collaborators << new_collaborator
 
     if collaborator_info.to_s.match( User::A_EMAIL_REGEX )
-      UserMailer.collaboration_invitation( new_collaborator )
+      UserMailer.collaboration_invitation( new_collaborator ).deliver
     end
   end
 
