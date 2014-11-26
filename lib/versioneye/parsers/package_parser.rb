@@ -267,6 +267,7 @@ class PackageParser < CommonParser
     dependency.name     = name
     dependency.language = Product::A_LANGUAGE_NODEJS
     if product
+      dependency.language        = product.language
       dependency.prod_key        = product.prod_key
       dependency.version_current = product.version
     end
