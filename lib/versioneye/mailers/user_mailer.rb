@@ -34,7 +34,7 @@ class UserMailer < ActionMailer::Base
     mail( :to => collaborator[:invitation_email], :subject => 'Invitation to project collabration' )
   end
 
-  def new_collaboration(collaborator)
+  def new_collaboration( collaborator )
     @caller        = collaborator.caller
     @project       = collaborator.project
     @callee        = collaborator.user
