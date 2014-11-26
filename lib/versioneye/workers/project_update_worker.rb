@@ -28,6 +28,7 @@ class ProjectUpdateWorker < Worker
     end
   end
 
+
   def process msg
     if msg.eql?( Project::A_PERIOD_MONTHLY ) || msg.eql?( Project::A_PERIOD_WEEKLY ) || msg.eql?( Project::A_PERIOD_DAILY )
       update_projects msg
@@ -41,6 +42,7 @@ class ProjectUpdateWorker < Worker
     log.error e.message
     log.error e.backtrace.join("\n")
   end
+
 
   # msg should have these values:
   # - Project::A_PERIOD_DAILY
