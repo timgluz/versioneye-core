@@ -18,10 +18,10 @@ class UpdateStrategy
       return StashUpdater.new
 
     when Project::A_SOURCE_API
-      return UrlUpdater.new
+      return UploadUpdater.new
 
     else
-      return UrlUpdater.new
+      return UploadUpdater.new
 
     end
   end

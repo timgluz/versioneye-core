@@ -11,7 +11,8 @@ class ProjectCollaboratorService < Versioneye::Service
 
     new_collaborator = ProjectCollaborator.new project_id: project[:_id].to_s,
                                                caller_id: caller_user[:_id].to_s,
-                                               owner_id: project[:user_id].to_s
+                                               owner_id: project[:user_id].to_s, 
+                                               period: project.period
 
     add_existing_user( project, new_collaborator, user ) if user
     invite_user( project, new_collaborator, collaborator_info ) if user.nil?
