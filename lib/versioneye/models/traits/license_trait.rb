@@ -43,7 +43,7 @@ module VersionEye
       return 'Artistic License 2.0' if artistic_20_match( tmp_name )
 
       return 'BSD 2-clause'  if bsd_2_clause_match( tmp_name )
-      return 'BSD 3-clause Revised License' if bsd_3_clause_match( tmp_name )
+      return 'BSD 3-clause' if bsd_3_clause_match( tmp_name )
       return 'BSD style' if bsd_style_match( tmp_name )
       return 'New BSD' if new_bsd_match( tmp_name )
       return 'BSD' if bsd_match( tmp_name )
