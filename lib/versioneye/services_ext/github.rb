@@ -405,9 +405,9 @@ class Github < Versioneye::Service
     content = JSON.parse(response.body, symbolize_names: true)
     catch_github_exception( content )
   rescue => e
-    log.error e.message
-    logger.error e.backtrace.join("\n")
-    return nil
+    log.error "ERROR in get_json( #{url} )"
+    log.error e.backtrace.join("\n")
+    nil
   end
 
   def self.build_request_headers token, updated_at = nil
