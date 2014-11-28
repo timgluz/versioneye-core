@@ -96,6 +96,25 @@ class Github < Versioneye::Service
     get_json("#{Settings.instance.github_api_url}/repos/#{repository}/tags", token)
   end
 
+  def self.repo_tags_all(repository, token)
+    tags = []
+    url = "#{Settings.instance.github_api_url}/repos/#{repository}/tags"
+    begin
+      request_headers = build_request_headers token
+      response = get(url, headers: request_headers)
+      content  = JSON.parse( response.body, symbolize_names: true )
+      data     = catch_github_exception( content )
+      tags     += data if data
+      paging   = paging_for response
+      url      = paging[:paging]["next"]
+    end while not url.nil?
+    tags = nil if tags.empty?
+    tags
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+  end
+
   def self.read_repo_data repo, token, try_n = 3
     return nil if repo.nil?
 
@@ -198,9 +217,9 @@ class Github < Versioneye::Service
       response = get(url, headers: request_headers)
       content  = JSON.parse( response.body, symbolize_names: true )
       data     = catch_github_exception( content )
-      branches += data if !data.nil?
-      paging = paging_for response
-      url = paging[:paging]["next"]
+      branches += data if data
+      paging   = paging_for response
+      url      = paging[:paging]["next"]
     end while not url.nil?
     branches = nil if branches.empty?
     branches
@@ -387,7 +406,7 @@ class Github < Versioneye::Service
     catch_github_exception( content )
   rescue => e
     log.error e.message
-    log.error e.backtrace.first
+    logger.error e.backtrace.join("\n")
     return nil
   end
 
