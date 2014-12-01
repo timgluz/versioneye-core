@@ -10,12 +10,13 @@ class UploadUpdater < CommonUpdater
 
     SyncService.sync_project_async project # For Enterprise environment
 
+    ProjectdependencyService.update_licenses project
+    
     unknown_licenses = ProjectService.unknown_licenses( project )
     red_licenses     = ProjectService.red_licenses( project )
-
     project.licenses_red = red_licenses.count
     project.licenses_unknown = unknown_licenses.count
-    project.save
+    project.save  
 
     return project if send_email == false 
     return project if project.user.email_inactive == false

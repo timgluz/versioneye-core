@@ -45,6 +45,36 @@ describe ProjectdependencyService do
 
   end
 
+  describe "release?" do
+
+    it 'returns nil because parameter is nil' do
+      ProjectdependencyService.release?(nil).should be_nil
+    end
+
+    it 'returns nil because version_current is nil' do
+      ProjectdependencyService.release?(Projectdependency.new).should be_nil
+    end
+
+    it 'updates the release to true' do
+      dep = ProjectdependencyFactory.create_new(@project, @product)
+      dep.version_current = @product.version
+      dep.release.should be_nil
+      ProjectdependencyService.release?(dep).should_not be_nil
+      dep.release.should_not be_nil
+      dep.release.should be_truthy
+    end
+
+    it 'updates the release to false' do
+      dep = ProjectdependencyFactory.create_new(@project, @product)
+      dep.version_current = '1.1.2-Alpha'
+      dep.release.should be_nil
+      ProjectdependencyService.release?(dep).should_not be_nil
+      dep.release.should_not be_nil
+      dep.release.should be_falsey
+    end
+
+  end
+
   describe "outdated?" do
 
     it "returns nil for nil" do

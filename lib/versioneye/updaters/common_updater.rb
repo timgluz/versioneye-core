@@ -8,18 +8,19 @@ class CommonUpdater < Versioneye::Service
 
     SyncService.sync_project_async old_project # For Enterprise environment
 
+    ProjectdependencyService.update_licenses old_project
+    
     unknown_licenses = ProjectService.unknown_licenses( old_project )
     red_licenses     = ProjectService.red_licenses( old_project )
-
     old_project.licenses_red = red_licenses.count
     old_project.licenses_unknown = unknown_licenses.count
-    old_project.save
+    old_project.save  
 
     active_email   = send_email && old_project.user.email_inactive == false
     outdated_deps  = old_project.out_number > 0
     # The next line is commented out because right now the user can not edit licenses
     # license_alerts = !unknown_licenses.empty? || !red_licenses.empty?
-    license_alerts = !red_licenses.empty?
+    license_alerts = old_project.licenses_red.to_i > 0
 
     if active_email && ( outdated_deps || license_alerts )
       log.info "Send out email notification for project #{old_project.name} to user #{old_project.user.fullname}"
@@ -30,7 +31,7 @@ class CommonUpdater < Versioneye::Service
 
   private
 
-
+  
     def log
       Versioneye::Log.instance.log
     end

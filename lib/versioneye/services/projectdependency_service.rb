@@ -5,6 +5,23 @@ class ProjectdependencyService < Versioneye::Service
   A_SECONDS_PER_DAY = 24 * 60 * 60 # 24h * 60min * 60s = 86400
 
 
+  def self.update_licenses project 
+    project.dependencies.each do |dep| 
+      dep.license_caches = []
+      product = dep.find_or_init_product
+      product.version = dep.version_requested 
+      licenses  = product.licenses
+      if licenses && !licenses.empty? 
+        fill_license_cach project, dep, licenses
+      end
+      dep.save
+    end
+  rescue => e 
+    log.error e.message
+    log.error e.backtrace.join "\n"
+  end
+
+
   def self.mute! project_id, dependency_id, mute_status
     project = Project.find_by_id( project_id )
     return false if project.nil?
@@ -124,5 +141,21 @@ class ProjectdependencyService < Versioneye::Service
       update_prod_key dependency
     end
   end
+
+
+  private 
+
+
+    def self.fill_license_cach project, dependency, licenses
+      licenses.each do |license|
+        licenseCach = LicenseCach.new({:name => license.name_substitute, :url => license.link} )
+        if project.license_whitelist
+          licenseCach.on_whitelist = project.license_whitelist.include_license_substitute?( license.name_substitute ) 
+        end
+        licenseCach.license_id = license.id.to_s 
+        dependency.license_caches << licenseCach
+      end
+    end
+
 
 end

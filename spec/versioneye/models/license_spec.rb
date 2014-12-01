@@ -137,11 +137,11 @@ describe License do
 
     it "should return BSD 3-Clause name" do
       license = License.new({:name => "The BSD 3-clause"})
-      license.name_substitute.should eq("BSD 3-clause Revised License")
+      license.name_substitute.should eq("BSD 3-clause")
     end
     it "should return BSD 3-Clause name" do
       license = License.new({:name => "The BSD 3 clause revised license"})
-      license.name_substitute.should eq("BSD 3-clause Revised License")
+      license.name_substitute.should eq("BSD 3-clause")
     end
 
     it "should return Ruby name" do

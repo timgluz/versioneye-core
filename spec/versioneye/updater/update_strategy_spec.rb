@@ -11,12 +11,12 @@ describe UpdateStrategy do
 
     it 'returns the Upload Updater' do
       updater = UpdateStrategy.updater_for Project::A_SOURCE_API
-      updater.instance_of?(UrlUpdater).should be_truthy
+      updater.instance_of?(UploadUpdater).should be_truthy
     end
 
     it 'returns the Upload Updater' do
       updater = UpdateStrategy.updater_for 'nil'
-      updater.instance_of?(UrlUpdater).should be_truthy
+      updater.instance_of?(UploadUpdater).should be_truthy
     end
 
     it 'returns the Upload Updater' do
