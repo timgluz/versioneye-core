@@ -15,32 +15,27 @@ describe ProjectdependencyService do
     @product.save
   end
 
-  describe "release?" do
+  describe "update_licenses" do
 
-    it 'returns nil because parameter is nil' do
-      ProjectdependencyService.release?(nil).should be_nil
-    end
-
-    it 'returns nil because version_current is nil' do
-      ProjectdependencyService.release?(Projectdependency.new).should be_nil
-    end
-
-    it 'updates the release to true' do
+    it 'updates the dependencies with the license infos' do
+      Projectdependency.count.should eq(0)
       dep = ProjectdependencyFactory.create_new(@project, @product)
-      dep.version_current = @product.version
-      dep.release.should be_nil
-      ProjectdependencyService.release?(dep).should_not be_nil
-      dep.release.should_not be_nil
-      dep.release.should be_truthy
-    end
+      dep.version_current   = @product.version
+      dep.version_requested = @product.version
+      dep.save 
+      Projectdependency.count.should eq(1)
+      @project.dependencies.count.should eq(1)
+      
+      license = LicenseFactory.create_new @product, "MIT"
+      license.save 
+      dep.license_caches.should be_empty 
 
-    it 'updates the release to false' do
-      dep = ProjectdependencyFactory.create_new(@project, @product)
-      dep.version_current = '1.1.2-Alpha'
-      dep.release.should be_nil
-      ProjectdependencyService.release?(dep).should_not be_nil
-      dep.release.should_not be_nil
-      dep.release.should be_falsey
+      ProjectdependencyService.update_licenses @project 
+
+      dep = Projectdependency.first
+      dep.license_caches.should_not be_empty 
+      dep.license_caches.count.should eq(1)
+      dep.license_caches.first.name.should eq('MIT')
     end
 
   end
