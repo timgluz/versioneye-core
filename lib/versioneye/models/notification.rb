@@ -3,9 +3,11 @@ class Notification < Versioneye::Model
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  field :version_id, type: String
-  field :read      , type: Boolean, default: false
-  field :sent_email, type: Boolean, default: false
+  field :version_id    , type: String
+  field :read          , type: Boolean, default: false
+  field :sent_email    , type: Boolean, default: false
+  field :email_disabled, type: Boolean, default: false
+  field :classification, type: String # nil for follow. Oterwise project. 
 
   belongs_to :user
   belongs_to :product
@@ -23,7 +25,7 @@ class Notification < Versioneye::Model
 
 
   def self.unsent_user_notifications( user )
-    Notification.where( sent_email: 'false', user_id: user.id.to_s )
+    by_user( user ).all_not_sent
   end
 
 end

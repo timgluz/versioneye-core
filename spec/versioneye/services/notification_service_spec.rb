@@ -58,7 +58,7 @@ describe NotificationService do
       NotificationFactory.create_new user
       user.email_inactive = true
       user.save
-      count        = NotificationService.send_notifications
+      count = NotificationService.send_notifications
       count.should eq(1)
     end
 
@@ -67,9 +67,35 @@ describe NotificationService do
       uns.notification_emails = false
       uns.save
       Notification.count.should == 1
-      count        = NotificationService.send_notifications
+      Notification.first.sent_email.should be_falsey
+      Notification.first.email_disabled.should be_falsey
+      count = NotificationService.send_notifications
       count.should eq(0)
-      Notification.count.should == 0
+      Notification.count.should == 1
+      Notification.first.sent_email.should be_truthy
+      Notification.first.email_disabled.should be_truthy
+    end
+
+    it "sends out 2 out of 3 because of uniq prods" do
+      uns = UserNotificationSetting.fetch_or_create_notification_setting @user
+      uns.notification_emails = true 
+      uns.save
+      
+      random_product = ProductFactory.create_new(Random.rand(778811), :gemfile)
+      noti_1 = Notification.new  user_id: @user.id,
+                                    product_id: random_product.id,
+                                    version_id: random_product.version
+      noti_1.save 
+      noti_2 = Notification.new  user_id: @user.id,
+                                    product_id: random_product.id,
+                                    version_id: '0.1.2'
+      noti_2.save 
+
+      Notification.count.should == 3
+      Notification.where(:email_disabled => true).count.should eq(0)
+      count = NotificationService.send_notifications
+      count.should eq(1)
+      Notification.where(:email_disabled => true).count.should eq(0)
     end
 
   end

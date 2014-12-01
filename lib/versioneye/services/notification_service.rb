@@ -26,7 +26,7 @@ class NotificationService < Versioneye::Service
       return 0
     end
 
-    return 1 if self.send_unsend_notifications user
+    return 1 if self.send_unsend_notifications( user )
     return 0
   rescue => e
     log.error e.message
@@ -36,19 +36,21 @@ class NotificationService < Versioneye::Service
 
 
   def self.send_unsend_notifications user
+    uns = UserNotificationSetting.fetch_or_create_notification_setting user
+    if uns.notification_emails == false
+      self.disable_notifications user
+      return false  
+    end
+
     notifications = Notification.unsent_user_notifications user
     return false if notifications.nil? || notifications.empty?
 
-    uns = UserNotificationSetting.fetch_or_create_notification_setting user
-    if uns.notification_emails == true
-      notifications.sort_by {|notice| [notice.product.language]}
-      NotificationMailer.new_version_email( user, notifications ).deliver
-      log.info "send notifications for user #{user.fullname}"
-      return true
-    end
-
-    self.remove_notifications user
-    return false
+    notis = uniq_products notifications  
+    notis.sort_by {|notice| [notice.product.language]}
+    NotificationMailer.new_version_email( user, notis ).deliver
+    log.info "Send notifications to user #{user.fullname}"
+    mark_as_sent notifications
+    return true
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
@@ -57,12 +59,53 @@ class NotificationService < Versioneye::Service
 
 
   def self.remove_notifications user
+    log.info " ---- Remove notifications for #{user.username}"
     notifications = Notification.where( :user_id => user.id.to_s )
     notifications.each do |notification|
-      log.info " ---- Remove notification for user id: #{user.id} "
       notification.remove
     end
   end
 
+  def self.disable_notifications user 
+    log.info " ---- Disable notifications for #{user.username}"
+    notifications = Notification.by_user(user).all_not_sent
+    notifications.each do |notification| 
+      notification.sent_email = true 
+      notification.email_disabled = true 
+      notification.save 
+    end
+  end
+
+  def self.uniq_products notifications
+    hashi = Hash.new 
+    notifications.each do |noti| 
+      next if noti.nil? || noti.product_id.nil? || noti.version_id.nil?
+      hashi[noti.product_id] = [] if hashi[noti.product_id].nil? 
+      hashi[noti.product_id] << noti.version_id 
+    end
+
+    hashi.each do |product_id, version_ids| 
+      if version_ids.count > 1 
+        hashi[product_id] = [ VersionService.newest_version( version_ids ) ]
+      end
+    end
+
+    result = []
+    notifications.each do |noti| 
+      version_id = hashi[noti.product_id].first
+      if version_id.eql?(noti.version_id)
+        result << noti 
+      end
+    end
+    result
+  end
+
+  def self.mark_as_sent notifications
+    notifications.each do |notification| 
+      notification.sent_email = true 
+      notification.email_disabled = false
+      notification.save 
+    end 
+  end 
 
 end

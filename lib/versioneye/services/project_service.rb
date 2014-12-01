@@ -88,7 +88,7 @@ class ProjectService < Versioneye::Service
         product = dep.product
         prod_id = "#{product.language_esc}_#{product.prod_key}"
         indexes[prod_id] = [] unless indexes.has_key?(prod_id)
-        indexes[prod_id] << project[:_id].to_s
+        indexes[prod_id] << {:project_id => project[:_id].to_s, :version_requested => dep.version_requested}
       end
     end
     indexes
