@@ -322,9 +322,7 @@ class User < Versioneye::Model
     enc_password.eql?(encrypted_password)
   end
 
-  def update_password(verification_code, password)
-    user = User.by_verification(verification_code).first
-    return false if user.nil?
+  def update_password( password )
     self.password = password
     encrypt_password
     save

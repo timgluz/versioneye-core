@@ -416,12 +416,9 @@ describe User do
   end
 
   describe "update_password" do
-    it "does not update the password" do
-      github_user.update_password("passwordasg", "asgasgfs").should be_falsey
-    end
     it "does update the password" do
       UserService.reset_password( github_user )
-      github_user.update_password(github_user.verification, "newpassword").should be_truthy
+      github_user.update_password( "newpassword" ).should be_truthy
       user = User.authenticate(github_user.email, "newpassword")
       user.should_not be_nil
     end
@@ -433,7 +430,7 @@ describe User do
     end
     it "does update the password" do
       UserService.reset_password( github_user )
-      github_user.update_password(github_user.verification, "newpassword").should be_truthy
+      github_user.update_password("newpassword").should be_truthy
       github_user.password_valid?("newpassword").should be_truthy
     end
   end
