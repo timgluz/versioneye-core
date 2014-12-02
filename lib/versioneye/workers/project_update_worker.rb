@@ -1,5 +1,7 @@
 class ProjectUpdateWorker < Worker
 
+# This worker handels the period update jobs (DAILY, WEEKLY, MONTHLY)
+# And the single project updates. 
 
   def work
     connection = get_connection
