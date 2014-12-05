@@ -24,13 +24,13 @@ class LeinParser < CommonParser
     doc = Nokogiri::HTML(xml_content)
     dep_items = doc.xpath('//div[@attr="dependencies"]')
 
-    if dep_items.nil? or dep_items.empty?
-      dep_items = []
-    else
-      dep_items = dep_items.first.children
+    deps = {:unknown_number => 0, :out_number => 0, :projectdependencies => []}
+    if dep_items && !dep_items.empty?
+      dep_items.each do |item| 
+        self.build_dependencies item.children, deps 
+      end
     end
 
-    deps = self.build_dependencies dep_items
     project              = Project.new deps
     project.project_type = Project::A_TYPE_LEIN
     project.language     = Product::A_LANGUAGE_CLOJURE
@@ -43,14 +43,14 @@ class LeinParser < CommonParser
   end
 
   def transform_to_xml(content)
-    #transform to xml
-    content = content.gsub /[\;]+.*/, '' #remove clojure comments
-    content = content.gsub /[\s]+/, ' ' #replace reduntant whitespaces
+    # transform to xml
+    content = content.gsub /[\;]+.*/, '' # Remove clojure comments
+    content = content.gsub /[\s]+/, ' '  # Replace reduntant whitespaces
     content = content.gsub /\[/, '<div>'
     content = content.gsub /\]/, '</div>'
     content = content.gsub /\{/, '<block>'
     content = content.gsub /\}/, '</block>'
-    #add attributes to tags
+    # add attributes to tags
     while true
       match = content.match(/\:(\S+)[\s]+\<(\w+)\>/)
       break if match.nil?
@@ -59,13 +59,15 @@ class LeinParser < CommonParser
     '<project>' + content + '</project>'
   end
 
-  def build_dependencies(matches)
-    data = []
+  def build_dependencies(matches, deps)
     unknowns, out_number = 0, 0
     matches.each do |item|
-      next if item.text.length < 2  #if dependency element is empty
+      next if item.text.to_s.strip.empty? # If dependency element is empty
+      
       _, group_id, name, version = item.text.scan(/((\S+)\/)?(\S+)\s+\"(\S+)\"/)[0]
-      group_id = name if group_id.nil?
+      next if name.to_s.strip.empty? 
+
+      group_id = name if group_id.to_s.empty? 
       scope, _ = item.text.scan(/:scope\s+\"(\S+)\"/)[0]
       dependency = Projectdependency.new({
         :scope => scope,
@@ -83,15 +85,15 @@ class LeinParser < CommonParser
         dependency.prod_key = product.prod_key
         dependency.version_current = product.version
       else
-        unknowns += 1
+        deps[:unknown_number] += 1
       end
+      
       if ProjectdependencyService.outdated?( dependency )
-        out_number += 1
+        deps[:out_number] += 1
       end
-      data << dependency
+      
+      deps[:projectdependencies] << dependency
     end
-
-    {:unknown_number => unknowns, :out_number => out_number, :projectdependencies => data}
   end
 
   # TODO use this method in this class to parse version strings
