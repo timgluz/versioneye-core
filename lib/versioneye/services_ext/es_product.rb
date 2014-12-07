@@ -168,7 +168,7 @@ class EsProduct < Versioneye::Service
             must {string 'group_id:' + group_id + "*"}
           end
         elsif q != '*' and group_id.empty?
-          query.custom_score :script => "(_score > 0.8 ? _score + doc['followers'].value + doc['used_by_count'].value : _score )" do
+          query.custom_score :script => "(_score > 0.95 ? _score + doc['followers'].value : _score )" do
             string "name.partial:" + q
           end
         elsif q == '*' and !group_id.empty?
