@@ -223,29 +223,20 @@ class ProductService < Versioneye::Service
 
       p "process #{first.to_s}"
       
-      first.versions.each do |version|
-        next if !last.version_by_number(version.to_s).nil?
-        
-        new_version = Version.new({:version => version.to_s, 
-          :created_at => version.created_at,
-          :released_at => version.released_at, 
-          :released_string => version.released_string})
-        last.versions.push new_version 
-        last.save 
-        p " - Added #{version.to_s} to #{last.to_s}"
+      if first.users.count > 0 
+        first.users.each do |user|
+          follow last.language, last.prod_key, user 
+          p " - Follow #{user.username} to #{last.to_s}"
+        end
       end
 
-      last.versions.each do |version|
-        next if !first.version_by_number(version.to_s).nil?
-        
-        new_version = Version.new({:version => version.to_s, 
-          :created_at => version.created_at,
-          :released_at => version.released_at, 
-          :released_string => version.released_string})
-        first.versions.push new_version
-        first.save 
-        p " - Added #{version.to_s} to #{first.to_s}"
+      if last.users.count > 0 
+        last.users.each do |user|
+          follow first.language, first.prod_key, user 
+          p " - Follow #{user.username} to #{first.to_s}"
+        end
       end
+      p " - #{first.users.count} - #{last.users.count}"
     end
   end
 
