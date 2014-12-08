@@ -89,9 +89,9 @@ describe Github do
         user_data = Github.user("94593468f5c9e59718a259297")
         user_data.should_not be_nil
         user_data.is_a?(Hash).should be_truthy
-        user_data.has_key?("login").should be_truthy
-        user_data['login'].should eql("reiz")
-        user_data['company'].should eql('VersionEye')
+        user_data.has_key?(:login).should be_truthy
+        user_data[:login].should eql("reiz")
+        user_data[:company].should eql('VersionEye')
       end
     end
   end

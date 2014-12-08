@@ -41,7 +41,7 @@ class Github < Versioneye::Service
 
   def self.user token
     client = OctokitApi.client token
-    JSON.parse client.user.to_json
+    client.user.to_hash 
   rescue => e
     log.error e.message
     log.error e.backtrace.join( "\n" )

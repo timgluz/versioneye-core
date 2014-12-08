@@ -105,7 +105,7 @@ class GitHubService < Versioneye::Service
 
   def self.cache_user_all_repos(user, orga_names)
     user_info = Github.user(user.github_token)
-    user[:user_login] = user_info['login'] if user_info.is_a?(Hash)
+    user[:user_login] = user_info[:login] if user_info.is_a?(Hash)
 
     log.info "reading user repos for user: #{user.fullname}"
     cache_user_repos(user)

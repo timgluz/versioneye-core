@@ -72,7 +72,6 @@ class GithubRepo < Versioneye::Model
     if user[:github_login].nil?
       user_info = Github.user(user.github_token)
       if user_info
-        user_info = user_info.deep_symbolize_keys
         user[:github_login] = user_info[:login]
         user.save
       end
