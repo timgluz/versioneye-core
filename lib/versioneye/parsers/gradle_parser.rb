@@ -262,7 +262,7 @@ class GradleParser < CommonParser
 
 
   def process_dep version, dependency, data
-    product = Product.find_by_group_and_artifact(dependency.group_id, dependency.artifact_id, dependency.language)
+    product = Product.find_by_group_and_artifact(dependency.group_id, dependency.artifact_id)
 
     dependency.prod_key = product.prod_key if product
     parse_requested_version( version, dependency, product )
