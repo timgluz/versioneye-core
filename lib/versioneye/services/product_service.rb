@@ -211,6 +211,45 @@ class ProductService < Versioneye::Service
   end
 
 
+  def self.clean_clojure 
+    Product.where(:language => "Clojure" ).each do |prod|
+      next if prod.group_id.to_s.empty? || prod.artifact_id.to_s.empty? 
+      
+      prods = Product.where(:group_id => prod.group_id, :artifact_id => prod.artifact_id)
+      next if prods.count.to_i != 2
+
+      last = prods.last 
+      first = prods.first 
+
+      p "process #{first.to_s}"
+      
+      first.versions.each do |version|
+        next if !last.version_by_number(version.to_s).nil?
+        
+        new_version = Version.new({:version => version.to_s, 
+          :created_at => version.created_at,
+          :released_at => version.released_at, 
+          :released_string => version.released_string})
+        last.versions.push new_version 
+        last.save 
+        p " - Added #{version.to_s} to #{last.to_s}"
+      end
+
+      last.versions.each do |version|
+        next if !first.version_by_number(version.to_s).nil?
+        
+        new_version = Version.new({:version => version.to_s, 
+          :created_at => version.created_at,
+          :released_at => version.released_at, 
+          :released_string => version.released_string})
+        first.versions.push new_version
+        first.save 
+        p " - Added #{version.to_s} to #{first.to_s}"
+      end
+    end
+  end
+
+
   private
 
 
