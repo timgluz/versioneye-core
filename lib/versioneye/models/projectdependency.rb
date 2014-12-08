@@ -53,6 +53,11 @@ class Projectdependency < Versioneye::Model
       return product if product
     end
 
+    if !group_id.to_s.empty? && !artifact_id.to_s.empty?
+      product = Product.find_by_group_and_artifact self.group_id, self.artifact_id
+      return product if product
+    end
+
     Product.fetch_product( self.language, self.prod_key.to_s.downcase )
   end
 
