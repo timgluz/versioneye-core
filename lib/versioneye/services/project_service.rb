@@ -34,7 +34,6 @@ class ProjectService < Versioneye::Service
       raise "Could not find a single dependency in the project."
     end
 
-    p "store project "
     if project.save
       project.save_dependencies
       update_license_numbers!( project )
@@ -190,7 +189,6 @@ class ProjectService < Versioneye::Service
   def self.update_license_numbers!( project )
     return nil if project.nil? || project.projectdependencies.empty?
 
-    p "update_licenses_numbers"
     ProjectdependencyService.update_licenses project
     project.licenses_unknown = unknown_licenses( project ).count
     project.licenses_red = red_licenses( project ).count
