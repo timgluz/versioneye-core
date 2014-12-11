@@ -6,16 +6,19 @@ class ProjectdependencyService < Versioneye::Service
 
 
   def self.update_licenses project 
+    p "update_licenses start"
     project.dependencies.each do |dep| 
       dep.license_caches = []
       product = dep.find_or_init_product
       product.version = dep.version_requested 
       licenses  = product.licenses
       if licenses && !licenses.empty? 
-        fill_license_cach project, dep, licenses
+        fill_license_cache project, dep, licenses
       end
       dep.save
+      p " - update_licenses for #{dep.to_s}"
     end
+    p "update_licenses end"
   rescue => e 
     log.error e.message
     log.error e.backtrace.join "\n"
@@ -146,7 +149,7 @@ class ProjectdependencyService < Versioneye::Service
   private 
 
 
-    def self.fill_license_cach project, dependency, licenses
+    def self.fill_license_cache project, dependency, licenses
       licenses.each do |license|
         licenseCach = LicenseCach.new({:name => license.name_substitute, :url => license.link} )
         if project.license_whitelist

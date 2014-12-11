@@ -14,7 +14,7 @@ class CommonUpdater < Versioneye::Service
     red_licenses     = ProjectService.red_licenses( old_project )
     old_project.licenses_red = red_licenses.count
     old_project.licenses_unknown = unknown_licenses.count
-    old_project.save  
+    old_project.save
 
     active_email   = send_email && old_project.user.email_inactive == false
     outdated_deps  = old_project.out_number > 0
