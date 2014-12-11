@@ -88,6 +88,7 @@ module Versioneye
     require 'versioneye/migrations/versionlink_migration'
 
     require 'versioneye/producers/producer.rb'
+    require 'versioneye/producers/git_repo_file_import_producer.rb'
     require 'versioneye/producers/git_repos_import_producer.rb'
     require 'versioneye/producers/git_repo_import_producer.rb'
     require 'versioneye/producers/language_daily_stats_producer.rb'
@@ -101,6 +102,7 @@ module Versioneye
     require 'versioneye/producers/sync_producer.rb'
 
     require 'versioneye/workers/worker.rb'
+    require 'versioneye/workers/git_repo_file_import_worker.rb'
     require 'versioneye/workers/git_repos_import_worker.rb'
     require 'versioneye/workers/git_repo_import_worker.rb'
     require 'versioneye/workers/language_daily_stats_worker.rb'

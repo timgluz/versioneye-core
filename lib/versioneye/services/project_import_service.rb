@@ -1,6 +1,14 @@
 class ProjectImportService < Versioneye::Service
 
   A_ENV_ENTERPRISE = "enterprise"
+  A_TASK_RUNNING = 'running'
+  A_TASK_TTL     = 180 # 180 seconds = 3 minutes
+
+
+  def self.import_from_github_async user, repo_name, filename, branch = 'master'
+    key = "github:::#{user.username}:::#{repo_name}:::#{filename}:::#{branch}"
+    task_status( key ){ GitRepoFileImportProducer.new( key ) }
+  end
 
 =begin
   This methods is
@@ -47,6 +55,11 @@ class ProjectImportService < Versioneye::Service
   end
 
 
+  def self.import_from_bitbucket_async user, repo_name, filename, branch = 'master'
+    key = "bitbucket:::#{user.username}:::#{repo_name}:::#{filename}:::#{branch}"
+    task_status( key ){ GitRepoFileImportProducer.new( key ) }
+  end
+
 =begin
   This methods is
    - Importing a project_file from Bitbucket
@@ -92,6 +105,11 @@ class ProjectImportService < Versioneye::Service
     ProjectService.store( project )
   end
 
+
+  def self.import_from_stash_async user, repo_name, filename, branch = 'master'
+    key = "stash:::#{user.username}:::#{repo_name}:::#{filename}:::#{branch}"
+    task_status( key ){ GitRepoFileImportProducer.new( key ) }
+  end
 
 =begin
   This methods is
@@ -187,6 +205,22 @@ class ProjectImportService < Versioneye::Service
     return allowed_to_add_e_project?() if env.eql?( A_ENV_ENTERPRISE )
     return allowed_to_add?( user, private_project )
   end
+
+
+  def self.task_status( key )
+    task_status   = cache.get( key )
+    if task_status && ( task_status.to_s == A_TASK_RUNNING || task_status.to_s.match(/\Adone_/) )
+      log.debug "status for #{key} is #{task_status}"
+      return task_status
+    end
+  
+    task_status = A_TASK_RUNNING
+    cache.set( key, task_status, A_TASK_TTL )
+    
+    yield 
+
+    task_status
+  end  
 
 
   private
