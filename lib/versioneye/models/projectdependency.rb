@@ -29,8 +29,6 @@ class Projectdependency < Versioneye::Model
   field :outdated_updated_at, type: DateTime, :default => DateTime.now
   field :muted              , type: Boolean , :default => false
 
-  field :file_name, type: String, :default => 'file'
-
   belongs_to :project
 
   embeds_many :license_caches  
