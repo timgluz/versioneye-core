@@ -116,6 +116,25 @@ class GitHubService < Versioneye::Service
   end
 
 
+  def self.pure_text_from project_file
+    file_bin = project_file[:content]
+    Base64.decode64(file_bin)
+  rescue => e 
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    ''
+  end
+
+  def self.filename_from project_file
+    full_name = project_file[:name]
+    full_name.split("/").last
+  rescue => e 
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    ''
+  end
+
+
   private
 
 

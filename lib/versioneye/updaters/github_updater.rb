@@ -21,10 +21,9 @@ class GithubUpdater < CommonUpdater
 
 
   def parse project_file
-    fullname  = project_file[:name]
-    file_name = fullname.split("/").last
+    content   = GitHubService.pure_text_from project_file
+    file_name = GitHubService.filename_from project_file
     parser    = parser_for file_name
-    content   = Base64.decode64( project_file[:content] )
     parse_content parser, content, file_name
   end
 

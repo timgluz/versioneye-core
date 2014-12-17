@@ -2,7 +2,14 @@ class ProjectImportService < Versioneye::Service
 
   A_ENV_ENTERPRISE = "enterprise"
   A_TASK_RUNNING = 'running'
-  A_TASK_TTL     = 180 # 180 seconds = 3 minutes
+  A_TASK_TTL     = 60 # 60 seconds = 1 minute
+
+
+
+  # def self.import_from_github_multi user, repo_name, filename, branch = 'master'
+  #   key = "github:::#{user.username}:::#{repo_name}:::#{filename}:::#{branch}"
+  #   task_status( key ){ GitRepoFileImportProducer.new( key ) }
+  # end
 
 
   def self.import_from_github_async user, repo_name, filename, branch = 'master'
@@ -28,14 +35,10 @@ class ProjectImportService < Versioneye::Service
       return " Didn't find any project file of a supported package manager."
     end
 
-    file_bin = project_file[:content]
-    file_txt = Base64.decode64(file_bin)
-
-    full_name = project_file[:name]
-    file_name = full_name.split("/").last
-
-    parser  = ProjectParseService.parser_for file_name
-    project = ProjectParseService.parse_content parser, file_txt, file_name
+    file_txt  = GitHubService.pure_text_from project_file
+    file_name = GitHubService.filename_from project_file
+    parser    = ProjectParseService.parser_for file_name
+    project   = ProjectParseService.parse_content parser, file_txt, file_name
 
     project.update_attributes({
       name: repo_name,
