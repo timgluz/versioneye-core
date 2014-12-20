@@ -31,7 +31,7 @@ class Projectdependency < Versioneye::Model
 
   belongs_to :project
 
-  embeds_many :license_caches  
+  embeds_many :license_caches 
 
   
   index({project_id: 1}, { name: "project_index", background: true})
@@ -41,12 +41,14 @@ class Projectdependency < Versioneye::Model
     "<Projectdependency: #{project} depends on #{name} (#{version_label}/#{version_requested}) current: #{version_current} >"
   end
 
+  
   def self.find_by_id id
     Projectdependency.find id
   rescue => e
     nil
   end
 
+  
   def product
     if project && project.project_type.to_s.eql?( Project::A_TYPE_BOWER )
       product = Product.fetch_bower name
@@ -61,6 +63,7 @@ class Projectdependency < Versioneye::Model
     Product.fetch_product( self.language, self.prod_key.to_s.downcase )
   end
 
+  
   def find_or_init_product
     if project && project.project_type.to_s.eql?( Project::A_TYPE_BOWER )
       product = Product.fetch_bower name
@@ -78,6 +81,7 @@ class Projectdependency < Versioneye::Model
     init_product
   end
 
+  
   def possible_prod_key
     return self.prod_key if !self.prod_key.to_s.empty?
 
@@ -88,16 +92,20 @@ class Projectdependency < Versioneye::Model
     possible_prod_key
   end
 
+  
   def unknown?
     prod_key.nil? && ext_link.nil?
   end
 
+  
   def known?
     !self.unknown?
   end
 
+  
   private
 
+  
     def init_product
       product             = Product.new
       product.name        = self.name
