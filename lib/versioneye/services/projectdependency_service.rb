@@ -4,7 +4,7 @@ class ProjectdependencyService < Versioneye::Service
 
   A_SECONDS_PER_DAY = 24 * 60 * 60 # 24h * 60min * 60s = 86400
 
-
+  # Updates projectdependency.license_caches for each projectdependency of the project
   def self.update_licenses project 
     project.dependencies.each do |dep| 
       dep.license_caches = []
@@ -150,7 +150,7 @@ class ProjectdependencyService < Versioneye::Service
       licenses.each do |license|
         licenseCach = LicenseCach.new({:name => license.name_substitute, :url => license.link} )
         if project.license_whitelist
-          licenseCach.on_whitelist = project.license_whitelist.include_license_substitute?( license.name_substitute ) 
+          licenseCach.on_whitelist = project.license_whitelist.include_license_substitute?( license.name_substitute )
         end
         licenseCach.license_id = license.id.to_s 
         dependency.license_caches << licenseCach

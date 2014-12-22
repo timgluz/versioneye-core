@@ -4,6 +4,21 @@ describe ProjectService do
 
   let(:github_user) { FactoryGirl.create(:github_user)}
 
+  describe "corresponding_file" do
+    it "returns nil for pom.xml" do
+      described_class.corresponding_file('pom.xml').should be_nil
+    end
+    it "returns Gemfile.lock" do
+      described_class.corresponding_file('Gemfile').should eq('Gemfile.lock')
+    end
+    it "returns composer.lock" do
+      described_class.corresponding_file('composer.json').should eq('composer.lock')
+    end
+    it "returns Podfile.lock" do
+      described_class.corresponding_file('Podfile').should eq('Podfile.lock')
+    end
+  end
+
   describe "type_by_filename" do
     it "returns RubyGems. OK" do
       url1 = "http://localhost:4567/veye_dev_projects/i5lSWS951IxJjU1rurMg_Gemfile?AWSAccessKeyId=123&Expires=1360525084&Signature=HRPsn%2Bai%2BoSjm8zqwZFRtzxJvvE%3D"
@@ -139,6 +154,52 @@ describe ProjectService do
     end
   end
 
+  describe 'find_child' do 
+    it "returns the child project with dependencies" do
+      rc_1 = '200.0.0-RC1'
+      zz_1 = '0.0.1'
+
+      user     = UserFactory.create_new
+      project1 = ProjectFactory.create_new user
+      project2 = ProjectFactory.create_new user
+      project2.parent_id = project1.id.to_s 
+      project2.save 
+
+      prod_1  = ProductFactory.create_new 1
+      prod_2  = ProductFactory.create_new 2
+      prod_2.versions = []
+      prod_2.add_version rc_1
+      prod_2.version = rc_1
+      prod_2.save
+      prod_3  = ProductFactory.create_new 3
+
+      dep_1 = ProjectdependencyFactory.create_new project2, prod_1, true, {:version_requested => '1000.0.0'}
+      dep_2 = ProjectdependencyFactory.create_new project2, prod_2, true, {:version_requested => zz_1, :version_current => rc_1}
+      dep_3 = ProjectdependencyFactory.create_new project2, prod_3, true, {:version_requested => '0.0.0'}
+
+      project2.dependencies.count.should eq(3)
+      project2.dependencies.each do |dep|
+        dep.outdated = nil
+        dep.release = nil
+        dep.save
+      end
+
+      project2.dependencies.each do |dep|
+        dep.outdated.should be_nil
+        dep.release.should be_nil
+      end
+
+      proj = ProjectService.find_child project1.id.to_s, project2.id.to_s
+      proj.should_not be_nil
+      proj.id.to_s.should eq(project2.id.to_s)
+      proj.dependencies.count.should eq(3)
+      proj.dependencies.each do |dep|
+        dep.outdated.should be_nil
+        dep.release.should be_nil
+      end
+    end
+  end
+
 
   describe 'store' do
 
@@ -185,9 +246,9 @@ describe ProjectService do
   end
 
 
-  describe 'destroy' do
+  describe 'destroy_single' do
 
-    it 'destroys a project' do
+    it 'destroys a single project' do
       owner   = UserFactory.create_new 1023
       user    = UserFactory.create_new
       project = ProjectFactory.create_new user, nil, true
@@ -211,12 +272,152 @@ describe ProjectService do
       Projectdependency.count.should == 3
       ProjectCollaborator.count.should == 1
 
-      ProjectService.destroy project.id
+      ProjectService.destroy_single project.id
 
       Product.count.should == 3
       Project.count.should == 0
       Projectdependency.count.should == 0
       ProjectCollaborator.count.should == 0
+    end
+
+  end
+
+
+  describe 'destroy' do
+
+    it 'destroys a parent project with all childs' do
+      owner   = UserFactory.create_new 1023
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user, nil, true
+      child   = ProjectFactory.create_new user, nil, true
+      child.parent_id = project.id.to_s 
+      child.save 
+
+      prod_1  = ProductFactory.create_new 1
+      prod_2  = ProductFactory.create_new 2
+      prod_3  = ProductFactory.create_new 3
+
+      dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1.0.0'}
+      dep_2 = ProjectdependencyFactory.create_new project, prod_2, true, {:version_requested => '0.1.0'}
+      dep_3 = ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => '0.0.0'}
+
+      dep_4 = ProjectdependencyFactory.create_new child, prod_1, true, {:version_requested => '1.0.0'}
+
+      Product.count.should == 3
+      Project.count.should == 2
+      Projectdependency.count.should == 4
+
+      ProjectService.destroy project
+
+      Product.count.should == 3
+      Project.count.should == 0
+      Projectdependency.count.should == 0
+    end
+
+  end
+
+
+  describe 'destroy_by' do
+
+    it 'destroys a project' do
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user, nil, true
+
+      prod_1  = ProductFactory.create_new 1
+      dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1.0.0'}
+  
+      Project.count.should == 1
+      ProjectService.destroy_by(user, project).should be_truthy
+      Project.count.should == 0
+    end
+
+    it 'throws exeception because user has no right to delete project.' do
+      dude    = UserFactory.create_new 23
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user, nil, true
+
+      prod_1  = ProductFactory.create_new 1
+      dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1.0.0'}
+  
+      Project.count.should == 1
+      expect { ProjectService.destroy_by(dude, project) }.to raise_exception
+      Project.count.should == 1
+    end
+
+  end
+
+
+  describe 'merge' do
+
+    it 'merges' do
+      user    = UserFactory.create_new
+      
+      project = ProjectFactory.create_new user, nil, true
+      prod_1  = ProductFactory.create_new 1
+      dep_1   = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1.0.0'}
+
+      project2 = ProjectFactory.create_new user, nil, true
+      dep_1    = ProjectdependencyFactory.create_new project2, prod_1, true, {:version_requested => '1.0.0'}
+
+      response = ProjectService.merge project.id, project2.id, user.id 
+      response.should be_truthy
+
+      Project.where(:parent_id.ne => nil).count.should eq(1)
+    end
+
+    it 'throws exception because user is not a collaborator' do
+      user    = UserFactory.create_new 1, true 
+      hacker  = UserFactory.create_new 2, true 
+      
+      project = ProjectFactory.create_new user, nil, true
+      prod_1  = ProductFactory.create_new 1
+      dep_1   = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1.0.0'}
+
+      project2 = ProjectFactory.create_new user, nil, true
+      dep_1    = ProjectdependencyFactory.create_new project2, prod_1, true, {:version_requested => '1.0.0'}
+
+      expect { ProjectService.merge(project.id, project2.id, hacker.id) }.to raise_exception
+    end
+
+  end
+
+
+  describe 'unmerge' do
+
+    it 'unmerges' do
+      user    = UserFactory.create_new
+      
+      project = ProjectFactory.create_new user, nil, true
+      prod_1  = ProductFactory.create_new 1
+      dep_1   = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1.0.0'}
+
+      project2 = ProjectFactory.create_new user, nil, true
+      dep_1    = ProjectdependencyFactory.create_new project2, prod_1, true, {:version_requested => '1.0.0'}
+  
+      project2.parent_id = project.id 
+      project2.save 
+
+      response = ProjectService.unmerge project.id, project2.id, user.id 
+      response.should be_truthy
+
+      Project.where(:parent_id.ne => nil).count.should eq(0)
+    end
+
+    it 'throws exception because user is not a collaborator' do
+      user    = UserFactory.create_new 1, true 
+      hacker  = UserFactory.create_new 2, true 
+      
+      project = ProjectFactory.create_new user, nil, true
+      prod_1  = ProductFactory.create_new 1
+      dep_1   = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1.0.0'}
+
+      project2 = ProjectFactory.create_new user, nil, true
+      dep_1    = ProjectdependencyFactory.create_new project2, prod_1, true, {:version_requested => '1.0.0'}
+  
+      project2.parent_id = project.id 
+      project2.save 
+
+      expect { ProjectService.unmerge(project.id, project2.id, hacker.id) }.to raise_exception
     end
 
   end
@@ -253,6 +454,35 @@ describe ProjectService do
       project_dep.save
       ProjectdependencyService.update_outdated!(project_dep)
       project_dep.save
+      ProjectService.outdated?(project).should be_truthy
+      ProjectService.badge_for_project(project.id).should eq('out-of-date')
+    end
+
+    it "returns the right badge out-of-date because a subproject is outdated!" do
+      user = UserFactory.create_new
+      product = ProductFactory.create_new
+      product.version = '10.0.0'
+      product.add_version '10.0.0'
+      product.save
+      project = ProjectFactory.create_new user
+      
+      project_dep = ProjectdependencyFactory.create_new project, product
+      project_dep.version_current = '10.0.0'
+      project_dep.version_requested = '10.0.0'
+      project_dep.save
+      ProjectdependencyService.update_outdated!(project_dep)
+      project_dep.save
+
+      sub_project = ProjectFactory.create_new user
+      project_dep2 = ProjectdependencyFactory.create_new sub_project, product
+      project_dep2.version_current = '10.0.0'
+      project_dep2.version_requested = '9.0.0'
+      project_dep2.save
+      sub_project.parent_id = project.id 
+      sub_project.save 
+      ProjectdependencyService.update_outdated!(project_dep2)
+      project_dep2.save
+
       ProjectService.outdated?(project).should be_truthy
       ProjectService.badge_for_project(project.id).should eq('out-of-date')
     end
@@ -510,6 +740,76 @@ describe ProjectService do
       red.should_not be_empty
       red.count.should eq(1)
       red.first.name.should eq(dep_2.name)
+    end
+
+  end
+
+
+  describe 'update_sums' do
+
+    it 'updates the sums for a single project' do
+      project = Project.new({ :dep_number => 5, :out_number => 1, 
+        :unknown_number => 2, :licenses_red => 2, :licenses_unknown => 2 })
+      project.dep_number_sum.should eq(0)
+      project.out_number_sum.should eq(0)
+      project.unknown_number_sum.should eq(0) 
+      project.licenses_red_sum.should eq(0)
+      project.licenses_unknown_sum.should eq(0) 
+      ProjectService.update_sums( project ) 
+      project.dep_number_sum.should eq( project.dep_number )
+      project.out_number_sum.should eq( project.out_number )
+      project.unknown_number_sum.should eq( project.unknown_number )
+      project.licenses_red_sum.should eq( project.licenses_red )
+      project.licenses_unknown_sum.should eq( project.licenses_unknown )
+    end
+
+    it 'updates the sums for a project with a child' do
+
+      user     = UserFactory.create_new
+      project  = ProjectFactory.create_new user, {:name => 'project_1'}, true
+      project2 = ProjectFactory.create_new user, {:name => 'project_2'}, true
+
+      prod_1  = ProductFactory.create_new 1
+      prod_2  = ProductFactory.create_new 2
+      prod_3  = ProductFactory.create_new 3
+      prod_4  = ProductFactory.create_new 4
+
+      mit = LicenseFactory.create_new prod_1, 'MIT'
+      gpl = LicenseFactory.create_new prod_2, 'GPL'
+
+      prod_1.licenses.push mit 
+      prod_2.licenses.push gpl
+
+      dep_1 = ProjectdependencyFactory.create_new project , prod_1, true, {:version_requested => prod_1.version}
+      dep_2 = ProjectdependencyFactory.create_new project , prod_2, true, {:version_requested => prod_2.version}
+      dep_3 = ProjectdependencyFactory.create_new project2, prod_3, true, {:version_requested => '0.0.0'}
+      dep_4 = ProjectdependencyFactory.create_new project2, prod_4, true, {:version_requested => '0.0.0'}
+      dep_5 = ProjectdependencyFactory.create_new project2, prod_1, true, {:version_requested => prod_1.version}
+      dep_6 = ProjectdependencyFactory.create_new project2, nil, true
+
+      ProjectdependencyService.update_outdated!( dep_1 )
+      ProjectdependencyService.update_outdated!( dep_2 )
+      ProjectdependencyService.update_outdated!( dep_3 )
+      ProjectdependencyService.update_outdated!( dep_4 )
+      ProjectdependencyService.update_outdated!( dep_5 )
+
+      whitelist = LicenseWhitelistFactory.create_new 'OSS', ['MIT']
+      whitelist.save
+      project.license_whitelist_id = whitelist.id
+      project.save
+      ProjectService.update_license_numbers! project
+
+      project2.parent_id = project.id.to_s 
+      project2.save 
+      ProjectService.update_license_numbers! project2
+
+      ProjectService.update_sums( project ) 
+      
+      project.dep_number_sum.should eq( 5 )
+      project.out_number_sum.should eq( 2 )
+      project.unknown_number_sum.should eq( 1 )
+      project.licenses_red_sum.should eq( 1 )
+      project.licenses_unknown_sum.should eq( 3 )
     end
 
   end

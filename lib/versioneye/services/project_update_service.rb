@@ -1,9 +1,23 @@
 class ProjectUpdateService < Versioneye::Service
 
 
-  def self.update_all period
-    update_projects period
-    # update_collaborators_projects period
+  def self.update_async project, send_email = false 
+    return nil if not_updateable?( project )
+    
+    msg = "project_#{project.id.to_s}:::#{send_email}"
+    ProjectUpdateProducer.new( msg )
+  end
+
+
+  def self.update project, send_email = false
+    return nil if not_updateable?( project )
+
+    project = update_single project, send_email 
+    project.children.each do |child_project|
+      update_single child_project, send_email   
+    end
+    ProjectService.update_sums( project )
+    project
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
@@ -11,42 +25,8 @@ class ProjectUpdateService < Versioneye::Service
   end
 
 
-  def self.update_projects period
-    projects = Project.by_period period
-    projects.each do |project|
-      msg = "project_#{project.id.to_s}"
-      ProjectUpdateProducer.new( msg )
-      # self.update( project, true )
-    end
-  end
-
-
-  def self.update_collaborators_projects period
-    collaborators = ProjectCollaborator.by_period( period )
-    collaborators.each do |collaborator|
-      project = collaborator.project
-      user    = collaborator.user
-      if project.nil? || user.nil?
-        collaborator.remove
-        next
-      end
-
-      project = self.update( project, false )
-      unknown_licenses = ProjectService.unknown_licenses( project )
-      red_licenses     = ProjectService.red_licenses( project )
-      license_alerts   = !unknown_licenses.empty? || !red_licenses.empty?
-      if project.out_number > 0 || license_alerts
-        log.info "send out email notification to collaborator #{user.fullname} for #{project.name}."
-        ProjectMailer.projectnotification_email( project, user, unknown_licenses, red_licenses ).deliver
-      end
-    end
-  end
-
-
-  def self.update project, send_email = false
-    return nil if project.nil?
-    return nil if project.user_id.nil? || project.user.nil?
-    return nil if project.user.deleted == true
+  def self.update_single project, send_email = false
+    return nil if not_updateable?( project )
 
     updater = UpdateStrategy.updater_for project.source
     updater.update project, send_email
@@ -67,6 +47,17 @@ class ProjectUpdateService < Versioneye::Service
     project.api_created = api_created
     project
   end
+
+
+  private 
+
+
+    def self.not_updateable?( project )
+      return true if project.nil?
+      return true if project.user_id.nil? || project.user.nil?
+      return true if project.user.deleted == true  
+      return false 
+    end
 
 
 end

@@ -9,6 +9,137 @@ describe Project do
     @user.save
   end
 
+  
+  describe "to_s" do 
+    it 'returns to_s' do 
+      project = Project.new({:language => 'Java', :project_type => 'Maven2', :name => 'pomi' })
+      project.to_s.should eq("<Project Java/Maven2 pomi>")
+    end
+  end
+
+
+  describe "children" do 
+    it 'returns an empty array' do 
+      project = Project.new({:language => 'Java', :project_type => 'Maven2', :name => 'pomi' })
+      kids = project.children
+      kids.should_not be_nil 
+      kids.should be_empty
+    end
+
+    it 'returns an empty array' do 
+      user = UserFactory.create_new 1079
+      project = ProjectFactory.create_new user
+      project.save 
+      kid     = ProjectFactory.create_new user
+      kid.parent_id = project.id.to_s
+      kid.save  
+      Project.all.count.should eq(2)
+      kids = project.children
+      kids.should_not be_nil 
+      kids.count.should eq(1)
+    end
+  end
+
+
+  describe "filename" do 
+    it 'returns the nacked filename' do 
+      project = Project.new({ :s3_filename => 'pom.xml' })
+      project.filename.should eq("pom.xml")
+    end
+    it 'returns the filtered filename' do 
+      project = Project.new({ :s3_filename => '85773722_pom.xml' })
+      project.filename.should eq("pom.xml")
+    end
+  end
+
+
+  describe "sum_own!" do 
+    it 'sums own' do 
+      project = Project.new({ :dep_number => 5, :out_number => 1, 
+        :unknown_number => 2, :licenses_red => 2, :licenses_unknown => 2 })
+      project.dep_number_sum.should eq(0)
+      project.out_number_sum.should eq(0)
+      project.unknown_number_sum.should eq(0) 
+      project.licenses_red_sum.should eq(0)
+      project.licenses_unknown_sum.should eq(0) 
+      project.sum_own! 
+      project.dep_number_sum.should eq( project.dep_number )
+      project.out_number_sum.should eq( project.out_number )
+      project.unknown_number_sum.should eq( project.unknown_number )
+      project.licenses_red_sum.should eq( project.licenses_red )
+      project.licenses_unknown_sum.should eq( project.licenses_unknown )
+    end
+  end
+
+
+  describe "show_dependency_badge?" do 
+    it 'shows the badge' do 
+      project = Project.new({ :language => 'Java' })
+      project.show_dependency_badge?().should be_truthy
+    end
+    it 'shows not the badge' do 
+      project = Project.new({ :language => 'Puki' })
+      project.show_dependency_badge?().should be_falsey
+    end
+  end
+
+
+  describe "license_whitelist?" do 
+    it 'returns nil' do 
+      project = Project.new
+      project.license_whitelist.should be_nil
+    end
+    it 'returns nil' do 
+      lwl = LicenseWhitelistFactory.create_new 'OkForMe'
+      lwl.save.should be_truthy
+      project = Project.new({:license_whitelist_id => lwl.id.to_s})
+      project.license_whitelist.should_not be_nil
+      project.license_whitelist.id.to_s.should eq(lwl.id.to_s)
+    end
+  end
+
+
+  describe "private_project_count_by_user" do 
+    it 'returns 0' do 
+      Project.private_project_count_by_user(nil).should eq(0)
+    end
+    it 'returns 0 because user has only public projects' do
+      user = UserFactory.create_new 
+      new_project = ProjectFactory.create_new user
+      new_project.private_project = false 
+      new_project.save 
+      Project.private_project_count_by_user( user.id.to_s ).should eq(0)
+    end
+    it 'returns 1 because user has only 1 private project' do
+      user = UserFactory.create_new 
+      new_project = ProjectFactory.create_new user
+      new_project.private_project = true 
+      new_project.save 
+      Project.private_project_count_by_user( user.id.to_s ).should eq(1)
+    end
+    it 'returns 1. User has 1 private and 1 public project' do
+      user = UserFactory.create_new 
+      new_project = ProjectFactory.create_new user
+      new_project.private_project = false
+      new_project.save 
+      new_project2 = ProjectFactory.create_new user
+      new_project2.private_project = true 
+      new_project2.save 
+      Project.private_project_count_by_user( user.id.to_s ).should eq(1)
+    end
+    it 'returns 2. User has 2 private' do
+      user = UserFactory.create_new 
+      new_project = ProjectFactory.create_new user
+      new_project.private_project = true 
+      new_project.save 
+      new_project2 = ProjectFactory.create_new user
+      new_project2.private_project = true 
+      new_project2.save 
+      Project.private_project_count_by_user( user.id.to_s ).should eq(2)
+    end
+  end
+
+
   describe "email_for" do
 
     it "returns user default email" do

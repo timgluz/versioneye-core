@@ -11,7 +11,6 @@ describe ProjectImportService do
 
 
   describe 'import_from_github' do
-
     it 'imports from github' do
       VCR.use_cassette('import_from_github', allow_playback_repeats: true) do
         project = ProjectImportService.import_from_github github_user, 'versioneye/versioneye_maven_plugin', 'pom.xml', 'master'
@@ -22,17 +21,58 @@ describe ProjectImportService do
         project.api_created.should be_falsey
       end
     end
-
     it 'does not import from github because file does not exist' do
       project = ProjectImportService.import_from_github github_user, 'versioneye/versioneye_maven_plugin', 'pomi.xml', 'master'
-      project.should match("Didn't find any project")
+      project.should match("Didn't find any project") 
     end
+  end
 
+  describe 'import_from_github_multi' do
+    it 'imports Gemfile and Gemfile.lock from github' do
+      VCR.use_cassette('import_from_github_multi', allow_playback_repeats: true) do
+        project = ProjectImportService.import_from_github_multi github_user, 'versioneye/docker_web_ui', 'Gemfile', 'master'
+        project.should_not be_nil
+        project.dependencies.should_not be_empty
+        project.name.should eq('versioneye/docker_web_ui')
+        project.source.should eq(Project::A_SOURCE_GITHUB)
+        project.api_created.should be_falsey
+        project.children.count.should eq(1)
+      end
+    end
+    it 'imports a pom.xml from github ' do
+      VCR.use_cassette('import_from_github_multi_pom', allow_playback_repeats: true) do
+        project = ProjectImportService.import_from_github_multi github_user, 'versioneye/versioneye_maven_plugin', 'pom.xml', 'master'
+        project.should_not be_nil
+        project.dependencies.should_not be_empty
+        project.name.should eq('versioneye/versioneye_maven_plugin')
+        project.source.should eq(Project::A_SOURCE_GITHUB)
+        project.api_created.should be_falsey
+        project.children.count.should eq(0)
+      end
+    end
+  end
+
+  describe 'import_from_github_async' do
+    it 'imports from github async' do
+      worker = Thread.new{ GitRepoFileImportWorker.new.work }
+      github_user.github_id = 652130
+      github_user.save.should be_truthy
+      VCR.use_cassette('import_from_github_async', allow_playback_repeats: true) do
+        Project.all.count.should eq(0)
+        status = ''
+        until status.match(/\Adone_/)
+          status = ProjectImportService.import_from_github_async github_user, 'versioneye/versioneye_maven_plugin', 'pom.xml', 'master'
+          p "status: #{status}"
+          sleep 2
+        end
+        Project.all.count.should eq(1)
+      end
+      worker.exit
+    end
   end
 
 
   describe 'import_from_bitbucket' do
-
     it 'imports from bitbucket' do
       bitbucket_repo = BitbucketRepo.new({:fullname => 'versioneye_test/fantom_hydra', :user => user_with_token, :private => false})
       bitbucket_repo.save
@@ -46,7 +86,6 @@ describe ProjectImportService do
         project.api_created.should be_falsey
       end
     end
-
     it 'does not import from bitbucket because file does not exist' do
       bitbucket_repo = BitbucketRepo.new({:fullname => 'versioneye_test/fantom_hydra', :user => user_with_token, :private => false})
       bitbucket_repo.save
@@ -55,12 +94,65 @@ describe ProjectImportService do
       project.should_not be_nil
       project.should match("Didn't find any project")
     end
+  end
 
+  describe 'import_from_bitbucket_multi' do
+    it 'imports Gemfile and Gemfile.lock from bitbucket' do
+      bitbucket_repo = BitbucketRepo.new({:fullname => 'reiz/test_gemi', :user => user_with_token, :private => false})
+      bitbucket_repo.save
+
+      VCR.use_cassette('bitbucket_file_import_multi', allow_playback_repeats: true) do
+        project = ProjectImportService.import_from_bitbucket_multi user_with_token, 'reiz/test_gemi', 'Gemfile', 'master'
+        project.should_not be_nil
+        project.dependencies.should_not be_empty
+        project.name.should eq('reiz/test_gemi')
+        project.source.should eq(Project::A_SOURCE_BITBUCKET)
+        project.api_created.should be_falsey
+        project.children.count.should eq(1)
+      end
+    end
+    it 'imports pom.xml from bitbucket' do
+      bitbucket_repo = BitbucketRepo.new({:fullname => 'reiz/test_gemi', :user => user_with_token, :private => false})
+      bitbucket_repo.save
+
+      VCR.use_cassette('bitbucket_file_import_multi_pom', allow_playback_repeats: true) do
+        project = ProjectImportService.import_from_bitbucket_multi user_with_token, 'reiz/test_gemi', 'pom.xml', 'master'
+        project.should_not be_nil
+        project.dependencies.should_not be_empty
+        project.name.should eq('reiz/test_gemi')
+        project.source.should eq(Project::A_SOURCE_BITBUCKET)
+        project.api_created.should be_falsey
+        project.children.count.should eq(0)
+      end
+    end
+  end
+
+  describe 'import_from_bitbucket_async' do
+    it 'imports from bitbucket async' do
+      bitbucket_repo = BitbucketRepo.new({:fullname => 'reiz/test_gemi', :user => user_with_token, :private => false})
+      bitbucket_repo.save
+      worker = Thread.new{ GitRepoFileImportWorker.new.work }
+      VCR.use_cassette('import_from_bitbucket_async', allow_playback_repeats: true) do
+        Project.all.count.should eq(0)
+        status = ''
+        until status.match(/\Adone_/)
+          status = ProjectImportService.import_from_bitbucket_async user_with_token, 'reiz/test_gemi', 'pom.xml', 'master'
+          p "status: #{status}"
+          sleep 2
+        end
+        Project.all.count.should eq(1)
+      end
+      worker.exit
+    end
   end
 
 
-  describe 'import_from_url' do
 
+  # TODO Tests for Stash !! 
+
+
+
+  describe 'import_from_url' do
     it 'creates a project from url' do
       url = 'https://bitbucket.org/reiz/test_gemi/raw/3691cce15b9d77934f21e372923a22465cf8ed7b/Gemfile'
       project = ProjectImportService.import_from_url url, "url_test_project", github_user
@@ -70,11 +162,9 @@ describe ProjectImportService do
       project.source.should eq(Project::A_SOURCE_URL)
       project.url.should eq( url )
     end
-
   end
 
   describe 'import_from_upload' do
-
     it 'imports from file upload' do
       gemfile = "spec/fixtures/files/Gemfile"
       file_attachment = Rack::Test::UploadedFile.new(gemfile, "application/octet-stream")
@@ -88,7 +178,6 @@ describe ProjectImportService do
       project.url.should be_nil
       project.api_created.should be_falsey
     end
-
   end
 
   describe "allowed_to_add_project?" do

@@ -1,0 +1,421 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://bitbucket.org/api/1.0/repositories/reiz/test_gemi/raw/master/Gemfile
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Chrome28 (contact@versioneye.com) (OAuth gem v0.4.7)
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      Authorization:
+      - OAuth oauth_consumer_key="HgSkE62pTT3HmxFGAm", oauth_nonce="qJZWyLwejsgYGGOrP1oo0Sj3kZV9YNo7kwEq6Trhlms",
+        oauth_signature="ZLTBrC2SzMDPZ3uBlEdC2opFubM%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1419102860", oauth_token="YsR6vM5qxmfZtkYt9G", oauth_version="1.0"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.5.10
+      Date:
+      - Sat, 20 Dec 2014 19:14:20 GMT
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Served-By:
+      - app18
+      X-Render-Time:
+      - '0.0539569854736'
+      Content-Language:
+      - en
+      Cache-Control:
+      - max-age=0
+      X-Request-Count:
+      - '58'
+      Expires:
+      - Sat, 20 Dec 2014 19:14:20 GMT
+      Vary:
+      - Authorization, Accept-Language, Cookie
+      X-Frame-Options:
+      - SAMEORIGIN
+      Last-Modified:
+      - Sat, 20 Dec 2014 19:14:20 GMT
+      X-Static-Version:
+      - 47d73a9b2e15
+      X-Version:
+      - a82cad5ca720
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Content-Type-Options:
+      - nosniff
+    body:
+      encoding: UTF-8
+      string: |
+        source 'http://rubygems.org'
+        ruby "1.9.3"
+
+        gem 'rails'             , '3.2.6' #this is a comment, too.
+        gem 'jquery-rails'                # this is a comment
+        gem 'execjs'            , '< 1.4.0'
+        gem 'therubyracer'      , '> 0.10.1'
+        gem 'will_paginate'     , '<= 3.0.3'
+        gem 'gravatar_image_tag', '>=1.1.3'
+        # gem 'tire'
+
+        group :assets do
+          gem 'sassy', "~> 3.2.0"
+          gem 'sass-rails', "~> 3.2"
+        end
+
+        gem 'cucumber-rails'   , require: false
+        gem 'fastercsv'        , :require => false
+        gem "guard-livereload" , :group   => :development, :require => false
+        gem "copycopter_client", :git     => "git://github.com/nmk/copycopter-ruby-client.git"
+        gem 'govkit'           , :path    => "#{File.expand_path(__FILE__)}/../vendor/gems"
+        gem 'therubyracer'     , :platforms => :ruby
+        gem 'libnotify' if /linux/ =~ RUBY_PLATFORM
+        gem 'growl' if /darwin/ =~ RUBY_PLATFORM
+
+        gemspec
+    http_version: 
+  recorded_at: Sat, 20 Dec 2014 19:14:20 GMT
+- request:
+    method: get
+    uri: https://bitbucket.org/api/1.0/repositories/reiz/test_gemi/raw/master/Gemfile.lock
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Chrome28 (contact@versioneye.com) (OAuth gem v0.4.7)
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      Authorization:
+      - OAuth oauth_consumer_key="HgSkE62pTT3HmxFGAm", oauth_nonce="GYOWoJ4mRjZoJlMnWmcaXu54rqOnYseGfPQEu1gbVU",
+        oauth_signature="f1IQbdjLrmwk0sAU1sP1jG%2FL5nk%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1419102861", oauth_token="YsR6vM5qxmfZtkYt9G", oauth_version="1.0"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.5.10
+      Date:
+      - Sat, 20 Dec 2014 19:14:21 GMT
+      Content-Type:
+      - text/plain; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Served-By:
+      - app16
+      X-Render-Time:
+      - '0.0469131469727'
+      Content-Language:
+      - en
+      Cache-Control:
+      - max-age=0
+      X-Request-Count:
+      - '472'
+      Expires:
+      - Sat, 20 Dec 2014 19:14:21 GMT
+      Vary:
+      - Authorization, Accept-Language, Cookie
+      X-Frame-Options:
+      - SAMEORIGIN
+      Last-Modified:
+      - Sat, 20 Dec 2014 19:14:21 GMT
+      X-Static-Version:
+      - 47d73a9b2e15
+      X-Version:
+      - a82cad5ca720
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Content-Type-Options:
+      - nosniff
+    body:
+      encoding: UTF-8
+      string: |
+        GEM
+          remote: http://rubygems.org/
+          specs:
+            actionmailer (3.2.6)
+              actionpack (= 3.2.6)
+              mail (~> 2.4.4)
+            actionpack (3.2.6)
+              activemodel (= 3.2.6)
+              activesupport (= 3.2.6)
+              builder (~> 3.0.0)
+              erubis (~> 2.7.0)
+              journey (~> 1.0.1)
+              rack (~> 1.4.0)
+              rack-cache (~> 1.2)
+              rack-test (~> 0.6.1)
+              sprockets (~> 2.1.3)
+            activemodel (3.2.6)
+              activesupport (= 3.2.6)
+              builder (~> 3.0.0)
+            activerecord (3.2.6)
+              activemodel (= 3.2.6)
+              activesupport (= 3.2.6)
+              arel (~> 3.0.2)
+              tzinfo (~> 0.3.29)
+            activeresource (3.2.6)
+              activemodel (= 3.2.6)
+              activesupport (= 3.2.6)
+            activesupport (3.2.6)
+              i18n (~> 0.6)
+              multi_json (~> 1.0)
+            arel (3.0.3)
+            builder (3.0.4)
+            erubis (2.7.0)
+            execjs (1.3.2)
+              multi_json (~> 1.0)
+            gravatar_image_tag (1.2.0)
+            hike (1.2.3)
+            i18n (0.7.0)
+            journey (1.0.4)
+            jquery-rails (3.1.2)
+              railties (>= 3.0, < 5.0)
+              thor (>= 0.14, < 2.0)
+            json (1.8.1)
+            libv8 (3.16.14.7)
+            mail (2.4.4)
+              i18n (>= 0.4.0)
+              mime-types (~> 1.16)
+              treetop (~> 1.4.8)
+            mime-types (1.25.1)
+            multi_json (1.10.1)
+            polyglot (0.3.5)
+            rack (1.4.5)
+            rack-cache (1.2)
+              rack (>= 0.4)
+            rack-ssl (1.3.4)
+              rack
+            rack-test (0.6.2)
+              rack (>= 1.0)
+            rails (3.2.6)
+              actionmailer (= 3.2.6)
+              actionpack (= 3.2.6)
+              activerecord (= 3.2.6)
+              activeresource (= 3.2.6)
+              activesupport (= 3.2.6)
+              bundler (~> 1.0)
+              railties (= 3.2.6)
+            railties (3.2.6)
+              actionpack (= 3.2.6)
+              activesupport (= 3.2.6)
+              rack-ssl (~> 1.3.2)
+              rake (>= 0.8.7)
+              rdoc (~> 3.4)
+              thor (>= 0.14.6, < 2.0)
+            rake (10.4.2)
+            rdoc (3.12.2)
+              json (~> 1.4)
+            ref (1.0.5)
+            sprockets (2.1.4)
+              hike (~> 1.2)
+              rack (~> 1.0)
+              tilt (~> 1.1, != 1.3.0)
+            therubyracer (0.12.1)
+              libv8 (~> 3.16.14.0)
+              ref
+            thor (0.19.1)
+            tilt (1.4.1)
+            treetop (1.4.15)
+              polyglot
+              polyglot
+              polyglot
+              polyglot
+              polyglot
+              polyglot
+              polyglot
+              polyglot
+              polyglot
+              polyglot
+              polyglot
+              polyglot
+              polyglot
+              polyglot
+              polyglot
+              polyglot
+              polyglot
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+              polyglot (>= 0.3.1)
+            tzinfo (0.3.42)
+            will_paginate (3.0.3)
+
+        PLATFORMS
+          ruby
+
+        DEPENDENCIES
+          execjs (< 1.4.0)
+          gravatar_image_tag (>= 1.1.3)
+          jquery-rails
+          rails (= 3.2.6)
+          therubyracer (> 0.10.1)
+          will_paginate (<= 3.0.3)
+    http_version: 
+  recorded_at: Sat, 20 Dec 2014 19:14:21 GMT
+recorded_with: VCR 2.9.3

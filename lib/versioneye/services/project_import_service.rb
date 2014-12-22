@@ -5,25 +5,24 @@ class ProjectImportService < Versioneye::Service
   A_TASK_TTL     = 60 # 60 seconds = 1 minute
 
 
-
-  # def self.import_from_github_multi user, repo_name, filename, branch = 'master'
-  #   key = "github:::#{user.username}:::#{repo_name}:::#{filename}:::#{branch}"
-  #   task_status( key ){ GitRepoFileImportProducer.new( key ) }
-  # end
-
-
   def self.import_from_github_async user, repo_name, filename, branch = 'master'
     key = "github:::#{user.username}:::#{repo_name}:::#{filename}:::#{branch}"
     task_status( key ){ GitRepoFileImportProducer.new( key ) }
   end
 
-=begin
-  This methods is
-   - Importing a project_file from GitHub
-   - Parsing the project_file to a new project
-   - Storing the new project to DB
-=end
-  def self.import_from_github user, repo_name, filename, branch = 'master'
+  def self.import_from_github_multi user, repo_name, filename, branch = 'master'
+    project = import_from_github user, repo_name, filename, branch
+    lock_file = ProjectService.corresponding_file filename
+    if lock_file
+      child = import_from_github user, repo_name, lock_file, branch
+      child.parent_id = project.id.to_s
+      child.save
+    end
+    ProjectService.update_sums( project )
+    project
+  end
+
+  def self.import_from_github user, repo_name, filename, branch = 'master', multi = false 
     private_project = Github.private_repo? user.github_token, repo_name
     unless allowed_to_add_project?(user, private_project)
       return "Please upgrade your plan to monitor the selected project."
@@ -63,12 +62,18 @@ class ProjectImportService < Versioneye::Service
     task_status( key ){ GitRepoFileImportProducer.new( key ) }
   end
 
-=begin
-  This methods is
-   - Importing a project_file from Bitbucket
-   - Parsing the project_file to a new project
-   - Storing the new project to DB
-=end
+  def self.import_from_bitbucket_multi user, repo_name, filename, branch = 'master'
+    project = import_from_bitbucket user, repo_name, filename, branch
+    lock_file = ProjectService.corresponding_file filename
+    if lock_file
+      child = import_from_bitbucket user, repo_name, lock_file, branch
+      child.parent_id = project.id.to_s
+      child.save
+    end
+    ProjectService.update_sums( project )
+    project
+  end
+
   def self.import_from_bitbucket(user, repo_name, filename, branch = "master")
     repo = BitbucketRepo.by_user(user).by_fullname(repo_name).shift
     private_project = repo[:private]
@@ -114,12 +119,18 @@ class ProjectImportService < Versioneye::Service
     task_status( key ){ GitRepoFileImportProducer.new( key ) }
   end
 
-=begin
-  This methods is
-   - Importing a project_file from Stash
-   - Parsing the project_file to a new project
-   - Storing the new project to DB
-=end
+  def self.import_from_stash_multi user, repo_name, filename, branch = 'master'
+    project = import_from_stash user, repo_name, filename, branch
+    lock_file = ProjectService.corresponding_file filename
+    if lock_file
+      child = import_from_stash user, repo_name, lock_file, branch
+      child.parent_id = project.id.to_s
+      child.save
+    end
+    ProjectService.update_sums( project )
+    project
+  end
+
   def self.import_from_stash(user, repo_name, filename, branch = "master")
     repo = StashRepo.by_user(user).by_fullname(repo_name).shift
     private_project = !repo[:public_repo]

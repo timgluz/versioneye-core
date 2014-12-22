@@ -37,6 +37,28 @@ class LicenseWhitelistService < Versioneye::Service
     success
   end
 
+  def self.update_project project, user, lwl_name 
+    return false if project.nil? 
+
+    lwl = fetch_by user, lwl_name
+    lwl_id = nil 
+    lwl_id = lwl.id.to_s if lwl 
+
+    project.license_whitelist_id = lwl_id
+    ProjectService.update_license_numbers! project
+
+    project.children.each do |child| 
+      child.license_whitelist_id = lwl_id
+      ProjectService.update_license_numbers! child 
+    end
+    ProjectService.update_sums project 
+    true 
+  rescue => e 
+    log.error e.message
+    log.error e.backtrace.join "\n"
+    false 
+  end
+
   private
 
     def self.index_enterprise

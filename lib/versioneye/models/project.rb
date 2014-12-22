@@ -44,15 +44,23 @@ class Project < Versioneye::Model
   field :scm_fullname  , type: String # repo name, for example 'reiz/gemify'
   field :scm_branch    , type: String, default: "master"
 
-  field :dep_number      , type: Integer
+  field :dep_number      , type: Integer, :default => 0
   field :out_number      , type: Integer, :default => 0
   field :unknown_number  , type: Integer, :default => 0
   field :licenses_red    , type: Integer, :default => 0
   field :licenses_unknown, type: Integer, :default => 0
 
-  field :public        , type: Boolean, :default => false   # visible for everybody
+  # These are the numbers summed up from all children 
+  field :dep_number_sum      , type: Integer, :default => 0
+  field :out_number_sum      , type: Integer, :default => 0
+  field :unknown_number_sum  , type: Integer, :default => 0
+  field :licenses_red_sum    , type: Integer, :default => 0
+  field :licenses_unknown_sum, type: Integer, :default => 0
+
+  field :public         , type: Boolean, :default => false  # visible for everybody
   field :private_project, type: Boolean, :default => false  # private project from GitHub/Bitbucket
   field :api_created    , type: Boolean, :default => false  # this project was created through the VersionEye API
+  field :parent_id      , type: String,  :default => nil    # id of the parent project. 
 
   field :license_whitelist_id, type: String
 
@@ -74,10 +82,15 @@ class Project < Versioneye::Model
   scope :by_id    , ->(id)      { where(_id: id.to_s) }
   scope :by_source, ->(source)  { where(source:  source ) }
   scope :by_period, ->(period)  { where(period:  period ) }
+  scope :parents  , -> { where(parent_id: nil ) }
   scope :by_github, ->(reponame){ where(source: A_SOURCE_GITHUB, scm_fullname: reponame) }
 
   def to_s
     "<Project #{language}/#{project_type} #{name}>"
+  end
+
+  def children 
+    Project.where(:parent_id => self.id.to_s)
   end
 
   def dependencies
@@ -250,6 +263,22 @@ class Project < Versioneye::Model
     value = ""
     20.times { value << chars[rand(chars.size)] }
     value
+  end
+
+  def sum_own!
+    self.dep_number_sum       = self.dep_number
+    self.out_number_sum       = self.out_number
+    self.unknown_number_sum   = self.unknown_number
+    self.licenses_red_sum     = self.licenses_red
+    self.licenses_unknown_sum = self.licenses_unknown
+  end
+
+  def sum_reset!
+    self.dep_number_sum       = 0
+    self.out_number_sum       = 0
+    self.unknown_number_sum   = 0
+    self.licenses_red_sum     = 0
+    self.licenses_unknown_sum = 0
   end
 
   private

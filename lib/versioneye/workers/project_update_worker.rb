@@ -52,8 +52,7 @@ class ProjectUpdateWorker < Worker
   # - Project::A_PERIOD_MONTHLY
   #
   def update_projects msg
-    log.info "ProjectUpdateService.update_all( #{msg} )"
-    # ProjectUpdateService.update_all( msg )
+    log.info "ProjectBatchUpdateService.update_all( #{msg} )"
     ProjectBatchUpdateService.update_all( msg )
   rescue => e
     log.error e.message
@@ -61,10 +60,14 @@ class ProjectUpdateWorker < Worker
   end
 
   def update_project msg
-    project_id = msg.gsub("project_", "")
+    pp  = msg.gsub("project_", "")
+    pps = pp.split(":::")
+    project_id = pps[0]
+    send_email = false 
+    send_email = true if pps[1].eql?('true')
     project = Project.find project_id
     log.info "ProjectUpdateService.update #{project_id}"
-    ProjectUpdateService.update project, true
+    ProjectUpdateService.update project, send_email
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")

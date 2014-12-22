@@ -1,6 +1,12 @@
 class ProjectBatchUpdateService < Versioneye::Service
 
-
+=begin
+  This method iterates through all users and sends out 
+  a project notification email to each user. The project notification email 
+  contains a status list with all projects of the user.  The list 
+  includes projects which belong to the user and projects where 
+  the user is collaborator.
+=end
   def self.update_all period
     UserService.all_users_paged do |users|
       update_for users, period
@@ -34,8 +40,8 @@ class ProjectBatchUpdateService < Versioneye::Service
     return nil if (projects.nil? || projects.empty?) && col_projects.empty?
 
     log.info "process #{period} projects for #{user.fullname}"
-    update_projects projects
-    update_projects col_projects
+    update_projects projects, false
+    update_projects col_projects, false 
 
     ProjectMailer.projectnotifications_email( user, projects, col_projects, period ).deliver
   end
@@ -45,7 +51,8 @@ class ProjectBatchUpdateService < Versioneye::Service
     return nil if projects.nil? || projects.empty?
 
     projects.each do |project|
-      ProjectUpdateService.update project, send_email
+      msg = "project_#{project.id.to_s}:::#{send_email}"
+      ProjectUpdateProducer.new( msg )
     end
   end
 
@@ -56,7 +63,7 @@ class ProjectBatchUpdateService < Versioneye::Service
     def self.fetch_projects user, period
       return [] if user.projects.nil? || user.projects.empty?
 
-      user.projects.where(:period => period)
+      user.projects.by_period( period )
     end
 
 

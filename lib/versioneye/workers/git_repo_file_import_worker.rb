@@ -53,11 +53,11 @@ class GitRepoFileImportWorker < Worker
 
       project = nil 
       if provider.eql?("stash")
-        project = ProjectImportService.import_from_stash user, repo_name, filename, branch
+        project = ProjectImportService.import_from_stash_multi user, repo_name, filename, branch
       elsif provider.eql?("github")
-        project = ProjectImportService.import_from_github user, repo_name, filename, branch
+        project = ProjectImportService.import_from_github_multi user, repo_name, filename, branch
       elsif provider.eql?("bitbucket")
-        project = ProjectImportService.import_from_bitbucket user, repo_name, filename, branch
+        project = ProjectImportService.import_from_bitbucket_multi user, repo_name, filename, branch
       end
       
       if project 

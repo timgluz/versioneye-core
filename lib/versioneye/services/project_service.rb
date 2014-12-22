@@ -17,9 +17,25 @@ class ProjectService < Versioneye::Service
     return nil
   end
 
+  def self.corresponding_file filename
+    return nil if filename.to_s.empty?
+    trimmed_name = filename.split('?')[0]
+    return 'Gemfile.lock'  if (/Gemfile\z/ =~ trimmed_name) == 0
+    return 'composer.lock' if (/composer.json\z/ =~ trimmed_name) == 0
+    return 'Podfile.lock'  if (/Podfile\z/ =~ trimmed_name) == 0
+    return nil
+  end
 
+  
   def self.find id
     Project.find_by_id( id )
+  rescue => e
+    log.error e.message
+    nil
+  end
+
+  def self.find_child parent_id, child_id
+    Project.where( :id => child_id, :parent_id => parent_id ).first
   rescue => e
     log.error e.message
     nil
@@ -29,11 +45,11 @@ class ProjectService < Versioneye::Service
   def self.store project
     raise "project is nil." if project.nil?
 
-    project.make_project_key!
     if project.dependencies.nil? || project.dependencies.empty?
       raise "Could not find a single dependency in the project."
     end
 
+    project.make_project_key!
     if project.save
       project.save_dependencies
       update_license_numbers!( project )
@@ -47,7 +63,76 @@ class ProjectService < Versioneye::Service
   end
 
 
-  def self.destroy project_id
+  def self.merge project_id, subproject_id, user_id 
+    project    = find project_id
+    subproject = find subproject_id 
+    return false if project.nil? || subproject.nil?  
+
+    user = User.find user_id
+    return false if user.nil? 
+    
+    if !project.collaborator?(user)
+      raise "User has no permission to unmerge this project!"
+    end
+
+    subproject.parent_id = project.id 
+    subproject.save 
+
+    cache.delete project.id.to_s
+    cache.delete subproject.id.to_s
+
+    ProjectUpdateService.update_async project 
+    true 
+  end
+
+
+  def self.unmerge project_id, subproject_id, user_id 
+    project    = find project_id
+    subproject = Project.where( :id => subproject_id, :parent_id => project_id ).first
+    return false if project.nil? || subproject.nil? 
+
+    user = User.find user_id
+    return false if user.nil? 
+    
+    if !project.collaborator?(user)
+      raise "User has no permission to unmerge this project!"
+    end
+
+    subproject.parent_id = nil 
+    subproject.save 
+
+    cache.delete project.id.to_s
+    cache.delete subproject.id.to_s
+
+    ProjectUpdateService.update_async project 
+    ProjectUpdateService.update_async subproject 
+    true 
+  end
+
+
+  def self.destroy_by user, project_id
+    project = Project.find_by_id( project_id )
+    return false if project.nil?
+    
+    if project.collaborator?( user )
+      destroy project 
+    else 
+      raise "User has no permission to delete this project!"
+    end
+  end
+
+  
+  def self.destroy project
+    return false if project.nil?  
+    
+    project.children.each do |child_project| 
+      destroy_single child_project.id 
+    end
+    destroy_single project.id
+  end
+
+  
+  def self.destroy_single project_id
     project = Project.find_by_id( project_id )
     return false if project.nil?
 
@@ -120,6 +205,14 @@ class ProjectService < Versioneye::Service
 
 
   def self.outdated?( project )
+    return true if outdated_single?( project )
+    project.children.each do |child_project|
+      return true if outdated_single?( child_project )
+    end
+    false
+  end
+
+  def self.outdated_single?( project )
     project.projectdependencies.each do |dep|
       return true if ProjectdependencyService.outdated?( dep )
     end
@@ -157,7 +250,7 @@ class ProjectService < Versioneye::Service
 
   # Returns the projectdependencies which violate the license whitelist.
   def self.red_licenses( project )
-    red = Array.new
+    red = []
     return red if project.nil? || project.projectdependencies.empty? || project.license_whitelist_id.nil?
 
     whitelist = project.license_whitelist
@@ -171,16 +264,8 @@ class ProjectService < Versioneye::Service
       product.version = dep.version_requested
       next if product.licenses.nil? || product.licenses.empty?
 
-      product.licenses.each do |lic|
-        on_white_list = false
-        whitelist.license_elements.each do |le|
-          if le.name_substitute.eql?(lic.name_substitute)
-            on_white_list = true
-            break
-          end
-        end
-        red << dep if !on_white_list
-      end
+      on_white_list = on_whitelist?( product, whitelist )
+      red << dep if !on_white_list
     end
     red
   end
@@ -194,6 +279,65 @@ class ProjectService < Versioneye::Service
     project.licenses_red = red_licenses( project ).count
     project.save
   end
+
+
+  def self.update_sums( project )
+    return if project.nil? 
+
+    if project.children.empty? 
+      project.sum_own!
+      return nil 
+    end
+
+    dep_hash = {}
+    project.sum_reset!
+    project.children.each do |child_project| 
+      update_numbers_for project, child_project, dep_hash
+    end
+    update_numbers_for project, project, dep_hash
+    project.save 
+    project 
+  end
+
+  
+  private 
+
+  
+    def self.update_numbers_for project, child_project, dep_hash = {}
+      child_project.dependencies.each do |dep| 
+        key = "#{dep.language}:#{dep.possible_prod_key}:#{dep.version_requested}"
+        next if dep_hash.include? key 
+
+        product = dep.product
+        dep_hash[key] = dep
+        project.dep_number_sum       += 1 
+        project.out_number_sum       += 1 if dep.outdated 
+        project.unknown_number_sum   += 1 if dep.unknown? 
+        project.licenses_unknown_sum += 1 if product.nil? || product.licenses.nil? || product.licenses.empty?
+        project.licenses_red_sum     += 1 if red_license?( dep )
+      end
+      dep_hash
+    end
+
+
+    def self.red_license? projectdependency 
+      lcs = projectdependency.license_caches
+      return false if lcs.nil? || lcs.empty?
+        
+      lcs.each do |lc| 
+        return true if lc.on_whitelist == false 
+      end
+      return false 
+    end
+
+
+    def self.on_whitelist?( product, whitelist )
+      product.licenses.each do |license|
+        on_whitelist = whitelist.include_license_substitute?( license.name_substitute )
+        return true if on_whitelist
+      end
+      false 
+    end
 
 
 end
