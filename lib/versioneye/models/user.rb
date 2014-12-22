@@ -329,20 +329,21 @@ class User < Versioneye::Model
   end
 
   def update_from_github_json(json_user, token)
-    self.username = json_user['login']
+    json_user.deep_symbolize_keys!
+    self.username = json_user[:login]
     if self.username.to_s.empty?
       self.username = create_random_value
     end
     self.cleanup_username
     self.ensure_unique_username
 
-    self.fullname = json_user['name']
+    self.fullname = json_user[:name]
     if self.fullname.to_s.empty?
       self.fullname = self.username
     end
 
-    self.github_id    = json_user['id']
-    self.github_login = json_user['login']
+    self.github_id    = json_user[:id]
+    self.github_login = json_user[:login]
     self.github_token = token
     self.password     = create_random_value
   end
