@@ -32,10 +32,6 @@ class LicenseWhitelist < Versioneye::Model
     self.by_user(user).by_name(name).first
   end
 
-  def self.licenses
-    License.distinct(:name)
-  end
-
   def license_by_name name
     license_elements.each do |license|
       return license if license.to_s.eql?( name )
