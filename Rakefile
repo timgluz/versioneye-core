@@ -49,3 +49,15 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
+
+$:.push File.expand_path("../lib", __FILE__)
+require 'versioneye-core'
+namespace :versioneye do
+
+  desc "start git repo file import worker"
+  task :git_repo_file_import_worker do
+    VersioneyeCore.new 
+    GitRepoFileImportWorker.new.work 
+  end
+
+end 
