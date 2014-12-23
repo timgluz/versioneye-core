@@ -63,7 +63,7 @@ class ProjectBatchUpdateService < Versioneye::Service
     def self.fetch_projects user, period
       return [] if user.projects.nil? || user.projects.empty?
 
-      user.projects.by_period( period )
+      user.projects.by_period( period ).parents
     end
 
 
@@ -72,7 +72,7 @@ class ProjectBatchUpdateService < Versioneye::Service
       projects = []
       collaborations.each do |collab|
         if collab.project
-          projects << collab.project
+          projects << collab.project 
         else
           log.error "Collaborated project doesnt exists: `#{collab.to_json}`"
           collab.remove
