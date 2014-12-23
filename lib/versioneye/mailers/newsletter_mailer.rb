@@ -5,7 +5,7 @@ class NewsletterMailer < ActionMailer::Base
 
   def newsletter_new_features_email(user)
     @user = user
-    mail(:to => @user.email, :subject => 'Maven Plugin + Audit Log') do |format|
+    mail(:to => @user.email, :subject => 'Mary Christmas - Multiple Files per Project!') do |format|
       format.html{ render layout: 'email_html_layout' }
     end
   end
