@@ -38,6 +38,7 @@ class ProjectdependencyService < Versioneye::Service
     else
       update_outdated! dependency
     end
+    cache.delete project_id.to_s 
     dependency.save
   end
 
