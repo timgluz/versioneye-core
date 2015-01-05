@@ -40,8 +40,8 @@ class GitHubService < Versioneye::Service
     user_task_key = "#{user[:username]}-#{user[:github_id]}"
     task_status   = cache.get( user_task_key )
 
-    if task_status == A_TASK_RUNNING
-      log.debug "We are still importing repos for `#{user[:fullname]}.`"
+    if task_status == A_TASK_RUNNING || task_status == A_TASK_DONE
+      log.debug "Status for importing repos for `#{user[:fullname]}.` from GitHub: #{task_status}"
       return task_status
     end
 
@@ -65,8 +65,8 @@ class GitHubService < Versioneye::Service
     repo_task_key = "github:::#{user.id.to_s}:::#{current_repo.id.to_s}"
     task_status   = cache.get( repo_task_key )
 
-    if task_status == A_TASK_RUNNING
-      log.debug "We are still importing branches and project files for `#{repo_fullname}.`"
+    if task_status == A_TASK_RUNNING || task_status == A_TASK_DONE
+      log.debug "Status for importing branches and project files for `#{repo_fullname}.` from GitHub: #{task_status}"
       return task_status
     end
 

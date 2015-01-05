@@ -30,8 +30,8 @@ class BitbucketService < Versioneye::Service
     user_task_key = "#{user[:username]}-bitbucket"
     task_status = cache.get(user_task_key)
 
-    if task_status == A_TASK_RUNNING
-      log.debug "Still importing data for #{user[:username]} from bitbucket"
+    if task_status == A_TASK_RUNNING || task_status == A_TASK_DONE
+      log.debug "Status for importing repos for #{user[:username]} from bitbucket => #{task_status}"
       return task_status
     end
 
@@ -53,9 +53,9 @@ class BitbucketService < Versioneye::Service
 
     repo_task_key = "bitbucket:::#{user.id.to_s}:::#{current_repo.id.to_s}"
     task_status   = cache.get( repo_task_key )
-    if task_status == A_TASK_RUNNING
+    if task_status == A_TASK_RUNNING || task_status == A_TASK_DONE
       repo_fullname = current_repo.fullname
-      log.debug "We are still importing branches and project files for `#{repo_fullname}.`"
+      log.debug "Status for importing branches and project files from `#{repo_fullname}.`: #{task_status}"
       return task_status
     end
 
