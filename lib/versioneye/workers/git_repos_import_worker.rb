@@ -78,7 +78,7 @@ class GitReposImportWorker < Worker
 
     def import_github_repos user
       return nil if user.nil?
-
+      
       user_task_key = "#{user[:username]}-#{user[:github_id]}"
       log.info "Fetch Repositories for #{user_task_key} from GitHub and cache them in DB."
 
