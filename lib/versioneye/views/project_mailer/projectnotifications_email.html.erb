@@ -35,17 +35,17 @@
           <td style="text-align: left">
             <span style="font-size: 14px; font-weight: bold;" >
               <% color = project.out_number.to_i == 0 ? "green" : "red" %>
-              <span title="out-dated dependencies" style="color: <%= color %>"><%= project.out_number %></span> /
+              <span title="out-dated dependencies" style="color: <%= color %>"><%= project.out_number_sum %></span> /
               <% color = project.unknown_number.to_i == 0 ? "green" : "orange" %>
-              <span title="unknown dependencies" style="color: <%= color %>"><%= project.unknown_number %></span>
+              <span title="unknown dependencies" style="color: <%= color %>"><%= project.unknown_number_sum %></span>
             </span>
           </td>
           <td style="text-align: left">
             <span style="font-weight: bold; font-size: 14px;" >
               <% color = project.licenses_red.to_i == 0 ? "green" : "red" %>
-              <span title="licenses violating the license whitelist" style="color: <%= color %>"><%= project.licenses_red %></span> /
+              <span title="licenses violating the license whitelist" style="color: <%= color %>"><%= project.licenses_red_sum %></span> /
               <% color = project.licenses_unknown.to_i == 0 ? "green" : "orange" %>
-              <span title="unknown licenses" style="color: <%= color %>"><%= project.licenses_unknown %></span>
+              <span title="unknown licenses" style="color: <%= color %>"><%= project.licenses_unknown_sum %></span>
             </span>
           </td>
         </tr>
