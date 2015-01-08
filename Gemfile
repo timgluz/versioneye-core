@@ -2,7 +2,7 @@ source "http://rubygems.org"
 
 gem 'naturalsorter'      , '~> 3.0.0'
 
-gem 'bundler'            , '~> 1.7.9'
+gem 'bundler'            , '~> 1.7.11'
 gem 'mongoid'            , '~> 3.1.0'
 gem 'log4r'              , '~> 1.1.0'
 gem 'dalli'              , '~> 2.7.0'
@@ -33,7 +33,7 @@ group :test do
   gem 'rdoc'            , '~> 4.2.0'
   gem 'simplecov'       , '~> 0.9.0'
   gem 'rspec'           , '~> 3.1.0'
-  gem 'database_cleaner', '~> 1.3.0'
+  gem 'database_cleaner', '~> 1.4.0'
   gem 'factory_girl'    , '~> 4.5.0'
   gem 'capybara'        , '~> 2.4.1'
   gem 'capybara-firebug', '~> 2.1.0'
