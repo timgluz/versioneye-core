@@ -64,6 +64,7 @@ class GitRepoFileImportWorker < Worker
         cache.set( message, "done_#{project.id.to_s}", A_TASK_TTL )
       end 
     rescue => e
+      cache.set( message, "error_#{e.message}", A_TASK_TTL )
       log.error e.message
       log.error e.backtrace.join("\n")
     end

@@ -14,12 +14,18 @@ class ProjectImportService < Versioneye::Service
     project = import_from_github user, repo_name, filename, branch
     lock_file = ProjectService.corresponding_file filename
     if lock_file
-      child = import_from_github user, repo_name, lock_file, branch
-      child.parent_id = project.id.to_s
-      child.save
+      import_child_from_github user, repo_name, lock_file, branch, project 
     end
     ProjectService.update_sums( project )
     project
+  end
+
+  def self.import_child_from_github user, repo_name, lock_file, branch, project 
+    child = import_from_github user, repo_name, lock_file, branch
+    child.parent_id = project.id.to_s
+    child.save
+  rescue => e 
+    log.error e.message
   end
 
   def self.import_from_github user, repo_name, filename, branch = 'master', multi = false 
@@ -66,12 +72,18 @@ class ProjectImportService < Versioneye::Service
     project = import_from_bitbucket user, repo_name, filename, branch
     lock_file = ProjectService.corresponding_file filename
     if lock_file
-      child = import_from_bitbucket user, repo_name, lock_file, branch
-      child.parent_id = project.id.to_s
-      child.save
+      import_child_from_bitbucket user, repo_name, lock_file, branch, project
     end
     ProjectService.update_sums( project )
     project
+  end
+
+  def self.import_child_from_bitbucket user, repo_name, lock_file, branch, project
+    child = import_from_bitbucket user, repo_name, lock_file, branch
+    child.parent_id = project.id.to_s
+    child.save
+  rescue => e 
+    log.error e.message
   end
 
   def self.import_from_bitbucket(user, repo_name, filename, branch = "master")
@@ -123,12 +135,18 @@ class ProjectImportService < Versioneye::Service
     project = import_from_stash user, repo_name, filename, branch
     lock_file = ProjectService.corresponding_file filename
     if lock_file
-      child = import_from_stash user, repo_name, lock_file, branch
-      child.parent_id = project.id.to_s
-      child.save
+      import_child_from_stash user, repo_name, lock_file, branch, project
     end
     ProjectService.update_sums( project )
     project
+  end
+
+  def self.import_child_from_stash user, repo_name, lock_file, branch, project
+    child = import_from_stash user, repo_name, lock_file, branch
+    child.parent_id = project.id.to_s
+    child.save
+  rescue => e 
+    log.error e.message
   end
 
   def self.import_from_stash(user, repo_name, filename, branch = "master")
@@ -222,8 +240,11 @@ class ProjectImportService < Versioneye::Service
 
 
   def self.task_status( key )
-    task_status   = cache.get( key )
-    if task_status && ( task_status.to_s == A_TASK_RUNNING || task_status.to_s.match(/\Adone_/) )
+    task_status = cache.get( key )
+    if task_status && 
+      ( task_status.to_s == A_TASK_RUNNING || 
+        task_status.to_s.match(/\Adone_/)  || 
+        task_status.to_s.match(/\Aerror_/) )
       log.debug "status for #{key} is #{task_status}"
       return task_status
     end
