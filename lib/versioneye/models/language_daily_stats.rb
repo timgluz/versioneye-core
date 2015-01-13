@@ -103,17 +103,17 @@ class LanguageDailyStats < Versioneye::Model
     end
 
     language = normalize_language release[:language]
-    if !Product::A_LANGS_SUPPORTED.include?(release[:language])
-      LanguageDailyStats.log.warn("Product #{release[:prod_key]} language #{release[:language]} is not supported.")
+    if !Product::A_LANGS_SUPPORTED.include?(language)
+      LanguageDailyStats.log.warn("Product #{release[:prod_key]} language #{language} is not supported.")
       return nil
     end
 
-    metric_key = LanguageDailyStats.language_to_sym(release[:language])
-    self.inc_version(metric_key)
+    metric_key = LanguageDailyStats.language_to_sym( language )
+    self.inc_version( metric_key )
 
     that_day_midnight = self[:date].at_midnight
     next_day_midnight = that_day_midnight + 1.day
-    count = Product.where(:language => release.language, :prod_key => release.prod_key,
+    count = Product.where(:language => language, :prod_key => release.prod_key,
       :created_at.gte => that_day_midnight, :created_at.lte => next_day_midnight).count
 
     self.inc_novel(metric_key) if count > 0
