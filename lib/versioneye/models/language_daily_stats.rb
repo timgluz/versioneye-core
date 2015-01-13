@@ -78,7 +78,7 @@ class LanguageDailyStats < Versioneye::Model
 
   def self.update_day_stats( n )
     that_day = n.days.ago.at_beginning_of_day
-    that_day_doc = self.new_document(that_day, true)
+    that_day_doc = self.new_document(that_day, false)
     that_day_doc.count_releases
     that_day_doc.count_language_packages
     that_day_doc.count_language_artifacts
@@ -104,7 +104,7 @@ class LanguageDailyStats < Versioneye::Model
     end
 
     if !Product::A_LANGS_SUPPORTED.include?(release[:language])
-      LanguageDailyStats.log.warn("Product #{release[:prod_key]} language is not supported.")
+      LanguageDailyStats.log.warn("Product #{release[:prod_key]} language #{release[:language]} is not supported.")
       return nil
     end
 
@@ -135,6 +135,7 @@ class LanguageDailyStats < Versioneye::Model
 
       language_key = LanguageDailyStats.language_to_sym(lang)
       n_artifacts  = LanguageDailyStats.count_artifacts( lang, that_day )
+      p "#{n_artifacts} for #{language_key}"
       self.inc_total_artifact(language_key, n_artifacts)
     end
   rescue => e
@@ -161,22 +162,18 @@ class LanguageDailyStats < Versioneye::Model
 
   def inc_version(metric_key, val = 1)
     self[metric_key]['new_version'] += val 
-    self.save
   end
 
   def inc_novel(metric_key, val =  1)
     self[metric_key]['novel_package'] += val 
-    self.save
   end
 
   def inc_total_package(metric_key, val =  1)
     self[metric_key]['total_package'] += val 
-    self.save
   end
 
   def inc_total_artifact(metric_key, val = 1)
     self[metric_key]['total_artifact'] += val 
-    self.save
   end
 
   def metrics

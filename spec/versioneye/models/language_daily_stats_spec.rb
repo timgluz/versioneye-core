@@ -123,9 +123,13 @@ describe LanguageDailyStats do
 
    it "should return all ruby project" do
       Newest.all.count.should eq(13)
+      LanguageDailyStats.all.count.should eq(0)
       LanguageDailyStats.update_counts
+      LanguageDailyStats.all.count.should eq(1)
+      p "count: #{LanguageDailyStats.all.count}"
       stats = LanguageDailyStats.today_stats
       stats.should_not be_nil
+      p "stats: #{stats}"
       stats.has_key?('Ruby').should be_truthy
       stats['Ruby'].has_key?("new_version")
       stats['Ruby']["new_version"].should eq(13)
@@ -280,6 +284,7 @@ describe LanguageDailyStats do
 
       # This is 2 days in the Future
       after_tomorrow = prod.versions.first.created_at + 2.days
+      p "after_tomorrow: #{after_tomorrow}"
       version = Version.new({:version => '1.1.1', :created_at => after_tomorrow, :updated_at => after_tomorrow })
       prod.versions.push version
       prod.save
@@ -288,7 +293,7 @@ describe LanguageDailyStats do
 
       that_day = prod.created_at
       vals = LanguageDailyStats.count_artifacts(prod.language, that_day)
-      vals.count.should eq(2) # Found only 2 because 3rd is in future!
+      vals.should eq(3) # Found only 2 because 3rd is in future!
     end
   end
 
