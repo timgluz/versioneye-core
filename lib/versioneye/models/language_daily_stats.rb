@@ -85,7 +85,6 @@ class LanguageDailyStats < Versioneye::Model
     that_day_doc.save 
   end
 
-
   def count_releases
     that_day = self[:date]
     next_day = (that_day + 1.day)
@@ -103,6 +102,7 @@ class LanguageDailyStats < Versioneye::Model
       return nil
     end
 
+    language = normalize_language release[:language]
     if !Product::A_LANGS_SUPPORTED.include?(release[:language])
       LanguageDailyStats.log.warn("Product #{release[:prod_key]} language #{release[:language]} is not supported.")
       return nil
@@ -360,4 +360,16 @@ class LanguageDailyStats < Versioneye::Model
   def self.novel_releases_timeline30(lang)
     self.language_timeline30(lang, 'novel_package')
   end
+
+  private 
+
+    def normalize_language lang 
+      return Product::A_LANGUAGE_JAVASCRIPT if lang.eql?("PureScript")
+      return Product::A_LANGUAGE_JAVASCRIPT if lang.eql?("CoffeeScript")
+      return Product::A_LANGUAGE_JAVASCRIPT if lang.eql?("ActionScript")
+      return Product::A_LANGUAGE_JAVASCRIPT if lang.eql?("TypeScript")
+      return Product::A_LANGUAGE_JAVASCRIPT if lang.eql?("LiveScript")
+      return lang
+    end
+
 end
