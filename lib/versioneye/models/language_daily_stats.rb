@@ -82,6 +82,7 @@ class LanguageDailyStats < Versioneye::Model
     that_day_doc.count_releases
     that_day_doc.count_language_packages
     that_day_doc.count_language_artifacts
+    that_day_doc.save 
   end
 
 
@@ -133,8 +134,7 @@ class LanguageDailyStats < Versioneye::Model
       n_artifacts = 0
 
       language_key = LanguageDailyStats.language_to_sym(lang)
-      mr = LanguageDailyStats.count_artifacts( lang, that_day )
-      n_artifacts = mr.nil? ? 0 : mr.count
+      n_artifacts  = LanguageDailyStats.count_artifacts( lang, that_day )
       self.inc_total_artifact(language_key, n_artifacts)
     end
   rescue => e
@@ -145,54 +145,38 @@ class LanguageDailyStats < Versioneye::Model
 
 
   def self.count_artifacts language, until_date
-    border = until_date.at_midnight + 1.day
-
-    map = %Q{
-      function() {
-        if ( this.versions == null || this.versions.count == 0 ) return;
-
-        that_day = new ISODate("#{border.iso8601}");
-        for (var version in this.versions){
-          created = this.versions[version].created_at
-          if (created != null && created.getTime() < that_day.getTime()){
-            emit( this.versions[version]._id, { count: 1 } );
-          }
-        }
-      }
-    }
-
-    reduce = %Q{
-      function(key, values) {
-        var result = { count: 0 };
-        values.forEach(function(value) {
-          result.count += value.count;
-        });
-        return result;
-      }
-    }
-
-    Product.where(:language => language, :created_at.lt => border ).map_reduce(map, reduce).out(inline: true)
+    ag = Product.collection.aggregate(
+      { '$unwind' => "$versions" }, 
+      { '$match' => {'language' => "#{language}"} }, 
+      { '$group' => { '_id' => '', 'count' => {'$sum' => 1} } } 
+    )
+    return ag.first["count"] if ag && ag.first 
+    return 0
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
-    nil
+    0
   end
 
 
   def inc_version(metric_key, val = 1)
-     self.inc("#{metric_key}.new_version", val)
+    self[metric_key]['new_version'] += val 
+    self.save
   end
 
   def inc_novel(metric_key, val =  1)
-    self.inc("#{metric_key}.novel_package", val)
+    self[metric_key]['novel_package'] += val 
+    self.save
   end
 
   def inc_total_package(metric_key, val =  1)
-    self.inc("#{metric_key}.total_package", val)
+    self[metric_key]['total_package'] += val 
+    self.save
   end
 
   def inc_total_artifact(metric_key, val = 1)
-    self.inc("#{metric_key}.total_artifact", val)
+    self[metric_key]['total_artifact'] += val 
+    self.save
   end
 
   def metrics
