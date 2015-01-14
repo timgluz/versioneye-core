@@ -5,9 +5,14 @@ class DockerImage < Versioneye::Model
 
   field :image_name   , type: String
   field :image_version, type: String
+  field :description  , type: String
 
   def to_s
-    "#{image_name}:#{image_version}"
+    "#{image_name}:#{image_version} - #{description}"
+  end
+
+  def self.by_name name
+    DockerImage.where(:image_name => name).first
   end
 
   def self.version name
