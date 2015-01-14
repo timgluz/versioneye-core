@@ -363,6 +363,7 @@ class LanguageDailyStats < Versioneye::Model
 
   private 
 
+    # In the UI all variants of JavaScript are bundled/displayed as JavaScript! 
     def normalize_language lang 
       return Product::A_LANGUAGE_JAVASCRIPT if lang.eql?("PureScript")
       return Product::A_LANGUAGE_JAVASCRIPT if lang.eql?("CoffeeScript")
