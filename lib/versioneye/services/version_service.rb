@@ -26,8 +26,11 @@ class VersionService < Versioneye::Service
       end
     end
     filtered = versions if filtered.empty?
-    sorted = Naturalsorter::Sorter.sort_version_by_method( filtered, 'to_s', false )
-    sorted.first
+    if filtered.size > 1 
+      sorted = Naturalsorter::Sorter.sort_version_by_method( filtered, 'to_s', false )
+      return sorted.first
+    end
+    return filtered.first
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
