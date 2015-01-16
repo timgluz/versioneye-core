@@ -10,7 +10,7 @@ class MavenRepository < Versioneye::Model
 
   validates_uniqueness_of :url, :message => 'm2 repository url exist already.'
 
-  index({ name: 1 }, { name: "name_index" })
+  index({ name: 1 }, { name: "name_index", unique: true, background: true })
 
   def self.fill_it
     repos = Hash.new
@@ -55,6 +55,7 @@ class MavenRepository < Versioneye::Model
     repos['devzendo']           = 'http://devzendo-org-repo.googlecode.com/svn/trunk/releases/'
     repos['pentaho']            = 'http://repository.pentaho.org/artifactory/pentaho/'
     repos['jcenter']            = 'http://jcenter.bintray.com'
+    repos['conjars']            = 'http://conjars.org/repo'
 
     # repo = MavenRepository.new( { :name => 'pentaho', :url => 'http://repository.pentaho.org/artifactory/pentaho/', :language => Product::A_LANGUAGE_JAVA } )
     # repo = MavenRepository.new( { :name => 'jcenter', :url => 'http://jcenter.bintray.com', :language => Product::A_LANGUAGE_JAVA } )
@@ -64,6 +65,7 @@ class MavenRepository < Versioneye::Model
       repo.save
     end
 
+    # repo_conjars = MavenRepository.new( { :name => 'conjars', :url => 'http://conjars.org/repo', :language => Product::A_LANGUAGE_JAVA } )
     repo_clojure = MavenRepository.new( { :name => 'cloJars', :url => 'http://clojars.org/repo', :language => Product::A_LANGUAGE_CLOJURE } )
     repo_clojure.save
   end
