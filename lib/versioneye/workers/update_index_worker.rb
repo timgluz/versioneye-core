@@ -1,5 +1,6 @@
 class UpdateIndexWorker < Worker
 
+
   def work
     connection = get_connection
     connection.start
@@ -16,7 +17,7 @@ class UpdateIndexWorker < Worker
         puts msg
         log.info msg
 
-        update_index msg
+        update_index body
 
         channel.ack(delivery_info.delivery_tag)
       end
@@ -35,5 +36,6 @@ class UpdateIndexWorker < Worker
     log.error e.message
     log.error e.backtrace.join("\n")
   end
+
 
 end
