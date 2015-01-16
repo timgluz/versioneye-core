@@ -16,7 +16,7 @@ class UpdateDependenciesWorker < Worker
         puts msg
         log.info msg
 
-        update_dependencies msg
+        update_dependencies body
 
         channel.ack(delivery_info.delivery_tag)
       end

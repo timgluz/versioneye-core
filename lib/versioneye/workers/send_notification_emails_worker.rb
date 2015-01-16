@@ -16,7 +16,7 @@ class SendNotificationEmailsWorker < Worker
         puts msg
         log.info msg
 
-        send_notification_emails msg
+        send_notification_emails body
 
         channel.ack(delivery_info.delivery_tag)
       end

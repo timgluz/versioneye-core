@@ -16,7 +16,7 @@ class UpdateMetaDataWorker < Worker
         puts msg
         log.info msg
 
-        update_meta_data msg
+        update_meta_data body
 
         channel.ack(delivery_info.delivery_tag)
       end
