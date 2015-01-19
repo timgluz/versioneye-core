@@ -145,7 +145,13 @@ class ProductService < Versioneye::Service
 
 
   def self.update_used_by_count product, persist = true
-    prod_keys = Dependency.where(:language => product.language, :dep_prod_key => product.prod_key).distinct(:prod_key)
+    prod_keys = nil 
+    if product.group_id && product.artifact_id
+      prod_keys = Dependency.where(:group_id => product.group_id, :artifact_id => product.artifact_id).distinct(:prod_key)
+    else
+      prod_keys = Dependency.where(:language => product.language, :dep_prod_key => product.prod_key).distinct(:prod_key)
+    end
+    
     count = prod_keys.count
     return nil if count == product.used_by_count
 
