@@ -91,6 +91,7 @@ class ProductService < Versioneye::Service
     log.error e.backtrace.join("\n")
   end
 
+  
   # This method updates the dependencies of a product.
   # It updates the parsed_version and the outdated field.
   def self.update_dependencies( product )
@@ -192,6 +193,7 @@ class ProductService < Versioneye::Service
 
   def self.update_meta_data_global
     all_products_paged do |products|
+      log.info " - update_meta_data_global - "
       update_products products
     end
   rescue => e
@@ -211,42 +213,11 @@ class ProductService < Versioneye::Service
   end
 
 
-  def self.clean_clojure 
-    Product.where(:language => "Clojure" ).each do |prod|
-      next if prod.group_id.to_s.empty? || prod.artifact_id.to_s.empty? 
-      
-      prods = Product.where(:group_id => prod.group_id, :artifact_id => prod.artifact_id)
-      next if prods.count.to_i != 2
-
-      last = prods.last 
-      first = prods.first 
-
-      p "process #{first.to_s}"
-      
-      if first.users.count > 0 
-        first.users.each do |user|
-          follow last.language, last.prod_key, user 
-          p " - Follow #{user.username} to #{last.to_s}"
-        end
-      end
-
-      if last.users.count > 0 
-        last.users.each do |user|
-          follow first.language, first.prod_key, user 
-          p " - Follow #{user.username} to #{first.to_s}"
-        end
-      end
-      p " - #{first.users.count} - #{last.users.count}"
-    end
-  end
-
-
   private
 
 
     def self.update_products products
       products.each do |product|
-        p " -- update #{product.language} - #{product.prod_key}"
         self.update_version_data  product, true
         self.update_followers_for product
         self.update_used_by_count product, true
@@ -258,7 +229,6 @@ class ProductService < Versioneye::Service
 
     def self.update_deps products
       products.each do |product|
-        p " -- update dependencies for #{product.language} - #{product.prod_key}"
         self.update_dependencies product
       end
     rescue => e

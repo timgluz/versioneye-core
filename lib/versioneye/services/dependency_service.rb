@@ -1,6 +1,8 @@
 class DependencyService < Versioneye::Service
 
-  A_DEPENDENCY_TTL = 86400 # 86400 seconds = 24 hours
+  A_DAY = 86400 # 86400 seconds = 24 hours
+  A_FIVE_DAYS = 432000 
+  A_DEPENDENCY_TTL = 432000 
 
   def self.dependencies_outdated?( dependencies, cached = false )
     return false if dependencies.nil? || dependencies.empty?
