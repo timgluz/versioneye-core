@@ -57,14 +57,16 @@ class Dependency < Versioneye::Model
   end
 
   def self.find_by_lang_key_and_version( language, prod_key, version)
-    Dependency.where( language: language, prod_key: prod_key, prod_version: version )
+    langs = language_array(language)
+    Dependency.where( :language.in => langs, prod_key: prod_key, prod_version: version )
   end
 
   def self.find_by_lang_key_version_scope(language, prod_key, version, scope)
+    langs = language_array(language)
     if scope
-      return Dependency.where( language: language, prod_key: prod_key, prod_version: version, scope: scope )
+      return Dependency.where( :language.in => langs, prod_key: prod_key, prod_version: version, scope: scope )
     else
-      return Dependency.where( language: language, prod_key: prod_key, prod_version: version )
+      return Dependency.where( :language.in => langs, prod_key: prod_key, prod_version: version )
     end
   end
 
@@ -149,6 +151,16 @@ class Dependency < Versioneye::Model
     self.prod_type = Project::A_TYPE_COCOAPODS if self.language.eql?(Product::A_LANGUAGE_OBJECTIVEC)
     self
   end
+
+  private 
+
+    def self.language_array language 
+      langs = [language]
+      if language.eql?(Product::A_LANGUAGE_CLOJURE || language.eql?(Product::A_LANGUAGE_JAVA))
+        langs = [Product::A_LANGUAGE_CLOJURE, Product::A_LANGUAGE_JAVA]
+      end
+      langs
+    end
 
 
 end
