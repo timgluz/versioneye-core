@@ -7,10 +7,18 @@ class Indexer
       next if index_keys.empty?
       next if model.embedded?
 
-      result = model.create_indexes
-      p "#{model} .. #{result}"
+      create_index model     
     end.compact
   rescue => e
+    p e.message
+    p e.backtrace.join("\n")
+  end
+
+
+  def self.create_index model 
+    result = model.create_indexes
+    p "#{model} .. #{result}"
+  rescue => e 
     p e.message
     p e.backtrace.join("\n")
   end
@@ -19,6 +27,7 @@ class Indexer
   def self.drop_indexes
     ::Mongoid.models.each do |model|
       next if model.embedded?
+      
       result = model.remove_indexes
       p "#{model} .. #{result}"
     end.compact
