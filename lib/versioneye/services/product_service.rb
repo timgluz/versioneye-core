@@ -20,6 +20,7 @@ class ProductService < Versioneye::Service
     return nil if product.nil?
 
     product.check_nil_version
+    product.version_newest = product.version
     product.version = version if version
 
     # Do this through RabbitMQ worker! 
