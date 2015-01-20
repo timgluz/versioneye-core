@@ -23,15 +23,6 @@ class ProductService < Versioneye::Service
     product.version_newest = product.version
     product.version = version if version
 
-    # Do this through RabbitMQ worker! 
-    # max_count = Settings.instance.max_dep_update
-    # max_count = 10 if max_count.to_s.empty?
-    # if product.all_dependencies.count < max_count.to_i
-    #   update_dependencies( product )
-    # end
-    # update_average_release_time( product )
-    # update_newest_version( product )
-
     product
   end
 
@@ -116,7 +107,7 @@ class ProductService < Versioneye::Service
     if average_release_time.nil?
       average_release_time = VersionService.estimated_average_release_time( product.versions )
     end
-    product[:average_release_time] = average_release_time
+    product.average_release_time = average_release_time
   end
 
 
@@ -230,9 +221,10 @@ class ProductService < Versioneye::Service
 
     def self.update_products products
       products.each do |product|
-        self.update_version_data  product, true
+        self.update_version_data  product, false
+        self.update_used_by_count product, false
+        self.update_average_release_time product
         self.update_followers_for product
-        self.update_used_by_count product, true
       end
     rescue => e
       log.error e.message
