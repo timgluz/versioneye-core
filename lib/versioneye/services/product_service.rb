@@ -157,6 +157,10 @@ class ProductService < Versioneye::Service
 
     reference = Reference.find_or_create_by(:language => product.language, :prod_key => product.prod_key )
     reference.update_from prod_keys
+    if product.group_id && product.artifact_id
+      reference.group_id = product.group_id
+      reference.artifact_id = product.artifact_id
+    end
     reference.save
 
     product.used_by_count = count

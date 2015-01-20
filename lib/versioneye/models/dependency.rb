@@ -48,6 +48,7 @@ class Dependency < Versioneye::Model
 
   index({ language: 1, prod_key: 1, prod_version: 1 }, { name: "prod_key_lang_ver_index", background: true })
   index({ language: 1, dep_prod_key: 1 }, { name: "language_dep_prod_key_index" , background: true })
+  index({ group_id: 1, artifact_id: 1 }, { name: "groupid_artifactid_index" , background: true })
 
 
 

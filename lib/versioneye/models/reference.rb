@@ -6,6 +6,9 @@ class Reference  < Versioneye::Model
   field :language, type: String
   field :prod_key, type: String
 
+  field :group_id    , type: String   # Maven specific
+  field :artifact_id , type: String   # Maven specific
+
   field :ref_count, type: Integer
   field :prod_keys, type: Array
 
@@ -26,7 +29,11 @@ class Reference  < Versioneye::Model
     filter = prod_keys[skip..limit]
     return nil if filter.nil? || filter.empty?
 
-    Product.where(:language => language, :prod_key.in => filter)
+    if group_id && artifact_id 
+      return Product.where(:group_id.ne => nil, :artifact_id.ne => nil, :prod_key.in => filter)
+    else 
+      return Product.where(:language => language, :prod_key.in => filter)
+    end 
   rescue => e
     log.error e.message
     nil
