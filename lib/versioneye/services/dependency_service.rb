@@ -95,4 +95,38 @@ class DependencyService < Versioneye::Service
     Product.fetch_product( language, dep_prod_key )
   end
 
+
+  def self.update_dependencies_global()
+    all_dependencies_paged do |dependencies|
+      dependencies.each do |dependency| 
+        cache_outdated? dependency
+      end
+    end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+  end
+
+
+  def self.all_dependencies_paged
+    count = Dependency.count()
+    page = 1000
+    iterations = count / page
+    iterations += 1
+    (0..iterations).each do |i|
+      skip = i * page
+      dependencies = Dependency.all().skip(skip).limit(page)
+
+      yield dependencies
+
+      co = i * page
+      log_msg = "all_dependencies_paged iteration: #{i} - dependencies processed: #{co}"
+      p log_msg
+      log.info log_msg
+    end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+  end
+
 end
