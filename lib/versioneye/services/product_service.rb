@@ -84,17 +84,14 @@ class ProductService < Versioneye::Service
     log.error e.backtrace.join("\n")
   end
 
-  
+
   # This method updates the dependencies of a product.
   # It updates the parsed_version and the outdated field.
   def self.update_dependencies( product )
     deps = product.all_dependencies
     return if deps.nil? || deps.empty?
 
-    deps.each do |dependency|
-      dependency.outdated = DependencyService.cache_outdated?( dependency )
-      dependency.save
-    end
+    update_dependencies_for deps 
     product.update_attribute(:dep_count, deps.count)
   rescue => e
     log.error e.message
@@ -102,19 +99,39 @@ class ProductService < Versioneye::Service
   end
 
 
-  def self.update_average_release_time product
-    average_release_time = VersionService.average_release_time( product.versions )
-    if average_release_time.nil?
-      average_release_time = VersionService.estimated_average_release_time( product.versions )
+  def self.update_dependencies_for deps 
+    deps.each do |dependency|
+      DependencyService.cache_outdated?( dependency )
     end
-    product.average_release_time = average_release_time
   end
 
 
-  def self.update_newest_version product
-    newest = VersionService.newest_version( product.versions )
-    product.version_newest = newest
-    product.update_attribute(:version, newest)
+  def self.update_meta_data_global
+    all_products_paged do |products|
+      log.info " - update_meta_data_global - "
+      update_products products
+    end
+  end
+
+
+  def self.update_products products
+    products.each do |product|
+      self.update_meta_data product  
+    end
+  end
+
+
+  def self.update_meta_data product, update_used_by = true  
+    self.update_version_data  product, false
+    if update_used_by == true 
+      self.update_used_by_count product, false
+    end 
+    self.update_average_release_time product
+    self.update_followers_for product
+    product.save 
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")  
   end
 
 
@@ -133,6 +150,10 @@ class ProductService < Versioneye::Service
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
+  end
+
+  def self.update_newest_version product
+    self.update_version_data product
   end
 
 
@@ -164,11 +185,12 @@ class ProductService < Versioneye::Service
   end
 
 
-  def self.update_followers
-    products = Product.where( :'user_ids.0' => {'$exists' => true} )
-    products.each do |product|
-      self.update_followers_for product
+  def self.update_average_release_time product
+    average_release_time = VersionService.average_release_time( product.versions )
+    if average_release_time.nil?
+      average_release_time = VersionService.estimated_average_release_time( product.versions )
     end
+    product.average_release_time = average_release_time
   end
 
 
@@ -177,31 +199,14 @@ class ProductService < Versioneye::Service
 
     product.followers = product.user_ids.count
     product.save
-  rescue => e
-    log.error e.message
-    log.error e.backtrace.join("\n")
-    false
   end
 
 
-  def self.update_dependencies_global()
-    all_products_paged do |products|
-      update_deps products
+  def self.update_followers
+    products = Product.where( :'user_ids.0' => {'$exists' => true} )
+    products.each do |product|
+      self.update_followers_for product
     end
-  rescue => e
-    log.error e.message
-    log.error e.backtrace.join("\n")
-  end
-
-
-  def self.update_meta_data_global
-    all_products_paged do |products|
-      log.info " - update_meta_data_global - "
-      update_products products
-    end
-  rescue => e
-    log.error e.message
-    log.error e.backtrace.join("\n")
   end
 
 
@@ -215,29 +220,5 @@ class ProductService < Versioneye::Service
     Product.by_language( language ).desc(:used_by_count).paginate(:page => page)
   end
 
-
-  private
-
-
-    def self.update_products products
-      products.each do |product|
-        self.update_version_data  product, false
-        self.update_used_by_count product, false
-        self.update_average_release_time product
-        self.update_followers_for product
-      end
-    rescue => e
-      log.error e.message
-      log.error e.backtrace.join("\n")
-    end
-
-    def self.update_deps products
-      products.each do |product|
-        self.update_dependencies product
-      end
-    rescue => e
-      log.error e.message
-      log.error e.backtrace.join("\n")
-    end
 
 end
