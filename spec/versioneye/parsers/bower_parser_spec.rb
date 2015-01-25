@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe BowerParser do
+
+  test_case_url = "https://s3.amazonaws.com/veye_test_env/bower.json"
+
   let(:parser){ BowerParser.new }
   let(:prod1){FactoryGirl.create(:product_with_versions,
                                  prod_key: "search",
@@ -65,9 +68,6 @@ describe BowerParser do
                                 )}
 
 
-  let(:filepath){"/veye/bower.json"}
-  let(:host){"https://s3-eu-west-1.amazonaws.com"}
-
   context "parsing project file from url" do
 
     before :each do
@@ -124,7 +124,7 @@ describe BowerParser do
 
     it "parses project file from given url correctly " do
       parser = BowerParser.new
-      project = parser.parse("#{host}#{filepath}")
+      project = parser.parse(test_case_url)
 
       project.should_not be_nil
       project.dependencies.size.should eql(9)
@@ -178,12 +178,12 @@ describe BowerParser do
       dep7.comperator.should eql("=")
       dep7.outdated.should be_truthy
 
-      # dep8 = project.dependencies[7]
-      # dep8.name.should eql(prod8[:name])
-      # dep8.version_requested.should eql("1.6")
-      # dep8.version_current.should eql("2.0")
-      # dep8.comperator.should eql("=")
-      # dep8.outdated.should be_truthy
+      dep8 = project.dependencies[7]
+      dep8.name.should eql(prod8[:name])
+      dep8.version_requested.should eql("1.6")
+      dep8.version_current.should eql("2.0")
+      dep8.comperator.should eql("=")
+      dep8.outdated.should be_truthy
 
       dep9 = project.dependencies[8]
       dep9.name.should eql(prod9[:name])
