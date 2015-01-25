@@ -56,6 +56,7 @@ class MavenRepository < Versioneye::Model
     repos['pentaho']            = 'http://repository.pentaho.org/artifactory/pentaho/'
     repos['jcenter']            = 'http://jcenter.bintray.com'
     repos['conjars']            = 'http://conjars.org/repo'
+    repos['adobe']              = 'https://repo.adobe.com/nexus/content/groups/public/'
 
     # repo = MavenRepository.new( { :name => 'pentaho', :url => 'http://repository.pentaho.org/artifactory/pentaho/', :language => Product::A_LANGUAGE_JAVA } )
     # repo = MavenRepository.new( { :name => 'jcenter', :url => 'http://jcenter.bintray.com', :language => Product::A_LANGUAGE_JAVA } )
@@ -65,7 +66,7 @@ class MavenRepository < Versioneye::Model
       repo.save
     end
 
-    # repo_conjars = MavenRepository.new( { :name => 'conjars', :url => 'http://conjars.org/repo', :language => Product::A_LANGUAGE_JAVA } )
+    # repo_conjars = MavenRepository.new( { :name => 'adobe', :url => 'https://repo.adobe.com/nexus/content/groups/public/', :language => Product::A_LANGUAGE_JAVA } )
     repo_clojure = MavenRepository.new( { :name => 'cloJars', :url => 'http://clojars.org/repo', :language => Product::A_LANGUAGE_CLOJURE } )
     repo_clojure.save
   end
