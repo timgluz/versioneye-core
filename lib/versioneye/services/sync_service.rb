@@ -110,7 +110,7 @@ class SyncService < Versioneye::Service
     if product
       product.add_version json[:version], {:released_at => parsed_date(json[:released_at]) }
       product.save
-      ProductService.update_newest_version product
+      ProductService.update_version_data product, true 
       return
     end
 
@@ -127,7 +127,7 @@ class SyncService < Versioneye::Service
     product.save
     product.add_version json[:version], {:released_at => parsed_date(json[:released_at]) }
     product.save
-    ProductService.update_newest_version product
+    ProductService.update_version_data product, true 
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
