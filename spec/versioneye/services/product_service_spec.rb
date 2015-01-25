@@ -137,7 +137,7 @@ describe ProductService do
     end
 
     it 'returns the estimated release time' do
-      product[:average_release_time].should be_nil
+      product[:average_release_time].should eq(0)
       version_1 = Version.new :created_at => DateTime.new(2014, 01, 01)
       version_2 = Version.new :created_at => DateTime.new(2014, 02, 01)
       version_3 = Version.new :created_at => DateTime.new(2014, 03, 02)
