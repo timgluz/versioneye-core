@@ -12,10 +12,9 @@ class Newest < Versioneye::Model
   field :prod_key  , type: String
   field :prod_type , type: String
   field :product_id, type: String
+  field :processed , type: Boolean, default: false
 
   scope :by_language, ->(lang){where(language: lang)}
-
-  attr_accessible :name, :version, :language, :prod_key, :prod_type, :product_id, :created_at
 
   index({language: 1, prod_key: 1, version: 1}, { name: "lang_prod_vers_index",   background: true, unique: true })
   index({updated_at: -1},                       { name: "updated_at_index",       background: true})
@@ -30,7 +29,11 @@ class Newest < Versioneye::Model
   end
 
   def product
-    Product.fetch_product self.language, self.prod_key
+    if !self.product_id.to_s.empty?
+      product = Product.find(self.product_id) 
+      return product if product
+    end 
+    return Product.fetch_product self.language, self.prod_key
   end
 
   def self.fetch_newest language, prod_key, version
