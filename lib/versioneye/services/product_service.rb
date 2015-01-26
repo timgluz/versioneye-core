@@ -85,27 +85,6 @@ class ProductService < Versioneye::Service
   end
 
 
-  # This method updates the dependencies of a product.
-  # It updates the parsed_version and the outdated field.
-  def self.update_dependencies( product )
-    deps = product.all_dependencies
-    return if deps.nil? || deps.empty?
-
-    update_dependencies_for deps 
-    product.update_attribute(:dep_count, deps.count)
-  rescue => e
-    log.error e.message
-    log.error e.backtrace.join("\n")
-  end
-
-
-  def self.update_dependencies_for deps 
-    deps.each do |dependency|
-      DependencyService.cache_outdated?( dependency )
-    end
-  end
-
-
   def self.update_meta_data_global
     all_products_paged do |products|
       log.info " - update_meta_data_global - "

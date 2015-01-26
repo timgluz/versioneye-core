@@ -323,7 +323,8 @@ class Product < Versioneye::Model
     dependencies_cache[scope]
   end
 
-  def all_dependencies
+  def all_dependencies( version = nil )
+    version = self.version if version.to_s.empty? 
     Dependency.find_by_lang_key_and_version( language, prod_key, version)
   end
 

@@ -91,37 +91,6 @@ describe ProductService do
 
   end
 
-  describe 'update_dependencies' do
-
-    let(:product){ ProductFactory.create_new(36) }
-    let(:user)   { UserFactory.create_new(36) }
-
-    it 'updates the dependencies' do
-      product.version.should_not be_nil
-      prod_1 = ProductFactory.create_new(37)
-      prod_2 = ProductFactory.create_new(38)
-      dep_1 = DependencyFactory.create_new product, prod_1
-      dep_2 = DependencyFactory.create_new product, prod_2
-      dep_1.outdated.should be_nil
-      dep_2.outdated.should be_nil
-
-      ver_cache = product.version
-      product.version = "0.0.0.0"
-
-      ProductService.update_dependencies product
-      product.all_dependencies.count.should eq(0)
-
-      product.version = ver_cache
-
-      ProductService.update_dependencies product
-      product.all_dependencies.each do |dep|
-        dep.outdated.should_not be_nil
-        dep.outdated.should be_falsey
-      end
-    end
-
-  end
-
   describe 'update_average_release_time' do
 
     let(:product){ ProductFactory.create_new(37) }

@@ -21,14 +21,14 @@ class NewestService < Versioneye::Service
   def self.process newest 
     product = newest.product 
     return nil if product.nil? 
-    
+
     multi_log "---"
     multi_log "update_meta_data for #{product.language}:#{product.prod_key}"
     ProductService.update_meta_data product, false 
-    
+
     multi_log "update_dependencies for #{product.language}:#{product.prod_key}"
-    update_dependencies product
-    
+    update_dependencies product, newest.version
+
     newest.processed = true 
     newest.save 
   rescue => e
@@ -37,7 +37,7 @@ class NewestService < Versioneye::Service
   end
 
 
-  def self.update_dependencies product 
+  def self.update_dependencies product, version
     if product.prod_type.eql?(Project::A_TYPE_MAVEN2)
       update_current_version_maven product
       update_outdated_maven( product )
@@ -45,6 +45,8 @@ class NewestService < Versioneye::Service
       update_current_version( product ) 
       update_outdated( product ) 
     end
+    multi_log "update product dependencies for #{product.language}:#{product.prod_key}:#{version}"
+    ProductService.update_dependencies product, version
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")

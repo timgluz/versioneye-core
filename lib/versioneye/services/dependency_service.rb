@@ -114,13 +114,32 @@ class DependencyService < Versioneye::Service
 
   def self.update_dependencies_global()
     all_dependencies_paged do |dependencies|
-      dependencies.each do |dependency| 
-        cache_outdated? dependency
-      end
+      update_dependencies_for( dependencies )
     end
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
+  end
+
+
+  # This method updates the dependencies of a product.
+  # It updates the parsed_version and the outdated field.
+  def self.update_dependencies( product, version = nil )
+    deps = product.all_dependencies( version )
+    return if deps.nil? || deps.empty?
+
+    update_dependencies_for deps 
+    product.update_attribute(:dep_count, deps.count)
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+  end
+
+
+  def self.update_dependencies_for deps 
+    deps.each do |dependency|
+      cache_outdated?( dependency )
+    end
   end
 
 
