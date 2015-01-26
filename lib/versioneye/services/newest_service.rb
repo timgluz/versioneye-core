@@ -46,7 +46,7 @@ class NewestService < Versioneye::Service
       update_outdated( product ) 
     end
     multi_log "update product dependencies for #{product.language}:#{product.prod_key}:#{version}"
-    ProductService.update_dependencies product, version
+    DependencyService.update_dependencies product, version
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
