@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-gem 'naturalsorter'      , '~> 3.0.0'
+gem 'naturalsorter'      , '~> 3.0.1'
 
 gem 'bundler'            , '~> 1.7.11'
 gem 'mongoid'            , '~> 3.1.0'
