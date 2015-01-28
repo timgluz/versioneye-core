@@ -21,6 +21,11 @@ class StashUpdater < CommonUpdater
     filename     = fetch_filename project
     branch       = project.scm_branch
     project_file = StashService.fetch_file_from_stash(user, repo, filename, branch)
+    err_message  = error_message(project_file)
+    if !err_message.to_s.empty? 
+      log.error err_message
+      return nil 
+    end
     StashService.pure_text_from project_file
   end
 
@@ -29,6 +34,13 @@ class StashUpdater < CommonUpdater
     filename = project.filename
     filename = 'pom.xml' if filename.eql? 'pom.json'
     filename
+  end
+
+
+  def error_message project_file
+    project_file[:errors].first[:message]
+  rescue => 
+    ''
   end
 
 

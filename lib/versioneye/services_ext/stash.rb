@@ -137,8 +137,7 @@ class Stash < Versioneye::Service
       log.error e.backtrace.join("\n")
     end
   rescue => e
-    log.error "Fuck up in get_json"
-    log.error e.message
+    log.error "Fuck up in get_json - #{e.message}"
     log.error e.backtrace.join("\n")
   end
 
