@@ -39,7 +39,7 @@ class StashUpdater < CommonUpdater
 
   def error_message project_file
     project_file[:errors].first[:message]
-  rescue => 
+  rescue => e 
     ''
   end
 
