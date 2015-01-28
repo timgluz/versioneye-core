@@ -13,7 +13,7 @@ class SyncWorker < Worker
 
     begin
       queue.subscribe(:ack => true, :block => true) do |delivery_info, properties, message|
-        puts " [x] Received #{message}"
+        puts " [x] SyncWorker Received #{message}"
 
         process_work message
 
