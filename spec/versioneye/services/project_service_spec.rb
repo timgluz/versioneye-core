@@ -347,6 +347,32 @@ describe ProjectService do
   end
 
 
+  describe 'merge_by_ga' do
+
+    it 'merges by group and artifact id' do
+      user    = UserFactory.create_new
+      
+      project = ProjectFactory.create_new user, nil, true
+      project.group_id = 'com.company'
+      project.artifact_id = 'project_a'
+      project.save 
+      prod_1  = ProductFactory.create_new 1
+      dep_1   = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1.0.0'}
+
+      project2 = ProjectFactory.create_new user, nil, true
+      dep_1    = ProjectdependencyFactory.create_new project2, prod_1, true, {:version_requested => '1.0.0'}
+
+      Project.where(:parent_id.ne => nil).count.should eq(0)
+
+      response = ProjectService.merge_by_ga project.group_id, project.artifact_id, project2.id, user.id 
+      response.should be_truthy
+
+      Project.where(:parent_id.ne => nil).count.should eq(1)
+    end
+
+  end
+
+
   describe 'merge' do
 
     it 'merges' do

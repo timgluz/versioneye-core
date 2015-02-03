@@ -31,6 +31,9 @@ class Project < Versioneye::Model
   field :description, type: String
   field :license    , type: String
 
+  field :group_id   , type: String # Maven specific
+  field :artifact_id, type: String # Maven specific
+
   field :project_type  , type: String,  :default => A_TYPE_MAVEN2
   field :language      , type: String
   field :project_key   , type: String
@@ -78,12 +81,13 @@ class Project < Versioneye::Model
   index({source: 1},  { name: "source_index",  background: true})
 
   scope :by_collaborator, ->(user){ all_in(_id: ProjectCollaborator.by_user(user).to_a.map(&:project_id)) }
-  scope :by_user  , ->(user)    { where(user_id: user[:_id].to_s) }
-  scope :by_id    , ->(id)      { where(_id: id.to_s) }
-  scope :by_source, ->(source)  { where(source:  source ) }
-  scope :by_period, ->(period)  { where(period:  period ) }
-  scope :parents  , -> { where(parent_id: nil ) }
-  scope :by_github, ->(reponame){ where(source: A_SOURCE_GITHUB, scm_fullname: reponame) }
+  scope :by_user   , ->(user)    { where(user_id: user[:_id].to_s) }
+  scope :by_user_id, ->(user_id) { where(user_id: user_id.to_s) }
+  scope :by_id     , ->(id)      { where(_id: id.to_s) }
+  scope :by_source , ->(source)  { where(source:  source ) }
+  scope :by_period , ->(period)  { where(period:  period ) }
+  scope :parents   , -> { where(parent_id: nil ) }
+  scope :by_github , ->(reponame){ where(source: A_SOURCE_GITHUB, scm_fullname: reponame) }
 
   def to_s
     "<Project #{language}/#{project_type} #{name}>"
@@ -121,6 +125,10 @@ class Project < Versioneye::Model
     log.error e.message
     log.error e.backtrace.join("\n")
     nil
+  end
+
+  def self.find_by_ga( group_id, artifact_id )
+    Project.where(:group_id => group_id, :artifact_id => artifact_id).first
   end
 
   def filename
