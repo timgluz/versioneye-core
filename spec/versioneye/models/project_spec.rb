@@ -77,9 +77,9 @@ describe Project do
       project = Project.new({ :language => 'Java' })
       project.show_dependency_badge?().should be_truthy
     end
-    it 'shows not the badge' do 
+    it 'shows the badge always!' do 
       project = Project.new({ :language => 'Puki' })
-      project.show_dependency_badge?().should be_falsey
+      project.show_dependency_badge?().should be_truthy
     end
   end
 
