@@ -368,6 +368,10 @@ describe ProjectService do
       response.should be_truthy
 
       Project.where(:parent_id.ne => nil).count.should eq(1)
+
+      project2 = Project.find project2.id.to_s 
+      project2.parent_id.should_not be_empty
+      project2.parent_id.to_s.should eq( project.id.to_s )
     end
 
   end
@@ -385,10 +389,16 @@ describe ProjectService do
       project2 = ProjectFactory.create_new user, nil, true
       dep_1    = ProjectdependencyFactory.create_new project2, prod_1, true, {:version_requested => '1.0.0'}
 
+      Project.where(:parent_id.ne => nil).count.should eq(0)
+
       response = ProjectService.merge project.id, project2.id, user.id 
       response.should be_truthy
 
       Project.where(:parent_id.ne => nil).count.should eq(1)
+
+      project2 = Project.find project2.id.to_s 
+      project2.parent_id.should_not be_empty
+      project2.parent_id.to_s.should eq( project.id.to_s )
     end
 
     it 'throws exception because user is not a collaborator' do
