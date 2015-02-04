@@ -205,7 +205,9 @@ class ProjectImportService < Versioneye::Service
       public: Settings.instance.default_project_public
     })
 
-    ProjectService.store( project )
+    project = ProjectService.store( project )
+    ProjectService.update_sums( project )
+    project
   end
 
 
@@ -228,7 +230,9 @@ class ProjectImportService < Versioneye::Service
     project.period      = Settings.instance.default_project_period
     project.public      = Settings.instance.default_project_public
 
-    ProjectService.store( project )
+    project = ProjectService.store( project )
+    ProjectService.update_sums( project )
+    project
   end
 
 

@@ -66,6 +66,7 @@ class ProjectService < Versioneye::Service
   def self.merge_by_ga group_id, artifact_id, subproject_id, user_id
     parent = Project.by_user_id(user_id).find_by_ga(group_id, artifact_id)
     merge( parent.id.to_s, subproject_id, user_id )
+    update_sums project
   end
 
 
@@ -74,17 +75,17 @@ class ProjectService < Versioneye::Service
     subproject = find subproject_id 
     return false if project.nil? || subproject.nil?  
     return false if subproject.parent_id        # project is already a subproject 
-    return false if !subproject.children.empty? # project has already some subprojects 
+    return false if !subproject.children.empty? # subproject is a parent project!
 
     user = User.find user_id
     return false if user.nil? 
     
     if !project.collaborator?(user)
-      raise "User has no permission to unmerge this project!"
+      raise "User has no permission to merge this project!"
     end
 
     subproject.parent_id = project.id 
-    subproject.save 
+    subproject.save
 
     cache.delete project.id.to_s
     cache.delete subproject.id.to_s
