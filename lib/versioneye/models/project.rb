@@ -140,7 +140,7 @@ class Project < Versioneye::Model
   end
 
   def show_dependency_badge?
-    Product::A_LANGS_DEP_BADGE.include?(self.language)
+    true 
   end
 
   def visible_for_user?(user)
