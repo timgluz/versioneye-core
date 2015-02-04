@@ -65,8 +65,9 @@ class ProjectService < Versioneye::Service
   
   def self.merge_by_ga group_id, artifact_id, subproject_id, user_id
     parent = Project.by_user_id(user_id).find_by_ga(group_id, artifact_id)
-    merge( parent.id.to_s, subproject_id, user_id )
-    update_sums project
+    resp = merge( parent.id.to_s, subproject_id, user_id )
+    update_sums parent
+    resp 
   end
 
 
