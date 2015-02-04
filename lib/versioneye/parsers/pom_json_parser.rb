@@ -34,7 +34,9 @@ class PomJsonParser < CommonParser
       project.projectdependencies.push(dependency)
     end
     project.dep_number = project.dependencies.size
-    project.name = pom_json['name']
+    project.name        = pom_json['name']
+    project.group_id    = pom_json['group_id']
+    project.artifact_id = pom_json['artifact_id']
     project
   end
 
