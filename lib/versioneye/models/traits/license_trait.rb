@@ -135,7 +135,8 @@ module VersionEye
 
     def gpl_match name
       name.match(/\AGPL\z/i) ||
-      name.match(/\AGNU General Public Library\z/i)
+      name.match(/\AGNU General Public Library\z/i) || 
+      name.match(/\AGNU General Public License (GPL)\z/i)
     end
 
     def gpl_10_match name
