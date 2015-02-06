@@ -20,7 +20,7 @@ gem 'nokogiri'           , '~> 1.6.0'
 gem 'cocoapods-core'     , '~> 0.35.0'
 gem 'actionmailer'       , '~> 3.2.17'
 gem 'pdfkit'             , '~> 0.6.2'
-gem 'bunny'              , '~> 1.6.3'
+gem 'bunny'              , '~> 1.7.0'
 gem 'wkhtmltopdf-binary' , '~> 0.9.9.1'
 gem 'will_paginate_mongoid', '2.0.1'
 
