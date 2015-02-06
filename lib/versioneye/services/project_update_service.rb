@@ -45,11 +45,22 @@ class ProjectUpdateService < Versioneye::Service
     cache.delete( new_project.id.to_s )
     project.update_from new_project
     project.api_created = api_created
+    update_numbers project
     project
   end
 
 
   private 
+
+
+    def self.update_numbers project 
+      if !project.parent_id.to_s.empty?
+        ProjectService.update_sums project.parent 
+      end
+    rescue => e 
+      log.error e.message
+      log.error e.backtrace.join("\n")  
+    end
 
 
     def self.not_updateable?( project )
