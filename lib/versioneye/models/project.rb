@@ -93,6 +93,10 @@ class Project < Versioneye::Model
     "<Project #{language}/#{project_type} #{name}>"
   end
 
+  def parent 
+    Project.find parent_id
+  end 
+
   def children 
     Project.where(:parent_id => self.id.to_s)
   end
