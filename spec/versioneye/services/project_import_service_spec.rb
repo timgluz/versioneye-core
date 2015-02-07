@@ -21,22 +21,47 @@ describe ProjectImportService do
         project.api_created.should be_falsey
       end
     end
+    it 'imports from privat github' do
+      github_user.github_id = "652130"
+      github_user.github_token = '666666666666777777777777777'
+      github_user.free_private_projects = 1 
+      github_user.save 
+      VCR.use_cassette('import_from_privat_github_allowed', allow_playback_repeats: true) do
+        project = ProjectImportService.import_from_github github_user, 'versioneye/versioneye-core', 'Gemfile', 'master'
+        project.should_not be_nil
+        project.dependencies.should_not be_empty
+        project.name.should eq('versioneye/versioneye-core')
+        project.source.should eq(Project::A_SOURCE_GITHUB)
+        project.api_created.should be_falsey
+      end
+    end
+    it 'imports not from privat github, because plan to low' do
+      github_user.github_id = "652130"
+      github_user.github_token = '666666666666777777777777777'
+      github_user.free_private_projects = 0
+      github_user.save 
+      VCR.use_cassette('import_from_privat_github_not_allowed', allow_playback_repeats: true) do
+        expect { ProjectImportService.import_from_github(github_user, 'versioneye/versioneye-core', 'Gemfile', 'master') }.to raise_error
+      end
+    end
     it 'does not import from github because file does not exist' do
-      project = ProjectImportService.import_from_github github_user, 'versioneye/versioneye_maven_plugin', 'pomi.xml', 'master'
-      project.should match("Didn't find any project") 
+      expect { ProjectImportService.import_from_github github_user, 'versioneye/versioneye_maven_plugin', 'pomi.xml', 'master' }.to raise_error
     end
   end
 
   describe 'import_from_github_multi' do
     it 'imports Gemfile and Gemfile.lock from github' do
       VCR.use_cassette('import_from_github_multi', allow_playback_repeats: true) do
+        worker = Thread.new{ GitRepoFileImportWorker.new.work }
         project = ProjectImportService.import_from_github_multi github_user, 'versioneye/docker_web_ui', 'Gemfile', 'master'
         project.should_not be_nil
         project.dependencies.should_not be_empty
         project.name.should eq('versioneye/docker_web_ui')
         project.source.should eq(Project::A_SOURCE_GITHUB)
         project.api_created.should be_falsey
+        sleep 3
         project.children.count.should eq(1)
+        worker.exit
       end
     end
     it 'imports a pom.xml from github ' do
@@ -102,13 +127,16 @@ describe ProjectImportService do
       bitbucket_repo.save
 
       VCR.use_cassette('bitbucket_file_import_multi', allow_playback_repeats: true) do
+        worker = Thread.new{ GitRepoFileImportWorker.new.work }
         project = ProjectImportService.import_from_bitbucket_multi user_with_token, 'reiz/test_gemi', 'Gemfile', 'master'
         project.should_not be_nil
         project.dependencies.should_not be_empty
         project.name.should eq('reiz/test_gemi')
         project.source.should eq(Project::A_SOURCE_BITBUCKET)
         project.api_created.should be_falsey
+        sleep 2 
         project.children.count.should eq(1)
+        worker.exit
       end
     end
     it 'imports pom.xml from bitbucket' do

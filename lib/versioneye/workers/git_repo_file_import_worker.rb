@@ -48,16 +48,27 @@ class GitRepoFileImportWorker < Worker
       repo_name = sps[2]
       filename  = sps[3]
       branch    = sps[4]
+      parent_id = sps[5]
       
       user = User.find_by_username username
+      if user.nil? 
+        cache.set( message, "error_User `#{username}` not found!", A_TASK_TTL )
+        return 
+      end
 
       project = nil 
       if provider.eql?("stash")
         project = ProjectImportService.import_from_stash_multi user, repo_name, filename, branch
       elsif provider.eql?("github")
         project = ProjectImportService.import_from_github_multi user, repo_name, filename, branch
+      elsif provider.eql?("github_child")
+        parent = Project.find parent_id
+        project = ProjectImportService.import_child_from_github user, repo_name, filename, branch, parent
       elsif provider.eql?("bitbucket")
         project = ProjectImportService.import_from_bitbucket_multi user, repo_name, filename, branch
+      elsif provider.eql?("bitbucket_child")
+        parent = Project.find parent_id
+        project = ProjectImportService.import_child_from_bitbucket user, repo_name, filename, branch, parent
       end
       
       if project 
