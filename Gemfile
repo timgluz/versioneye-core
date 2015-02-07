@@ -32,7 +32,7 @@ group :test do
   gem 'fakes3'          , '0.1.6.1'
   gem 'rdoc'            , '~> 4.2.0'
   gem 'simplecov'       , '~> 0.9.0'
-  gem 'rspec'           , '~> 3.1.0'
+  gem 'rspec'           , '~> 3.2.0'
   gem 'database_cleaner', '~> 1.3.0'
   gem 'factory_girl'    , '~> 4.5.0'
   gem 'capybara'        , '~> 2.4.1'
