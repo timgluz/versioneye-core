@@ -87,6 +87,7 @@ module Versioneye
     require 'versioneye/remote_api/me_client'
 
     require 'versioneye/migrations/versionlink_migration'
+    require 'versioneye/migrations/product_migration'
 
     require 'versioneye/producers/producer.rb'
     require 'versioneye/producers/git_repo_file_import_producer.rb'
