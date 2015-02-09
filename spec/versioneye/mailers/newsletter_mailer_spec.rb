@@ -10,7 +10,7 @@ describe NewsletterMailer do
       email = described_class.newsletter_new_features_email( user )
 
       email.encoded.should include( "Hey Bono Tono" )
-      email.encoded.should include( '14482 Pots' )
+      email.encoded.should include( '68199 Mannheim' )
 
       ActionMailer::Base.deliveries.clear
       email.deliver!

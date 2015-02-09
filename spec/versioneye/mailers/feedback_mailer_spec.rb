@@ -9,7 +9,7 @@ describe FeedbackMailer do
 
       email.encoded.should include( "Hans Tanz" )
       email.encoded.should include( 'VersionEye is awesome' )
-      email.encoded.should include( 'Potsdam' )
+      email.encoded.should include( 'Mannheim' )
       email.from.should eq([Settings.instance.smtp_sender_email])
 
       ActionMailer::Base.deliveries.clear
