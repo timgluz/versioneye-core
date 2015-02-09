@@ -14,6 +14,7 @@ class MavenRepository < Versioneye::Model
 
   def self.fill_it
     repos = Hash.new
+    repos['custom']             = 'http://localhost:9090/maven2'
     repos['central']            = 'http://repo.maven.apache.org/maven2'
     repos['codeHaus']           = 'http://repository.codehaus.org/'
     repos['typesafe']           = 'http://repo.typesafe.com/typesafe/releases/'
@@ -58,16 +59,12 @@ class MavenRepository < Versioneye::Model
     repos['conjars']            = 'http://conjars.org/repo'
     repos['adobe']              = 'https://repo.adobe.com/nexus/content/groups/public/'
 
-    # repo = MavenRepository.new( { :name => 'pentaho', :url => 'http://repository.pentaho.org/artifactory/pentaho/', :language => Product::A_LANGUAGE_JAVA } )
-    # repo = MavenRepository.new( { :name => 'jcenter', :url => 'http://jcenter.bintray.com', :language => Product::A_LANGUAGE_JAVA } )
-
     repos.keys.each do |key|
       repo = MavenRepository.new( { :name => key, :url => repos[key], :language => Product::A_LANGUAGE_JAVA } )
       repo.save
     end
 
-    # repo_conjars = MavenRepository.new( { :name => 'adobe', :url => 'https://repo.adobe.com/nexus/content/groups/public/', :language => Product::A_LANGUAGE_JAVA } )
-    repo_clojure = MavenRepository.new( { :name => 'cloJars', :url => 'http://clojars.org/repo', :language => Product::A_LANGUAGE_CLOJURE } )
+    repo_clojure = MavenRepository.new( { :name => 'cloJars', :url => 'https://clojars.org/repo', :language => Product::A_LANGUAGE_CLOJURE } )
     repo_clojure.save
   end
 
