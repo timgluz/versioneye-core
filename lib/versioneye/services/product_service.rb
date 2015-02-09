@@ -191,6 +191,28 @@ class ProductService < Versioneye::Service
 
   def self.remove product
     EsProduct.remove( product )
+    
+    archives = Versionarchive.where( :language => product.language, :prod_key => product.prod_key )
+    if archives && !archives.empty?
+      archives.each do |archive| 
+        archive.delete
+      end
+    end
+
+    links = Versionlink.where( :language => product.language, :prod_key => product.prod_key )
+    if links && !links.empty?
+      links.each do |link| 
+        link.delete
+      end
+    end
+
+    dependencies = Dependency.where( :language => product.language, :prod_key => product.prod_key )
+    if dependencies && !dependencies.empty?
+      dependencies.each do |dependency| 
+        dependency.delete
+      end
+    end
+
     product.remove
   end
 
