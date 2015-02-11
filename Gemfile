@@ -2,7 +2,7 @@ source "http://rubygems.org"
 
 gem 'naturalsorter'      , '~> 3.0.1'
 
-gem 'bundler'            , '~> 1.7.11'
+gem 'bundler'            , '~> 1.8.0'
 gem 'mongoid'            , '~> 3.1.0'
 gem 'log4r'              , '~> 1.1.0'
 gem 'dalli'              , '~> 2.7.0'
