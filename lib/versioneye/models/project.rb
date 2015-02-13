@@ -101,12 +101,27 @@ class Project < Versioneye::Model
     Project.where(:parent_id => self.id.to_s)
   end
 
-  def dependencies
-    self.projectdependencies
+  def scopes 
+    return [] if self.projectdependencies.nil? || self.projectdependencies.empty?
+    scopes = []
+    self.projectdependencies.each do |dependency| 
+      scopes << dependency.scope if !scopes.include?( dependency.scope )
+    end
+    scopes
   end
 
-  def sorted_dependencies_by_rank
-    deps = self.dependencies
+  def dependencies(scope = nil)
+    return self.projectdependencies if scope.nil? 
+    return self.projectdependencies if self.projectdependencies.nil? || self.projectdependencies.empty?
+    deps = []
+    self.projectdependencies.each do |dependency| 
+      deps << dependency if dependency.scope.eql?(scope)
+    end
+    deps
+  end
+
+  def sorted_dependencies_by_rank( deps = nil )
+    deps = self.dependencies if deps.nil? 
     return deps if deps.nil? or deps.empty?
     deps.sort_by {|dep| dep[:status_rank] }
   end
