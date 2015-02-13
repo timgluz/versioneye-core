@@ -10,7 +10,8 @@ class ComposerParser < CommonParser
     data = self.fetch_data url
     parse_content( data )
   rescue => e
-    print_backtrace e
+    log.error e.message
+    log.error e.backtrace.join("\n")
     nil
   end
 
@@ -18,19 +19,38 @@ class ComposerParser < CommonParser
     return nil if data.nil?
 
     json_content = JSON.parse( data )
-    dependencies = fetch_dependencies json_content
-    return nil if dependencies.nil?
-
     project = init_project
-    dependencies.each do |key, value|
-      self.process_dependency( key, value, project, json_content )
+    
+    dependencies = json_content['require']
+    if dependencies && !dependencies.empty?
+      parse_dependencies dependencies, project, json_content
     end
+
+    dependencies = json_content['require-dev']
+    if dependencies && !dependencies.empty?
+      parse_dependencies dependencies, project, json_content, Dependency::A_SCOPE_DEVELOPMENT
+    end
+
+    dependencies = json_content['require-test']
+    if dependencies && !dependencies.empty?
+      parse_dependencies dependencies, project, json_content, Dependency::A_SCOPE_TEST
+    end
+    
     self.update_project( project, json_content )
     project
   rescue => e
-    print_backtrace e
+    log.error e.message
+    log.error e.backtrace.join("\n")
     nil
   end
+
+
+  def parse_dependencies dependencies, project, json_content, scope = Dependency::A_SCOPE_COMPILE
+    dependencies.each do |key, value|
+      self.process_dependency( key, value, project, json_content, scope )
+    end
+  end
+
 
   def fetch_data url
     return nil if url.nil?
@@ -41,22 +61,11 @@ class ComposerParser < CommonParser
     response.body
   end
 
-  def fetch_dependencies data
-    dependencies     = data['require']
-    dependencies_dev = data['require-dev']
-    if dependencies && dependencies_dev.nil?
-      return dependencies
-    elsif dependencies.nil? && dependencies_dev
-      return dependencies_dev
-    elsif dependencies && dependencies_dev
-      return dependencies.merge(dependencies_dev)
-    end
-    nil
-  end
-
-  def process_dependency key, value, project, data
+  
+  def process_dependency key, value, project, data, scope = Dependency::A_SCOPE_COMPILE
     product    = Product.fetch_product( Product::A_LANGUAGE_PHP, key )
     dependency = init_projectdependency( key, product )
+    dependency.scope = scope 
     parse_requested_version( value, dependency, product )
     if product.nil?
       dep_in_ext_repo = dependency_in_repositories?( dependency, data )
@@ -66,6 +75,7 @@ class ComposerParser < CommonParser
     project.projectdependencies.push dependency
   end
 
+  
   def update_project project, data
     name                = data['name']
     description         = data['description']
@@ -76,6 +86,7 @@ class ComposerParser < CommonParser
     project.dep_number  = project.dependencies.size
   end
 
+  
   # It is important that this method is NOT writing into the database!
   #
   def parse_requested_version version, dependency, product
@@ -231,6 +242,7 @@ class ComposerParser < CommonParser
 
   end
 
+  
   # TODO write tests
   #
   def dependency_in_repositories? dependency, data
@@ -251,10 +263,12 @@ class ComposerParser < CommonParser
     end
     return false
   rescue => e
-    print_backtrace( e )
+    log.error e.message
+    log.error e.backtrace.join("\n")
     false
   end
 
+  
   def init_project url = nil
     project              = Project.new
     project.project_type = Project::A_TYPE_COMPOSER
@@ -263,8 +277,10 @@ class ComposerParser < CommonParser
     project
   end
 
+  
   private
 
+  
     def init_projectdependency key, product
       dependency          = Projectdependency.new
       dependency.name     = key
@@ -276,6 +292,7 @@ class ComposerParser < CommonParser
       dependency
     end
 
+
     # This method exist in CommonParser, too!
     # This is just a copy with a different implementation for Composer!
     #
@@ -286,11 +303,6 @@ class ComposerParser < CommonParser
         dependency.version_requested = "UNKNOWN"
       end
       dependency
-    end
-
-    def print_backtrace e
-      log.error e.message
-      log.error e.backtrace.join("\n")
     end
 
 end
