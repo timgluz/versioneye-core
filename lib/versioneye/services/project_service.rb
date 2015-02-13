@@ -224,6 +224,8 @@ class ProjectService < Versioneye::Service
 
   def self.outdated_single?( project )
     project.projectdependencies.each do |dep|
+      next if dep.scope.to_s.eql?(Dependency::A_SCOPE_DEVELOPMENT)
+      next if dep.scope.to_s.eql?(Dependency::A_SCOPE_TEST)
       return true if ProjectdependencyService.outdated?( dep )
     end
     false
