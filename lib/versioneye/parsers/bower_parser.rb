@@ -23,13 +23,21 @@ class BowerParser < PackageParser
     data = JSON.parse( content )
     return nil if data.nil?
 
-    dependencies = fetch_dependencies( data )
-    return nil if dependencies.nil?
-
     project = init_project( data )
-    dependencies.each do |package_name, version_label|
-      parse_line( package_name.to_s.downcase, version_label, project )
+
+    dependencies = data['dependencies']
+    if dependencies && !dependencies.empty?
+      parse_dependencies dependencies, project
     end
+
+    dependencies = data['devDependencies']
+    if dependencies && !dependencies.empty?
+      parse_dependencies dependencies, project, Dependency::A_SCOPE_DEVELOPMENT
+    end
+
+    dependencies = project.dependencies
+    return nil if dependencies.nil? || dependencies.empty?
+    
     project.dep_number = project.dependencies.size
     project
   rescue => e
@@ -39,9 +47,17 @@ class BowerParser < PackageParser
   end
 
 
-  def parse_line( package_name, version_label, project )
+  def parse_dependencies dependencies, project, scope = Dependency::A_SCOPE_COMPILE
+    dependencies.each do |package_name, version_label|
+      parse_line( package_name.to_s.downcase, version_label, project, scope )
+    end
+  end
+
+
+  def parse_line( package_name, version_label, project, scope = Dependency::A_SCOPE_COMPILE )
     product    = Product.fetch_bower package_name
     dependency = init_dependency( product, package_name )
+    dependency.scope = scope 
     parse_requested_version( version_label, dependency, product )
     project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
     project.unknown_number += 1 if product.nil?
@@ -56,20 +72,6 @@ class BowerParser < PackageParser
     project.name         = data['name']
     project.description  = data['description']
     project
-  end
-
-
-  def fetch_dependencies( data )
-    dependencies = data['dependencies']
-    dev_dependencies = data['devDependencies'] #Shouldnt be separated?
-    if dev_dependencies
-      if dependencies.nil?
-        dependencies = dev_dependencies
-      else
-        dependencies.merge!(dev_dependencies)
-      end
-    end
-    dependencies
   end
 
 

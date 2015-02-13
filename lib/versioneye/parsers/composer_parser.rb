@@ -35,6 +35,9 @@ class ComposerParser < CommonParser
     if dependencies && !dependencies.empty?
       parse_dependencies dependencies, project, json_content, Dependency::A_SCOPE_TEST
     end
+
+    dependencies = project.dependencies
+    return nil if dependencies.nil? || dependencies.empty? 
     
     self.update_project( project, json_content )
     project
