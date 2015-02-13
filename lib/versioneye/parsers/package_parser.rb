@@ -19,17 +19,33 @@ class PackageParser < CommonParser
     nil
   end
 
+  
   def parse_content( content )
     data = JSON.parse( content )
     return nil if data.nil?
 
-    dependencies = fetch_dependencies( data )
-    return nil if dependencies.nil?
-
     project = init_project( data )
-    dependencies.each do |package_name, version_label|
-      parse_line( package_name, version_label, project )
+    
+    dependencies = data['dependencies']
+    if dependencies && !dependencies.empty?
+      parse_dependencies dependencies, project
     end
+
+    dev_dependencies = data['devDependencies']
+    if dev_dependencies && !dev_dependencies.empty?
+      parse_dependencies dev_dependencies, project, Dependency::A_SCOPE_DEVELOPMENT
+    end
+
+    bundledDependencies = data['bundledDependencies']
+    if bundledDependencies && !bundledDependencies.empty?
+      parse_dependencies bundledDependencies, project, Dependency::A_SCOPE_BUNDLED
+    end
+
+    optionalDependencies = data['optionalDependencies']
+    if optionalDependencies && !optionalDependencies.empty?
+      parse_dependencies optionalDependencies, project, Dependency::A_SCOPE_OPTIONAL
+    end
+
     project.dep_number = project.dependencies.size
     project
   rescue => e
@@ -38,15 +54,25 @@ class PackageParser < CommonParser
     nil
   end
 
-  def parse_line( package_name, version_label, project )
+
+  def parse_dependencies dependencies, project, scope = Dependency::A_SCOPE_COMPILE
+    dependencies.each do |package_name, version_label|
+      parse_line( package_name, version_label, project, scope )
+    end
+  end
+
+
+  def parse_line( package_name, version_label, project, scope = Dependency::A_SCOPE_COMPILE )
     product    = Product.fetch_product( Product::A_LANGUAGE_NODEJS, package_name )
     dependency = init_dependency( product, package_name )
+    dependency.scope = scope 
     parse_requested_version( version_label, dependency, product )
     project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
     project.unknown_number += 1 if product.nil?
     project.projectdependencies.push dependency
   end
 
+  
   # It is important that this method is not writing int the database!
   #
   def parse_requested_version(version, dependency, product)
@@ -232,6 +258,7 @@ class PackageParser < CommonParser
     end
   end
 
+  
   def init_project( data )
     project = Project.new
     project.project_type = Project::A_TYPE_NPM
@@ -241,26 +268,6 @@ class PackageParser < CommonParser
     project
   end
 
-  def fetch_dependencies( data )
-    dependencies = data['dependencies']
-    dev_dependencies = data['devDependencies']
-    bundledDependencies = data['bundledDependencies']
-    optionalDependencies = data['optionalDependencies']
-    if dev_dependencies
-      if dependencies.nil?
-        dependencies = dev_dependencies
-      else
-        dependencies.merge!(dev_dependencies)
-      end
-    end
-    if dependencies && bundledDependencies
-      dependencies.merge!(bundledDependencies)
-    end
-    if dependencies && optionalDependencies
-      dependencies.merge!(optionalDependencies)
-    end
-    dependencies
-  end
 
   def init_dependency( product, name )
     dependency          = Projectdependency.new
@@ -274,11 +281,13 @@ class PackageParser < CommonParser
     dependency
   end
 
+  
   def pre_process version
     if version.match(/\A\d*\z/) || version.match(/\A\d*\.\d*\z/)
       version = "#{version}.*"
     end
     version
   end
+
 
 end
