@@ -2,7 +2,6 @@ class Crawle < Versioneye::Model
 
   include Mongoid::Document
   include Mongoid::Timestamps
-  include Mongoid::MultiParameterAttributes
 
   field :crawler_name   , type: String
   field :crawler_version, type: String

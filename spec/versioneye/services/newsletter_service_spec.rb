@@ -6,7 +6,7 @@ describe NewsletterService do
 
     it "sends out 0 because user is deleted" do
       user = UserFactory.create_new
-      user.deleted = true
+      user.deleted_user = true
       user.save
       described_class.send_newsletter_features.should eq(0)
     end
@@ -42,7 +42,7 @@ describe NewsletterService do
 
     it "sends out 2 of 3 because 1 is deleted" do
       user = UserFactory.create_new 1
-      user.deleted = true
+      user.deleted_user = true
       user.save
       UserFactory.create_new 2
       UserFactory.create_new 3

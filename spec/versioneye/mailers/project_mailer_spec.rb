@@ -53,7 +53,9 @@ describe ProjectMailer do
       deps = ProjectService.outdated_dependencies( project, true )
       deps.count.should eq(2)
 
-      email = described_class.projectnotification_email(project)
+      email = described_class.projectnotification_email(project, user)
+
+      p "email.to: #{email.to}"
 
       email.to.should eq( [user.email] )
       email.encoded.should include( "Hello #{user.fullname}" )

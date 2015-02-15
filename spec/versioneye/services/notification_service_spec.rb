@@ -47,7 +47,7 @@ describe NotificationService do
     it "sends out 1 out of 2 notifications, because 1 user is deleted" do
       user         = UserFactory.create_new 3
       NotificationFactory.create_new user
-      user.deleted = true
+      user.deleted_user = true
       user.save
       count        = NotificationService.send_notifications
       count.should eq(1)

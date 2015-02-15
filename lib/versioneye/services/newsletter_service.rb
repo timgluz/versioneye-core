@@ -5,7 +5,7 @@ class NewsletterService < Versioneye::Service
     count = 0
     users = User.all()
     users.each do |user|
-      next if user.deleted || user.email_inactive
+      next if user.deleted_user || user.email_inactive
 
       uns = UserNotificationSetting.fetch_or_create_notification_setting( user )
       next if uns.newsletter_features.nil?

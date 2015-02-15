@@ -29,7 +29,7 @@ class ProjectBatchUpdateService < Versioneye::Service
 
   def self.process user, period
     return nil if user.nil?
-    return nil if user.deleted == true
+    return nil if user.deleted_user == true
     return nil if user.email_inactive == true
 
     uns = UserNotificationSetting.fetch_or_create_notification_setting( user )

@@ -3,6 +3,7 @@ class LanguageDailyStats < Versioneye::Model
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  field :language, type: String
   field :date, type: DateTime
   field :date_string, type: String #format: %Y-%m-%d
 
@@ -19,8 +20,6 @@ class LanguageDailyStats < Versioneye::Model
   index({date: -1},        {background: true})
   index({date_string: -1}, {background: true})
   index({created_at: -1},  {background: true})
-
-  attr_accessible :language, :date, :metrics
 
   def self.initial_metrics_table
     {

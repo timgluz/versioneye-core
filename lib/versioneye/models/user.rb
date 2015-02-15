@@ -4,7 +4,6 @@ class User < Versioneye::Model
 
   include Mongoid::Document
   include Mongoid::Timestamps
-  include Mongoid::MultiParameterAttributes
 
   field :username          , type: String
   field :fullname          , type: String
@@ -15,6 +14,7 @@ class User < Versioneye::Model
   field :salt              , type: String
   field :admin             , type: Boolean, default: false
   field :deleted           , type: Boolean, default: false
+  field :deleted_user      , type: Boolean, default: false
   field :verification      , type: String
   field :terms             , type: Boolean
   field :datenerhebung     , type: Boolean
@@ -98,15 +98,14 @@ class User < Versioneye::Model
   before_save :check_terms, :check_np_domain
 
   scope :by_verification, ->(code){where(verification: code)}
-  scope :live_users     , where(verification: nil, deleted: false)
+  scope :live_users     , where(verification: nil, deleted_user: false)
   scope :follows_equal  , ->(n){where(:product_ids.count.eq(n))}
   scope :follows_least  , ->(n){where(:product_ids.count >= n)}
   scope :follows_max    , ->(n){where(:product_ids.count <= n)}
 
   attr_accessor :password, :new_username
-  attr_accessible :fullname, :username, :email, :password, :new_username, :terms, :datenerhebung, :verification, :terms, :datenerhebung
 
-
+  
   def to_param
     username
   end
@@ -115,7 +114,7 @@ class User < Versioneye::Model
     result = "#{username} / #{fullname} / #{email}"
     result += " - verification: #{verification}" if verification
     result += " - verified account " if verification.nil?
-    result += " - deleted " if deleted
+    result += " - deleted " if deleted_user
     result
   end
 
@@ -140,7 +139,7 @@ class User < Versioneye::Model
   end
 
   def send_verification_reminder
-    if !self.verification.nil? && self.deleted != true
+    if self.verification && self.deleted_user != true
       UserMailer.verification_email_reminder(self, self.verification, self.email).deliver
     end
   rescue => e
@@ -149,7 +148,7 @@ class User < Versioneye::Model
   end
 
   def send_suggestions
-    return nil if deleted || email_inactive
+    return nil if deleted_user || email_inactive
     UserMailer.suggest_packages_email(self).deliver
   rescue => e
     User.log.error e.message
@@ -275,7 +274,7 @@ class User < Versioneye::Model
   def self.authenticate(email, submitted_password)
     user = User.find_by_email( email )
     user = User.find_by_username( email ) if user.nil?
-    return nil  if user.nil? || user.deleted
+    return nil  if user.nil? || user.deleted_user
     return user if user.has_password?(submitted_password)
     return nil
   end
