@@ -45,7 +45,9 @@ class ProjectUpdateService < Versioneye::Service
     cache.delete( new_project.id.to_s )
     project.update_from new_project
     project.api_created = api_created
+    ProjectService.update_license_numbers! project 
     update_numbers project
+
     project
   end
 
