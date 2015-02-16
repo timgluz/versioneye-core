@@ -139,11 +139,18 @@ describe ComposerParser do
       product_21.versions.push( Version.new({ :version => "1.1.0"       }) )
       product_21.save
 
+      product_22 = ProductFactory.create_for_composer("phpuno/phpuno", "4.5.0")
+      product_22.versions.push( Version.new({ :version => "4.3.0"       }) )
+      product_22.versions.push( Version.new({ :version => "4.4.0"       }) )
+      product_22.versions.push( Version.new({ :version => "4.5.0"       }) )
+      product_22.versions.push( Version.new({ :version => "dev-master"  }) )
+      product_22.save
+
 
       parser  = ComposerParser.new
       project = parser.parse("https://s3.amazonaws.com/veye_test_env/composer.json")
       project.should_not be_nil
-      project.dependencies.size.should eql(21)
+      project.dependencies.size.should eql(22)
 
 
       dep_01 = fetch_by_name(project.dependencies, "symfony/symfony")
@@ -274,6 +281,13 @@ describe ComposerParser do
       dep_20.version_requested.should eql('3.7.29')
       dep_20.version_current.should   eql('3.7.29')
       dep_20.comperator.should        eql('~')
+
+      dep_22 = fetch_by_name(project.dependencies, "phpuno/phpuno")
+      dep_22.name.should              eql('phpuno/phpuno')
+      dep_22.version_label.should     eql('^4.3.0')
+      dep_22.version_requested.should eql('4.5.0')
+      dep_22.version_current.should   eql('4.5.0')
+      dep_22.comperator.should        eql('^')
 
       dep_21 = fetch_by_name(project.dependencies, "yiisoft/jquery")
       dep_21.name.should              eql('yiisoft/jquery')
