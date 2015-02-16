@@ -18,7 +18,6 @@ describe PromoCode do
       tada.free_private_projects.should eq(3)
       tada.redeemed.should eq(0)
       tada.end_date.should_not be_nil
-      tada.end_date.should eq(future)
     end
 
   end

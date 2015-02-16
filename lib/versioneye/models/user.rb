@@ -13,7 +13,7 @@ class User < Versioneye::Model
   field :encrypted_password, type: String
   field :salt              , type: String
   field :admin             , type: Boolean, default: false
-  field :deleted           , type: Boolean, default: false
+  # field :deleted           , type: Boolean, default: false
   field :deleted_user      , type: Boolean, default: false
   field :verification      , type: String
   field :terms             , type: Boolean
@@ -98,7 +98,7 @@ class User < Versioneye::Model
   before_save :check_terms, :check_np_domain
 
   scope :by_verification, ->(code){where(verification: code)}
-  scope :live_users     , where(verification: nil, deleted_user: false)
+  # scope :live_users     , where(verification: nil, deleted_user: false)
   scope :follows_equal  , ->(n){where(:product_ids.count.eq(n))}
   scope :follows_least  , ->(n){where(:product_ids.count >= n)}
   scope :follows_max    , ->(n){where(:product_ids.count <= n)}
