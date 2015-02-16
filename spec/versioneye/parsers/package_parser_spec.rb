@@ -32,10 +32,13 @@ describe PackageParser do
 
       product15 = create_product('async'        , 'async'        , '0.0.0', ['0.0.0' , '0.8.0', '0.9.0' ] )
 
+      product15 = create_product('gulp-webserver', 'gulp-webserver', '0.9.1', ['0.9.1' , '0.9.0' ] )
+      
+
       parser = PackageParser.new
       project = parser.parse('http://s3.amazonaws.com/veye_test_env/package.json')
       project.should_not be_nil
-      project.dependencies.size.should eql(17)
+      project.dependencies.size.should eql(18)
 
       dep_01 = project.dependencies.first
       dep_01.name.should eql('connect-redis')
@@ -146,6 +149,14 @@ describe PackageParser do
       dep_16.comperator.should eql('=')
       dep_16.version_label.should eql('0.x')
       dep_16.outdated?().should be_falsey
+
+      dep_17 = project.dependencies[17]
+      dep_17.name.should eql('gulp-webserver')
+      dep_17.version_requested.should eql('0.9.1')
+      dep_17.version_current.should eql('0.9.1')
+      dep_17.comperator.should eql('^')
+      dep_17.version_label.should eql('^0.9.*')
+      dep_17.outdated?().should be_falsey
     end
 
   end

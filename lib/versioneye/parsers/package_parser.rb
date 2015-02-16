@@ -208,6 +208,8 @@ class PackageParser < CommonParser
       ver = version.gsub("\>", "")
       ver = ver.gsub("^", "")
       ver = ver.gsub(" ", "")
+      ver = ver.gsub(/\.\*\z/i, ".0")
+      ver = ver.gsub(/\.x\z/i, ".0")
 
       semver = SemVer.parse( ver )
       if semver.nil?
