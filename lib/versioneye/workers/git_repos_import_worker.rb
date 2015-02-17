@@ -83,15 +83,7 @@ class GitReposImportWorker < Worker
       log.info "Fetch Repositories for #{user_task_key} from GitHub and cache them in DB."
 
       n_repos    = Github.count_user_repos user # Repos without Orgas
-      orga_names = Github.orga_names(user.github_token)
-
-      if n_repos == 0 && orga_names.empty?
-        msg = "User #{user.username} has no repositories;"
-        puts msg
-        log.info msg
-        cache.set( user_task_key, GitHubService::A_TASK_DONE, GitHubService::A_TASK_TTL )
-        return
-      end
+      orga_names = Github.orga_names( user.github_token )
 
       cache.set( user_task_key, GitHubService::A_TASK_RUNNING, GitHubService::A_TASK_TTL )
       GitHubService.cache_user_all_repos(user, orga_names)

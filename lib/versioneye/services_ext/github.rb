@@ -183,7 +183,7 @@ class Github < Versioneye::Service
   end
 
   def self.create_or_update_repos user, data
-    return nil if data.nil?
+    return nil if data.nil? || data.empty? 
 
     data.each do |repo|
       next if repo.nil?
