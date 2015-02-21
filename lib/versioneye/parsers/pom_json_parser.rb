@@ -23,10 +23,12 @@ class PomJsonParser < CommonParser
     pom_json['dependencies'].each do |json_dep|
       version     = json_dep['version']
       name        = json_dep['name']
+      scope       = json_dep['scope']
+      scope       = 'compile' if scope.to_s.empty? 
       spliti      = name.split(':')
       group_id    = spliti[0]
       artifact_id = spliti[1]
-      dependency  = init_dependency(name, group_id, artifact_id, version)
+      dependency  = init_dependency(name, group_id, artifact_id, version, scope)
       product     = Product.find_by_group_and_artifact(dependency.group_id, dependency.artifact_id )
       dependency.prod_key     = product.prod_key if product
       project.unknown_number += 1 if product.nil?
@@ -41,7 +43,7 @@ class PomJsonParser < CommonParser
   end
 
 
-  def init_dependency name, group_id, artifact_id, version
+  def init_dependency name, group_id, artifact_id, version, scope
     dependency             = Projectdependency.new
     dependency.language    = Product::A_LANGUAGE_JAVA
     dependency.name        = name
@@ -49,6 +51,7 @@ class PomJsonParser < CommonParser
     dependency.artifact_id = artifact_id
     dependency.version_requested = version
     dependency.version_label = version
+    dependency.scope       = scope 
     dependency
   end
 
