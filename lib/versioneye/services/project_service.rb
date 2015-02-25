@@ -45,7 +45,7 @@ class ProjectService < Versioneye::Service
   def self.store project
     raise "project is nil." if project.nil?
 
-    if project.dependencies.nil? || project.dependencies.empty?
+    if project.allow_zero_deps != true && (project.dependencies.nil? || project.dependencies.empty?)
       raise "Could not find a single dependency in the project."
     end
 

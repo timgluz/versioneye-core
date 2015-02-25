@@ -39,6 +39,7 @@ class PomJsonParser < CommonParser
     project.name        = pom_json['name']
     project.group_id    = pom_json['group_id']
     project.artifact_id = pom_json['artifact_id']
+    project.allow_zero_deps = true 
     project
   end
 
