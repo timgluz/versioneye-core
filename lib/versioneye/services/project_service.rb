@@ -75,8 +75,10 @@ class ProjectService < Versioneye::Service
     project    = find project_id
     subproject = find subproject_id 
     return false if project.nil? || subproject.nil?  
-    return false if subproject.parent_id        # project is already a subproject 
+    return false if subproject.parent_id        # subproject has already a parent project!
+    return false if project.parent_id           # project is already a subproject!
     return false if !subproject.children.empty? # subproject is a parent project!
+    return false if project.id.to_s.eql?(subproject.id.to_s) # project & subproject are the same! 
 
     user = User.find user_id
     return false if user.nil? 
