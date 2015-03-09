@@ -1,5 +1,3 @@
-{<img src="https://www.versioneye.com/user/projects/5335e1677bae4b6ef2000a20/badge.png" alt="Dependency Status" />}[https://www.versioneye.com/user/projects/5335e1677bae4b6ef2000a20]
-{<img alt="Status?branch=master" src="https://www.codeship.io/projects/89b50ff0-9c04-0131-2ec8-3af16e33d613/status?branch=master" />}[https://www.codeship.io/projects/17704]
 
 = versioneye-core
 
