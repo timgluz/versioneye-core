@@ -22,6 +22,7 @@ class ProductService < Versioneye::Service
     product.check_nil_version
     product.version_newest = product.version
     product.version = version if version
+    product.project_usage = ReferenceService.project_references( lang, prod_key ).count
 
     product
   end

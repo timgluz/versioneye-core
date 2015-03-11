@@ -21,4 +21,11 @@ class ReferenceService < Versioneye::Service
   end
 
 
+  def self.project_references language, prod_key 
+    return [] if !Settings.instance.environment.to_s.eql?("enterprise")
+
+    Projectdependency.where(:language => language, :prod_key => prod_key).distinct(:project_id)
+  end
+
+
 end
