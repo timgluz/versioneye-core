@@ -90,6 +90,8 @@ class Project < Versioneye::Model
   scope :parents   , -> { where(parent_id: nil ) }
   scope :by_github , ->(reponame){ where(source: A_SOURCE_GITHUB, scm_fullname: reponame) }
 
+  attr_accessor :lwl_pdf_list
+
   def to_s
     "<Project #{language}/#{project_type} #{name}>"
   end
@@ -309,6 +311,10 @@ class Project < Versioneye::Model
     self.licenses_red_sum     = 0
     self.licenses_unknown_sum = 0
     self.save 
+  end
+
+  def get_binding
+    binding()
   end
 
   private

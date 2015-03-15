@@ -32,6 +32,7 @@ module Versioneye
     require 'versioneye/services/language_service'
     require 'versioneye/services/license_whitelist_service'
     require 'versioneye/services/license_service'
+    require 'versioneye/services/lwl_pdf_service'
     require 'versioneye/services/sync_service'
     require 'versioneye/services/transfer_service'
     require 'versioneye/services/enterprise_service'
