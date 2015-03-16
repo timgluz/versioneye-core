@@ -68,9 +68,8 @@
   <body>
     <div class="container">
 
-
       <p>
-        <b>Date:</b> <%= DateTime.now.strftime("%b %d, %Y") %> <br/>
+        <b>Date:</b> <%= DateTime.now.strftime("%d.%m.%Y") %> <br/>
       </p>
 
       <p>
@@ -92,7 +91,12 @@
             <% lwl_pdf_list[key].each do |dep| %> 
               <tr>
                 <td class="left"> <%= key.to_s %> </td>
-                <td class="left"> <%= dep[:component] %> </td>
+                <td class="left"> 
+                  <%= dep[:component] %> 
+                  <% if dep[:group_id] %> 
+                    <br/> <span class='small'>GroupId: <%= dep[:group_id] %></span>
+                  <% end %> 
+                </td>
                 <td class="left"> <%= dep[:version] %> </td>
                 <td class="left"> <%= dep[:license] %> </td>
               </tr>  
