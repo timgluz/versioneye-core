@@ -1,11 +1,11 @@
 class LwlPdfService < Versioneye::Service 
 
   require 'pdfkit'
+  require 'ostruct'
 
   
-  def self.process project, write_to_disk = false
-    fill_dto project 
-    html = compile_html project
+  def self.process project, exclude_kids = false, write_to_disk = false
+    html = compile_html project, exclude_kids
     kit  = new_kit html
     
     write_pdf_to_disk(kit, project) if write_to_disk
@@ -14,10 +14,15 @@ class LwlPdfService < Versioneye::Service
   end
 
 
-  def self.compile_html project
+  def self.compile_html project, exclude_kids = false 
+    fill_dto_single project 
+    children = prepare_kids project, exclude_kids
+    
+    namespace = OpenStruct.new(project: project, children: children)
     content_file = Settings.instance.lwl_pdf_content
     erb = ERB.new(File.read(content_file))
-    html = erb.result(project.get_binding)
+    html = erb.result( namespace.instance_eval { binding } )
+
     html = html.force_encoding(Encoding::UTF_8)
     html
   end
@@ -40,7 +45,21 @@ class LwlPdfService < Versioneye::Service
   end
 
 
-  def self.fill_dto project 
+  def self.prepare_kids project, exclude_kids = false 
+    children = [] 
+    return children if exclude_kids
+
+    if project.children && !project.children.empty?
+      project.children.each do |sub_project| 
+        fill_dto_single sub_project
+        children << sub_project
+      end
+    end
+    children
+  end
+
+
+  def self.fill_dto_single project 
     dto = { :whitelisted => [], :unknown => [], :violated => [] }
     project.dependencies.each do |dep|
       if dep.license_caches && !dep.license_caches.empty?
@@ -57,6 +76,7 @@ class LwlPdfService < Versioneye::Service
     dto[:unknown].sort_by!{ |hsh| hsh[:component] }
     dto[:violated].sort_by!{ |hsh| hsh[:component] }
     project.lwl_pdf_list = dto
+    dto 
   end
 
 

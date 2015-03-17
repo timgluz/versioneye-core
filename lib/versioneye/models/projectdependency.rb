@@ -48,6 +48,11 @@ class Projectdependency < Versioneye::Model
     nil
   end
 
+
+  def version 
+    version_requested
+  end
+
   
   def product
     if project && project.project_type.to_s.eql?( Project::A_TYPE_BOWER )
@@ -100,6 +105,11 @@ class Projectdependency < Versioneye::Model
   
   def known?
     !self.unknown?
+  end
+
+
+  def get_binding
+    binding()
   end
 
   
