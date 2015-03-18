@@ -177,67 +177,67 @@ describe License do
 
     it "should return Apache License version 2 name" do
       license = License.new({:name => "The Apache Software License\, Version 2\.0"})
-      license.name_substitute.should eq("Apache License 2.0")
+      license.name_substitute.should eq("Apache-2.0")
     end
     it "should return Apache License version 2 name" do
       license = License.new({:name => "Apache License, Version 2.0"})
-      license.name_substitute.should eq("Apache License 2.0")
+      license.name_substitute.should eq("Apache-2.0")
     end
     it "should return Apache License version 2 name" do
       license = License.new({:name => "Apache License Version 2.0"})
-      license.name_substitute.should eq("Apache License 2.0")
+      license.name_substitute.should eq("Apache-2.0")
     end
     it "should return Apache License version 2 name" do
       license = License.new({:name => "Apache-2.0"})
-      license.name_substitute.should eq("Apache License 2.0")
+      license.name_substitute.should eq("Apache-2.0")
     end
 
     it "should return Apache License name" do
       license = License.new({:name => "Apache License"})
-      license.name_substitute.should eq("Apache License 2.0")
+      license.name_substitute.should eq("Apache-2.0")
     end
     it "should return Apache License name" do
       license = License.new({:name => "Apache Software License"})
-      license.name_substitute.should eq("Apache License 2.0")
+      license.name_substitute.should eq("Apache-2.0")
     end
     it "should return Apache License name" do
       license = License.new({:name => "the Apache License, ASL Version 2.0"})
-      license.name_substitute.should eq("Apache License 2.0")
+      license.name_substitute.should eq("Apache-2.0")
     end
 
     it "should return eclipse public license name" do
       license = License.new({:name => "Eclipse"})
-      license.name_substitute.should eq("Eclipse Public License 1.0")
+      license.name_substitute.should eq("EPL-1.0")
     end
     it "should return eclipse public license name" do
       license = License.new({:name => "Eclipse License"})
-      license.name_substitute.should eq("Eclipse Public License 1.0")
+      license.name_substitute.should eq("EPL-1.0")
     end
     it "should return eclipse public license name" do
-      license = License.new({:name => "Eclipse Public License 1.0"})
-      license.name_substitute.should eq("Eclipse Public License 1.0")
+      license = License.new({:name => "EPL-1.0"})
+      license.name_substitute.should eq("EPL-1.0")
     end
 
-    it "should return Artistic License 1.0 license name" do
+    it "should return Artistic-1.0 license name" do
       license = License.new({:name => "Artistic 1.0"})
-      license.name_substitute.should eq("Artistic License 1.0")
+      license.name_substitute.should eq("Artistic-1.0")
     end
-    it "should return Artistic License 1.0 license name" do
+    it "should return Artistic-1.0 license name" do
       license = License.new({:name => "Artistic License"})
-      license.name_substitute.should eq("Artistic License 1.0")
+      license.name_substitute.should eq("Artistic-1.0")
     end
-    it "should return Artistic License 1.0 license name" do
-      license = License.new({:name => "Artistic License 1.0"})
-      license.name_substitute.should eq("Artistic License 1.0")
+    it "should return Artistic-1.0 license name" do
+      license = License.new({:name => "Artistic-1.0"})
+      license.name_substitute.should eq("Artistic-1.0")
     end
 
-    it "should return Artistic License 2.0 license name" do
+    it "should return Artistic-2.0 license name" do
       license = License.new({:name => "Artistic 2.0"})
-      license.name_substitute.should eq("Artistic License 2.0")
+      license.name_substitute.should eq("Artistic-2.0")
     end
-    it "should return Artistic License 2.0 license name" do
-      license = License.new({:name => "Artistic License 2.0"})
-      license.name_substitute.should eq("Artistic License 2.0")
+    it "should return Artistic-2.0 license name" do
+      license = License.new({:name => "Artistic-2.0"})
+      license.name_substitute.should eq("Artistic-2.0")
     end
 
     it "should return the given name if name is uknown" do

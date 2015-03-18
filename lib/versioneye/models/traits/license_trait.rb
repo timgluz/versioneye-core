@@ -10,7 +10,7 @@ module VersionEye
 
       return 'Ruby' if ruby_match( tmp_name )
 
-      return 'Common Public License 1.0' if cpl_10_match( tmp_name )
+      return 'CPL-1.0' if cpl_10_match( tmp_name ) # Common Public License 1.0
 
       return 'MPL-1.0'  if mpl_10_match( tmp_name )
       return 'MPL-1.1'  if mpl_11_match( tmp_name )
@@ -32,15 +32,15 @@ module VersionEye
 
       return 'AGPL-3.0' if agpl_30_match( tmp_name )
 
-      return 'Apache License 1.0' if apache_license_10_match( tmp_name )
-      return 'Apache License 1.1' if apache_license_11_match( tmp_name )
-      return 'Apache License 2.0' if apache_license_20_match( tmp_name )
+      return 'Apache-1.0' if apache_license_10_match( tmp_name )
+      return 'Apache-1.1' if apache_license_11_match( tmp_name )
+      return 'Apache-2.0' if apache_license_20_match( tmp_name )
 
-      return 'Eclipse Public License 1.0' if eclipse_match( tmp_name )
+      return 'EPL-1.0' if eclipse_match( tmp_name ) # Eclipse Public License 1.0
       return 'Eclipse Distribution License 1.0' if eclipse_distribution_match( tmp_name )
 
-      return 'Artistic License 1.0' if artistic_10_match( tmp_name )
-      return 'Artistic License 2.0' if artistic_20_match( tmp_name )
+      return 'Artistic-1.0' if artistic_10_match( tmp_name )
+      return 'Artistic-2.0' if artistic_20_match( tmp_name )
 
       return 'BSD 2-clause'  if bsd_2_clause_match( tmp_name )
       return 'BSD 3-clause' if bsd_3_clause_match( tmp_name )
