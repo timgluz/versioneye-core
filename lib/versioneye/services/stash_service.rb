@@ -76,6 +76,9 @@ class StashService < Versioneye::Service
 
 
   def self.update_project_files user, repo
+    return nil if repo.nil? 
+    return nil if repo.branches.nil?
+
     project_files = {}
     project_key = repo.project_key
     repo_name = repo.slug
