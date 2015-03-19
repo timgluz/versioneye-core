@@ -86,7 +86,8 @@ class StashService < Versioneye::Service
       supported = filter_supported files[:values]
       next if supported.empty?
 
-      project_files[branch_name] = supported
+      branch_key = Stash.encode_db_key( branch_name )
+      project_files[branch_key] = supported
     end
     repo.project_files = project_files
     repo.save
