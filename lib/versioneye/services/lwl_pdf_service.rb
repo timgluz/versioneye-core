@@ -4,8 +4,8 @@ class LwlPdfService < Versioneye::Service
   require 'ostruct'
 
   
-  def self.process project, exclude_kids = false, write_to_disk = false
-    html = compile_html project, exclude_kids
+  def self.process project, exclude_kids = false, flatten = true, write_to_disk = false
+    html = compile_html project, exclude_kids, flatten
     kit  = new_kit html
     
     write_pdf_to_disk(kit, project) if write_to_disk
@@ -14,9 +14,9 @@ class LwlPdfService < Versioneye::Service
   end
 
 
-  def self.compile_html project, exclude_kids = false 
-    fill_dto_single project 
-    children = prepare_kids project, exclude_kids
+  def self.compile_html project, exclude_kids = false, flatten = true 
+    fill_dto project, flatten  
+    children = prepare_kids project, exclude_kids, flatten
     
     namespace = OpenStruct.new(project: project, children: children)
     content_file = Settings.instance.lwl_pdf_content
@@ -45,13 +45,13 @@ class LwlPdfService < Versioneye::Service
   end
 
 
-  def self.prepare_kids project, exclude_kids = false 
+  def self.prepare_kids project, exclude_kids = false, flatten
     children = [] 
-    return children if exclude_kids
+    return children if exclude_kids || flatten
 
     if project.children && !project.children.empty?
       project.children.each do |sub_project| 
-        fill_dto_single sub_project
+        fill_dto sub_project, false 
         children << sub_project
       end
     end
@@ -59,19 +59,18 @@ class LwlPdfService < Versioneye::Service
   end
 
 
-  def self.fill_dto_single project 
+  def self.fill_dto project, flatten = false  
+    uniq_array = []
     dto = { :whitelisted => [], :unknown => [], :violated => [] }
-    project.dependencies.each do |dep|
-      if dep.license_caches && !dep.license_caches.empty?
-        dep.license_caches.each do |lc|
-          line = build_line(dep, lc.name) 
-          dto[:whitelisted] << line if lc.on_whitelist
-          dto[:violated]    << line if !lc.on_whitelist
-        end
-      else 
-        dto[:unknown] << build_line(dep, 'UNKNOWN') 
+    
+    fill_dto_with project.dependencies, dto, uniq_array
+
+    if flatten && project.children && !project.children.empty? 
+      project.children.each do |child| 
+        fill_dto_with child.dependencies, dto, uniq_array
       end
     end
+
     dto[:whitelisted].sort_by!{ |hsh| hsh[:component] }
     dto[:unknown].sort_by!{ |hsh| hsh[:component] }
     dto[:violated].sort_by!{ |hsh| hsh[:component] }
@@ -80,13 +79,42 @@ class LwlPdfService < Versioneye::Service
   end
 
 
-  private 
+  private
 
 
-    def self.build_line dep, name 
+    def self.fill_dto_with dependencies, dto, uniq_array 
+      uvalue = ''
+      dependencies.each do |dep|
+        line = build_line(dep)
+        if dep.license_caches && !dep.license_caches.empty?
+          dep.license_caches.each do |lc|
+            line[:license] = lc.name
+            uvalue = create_uniq_identifier(line)
+            next if uniq_array.include?(uvalue)
+            
+            dto[:whitelisted] << line if lc.on_whitelist
+            dto[:violated]    << line if !lc.on_whitelist
+          end
+        else
+          line[:license] = 'UNKNOWN'  
+          uvalue = create_uniq_identifier(line)
+          dto[:unknown] << line if !uniq_array.include?(uvalue)
+        end
+        
+        uniq_array << uvalue if !uniq_array.include?(uvalue)
+      end
+    end
+
+
+    def self.create_uniq_identifier line 
+      "#{line[:component]}_#{line[:group_id]}_#{line[:version]}_#{line[:license]}"
+    end
+
+
+    def self.build_line dep
       dep_name = dep.name 
       dep_name = dep.artifact_id if !dep.artifact_id.to_s.empty?
-      {:component => dep_name, :group_id => dep.group_id, :version => dep.version_requested, :license => name}
+      {:component => dep_name, :group_id => dep.group_id, :version => dep.version_requested}
     end
 
 
