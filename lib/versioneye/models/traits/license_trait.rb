@@ -289,6 +289,7 @@ module VersionEye
       name.match(/\AApache License 2\.0\z/i) ||
       name.match(/\AApache License V2\.0\z/i) ||
       name.match(/\AApache License Version 2\.0\z/i) ||
+      name.match(/\AApache Public License 2\.0\z/i) ||
       name.match(/\AApache Software License\z/i) ||
       name.match(/\AApache Software Licenses\z/i) ||
       name.match(/\AApache Software License Version 2\.0\z/i) ||
