@@ -102,7 +102,8 @@ class Bitbucket < Versioneye::Service
     files = {}
     branches.each do |branch|
       project_files = project_files_from_branch(repo_name, branch, token, secret)
-      files[branch] = project_files if project_files
+      branch_name   = encode_db_key(branch)
+      files[branch_name] = project_files if project_files
     end
     files
   end
