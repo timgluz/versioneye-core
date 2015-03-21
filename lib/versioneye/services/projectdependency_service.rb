@@ -100,8 +100,7 @@ class ProjectdependencyService < Versioneye::Service
     if projectdependency.prod_key.nil?
       update_prod_key projectdependency
     end
-    return false if projectdependency.prod_key.nil?
-
+    
     product = projectdependency.product
     return false if product.nil?
 
