@@ -12,7 +12,7 @@ class NewestService < Versioneye::Service
 
 
   def self.update_nils 
-    Dependency.where(:current_version => nil).each do |dep|
+    Dependency.where(:current_version => nil, :dep_prod_key.ne => nil).each do |dep|
       DependencyService.outdated?( dep )
       multi_log "update #{dep.language}:#{dep.prod_key}"
     end
