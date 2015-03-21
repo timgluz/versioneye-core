@@ -4,8 +4,17 @@ class NewestService < Versioneye::Service
   def self.run_worker
     loop do 
       post_process
+      update_nils 
       multi_log "sleep for a while"
       sleep 60
+    end
+  end
+
+
+  def self.update_nils 
+    Dependency.where(:current_version => nil).each do |dep|
+      DependencyService.outdated?( dep )
+      multi_log "update #{dep.language}:#{dep.prod_key}"
     end
   end
 
