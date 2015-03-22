@@ -122,12 +122,15 @@ module VersionEye
 
     def bsd_2_clause_match name
       name.match(/BSD 2-Clause/i) ||
+      name.match(/BSD-2-Clause/i) ||
+      name.match(/BSD-2 Clause/i) ||
       name.match(/BSD 2 Clause/i)
     end
 
     def bsd_3_clause_match name
-      name.match(/BSD 3-Clause/i) ||
       name.match(/BSD 3 Clause/i) ||
+      name.match(/BSD 3-Clause/i) ||
+      name.match(/BSD-3-Clause/i) ||
       name.match(/\ARevised BSD\z/i) ||
       name.match(/\ABSD Revised\z/i) ||
       name.match(/\ABSD New\z/i)
@@ -160,6 +163,7 @@ module VersionEye
       name.match(/\AGPLv2\+\z/i) ||
       name.match(/\AGPL 2\.0\z/i) ||
       name.match(/\AGPL\-2\.0\z/i) ||
+      name.match(/\AGNU GPL v2/i) ||
       name.match(/\AGNU General Public License version 2 \(GPL\-2\.0\)\z/i) ||
       name.match(/\AGNU General Public License \(GPL\-2\.0\)\z/i) ||
       name.match(/\AGNU General Public License 2\.0\z/i) ||
