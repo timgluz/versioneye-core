@@ -23,11 +23,15 @@ GEM
     addressable (2.3.7)
     amq-protocol (1.9.2)
     ansi (1.5.0)
-    aws-sdk (1.63.0)
-      aws-sdk-v1 (= 1.63.0)
-    aws-sdk-v1 (1.63.0)
-      json (~> 1.4)
-      nokogiri (>= 1.4.4)
+    aws-sdk (2.0.31)
+      aws-sdk-resources (= 2.0.31)
+    aws-sdk-core (2.0.31)
+      builder (~> 3.0)
+      jmespath (~> 1.0)
+      multi_json (~> 1.0)
+      multi_xml (~> 0.5)
+    aws-sdk-resources (2.0.31)
+      aws-sdk-core (= 2.0.31)
     builder (3.0.4)
     bunny (1.7.0)
       amq-protocol (>= 1.9.2)
@@ -93,6 +97,8 @@ GEM
       nokogiri (>= 1.5.10)
       rake
       rdoc
+    jmespath (1.0.2)
+      multi_json (~> 1.0)
     journey (1.0.4)
     json (1.8.2)
     jwt (1.4.1)
@@ -216,7 +222,7 @@ PLATFORMS
 
 DEPENDENCIES
   actionmailer (~> 3.2.21)
-  aws-sdk (~> 1.63.0)
+  aws-sdk (~> 2.0.31)
   bundler (~> 1.9.1)
   bunny (~> 1.7.0)
   capybara (~> 2.4.1)

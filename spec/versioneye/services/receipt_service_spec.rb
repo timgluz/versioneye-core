@@ -4,7 +4,9 @@ describe ReceiptService do
 
   before(:each) do
     Plan.create_defaults
-    AWS.config(:s3_endpoint => 'localhost', :s3_port => 4567, :use_ssl => false )
+    region = 'eu-west-1'
+    creds = Aws::Credentials.new(ENV['AWS_ACCESS_KEY_ID'], ENV['AWS_SECRET_ACCESS_KEY'])
+    Aws.config[:credentials] = creds 
   end
 
   describe "process_receipts" do

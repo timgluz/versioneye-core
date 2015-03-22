@@ -8,7 +8,7 @@ gem 'log4r'              , '~> 1.1.0'
 gem 'dalli'              , '~> 2.7.0'
 gem 'kgio'               , '~> 2.9.0'   # 20% performance boost for dalli
 gem 'oauth'              , '~> 0.4.7'
-gem 'aws-sdk'            , '~> 1.63.0'
+gem 'aws-sdk'            , '~> 2.0.31'
 gem 'stripe'             , '~> 1.14.0'
 gem 'tire'               , '~> 0.6.2'
 gem 'octokit'            , '~> 3.8.0'

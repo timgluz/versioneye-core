@@ -139,4 +139,8 @@ class Receipt < Versioneye::Model
     "#{date_str}-VersionEye-#{receipt_nr}.pdf"
   end
 
+  def to_s 
+    filename
+  end
+
 end
