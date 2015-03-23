@@ -41,6 +41,13 @@ class DependencyService < Versioneye::Service
     product = dependency.product
     return false if product.nil?
 
+    if product.versions.nil? || product.versions.empty? 
+      dependency.outdated = false 
+      dependency.current_version = '0.0.0+NA'
+      dependency.save 
+      return false 
+    end
+
     newest_product_version = product.version 
     if update_newest_version
       newest_product_version = VersionService.newest_version_number( product.versions )
