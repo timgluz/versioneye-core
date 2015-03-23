@@ -31,6 +31,7 @@ class ProjectImportService < Versioneye::Service
     child.parent_id = project.id.to_s
     child.save
     ProjectService.update_sums( child.parent )
+    child 
   rescue => e 
     log.error e.message
   end
@@ -83,11 +84,13 @@ class ProjectImportService < Versioneye::Service
     check_permission_for_bitbucket_repo user, private_project
 
     project = import_from_bitbucket user, repo_name, filename, branch, false, repo
+    
     lock_file = ProjectService.corresponding_file filename
     if lock_file
       key = "bitbucket_child:::#{user.username}:::#{repo_name}:::#{lock_file}:::#{branch}:::#{project.id}"
       GitRepoFileImportProducer.new( key )
     end
+    
     ProjectService.update_sums( project )
     project
   end
@@ -96,6 +99,8 @@ class ProjectImportService < Versioneye::Service
     child = import_from_bitbucket user, repo_name, lock_file, branch, false
     child.parent_id = project.id.to_s
     child.save
+    ProjectService.update_sums( project )
+    child 
   rescue => e 
     log.error e.message
   end
