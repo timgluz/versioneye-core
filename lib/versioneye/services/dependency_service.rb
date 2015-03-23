@@ -92,14 +92,15 @@ class DependencyService < Versioneye::Service
 
 
   def self.update_parsed_version dependency, product = nil
-    if dependency.version.to_s.empty?
-      dependency.parsed_version = "unknown"
-      return
-    end
-
     if product.nil?
       product  = find_product( dependency.prod_type, dependency.language, dependency.dep_prod_key )
     end
+
+    if ( dependency.version.to_s.empty? || dependency.version.to_s.eql?("*") ) && product
+      dependency.parsed_version = product.version 
+      return
+    end
+
     dependency.set_prod_type_if_nil
     parser   = ParserStrategy.parser_for( dependency.prod_type, '' )
     proj_dep = Projectdependency.new
