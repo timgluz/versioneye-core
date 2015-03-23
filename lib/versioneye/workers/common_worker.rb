@@ -42,6 +42,8 @@ class CommonWorker < Worker
       User.send_verification_reminders
     elsif message.eql?("process_receipts")
       ReceiptService.process_receipts
+    elsif message.eql?("update_smc_meta_data_all")
+      ScmMetaDataService.update_all_users
     end
 
     log.info "Job done for #{message}"
