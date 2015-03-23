@@ -70,11 +70,18 @@ class SyncService < Versioneye::Service
     json.deep_symbolize_keys!
     return nil if json[:versions].nil?
 
-    product = Product.fetch_product language, prod_key
+    product_preload = Product.fetch_product language, prod_key
 
     json[:versions].each do |ver|
-      next if product && product.version_by_number(ver[:version]) && skip_known_versions
-      sync_version language, prod_key, ver[:version]
+      new_version = product_preload.nil? || product_preload.version_by_number(ver[:version]).nil?
+      next if new_version == false && skip_known_versions == true 
+      
+      product = sync_version( language, prod_key, ver[:version] ) 
+
+      if product && new_version == true 
+        NewestService.create_newest( product, ver[:version] )
+        NewestService.create_notifications(product, ver[:version])
+      end
     end
     log.info "synced #{language}:#{prod_key}"
     true
@@ -91,12 +98,14 @@ class SyncService < Versioneye::Service
 
     json.deep_symbolize_keys!
 
-    create_product_if_not_exist json
+    product = create_product_if_not_exist json
 
     handle_licenses json
     handle_links json
     handle_archives json
     handle_dependencies json
+
+    product 
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
@@ -111,7 +120,7 @@ class SyncService < Versioneye::Service
       product.add_version json[:version], {:released_at => parsed_date(json[:released_at]) }
       product.save
       ProductService.update_version_data product, true 
-      return
+      return product
     end
 
     product = Product.new
@@ -128,6 +137,7 @@ class SyncService < Versioneye::Service
     product.add_version json[:version], {:released_at => parsed_date(json[:released_at]) }
     product.save
     ProductService.update_version_data product, true 
+    product 
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
