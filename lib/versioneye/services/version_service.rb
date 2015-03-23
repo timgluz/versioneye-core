@@ -124,6 +124,10 @@ class VersionService < Versioneye::Service
   def self.versions_start_with( versions, val )
     return [] if versions.nil? || versions.empty?
     versions.dup.keep_if {|ver| ver[:version].to_s.match(/^#{val}/)}
+  rescue => e 
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    []
   end
 
 
