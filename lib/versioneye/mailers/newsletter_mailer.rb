@@ -7,7 +7,7 @@ class NewsletterMailer < ActionMailer::Base
   
   def newsletter_new_features_email( user )
     @user = user
-    mail(:to => @user.email, :subject => 'Public Ticket System for VersionEye!') do |format|
+    mail(:to => @user.email, :subject => 'VersionEye Enterprise!') do |format|
       format.html{ render layout: 'email_html_layout' }
     end
   end
