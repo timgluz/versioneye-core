@@ -2,16 +2,17 @@ class NewsletterService < Versioneye::Service
 
 
   def self.send_newsletter_features
-    count = 0
-    users = User.all()
-    users.each do |user|
-      next if user.deleted_user || user.email_inactive
+    count = 0    
+    UserService.all_users_paged do |users|
+      users.each do |user|
+        next if user.deleted_user || user.email_inactive
 
-      uns = UserNotificationSetting.fetch_or_create_notification_setting( user )
-      next if uns.newsletter_features.nil?
-      next if uns.newsletter_features == false
+        uns = UserNotificationSetting.fetch_or_create_notification_setting( user )
+        next if uns.newsletter_features.nil?
+        next if uns.newsletter_features == false
 
-      count += self.send_email( user )
+        count += self.send_email( user )
+      end
     end
     count
   end
