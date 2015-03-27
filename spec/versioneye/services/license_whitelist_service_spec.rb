@@ -132,6 +132,59 @@ describe LicenseWhitelistService do
 
   end
 
+  describe 'default' do
+
+    it 'sets the default' do
+      user = UserFactory.create_new 1
+      resp = LicenseWhitelistService.create user, 'SuperList'
+      resp.should be_truthy
+      resp = LicenseWhitelistService.create user, 'MyList'
+      resp.should be_truthy
+      resp = LicenseWhitelistService.create user, 'YourList'
+      resp.should be_truthy
+
+      LicenseWhitelist.count.should eq(3)
+      LicenseWhitelist.all.each do |lwl| 
+        lwl.default.should be_falsy
+      end
+
+      LicenseWhitelistService.default user, 'MyList'
+      lwl = LicenseWhitelist.fetch_by user, 'MyList'
+      lwl.default.should be_truthy
+      lwl = LicenseWhitelist.fetch_by user, 'SuperList'
+      lwl.default.should be_falsy
+      lwl = LicenseWhitelist.fetch_by user, 'YourList'
+      lwl.default.should be_falsy
+    end
+
+  end
+
+  describe 'fetch_default_id' do
+
+    it 'returns nil because there is no default' do
+      user = UserFactory.create_new 1
+      resp = LicenseWhitelistService.create user, 'SuperList'
+      resp.should be_truthy
+
+      LicenseWhitelist.count.should eq(1)
+      LicenseWhitelistService.fetch_default_id(user).should be_nil 
+    end
+
+    it 'returns the default_id' do
+      user = UserFactory.create_new 1
+      resp = LicenseWhitelistService.create user, 'SuperList'
+      resp.should be_truthy
+      resp = LicenseWhitelistService.create user, 'MyList'
+      resp.should be_truthy
+
+      LicenseWhitelistService.default user, 'MyList'
+      lwl = LicenseWhitelist.fetch_by user, 'MyList'
+
+      LicenseWhitelistService.fetch_default_id(user).should eq(lwl.id.to_s)
+    end
+
+  end
+
   describe 'remove' do
 
     it 'remove license from list for a user' do

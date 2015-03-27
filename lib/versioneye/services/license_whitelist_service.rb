@@ -37,6 +37,28 @@ class LicenseWhitelistService < Versioneye::Service
     success
   end
 
+  def self.default user, list_name 
+    list = index( user )
+    list.each do |lwl| 
+      if lwl.name.eql?( list_name )
+        lwl.default = true 
+      else 
+        lwl.default = false
+      end
+      lwl.save 
+    end  
+  end
+
+  
+  def self.fetch_default_id user 
+    list = index( user )
+    list.each do |lwl| 
+      return lwl.id.to_s if lwl.default == true 
+    end
+    nil
+  end
+
+
   def self.update_project project, user, lwl_name 
     return false if project.nil? 
 

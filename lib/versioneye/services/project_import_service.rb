@@ -69,7 +69,7 @@ class ProjectImportService < Versioneye::Service
       public: Settings.instance.default_project_public
     })
 
-    ProjectService.store( project )
+    ProjectService.store( project ) 
   end
 
 

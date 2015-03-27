@@ -49,11 +49,13 @@ class ProjectService < Versioneye::Service
       raise "Could not find a single dependency in the project."
     end
 
+    default_lwl_id = LicenseWhitelistService.fetch_default_id project.user 
+    project.license_whitelist_id = default_lwl_id
     project.make_project_key!
     if project.save
       project.save_dependencies
       update_license_numbers!( project )
-      SyncService.sync_project_async project # For Enterprise environment
+      SyncService.sync_project_async project # For Enterprise environment only! 
     else
       err_msg = "Can't save project: #{project.errors.full_messages.to_json}"
       log.error err_msg
