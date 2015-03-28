@@ -10,7 +10,7 @@ class ParserStrategy
         end
 
       when Project::A_TYPE_PIP
-        if url.match(/requirements.txt/) || url.match(/pip.log/)
+        if url.match(/requirements\S*.txt/) || url.match(/pip.log/)
           return RequirementsParser.new
         else
           return PythonSetupParser.new
