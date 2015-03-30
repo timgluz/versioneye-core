@@ -49,6 +49,9 @@ class ProjectService < Versioneye::Service
       raise "Could not find a single dependency in the project."
     end
 
+    ensure_unique_ga( project )
+    ensure_unique_scm( project )
+
     default_lwl_id = LicenseWhitelistService.fetch_default_id project.user 
     project.license_whitelist_id = default_lwl_id
     project.make_project_key!
@@ -62,6 +65,32 @@ class ProjectService < Versioneye::Service
       raise err_msg
     end
     project
+  end
+
+
+  def self.ensure_unique_ga project 
+    return true if Settings.instance.projects_unique_ga == false 
+    return true if project.group_id.to_s.empty? && project.artifact_id.to_s.empty? 
+    
+    project = Project.find_by_ga( project.group_id, project.artifact_id )    
+    return true if project.nil? 
+
+    err_msg = "A project with same GroupId and ArtifactId exist already. Project ID: #{project.id.to_s}"
+    log.error err_msg
+    raise err_msg
+  end
+
+
+  def self.ensure_unique_scm project 
+    return true if Settings.instance.projects_unique_scm == false 
+    return true if project.scm_fullname.to_s.empty?
+    
+    project = Project.where(:source => project.source, :scm_fullname => project.scm_fullname, :scm_branch => project.scm_branch, :s3_filename => project.s3_filename).first
+    return true if project.nil? 
+
+    err_msg = "The project file is already monitored by VersionEye. Project ID: #{project.id.to_s}"
+    log.error err_msg
+    raise err_msg
   end
 
   

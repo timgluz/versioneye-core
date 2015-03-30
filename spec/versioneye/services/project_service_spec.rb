@@ -246,6 +246,64 @@ describe ProjectService do
   end
 
 
+  describe 'ensure_unique_ga' do 
+    it 'returns true because its turned off' do 
+      Settings.instance.projects_unique_ga = false 
+      ProjectService.ensure_unique_ga(nil).should be_truthy
+    end
+    it 'returns true because there is no other project in db!' do 
+      Settings.instance.projects_unique_ga = true 
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user, nil, false
+      project.group_id = "org.junit"
+      project.artifact_id = 'junit'
+      ProjectService.ensure_unique_ga(project).should be_truthy
+      Settings.instance.projects_unique_ga = false 
+    end
+    it 'returns true because there is no other project in db!' do 
+      Settings.instance.projects_unique_ga = true 
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user, nil, false
+      project.group_id = "org.junit"
+      project.artifact_id = 'junit'
+      project.save 
+      expect { ProjectService.ensure_unique_ga(project) }.to raise_exception
+      Settings.instance.projects_unique_ga = false 
+    end
+  end
+
+
+  describe 'ensure_unique_scm' do 
+    it 'returns true because its turned off' do 
+      Settings.instance.projects_unique_scm = false 
+      ProjectService.ensure_unique_scm(nil).should be_truthy
+    end
+    it 'returns true because there is no other project in db!' do 
+      Settings.instance.projects_unique_scm = true 
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user, nil, false
+      project.source = "github"
+      project.scm_fullname = 'reiz/boom'
+      project.scm_branch = 'master'
+      project.s3_filename = 'pom.xml'
+      ProjectService.ensure_unique_scm(project).should be_truthy
+      Settings.instance.projects_unique_scm = false 
+    end
+    it 'returns true because there is no other project in db!' do 
+      Settings.instance.projects_unique_scm = true 
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user, nil, false
+      project.source = "github"
+      project.scm_fullname = 'reiz/boom'
+      project.scm_branch = 'master'
+      project.s3_filename = 'pom.xml'
+      project.save 
+      expect { ProjectService.ensure_unique_scm(project) }.to raise_exception
+      Settings.instance.projects_unique_scm = false 
+    end
+  end
+
+
   describe 'destroy_single' do
 
     it 'destroys a single project' do
