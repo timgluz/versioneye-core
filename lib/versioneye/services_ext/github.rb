@@ -428,19 +428,6 @@ class Github < Versioneye::Service
     request_headers
   end
 
-  def self.support_project_files
-    Set['pom.xml',
-        'dependency.gradle',
-        'build.sbt',
-        'project.clj',
-        'requirements.txt', 'setup.py',
-        'Gemfile', 'Gemfile.lock',
-        'Podfile', 'Podfile.lock',
-        'composer.json', 'composer.lock',
-        'package.json', 'bower.json'
-         ]
-  end
-
   def self.encode_db_key(key_val)
     URI.escape(key_val.to_s, /\.|\$/)
   end
