@@ -119,6 +119,8 @@ class PomParser < CommonParser
     project              = Project.new
     project.project_type = Project::A_TYPE_MAVEN2
     project.language     = Product::A_LANGUAGE_JAVA
+    project.group_id     = doc.xpath('//project/groupId').text
+    project.artifact_id  = doc.xpath('//project/artifactId').text
     project.name         = doc.xpath('//project/name').text
     project.name         = doc.xpath('//project/artifactId').text if project.name.to_s.empty?
     project
