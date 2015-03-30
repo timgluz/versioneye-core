@@ -2,6 +2,29 @@ require 'spec_helper'
 
 describe NewestService do
 
+  describe "create_notifications" do
+
+    it "creates 2 notifications" do
+      
+      user_1    = UserFactory.create_new 1 
+      user_2    = UserFactory.create_new 2
+      product_1 = ProductFactory.create_new(36)
+
+      ProductService.follow product_1.language, product_1.prod_key, user_1
+      ProductService.follow product_1.language, product_1.prod_key, user_2
+
+      product = Product.find product_1.id 
+      product.followers.should eq(2)      
+
+      Notification.count.should eq(0)
+
+      NewestService.create_notifications product, '44444.455555.888888'
+      Notification.count.should eq(2)
+    end
+
+  end
+
+  
   describe "update_nil" do
 
     it "updates the nils" do
@@ -38,10 +61,14 @@ describe NewestService do
         :group_id => product_1.group_id, :artifact_id => product_1.artifact_id})
       dependency.save
 
-      newest = Newest.new({:language => product_1.language, :prod_key => product_1.prod_key, 
-        :prod_type => product_1.prod_type, :version => '100000000' })
-      newest.save 
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user
+      p_dep_1 = ProjectdependencyFactory.create_new project, product_1, true
+      p_dep_1.save 
 
+      NewestService.create_newest product_1, '100000000'
+      newest = Newest.last
+      
       described_class.post_process
 
       product = Product.find product_1.id 
@@ -49,6 +76,9 @@ describe NewestService do
 
       dep = Dependency.find dependency.id 
       dep.current_version.should eq(newest.version)
+
+      pdep = Projectdependency.find p_dep_1.id 
+      pdep.version_current.should eq(newest.version)
     end
 
     it 'updates a ruby product and dependency' do 
@@ -64,9 +94,13 @@ describe NewestService do
         :group_id => product_1.group_id, :artifact_id => product_1.artifact_id})
       dependency.save
 
-      newest = Newest.new({:language => product_1.language, :prod_key => product_1.prod_key, 
-        :prod_type => product_1.prod_type, :version => '2.0.0' })
-      newest.save 
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user
+      p_dep_1 = ProjectdependencyFactory.create_new project, product_1, true
+      p_dep_1.save 
+
+      NewestService.create_newest product_1, '2.0.0'
+      newest = Newest.last
 
       product_1.add_version '2.0.0'
       product_1.save 
@@ -78,6 +112,9 @@ describe NewestService do
 
       dep = Dependency.find dependency.id 
       dep.current_version.should eq(newest.version)
+
+      pdep = Projectdependency.find p_dep_1.id 
+      pdep.version_current.should eq(newest.version)
     end
 
   end

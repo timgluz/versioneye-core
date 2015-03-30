@@ -84,8 +84,8 @@ class NewestService < Versioneye::Service
     multi_log "update_dependencies for #{product.language}:#{product.prod_key}"
     update_dependencies product, newest.version
 
-    # TODO Update Projectdependencies 
-    # 
+    multi_log "update_projectdependencies for #{product.language}:#{product.prod_key}"
+    update_projectdependencies product, newest.version
 
     newest.processed = true 
     newest.save 
@@ -147,6 +147,53 @@ class NewestService < Versioneye::Service
       :dep_prod_key => product.prod_key)
     dependencies.each do |dependency|
       DependencyService.soft_outdated?( dependency, product )
+    end
+  end
+
+
+  def self.update_projectdependencies product, version
+    if !product.group_id.to_s.empty? && !product.artifact_id.to_s.empty?
+      update_current_version_maven_pd product
+      update_outdated_maven_pd( product )
+    else 
+      update_current_for_pd product
+      update_outdated_pd product 
+    end
+  end
+
+  def self.update_current_version_maven_pd product 
+    multi_log "update_current_version_maven for #{product.language}:#{product.prod_key}"
+    Projectdependency.where(
+      :group_id => product.group_id, 
+      :artifact_id => product.artifact_id
+      ).update_all(:version_current => product.version)
+  end
+
+  def self.update_outdated_maven_pd product 
+    multi_log "update_outdated_maven for #{product.language}:#{product.prod_key}"
+    dependencies = Projectdependency.where(
+      :group_id => product.group_id, 
+      :artifact_id => product.artifact_id)
+    dependencies.each do |dependency|
+      ProjectdependencyService.update_outdated!( dependency )
+      ProjectService.update_sums( dependency.project )
+    end
+  end
+
+  def self.update_current_for_pd product
+    Projectdependency.where(
+      :language => product.language, 
+      :prod_key => product.prod_key
+      ).update_all(:version_current => product.version)
+  end
+
+  def self.update_outdated_pd product 
+    dependencies = Projectdependency.where(
+      :language => product.language, 
+      :prod_key => product.prod_key)
+    dependencies.each do |dependency|
+      ProjectdependencyService.update_outdated!( dependency )
+      ProjectService.update_sums( dependency.project )
     end
   end
 
