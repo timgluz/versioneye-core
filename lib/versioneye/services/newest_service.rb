@@ -51,6 +51,7 @@ class NewestService < Versioneye::Service
     loop do 
       post_process
       update_nils 
+      # TODO Update Project Dependencies !! 
       multi_log "sleep for a while"
       sleep 60
     end
