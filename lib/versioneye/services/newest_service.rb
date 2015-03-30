@@ -50,8 +50,7 @@ class NewestService < Versioneye::Service
   def self.run_worker
     loop do 
       post_process
-      update_nils 
-      # TODO Update Project Dependencies !! 
+      update_nils      
       multi_log "sleep for a while"
       sleep 60
     end
@@ -85,6 +84,9 @@ class NewestService < Versioneye::Service
     multi_log "update_dependencies for #{product.language}:#{product.prod_key}"
     update_dependencies product, newest.version
 
+    # TODO Update Projectdependencies 
+    # 
+
     newest.processed = true 
     newest.save 
   rescue => e
@@ -94,7 +96,7 @@ class NewestService < Versioneye::Service
 
 
   def self.update_dependencies product, version
-    if product.prod_type.eql?(Project::A_TYPE_MAVEN2)
+    if !product.group_id.to_s.empty? && !product.artifact_id.to_s.empty?
       update_current_version_maven product
       update_outdated_maven( product )
     else 
