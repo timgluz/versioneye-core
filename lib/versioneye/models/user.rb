@@ -13,7 +13,6 @@ class User < Versioneye::Model
   field :encrypted_password, type: String
   field :salt              , type: String
   field :admin             , type: Boolean, default: false
-  # field :deleted           , type: Boolean, default: false
   field :deleted_user      , type: Boolean, default: false
   field :verification      , type: String
   field :terms             , type: Boolean
