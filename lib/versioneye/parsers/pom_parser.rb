@@ -22,6 +22,9 @@ class PomParser < CommonParser
     doc.xpath('//dependencies/dependency').each do |node|
       fetch_dependency(node, properties, project)
     end
+    doc.xpath('//plugins/plugin').each do |node|
+      dep = fetch_dependency(node, properties, project, "plugins")
+    end
     project.dep_number = project.projectdependencies.size
     project
   rescue => e
@@ -30,9 +33,10 @@ class PomParser < CommonParser
     nil
   end
 
-  def fetch_dependency(node, properties, project)
+  def fetch_dependency(node, properties, project, scope = Dependency::A_SCOPE_COMPILE)
     dependency = Projectdependency.new
     dependency.language = Product::A_LANGUAGE_JAVA
+    dependency.scope = scope
     node.children.each do |child|
       if child.name.casecmp('groupId') == 0
         groupId_text = get_variable_value_from_pom(properties, child.text.strip)
@@ -49,9 +53,6 @@ class PomParser < CommonParser
       end
     end
     dependency.name = dependency.artifact_id
-    if dependency.scope.nil?
-      dependency.scope = Dependency::A_SCOPE_COMPILE
-    end
     product = Product.find_by_group_and_artifact(dependency.group_id, dependency.artifact_id )
     parse_requested_version( dependency.version_requested, dependency, product )
     dependency.prod_key    = product.prod_key if product

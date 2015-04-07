@@ -30,6 +30,12 @@ describe PomParser do
       product_6 = ProductFactory.create_for_maven("org.apache.commons", "commons-email", "1.4")
       product_6.save
 
+      product_7 = ProductFactory.create_for_maven("org.apache.maven.plugins", "maven-project-info-reports-plugin", "1.0")
+      product_7.save
+
+      product_8 = ProductFactory.create_for_maven("org.apache.maven.plugins", "maven-surefire-report-plugin", "2.4.2")
+      product_8.save
+
       parser = PomParser.new
       project = parser.parse("https://s3.amazonaws.com/veye_test_env/pom.xml")
       project.should_not be_nil
@@ -76,12 +82,20 @@ describe PomParser do
       dependency_06.comperator.should eql("=")
       dependency_06.scope.should eql("compile")
 
-      product_1.remove
-      product_2.remove
-      product_3.remove
-      product_4.remove
-      product_5.remove
-      product_6.remove
+      dependency_06 = project.dependencies[6]
+      dependency_06.name.should eql("maven-project-info-reports-plugin")
+      dependency_06.version_requested.should eql("1.0")
+      dependency_06.version_current.should eql("1.0")
+      dependency_06.comperator.should eql("=")
+      dependency_06.scope.should eql("plugins")
+
+      dependency_06 = project.dependencies[8]
+      dependency_06.name.should eql("maven-surefire-report-plugin")
+      dependency_06.version_requested.should eql("2.4.2")
+      dependency_06.version_current.should eql("2.4.2")
+      dependency_06.comperator.should eql("=")
+      dependency_06.scope.should eql("plugins")
+
     end
 
   end
