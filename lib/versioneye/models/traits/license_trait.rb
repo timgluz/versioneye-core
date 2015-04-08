@@ -1,6 +1,8 @@
 module VersionEye
   module LicenseTrait
 
+    # http://spdx.org/licenses/
+
     def name_substitute
       return 'unknown' if name.to_s.empty?
 
@@ -9,6 +11,8 @@ module VersionEye
       return 'MIT' if mit_match( tmp_name )
 
       return 'Ruby' if ruby_match( tmp_name )
+
+      return 'JSON' if json_match( tmp_name )
 
       return 'CPL-1.0' if cpl_10_match( tmp_name ) # Common Public License 1.0
 
@@ -49,6 +53,11 @@ module VersionEye
       return 'BSD' if bsd_match( tmp_name )
 
       name.gsub("Licence", "License")
+    end
+
+    def json_match name
+      name.match(/\AJSON\z/i) ||
+      name.match(/\AJSON license\z/i)
     end
 
     def mpl_10_match name
@@ -305,6 +314,7 @@ module VersionEye
       name.match(/\ACDDL\z/i) ||
       name.match(/\ACDDL 1\.0\z/i) ||
       name.match(/\ACDDL\-1\.0\z/i) ||
+      name.match(/\ACommon Development and Distribution License 1\.0\z/i) ||
       name.match(/\ACOMMON DEVELOPMENT AND DISTRIBUTION LICENSE \(CDDL\) Version 1\.0\z/i) ||
       name.match(/\ACommon Development and Distribution License \(CDDL\-1\.0\)\z/i) ||
       name.match(/\ACommon Development and Distribution License \(CDDL\) v1\.0\z/i)
@@ -313,6 +323,7 @@ module VersionEye
     def cddl_11_match name
       name.match(/\ACDDL 1\.1\z/i) ||
       name.match(/\ACDDL\-1\.1\z/i) ||
+      name.match(/\ACommon Development and Distribution License 1\.1\z/i) ||
       name.match(/\ACOMMON DEVELOPMENT AND DISTRIBUTION LICENSE \(CDDL\) Version 1\.1\z/i) ||
       name.match(/\ACommon Development and Distribution License \(CDDL\-1\.1\)\z/i) ||
       name.match(/\ACommon Development and Distribution License \(CDDL\) v1\.1\z/i)
@@ -335,7 +346,6 @@ module VersionEye
       name.match(/\ACommon Public License 1\.0\z/i) ||
       name.match(/\ACommon Public License v 1\.0\z/i)
     end
-
 
   end
 

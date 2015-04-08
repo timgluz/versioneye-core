@@ -86,7 +86,6 @@ describe License do
       license = License.new({:name => "MIT License"})
       license.link.should eq("http://mit-license.org/")
     end
-
     it "should return apache 2 link" do
       license = License.new({:name => "Apache License, Version 2.0"})
       license.link.should eq("http://www.apache.org/licenses/LICENSE-2.0.txt")
@@ -98,6 +97,18 @@ describe License do
     it "should return apache 2 link" do
       license = License.new({:name => "The Apache Software License, Version 2.0"})
       license.link.should eq("http://www.apache.org/licenses/LICENSE-2.0.txt")
+    end
+    it "should return json link" do
+      license = License.new({:name => "the json licensE"})
+      license.link.should eq("http://www.json.org/license.html")
+    end
+    it "should return cddl 1.0 link" do
+      license = License.new({:name => "Common Development and Distribution License 1.0"})
+      license.link.should eq("http://spdx.org/licenses/CDDL-1.0.html")
+    end
+    it "should return cddl 1.0 link" do
+      license = License.new({:name => "Common Development and Distribution License 1.1"})
+      license.link.should eq("http://spdx.org/licenses/CDDL-1.1.html")
     end
 
   end
@@ -243,6 +254,20 @@ describe License do
     it "should return the given name if name is uknown" do
       license = License.new({:name => "not_existing"})
       license.name_substitute.should eq("not_existing")
+    end
+
+    it "check for JSON license" do
+      license = License.new({:name => "The JSON LiCense"})
+      license.name_substitute.should eq("JSON")
+    end
+    it "check for JSON license" do
+      license = License.new({:name => "JSON LiCense"})
+      license.name_substitute.should eq("JSON")
+    end
+
+    it "check for CDDL 1.0 license" do
+      license = License.new({:name => "Common Development and Distribution License 1.0"})
+      license.name_substitute.should eq("CDDL-1.0")
     end
 
   end

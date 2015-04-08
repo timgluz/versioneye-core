@@ -61,6 +61,8 @@ class License < Versioneye::Model
 
     return 'http://mit-license.org/' if mit_match( tmp_name )
 
+    return 'http://www.json.org/license.html' if json_match( tmp_name )
+
     return 'http://www.ruby-lang.org/en/about/license.txt' if ruby_match( tmp_name )
 
     return 'http://www.apache.org/licenses/LICENSE-1.0.txt' if apache_license_10_match( tmp_name )
@@ -94,8 +96,9 @@ class License < Versioneye::Model
     return 'http://opensource.org/licenses/artistic-license-1.0' if artistic_10_match( tmp_name )
     return 'http://opensource.org/licenses/artistic-license-2.0' if artistic_20_match( tmp_name )
 
-    return 'http://opensource.org/licenses/cddl1' if cddl_match( tmp_name )
-    return 'https://glassfish.java.net/public/CDDL+GPL_1_1.html' if cddl_11_match( tmp_name )
+    return 'http://spdx.org/licenses/CDDL-1.0.html' if cddl_match( tmp_name )
+    return 'http://spdx.org/licenses/CDDL-1.1.html' if cddl_11_match( tmp_name )
+    
     return 'https://glassfish.java.net/nonav/public/CDDL+GPL.html' if cddl_plus_gpl( tmp_name )
 
     nil
