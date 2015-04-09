@@ -303,6 +303,14 @@ describe License do
       license.name_substitute.should eq("CDDL-1.0")
     end
 
+    it "check Zlib" do
+      license = License.new({:name => "ZLIB license"})
+      license.name_substitute.should eq("ZLIB license")
+      spdx = SpdxLicense.new({:fullname => 'zlib License', :identifier => 'Zlib'})
+      spdx.save 
+      license.name_substitute.should eq("Zlib")
+    end
+
   end
 
 end

@@ -6,7 +6,7 @@ module VersionEye
     def name_substitute
       return 'unknown' if name.to_s.empty?
 
-      tmp_name = name.gsub(/The /i, "").gsub(" - ", " ").gsub(", ", " ").gsub("Licence", "License").strip
+      tmp_name = name.gsub(/\AThe /i, "").gsub(" - ", " ").gsub(", ", " ").gsub("Licence", "License").strip
 
       return 'MIT' if mit_match( tmp_name )
 
@@ -51,6 +51,12 @@ module VersionEye
       return 'BSD style' if bsd_style_match( tmp_name )
       return 'New BSD' if new_bsd_match( tmp_name )
       return 'BSD' if bsd_match( tmp_name )
+
+      spdx = SpdxLicense.where(:fullname => /\A#{name}\z/i ).first
+      return spdx.identifier if spdx 
+
+      spdx = SpdxLicense.where(:identifier => /\A#{name}\z/i ).first
+      return spdx.identifier if spdx
 
       name.gsub("Licence", "License")
     end
