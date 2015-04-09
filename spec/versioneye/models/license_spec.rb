@@ -164,6 +164,16 @@ describe License do
       license.name_substitute.should eq("Ruby")
     end
 
+    it "should return GPL 1.0 name" do
+      license = License.new({:name => "GNU General Public License v1.0 only"})
+      license.name_substitute.should eq("GPL-1.0")
+    end
+    it "should return GPL 1.0 name" do
+      license = License.new({:name => "GPL 1"})
+      license.name_substitute.should eq("GPL-1.0")
+    end
+
+
     it "should return GPL 2.0 name" do
       license = License.new({:name => "GPL 2"})
       license.name_substitute.should eq("GPL-2.0")
@@ -175,6 +185,25 @@ describe License do
     it "should return GPL 2.0 name" do
       license = License.new({:name => "GPL 2.0"})
       license.name_substitute.should eq("GPL-2.0")
+    end
+    it "should return GPL 2.0 name" do
+      license = License.new({:name => "GNU General Public License v2.0 only"})
+      license.name_substitute.should eq("GPL-2.0")
+    end
+
+    it "should return GPL 3.0 name" do
+      license = License.new({:name => "GNU General Public License v3.0 only"})
+      license.name_substitute.should eq("GPL-3.0")
+    end
+
+    it "should return LGPL 2.1 name" do
+      license = License.new({:name => "GNU Lesser General Public License v2.1 only"})
+      license.name_substitute.should eq("LGPL-2.1")
+    end
+
+    it "should return LGPL 3.0 name" do
+      license = License.new({:name => "GNU Lesser General Public License v3.0 only"})
+      license.name_substitute.should eq("LGPL-3.0")
     end
 
     it "should return AGPL 3.0 name" do
@@ -226,6 +255,10 @@ describe License do
     end
     it "should return eclipse public license name" do
       license = License.new({:name => "EPL-1.0"})
+      license.name_substitute.should eq("EPL-1.0")
+    end
+    it "should return eclipse public license name" do
+      license = License.new({:name => "Eclipse Public License 1.0"})
       license.name_substitute.should eq("EPL-1.0")
     end
 

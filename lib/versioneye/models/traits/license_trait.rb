@@ -57,23 +57,27 @@ module VersionEye
 
     def json_match name
       name.match(/\AJSON\z/i) ||
-      name.match(/\AJSON license\z/i)
+      name.match(/\AJSON license\z/i) || 
+      name.match(/\AThe JSON license\z/i)
     end
 
     def mpl_10_match name
       name.match(/\AMozilla Public License Version 1\.0\z/i) ||
+      name.match(/\AMozilla Public License 1\.0\z/i) ||
       name.match(/\AMPL\-1\.0\z/i) ||
       name.match(/\AMPL 1\.0\z/i)
     end
 
     def mpl_11_match name
       name.match(/\AMozilla Public License Version 1\.1\z/i) ||
+      name.match(/\AMozilla Public License 1\.1\z/i) ||
       name.match(/\AMozilla Public License 1\.1 \(MPL 1\.1\)\z/i) ||
       name.match(/\AMPL\-1\.1\z/i) ||
       name.match(/\AMPL 1\.1\z/i)
     end
 
     def mpl_20_match name
+      name.match(/\AMozilla Public License 2\.0\z/i) ||
       name.match(/\AMozilla Public License Version 2\.0\z/i) ||
       name.match(/\AMozilla Public License 2\.0 \(MPL 2\.0\)\z/i) ||
       name.match(/\AMPL\-2\.0\z/i) ||
@@ -162,6 +166,7 @@ module VersionEye
       name.match(/\AGNU General Public License \(GPL\-1\.0\)\z/i) ||
       name.match(/\AGNU General Public License 1\.0\z/i) ||
       name.match(/\AGNU General Public License Version 1\z/i) ||
+      name.match(/\AGNU General Public License v1\.0 only\z/i) ||
       name.match(/\AGeneral Public License 1\.0\z/i)
     end
 
@@ -177,6 +182,7 @@ module VersionEye
       name.match(/\AGNU General Public License \(GPL\-2\.0\)\z/i) ||
       name.match(/\AGNU General Public License 2\.0\z/i) ||
       name.match(/\AGNU General Public License Version 2\z/i) ||
+      name.match(/\AGNU General Public License v2\.0 only\z/i) || 
       name.match(/\AGeneral Public License 2\.0\z/i)
     end
 
@@ -192,6 +198,7 @@ module VersionEye
       name.match(/\AGNU General Public License \(GPL\-3\.0\)\z/i) ||
       name.match(/\AGNU General Public License 3\.0\z/i) ||
       name.match(/\AGNU General Public License Version 3\z/i) ||
+      name.match(/\AGNU General Public License v3\.0 only\z/i) ||
       name.match(/\AGeneral Public License 3\.0\z/i)
     end
 
