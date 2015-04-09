@@ -11,7 +11,7 @@ class GradleParser < CommonParser
   A_GLOBAL_VARS_MATCHER_2 = /^\s*(def\s+\S+\s*=\s*["']\S*["']$)/xi
 
   # Matches this 'junit:junit-dep:4.0.0'
-  A_DEP_SIMPLE_MATCHER = /["|']\s*(\S+\:\S+\:\S+)\s*["|']/xi
+  A_DEP_SIMPLE_MATCHER = /["|']\s*([\w\.\-]+:[\w\.\-]+:[\w\.\-]+)\s*["|']/xi
 
 
   # (\w+) [\s|\(]?[\'|\"]+  ([\w|\d|\.|\-|\_]+)  :([\w|\d|\.|\-|_]+)  :([$\w|\d|\.|\-|_]+)
