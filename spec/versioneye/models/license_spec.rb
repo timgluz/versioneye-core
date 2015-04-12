@@ -127,6 +127,10 @@ describe License do
       license = License.new({:name => "The MIT License"})
       license.name_substitute.should eq("MIT")
     end
+    it "should return MIT name" do
+      license = License.new({:name => "The MIT License (MIT)"})
+      license.name_substitute.should eq("MIT")
+    end
 
     it "should return BSD name" do
       license = License.new({:name => "BSD"})

@@ -63,8 +63,7 @@ module VersionEye
 
     def json_match name
       name.match(/\AJSON\z/i) ||
-      name.match(/\AJSON license\z/i) || 
-      name.match(/\AThe JSON license\z/i)
+      name.match(/\AJSON license\z/i)
     end
 
     def mpl_10_match name
@@ -98,7 +97,8 @@ module VersionEye
 
     def mit_match name
       name.match(/\AMIT\z/i) ||
-      name.match(/\AMIT License\z/i)
+      name.match(/\AMIT License\z/i) || 
+      name.match(/\AMIT License \(MIT\)\z/i)
     end
 
     def eclipse_match name
