@@ -128,7 +128,7 @@ class Github < Versioneye::Service
     fullname = repo[:full_name]
     fullname = repo[:fullname] if fullname.to_s.empty?
 
-    #adds project files
+    # Adds project files
     try_n.times do
       project_files = repo_project_files(fullname, token, nil)
       break unless project_files.nil? or project_files.empty?
