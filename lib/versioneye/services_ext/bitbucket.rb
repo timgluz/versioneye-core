@@ -141,14 +141,19 @@ class Bitbucket < Versioneye::Service
 
   def self.project_files_recursive repo_name, branch, token, secret, directories, project_files
     directories.to_a.each do |dir_info|
-      branch_tree = repo_branch_tree(repo_name, branch, token, secret, dir_info)  
-      branch_tree[:files].each do |file_info|
+      branch_tree = repo_branch_tree(repo_name, branch, token, secret, dir_info) 
+      next if branch_tree.nil? || branch_tree.empty? 
+    
+      branch_tree[:files].to_a.each do |file_info|
         project_files << file_info if ProjectService.type_by_filename(file_info[:path]) != nil
       end
       if !branch_tree[:directories].to_a.empty? 
         project_files_recursive repo_name, branch, token, secret, branch_tree[:directories], project_files
       end
     end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('/n')
   end
 
 
@@ -177,11 +182,13 @@ class Bitbucket < Versioneye::Service
       log.error e.message
       log.error "Got status: #{response.code} #{response.message} body: #{response.body}"
       log.error e.backtrace.join("\n")
+      nil
     end
   rescue => e
     log.error "Fuck up in get_json"
     log.error e.message
     log.error e.backtrace.join("\n")
+    nil 
   end
 
 

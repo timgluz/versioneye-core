@@ -186,7 +186,7 @@ describe Bitbucket do
         files = Bitbucket.repo_project_files(repo_name, token, secret)
         files.should_not be_nil
         files.is_a?(Hash).should be_truthy
-        files.keys.size.should eql(2)
+        files.keys.size.should eql(3)
         files.keys.each do |key| 
           p " - key: #{key}"
         end
