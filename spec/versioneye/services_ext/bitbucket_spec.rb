@@ -161,6 +161,9 @@ describe Bitbucket do
         branches = Bitbucket.repo_branches(repo_name, token, secret)
         branches.should_not be_nil
         branches.is_a?(Array).should be_truthy
+        branches.each do |key| 
+          p " - key: #{key}"
+        end
         branches.size.should eql(3)
         branches.include? "java_branch"
         branches.include? "clojure_branch"
@@ -183,7 +186,10 @@ describe Bitbucket do
         files = Bitbucket.repo_project_files(repo_name, token, secret)
         files.should_not be_nil
         files.is_a?(Hash).should be_truthy
-        files.keys.size.should eql(3)
+        files.keys.size.should eql(2)
+        files.keys.each do |key| 
+          p " - key: #{key}"
+        end
         files.keys.include?("java_branch").should be_truthy
         files['java_branch'].is_a?(Array).should be_truthy
         files['java_branch'].size.should eql(1)

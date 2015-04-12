@@ -14,7 +14,7 @@ describe ProjectUpdateService do
       VCR.use_cassette('ProjectUpdateService_update', allow_playback_repeats: true) do
         project = described_class.update project
         project.should_not be_nil
-        project.dependencies.count.should == 11
+        project.dependencies.count.should == 15
       end
     end
   end
