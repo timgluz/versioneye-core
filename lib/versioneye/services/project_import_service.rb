@@ -129,6 +129,7 @@ class ProjectImportService < Versioneye::Service
     file_name = filename.split("/").last
     parser  = ProjectParseService.parser_for file_name
     project = ProjectParseService.parse_content parser, project_file, file_name
+    revision = BitbucketRepo.revision_for user, repo_name, branch, filename
 
     project.update_attributes({
       name: repo_name,
@@ -137,6 +138,7 @@ class ProjectImportService < Versioneye::Service
       source: Project::A_SOURCE_BITBUCKET,
       scm_fullname: repo_name,
       scm_branch: branch,
+      scm_revision: revision,
       private_project: private_project,
       s3_filename: filename,
       url: nil,

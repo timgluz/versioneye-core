@@ -47,6 +47,7 @@ class Project < Versioneye::Model
 
   field :scm_fullname  , type: String # repo name, for example 'reiz/gemify'
   field :scm_branch    , type: String, default: "master"
+  field :scm_revision  , type: String
 
   field :dep_number      , type: Integer, :default => 0
   field :out_number      , type: Integer, :default => 0

@@ -35,6 +35,18 @@ class BitbucketRepo < Versioneye::Model
   scope :by_fullname    , ->(name){where(fullname: name)}
 
 
+  def self.revision_for user, fullname, branch, filename 
+    repo = BitbucketRepo.where(:user_id => user.id.to_s, :fullname => fullname).first
+    repo.project_files[branch].each do |files| 
+      return files["revision"] if files["path"].eql?(filename)
+    end
+    nil 
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    nil
+  end
+
   def self.get_owner_type(user, owner_info)
     owner_type = 'team'
     if user[:bitbucket_id] == owner_info[:username]
