@@ -14,13 +14,14 @@ class GradleParser < CommonParser
   A_DEP_SIMPLE_MATCHER = /["|']\s*([\w\.\-]+:[\w\.\-]+:[\w\.\-]+)\s*["|']/xi
 
 
-  # (\w+) [\s|\(]?[\'|\"]+  ([\w|\d|\.|\-|\_]+)  :([\w|\d|\.|\-|_]+)  :([$\w|\d|\.|\-|_]+)
+  # (\w+) [\s|\(]?[\'|\"]+ ([\w|\.|\-|\_|\+]+)  :([\w|\.|\-|_|\+]+)  :([$\w|\.|\-|_|\+]+) [\s|\(]?[\'|\"]+
   A_DEP_SHORT_MATCHER = /
-      (\w+) #scope
+      (\w+) #scope 
       [\s|\(]?[\'|\"]+ #scope separator
-        ([\w|\d|\.|\-|\_]+) #group_id
-        :([\w|\d|\.|\-|_]+) #artifact
-        :([$\w|\d|\.|\-|_]+) #version number
+        ([\w|\.|\-|\_|\+]+) #group_id 
+        :([\w|\.|\-|_|\+]+) #artifact 
+        :([$\w|\.|\-|_|\+]+) #version number
+        [\s|\(]?[\'|\"]+ #separator
     /xi
 
   # ^[\s]* (\w+) [\s]* (\w+\:) [\s]*[\'|\"]+ ([\w|\d|\.|\-|\_]+) [\'|\"]+,[\s]* (\w+\:) [\s]*[\'|\"]+ ([\w|\d|\.|\-|\_]+) [\'|\"]+,[\s]* (\w+\:) [\s]*[\'|\"]+ ([\w|\d|\.|\-|\_]+)
@@ -72,7 +73,9 @@ class GradleParser < CommonParser
   def parse_content( content )
     return nil if content.nil?
 
-    content = content.gsub(/\/\/.*$/, "") # remove comments
+    content = content.gsub(/\/\*.*?\*\//mxi, "") # remove comments /* */ 
+    content = content.gsub(/\A\/\/.*$/xi, "") # remove comments // 
+    content = content.gsub(/[^[https:][http:]]\/\/.*$/xi, "") # remove comments // without http[s]
     content = content.gsub(/.*classpath.*$/, "")
 
     vars = extract_vars content
@@ -165,12 +168,12 @@ class GradleParser < CommonParser
     # Returns map {:unknowns => 0 , dependencies => []}
     data = []
     matches.each do |row|
-      version = calc_version( row[4], vars )
+      version = calc_version( row[3], vars )
       dependency = Projectdependency.new({
-        :scope => row[1],
-        :group_id => row[2],
-        :artifact_id => row[3],
-        :name => row[3],
+        :scope => row[0],
+        :group_id => row[1],
+        :artifact_id => row[2],
+        :name => row[2],
         :language => Product::A_LANGUAGE_JAVA,
         :comperator => '='
       })
