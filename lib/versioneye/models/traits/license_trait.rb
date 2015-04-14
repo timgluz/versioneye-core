@@ -158,7 +158,7 @@ module VersionEye
     def gpl_match name
       name.match(/\AGPL\z/i) ||
       name.match(/\AGNU General Public Library\z/i) || 
-      name.match(/\AGNU General Public License (GPL)\z/i)
+      name.match(/\AGNU General Public License \(GPL\)\z/i)
     end
 
     def gpl_10_match name
@@ -256,7 +256,8 @@ module VersionEye
       name.match(/\ALGPL\z/i) ||
       name.match(/\AGnu Lesser Public License\z/i) ||
       name.match(/\AGNU LESSER GENERAL PUBLIC LICENSE\z/i) ||
-      name.match(/\AGNU Lesser General Public License v3\.0 only\z/i)
+      name.match(/\AGNU Lesser General Public License v3\.0 only\z/i) || 
+      name.match(/\AGNU Library or Lesser General Public License \(LGPL\)\z/i)
     end
 
     def lgpl_3_or_later_match name
@@ -305,6 +306,7 @@ module VersionEye
       name.match(/\AASF-2\.0\z/i) ||
       name.match(/\AASF-2\z/i) ||
       name.match(/\AASF 2\z/i) ||
+      name.match(/\AASL 2\.0\z/i) ||
       name.match(/\AApache\z/i) ||
       name.match(/\AApache 2\z/i) ||
       name.match(/\AApache\-2\z/i) ||

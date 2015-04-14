@@ -168,6 +168,11 @@ describe License do
       license.name_substitute.should eq("Ruby")
     end
 
+    it "should return GPL name" do
+      license = License.new({:name => "GNU General Public License (GPL)"})
+      license.name_substitute.should eq("GPL")
+    end
+
     it "should return GPL 1.0 name" do
       license = License.new({:name => "GNU General Public License v1.0 only"})
       license.name_substitute.should eq("GPL-1.0")
