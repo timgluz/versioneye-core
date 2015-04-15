@@ -157,7 +157,7 @@ class ProjectService < Versioneye::Service
     project = Project.find_by_id( project_id )
     return false if project.nil?
     
-    if project.collaborator?( user )
+    if project.collaborator?( user ) || user.admin == true 
       destroy project 
     else 
       raise "User has no permission to delete this project!"

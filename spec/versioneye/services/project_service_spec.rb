@@ -402,6 +402,21 @@ describe ProjectService do
       Project.count.should == 1
     end
 
+    it 'throws exeception because user has no right to delete project.' do
+      admin   = UserFactory.create_new 23
+      admin.admin = true 
+      admin.save 
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user, nil, true
+
+      prod_1  = ProductFactory.create_new 1
+      dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1.0.0'}
+  
+      Project.count.should == 1
+      ProjectService.destroy_by(admin, project)
+      Project.count.should == 0
+    end
+
   end
 
 
