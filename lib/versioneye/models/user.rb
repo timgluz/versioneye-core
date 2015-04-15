@@ -59,6 +59,7 @@ class User < Versioneye::Model
 
   # *** RELATIONS START ***
   belongs_to :plan
+  has_one    :user_permission
   has_one    :billing_address
   has_one    :user_notification_setting
   has_many   :projects
@@ -409,6 +410,14 @@ class User < Versioneye::Model
       self.billing_address.name = self.fullname
     end
     self.billing_address
+  end
+
+  def fetch_or_create_permissions
+    if self.user_permission.nil? 
+      self.user_permission = UserPermission.new 
+      self.user_permission.save 
+    end
+    self.user_permission
   end
 
   #-- ElasticSearch mapping ------------------

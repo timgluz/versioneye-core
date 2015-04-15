@@ -50,6 +50,7 @@ module Versioneye
     require 'versioneye/models/user_email'
     require 'versioneye/models/user_notification_setting'
     require 'versioneye/models/userlinkcollection'
+    require 'versioneye/models/user_permission'
     require 'versioneye/models/version'
     require 'versioneye/models/versionarchive'
     require 'versioneye/models/versioncomment'
