@@ -81,6 +81,14 @@ class LicenseWhitelistService < Versioneye::Service
     false 
   end
 
+  # Returns true if user has permission to edit lwl for enterprise
+  def self.enterprise_permission user 
+    return false if user.nil? 
+    return true  if user.admin == true  
+    return true  if user.fetch_or_create_permissions.lwl == true 
+    return false 
+  end
+
   private
 
     def self.index_enterprise
@@ -106,7 +114,7 @@ class LicenseWhitelistService < Versioneye::Service
     end
 
     def self.create_for_enterprise user, name
-      return false if user.nil? || user.admin != true
+      return false if enterprise_permission(user) == false  
       create_for user, name
     end
 
@@ -117,7 +125,7 @@ class LicenseWhitelistService < Versioneye::Service
     end
 
     def self.add_license_for_enterprise user, list_name, license_name
-      return false if user.nil? || user.admin != true
+      return false if enterprise_permission(user) == false  
       license_whitelist = LicenseWhitelist.by_name( list_name ).first
       license_whitelist.add_license_element license_name
       license_whitelist.save
@@ -130,7 +138,7 @@ class LicenseWhitelistService < Versioneye::Service
     end
 
     def self.remove_license_for_enterprise user, list_name, license_name
-      return false if user.nil? || user.admin != true
+      return false if enterprise_permission(user) == false  
       license_whitelist = LicenseWhitelist.by_name( list_name ).first
       license_whitelist.remove_license_element license_name
       license_whitelist.save

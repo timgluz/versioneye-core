@@ -2,6 +2,32 @@ require 'spec_helper'
 
 describe LicenseWhitelistService do
 
+  describe 'enterprise_permission' do
+
+    it 'returns false because user is nil' do
+      LicenseWhitelistService.enterprise_permission(nil).should be_falsy 
+    end
+    it 'returns false because user is not admin' do
+      user = UserFactory.create_new 1
+      user.admin = false 
+      user.fetch_or_create_permissions.lwl = false 
+      LicenseWhitelistService.enterprise_permission(user).should be_falsy 
+    end
+    it 'returns true because user is admin' do
+      user = UserFactory.create_new 1
+      user.admin = true  
+      user.fetch_or_create_permissions.lwl = false 
+      LicenseWhitelistService.enterprise_permission(user).should be_truthy
+    end
+    it 'returns true because user has lwl permission' do
+      user = UserFactory.create_new 1
+      user.admin = false 
+      user.fetch_or_create_permissions.lwl = true 
+      LicenseWhitelistService.enterprise_permission(user).should be_truthy
+    end
+
+  end
+
   describe 'index' do
 
     it 'returns the list for the given user' do
