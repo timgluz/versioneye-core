@@ -54,7 +54,10 @@ class License < Versioneye::Model
   end
 
   def link
-    return url if url && !url.empty?
+    if url && !url.empty?
+      return url if url.match(/\Ahttp:\/\//) || url.match(/\Ahttps:\/\//)
+      return "http://#{url}"
+    end
     return nil if name.to_s.empty?
 
     tmp_name = name.gsub(/The /i, "").gsub(" - ", " ").gsub(", ", " ").gsub("Licence", "License").strip
