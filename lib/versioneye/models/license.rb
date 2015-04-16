@@ -55,7 +55,7 @@ class License < Versioneye::Model
 
   def link
     if url && !url.empty?
-      return url if url.match(/\Ahttp:\/\//) || url.match(/\Ahttps:\/\//)
+      return url if url.match(/\Ahttp:\/\//xi) || url.match(/\Ahttps:\/\//xi)
       return "http://#{url}"
     end
     return nil if name.to_s.empty?
