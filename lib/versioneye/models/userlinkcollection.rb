@@ -23,6 +23,36 @@ class Userlinkcollection < Versioneye::Model
   	Userlinkcollection.where( user_id: user_id ).shift
   end
 
+  def linkedin_url 
+    return linkedin if linkedin.match(/\Ahttp:\/\//) || linkedin.match(/\Ahttps:\/\//)
+    "http://#{linkedin}"
+  end
+
+  def xing_url 
+    return xing if xing.match(/\Ahttp:\/\//) || xing.match(/\Ahttps:\/\//)
+    "http://#{xing}"
+  end
+
+  def github_url 
+    return github if github.match(/\Ahttp:\/\//) || github.match(/\Ahttps:\/\//)
+    "https://#{github}"
+  end
+
+  def stackoverflow_url 
+    return stackoverflow if stackoverflow.match(/\Ahttp:\/\//) || stackoverflow.match(/\Ahttps:\/\//)
+    "http://#{stackoverflow}"
+  end
+
+  def twitter_url 
+    return twitter if twitter.match(/\Ahttp:\/\//) || twitter.match(/\Ahttps:\/\//)
+    "https://#{twitter}"
+  end
+
+  def facebook_url 
+    return facebook if facebook.match(/\Ahttp:\/\//) || facebook.match(/\Ahttps:\/\//)
+    "https://#{facebook}"
+  end
+
   def empty?
   	linkedin_empty? && xing_empty? && github_empty? &&
     stackoverflow_empty? && twitter_empty? && facebook_empty?
