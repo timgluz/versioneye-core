@@ -6,6 +6,8 @@ module VersionEye
     def name_substitute
       return 'unknown' if name.to_s.empty?
 
+      return name if name.size > 100
+
       tmp_name = name.gsub(/\AThe /i, "").gsub(" - ", " ").gsub(", ", " ").gsub("Licence", "License").strip
 
       return 'MIT' if mit_match( tmp_name )
