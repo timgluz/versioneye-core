@@ -30,13 +30,13 @@ end
 
 group :test do
   gem 'fakes3'          , '0.2.1'
-  gem 'simplecov'       , '~> 0.9.0'
+  gem 'simplecov'       , '~> 0.10.0'
   gem 'rspec'           , '~> 3.2.0'
   gem 'database_cleaner', '~> 1.4.1'
   gem 'factory_girl'    , '~> 4.5.0'
   gem 'capybara'        , '~> 2.4.1'
   gem 'capybara-firebug', '~> 2.1.0'
   gem 'vcr'             , '~> 2.9.3',  :require => false
-  gem 'webmock'         , '~> 1.20.3', :require => false
+  gem 'webmock'         , '~> 1.21.0', :require => false
   gem 'fakeweb'         , '~> 1.3.0'
 end
