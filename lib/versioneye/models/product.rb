@@ -403,7 +403,7 @@ class Product < Versioneye::Model
       links.each do |link|
         next if link.nil?
         next if link.link.to_s.empty?
-        next if link.link.match(/\Ahttp*/) == nil
+        next if link.link.match(/\Ahttp*/i) == nil
 
         if !link.to_s.match("search.maven.org") && !self.group_id.to_s.empty? && link.to_s.match(self.group_id)
           link.link = link.to_s.gsub( self.group_id , self.group_id.gsub(/\./, "/") )
