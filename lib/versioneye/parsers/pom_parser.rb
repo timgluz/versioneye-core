@@ -23,7 +23,7 @@ class PomParser < CommonParser
       fetch_dependency(node, properties, project)
     end
     doc.xpath('//plugins/plugin').each do |node|
-      dep = fetch_dependency(node, properties, project, "plugins")
+      dep = fetch_dependency(node, properties, project, "plugin")
     end
     project.dep_number = project.projectdependencies.size
     project
