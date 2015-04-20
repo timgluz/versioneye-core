@@ -87,14 +87,14 @@ describe PomParser do
       dependency_06.version_requested.should eql("1.0")
       dependency_06.version_current.should eql("1.0")
       dependency_06.comperator.should eql("=")
-      dependency_06.scope.should eql("plugins")
+      dependency_06.scope.should eql("plugin")
 
       dependency_06 = project.dependencies[8]
       dependency_06.name.should eql("maven-surefire-report-plugin")
       dependency_06.version_requested.should eql("2.4.2")
       dependency_06.version_current.should eql("2.4.2")
       dependency_06.comperator.should eql("=")
-      dependency_06.scope.should eql("plugins")
+      dependency_06.scope.should eql("plugin")
 
     end
 
