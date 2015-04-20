@@ -83,7 +83,7 @@ GEM
       oauth2
     hashie (3.4.1)
     hashr (0.0.22)
-    highline (1.7.1)
+    highline (1.7.2)
     hike (1.2.3)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
