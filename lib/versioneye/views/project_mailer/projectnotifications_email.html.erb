@@ -34,10 +34,9 @@
           </td>
           <td style="text-align: left">
             <span style="font-size: 14px; font-weight: bold;" >
-              <% color = project.out_number.to_i == 0 ? "green" : "red" %>
+              <% color = project.out_number_sum.to_i == 0 ? "green" : "red" %>
               <span title="out-dated dependencies" style="color: <%= color %>"><%= project.out_number_sum %></span> /
-              <% color = project.unknown_number.to_i == 0 ? "green" : "orange" %>
-              <span title="unknown dependencies" style="color: <%= color %>"><%= project.unknown_number_sum %></span>
+              <span title="dependencies" ><%= project.dep_number_sum %></span>
             </span>
           </td>
           <td style="text-align: left">
