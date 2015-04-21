@@ -12,7 +12,7 @@ module VersionEye
       A_LANGUAGE_C            = 'C'
       A_LANGUAGE_C_PP         = 'C++'
       A_LANGUAGE_CPP          = 'CPP'
-      A_LANGUAGE_BIICODE      = 'biicode'
+      A_LANGUAGE_BIICODE      = 'Biicode'
       A_LANGUAGE_OBJECTIVEC   = 'Objective-C'
       A_LANGUAGE_GO           = 'Go'
       A_LANGUAGE_CSS          = 'CSS'
