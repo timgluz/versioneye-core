@@ -15,6 +15,7 @@ class Product < Versioneye::Model
   field :prod_type    , type: String # Identifies the package manager
   field :language     , type: String
   field :version      , type: String, default: '0.0.0+NA' # latest stable version
+  field :tags         , type: Array  # Array of keywords 
 
   field :group_id   , type: String # Maven specific
   field :artifact_id, type: String # Maven specific
