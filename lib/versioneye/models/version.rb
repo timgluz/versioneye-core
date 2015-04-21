@@ -6,7 +6,9 @@ class Version < Versioneye::Model
   field :uid            , type: String
   field :version        , type: String
   field :downloads      , type: Integer
-  field :pom            , type: String
+  field :pom            , type: String # maven specific 
+  field :tag            , type: String # biicode specific - git tag string 
+  field :status         , type: String # biicode specific - [STABLE, DEV]
   field :released_at    , type: DateTime
   field :released_string, type: String
 

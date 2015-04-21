@@ -13,7 +13,7 @@ class Dependency < Versioneye::Model
   A_SCOPE_REQUIRE     = 'require'     # PHP Composer, Bower
   A_SCOPE_PROVIDED    = 'provided'    # Java Maven
   A_SCOPE_TEST        = 'test'        # Java Maven
-  A_SCOPE_COMPILE     = 'compile'     # NPM, Maven
+  A_SCOPE_COMPILE     = 'compile'     # NPM, Maven and many more! 
   A_SCOPE_DEVELOPMENT = 'development' # NPM
   A_SCOPE_BUNDLED     = 'bundled'     # NPM
   A_SCOPE_OPTIONAL    = 'optional'    # NPM
@@ -116,7 +116,7 @@ class Dependency < Versioneye::Model
   def self.main_scope( language )
     if language.eql?( Product::A_LANGUAGE_RUBY )
       return A_SCOPE_RUNTIME
-    elsif language.eql?( Product::A_LANGUAGE_JAVA ) || language.eql?( Product::A_LANGUAGE_CLOJURE )
+    elsif language.eql?( Product::A_LANGUAGE_JAVA ) || language.eql?( Product::A_LANGUAGE_CLOJURE ) || language.eql?( Product::A_LANGUAGE_BIICODE )
       return A_SCOPE_COMPILE
     elsif language.eql?( Product::A_LANGUAGE_NODEJS)
       return A_SCOPE_COMPILE
@@ -149,6 +149,7 @@ class Dependency < Versioneye::Model
     self.prod_type = Project::A_TYPE_LEIN      if self.language.eql?(Product::A_LANGUAGE_CLOJURE)
     self.prod_type = Project::A_TYPE_BOWER     if self.language.eql?(Product::A_LANGUAGE_JAVASCRIPT)
     self.prod_type = Project::A_TYPE_COCOAPODS if self.language.eql?(Product::A_LANGUAGE_OBJECTIVEC)
+    self.prod_type = Project::A_TYPE_BIICODE   if self.language.eql?(Product::A_LANGUAGE_BIICODE)
     self
   end
 

@@ -15,6 +15,7 @@ class Project < Versioneye::Model
   A_TYPE_GITHUB    = 'GitHub'
   A_TYPE_R         = 'R'
   A_TYPE_COCOAPODS = 'CocoaPods'
+  A_TYPE_BIICODE   = 'biicode'
 
   A_SOURCE_UPLOAD    = 'upload'
   A_SOURCE_URL       = 'url'
