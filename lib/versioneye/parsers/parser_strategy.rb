@@ -54,6 +54,9 @@ class ParserStrategy
       when Project::A_TYPE_BOWER
         return BowerParser.new
 
+      when Project::A_TYPE_BIICODE
+        return BiicodeParser.new
+
       else
         nil
 

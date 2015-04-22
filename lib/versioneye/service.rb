@@ -60,6 +60,7 @@ module Versioneye
     require 'versioneye/mailers/versioncomment_mailer'
     require 'versioneye/mailers/versioncommentreply_mailer'
 
+    require 'versioneye/parsers/biicode_parser'
     require 'versioneye/parsers/bower_parser'
     require 'versioneye/parsers/common_parser'
     require 'versioneye/parsers/composer_lock_parser'
