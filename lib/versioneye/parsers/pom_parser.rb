@@ -53,7 +53,7 @@ class PomParser < CommonParser
       end
     end
     dependency.name = dependency.artifact_id
-    product = Product.find_by_group_and_artifact(dependency.group_id, dependency.artifact_id )
+    product = fetch_product dependency
     parse_requested_version( dependency.version_requested, dependency, product )
     dependency.prod_key    = product.prod_key if product
     project.unknown_number += 1 if product.nil?
@@ -135,6 +135,18 @@ class PomParser < CommonParser
     return nil if doc.nil?
 
     doc
+  end
+
+  def fetch_product dependency
+    product = nil 
+    if dependency.group_id.to_s.empty? 
+      group_id = 'org.apache.maven.plugins'
+      product = Product.find_by_group_and_artifact(group_id, dependency.artifact_id )
+      dependency.group_id = group_id if product 
+    else 
+      product = Product.find_by_group_and_artifact(dependency.group_id, dependency.artifact_id )  
+    end
+    product
   end
 
 end
