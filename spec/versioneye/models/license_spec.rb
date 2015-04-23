@@ -240,6 +240,10 @@ describe License do
       license = License.new({:name => "Apache-2.0"})
       license.name_substitute.should eq("Apache-2.0")
     end
+    it "should return Apache License version 2 name" do
+      license = License.new({:name => "Apache2"})
+      license.name_substitute.should eq("Apache-2.0")
+    end
 
     it "should return Apache License name" do
       license = License.new({:name => "Apache License"})

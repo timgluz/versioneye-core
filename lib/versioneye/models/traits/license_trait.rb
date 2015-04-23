@@ -149,6 +149,7 @@ module VersionEye
     end
 
     def bsd_3_clause_match name
+      name.match(/BSD3 Clause/i) ||
       name.match(/BSD 3 Clause/i) ||
       name.match(/BSD 3-Clause/i) ||
       name.match(/BSD-3-Clause/i) ||
@@ -252,6 +253,7 @@ module VersionEye
     end
 
     def lgpl_3_match name
+      name.match(/\ALGPL3\z/i) ||
       name.match(/\ALGPL 3\z/i) ||
       name.match(/\ALGPLv3\z/i) ||
       name.match(/\ALGPL\-3\z/i) ||
@@ -270,6 +272,8 @@ module VersionEye
     end
 
     def artistic_10_match name
+      name.match(/\AArtistic1\z/i) ||
+      name.match(/\AArtistic1\.0\z/i) ||
       name.match(/\AArtistic 1\.0\z/i) ||
       name.match(/\AArtistic\-1\.0\z/i) ||
       name.match(/\AArtistic License\z/i) ||
@@ -277,12 +281,14 @@ module VersionEye
     end
 
     def artistic_20_match name
-      name.match(/\AArtistic 2.0\z/) ||
+      name.match(/\AArtistic2\.0\z/) ||
+      name.match(/\AArtistic 2\.0\z/) ||
       name.match(/\AArtistic\-2.0\z/) ||
       name.match(/\AArtistic License 2.0\z/i)
     end
 
     def apache_license_10_match name
+      name.match(/\AApache1\z/i) ||
       name.match(/\AApache 1\z/i) ||
       name.match(/\AApache\-1\z/i) ||
       name.match(/\AApache 1\.0\z/i) ||
@@ -295,6 +301,7 @@ module VersionEye
     end
 
     def apache_license_11_match name
+      name.match(/\AApache1\.1\z/i) ||
       name.match(/\AApache 1\.1\z/i) ||
       name.match(/\AApache\-1\.1\z/i) ||
       name.match(/\AApache License 1\.1\z/i) ||
@@ -314,6 +321,9 @@ module VersionEye
       name.match(/\AApache\-2\z/i) ||
       name.match(/\AApache 2\.0\z/i) ||
       name.match(/\AApache\-2\.0\z/i) ||
+      name.match(/\AApache2\z/i) ||
+      name.match(/\AApache20\z/i) ||
+      name.match(/\AApache2\.0\z/i) ||
       name.match(/\AApache License\z/i) ||
       name.match(/\AApache License 2\z/i) ||
       name.match(/\AApache License 2\.0\z/i) ||
@@ -352,6 +362,8 @@ module VersionEye
     end
 
     def cpl_10_match name
+      name.match(/\ACPL1\z/i) ||
+      name.match(/\ACPL1\.0\z/i) ||
       name.match(/\ACPL 1\.0\z/i) ||
       name.match(/\ACPL\-1\.0\z/i) ||
       name.match(/\ACommon Public License 1\z/i) ||
