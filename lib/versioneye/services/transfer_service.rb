@@ -14,7 +14,7 @@ class TransferService < Versioneye::Service
       datef = Time.at(tr.date).strftime("%d.%m.%Y")
 
       p ""
-      p "#{datef} Charged: #{'%.02f' % gross} #{currency} Fee: #{'%.02f' % fees} #{currency} Transfered: #{'%.02f' % net} #{currency}"
+      p "#{datef} Charged: #{'%.02f' % gross} #{currency} - Fee: #{'%.02f' % fees} #{currency} - Transfered: #{'%.02f' % net} #{currency}"
       tr.transactions.each do |tx| 
         charge = Stripe::Charge.retrieve(tx.id)      
         receipt_nr = ''
@@ -25,7 +25,7 @@ class TransferService < Versioneye::Service
         amount = tx.amount.to_f / 100 
         fee = tx.fee.to_f / 100 
         net = tx.net.to_f / 100
-        p " -> #{tx.customer_details} (#{receipt_nr}) - Charged: #{amount} #{currency} Fee: #{fee} #{currency} Net: #{net} #{currency}"
+        p " -> #{tx.customer_details} (#{receipt_nr}) - Charged: #{amount} #{currency} - Fee: #{fee} #{currency} - Net: #{net} #{currency}"
       end
     end
     nil
