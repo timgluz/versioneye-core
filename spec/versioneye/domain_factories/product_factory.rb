@@ -28,6 +28,20 @@ class ProductFactory
   end
 
 
+  def self.create_for_biicode(prod_key, version)
+    product = Product.new(
+      {
+        :name          => prod_key,
+        :name_downcase => prod_key.downcase,
+        :prod_key      => prod_key,
+        :language      => Product::A_LANGUAGE_BIICODE,
+        :prod_type     => Project::A_TYPE_BIICODE,
+        :version       => version
+      })
+    product.add_version( version )
+    product
+  end
+
   def self.create_for_maven(group_id, artifact_id, version)
     product = Product.new(
       {
