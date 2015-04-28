@@ -192,6 +192,12 @@ class Project < Versioneye::Model
     nil
   end
 
+  def license_whitelist_name
+    lwl = license_whitelist
+    return lwl.name if lwl 
+    nil 
+  end
+
   def collaborator?( user )
     return false if user.nil?
     return true if !self.user.nil? && self.user.username.eql?( user.username )
