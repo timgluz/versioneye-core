@@ -3,6 +3,7 @@ class NotificationMailer < ActionMailer::Base
   default from: "\"#{Settings.instance.smtp_sender_name}\" <#{Settings.instance.smtp_sender_email}>"
 
   def new_version_email(user, notifications)
+    @newsletter = "notification_emails"
     @user = user
     @notifications = notifications
     @link =  "#{Settings.instance.server_url}/"

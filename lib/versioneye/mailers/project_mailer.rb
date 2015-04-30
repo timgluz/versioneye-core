@@ -32,6 +32,7 @@ class ProjectMailer < ActionMailer::Base
 
 
   def projectnotifications_email user, projects, col_projects, period
+    @newsletter = "project_emails"
     @user = user
     @projects = projects
     @col_projects = col_projects
