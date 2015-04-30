@@ -1,23 +1,26 @@
 Hey <%= @user.fullname %>,
+
 <p>
-  In the last months we worked hard on <a href="https://www.versioneye.com/enterprise">VersionEye Enterprise</a>! For a long time it was under the radar, 
-  because it was unclear if it will work or if customers are willing to pay for it! But now 
-  both uncertaincis are history! The product is working and we sold the first UNLIMITED licenses! 
+  We just finished some new features: 
 </p>
-<p>
-  <a href="https://www.versioneye.com/enterprise"><h3>VersionEye Enterprise</h3></a>
-</p>  
-<p>
-  If you host already your own private Git server than <a href="https://www.versioneye.com/enterprise">VersionEye Enterprise</a> will complement your development infrastructure! 
-  VersionEye will help your development team to stay up-to-date with open source &amp; closed source components! And it will 
-  help you to avoid copyleft licenses!  
-</p>
-<p>
-  <img src="https://versioneye.files.wordpress.com/2015/03/versioneye-statuscharts.png" />
-</p>
-<p>
-  Contact us if you are interested in running <a href="https://www.versioneye.com/enterprise">VersionEye Enterprise</a> on your own server in your own network! 
-</p>
+
+<ul>
+  <li>
+    <b>Biicode Integration:</b> Biicode is a package manager for C/C++. We just recently finished the Biicode integration. Check out how you can stay up-to-date with your C/C++ dependencies: <a href="http://blog.versioneye.com/2015/04/27/biicode-integration/">Biicode Integration</a>.
+    <br/><br/>
+    <img src="https://versioneye.files.wordpress.com/2015/04/biicode_adrian.png" width="200" />
+    <br/><br/>
+  </li>
+  <li>
+    <b>VersionEye Maven Plugin 3.4.0:</b> The new version of the <a href="https://github.com/versioneye/versioneye_maven_plugin">maven plugin</a> introduces a new goal: 
+    <pre> 
+      mvn versioneye:licenseCheck
+    </pre>
+    This goal checks all your dependencies against a license whitelist on the server. If there is a violation it will break your build. Read more about it <a href="http://blog.versioneye.com/2015/04/15/versioneye-maven-plugin-3-3-0/">here</a>.
+    <br/><br/>
+  </li>
+</ul>
+
 <p>   
   We'd love to hear from you!
 </p>  
