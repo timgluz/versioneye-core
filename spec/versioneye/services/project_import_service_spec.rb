@@ -165,7 +165,6 @@ describe ProjectImportService do
         status = ''
         until status.match(/\Adone_/)
           status = ProjectImportService.import_from_bitbucket_async user_with_token, 'reiz/test_gemi', 'pom.xml', 'master'
-          p "status: #{status}"
           sleep 2
         end
         Project.all.count.should eq(1)
