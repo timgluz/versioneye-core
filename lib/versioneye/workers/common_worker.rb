@@ -44,6 +44,8 @@ class CommonWorker < Worker
       ReceiptService.process_receipts
     elsif message.eql?("update_smc_meta_data_all")
       ScmMetaDataService.update_all_users
+    elsif message.eql?("update_distinct_languages")
+      LanguageService.update_distinct_languages
     end
 
     log.info "Job done for #{message}"

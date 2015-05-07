@@ -1,9 +1,6 @@
 class LanguageService < Versioneye::Service
 
 
-  A_TTL = 7200 # 2 hours
-
-
   def self.language_for lang_string
     languages = distinct_languages
     languages << 'nodejs'
@@ -18,10 +15,17 @@ class LanguageService < Versioneye::Service
   def self.distinct_languages
     key = "distinct_languages"
     languages = cached_languages key
-    if languages.to_s.empty?
-      languages = Product.all.distinct(:language)
-      save_in_cache key, languages
+    if languages.nil? || languages.empty?
+      languages = update_distinct_languages   
     end
+    languages
+  end
+
+
+  def self.update_distinct_languages 
+    key = "distinct_languages"
+    languages = Product.all.distinct(:language)
+    save_in_cache key, languages
     languages
   end
 
@@ -37,7 +41,7 @@ class LanguageService < Versioneye::Service
     end
 
     def self.save_in_cache key, languages
-      cache.set( key, languages, A_TTL )
+      cache.set( key, languages )
     rescue => e
       log.error e.message
       nil
