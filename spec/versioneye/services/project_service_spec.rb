@@ -539,6 +539,33 @@ describe ProjectService do
       product.version = '10.0.0'
       product.add_version '10.0.0'
       product.save
+      
+      sv = SecurityVulnerability.new({:language => product.language, :prod_key => product.prod_key, :summary => 'test'})
+      sv.affected_versions << product.version 
+      sv.save.should be_truthy
+      
+      version = product.version_by_number product.version 
+      version.sv_ids << sv._id.to_s 
+      version.save.should be_truthy 
+
+      project = ProjectFactory.create_new user
+      project_dep = ProjectdependencyFactory.create_new project, product
+      project_dep.version_current = '10.0.0'
+      project_dep.version_requested = '10.0.0'
+      project_dep.sv_ids = version.sv_ids
+      project_dep.save
+      ProjectdependencyService.update_outdated!(project_dep)
+      project_dep.save
+      ProjectService.outdated?(project).should be_falsey
+      ProjectService.badge_for_project(project.id).should eq('update!')
+    end
+
+    it "returns the right badge up-to-date" do
+      user = UserFactory.create_new
+      product = ProductFactory.create_new
+      product.version = '10.0.0'
+      product.add_version '10.0.0'
+      product.save
       project = ProjectFactory.create_new user
       project_dep = ProjectdependencyFactory.create_new project, product
       project_dep.version_current = '10.0.0'

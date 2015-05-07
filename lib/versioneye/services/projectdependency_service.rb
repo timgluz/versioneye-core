@@ -22,6 +22,23 @@ class ProjectdependencyService < Versioneye::Service
   end
 
 
+  # Updates projectdependency.sv_ids for each projectdependency of the project
+  def self.update_security project 
+    project.dependencies.each do |dep| 
+      dep.sv_ids = []
+      product = dep.find_or_init_product
+      version = product.version_by_number dep.version_requested 
+      next if version.nil? 
+
+      dep.sv_ids = version.sv_ids
+      dep.save
+    end
+  rescue => e 
+    log.error e.message
+    log.error e.backtrace.join "\n"
+  end
+
+
   def self.mute! project_id, dependency_id, mute_status
     project = Project.find_by_id( project_id )
     return false if project.nil?

@@ -238,13 +238,23 @@ class ProjectService < Versioneye::Service
 
 
   def self.update_badge_for_project project
-    badge    = outdated?(project) ? 'out-of-date' : 'up-to-date'
+    badge = 'up-to-date'
+    badge = 'out-of-date' if outdated?( project )
+    badge = 'update!'     if insecure?( project )
     cache.set( project.id.to_s, badge, 21600) # TTL = 6.hour
     badge
   rescue => e
     log.error e.message
     log.error e.backtrace.join "\n"
     "unknown"
+  end
+
+
+  def self.insecure?( project )
+    project.projectdependencies.each do |dep|
+      return true if !dep.sv_ids.to_a.empty?
+    end
+    return false 
   end
 
 

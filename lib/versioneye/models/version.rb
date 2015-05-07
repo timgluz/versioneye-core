@@ -11,8 +11,7 @@ class Version < Versioneye::Model
   field :status         , type: String # biicode specific - [STABLE, DEV]
   field :released_at    , type: DateTime
   field :released_string, type: String
-  
-  field :sv_ids         , type: Array, default: []  # SecurityVulnerability Summary 
+  field :sv_ids         , type: Array, default: []  # SecurityVulnerability IDs
 
   embedded_in :product
 

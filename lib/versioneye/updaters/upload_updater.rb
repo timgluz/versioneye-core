@@ -11,6 +11,7 @@ class UploadUpdater < CommonUpdater
     SyncService.sync_project_async project # For Enterprise environment
 
     ProjectdependencyService.update_licenses project
+    ProjectdependencyService.update_security project
     
     unknown_licenses = ProjectService.unknown_licenses( project )
     red_licenses     = ProjectService.red_licenses( project )

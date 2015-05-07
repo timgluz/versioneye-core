@@ -9,6 +9,7 @@ class CommonUpdater < Versioneye::Service
     SyncService.sync_project_async old_project # For Enterprise environment
 
     ProjectdependencyService.update_licenses old_project
+    ProjectdependencyService.update_security old_project
     
     unknown_licenses = ProjectService.unknown_licenses( old_project )
     red_licenses     = ProjectService.red_licenses( old_project )

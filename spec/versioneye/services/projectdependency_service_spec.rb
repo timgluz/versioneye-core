@@ -40,6 +40,35 @@ describe ProjectdependencyService do
 
   end
 
+  describe "update_security" do
+
+    it 'updates the dependencies with the securiyt infos' do
+      Projectdependency.count.should eq(0)
+      dep = ProjectdependencyFactory.create_new(@project, @product)
+      dep.version_current   = @product.version
+      dep.version_requested = @product.version
+      dep.save 
+      Projectdependency.count.should eq(1)
+      @project.dependencies.count.should eq(1)
+      
+      sv = SecurityVulnerability.new({:language => @product.language, :prod_key => @product.prod_key, :summary => 'test'})
+      sv.affected_versions << @product.version 
+      sv.save.should be_truthy
+      
+      version = @product.version_by_number @product.version 
+      version.sv_ids << sv._id.to_s 
+      version.save.should be_truthy
+
+      ProjectdependencyService.update_security @project 
+
+      dep = Projectdependency.first
+      dep.sv_ids.should_not be_empty 
+      dep.sv_ids.count.should eq(1)
+      dep.sv_ids.first.to_s.should eq( sv._id.to_s )
+    end
+
+  end
+
   describe "release?" do
 
     it 'returns nil because parameter is nil' do

@@ -2,7 +2,7 @@ class Projectdependency < Versioneye::Model
 
   require 'naturalsorter'
 
-  # This Model describes the relationship between a project and a package
+  # This Model describes the relationship between a project and a software component / dependency 
   # This Model describes 1 dependency of a project
 
   include Mongoid::Document
@@ -28,6 +28,8 @@ class Projectdependency < Versioneye::Model
   field :outdated           , type: Boolean
   field :outdated_updated_at, type: DateTime, :default => DateTime.now
   field :muted              , type: Boolean , :default => false
+
+  field :sv_ids           , type: Array, default: []  # SecurityVulnerability IDs
 
   belongs_to :project
 
