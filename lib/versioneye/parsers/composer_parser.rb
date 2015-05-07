@@ -130,37 +130,10 @@ class ComposerParser < CommonParser
       dependency.version_requested = highest_version
 
     when version.match(/,/)
-      # Version Ranges
-      version_splitted = version.split(",")
-      prod = Product.new
-      prod.versions = product.versions
+
       stability = dependency.stability
-      version_splitted.each do |verso|
-        verso.gsub!(" ", "")
-        stability = VersionTagRecognizer.stability_tag_for verso
-        if verso.match(/\A>=/)
-          verso.gsub!(">=", "")
-          new_range = VersionService.greater_than_or_equal( prod.versions, verso, true, stability )
-          prod.versions = new_range
-        elsif verso.match(/\A>/)
-          verso.gsub!(">", "")
-          new_range = VersionService.greater_than( prod.versions, verso, true, stability )
-          prod.versions = new_range
-        elsif verso.match(/\A<=/)
-          verso.gsub!("<=", "")
-          new_range = VersionService.smaller_than_or_equal( prod.versions, verso, true, stability )
-          prod.versions = new_range
-        elsif verso.match(/\A</)
-          verso.gsub!("<", "")
-          new_range = VersionService.smaller_than( prod.versions, verso, true, stability )
-          prod.versions = new_range
-        elsif verso.match(/\A!=/)
-          verso.gsub!("!=", "")
-          new_range = VersionService.newest_but_not( prod.versions, verso, true, stability)
-          prod.versions = new_range
-        end
-      end
-      highest_version = VersionService.newest_version_from( prod.versions, stability )
+      versions = VersionService.from_ranges product.versions, version
+      highest_version = VersionService.newest_version_from( versions, stability )
       if highest_version
         dependency.version_requested = highest_version.to_s
       else

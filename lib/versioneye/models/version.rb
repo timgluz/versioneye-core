@@ -11,6 +11,7 @@ class Version < Versioneye::Model
   field :status         , type: String # biicode specific - [STABLE, DEV]
   field :released_at    , type: DateTime
   field :released_string, type: String
+  field :sv_summary     , type: String # SecurityVulnerability Summary 
 
   embedded_in :product
 
@@ -38,6 +39,8 @@ class Version < Versioneye::Model
     return nil if version.nil?
     version.gsub(':', '/')
   end
+
+  
 
   def to_param
     val = Version.encode_version(self.version)

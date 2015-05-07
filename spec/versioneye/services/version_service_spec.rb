@@ -315,6 +315,9 @@ describe VersionService do
     it "returns the right value 2.0.0" do
       VersionService.tile_border( "1.2.1_RC" ).should eql("1.3")
     end
+    it "returns the right value 3" do
+      VersionService.tile_border( 2 ).should eql( 3 )
+    end
   end
 
   describe "get_version_range" do
@@ -448,6 +451,73 @@ describe VersionService do
       product.versions.push( Version.new( { :version => "1.0" } ) )
       ver = VersionService.smaller_than_or_equal(product.versions, "1.1")
       ver.version.should eql("1.0")
+    end
+
+  end
+
+
+  describe "from_ranges" do
+
+    it "returns the right values" do
+      product.versions = Array.new
+      product.versions.push( Version.new( { :version => "1.0" } ) )
+      product.versions.push( Version.new( { :version => "1.1" } ) )
+      product.versions.push( Version.new( { :version => "1.2" } ) )
+      product.versions.push( Version.new( { :version => "1.3" } ) )
+      versions = VersionService.from_ranges(product.versions, ">=1.0, <1.2")
+      versions.size.should eq(2)
+      versions.first.to_s.should eq("1.0")
+      versions.last.to_s.should eq("1.1")
+    end
+
+    it "returns the right values" do
+      product.versions = Array.new
+      product.versions.push( Version.new( { :version => "1.0" } ) )
+      product.versions.push( Version.new( { :version => "1.1" } ) )
+      product.versions.push( Version.new( { :version => "1.2" } ) )
+      product.versions.push( Version.new( { :version => "1.3" } ) )
+      versions = VersionService.from_ranges(product.versions, ">1.0, <1.2")
+      versions.size.should eq(1)
+      versions.first.to_s.should eq("1.1")
+    end
+
+    it "returns the right values" do
+      product.versions = Array.new
+      product.versions.push( Version.new( { :version => "1.0" } ) )
+      product.versions.push( Version.new( { :version => "1.1" } ) )
+      product.versions.push( Version.new( { :version => "1.2" } ) )
+      product.versions.push( Version.new( { :version => "1.3" } ) )
+      versions = VersionService.from_ranges(product.versions, ">=1.0, <=1.2")
+      versions.size.should eq(3)
+      versions.first.to_s.should eq("1.0")
+      versions.last.to_s.should eq("1.2")
+    end
+
+    it "returns the right values" do
+      product.versions = Array.new
+      product.versions.push( Version.new( { :version => "1.0" } ) )
+      product.versions.push( Version.new( { :version => "1.1" } ) )
+      product.versions.push( Version.new( { :version => "1.2" } ) )
+      product.versions.push( Version.new( { :version => "1.3" } ) )
+      versions = VersionService.from_ranges(product.versions, ">=1.0, !=1.2")
+      versions.size.should eq(3)
+      versions.first.to_s.should eq("1.0")
+      versions.last.to_s.should eq("1.3")
+    end
+    
+    it "returns the right values" do
+      product.versions = Array.new
+      product.versions.push( Version.new( { :version => "2.0.0" } ) )
+      product.versions.push( Version.new( { :version => "2.0.1" } ) )
+      product.versions.push( Version.new( { :version => "2.0.2" } ) )
+      product.versions.push( Version.new( { :version => "2.0.10" } ) )
+      product.versions.push( Version.new( { :version => "2.0.11" } ) )
+      product.versions.push( Version.new( { :version => "2.1.1" } ) )
+      product.versions.push( Version.new( { :version => "2.2.5" } ) )
+      versions = VersionService.from_ranges(product.versions, ">=2.0.0, <2.0.11")
+      versions.size.should eq(4)
+      versions.first.to_s.should eq("2.0.0")
+      versions.last.to_s.should eq("2.0.10")
     end
 
   end

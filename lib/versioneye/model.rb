@@ -43,7 +43,7 @@ module Versioneye
     require 'versioneye/models/receipt'
     require 'versioneye/models/repository'
     require 'versioneye/models/searchlog'
-    require 'versioneye/models/security_notification'
+    require 'versioneye/models/security_vulnerability'
     require 'versioneye/models/submitted_url'
     require 'versioneye/models/spdx_license'
     require 'versioneye/models/user'
