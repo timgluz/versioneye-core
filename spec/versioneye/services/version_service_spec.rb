@@ -520,6 +520,51 @@ describe VersionService do
       versions.last.to_s.should eq("2.0.10")
     end
 
+    it "returns the right values" do
+      product.versions = Array.new
+      product.versions.push( Version.new( { :version => "2.0.0" } ) )
+      product.versions.push( Version.new( { :version => "2.0.1" } ) )
+      product.versions.push( Version.new( { :version => "2.0.2" } ) )
+      product.versions.push( Version.new( { :version => "2.0.10" } ) )
+      product.versions.push( Version.new( { :version => "2.0.11" } ) )
+      product.versions.push( Version.new( { :version => "2.1.1" } ) )
+      product.versions.push( Version.new( { :version => "2.2.5" } ) )
+      versions = VersionService.from_ranges(product.versions, "<2.1.0")
+      versions.size.should eq(5)
+      versions.first.to_s.should eq("2.0.0")
+      versions.last.to_s.should eq("2.0.11")
+    end
+
+    it "returns the right values" do
+      product.versions = Array.new
+      product.versions.push( Version.new( { :version => "2.0.0" } ) )
+      product.versions.push( Version.new( { :version => "2.0.1" } ) )
+      product.versions.push( Version.new( { :version => "2.0.2" } ) )
+      product.versions.push( Version.new( { :version => "2.0.10" } ) )
+      product.versions.push( Version.new( { :version => "2.0.11" } ) )
+      product.versions.push( Version.new( { :version => "2.1.1" } ) )
+      product.versions.push( Version.new( { :version => "2.2.5" } ) )
+      versions = VersionService.from_ranges(product.versions, "2.0.0, 2.1.1")
+      versions.size.should eq(2)
+      versions.first.to_s.should eq("2.0.0")
+      versions.last.to_s.should eq("2.1.1")
+    end
+
+    it "returns the right values" do
+      product.versions = Array.new
+      product.versions.push( Version.new( { :version => "2.0.0" } ) )
+      product.versions.push( Version.new( { :version => "2.0.1" } ) )
+      product.versions.push( Version.new( { :version => "2.0.2" } ) )
+      product.versions.push( Version.new( { :version => "2.0.10" } ) )
+      product.versions.push( Version.new( { :version => "2.0.11" } ) )
+      product.versions.push( Version.new( { :version => "2.1.1" } ) )
+      product.versions.push( Version.new( { :version => "2.2.5" } ) )
+      versions = VersionService.from_ranges(product.versions, "<2.0.1, 2.1.1")
+      versions.size.should eq(2)
+      versions.first.to_s.should eq("2.0.0")
+      versions.last.to_s.should eq("2.1.1")
+    end
+
   end
 
 

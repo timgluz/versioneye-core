@@ -200,30 +200,39 @@ class VersionService < Versioneye::Service
   def self.from_ranges( versions, version_string )
     version_splitted = version_string.split(",")
     prod = Product.new
-    prod.versions = versions
+    prod.versions = []
     version_splitted.each do |verso|
       verso.gsub!(" ", "")
       stability = VersionTagRecognizer.stability_tag_for verso
       if verso.match(/\A>=/)
         verso.gsub!(">=", "")
-        new_range = VersionService.greater_than_or_equal( prod.versions, verso, true, stability )
+        version_array = prod.versions.empty? ? versions : prod.versions
+        new_range = VersionService.greater_than_or_equal( version_array, verso, true, stability )
         prod.versions = new_range
       elsif verso.match(/\A>/)
         verso.gsub!(">", "")
-        new_range = VersionService.greater_than( prod.versions, verso, true, stability )
+        version_array = prod.versions.empty? ? versions : prod.versions
+        new_range = VersionService.greater_than( version_array, verso, true, stability )
         prod.versions = new_range
       elsif verso.match(/\A<=/)
         verso.gsub!("<=", "")
-        new_range = VersionService.smaller_than_or_equal( prod.versions, verso, true, stability )
+        version_array = prod.versions.empty? ? versions : prod.versions
+        new_range = VersionService.smaller_than_or_equal( version_array, verso, true, stability )
         prod.versions = new_range
       elsif verso.match(/\A</)
         verso.gsub!("<", "")
-        new_range = VersionService.smaller_than( prod.versions, verso, true, stability )
+        version_array = prod.versions.empty? ? versions : prod.versions
+        new_range = VersionService.smaller_than( version_array, verso, true, stability )
         prod.versions = new_range
       elsif verso.match(/\A!=/)
         verso.gsub!("!=", "")
-        new_range = VersionService.newest_but_not( prod.versions, verso, true, stability)
+        version_array = prod.versions.empty? ? versions : prod.versions
+        new_range = VersionService.newest_but_not( version_array, verso, true, stability)
         prod.versions = new_range
+      elsif verso.match(/\A=/) || verso.match(/\A\w/)
+        versions.each do |version| 
+          prod.versions << version if version.to_s.eql?(verso)
+        end
       end
     end
     prod.versions  

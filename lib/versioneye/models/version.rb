@@ -11,7 +11,8 @@ class Version < Versioneye::Model
   field :status         , type: String # biicode specific - [STABLE, DEV]
   field :released_at    , type: DateTime
   field :released_string, type: String
-  field :sv_summary     , type: String # SecurityVulnerability Summary 
+  
+  field :sv_ids         , type: Array, default: []  # SecurityVulnerability Summary 
 
   embedded_in :product
 
@@ -40,8 +41,6 @@ class Version < Versioneye::Model
     version.gsub(':', '/')
   end
 
-  
-
   def to_param
     val = Version.encode_version(self.version)
     "#{val}".strip
@@ -50,6 +49,11 @@ class Version < Versioneye::Model
   def released_or_detected
     return released_at if released_at
     created_at
+  end
+
+  def security_vulnerabilities 
+    return nil if sv_ids.to_a.empty? 
+    SecurityVulnerability.where(:_id.in => sv_ids)
   end
 
 end
