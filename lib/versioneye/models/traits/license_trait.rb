@@ -54,13 +54,17 @@ module VersionEye
       return 'New BSD' if new_bsd_match( tmp_name )
       return 'BSD' if bsd_match( tmp_name )
 
-      spdx = SpdxLicense.where(:fullname => /\A#{name}\z/i ).first
+      spdx = SpdxLicense.identifier_by_fullname_regex name 
       return spdx.identifier if spdx 
 
-      spdx = SpdxLicense.where(:identifier => /\A#{name}\z/i ).first
+      spdx = SpdxLicense.identifier_by_regex name 
       return spdx.identifier if spdx
 
       name.gsub("Licence", "License")
+    rescue => e 
+      log.error e 
+      log.error e.backtrace.join("\n")
+      name 
     end
 
     def json_match name
