@@ -231,7 +231,7 @@ class ProjectImportService < Versioneye::Service
   end
 
 
-  # This is currently only used by the VersionEye API project! 
+  # This is currently used by the VersionEye API project and the file upload in the Web UI.
   def self.import_from_upload file, user = nil, api_created = false
     project_name = file['datafile'].original_filename
     project = ProjectParseService.project_from file
