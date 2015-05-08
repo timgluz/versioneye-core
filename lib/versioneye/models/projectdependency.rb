@@ -55,6 +55,12 @@ class Projectdependency < Versioneye::Model
     version_requested
   end
 
+
+  def security_vulnerabilities 
+    return nil if sv_ids.to_a.empty? 
+    SecurityVulnerability.where(:_id.in => sv_ids)
+  end
+
   
   def product
     if project && project.project_type.to_s.eql?( Project::A_TYPE_BOWER )
