@@ -59,6 +59,7 @@ class ProjectService < Versioneye::Service
     if project.save
       project.save_dependencies
       update_license_numbers!( project )
+      ProjectdependencyService.update_security project
       SyncService.sync_project_async project # For Enterprise environment only! 
     else
       err_msg = "Can't save project: #{project.errors.full_messages.to_json}"
