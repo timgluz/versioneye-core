@@ -59,8 +59,11 @@ describe ProjectdependencyService do
       version.sv_ids << sv._id.to_s 
       version.save.should be_truthy
 
+      @project.sv_count.should eq(0)
+
       ProjectdependencyService.update_security @project 
 
+      @project.sv_count.should eq(1)
       dep = Projectdependency.first
       dep.sv_ids.should_not be_empty 
       dep.sv_ids.count.should eq(1)

@@ -32,6 +32,11 @@ class ProjectdependencyService < Versioneye::Service
 
       dep.sv_ids = version.sv_ids
       dep.save
+
+      if version.sv_ids.size > 0 
+        project.sv_count += version.sv_ids.size
+        project.save 
+      end
     end
   rescue => e 
     log.error e.message
