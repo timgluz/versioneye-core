@@ -1,6 +1,10 @@
 class LanguageService < Versioneye::Service
 
 
+  A_DISTINCT_LANGUAGES = ["Java", "PHP", "CSS", "Ruby", "Python", "Node.JS", "CoffeeScript", "HTML", "JavaScript", "Clojure", "Objective-C", "R", "Biicode", "PureScript", "Go", "Haskell", "Perl", "C#", "TypeScript", "Handlebars", "Opa", "C", "none", "Nix", "Shell", "wisp", "LiveScript", "Makefile", "ApacheConf", "C++", "ActionScript", "Scala", "Processing", "PowerShell", "Dart", "XSLT", "Lua", "XML", "ASP", "TeX", "Liquid", "Groovy", "Gettext Catalog", "Cirru", "Smarty", "Eagle", "Puppet", "SuperCollider"]
+  A_KEY = "distinct_languages"
+
+
   def self.language_for lang_string
     languages = distinct_languages
     languages << 'nodejs'
@@ -13,19 +17,19 @@ class LanguageService < Versioneye::Service
 
 
   def self.distinct_languages
-    key = "distinct_languages"
-    languages = cached_languages key
+    languages = cached_languages A_KEY
     if languages.nil? || languages.empty?
-      languages = update_distinct_languages   
+      languages = A_DISTINCT_LANGUAGES
+      save_in_cache A_KEY, languages
+      CommonProducer.new "update_distinct_languages"
     end
     languages
   end
 
 
   def self.update_distinct_languages 
-    key = "distinct_languages"
     languages = Product.all.distinct(:language)
-    save_in_cache key, languages
+    save_in_cache A_KEY, languages
     languages
   end
 
