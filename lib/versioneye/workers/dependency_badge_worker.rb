@@ -58,7 +58,6 @@ class DependencyBadgeWorker < Worker
       badge = 'up-to-date'  if outdated == false
       cache.set( key, badge, A_TTL )
     rescue => e
-      cache.set( message, "error_#{e.message}", A_TASK_TTL )
       log.error e.message
       log.error e.backtrace.join("\n")
     end
