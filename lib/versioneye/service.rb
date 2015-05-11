@@ -94,6 +94,7 @@ module Versioneye
     require 'versioneye/migrations/product_migration'
 
     require 'versioneye/producers/producer.rb'
+    require 'versioneye/producers/dependency_badge_producer.rb'
     require 'versioneye/producers/git_repo_file_import_producer.rb'
     require 'versioneye/producers/git_repos_import_producer.rb'
     require 'versioneye/producers/git_repo_import_producer.rb'
@@ -107,6 +108,7 @@ module Versioneye
     require 'versioneye/producers/sync_producer.rb'
 
     require 'versioneye/workers/worker.rb'
+    require 'versioneye/workers/dependency_badge_worker.rb'
     require 'versioneye/workers/git_repo_file_import_worker.rb'
     require 'versioneye/workers/git_repos_import_worker.rb'
     require 'versioneye/workers/git_repo_import_worker.rb'
