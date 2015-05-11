@@ -115,6 +115,23 @@ describe License do
 
   describe "name_substitute" do
 
+    it "should return PHP-3.01 name" do
+      license = License.new({:name => "The PHP License, version 3.01"})
+      license.name_substitute.should eq("PHP-3.01")
+    end
+    it "should return PHP-3.01 name" do
+      license = License.new({:name => "The PHP License Version 3.01"})
+      license.name_substitute.should eq("PHP-3.01")
+    end
+    it "should return PHP-3.01 name" do
+      license = License.new({:name => "PHP 3.01"})
+      license.name_substitute.should eq("PHP-3.01")
+    end
+    it "should return PHP-3.01 name" do
+      license = License.new({:name => "PHP License v3.01"})
+      license.name_substitute.should eq("PHP-3.01")
+    end
+
     it "should return MIT name" do
       license = License.new({:name => "MIT"})
       license.name_substitute.should eq("MIT")

@@ -54,6 +54,8 @@ module VersionEye
       return 'New BSD' if new_bsd_match( tmp_name )
       return 'BSD' if bsd_match( tmp_name )
 
+      return 'PHP-3.01' if php_301_match( tmp_name )
+
       spdx = SpdxLicense.identifier_by_fullname_regex name 
       return spdx.identifier if spdx 
 
@@ -65,6 +67,14 @@ module VersionEye
       log.error e 
       log.error e.backtrace.join("\n")
       name 
+    end
+
+
+    def php_301_match name
+      name.match(/\APHP 3.01\z/i) ||
+      name.match(/\APHP License v3\.01\z/i) || 
+      name.match(/\APHP License, version 3\.01\z/i) || 
+      name.match(/\APHP License version 3\.01\z/i)
     end
 
     def json_match name
