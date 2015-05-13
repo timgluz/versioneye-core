@@ -252,6 +252,8 @@ class ProjectService < Versioneye::Service
 
 
   def self.insecure?( project )
+    return false if project.language.eql?(Product::A_LANGUAGE_PHP) && !project.filename.eql?('composer.lock')
+    
     project.projectdependencies.each do |dep|
       return true if !dep.sv_ids.to_a.empty?
     end

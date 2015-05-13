@@ -536,6 +536,7 @@ describe ProjectService do
     it "returns the right badge up-to-date" do
       user = UserFactory.create_new
       product = ProductFactory.create_new
+      product.language = Product::A_LANGUAGE_PHP
       product.version = '10.0.0'
       product.add_version '10.0.0'
       product.save
@@ -549,6 +550,7 @@ describe ProjectService do
       version.save.should be_truthy 
 
       project = ProjectFactory.create_new user
+      project.language = Product::A_LANGUAGE_PHP
       project_dep = ProjectdependencyFactory.create_new project, product
       project_dep.version_current = '10.0.0'
       project_dep.version_requested = '10.0.0'
@@ -557,6 +559,15 @@ describe ProjectService do
       ProjectdependencyService.update_outdated!(project_dep)
       project_dep.save
       ProjectService.outdated?(project).should be_falsey
+      project.s3_filename = 'composer.json'
+      project.save 
+      project.filename.should eq('composer.json')
+      ProjectService.badge_for_project(project.id).should_not eq('update!')
+      
+      ProjectService.cache.delete project.id.to_s 
+      project.s3_filename = 'composer.lock'
+      project.save 
+      project.filename.should eq('composer.lock')
       ProjectService.badge_for_project(project.id).should eq('update!')
     end
 
