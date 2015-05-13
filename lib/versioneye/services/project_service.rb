@@ -252,6 +252,15 @@ class ProjectService < Versioneye::Service
 
 
   def self.insecure?( project )
+    return true if insecure_single?( project )
+    project.children.each do |child_project|
+      return true if insecure_single?( child_project )
+    end
+    false
+  end
+
+
+  def self.insecure_single?( project )
     return false if project.language.eql?(Product::A_LANGUAGE_PHP) && !project.filename.eql?('composer.lock')
     
     project.projectdependencies.each do |dep|
