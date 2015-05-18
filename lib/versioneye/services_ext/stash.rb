@@ -93,7 +93,7 @@ class Stash < Versioneye::Service
 
   def self.branch_names( projectKey, repo, token, secret )
     names = []
-    path = "#{A_API_V1_PATH}/projects/#{projectKey}/repos/#{repo}/branches?start=0&limit=1000"
+    path = "#{A_API_V1_PATH}/projects/#{projectKey}/repos/#{repo}/branches?start=0&limit=10000"
     response = get_json(path, token, secret)
     response[:values].each do |branch|
        names << branch[:displayId]
@@ -102,8 +102,8 @@ class Stash < Versioneye::Service
   end
 
 
-  def self.files( projectKey, repo, branch = 'master', token, secret )
-    path = "#{A_API_V1_PATH}/projects/#{projectKey}/repos/#{repo}/files?at=#{branch}&start=0&limit=10000"
+  def self.files( projectKey, repo, branch = 'master', token = '', secret = '', limit = '100000' )
+    path = "#{A_API_V1_PATH}/projects/#{projectKey}/repos/#{repo}/files?at=#{branch}&start=0&limit=#{limit}"
     get_json(path, token, secret)
   end
 
