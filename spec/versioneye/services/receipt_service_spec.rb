@@ -34,7 +34,7 @@ describe ReceiptService do
       Receipt.count.should == 1
       rec = Receipt.first
       rec.plan_id = Plan.personal_plan_6.name_id
-      rec.amount.should eq('600')
+      rec.total.should eq('600')
       rec.currency.should eq('eur')
 
       described_class.process_receipts
@@ -50,9 +50,9 @@ describe ReceiptService do
       receipt.user = user
       receipt.type = Receipt::A_TYPE_CORPORATE
       html = described_class.compile_html_invoice receipt, true
-      html.match("4.86 EUR").should_not be_nil
-      html.match("1.14 EUR").should_not be_nil
-      html.match("6.00 EUR").should_not be_nil
+      html.match("4,86 EUR").should_not be_nil
+      html.match("1,14 EUR").should_not be_nil
+      html.match("6,00 EUR").should_not be_nil
       html.match('Reverse Charge -').should be_nil
       html.match('Non EU customers - Not taxable in Germany.').should be_nil
     end
@@ -61,9 +61,9 @@ describe ReceiptService do
       receipt = ReceiptFactory.create_new
       receipt.user = user
       html = described_class.compile_html_invoice receipt, true
-      html.match("4.86 EUR").should_not be_nil
-      html.match("1.14 EUR").should_not be_nil
-      html.match("6.00 EUR").should_not be_nil
+      html.match("4,86 EUR").should_not be_nil
+      html.match("1,14 EUR").should_not be_nil
+      html.match("6,00 EUR").should_not be_nil
       html.match('Reverse Charge -').should be_nil
       html.match('Non EU customers - Not taxable in Germany.').should be_nil
     end
@@ -74,9 +74,9 @@ describe ReceiptService do
       receipt.type = Receipt::A_TYPE_CORPORATE
       receipt.country = 'FR'
       html = described_class.compile_html_invoice receipt, true
-      html.match("4.86 EUR").should be_nil
-      html.match("1.14 EUR").should be_nil
-      html.match("6.00 EUR").should_not be_nil
+      html.match("4,86 EUR").should be_nil
+      html.match("1,14 EUR").should be_nil
+      html.match("6,00 EUR").should_not be_nil
       html.match('Reverse Charge -').should_not be_nil
       html.match('Non EU customers - Not taxable in Germany.').should be_nil
     end
@@ -87,9 +87,10 @@ describe ReceiptService do
       receipt.type = Receipt::A_TYPE_INDIVIDUAL
       receipt.country = 'FR'
       html = described_class.compile_html_invoice receipt, true
-      html.match("4.86 EUR").should_not be_nil
-      html.match("1.14 EUR").should_not be_nil
-      html.match("6.00 EUR").should_not be_nil
+      p html
+      html.match("4,86 EUR").should_not be_nil
+      html.match("1,14 EUR").should_not be_nil
+      html.match("6,00 EUR").should_not be_nil
       html.match('Reverse Charge -').should be_nil
       html.match('Non EU customers - Not taxable in Germany.').should be_nil
     end
@@ -100,9 +101,9 @@ describe ReceiptService do
       receipt.type = Receipt::A_TYPE_CORPORATE
       receipt.country = 'US'
       html = described_class.compile_html_invoice receipt, true
-      html.match("4.86 EUR").should be_nil
-      html.match("1.14 EUR").should be_nil
-      html.match("6.00 EUR").should_not be_nil
+      html.match("4,86 EUR").should be_nil
+      html.match("1,14 EUR").should be_nil
+      html.match("6,00 EUR").should_not be_nil
       html.match('Reverse Charge -').should be_nil
       html.match('Non EU customers - Not taxable in Germany.').should_not be_nil
     end
@@ -113,9 +114,9 @@ describe ReceiptService do
       receipt.type = Receipt::A_TYPE_INDIVIDUAL
       receipt.country = 'US'
       html = described_class.compile_html_invoice receipt, true
-      html.match("4.86 EUR").should be_nil
-      html.match("1.14 EUR").should be_nil
-      html.match("6.00 EUR").should_not be_nil
+      html.match("4,86 EUR").should be_nil
+      html.match("1,14 EUR").should be_nil
+      html.match("6,00 EUR").should_not be_nil
       html.match('Reverse Charge -').should be_nil
       html.match('Non EU customers - Not taxable in Germany.').should_not be_nil
     end
@@ -126,6 +127,7 @@ describe ReceiptService do
       described_class.next_receipt_nr.should == 1001
     end
     it 'returns 1002' do
+      user = UserFactory.create_new
       nr = described_class.next_receipt_nr
       ba = BillingAddressFactory.create_new
       invoice = StripeInvoiceFactory.create_new
@@ -134,7 +136,8 @@ describe ReceiptService do
       receipt.update_from_invoice invoice
       receipt.invoice_id = 'tx_1'
       receipt.receipt_nr = nr
-      receipt.save.should be_truthy
+      result = receipt.save
+      result.should be_truthy
       nr = described_class.next_receipt_nr
       nr.should == 1002
     end

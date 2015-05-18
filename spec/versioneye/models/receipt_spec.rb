@@ -117,6 +117,7 @@ describe Receipt do
       receipt_2.receipt_nr = 1
       receipt_2.invoice_id = 'tx_2'
       receipt_2.save.should be_falsey
+      receipt_2.filename.should eq(receipt_2.to_s)
     end
 
     it 'saves both' do

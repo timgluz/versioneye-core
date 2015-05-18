@@ -20,20 +20,22 @@ class Receipt < Versioneye::Model
   field :taxid  , type: String
   field :email  , type: String
 
+  # Rechnungsnummer, fortlaufend! Wichtig fuer das Finanzamt!
+  field :receipt_nr  , type: Integer
+
   # This fields filled from Stripe invoice object.
-  field :invoice_id    , type: String
-  field :invoice_date  , type: Time
-  field :period_start  , type: Time
-  field :period_end    , type: Time
-  field :plan_id       , type: String
-  field :plan_name     , type: String
-  field :amount        , type: String
+  field :total         , type: String
   field :currency      , type: String
   field :paid          , type: Boolean
   field :closed        , type: Boolean
 
-  # Rechnungsnummer, fortlaufend! Wichtig fuer das Finanzamt!
-  field :receipt_nr  , type: Integer
+  field :invoice_id    , type: String
+  field :invoice_date  , type: Time
+
+  field :period_start  , type: Time
+  field :period_end    , type: Time
+
+  embeds_many :receipt_lines
 
   belongs_to :user
   belongs_to :plan
@@ -48,9 +50,7 @@ class Receipt < Versioneye::Model
   validates_presence_of :invoice_date, :message => 'is mandatory!'
   validates_presence_of :period_start, :message => 'is mandatory!'
   validates_presence_of :period_end  , :message => 'is mandatory!'
-  validates_presence_of :plan_id     , :message => 'is mandatory!'
-  validates_presence_of :plan_name   , :message => 'is mandatory!'
-  validates_presence_of :amount      , :message => 'is mandatory!'
+  validates_presence_of :total       , :message => 'is mandatory!'
   validates_presence_of :currency    , :message => 'is mandatory!'
   validates_presence_of :paid        , :message => 'is mandatory!'
   validates_presence_of :closed      , :message => 'is mandatory!'
@@ -89,15 +89,16 @@ class Receipt < Versioneye::Model
     self.invoice_date = Time.at invoice[:date]
     self.period_start = Time.at invoice[:period_start]
     self.period_end   = Time.at invoice[:period_end]
+    self.total        = invoice[:total]
     self.currency     = invoice[:currency]
     self.paid         = invoice[:paid]
     self.closed       = invoice[:closed]
 
-    first_line = invoice.lines.first
-    plan = first_line[:plan]
-    self.plan_id      = plan[:id]
-    self.plan_name    = plan[:name]
-    self.amount       = plan[:amount]
+    invoice.lines.each do |line|
+      receipt_line = ReceiptLine.new 
+      receipt_line.update_from line 
+      receipt_lines << receipt_line
+    end
   end
 
   def taxid_mandatory?

@@ -41,6 +41,7 @@ module Versioneye
     require 'versioneye/models/promo_code'
     require 'versioneye/models/refer'
     require 'versioneye/models/receipt'
+    require 'versioneye/models/receipt_line'
     require 'versioneye/models/repository'
     require 'versioneye/models/searchlog'
     require 'versioneye/models/security_vulnerability'

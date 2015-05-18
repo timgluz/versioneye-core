@@ -57,24 +57,22 @@ class ReceiptService < Versioneye::Service
 
 
   def self.handle_invoice user, invoice
-    return nil if invoice[:paid].to_s.casecmp('true')   != 0 # return if paid = false
-    return nil if invoice[:closed].to_s.casecmp('true') != 0 # return if paid = false
+    return nil if invoice[:paid].to_s.casecmp('true')   != 0 # return if paid   = false
+    return nil if invoice[:closed].to_s.casecmp('true') != 0 # return if closed = false
 
-    first_line = invoice.lines.first
-    plan = first_line[:plan]
-    return nil if plan[:amount].to_s.empty?
-
+    # Early exit if receipt exist already in db
     receipt = Receipt.where(:invoice_id => invoice[:id]).shift
     return nil if !receipt.nil?
 
     receipt = new_receipt user, invoice
+
     html    = compile_html_invoice receipt
     pdf     = compile_pdf_invoice html
     upload( receipt, pdf )
     if receipt.save
       email receipt, pdf
     else
-      log.error "Could not persist receipt for user '#{user.id}' and invoice '#{invoicde[:id]}'"
+      log.error "Could not persist receipt for user '#{user.id}' and invoice '#{invoice[:id]}' - #{receipt.errors.full_messages}"
     end
 
     receipt
