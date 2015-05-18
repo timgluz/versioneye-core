@@ -3,6 +3,8 @@ class ProjectService < Versioneye::Service
 
   def self.type_by_filename filename
     return nil if filename.to_s.empty?
+    return nil if filename.to_s.match(/\/node_modules\//) # Skip workirectory of NPM. 
+
     trimmed_name = filename.split('?')[0]
     return Project::A_TYPE_RUBYGEMS  if (!(/Gemfile\z/ =~ trimmed_name).nil?)        or (!(/Gemfile.lock\z/  =~ trimmed_name).nil?)
     return Project::A_TYPE_COMPOSER  if (!(/composer.json\z/ =~ trimmed_name).nil?)  or (!(/composer.lock\z/ =~ trimmed_name).nil?)
