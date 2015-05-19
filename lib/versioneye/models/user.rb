@@ -296,7 +296,11 @@ class User < Versioneye::Model
     user = User.find_by_id(user_api.user_id)
     return nil if user.nil?
 
-    user
+    user 
+  rescue => e 
+    log.error e.message 
+    log.error e.backtrace.join("\n")
+    nil 
   end
 
   def api
