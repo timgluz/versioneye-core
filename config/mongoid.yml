@@ -73,13 +73,13 @@ test:
       database: veye_test
       hosts:
         - 172.16.172.128:27017
-      options:
-        # Change whether the session persists in safe mode by default.
-        # (default: false)
-        safe: true
-        consistency: :strong
-        # In the test environment we lower the retries and retry interval to
-        # low amounts for fast failures.
+      # options:
+      #   # Change whether the session persists in safe mode by default.
+      #   # (default: false)
+      #   safe: true
+      #   consistency: :strong
+      #   # In the test environment we lower the retries and retry interval to
+      #   # low amounts for fast failures.
 
 
 development:
