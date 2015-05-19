@@ -3,7 +3,7 @@ source "http://rubygems.org"
 gem 'naturalsorter'      , '~> 3.0.6'
 
 gem 'bundler'            , '~> 1.9.1'
-gem 'mongoid'            , '~> 3.1.6'
+gem 'mongoid'            , '~> 4.0.2'
 gem 'log4r'              , '~> 1.1.0'
 gem 'dalli'              , '~> 2.7.0'
 gem 'kgio'               , '~> 2.9.0'   # 20% performance boost for dalli
@@ -18,7 +18,7 @@ gem 'persistent_httparty', '~> 0.1.0'
 gem 'json'               , '~> 1.8.0'
 gem 'nokogiri'           , '~> 1.6.0'
 gem 'cocoapods-core'     , '~> 0.37.1'
-gem 'actionmailer'       , '~> 3.2.21'
+gem 'actionmailer'       , '~> 4.2.1'
 gem 'pdfkit'             , '~> 0.7.0'
 gem 'bunny'              , '~> 1.7.0'
 gem 'wkhtmltopdf-binary' , '~> 0.9.9.1'
