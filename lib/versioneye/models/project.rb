@@ -99,6 +99,10 @@ class Project < Versioneye::Model
     "<Project #{language}/#{project_type} #{name}>"
   end
 
+  def ids 
+    id.to_s 
+  end
+
   def parent 
     Project.find parent_id
   end 
