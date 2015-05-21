@@ -1,9 +1,7 @@
 source "http://rubygems.org"
 
-gem 'naturalsorter'      , '~> 3.0.6'
-
 gem 'bundler'            , '~> 1.9.1'
-gem 'mongoid'            , '~> 4.0.2'
+gem 'naturalsorter'      , '~> 3.0.6'
 gem 'log4r'              , '~> 1.1.0'
 gem 'dalli'              , '~> 2.7.0'
 gem 'kgio'               , '~> 2.9.0'   # 20% performance boost for dalli
@@ -22,7 +20,12 @@ gem 'actionmailer'       , '~> 4.2.1'
 gem 'pdfkit'             , '~> 0.7.0'
 gem 'bunny'              , '~> 1.7.0'
 gem 'wkhtmltopdf-binary' , '~> 0.9.9.1'
+
+gem 'mongoid'            , '~> 4.0.2'
+gem 'bson'               , '~> 2.3.0'
+gem 'moped'              , '~> 2.0.0'
 gem 'will_paginate_mongoid', '2.0.1'
+
 
 group :development do
   gem 'jeweler', '~> 2.0.1'
