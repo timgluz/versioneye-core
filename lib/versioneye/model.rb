@@ -62,6 +62,10 @@ module Versioneye
     require 'versioneye/models/reference'
     require 'versioneye/models/helpers/indexer'
 
+    def ids 
+      self.id.to_s 
+    end
+
     def self.log
       Versioneye::Log.instance.log
     end
