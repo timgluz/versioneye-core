@@ -16,7 +16,7 @@ class DependencyBadgeWorker < Worker
     log.info log_msg
 
     begin
-      queue.subscribe(:ack => true, :block => true) do |delivery_info, properties, body|
+      queue.subscribe(:manual_ack => true, :block => true) do |delivery_info, properties, body|
         msg = " [x] Received #{body}"
         puts msg
         log.info msg
@@ -41,22 +41,7 @@ class DependencyBadgeWorker < Worker
 
 
     def calculate_badge message
-      sps = message.split(":::")
-      language  = sps[0]
-      prod_key  = sps[1]
-      version   = sps[2]
-
-      key = "#{language}_#{prod_key}_#{version}"
-
-      product = Product.fetch_product language, prod_key
-      product.version = version if !version.to_s.empty?
-      dependencies    = product.dependencies
-
-      outdated = DependencyService.dependencies_outdated?( dependencies, false )
-
-      badge = 'out-of-date' if outdated == true
-      badge = 'up-to-date'  if outdated == false
-      cache.set( key, badge, A_TTL )
+      BadgeService.update message
     rescue => e
       log.error e.message
       log.error e.backtrace.join("\n")

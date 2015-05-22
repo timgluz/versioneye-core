@@ -227,32 +227,6 @@ class ProjectService < Versioneye::Service
   end
 
 
-  def self.badge_for_project project_id
-    log.debug "project_id: #{project_id}"
-    badge = cache.get project_id.to_s
-    log.info "badge: #{badge}"
-    return badge if badge
-
-    project = Project.find_by_id project_id.to_s
-    return "unknown" if project.nil?
-
-    update_badge_for_project project
-  end
-
-
-  def self.update_badge_for_project project
-    badge = 'up-to-date'
-    badge = 'out-of-date' if outdated?( project )
-    badge = 'update!'     if insecure?( project )
-    cache.set( project.id.to_s, badge, 21600) # TTL = 6.hour
-    badge
-  rescue => e
-    log.error e.message
-    log.error e.backtrace.join "\n"
-    "unknown"
-  end
-
-
   def self.insecure?( project )
     return true if insecure_single?( project )
     project.children.each do |child_project|

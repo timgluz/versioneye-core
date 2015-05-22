@@ -31,18 +31,20 @@ describe DependencyBadgeWorker do
       prod_key = rails.prod_key
       version  = rails.version
 
-      key = "#{language}_#{prod_key}_#{version}"
+      key = "#{language}:::#{prod_key}:::#{version}"
       DependencyService.cache.delete(key)
+      Badge.count.should eq(0)
 
       worker = Thread.new{ described_class.new.work }
-
       DependencyService.cache.get(key).should be_nil 
       DependencyBadgeProducer.new("#{language}:::#{prod_key}:::#{version}")
       sleep 3 
-      DependencyService.cache.get(key).should_not be_nil 
-      DependencyService.cache.get(key).should eq('out-of-date')
-
       worker.exit
+
+      Badge.count.should eq(1)
+      badge = Badge.first
+      badge.status.should eq('out_of_date')
+      BadgeService.cache.get(key).should_not be_nil 
     end
 
   end
