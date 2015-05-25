@@ -30,6 +30,15 @@ class ProjectService < Versioneye::Service
   end
 
   
+  def self.index( user, all_public = false )
+    if all_public
+      return Project.where(:public => true, :parent_id => nil).desc(:out_number_sum, :unknown_number_sum).asc(:name)
+    else 
+      return Project.where(:user_id => user.id.to_s, :parent_id => nil).desc(:out_number_sum, :unknown_number_sum).asc(:name)
+    end
+  end
+
+
   def self.find id
     Project.find_by_id( id )
   rescue => e

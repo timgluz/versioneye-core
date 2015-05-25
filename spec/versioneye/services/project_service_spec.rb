@@ -4,6 +4,45 @@ describe ProjectService do
 
   let(:github_user) { FactoryGirl.create(:github_user)}
 
+  describe "index" do 
+    it 'returns the single project for a user' do 
+      user = UserFactory.create_new 
+      project = ProjectFactory.create_new user 
+      project.save 
+      expect( ProjectService.index(user).count ).to eq(1)
+    end
+    it 'returns the single parent project for a user' do 
+      user = UserFactory.create_new 
+      project = ProjectFactory.create_new user 
+      project.save 
+      project2 = ProjectFactory.create_new user 
+      project2.parent_id = project.ids 
+      project2.save 
+      expect( ProjectService.index(user).count ).to eq(1)
+    end
+    it 'returns 2 projects for a user' do 
+      user = UserFactory.create_new 
+      project = ProjectFactory.create_new user 
+      project.save 
+      project2 = ProjectFactory.create_new user 
+      project2.save 
+      expect( ProjectService.index(user).count ).to eq(2)
+    end
+    it 'returns 2 projects for a user' do 
+      user  = UserFactory.create_new 1
+      user2 = UserFactory.create_new 2
+      project = ProjectFactory.create_new user 
+      project.public = true 
+      project.parent_id = nil 
+      project.save 
+      project2 = ProjectFactory.create_new user2 
+      project2.public = true 
+      project2.parent_id = nil 
+      expect( project2.save ).to be_truthy
+      expect( ProjectService.index(user, true).count ).to eq(2)
+    end
+  end
+
   describe "corresponding_file" do
     it "returns nil for pom.xml" do
       described_class.corresponding_file('pom.xml').should be_nil
