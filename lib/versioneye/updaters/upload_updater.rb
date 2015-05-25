@@ -1,8 +1,12 @@
 class UploadUpdater < CommonUpdater
 
   def update( project, send_email = false )
+    out_number = 0 
+    dep_number = 0 
     project.dependencies.each do |dep|
-      ProjectdependencyService.outdated?( dep )
+      outdated = ProjectdependencyService.outdated?( dep )
+      out_number += 1 if outdated
+      dep_number += 1 
     end
     project.reload
 
@@ -17,7 +21,9 @@ class UploadUpdater < CommonUpdater
     red_licenses     = ProjectService.red_licenses( project )
     project.licenses_red = red_licenses.count
     project.licenses_unknown = unknown_licenses.count
-    project.save  
+    project.dep_number = dep_number
+    project.out_number = out_number
+    project.sum_own! 
 
     return project if send_email == false 
     return project if project.user.email_inactive == false
