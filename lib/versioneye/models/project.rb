@@ -309,7 +309,7 @@ class Project < Versioneye::Model
   end
 
   def sum_own!
-    self.dep_number_sum       = self.dep_number
+    self.dep_number_sum       = self.dep_number 
     self.out_number_sum       = self.out_number
     self.unknown_number_sum   = self.unknown_number
     self.licenses_red_sum     = self.licenses_red

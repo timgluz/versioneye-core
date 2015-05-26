@@ -5,13 +5,32 @@ describe UserMailer do
   describe 'verification_email' do
 
     it 'should contain the verification link' do
-
       user = UserFactory.create_new
       verification = "aslaksasasas8888asg8ag"
 
       email = described_class.verification_email( user, verification, user.email )
 
       email.to.should eq( [user.email] )
+      email.from.should eq( [Settings.instance.smtp_sender_email] )
+      email.encoded.should include( "Hello #{user.fullname}" )
+      email.encoded.should include( "#{Settings.instance.server_url}/users/activate/" )
+      email.encoded.should include( "#{verification}" )
+      email.encoded.should include( "Handelsregister" )
+
+      ActionMailer::Base.deliveries.clear
+      email.deliver!
+      ActionMailer::Base.deliveries.size.should == 1
+    end
+
+    it 'should contain the verification link' do
+      Settings.instance.smtp_sender_email = 'test@bin.go'
+      user = UserFactory.create_new
+      verification = "aslaksasasas8888asg8ag"
+
+      email = described_class.verification_email( user, verification, user.email )
+
+      email.to.should eq( [user.email] )
+      email.from.should eq( ['test@bin.go'] )
       email.encoded.should include( "Hello #{user.fullname}" )
       email.encoded.should include( "#{Settings.instance.server_url}/users/activate/" )
       email.encoded.should include( "#{verification}" )

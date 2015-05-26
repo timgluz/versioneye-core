@@ -1,7 +1,6 @@
 class FeedbackMailer < ActionMailer::Base
 
   layout 'email_html_layout'
-  default from: "\"#{Settings.instance.smtp_sender_name}\" <#{Settings.instance.smtp_sender_email}>"
 
   def feedback_email(name, email, feedback)
     @name     = name
@@ -9,12 +8,18 @@ class FeedbackMailer < ActionMailer::Base
     @feedback = feedback
     rnd_val = create_random_value
     subject = "VersionEye Feedback #{rnd_val}"
-    mail(:to => 'reiz@versioneye.com', :subject => subject) do |format|
+    m = mail(:to => 'reiz@versioneye.com', :subject => subject) do |format|
       format.html{ render layout: 'email_html_layout' }
     end
+    set_from(m)
   end
 
   private
+
+    def set_from( mail )
+      mail.from = "\"#{Settings.instance.smtp_sender_name}\" <#{Settings.instance.smtp_sender_email}>"
+      mail  
+    end
 
     def create_random_value
       chars = '0123456789'

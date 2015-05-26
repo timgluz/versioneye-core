@@ -1,6 +1,8 @@
 class UploadUpdater < CommonUpdater
 
   def update( project, send_email = false )
+    return nil if project.nil?
+    
     out_number = 0 
     dep_number = 0 
     project.dependencies.each do |dep|

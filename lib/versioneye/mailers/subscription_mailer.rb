@@ -5,9 +5,17 @@ class SubscriptionMailer < ActionMailer::Base
 
   def update_subscription( user )
     @user =  user
-    mail(to: user.email, subject: 'VersionEye Subscription') do |format|
+    m = mail(to: user.email, subject: 'VersionEye Subscription') do |format|
       format.html{ render layout: 'email_html_layout' }
     end
+    set_from(m)
   end
+
+  private 
+
+    def set_from( mail )
+      mail.from = "\"#{Settings.instance.smtp_sender_name}\" <#{Settings.instance.smtp_sender_email}>"
+      mail  
+    end
 
 end

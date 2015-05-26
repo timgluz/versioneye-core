@@ -1,7 +1,5 @@
 class NotificationMailer < ActionMailer::Base
 
-  default from: "\"#{Settings.instance.smtp_sender_name}\" <#{Settings.instance.smtp_sender_email}>"
-
   def new_version_email(user, notifications)
     @newsletter = "notification_emails"
     @user = user
@@ -10,19 +8,26 @@ class NotificationMailer < ActionMailer::Base
     @user_product_index = ProjectService.user_product_index_map( user )
 
     names = first_names notifications
-    mail(:to => @user.email, :subject => "Update: #{names}") do |format|
+    m = mail(:to => @user.email, :subject => "Update: #{names}") do |format|
       format.html{ render layout: 'email_html_layout' }
     end
+    set_from( m )
   end
 
   def status(count)
     @count = count
-    mail(:to => 'reiz@versioneye.com', :subject => "#{count} notifications") do |format|
+    m = mail(:to => 'reiz@versioneye.com', :subject => "#{count} notifications") do |format|
       format.html{ render layout: 'email_html_layout' }
     end
+    set_from( m )
   end
 
   private
+
+    def set_from( mail )
+      mail.from = "\"#{Settings.instance.smtp_sender_name}\" <#{Settings.instance.smtp_sender_email}>"
+      mail  
+    end
 
     def first_names notifications
       names = Array.new

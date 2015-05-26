@@ -1,7 +1,6 @@
 class ProjectMailer < ActionMailer::Base
 
   layout 'email_html_layout'
-  default from: "\"#{Settings.instance.smtp_sender_name}\" <#{Settings.instance.smtp_sender_email}>"
 
   def projectnotification_email( project, user = nil, unknown_licenses = nil, red_licenses = nil )
     @project_name = project.name
@@ -25,9 +24,10 @@ class ProjectMailer < ActionMailer::Base
 
     email = user ? user.email : Project.email_for(project, @user)
 
-    mail(:to => email, :subject => "Project Notification for #{project.name}") do |format|
+    m = mail(:to => email, :subject => "Project Notification for #{project.name}") do |format|
       format.html{ render layout: 'email_html_layout' }
     end
+    set_from( m )
   end
 
 
@@ -39,9 +39,17 @@ class ProjectMailer < ActionMailer::Base
     @period = period
     @projectlink = "#{Settings.instance.server_url}/user/projects"
 
-    mail(:to => user.email, :subject => "#{period.capitalize} Project Notifications") do |format|
+    m = mail(:to => user.email, :subject => "#{period.capitalize} Project Notifications") do |format|
       format.html{ render layout: 'email_html_layout' }
     end
+    set_from( m )
   end
+
+  private 
+
+    def set_from( mail )
+      mail.from = "\"#{Settings.instance.smtp_sender_name}\" <#{Settings.instance.smtp_sender_email}>"
+      mail  
+    end
 
 end
