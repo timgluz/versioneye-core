@@ -20,6 +20,7 @@ class ProjectService < Versioneye::Service
     return nil
   end
 
+  
   def self.corresponding_file filename
     return nil if filename.to_s.empty?
     trimmed_name = filename.split('?')[0]
@@ -30,11 +31,23 @@ class ProjectService < Versioneye::Service
   end
 
   
-  def self.index( user, all_public = false )
-    if all_public
-      return Project.where(:public => true, :parent_id => nil).desc(:out_number_sum, :unknown_number_sum).asc(:name)
+  def self.index( user, filter = {}, sort = nil)
+    filter_options            = {:parent_id => nil}
+    filter_options[:language] = filter[:language]  if filter[:language] && !filter[:language].to_s.eql?('ALL')
+    filter_options[:name]     = /#{filter[:name]}/i if filter[:name] && !filter[:name].to_s.strip.empty?
+    if filter[:scope].to_s == 'all_public'
+      filter_options[:public] = true 
     else 
-      return Project.where(:user_id => user.id.to_s, :parent_id => nil).desc(:out_number_sum, :unknown_number_sum).asc(:name)
+      filter_options[:user_id] = user.ids 
+    end
+
+    case sort
+    when 'name' 
+      Project.where( filter_options ).asc(:name).desc(:licenses_red_sum)
+    when 'license_violations'
+      Project.where( filter_options ).desc(:licenses_red_sum).asc(:name)
+    else 
+      Project.where( filter_options ).desc(:out_number_sum).asc(:name)
     end
   end
 
@@ -46,6 +59,7 @@ class ProjectService < Versioneye::Service
     nil
   end
 
+  
   def self.find_child parent_id, child_id
     Project.where( :id => child_id, :parent_id => parent_id ).first
   rescue => e

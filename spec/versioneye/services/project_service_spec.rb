@@ -28,18 +28,74 @@ describe ProjectService do
       project2.save 
       expect( ProjectService.index(user).count ).to eq(2)
     end
-    it 'returns 2 projects for a user' do 
+    it 'returns 2 public projects for a user' do 
       user  = UserFactory.create_new 1
       user2 = UserFactory.create_new 2
       project = ProjectFactory.create_new user 
       project.public = true 
+      project.name = 'bbb'
       project.parent_id = nil 
       project.save 
       project2 = ProjectFactory.create_new user2 
       project2.public = true 
+      project2.name = "aaa"
       project2.parent_id = nil 
       expect( project2.save ).to be_truthy
-      expect( ProjectService.index(user, true).count ).to eq(2)
+      projects = ProjectService.index(user, {:scope => 'all_public'}, 'name')
+      expect( projects.count ).to eq(2)
+      expect( projects.first.name ).to eq('aaa')
+    end
+    it 'returns public projects for a user filtered by language' do 
+      user  = UserFactory.create_new 1
+      user2 = UserFactory.create_new 2
+      project = ProjectFactory.create_new user 
+      project.public = true 
+      project.language = 'Ruby'
+      project.parent_id = nil 
+      project.save 
+      project2 = ProjectFactory.create_new user2 
+      project2.public = true 
+      project2.language = 'Java'
+      project2.parent_id = nil 
+      expect( project2.save ).to be_truthy
+      projects = ProjectService.index(user, {:scope => 'all_public', :language => 'Java'})
+      expect( projects.count ).to eq(1)
+      expect( projects.first.language ).to eq('Java')
+    end
+    it 'returns empty list for a user filtered by language' do 
+      user  = UserFactory.create_new 1
+      user2 = UserFactory.create_new 2
+      project = ProjectFactory.create_new user 
+      project.public = true 
+      project.language = 'Ruby'
+      project.parent_id = nil 
+      project.save 
+      project2 = ProjectFactory.create_new user2 
+      project2.public = true 
+      project2.language = 'Java'
+      project2.parent_id = nil 
+      expect( project2.save ).to be_truthy
+      projects = ProjectService.index(user, {:scope => 'user', :language => 'Java'})
+      expect( projects.count ).to eq(0)
+    end
+    it 'returns public projects for a user filtered by name' do 
+      user  = UserFactory.create_new 1
+      user2 = UserFactory.create_new 2
+      project = ProjectFactory.create_new user 
+      project.public = true 
+      project.name = 'hansi_binsi'
+      project.language = 'Ruby'
+      project.parent_id = nil 
+      project.save 
+      project2 = ProjectFactory.create_new user2 
+      project2.public = true 
+      project2.language = 'Java'
+      project2.parent_id = nil 
+      expect( project2.save ).to be_truthy
+      projects = ProjectService.index(user, {:scope => 'all_public', :name => project.name}, 'license_violations')
+      expect( projects.count ).to eq(1)
+      expect( projects.first.language ).to eq('Ruby')
+      expect( projects.first.name ).to eq(project.name)
     end
   end
 
