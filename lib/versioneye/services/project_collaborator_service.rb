@@ -4,7 +4,7 @@ class ProjectCollaboratorService < Versioneye::Service
   # collaborator_info is either a username or a email address! 
   def self.add_new project, caller_user, collaborator_info 
     user = User.find_by_username( collaborator_info )
-    user = User.find_by_email( collaborator_info ) if user.nil? 
+    user = by_email( collaborator_info ) if user.nil? 
     if user && ProjectCollaborator.collaborator?(project[:_id].to_s, user[:_id].to_s)
       raise "#{user[:fullname]} is already a collaborator in your project."
     end
@@ -14,8 +14,11 @@ class ProjectCollaboratorService < Versioneye::Service
                                                owner_id: project[:user_id].to_s, 
                                                period: project.period
 
-    add_existing_user( project, new_collaborator, user ) if user
-    invite_user( project, new_collaborator, collaborator_info ) if user.nil?
+    if user
+      add_existing_user( project, new_collaborator, user ) 
+    else 
+      invite_user( project, new_collaborator, collaborator_info )
+    end
 
     new_collaborator
   end
@@ -49,6 +52,18 @@ class ProjectCollaboratorService < Versioneye::Service
       UserMailer.collaboration_invitation( new_collaborator ).deliver
     end
   end
+
+
+  private 
+
+    def self.by_email email 
+      user = User.find_by_email( email )
+      if user.nil? 
+        ue = UserEmail.find_by_email( email )
+        user = ue.user if ue && ue.verified?
+      end
+      user 
+    end
 
 
 end

@@ -53,6 +53,34 @@ describe ProjectCollaboratorService do
       ActionMailer::Base.deliveries.size.should == 1
     end
 
+    it 'adds an existing user to the project by secondary email' do
+      ActionMailer::Base.deliveries.clear
+
+      invitee = UserFactory.create_new 1 
+      owner = UserFactory.create_new 2 
+
+      user_email = UserEmail.new({:email => 'test@email.de', :user_id => invitee.ids})
+      expect( user_email.save ).to be_truthy
+
+      project = ProjectFactory.create_new owner
+
+      ProjectCollaborator.count.should eq(0)
+
+      nc = ProjectCollaboratorService.add_new project, owner, 'test@email.de'
+      nc.should_not be_nil 
+      ProjectCollaborator.count.should eq(1)
+      project.collaborators.count.should eq(1)
+      pc = ProjectCollaborator.first
+      pc.user_id.should eq(invitee.id.to_s)
+      pc.active.should be_truthy
+      pc.invitation_email.should be_nil 
+      pc.invitation_code.should be_nil
+
+      ActionMailer::Base.deliveries.size.should == 1
+
+      expect{ ProjectCollaboratorService.add_new(project, owner, 'test@email.de') }.to raise_error()
+    end
+
     it 'adds an non existing user to the project' do
       ActionMailer::Base.deliveries.clear
 

@@ -15,6 +15,13 @@ class UserEmail < Versioneye::Model
   validates_format_of   :email, with: User::A_EMAIL_REGEX
 
 
+  def user 
+    User.find(self.user_id)
+  rescue => e 
+    log.error e.message
+    nil 
+  end
+
   def verified?
     self.verification.nil?
   end
