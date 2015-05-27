@@ -1,14 +1,12 @@
-class Api < Versioneye::Model
+class Pom < Versioneye::Model
 
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  field :pom    , type: String
-  field :pomhash, type: String
+  field :url    , type: String
 
-  index({ api_key: 1 }, { name: "api_key_index", unique: true, background: true })
+  index({ url: 1 }, { name: "url_index", unique: true, background: true })
 
-  validates :pom    , presence: true
-  validates :pomhash, presence: true
+  validates :url, presence: true
 
 end

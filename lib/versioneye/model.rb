@@ -33,6 +33,7 @@ module Versioneye
     require 'versioneye/models/maven_repository'
     require 'versioneye/models/newest'
     require 'versioneye/models/notification'
+    require 'versioneye/models/pom'
     require 'versioneye/models/plan'
     require 'versioneye/models/product'
     require 'versioneye/models/product_resource'
