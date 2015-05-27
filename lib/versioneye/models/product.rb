@@ -97,6 +97,7 @@ class Product < Versioneye::Model
 
   def artifact_id_original 
     return artifact_id_orig if !artifact_id_orig.to_s.empty? 
+    return name if !name.to_s.empty
     artifact_id
   end
 
