@@ -17,9 +17,11 @@ class Product < Versioneye::Model
   field :version      , type: String, default: '0.0.0+NA' # latest stable version
   field :tags         , type: Array  # Array of keywords 
 
-  field :group_id   , type: String # Maven specific
-  field :artifact_id, type: String # Maven specific
+  field :group_id   , type: String # Maven specific - GroupID lower case 
+  field :artifact_id, type: String # Maven specific - ArtifactId lower case 
   field :parent_id  , type: String # Maven specific
+  field :group_id_orig   , type: String # Maven specific
+  field :artifact_id_orig, type: String # Maven specific
 
   field :description       , type: String
   field :description_manual, type: String
@@ -86,6 +88,16 @@ class Product < Versioneye::Model
       return "#{group_id}:#{artifact_id}"
     end
     return name
+  end
+
+  def group_id_original 
+    return group_id_orig if !group_id_orig.to_s.empty? 
+    group_id
+  end
+
+  def artifact_id_original 
+    return artifact_id_orig if !artifact_id_orig.to_s.empty? 
+    artifact_id
   end
 
   ######## SEARCH METHODS ####################

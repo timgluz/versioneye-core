@@ -26,8 +26,8 @@ class PomJsonParser < CommonParser
       scope       = json_dep['scope']
       scope       = 'compile' if scope.to_s.empty? 
       spliti      = name.split(':')
-      group_id    = spliti[0]
-      artifact_id = spliti[1]
+      group_id    = spliti[0].to_s.downcase
+      artifact_id = spliti[1].to_s.downcase
       dependency  = init_dependency(name, group_id, artifact_id, version, scope)
       product     = Product.find_by_group_and_artifact(dependency.group_id, dependency.artifact_id )
       dependency.prod_key     = product.prod_key if product

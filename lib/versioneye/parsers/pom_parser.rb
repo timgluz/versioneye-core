@@ -40,10 +40,10 @@ class PomParser < CommonParser
     node.children.each do |child|
       if child.name.casecmp('groupId') == 0
         groupId_text = get_variable_value_from_pom(properties, child.text.strip)
-        dependency.group_id = groupId_text
+        dependency.group_id = groupId_text.downcase
       elsif child.name.casecmp('artifactId') == 0
         artifactId_text = get_variable_value_from_pom(properties, child.text.strip)
-        dependency.artifact_id = artifactId_text
+        dependency.artifact_id = artifactId_text.downcase
       elsif child.name.casecmp('version') == 0
         version_text = get_variable_value_from_pom(properties, child.text.strip)
         dependency.version_requested = version_text
