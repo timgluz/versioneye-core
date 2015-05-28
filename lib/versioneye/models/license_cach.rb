@@ -15,6 +15,10 @@ class LicenseCach < Versioneye::Model
 
   embedded_in :projectdependency
 
+  def to_s
+    "#{on_whitelist} - #{name} - #{url}"
+  end 
+
   def link 
     url 
   end
