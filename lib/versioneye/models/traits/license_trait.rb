@@ -140,7 +140,7 @@ module VersionEye
 
     def mpl_10_match name
       name.match(/\AMozilla Public License Version 1\.0\z/i) ||
-      name.match(/\AMozilla Public License 1\.0\z/i) ||
+      name.match(/\AMozilla Public License 1\.0\z/i) || 
       name.match(/\AMPL\-1\.0\z/i) ||
       name.match(/\AMPL 1\.0\z/i)
     end

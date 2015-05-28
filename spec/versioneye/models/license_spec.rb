@@ -163,6 +163,11 @@ describe License do
       license.name_substitute.should eq("BSD-2-Clause")
     end
     it "should return BSD 2-Clause name" do
+      license = License.new({:name => "\"BSD 2-clause \"\"Simplified\"\" License\""})
+      license.name_substitute.should eq("BSD-2-Clause")
+    end
+    
+    it "should return BSD 2-Clause name" do
       license = License.new({:name => "The BSD 2 clause revised license"})
       license.name_substitute.should eq("BSD-2-Clause")
     end
@@ -201,6 +206,11 @@ describe License do
       license = License.new({:name => "revised bsd"})
       license.name_substitute.should eq("BSD-3-Clause")
     end
+    it "should return BSD 3-Clause name" do
+      license = License.new({:name => "\"BSD 3-clause \"\"New\"\" or \"\"Revised\"\" License\""})
+      license.name_substitute.should eq("BSD-3-Clause")
+    end
+    
 
     it "should return BSD 3-Clause-Clear clear name" do
       license = License.new({:name => "BSD 3-clause Clear License"})
@@ -220,6 +230,11 @@ describe License do
       license.name_substitute.should eq("BSD-4-Clause")
     end
     
+
+    it "should return MPL-1.0" do
+      license = License.new({:name => "Mozilla Public License 1.0"})
+      license.name_substitute.should eq("MPL-1.0")
+    end
 
 
     it "should return Ruby name" do
