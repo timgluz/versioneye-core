@@ -160,20 +160,43 @@ describe License do
 
     it "should return BSD 2-Clause name" do
       license = License.new({:name => "The BSD 2 clause"})
-      license.name_substitute.should eq("BSD 2-clause")
+      license.name_substitute.should eq("BSD-2-Clause")
     end
     it "should return BSD 2-Clause name" do
       license = License.new({:name => "The BSD 2 clause revised license"})
-      license.name_substitute.should eq("BSD 2-clause")
+      license.name_substitute.should eq("BSD-2-Clause")
+    end
+    it "should return BSD 2-Clause name" do
+      license = License.new({:name => "BSD 2 clause Simplified License"})
+      license.name_substitute.should eq("BSD-2-Clause")
+    end
+    it "should return BSD 2-Clause name" do
+      license = License.new({:name => "BSD 2 clause \"Simplified\" License"})
+      license.name_substitute.should eq("BSD-2-Clause")
+    end
+
+    it "should return BSD 2-Clause-freebsd name" do
+      license = License.new({:name => "BSD 2 clause FreeBSD"})
+      license.name_substitute.should eq("BSD-2-Clause-FreeBSD")
+    end
+
+    it "should return BSD 2-Clause-netbsd name" do
+      license = License.new({:name => "BSD 2-clause NetBSD License"})
+      license.name_substitute.should eq("BSD-2-Clause-NetBSD")
     end
 
     it "should return BSD 3-Clause name" do
       license = License.new({:name => "The BSD 3-clause"})
-      license.name_substitute.should eq("BSD 3-clause")
+      license.name_substitute.should eq("BSD-3-Clause")
     end
     it "should return BSD 3-Clause name" do
       license = License.new({:name => "The BSD 3 clause revised license"})
-      license.name_substitute.should eq("BSD 3-clause")
+      license.name_substitute.should eq("BSD-3-Clause")
+    end
+
+    it "should return BSD 3-Clause clear name" do
+      license = License.new({:name => "BSD 3-clause Clear License"})
+      license.name_substitute.should eq("BSD-3-Clause-Clear")
     end
 
     it "should return Ruby name" do

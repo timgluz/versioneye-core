@@ -48,11 +48,16 @@ module VersionEye
       return 'Artistic-1.0' if artistic_10_match( tmp_name )
       return 'Artistic-2.0' if artistic_20_match( tmp_name )
 
-      return 'BSD 2-clause'  if bsd_2_clause_match( tmp_name )
-      return 'BSD 3-clause' if bsd_3_clause_match( tmp_name )
-      return 'BSD style' if bsd_style_match( tmp_name )
-      return 'New BSD' if new_bsd_match( tmp_name )
-      return 'BSD' if bsd_match( tmp_name )
+      return 'BSD-2-Clause-NetBSD'  if bsd_2_clause_netbsd_match( tmp_name )
+      return 'BSD-2-Clause-FreeBSD' if bsd_2_clause_freebsd_match( tmp_name )
+      return 'BSD-2-Clause'         if bsd_2_clause_match( tmp_name )
+
+      return 'BSD-3-Clause-Clear' if bsd_3_clause_clear_match( tmp_name )
+      return 'BSD-3-Clause'       if bsd_3_clause_match( tmp_name )
+      
+      return 'BSD style'          if bsd_style_match( tmp_name )
+      return 'New BSD'            if new_bsd_match( tmp_name )
+      return 'BSD'                if bsd_match( tmp_name )
 
       return 'PHP-3.01' if php_301_match( tmp_name )
 
@@ -156,20 +161,43 @@ module VersionEye
     end
 
     def bsd_2_clause_match name
-      name.match(/BSD 2-Clause/i) ||
-      name.match(/BSD-2-Clause/i) ||
-      name.match(/BSD-2 Clause/i) ||
-      name.match(/BSD 2 Clause/i)
+      tmp_name = name.gsub("-", " ").strip 
+      tmp_name.match(/BSD 2 Clause/i) || 
+      tmp_name.match(/BSD 2 clause \"Simplified\" License/i) || 
+      tmp_name.match(/BSD 2 clause Simplified License/i) || 
+      tmp_name.match(/BSD 2 clause Simplified/i) 
+    end
+
+    def bsd_2_clause_freebsd_match name
+      tmp_name = name.gsub("-", " ").strip 
+      tmp_name.match(/BSD 2 Clause FreeBSD/i) || 
+      tmp_name.match(/BSD 2 clause FreeBSD License/i) 
+    end
+
+    def bsd_2_clause_netbsd_match name
+      tmp_name = name.gsub("-", " ").strip 
+      tmp_name.match(/BSD 2 clause NetBSD License/i) || 
+      tmp_name.match(/BSD 2 clause NetBSD/i) 
     end
 
     def bsd_3_clause_match name
       name.match(/BSD3 Clause/i) ||
       name.match(/BSD 3 Clause/i) ||
       name.match(/BSD 3-Clause/i) ||
-      name.match(/BSD-3-Clause/i) ||
+      name.match(/BSD-3-Clause/i) || 
       name.match(/\ARevised BSD\z/i) ||
       name.match(/\ABSD Revised\z/i) ||
-      name.match(/\ABSD New\z/i)
+      name.match(/\ABSD New\z/i) || 
+      name.match(/\ABSD 3-clause \"New\" or \"Revised\" License\z/i)
+    end
+
+    def bsd_3_clause_clear_match name 
+      new_name = name.gsub("-", " ").strip 
+      return true if new_name.match(/\ABSD 3 Clause Clear License\z/i)
+      return true if new_name.match(/\ABSD 3 Clause Clear\z/i)
+      return true if new_name.match(/\AThe Clear BSD License\z/i)
+      return true if new_name.match(/\AClear BSD License\z/i)
+      return false 
     end
 
     def gpl_match name
