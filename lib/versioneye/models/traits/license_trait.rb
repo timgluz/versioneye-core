@@ -169,6 +169,8 @@ module VersionEye
 
     def mit_match name
       name.match(/\AMIT\z/i) ||
+      name.match(/\AMIT style\z/i) ||
+      name.match(/\AMIT-style\z/i) ||
       name.match(/\AMIT License\z/i) || 
       name.match(/\AMIT License \(MIT\)\z/i)
     end
