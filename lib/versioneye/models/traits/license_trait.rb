@@ -10,6 +10,12 @@ module VersionEye
 
       tmp_name = name.gsub(/\AThe /i, "").gsub(" - ", " ").gsub(", ", " ").gsub("Licence", "License").strip
 
+      return 'CC-BY-SA-1.0' if cc_by_sa_10_match( tmp_name )
+      return 'CC-BY-SA-2.0' if cc_by_sa_20_match( tmp_name )
+      return 'CC-BY-SA-2.5' if cc_by_sa_25_match( tmp_name )
+      return 'CC-BY-SA-3.0' if cc_by_sa_30_match( tmp_name )
+      return 'CC-BY-SA-4.0' if cc_by_sa_40_match( tmp_name )
+
       return 'MIT' if mit_match( tmp_name )
 
       return 'Ruby' if ruby_match( tmp_name )
@@ -48,15 +54,15 @@ module VersionEye
       return 'Artistic-1.0' if artistic_10_match( tmp_name )
       return 'Artistic-2.0' if artistic_20_match( tmp_name )
 
-      return 'BSD-2-Clause-NetBSD'  if bsd_2_clause_netbsd_match( tmp_name )
-      return 'BSD-2-Clause-FreeBSD' if bsd_2_clause_freebsd_match( tmp_name )
-      return 'BSD-2-Clause'         if bsd_2_clause_match( tmp_name )
+      return 'BSD-4-Clause'       if bsd_4_clause_match( tmp_name )
 
       return 'BSD-3-Clause-Clear' if bsd_3_clause_clear_match( tmp_name )
       return 'BSD-3-Clause'       if bsd_3_clause_match( tmp_name )
+
+      return 'BSD-2-Clause-NetBSD'  if bsd_2_clause_netbsd_match( tmp_name )
+      return 'BSD-2-Clause-FreeBSD' if bsd_2_clause_freebsd_match( tmp_name )
+      return 'BSD-2-Clause'         if bsd_2_clause_match( tmp_name )
       
-      return 'BSD style'          if bsd_style_match( tmp_name )
-      return 'New BSD'            if new_bsd_match( tmp_name )
       return 'BSD'                if bsd_match( tmp_name )
 
       return 'PHP-3.01' if php_301_match( tmp_name )
@@ -80,6 +86,51 @@ module VersionEye
       name.match(/\APHP License v3\.01\z/i) || 
       name.match(/\APHP License, version 3\.01\z/i) || 
       name.match(/\APHP License version 3\.01\z/i)
+    end
+
+    # Creative Commons Attribution Share Alike 1.0
+    def cc_by_sa_10_match name
+      tmp_name = name.gsub("-", " ").strip
+      tmp_name.match(/\ACC BY SA 1\.0\z/i) ||
+      tmp_name.match(/\ACreative Commons Attribution Share Alike 1\.0\z/i) || 
+      tmp_name.match(/\ACreative Commons 1\.0 BY SA\z/i) || 
+      tmp_name.match(/\ACC 1\.0 BY SA\z/i) 
+    end
+
+    # Creative Commons Attribution Share Alike 2.0
+    def cc_by_sa_20_match name
+      tmp_name = name.gsub("-", " ").strip
+      tmp_name.match(/\ACC BY SA 2\.0\z/i) ||
+      tmp_name.match(/\ACreative Commons Attribution Share Alike 2\.0\z/i) || 
+      tmp_name.match(/\ACreative Commons 2\.0 BY SA\z/i) || 
+      tmp_name.match(/\ACC 2\.0 BY SA\z/i) 
+    end
+
+    # Creative Commons Attribution Share Alike 2.5
+    def cc_by_sa_25_match name
+      tmp_name = name.gsub("-", " ").strip
+      tmp_name.match(/\ACC BY SA 2\.5\z/i) ||
+      tmp_name.match(/\ACreative Commons Attribution Share Alike 2\.5\z/i) || 
+      tmp_name.match(/\ACreative Commons 2\.5 BY SA\z/i) || 
+      tmp_name.match(/\ACC 2\.5 BY SA\z/i) 
+    end
+
+    # Creative Commons Attribution Share Alike 3.0
+    def cc_by_sa_30_match name
+      tmp_name = name.gsub("-", " ").strip
+      tmp_name.match(/\ACC BY SA 3\.0\z/i) ||
+      tmp_name.match(/\ACreative Commons Attribution Share Alike 3\.0\z/i) || 
+      tmp_name.match(/\ACreative Commons 3\.0 BY SA\z/i) || 
+      tmp_name.match(/\ACC 3\.0 BY SA\z/i) 
+    end
+
+    # Creative Commons Attribution Share Alike 4.0
+    def cc_by_sa_40_match name
+      tmp_name = name.gsub("-", " ").strip
+      tmp_name.match(/\ACC BY SA 4\.0\z/i) ||
+      tmp_name.match(/\ACreative Commons Attribution Share Alike 4\.0\z/i) || 
+      tmp_name.match(/\ACreative Commons 4\.0 BY SA\z/i) || 
+      tmp_name.match(/\ACC 4\.0 BY SA\z/i) 
     end
 
     def json_match name
@@ -145,19 +196,13 @@ module VersionEye
     end
 
     def bsd_match name
-      name.match(/\ABSD\z/) ||
-      name.match(/\ABSD License\z/i)
-    end
-
-    def bsd_style_match name
-      name.match(/\ABSD style\z/i) ||
-      name.match(/\ABSD style License\z/i) ||
-      name.match(/\ABSD-style License\z/i)
-    end
-
-    def new_bsd_match name
-      name.match(/\ANew BSD\z/i) ||
-      name.match(/\ANew BSD License\z/i)
+      tmp_name = name.gsub("-", " ").strip 
+      tmp_name.match(/\ABSD\z/) ||
+      tmp_name.match(/\ABSD License\z/i) || 
+      tmp_name.match(/\ABSD style\z/i) ||
+      tmp_name.match(/\ABSD style License\z/i) || 
+      tmp_name.match(/\ABSD like\z/i) ||
+      tmp_name.match(/\ABSD like License\z/i)
     end
 
     def bsd_2_clause_match name
@@ -165,12 +210,14 @@ module VersionEye
       tmp_name.match(/BSD 2 Clause/i) || 
       tmp_name.match(/BSD 2 clause \"Simplified\" License/i) || 
       tmp_name.match(/BSD 2 clause Simplified License/i) || 
-      tmp_name.match(/BSD 2 clause Simplified/i) 
+      tmp_name.match(/BSD 2 clause Simplified/i) || 
+      tmp_name.match(/Simplified BSD/i) 
     end
 
     def bsd_2_clause_freebsd_match name
       tmp_name = name.gsub("-", " ").strip 
       tmp_name.match(/BSD 2 Clause FreeBSD/i) || 
+      tmp_name.match(/FreeBSD License/i) || 
       tmp_name.match(/BSD 2 clause FreeBSD License/i) 
     end
 
@@ -181,14 +228,20 @@ module VersionEye
     end
 
     def bsd_3_clause_match name
-      name.match(/BSD3 Clause/i) ||
-      name.match(/BSD 3 Clause/i) ||
-      name.match(/BSD 3-Clause/i) ||
-      name.match(/BSD-3-Clause/i) || 
-      name.match(/\ARevised BSD\z/i) ||
-      name.match(/\ABSD Revised\z/i) ||
-      name.match(/\ABSD New\z/i) || 
-      name.match(/\ABSD 3-clause \"New\" or \"Revised\" License\z/i)
+      tmp_name = name.gsub("-", " ").strip 
+      tmp_name.match(/BSD 3/i) ||
+      tmp_name.match(/BSD3/i) ||
+      tmp_name.match(/BSD3 Clause/i) ||
+      tmp_name.match(/BSD 3 Clause/i) ||
+      tmp_name.match(/BSD 3 Clause new/i) ||
+      tmp_name.match(/BSD 3 Clause Revised/i) ||
+      tmp_name.match(/3 clause BSD/i) ||
+      tmp_name.match(/\ARevised BSD\z/i) ||
+      tmp_name.match(/\ABSD Revised\z/i) ||
+      tmp_name.match(/\ABSD New\z/i) || 
+      tmp_name.match(/\ANew BSD\z/i) || 
+      tmp_name.match(/\ANew BSD License\z/i) || 
+      tmp_name.match(/\ABSD 3 clause \"New\" or \"Revised\" License\z/i)
     end
 
     def bsd_3_clause_clear_match name 
@@ -198,6 +251,18 @@ module VersionEye
       return true if new_name.match(/\AThe Clear BSD License\z/i)
       return true if new_name.match(/\AClear BSD License\z/i)
       return false 
+    end
+
+    def bsd_4_clause_match name
+      tmp_name = name.gsub("-", " ").strip 
+      tmp_name.match(/BSD 4 clause/i) ||
+      tmp_name.match(/BSD 4/i) ||
+      tmp_name.match(/4 clause BSD/i) ||
+      tmp_name.match(/BSD 4-clause \"Original\" or \"Old\" License/i) ||
+      tmp_name.match(/original BSD/i) ||
+      tmp_name.match(/original BSD license/i) ||
+      tmp_name.match(/old BSD/i) || 
+      tmp_name.match(/old BSD license/i) 
     end
 
     def gpl_match name

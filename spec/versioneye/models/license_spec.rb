@@ -193,11 +193,34 @@ describe License do
       license = License.new({:name => "The BSD 3 clause revised license"})
       license.name_substitute.should eq("BSD-3-Clause")
     end
+    it "should return BSD 3-Clause name" do
+      license = License.new({:name => "new bsd"})
+      license.name_substitute.should eq("BSD-3-Clause")
+    end
+    it "should return BSD 3-Clause name" do
+      license = License.new({:name => "revised bsd"})
+      license.name_substitute.should eq("BSD-3-Clause")
+    end
 
-    it "should return BSD 3-Clause clear name" do
+    it "should return BSD 3-Clause-Clear clear name" do
       license = License.new({:name => "BSD 3-clause Clear License"})
       license.name_substitute.should eq("BSD-3-Clause-Clear")
     end
+
+    it "should return BSD-4-Clause name" do
+      license = License.new({:name => "old bsd license"})
+      license.name_substitute.should eq("BSD-4-Clause")
+    end
+    it "should return BSD-4-Clause name" do
+      license = License.new({:name => "BSD 4-clause \"Original\" or \"Old\" License"})
+      license.name_substitute.should eq("BSD-4-Clause")
+    end
+    it "should return BSD-4-Clause name" do
+      license = License.new({:name => "BSD 4 clause"})
+      license.name_substitute.should eq("BSD-4-Clause")
+    end
+    
+
 
     it "should return Ruby name" do
       license = License.new({:name => "Ruby"})
@@ -354,6 +377,57 @@ describe License do
     it "check for CDDL 1.0 license" do
       license = License.new({:name => "Common Development and Distribution License 1.0"})
       license.name_substitute.should eq("CDDL-1.0")
+    end
+
+    it "check for CC-BY-SA-2.5 license" do
+      license = License.new({:name => "CC-BY-SA-2.5"})
+      license.name_substitute.should eq("CC-BY-SA-2.5")
+    end
+    it "check for CC-BY-SA-2.5 license" do
+      license = License.new({:name => "Creative Commons 2.5 BY-SA"})
+      license.name_substitute.should eq("CC-BY-SA-2.5")
+    end
+    it "check for CC-BY-SA-2.5 license" do
+      license = License.new({:name => "cc 2.5 BY-SA"})
+      license.name_substitute.should eq("CC-BY-SA-2.5")
+    end
+    it "check for CC-BY-SA-2.5 license" do
+      license = License.new({:name => "Creative Commons Attribution share alike 2.5"})
+      license.name_substitute.should eq("CC-BY-SA-2.5")
+    end
+
+    it "check for CC-BY-SA-3.0 license" do
+      license = License.new({:name => "CC-BY-SA-3.0"})
+      license.name_substitute.should eq("CC-BY-SA-3.0")
+    end
+    it "check for CC-BY-SA-3.0 license" do
+      license = License.new({:name => "Creative Commons 3.0 BY-SA"})
+      license.name_substitute.should eq("CC-BY-SA-3.0")
+    end
+    it "check for CC-BY-SA-3.0 license" do
+      license = License.new({:name => "cc 3.0 BY-SA"})
+      license.name_substitute.should eq("CC-BY-SA-3.0")
+    end
+    it "check for CC-BY-SA-3.0 license" do
+      license = License.new({:name => "Creative Commons Attribution share alike 3.0"})
+      license.name_substitute.should eq("CC-BY-SA-3.0")
+    end
+
+    it "check for CC-BY-SA-4.0 license" do
+      license = License.new({:name => "CC-BY-SA-4.0"})
+      license.name_substitute.should eq("CC-BY-SA-4.0")
+    end
+    it "check for CC-BY-SA-4.0 license" do
+      license = License.new({:name => "Creative Commons 4.0 BY-SA"})
+      license.name_substitute.should eq("CC-BY-SA-4.0")
+    end
+    it "check for CC-BY-SA-4.0 license" do
+      license = License.new({:name => "cc 4.0 BY-SA"})
+      license.name_substitute.should eq("CC-BY-SA-4.0")
+    end
+    it "check for CC-BY-SA-4.0 license" do
+      license = License.new({:name => "Creative Commons Attribution share alike 4.0"})
+      license.name_substitute.should eq("CC-BY-SA-4.0")
     end
 
     it "check Zlib" do
