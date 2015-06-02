@@ -40,11 +40,13 @@ class RequirementsParser < CommonParser
   def parse_line( line, project )
     return false if line.to_s.strip.empty?
 
-    sp = line.split("#")
+    sp = line.split("#") # Remove comments 
     return false if sp.nil? || sp.empty?
 
     line = sp.first
     return false if line.to_s.strip.empty?
+
+    return false if line.match(/\A\-e /)
 
     comparator  = extract_comparator line
     requirement = line.split(comparator)
