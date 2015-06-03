@@ -2,6 +2,8 @@ class CommonUpdater < Versioneye::Service
 
 
   def update_old_with_new old_project, new_project, send_email = false
+    return nil if old_project.nil? || new_project.nil? 
+    
     old_project.update_from new_project
     old_project.reload
     cache.delete( old_project.id.to_s ) # Delete badge status for project

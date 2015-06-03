@@ -6,6 +6,7 @@ SimpleCov.start do
   add_filter "/spec"
 end
 
+require 'rack/test'
 require 'stripe'
 require 'versioneye-core'
 require 'rspec/autorun'

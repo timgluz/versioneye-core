@@ -17,6 +17,29 @@ describe ProjectUpdateService do
         project.dependencies.count.should == 15
       end
     end
+    it 'will update the project from URL' do
+      url = 'https://s3.amazonaws.com/veye_test_env/Gemfile'
+      user = UserFactory.create_new
+      project = ProjectImportService.import_from_url url, 'Gemfile', user
+      expect( project.save ).to be_truthy
+      expect( project.source ).to eq( Project::A_SOURCE_URL )
+      expect( project.url ).to eq( url )
+      expect( project.dependencies ).to_not be_empty
+
+      project = described_class.update project
+      expect( project ).to_not be_nil
+      expect( project.source ).to eq( Project::A_SOURCE_URL )
+      expect( project.url ).to eq( url )
+      expect( project.dependencies ).to_not be_empty
+
+      # project.url = 'https://www.heise.dem/Gemfile'
+      # expect( project.save ).to be_truthy
+      # project = described_class.update project
+      # expect( project ).to_not be_nil
+      # expect( project.source ).to eq( Project::A_SOURCE_URL )
+      # expect( project.url ).to eq( 'https://www.heise.dem/Gemfile' )
+      # expect( project.dependencies ).to_not be_empty
+    end
   end
 
   describe 'update_from_upload' do

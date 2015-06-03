@@ -30,6 +30,7 @@ group :development do
 end
 
 group :test do
+  gem 'rack-test'       , '0.6.3'
   gem 'fakes3'          , '0.2.1'
   gem 'simplecov'       , '~> 0.10.0'
   gem 'rspec'           , '~> 3.2.0'
