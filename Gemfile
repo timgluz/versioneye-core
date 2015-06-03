@@ -1,7 +1,7 @@
 source "http://rubygems.org"
 
 gem 'bundler'            , '~> 1.10.2'
-gem 'naturalsorter'      , '~> 3.0.7'
+gem 'naturalsorter'      , '~> 3.0.8'
 gem 'log4r'              , '~> 1.1.0'
 gem 'dalli'              , '~> 2.7.0'
 gem 'kgio'               , '~> 2.9.0'   # 20% performance boost for dalli
