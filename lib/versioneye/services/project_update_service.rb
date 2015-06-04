@@ -4,7 +4,7 @@ class ProjectUpdateService < Versioneye::Service
   def self.update_async project, send_email = false 
     return nil if not_updateable?( project )
     
-    msg = "project_#{project.id.to_s}:::#{send_email}"
+    msg = "project_#{project.ids}:::#{send_email}"
     ProjectUpdateProducer.new( msg )
   end
 
