@@ -45,11 +45,14 @@ class ProjectMailer < ActionMailer::Base
     set_from( m )
   end
 
+  
   private 
 
+  
     def set_from( mail )
       mail.from = "\"#{Settings.instance.smtp_sender_name}\" <#{Settings.instance.smtp_sender_email}>"
       mail  
     end
+
 
 end
