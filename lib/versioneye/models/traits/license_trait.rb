@@ -213,6 +213,8 @@ module VersionEye
       tmp_name.match(/BSD 2 clause \"Simplified\" License/i) || 
       tmp_name.match(/BSD 2 clause Simplified License/i) || 
       tmp_name.match(/BSD 2 clause Simplified/i) || 
+      tmp_name.match(/2 clause BSD/i) || 
+      tmp_name.match(/2 clause BSDL/i) || 
       tmp_name.match(/Simplified BSD/i) 
     end
 
@@ -238,6 +240,7 @@ module VersionEye
       tmp_name.match(/BSD 3 Clause new/i) ||
       tmp_name.match(/BSD 3 Clause Revised/i) ||
       tmp_name.match(/3 clause BSD/i) ||
+      tmp_name.match(/3 clause BSDL/i) ||
       tmp_name.match(/\ARevised BSD\z/i) ||
       tmp_name.match(/\ABSD Revised\z/i) ||
       tmp_name.match(/\ABSD New\z/i) || 
