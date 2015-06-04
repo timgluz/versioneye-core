@@ -37,6 +37,8 @@ class ProjectService < Versioneye::Service
     filter_options[:name]     = /#{filter[:name]}/i if filter[:name] && !filter[:name].to_s.strip.empty?
     if filter[:scope].to_s == 'all_public'
       filter_options[:public] = true 
+    elsif filter[:scope].to_s == 'all' && user.admin == true 
+      # Do nothing. Admin can see ALL projects
     else 
       filter_options[:user_id] = user.ids 
     end
