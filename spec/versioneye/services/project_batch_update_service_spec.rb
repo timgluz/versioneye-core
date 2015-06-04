@@ -44,6 +44,34 @@ describe ProjectBatchUpdateService do
       expect( ActionMailer::Base.deliveries.size ).to eq(0)
     end
 
+    it 'doesnt send out email because project violates license whitelist' do
+      product = ProductFactory.create_for_cocoapods 'JSONKit', '1.1.0'
+      expect( product.save ).to be_truthy
+      LicenseFactory.create_new product, 'GPL'
+
+      user    = UserFactory.create_new 1
+
+      LicenseWhitelistService.create user, 'SuperList'
+      LicenseWhitelistService.add user, 'SuperList', 'MIT'
+      lwl = LicenseWhitelistService.fetch_by user, 'SuperList'
+      
+      parser  = PodfileParser.new
+      project = parser.parse_file './spec/fixtures/files/pod_file/example1/Podfile'
+      project.name = 'Podfile'
+      project.make_project_key!
+      project.user_id = user.ids 
+      project.license_whitelist_id = lwl.ids 
+      project.period = Project::A_PERIOD_DAILY
+      project.sum_own!
+      expect( project.save ).to be_truthy
+      expect( project.out_number_sum ).to eq(0) 
+      expect( project.licenses_red_sum ).to eq(1) 
+
+      ActionMailer::Base.deliveries.clear
+      ProjectBatchUpdateService.update_all Project::A_PERIOD_DAILY
+      expect( ActionMailer::Base.deliveries.size ).to eq(1)
+    end
+
     it 'sends out email because child project is out-dated' do 
       product = ProductFactory.create_for_gemfile('rails', '4.0.0')
       product.save 
