@@ -18,7 +18,6 @@ describe ProjectImportService do
         project.dependencies.should_not be_empty
         project.name.should eq('versioneye/versioneye_maven_plugin')
         project.source.should eq(Project::A_SOURCE_GITHUB)
-        project.api_created.should be_falsey
       end
     end
     it 'imports from privat github' do
@@ -32,7 +31,6 @@ describe ProjectImportService do
         project.dependencies.should_not be_empty
         project.name.should eq('versioneye/versioneye-core')
         project.source.should eq(Project::A_SOURCE_GITHUB)
-        project.api_created.should be_falsey
       end
     end
     it 'imports not from privat github, because plan to low' do
@@ -58,7 +56,6 @@ describe ProjectImportService do
         project.dependencies.should_not be_empty
         project.name.should eq('versioneye/docker_web_ui')
         project.source.should eq(Project::A_SOURCE_GITHUB)
-        project.api_created.should be_falsey
         sleep 3
         project.children.count.should eq(1)
         worker.exit
@@ -71,7 +68,6 @@ describe ProjectImportService do
         project.dependencies.should_not be_empty
         project.name.should eq('versioneye/versioneye_maven_plugin')
         project.source.should eq(Project::A_SOURCE_GITHUB)
-        project.api_created.should be_falsey
         project.children.count.should eq(0)
       end
     end
@@ -108,7 +104,6 @@ describe ProjectImportService do
         project.dependencies.should_not be_empty
         project.name.should eq('versioneye_test/fantom_hydra')
         project.source.should eq(Project::A_SOURCE_BITBUCKET)
-        project.api_created.should be_falsey
       end
     end
     it 'does not import from bitbucket because file does not exist' do
@@ -133,7 +128,6 @@ describe ProjectImportService do
         project.dependencies.should_not be_empty
         project.name.should eq('reiz/test_gemi')
         project.source.should eq(Project::A_SOURCE_BITBUCKET)
-        project.api_created.should be_falsey
         sleep 2 
         project.children.count.should eq(1)
         worker.exit
@@ -149,7 +143,6 @@ describe ProjectImportService do
         project.dependencies.should_not be_empty
         project.name.should eq('reiz/test_gemi')
         project.source.should eq(Project::A_SOURCE_BITBUCKET)
-        project.api_created.should be_falsey
         project.children.count.should eq(0)
       end
     end
@@ -203,7 +196,6 @@ describe ProjectImportService do
       project.name.should eq('Gemfile')
       project.source.should eq(Project::A_SOURCE_UPLOAD)
       project.url.should be_nil
-      project.api_created.should be_falsey
     end
   end
 

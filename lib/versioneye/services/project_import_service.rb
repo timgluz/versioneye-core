@@ -242,8 +242,8 @@ class ProjectImportService < Versioneye::Service
       project.name        = project_name
     end
     project.source      = Project::A_SOURCE_UPLOAD
+    project.source      = Project::A_SOURCE_API if api_created
     project.user        = user
-    project.api_created = api_created
     project.period      = Settings.instance.default_project_period
     project.public      = Settings.instance.default_project_public
 

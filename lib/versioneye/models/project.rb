@@ -22,7 +22,7 @@ class Project < Versioneye::Model
   A_SOURCE_GITHUB    = 'github'
   A_SOURCE_BITBUCKET = 'bitbucket'
   A_SOURCE_STASH     = 'stash'
-  A_SOURCE_API       = 'API'  # TODO use this to replace property :api_created
+  A_SOURCE_API       = 'API'  
 
   A_PERIOD_MONTHLY = 'monthly'
   A_PERIOD_WEEKLY  = 'weekly'
@@ -66,7 +66,6 @@ class Project < Versioneye::Model
 
   field :public         , type: Boolean, :default => false  # visible for everybody
   field :private_project, type: Boolean, :default => false  # private project from GitHub/Bitbucket
-  field :api_created    , type: Boolean, :default => false  # this project was created through the VersionEye API
   field :parent_id      , type: String,  :default => nil    # id of the parent project. 
 
   field :license_whitelist_id, type: String
