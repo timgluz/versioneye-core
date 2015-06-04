@@ -175,6 +175,7 @@ class Project < Versioneye::Model
   def visible_for_user?(user)
     return true  if self[:public]
     return false if user.nil?
+    return true  if user.admin
     return true  if self.user_id.to_s == user[:_id].to_s
     return true  if ProjectCollaborator.collaborator?(self[:_id], user[:_id])
     return false

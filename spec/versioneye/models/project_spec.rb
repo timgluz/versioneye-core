@@ -271,6 +271,13 @@ describe Project do
       @test_project.visible_for_user?( col_user ).should be_falsey
       @test_project.visible_for_user?( nil ).should be_falsey
       @test_project.visible_for_user?( @test_user ).should be_truthy
+      
+      col_user.admin = true 
+      col_user.save 
+      @test_project.visible_for_user?( col_user ).should be_truthy
+      col_user.admin = false
+      col_user.save 
+
       @test_project.public = true
       @test_project.save
       @test_project.visible_for_user?( col_user ).should be_truthy
