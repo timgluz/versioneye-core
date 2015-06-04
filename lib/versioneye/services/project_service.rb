@@ -360,6 +360,7 @@ class ProjectService < Versioneye::Service
     project.sum_reset!
     project.children.each do |child_project| 
       update_numbers_for project, child_project, dep_hash
+      child_project.sum_own!
     end
     update_numbers_for project, project, dep_hash
     project.save 

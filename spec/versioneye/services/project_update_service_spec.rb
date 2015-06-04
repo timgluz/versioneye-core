@@ -60,6 +60,43 @@ describe ProjectUpdateService do
       project.dependencies.count.should > 0
       Project.count.should == 1
     end
+
+    it 'updates an existing project from a file upload and updates the sums for parent' do
+      gemfile = "spec/fixtures/files/Gemfile"
+      file_attachment = Rack::Test::UploadedFile.new(gemfile, "application/octet-stream")
+      file = {'datafile' => file_attachment}
+
+      user    = UserFactory.create_new
+
+      parent = ProjectFactory.create_new user
+      parent.name = 'parent'
+      parent.s3_filename = 'Gemfile'
+      parent.source = Project::A_SOURCE_UPLOAD
+      parent.save.should be_truthy
+      parent.dependencies.count.should eq(0)
+      parent.dep_number_sum.should eq(0)
+      Project.count.should == 1
+
+      project = ProjectFactory.create_new user
+      project.name = 'child'
+      project.s3_filename = 'Gemfile'
+      project.source = Project::A_SOURCE_UPLOAD
+      project.parent_id = parent.ids 
+      project.save.should be_truthy
+      Project.count.should == 2
+
+      project = described_class.update_from_upload project, file, user
+      project.should_not be_nil
+      project.reload
+      project.dependencies.size.should > 0
+      project.dep_number.should > 0
+      project.dep_number_sum.should > 0
+      Project.count.should == 2
+
+      parent.reload 
+      parent.dep_number.should eq(0)
+      parent.dep_number_sum.should > 0 
+    end
   end
 
 end

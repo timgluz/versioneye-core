@@ -43,8 +43,9 @@ class ProjectUpdateService < Versioneye::Service
 
     new_project = ProjectParseService.project_from file
     cache.delete( new_project.id.to_s )
+    cache.delete( project.id.to_s )
     project.update_from new_project
-    project.api_created = api_created
+    project.source = Project::A_SOURCE_API if api_created
     ProjectService.update_license_numbers! project 
     update_numbers project
 
@@ -58,6 +59,8 @@ class ProjectUpdateService < Versioneye::Service
     def self.update_numbers project 
       if !project.parent_id.to_s.empty?
         ProjectService.update_sums project.parent 
+      else 
+        ProjectService.update_sums project 
       end
     rescue => e 
       log.error e.message
