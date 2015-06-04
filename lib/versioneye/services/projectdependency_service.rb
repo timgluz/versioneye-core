@@ -175,7 +175,7 @@ class ProjectdependencyService < Versioneye::Service
           licenseCach.on_whitelist = project.license_whitelist.include_license_substitute?( license.name_substitute )
         end
         licenseCach.license_id = license.id.to_s 
-        dependency.license_caches << licenseCach
+        dependency.license_caches.push licenseCach
       end
     end
 
