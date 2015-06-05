@@ -79,7 +79,7 @@ describe Projectdependency do
 
       prod = dep_1.find_or_init_product
       prod.should_not be_nil
-      prod.prod_key.should be_nil
+      prod.prod_key.should be_empty
       prod.name.should eq(dep_1.name)
     end
   end
