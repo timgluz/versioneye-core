@@ -269,17 +269,14 @@ class Project < Versioneye::Model
     self.dep_number     = new_project.dep_number
     self.out_number     = new_project.out_number
     self.unknown_number = new_project.unknown_number
-
-    if new_project.dependencies && !new_project.dependencies.empty?
-      self.overwrite_dependencies( new_project.dependencies )
-    end
-    
     self.description    = new_project.description
     self.license        = new_project.license
     self.url            = new_project.url
     if new_project.s3_filename
       self.s3_filename  = new_project.s3_filename
     end
+
+    self.overwrite_dependencies( new_project.projectdependencies )
     
     self.save
   end
