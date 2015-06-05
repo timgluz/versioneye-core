@@ -218,7 +218,7 @@ class Project < Versioneye::Model
   end
 
   def remove_dependencies
-    projectdependencies.each { |dependency| dependency.remove }
+    projectdependencies.each { |dependency| dependency.delete }
   end
 
   def save_dependencies
