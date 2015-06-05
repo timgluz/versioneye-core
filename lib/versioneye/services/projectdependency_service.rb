@@ -6,42 +6,61 @@ class ProjectdependencyService < Versioneye::Service
 
   # Updates projectdependency.license_caches for each projectdependency of the project
   def self.update_licenses project 
-    project.dependencies.each do |dep| 
-      dep.license_caches.clear
+    project.projectdependencies.each do |dep| 
       product = dep.find_or_init_product
-      product.version = dep.version_requested 
-      licenses = product.licenses
-      log.info "update_licenses for #{dep.language}:#{dep.prod_key}:#{dep.version_current} - product.prod_key: #{product.prod_key} - licenses: #{licenses.count}"
-      if licenses && !licenses.empty? 
-        fill_license_cache project, dep, licenses
-      end
-      dep.save
+      update_licenses_for project, dep, product
     end
   rescue => e 
     log.error e.message
     log.error e.backtrace.join "\n"
   end
 
+  def self.update_licenses_for project, dep, product, save_dep = true 
+    dep.license_caches.clear
+    product.version = dep.version_requested 
+    licenses = product.licenses
+    if licenses && !licenses.empty? 
+      fill_license_cache project, dep, licenses
+    end
+    dep.save if save_dep
+  end
+
 
   # Updates projectdependency.sv_ids for each projectdependency of the project
   def self.update_security project 
-    project.dependencies.each do |dep| 
-      dep.sv_ids = []
+    project.projectdependencies.each do |dep| 
       product = dep.find_or_init_product
-      version = product.version_by_number dep.version_requested 
-      next if version.nil? 
-
-      dep.sv_ids = version.sv_ids
-      dep.save
-
-      if version.sv_ids.size > 0 
-        project.sv_count += version.sv_ids.size
-        project.save 
-      end
+      update_security_for project, dep, product
     end
   rescue => e 
     log.error e.message
     log.error e.backtrace.join "\n"
+  end
+
+  def self.update_security_for project, dep, product, save_dep = true  
+    version = product.version_by_number dep.version_requested 
+    return nil if version.nil? 
+
+    dep.sv_ids = version.sv_ids
+    dep.save if save_dep
+
+    if version.sv_ids.size > 0 
+      project.sv_count += version.sv_ids.size
+      project.save 
+    end
+  end
+
+
+  def self.update_licenses_security project 
+    project.projectdependencies.each do |dep| 
+      product = dep.find_or_init_product
+      update_licenses_for project, dep, product, false
+      update_security_for project, dep, product, false 
+      dep.save 
+    end
+  rescue => e 
+    log.error e.message
+    log.error e.backtrace.join "\n"  
   end
 
 
