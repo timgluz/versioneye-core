@@ -150,8 +150,8 @@ class ProjectService < Versioneye::Service
     subproject.parent_id = project.id 
     subproject.save
 
-    cache.delete project.id.to_s
-    cache.delete subproject.id.to_s
+    reset_badge project
+    reset_badge subproject
 
     ProjectUpdateService.update_async project 
     true 
@@ -173,8 +173,8 @@ class ProjectService < Versioneye::Service
     subproject.parent_id = nil 
     subproject.save 
 
-    cache.delete project.id.to_s
-    cache.delete subproject.id.to_s
+    reset_badge project
+    reset_badge subproject
 
     ProjectUpdateService.update_async project 
     ProjectUpdateService.update_async subproject 
@@ -367,6 +367,12 @@ class ProjectService < Versioneye::Service
     update_numbers_for project, project, dep_hash
     project.save 
     project 
+  end
+
+
+  def self.reset_badge project 
+    cache.delete project.id.to_s
+    Badge.where(:key => project.id.to_s ).delete
   end
 
   
