@@ -396,6 +396,8 @@ module VersionEye
       name.match(/\AArtistic2\.0\z/) ||
       name.match(/\AArtistic 2\.0\z/) ||
       name.match(/\AArtistic\-2.0\z/) ||
+      name.match(/\APerl Artistic v2\z/) ||
+      name.match(/\APerl-Artistic v2\z/) ||
       name.match(/\AArtistic License 2.0\z/i)
     end
 
