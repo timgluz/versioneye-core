@@ -55,6 +55,13 @@ RSpec.configure do |config|
 
   VersioneyeCore.new
 
+  if (!Settings.instance.environment.eql?('test'))
+    p "---"
+    p "*** YOU ARE NOT IN A TEST ENVIRONMENT! ***"
+    p "---"
+    return nil 
+  end
+
   Stripe.api_key = Settings.instance.stripe_secret_key
 
   config.before(:suite) do
