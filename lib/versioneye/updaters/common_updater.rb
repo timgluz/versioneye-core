@@ -6,7 +6,7 @@ class CommonUpdater < Versioneye::Service
     
     old_project.update_from new_project
     old_project.reload
-    cache.delete( old_project.id.to_s ) # Delete badge status for project
+    ProjectService.reset_badge old_project
 
     SyncService.sync_project_async old_project # For Enterprise environment
 
