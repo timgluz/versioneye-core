@@ -57,11 +57,16 @@ class ProjectdependencyService < Versioneye::Service
     if mute_status == true
       dependency.outdated = false
       dependency.outdated_updated_at = DateTime.now
+      update_project_numbers dependency, project 
     else
       update_outdated! dependency
+      update_project_numbers dependency, project 
     end
-    cache.delete project_id.to_s 
-    dependency.save
+    saved = dependency.save
+    project.reload
+    ProjectService.update_sums project 
+    ProjectService.reset_badge project 
+    saved 
   end
 
 
@@ -166,6 +171,18 @@ class ProjectdependencyService < Versioneye::Service
 
 
   private 
+
+
+    def self.update_project_numbers dependency, project 
+      if dependency.outdated 
+        project.out_number = project.out_number.to_i + 1 
+        project.out_number_sum = project.out_number_sum.to_i + 1 
+      else 
+        project.out_number = project.out_number.to_i - 1 
+        project.out_number_sum = project.out_number_sum.to_i - 1   
+      end
+      project.save 
+    end
 
 
     def self.fill_license_cache project, dependency, licenses

@@ -19,6 +19,7 @@ describe ProjectBatchUpdateService do
       project.period = Project::A_PERIOD_DAILY
       project.sum_own!
       expect( project.save ).to be_truthy
+      expect( project.out_number ).to be > 0 
       expect( project.out_number_sum ).to be > 0 
 
       ActionMailer::Base.deliveries.clear
@@ -49,7 +50,7 @@ describe ProjectBatchUpdateService do
       expect( product.save ).to be_truthy
       LicenseFactory.create_new product, 'GPL'
 
-      user    = UserFactory.create_new 1
+      user = UserFactory.create_new 1
 
       LicenseWhitelistService.create user, 'SuperList'
       LicenseWhitelistService.add user, 'SuperList', 'MIT'
@@ -62,9 +63,12 @@ describe ProjectBatchUpdateService do
       project.user_id = user.ids 
       project.license_whitelist_id = lwl.ids 
       project.period = Project::A_PERIOD_DAILY
+      ProjectService.update_license_numbers!( project )
       project.sum_own!
       expect( project.save ).to be_truthy
+      expect( project.out_number ).to eq(0) 
       expect( project.out_number_sum ).to eq(0) 
+      expect( project.licenses_red ).to eq(1) 
       expect( project.licenses_red_sum ).to eq(1) 
 
       ActionMailer::Base.deliveries.clear

@@ -125,6 +125,7 @@ describe BadgeService do
     end
 
     it "fetches yellow - green badge" do
+      Badge.delete_all
       user = UserFactory.create_new 
       product_1 = ProductFactory.create_new "1"
       product_1.add_version '1000.0.0'
@@ -137,25 +138,23 @@ describe BadgeService do
     
       key = project.ids 
       BadgeService.cache.delete key 
+      Badge.count.should eq(0)
 
       badge = BadgeService.badge_for( key )
       badge.status.should eq('out_of_date')
       BadgeService.cache.get(key).should_not be_nil 
       Badge.count.should eq(1)
 
-      BadgeService.cache.delete key 
+      ProjectService.reset_badge project 
+      Badge.count.should eq(0)
       
       dep.version_requested = product_1.version
       dep.outdated = false
       dep.save.should be_truthy
 
-      badge.updated_at = 2.days.ago 
-      badge.save.should be_truthy
-
       worker = Thread.new{ DependencyBadgeWorker.new.work }
-      badge = BadgeService.badge_for( key )
-      badge.status.should eq('out_of_date')
-      sleep 3
+      BadgeService.badge_for( key )
+      sleep 2
       badge = BadgeService.badge_for( key )
       badge.status.should eq('up_to_date')
       worker.exit 

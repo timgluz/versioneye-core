@@ -235,17 +235,6 @@ class Project < Versioneye::Model
     prod_keys
   end
 
-  def overwrite_dependencies( new_dependencies )
-    muted_keys = muted_prod_keys
-    remove_dependencies
-    new_dependencies.each do |dep|
-      key = dep_key(dep)
-      dep.muted = true if muted_keys.include?( key )
-      projectdependencies.push dep
-      dep.save
-    end
-  end
-
   def make_project_key!
     if self.project_key.to_s.empty?
       self.project_key = make_project_key
@@ -277,19 +266,38 @@ class Project < Versioneye::Model
   def update_from new_project
     return nil if new_project.nil?
 
+    self.dep_number     = new_project.dep_number
+    self.out_number     = new_project.out_number
+    self.unknown_number = new_project.unknown_number
+
     if new_project.dependencies && !new_project.dependencies.empty?
       self.overwrite_dependencies( new_project.dependencies )
     end
+    
     self.description    = new_project.description
     self.license        = new_project.license
     self.url            = new_project.url
     if new_project.s3_filename
       self.s3_filename  = new_project.s3_filename
     end
-    self.dep_number     = new_project.dep_number
-    self.out_number     = new_project.out_number
-    self.unknown_number = new_project.unknown_number
+    
     self.save
+  end
+
+  def overwrite_dependencies( new_dependencies )
+    muted_keys = muted_prod_keys
+    remove_dependencies
+    new_dependencies.each do |dep|
+      key = dep_key(dep)
+      if muted_keys.include?( key )
+        dep.muted = true 
+        dep.outdated = false 
+        dep.outdated_updated_at = DateTime.now
+        self.out_number = self.out_number.to_i - 1 
+      end
+      projectdependencies.push dep
+      dep.save
+    end
   end
 
   def self.email_for(project, user)

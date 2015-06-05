@@ -16,7 +16,6 @@ describe ProjectdependencyService do
   end
 
   describe "update_licenses" do
-
     it 'updates the dependencies with the license infos' do
       Projectdependency.count.should eq(0)
       dep = ProjectdependencyFactory.create_new(@project, @product)
@@ -37,7 +36,6 @@ describe ProjectdependencyService do
       dep.license_caches.count.should eq(1)
       dep.license_caches.first.name.should eq('MIT')
     end
-
   end
 
   describe "update_security" do
@@ -319,23 +317,51 @@ describe ProjectdependencyService do
     end
 
     it 'does mute like expected' do
-      user    = UserFactory.create_new
+      user    = UserFactory.create_new 45 
+      expect( user.save ).to be_truthy
+
       project = ProjectFactory.create_new( user )
-      product = Product.new({:name => 'rails', :prod_key => 'rails', :language => Product::A_LANGUAGE_RUBY, :version => '1.0.0' })
-      product.versions = Array.new
-      product.versions.push(Version.new({:version => '1.0.0'}))
-      product.version  = product.versions.first.to_s
-      product.save
+      project.source = Project::A_SOURCE_UPLOAD 
+      expect( project.save ).to be_truthy
+      
+      product = ProductFactory.create_for_gemfile 'rails', '1.0.0'
+      expect( product.save ).to be_truthy
+      
       dependency = ProjectdependencyFactory.create_new(project, product)
-      dependency.muted.should be_falsey
+      dependency.project_id = project.ids 
+      dependency.version_label = '0.9.0'
+      dependency.version_requested = '0.9.0'
+      dependency.version_current = '0.9.0'
+      dependency.outdated = true 
+      expect( dependency.save ).to be_truthy
+      expect( dependency.muted ).to be_falsey
+      expect( dependency.outdated ).to be_truthy
+      expect( ProjectService.outdated?(project) ).to be_truthy
 
-      ProjectdependencyService.mute!( project.id.to_s, dependency.id.to_s, true ).should be_truthy
-      dependency.reload
-      dependency.muted.should be_truthy
+      project = ProjectUpdateService.update project  
+      expect( project ).to_not be_nil 
+      expect( project.dependencies.count ).to eq(1)
+      expect( project.dep_number ).to eq(1)
+      expect( project.out_number ).to eq(1)
+      expect( project.out_number_sum ).to eq(1)
 
-      ProjectdependencyService.mute!( project.id.to_s, dependency.id.to_s, false ).should be_truthy
+      expect( ProjectdependencyService.mute!( project.id.to_s, dependency.id.to_s, true ) ).to be_truthy
       dependency.reload
-      dependency.muted.should be_falsey
+      expect( dependency.muted ).to be_truthy
+      expect( dependency.outdated ).to be_falsey
+      project.reload 
+      expect( project.out_number ).to eq(0)
+      expect( project.out_number_sum ).to eq(0)
+      expect( ProjectService.outdated?(project) ).to be_falsey
+
+      expect( ProjectdependencyService.mute!( project.id.to_s, dependency.id.to_s, false ) ).to be_truthy
+      dependency.reload
+      expect( dependency.muted ).to be_falsey
+      expect( dependency.outdated ).to be_truthy
+      project.reload 
+      expect( project.out_number ).to eq(1)
+      expect( project.out_number_sum ).to eq(1)
+      expect( ProjectService.outdated?(project) ).to be_truthy
     end
 
   end
