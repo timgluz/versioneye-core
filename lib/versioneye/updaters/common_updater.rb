@@ -5,7 +5,6 @@ class CommonUpdater < Versioneye::Service
     return nil if old_project.nil? || new_project.nil? 
     
     old_project.update_from new_project
-    old_project.reload
     ProjectService.reset_badge old_project
 
     SyncService.sync_project_async old_project # For Enterprise environment
