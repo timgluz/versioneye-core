@@ -21,6 +21,10 @@ class ProjectUpdateWorker < Worker
 
         process body
 
+        msg = " - job done for #{body}"
+        puts msg
+        log.info msg
+
         channel.ack(delivery_info.delivery_tag)
       end
     rescue => e
@@ -52,7 +56,7 @@ class ProjectUpdateWorker < Worker
   # - Project::A_PERIOD_MONTHLY
   #
   def update_projects msg
-    log.info "ProjectBatchUpdateService.update_all( #{msg} )"
+    log.info " - ProjectBatchUpdateService.update_all( #{msg} )"
     ProjectBatchUpdateService.update_all( msg )
   rescue => e
     log.error e.message
@@ -66,7 +70,7 @@ class ProjectUpdateWorker < Worker
     send_email = false 
     send_email = true if pps[1].eql?('true')
     project = Project.find project_id
-    log.info "ProjectUpdateService.update #{project_id}"
+    log.info " - ProjectUpdateService.update #{project_id}"
     ProjectUpdateService.update project, send_email
   rescue => e
     log.error e.message
