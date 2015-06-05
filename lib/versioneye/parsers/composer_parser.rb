@@ -250,7 +250,7 @@ class ComposerParser < CommonParser
     return false if (dependency.nil? || data.nil?)
 
     repos = data['repositories']
-    return false if (repos.nil? || repos.empty? || repos['package'].nil?)
+    return false if (repos.nil? || repos.empty?)
 
     repos.each do |repo|
       repo_name = repo['package']['name']
