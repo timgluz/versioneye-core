@@ -127,7 +127,7 @@ class Projectdependency < Versioneye::Model
     def init_product
       product             = Product.new
       product.name        = self.name
-      product.prod_key    = self.prod_key.to_s.downcase
+      product.language    = self.language if self.language
       product.group_id    = self.group_id.to_s.downcase
       product.artifact_id = self.artifact_id.to_s.downcase
       product
