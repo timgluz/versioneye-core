@@ -10,7 +10,7 @@ class ProjectdependencyService < Versioneye::Service
       dep.license_caches = []
       product = dep.find_or_init_product
       product.version = dep.version_requested 
-      licenses  = product.licenses
+      licenses = product.licenses
       if licenses && !licenses.empty? 
         fill_license_cache project, dep, licenses
       end
