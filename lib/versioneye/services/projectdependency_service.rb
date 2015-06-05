@@ -11,7 +11,7 @@ class ProjectdependencyService < Versioneye::Service
       product = dep.find_or_init_product
       product.version = dep.version_requested 
       licenses = product.licenses
-      log.info "update_licenses for #{dep.language}:#{dep.prod_key}:#{dep.version_current} - licenses: #{licenses.count}"
+      log.info "update_licenses for #{dep.language}:#{dep.prod_key}:#{dep.version_current} - product.prod_key: #{product.prod_key} - licenses: #{licenses.count}"
       if licenses && !licenses.empty? 
         fill_license_cache project, dep, licenses
       end
