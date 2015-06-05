@@ -35,9 +35,9 @@
             </div>
             <div style="display: table-cell" >
               <span style="font-weight: bold; font-size: 14px;" >
-                <% color = project.licenses_red.to_i == 0 ? "green" : "red" %>
+                <% color = project.licenses_red_sum.to_i == 0 ? "green" : "red" %>
                 <span title="licenses violating the license whitelist" style="color: <%= color %>"><%= project.licenses_red_sum %></span> :
-                <% color = project.licenses_unknown.to_i == 0 ? "green" : "orange" %>
+                <% color = project.licenses_unknown_sum.to_i == 0 ? "green" : "orange" %>
                 <span title="unknown licenses" style="color: <%= color %>"><%= project.licenses_unknown_sum %></span>
               </span>
             </div>
