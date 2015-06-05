@@ -7,7 +7,7 @@ class ProjectdependencyService < Versioneye::Service
   # Updates projectdependency.license_caches for each projectdependency of the project
   def self.update_licenses project 
     project.dependencies.each do |dep| 
-      dep.license_caches = []
+      dep.license_caches.clear
       product = dep.find_or_init_product
       product.version = dep.version_requested 
       licenses = product.licenses
@@ -194,6 +194,7 @@ class ProjectdependencyService < Versioneye::Service
         end
         licenseCach.license_id = license.id.to_s 
         dependency.license_caches.push licenseCach
+        licenseCach.save 
       end
     end
 

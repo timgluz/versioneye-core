@@ -33,7 +33,7 @@ class Projectdependency < Versioneye::Model
 
   belongs_to :project
 
-  embeds_many :license_caches 
+  embeds_many :license_caches, cascade_callbacks: true
 
   
   index({project_id: 1}, { name: "project_index", background: true})
