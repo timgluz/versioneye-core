@@ -2,6 +2,38 @@ require 'spec_helper'
 
 describe ProjectUpdateService do
 
+  describe 'status_for' do 
+    it 'returns done for not existing project' do 
+      expect( described_class.status_for 'sfafgas-NAN---' ).to eq('done')
+    end
+  end
+
+  describe 'update_async' do 
+    it 'updates async and returns the right status code' do 
+      gemfile = "spec/fixtures/files/Gemfile"
+      file_attachment = Rack::Test::UploadedFile.new(gemfile, "application/octet-stream")
+      file = {'datafile' => file_attachment}
+
+      user = UserFactory.create_new
+      project = ProjectFactory.default user
+      project.s3_filename = 'Gemfile'
+      project.source = Project::A_SOURCE_UPLOAD
+      project.save.should be_truthy
+      Project.count.should == 1
+
+      project = described_class.update_from_upload project, file, user
+
+      expect( described_class.update_async project ).to eql('running')
+      expect( described_class.update_async project ).to eql('running')
+      expect( described_class.status_for project.ids ).to eq('running')
+
+      worker = Thread.new{ ProjectUpdateWorker.new.work }
+      sleep 2 
+      expect( described_class.status_for project.ids ).to eq('done')
+      worker.exit
+    end
+  end
+
   describe 'update' do
     it 'will update the project' do
       user = UserFactory.create_new

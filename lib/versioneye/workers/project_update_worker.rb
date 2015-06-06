@@ -72,6 +72,9 @@ class ProjectUpdateWorker < Worker
     project = Project.find project_id
     log.info " - ProjectUpdateService.update #{project_id}"
     ProjectUpdateService.update project, send_email
+
+    task_key    = "task_#{project.ids}"
+    task_status = cache.set( task_key, ProjectUpdateService::A_TASK_DONE, ProjectUpdateService::A_TASK_TTL )
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
