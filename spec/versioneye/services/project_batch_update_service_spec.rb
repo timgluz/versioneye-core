@@ -25,6 +25,11 @@ describe ProjectBatchUpdateService do
       ActionMailer::Base.deliveries.clear
       ProjectBatchUpdateService.update_all Project::A_PERIOD_DAILY
       ActionMailer::Base.deliveries.size.should == 1
+      expect(MailTrack.send_already?(user.ids, ProjectBatchUpdateService::A_EMAIL_TEMPLATE_1, project.period)).to be_truthy 
+      expect(MailTrack.count).to eq(1)
+      ProjectBatchUpdateService.update_all Project::A_PERIOD_DAILY
+      expect(MailTrack.count).to eq(1)
+      ActionMailer::Base.deliveries.size.should == 1
     end
 
     it 'doesnt send out email because project is up-to-date' do
