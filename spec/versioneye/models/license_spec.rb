@@ -117,6 +117,12 @@ describe License do
   describe "name_substitute" do
 
     it "should return PHP-3.01 name" do
+      license = License.new({:name => "xpp license"})
+      license.name_substitute.should eq("xpp")
+    end
+
+
+    it "should return PHP-3.01 name" do
       license = License.new({:name => "The PHP License, version 3.01"})
       license.name_substitute.should eq("PHP-3.01")
     end
@@ -1012,7 +1018,7 @@ describe License do
 
     it "check Zlib" do
       license = License.new({:name => "ZLIB license"})
-      license.name_substitute.should eq("ZLIB license")
+      license.name_substitute.should eq("Zlib")
       spdx = SpdxLicense.new({:fullname => 'zlib License', :identifier => 'Zlib'})
       spdx.save 
       license.name_substitute.should eq("Zlib")

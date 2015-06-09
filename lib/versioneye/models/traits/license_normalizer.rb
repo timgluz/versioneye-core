@@ -24,6 +24,12 @@ module VersionEye
     
     # http://spdx.org/licenses/
     def spdx_identifier 
+
+      spdx = spdx_2_0_map
+
+      spdx_id = has_id_or_fullname?(spdx, name)
+      return spdx_id if !spdx_id.to_s.empty? 
+
       tmp_name = do_replacements(name)
 
       return 'AGPL-3.0' if agpl_30_match( tmp_name )
@@ -88,12 +94,6 @@ module VersionEye
 
       return 'PHP-3.01' if php_301_match( tmp_name )
       return 'PHP-3.0'  if php_30_match( tmp_name )
-
-      spdx = SpdxLicense.identifier_by_fullname_regex name 
-      return spdx.identifier if spdx 
-
-      spdx = SpdxLicense.identifier_by_regex name
-      return spdx.identifier if spdx
 
       nil 
     end
@@ -493,6 +493,14 @@ module VersionEye
 
     private 
 
+      def has_id_or_fullname?(map, name) 
+        map.keys.each do |key|
+          return key if key.upcase.eql?(name.upcase)
+          return key if map[key][:fullname].upcase.eql?(name.upcase)
+        end
+        nil 
+      end
+      
       def do_replacements name 
         tmp_name = name.gsub(/\AThe /i, "").gsub(" - ", " ").gsub(", ", " ").strip
         tmp_name = tmp_name.gsub("-", " ").strip
@@ -520,6 +528,309 @@ module VersionEye
         tmp_name = tmp_name.gsub(/Lizenz/i, " ").strip 
 
         tmp_name
+      end
+
+      def spdx_2_0_map
+        @@map ||= init_spdx_2_0_map
+      end
+
+      def init_spdx_2_0_map
+        map = {}
+        map['Glide'] = {:fullname => '3dfx Glide License', :osi_approved => false}
+        map['Abstyles'] = {:fullname => 'Abstyles License', :osi_approved => false}
+        map['AFL-1.1'] = {:fullname => 'Academic Free License v1.1', :osi_approved => true}
+        map['AFL-1.2'] = {:fullname => 'Academic Free License v1.2', :osi_approved => true}
+        map['AFL-2.0'] = {:fullname => 'Academic Free License v2.0', :osi_approved => true}
+        map['AFL-2.1'] = {:fullname => 'Academic Free License v2.1', :osi_approved => true}
+        map['AFL-3.0'] = {:fullname => 'Academic Free License v3.0', :osi_approved => true}
+        map['AMPAS'] = {:fullname => 'Academy of Motion Picture Arts and Sciences BSD', :osi_approved => false}
+        map['APL-1.0'] = {:fullname => 'Adaptive Public License 1.0', :osi_approved => true}
+        map['Adobe-Glyph'] = {:fullname => 'Adobe Glyph List License', :osi_approved => false}
+        map['APAFML'] = {:fullname => 'Adobe Postscript AFM License', :osi_approved => false}
+        map['Adobe-2006'] = {:fullname => 'Adobe Systems Incorporated Source Code License Agreement', :osi_approved => false}
+        map['AGPL-1.0'] = {:fullname => 'Affero General Public License v1.0', :osi_approved => false}
+        map['Afmparse'] = {:fullname => 'Afmparse License', :osi_approved => false}
+        map['Aladdin'] = {:fullname => 'Aladdin Free Public License', :osi_approved => false}
+        map['ADSL'] = {:fullname => 'Amazon Digital Services License', :osi_approved => false}
+        map['AMDPLPA'] = {:fullname => 'AMD\'s plpa_map.c License', :osi_approved => false}
+        map['ANTLR-PD'] = {:fullname => 'ANTLR Software Rights Notice', :osi_approved => false}
+        map['Apache-1.0'] = {:fullname => 'Apache License 1.0', :osi_approved => false}
+        map['Apache-1.1'] = {:fullname => 'Apache License 1.1', :osi_approved => true}
+        map['Apache-2.0'] = {:fullname => 'Apache License 2.0', :osi_approved => true}
+        map['AML'] = {:fullname => 'Apple MIT License', :osi_approved => false}
+        map['APSL-1.0'] = {:fullname => 'Apple Public Source License 1.0', :osi_approved => true}
+        map['APSL-1.1'] = {:fullname => 'Apple Public Source License 1.1', :osi_approved => true}
+        map['APSL-1.2'] = {:fullname => 'Apple Public Source License 1.2', :osi_approved => true}
+        map['APSL-2.0'] = {:fullname => 'Apple Public Source License 2.0', :osi_approved => true}
+        map['Artistic-1.0'] = {:fullname => 'Artistic License 1.0', :osi_approved => true}
+        map['Artistic-1.0-Perl'] = {:fullname => 'Artistic License 1.0 (Perl)', :osi_approved => true}
+        map['Artistic-1.0-cl8'] = {:fullname => 'Artistic License 1.0 w/clause 8', :osi_approved => true}
+        map['Artistic-2.0'] = {:fullname => 'Artistic License 2.0', :osi_approved => true}
+        map['AAL'] = {:fullname => 'Attribution Assurance License', :osi_approved => true}
+        map['Bahyph'] = {:fullname => 'Bahyph License', :osi_approved => false}
+        map['Barr'] = {:fullname => 'Barr License', :osi_approved => false}
+        map['Beerware'] = {:fullname => 'Beerware License', :osi_approved => false}
+        map['BitTorrent-1.0'] = {:fullname => 'BitTorrent Open Source License v1.0', :osi_approved => false}
+        map['BitTorrent-1.1'] = {:fullname => 'BitTorrent Open Source License v1.1', :osi_approved => false}
+        map['BSL-1.0'] = {:fullname => 'Boost Software License 1.0', :osi_approved => true}
+        map['Borceux'] = {:fullname => 'Borceux license', :osi_approved => false}
+        map['BSD-2-Clause'] = {:fullname => 'BSD 2-clause \"Simplified\" License', :osi_approved => true}
+        map['BSD-2-Clause-FreeBSD'] = {:fullname => 'BSD 2-clause FreeBSD License', :osi_approved => false}
+        map['BSD-2-Clause-NetBSD'] = {:fullname => 'BSD 2-clause NetBSD License', :osi_approved => false}
+        map['BSD-3-Clause'] = {:fullname => 'BSD 3-clause \"New\" or \"Revised\" License', :osi_approved => true}
+        map['BSD-3-Clause-Clear'] = {:fullname => 'BSD 3-clause Clear License', :osi_approved => false}
+        map['BSD-4-Clause'] = {:fullname => 'BSD 4-clause \"Original\" or \"Old\" License', :osi_approved => false}
+        map['BSD-Protection'] = {:fullname => 'BSD Protection License', :osi_approved => false}
+        map['BSD-3-Clause-Attribution'] = {:fullname => 'BSD with attribution', :osi_approved => false}
+        map['BSD-4-Clause-UC'] = {:fullname => 'BSD-4-Clause (University of California-Specific)', :osi_approved => false}
+        map['bzip2-1.0.5'] = {:fullname => 'bzip2 and libbzip2 License v1.0.5', :osi_approved => false}
+        map['bzip2-1.0.6'] = {:fullname => 'bzip2 and libbzip2 License v1.0.6', :osi_approved => false}
+        map['Caldera'] = {:fullname => 'Caldera License', :osi_approved => false}
+        map['CECILL-1.0'] = {:fullname => 'CeCILL Free Software License Agreement v1.0', :osi_approved => false}
+        map['CECILL-1.1'] = {:fullname => 'CeCILL Free Software License Agreement v1.1', :osi_approved => false}
+        map['CECILL-2.0'] = {:fullname => 'CeCILL Free Software License Agreement v2.0', :osi_approved => false}
+        map['CECILL-B'] = {:fullname => 'CeCILL-B Free Software License Agreement', :osi_approved => false}
+        map['CECILL-C'] = {:fullname => 'CeCILL-C Free Software License Agreement', :osi_approved => false}
+        map['ClArtistic'] = {:fullname => 'Clarified Artistic License', :osi_approved => false}
+        map['MIT-CMU'] = {:fullname => 'CMU License', :osi_approved => false}
+        map['CNRI-Python'] = {:fullname => 'CNRI Python License', :osi_approved => true}
+        map['CNRI-Python-GPL-Compatible'] = {:fullname => 'CNRI Python Open Source GPL Compatible License Agreement', :osi_approved => false}
+        map['CPOL-1.02'] = {:fullname => 'Code Project Open License 1.02', :osi_approved => false}
+        map['CDDL-1.0'] = {:fullname => 'Common Development and Distribution License 1.0', :osi_approved => true}
+        map['CDDL-1.1'] = {:fullname => 'Common Development and Distribution License 1.1', :osi_approved => false}
+        map['CPAL-1.0'] = {:fullname => 'Common Public Attribution License 1.0', :osi_approved => true}
+        map['CPL-1.0'] = {:fullname => 'Common Public License 1.0', :osi_approved => true}
+        map['CATOSL-1.1'] = {:fullname => 'Computer Associates Trusted Open Source License 1.1', :osi_approved => true}
+        map['Condor-1.1'] = {:fullname => 'Condor Public License v1.1', :osi_approved => false}
+        map['CC-BY-1.0'] = {:fullname => 'Creative Commons Attribution 1.0', :osi_approved => false}
+        map['CC-BY-2.0'] = {:fullname => 'Creative Commons Attribution 2.0', :osi_approved => false}
+        map['CC-BY-2.5'] = {:fullname => 'Creative Commons Attribution 2.5', :osi_approved => false}
+        map['CC-BY-3.0'] = {:fullname => 'Creative Commons Attribution 3.0', :osi_approved => false}
+        map['CC-BY-4.0'] = {:fullname => 'Creative Commons Attribution 4.0', :osi_approved => false}
+        map['CC-BY-ND-1.0'] = {:fullname => 'Creative Commons Attribution No Derivatives 1.0', :osi_approved => false}
+        map['CC-BY-ND-2.0'] = {:fullname => 'Creative Commons Attribution No Derivatives 2.0', :osi_approved => false}
+        map['CC-BY-ND-2.5'] = {:fullname => 'Creative Commons Attribution No Derivatives 2.5', :osi_approved => false}
+        map['CC-BY-ND-3.0'] = {:fullname => 'Creative Commons Attribution No Derivatives 3.0', :osi_approved => false}
+        map['CC-BY-ND-4.0'] = {:fullname => 'Creative Commons Attribution No Derivatives 4.0', :osi_approved => false}
+        map['CC-BY-NC-1.0'] = {:fullname => 'Creative Commons Attribution Non Commercial 1.0', :osi_approved => false}
+        map['CC-BY-NC-2.0'] = {:fullname => 'Creative Commons Attribution Non Commercial 2.0', :osi_approved => false}
+        map['CC-BY-NC-2.5'] = {:fullname => 'Creative Commons Attribution Non Commercial 2.5', :osi_approved => false}
+        map['CC-BY-NC-3.0'] = {:fullname => 'Creative Commons Attribution Non Commercial 3.0', :osi_approved => false}
+        map['CC-BY-NC-4.0'] = {:fullname => 'Creative Commons Attribution Non Commercial 4.0', :osi_approved => false}
+        map['CC-BY-NC-ND-1.0'] = {:fullname => 'Creative Commons Attribution Non Commercial No Derivatives 1.0', :osi_approved => false}
+        map['CC-BY-NC-ND-2.0'] = {:fullname => 'Creative Commons Attribution Non Commercial No Derivatives 2.0', :osi_approved => false}
+        map['CC-BY-NC-ND-2.5'] = {:fullname => 'Creative Commons Attribution Non Commercial No Derivatives 2.5', :osi_approved => false}
+        map['CC-BY-NC-ND-3.0'] = {:fullname => 'Creative Commons Attribution Non Commercial No Derivatives 3.0', :osi_approved => false}
+        map['CC-BY-NC-ND-4.0'] = {:fullname => 'Creative Commons Attribution Non Commercial No Derivatives 4.0', :osi_approved => false}
+        map['CC-BY-NC-SA-1.0'] = {:fullname => 'Creative Commons Attribution Non Commercial Share Alike 1.0', :osi_approved => false}
+        map['CC-BY-NC-SA-2.0'] = {:fullname => 'Creative Commons Attribution Non Commercial Share Alike 2.0', :osi_approved => false}
+        map['CC-BY-NC-SA-2.5'] = {:fullname => 'Creative Commons Attribution Non Commercial Share Alike 2.5', :osi_approved => false}
+        map['CC-BY-NC-SA-3.0'] = {:fullname => 'Creative Commons Attribution Non Commercial Share Alike 3.0', :osi_approved => false}
+        map['CC-BY-NC-SA-4.0'] = {:fullname => 'Creative Commons Attribution Non Commercial Share Alike 4.0', :osi_approved => false}
+        map['CC-BY-SA-1.0'] = {:fullname => 'Creative Commons Attribution Share Alike 1.0', :osi_approved => false}
+        map['CC-BY-SA-2.0'] = {:fullname => 'Creative Commons Attribution Share Alike 2.0', :osi_approved => false}
+        map['CC-BY-SA-2.5'] = {:fullname => 'Creative Commons Attribution Share Alike 2.5', :osi_approved => false}
+        map['CC-BY-SA-3.0'] = {:fullname => 'Creative Commons Attribution Share Alike 3.0', :osi_approved => false}
+        map['CC-BY-SA-4.0'] = {:fullname => 'Creative Commons Attribution Share Alike 4.0', :osi_approved => false}
+        map['CC0-1.0'] = {:fullname => 'Creative Commons Zero v1.0 Universal', :osi_approved => false}
+        map['Crossword'] = {:fullname => 'Crossword License', :osi_approved => false}
+        map['CUA-OPL-1.0'] = {:fullname => 'CUA Office Public License v1.0', :osi_approved => true}
+        map['Cube'] = {:fullname => 'Cube License', :osi_approved => false}
+        map['D-FSL-1.0'] = {:fullname => 'Deutsche Freie Software Lizenz', :osi_approved => false}
+        map['diffmark'] = {:fullname => 'diffmark license', :osi_approved => false}
+        map['WTFPL'] = {:fullname => 'Do What The F*ck You Want To Public License', :osi_approved => false}
+        map['DOC'] = {:fullname => 'DOC License', :osi_approved => false}
+        map['Dotseqn'] = {:fullname => 'Dotseqn License', :osi_approved => false}
+        map['DSDP'] = {:fullname => 'DSDP License', :osi_approved => false}
+        map['dvipdfm'] = {:fullname => 'dvipdfm License', :osi_approved => false}
+        map['EPL-1.0'] = {:fullname => 'Eclipse Public License 1.0', :osi_approved => true}
+        map['ECL-1.0'] = {:fullname => 'Educational Community License v1.0', :osi_approved => true}
+        map['ECL-2.0'] = {:fullname => 'Educational Community License v2.0', :osi_approved => true}
+        map['eGenix'] = {:fullname => 'eGenix.com Public License 1.1.0', :osi_approved => false}
+        map['EFL-1.0'] = {:fullname => 'Eiffel Forum License v1.0', :osi_approved => true}
+        map['EFL-2.0'] = {:fullname => 'Eiffel Forum License v2.0', :osi_approved => true}
+        map['MIT-advertising'] = {:fullname => 'Enlightenment License (e16)', :osi_approved => false}
+        map['MIT-enna'] = {:fullname => 'enna License', :osi_approved => false}
+        map['Entessa'] = {:fullname => 'Entessa Public License v1.0', :osi_approved => true}
+        map['ErlPL-1.1'] = {:fullname => 'Erlang Public License v1.1', :osi_approved => false}
+        map['EUDatagrid'] = {:fullname => 'EU DataGrid Software License', :osi_approved => true}
+        map['EUPL-1.0'] = {:fullname => 'European Union Public License 1.0', :osi_approved => false}
+        map['EUPL-1.1'] = {:fullname => 'European Union Public License 1.1', :osi_approved => true}
+        map['Eurosym'] = {:fullname => 'Eurosym License', :osi_approved => false}
+        map['Fair'] = {:fullname => 'Fair License', :osi_approved => true}
+        map['MIT-feh'] = {:fullname => 'feh License', :osi_approved => false}
+        map['Frameworx-1.0'] = {:fullname => 'Frameworx Open License 1.0', :osi_approved => true}
+        map['FreeImage'] = {:fullname => 'FreeImage Public License v1.0', :osi_approved => false}
+        map['FTL'] = {:fullname => 'Freetype Project License', :osi_approved => false}
+        map['FSFUL'] = {:fullname => 'FSF Unlimited License', :osi_approved => false}
+        map['FSFULLR'] = {:fullname => 'FSF Unlimited License (with License Retention)', :osi_approved => false}
+        map['Giftware'] = {:fullname => 'Giftware License', :osi_approved => false}
+        map['GL2PS'] = {:fullname => 'GL2PS License', :osi_approved => false}
+        map['Glulxe'] = {:fullname => 'Glulxe License', :osi_approved => false}
+        map['AGPL-3.0'] = {:fullname => 'GNU Affero General Public License v3.0', :osi_approved => true}
+        map['GFDL-1.1'] = {:fullname => 'GNU Free Documentation License v1.1', :osi_approved => false}
+        map['GFDL-1.2'] = {:fullname => 'GNU Free Documentation License v1.2', :osi_approved => false}
+        map['GFDL-1.3'] = {:fullname => 'GNU Free Documentation License v1.3', :osi_approved => false}
+        map['GPL-1.0'] = {:fullname => 'GNU General Public License v1.0 only', :osi_approved => false}
+        map['GPL-2.0'] = {:fullname => 'GNU General Public License v2.0 only', :osi_approved => true}
+        map['GPL-3.0'] = {:fullname => 'GNU General Public License v3.0 only', :osi_approved => true}
+        map['LGPL-2.1'] = {:fullname => 'GNU Lesser General Public License v2.1 only', :osi_approved => true}
+        map['LGPL-3.0'] = {:fullname => 'GNU Lesser General Public License v3.0 only', :osi_approved => true}
+        map['LGPL-2.0'] = {:fullname => 'GNU Library General Public License v2 only', :osi_approved => true}
+        map['gnuplot'] = {:fullname => 'gnuplot License', :osi_approved => false}
+        map['gSOAP-1.3b'] = {:fullname => 'gSOAP Public License v1.3b', :osi_approved => false}
+        map['HaskellReport'] = {:fullname => 'Haskell Language Report License', :osi_approved => false}
+        map['HPND'] = {:fullname => 'Historic Permission Notice and Disclaimer', :osi_approved => true}
+        map['IBM-pibs'] = {:fullname => 'IBM PowerPC Initialization and Boot Software', :osi_approved => false}
+        map['IPL-1.0'] = {:fullname => 'IBM Public License v1.0', :osi_approved => true}
+        map['ImageMagick'] = {:fullname => 'ImageMagick License', :osi_approved => false}
+        map['iMatix'] = {:fullname => 'iMatix Standard Function Library Agreement', :osi_approved => false}
+        map['Imlib2'] = {:fullname => 'Imlib2 License', :osi_approved => false}
+        map['IJG'] = {:fullname => 'Independent JPEG Group License', :osi_approved => false}
+        map['Intel-ACPI'] = {:fullname => 'Intel ACPI Software License Agreement', :osi_approved => false}
+        map['Intel'] = {:fullname => 'Intel Open Source License', :osi_approved => true}
+        map['IPA'] = {:fullname => 'IPA Font License', :osi_approved => true}
+        map['ISC'] = {:fullname => 'ISC License', :osi_approved => true}
+        map['JasPer-2.0'] = {:fullname => 'JasPer License', :osi_approved => false}
+        map['JSON'] = {:fullname => 'JSON License', :osi_approved => false}
+        map['LPPL-1.3a'] = {:fullname => 'LaTeX Project Public License 1.3a', :osi_approved => false}
+        map['LPPL-1.0'] = {:fullname => 'LaTeX Project Public License v1.0', :osi_approved => false}
+        map['LPPL-1.1'] = {:fullname => 'LaTeX Project Public License v1.1', :osi_approved => false}
+        map['LPPL-1.2'] = {:fullname => 'LaTeX Project Public License v1.2', :osi_approved => false}
+        map['LPPL-1.3c'] = {:fullname => 'LaTeX Project Public License v1.3c', :osi_approved => true}
+        map['Latex2e'] = {:fullname => 'Latex2e License', :osi_approved => false}
+        map['BSD-3-Clause-LBNL'] = {:fullname => 'Lawrence Berkeley National Labs BSD variant license', :osi_approved => false}
+        map['Leptonica'] = {:fullname => 'Leptonica License', :osi_approved => false}
+        map['Libpng'] = {:fullname => 'libpng License', :osi_approved => false}
+        map['libtiff'] = {:fullname => 'libtiff License', :osi_approved => false}
+        map['LPL-1.02'] = {:fullname => 'Lucent Public License v1.02', :osi_approved => true}
+        map['LPL-1.0'] = {:fullname => 'Lucent Public License Version 1.0', :osi_approved => true}
+        map['MakeIndex'] = {:fullname => 'MakeIndex License', :osi_approved => false}
+        map['MTLL'] = {:fullname => 'Matrix Template Library License', :osi_approved => false}
+        map['MS-PL'] = {:fullname => 'Microsoft Public License', :osi_approved => true}
+        map['MS-RL'] = {:fullname => 'Microsoft Reciprocal License', :osi_approved => true}
+        map['MirOS'] = {:fullname => 'MirOS Licence', :osi_approved => true}
+        map['MITNFA'] = {:fullname => 'MIT +no-false-attribs license', :osi_approved => false}
+        map['MIT'] = {:fullname => 'MIT License', :osi_approved => true}
+        map['Motosoto'] = {:fullname => 'Motosoto License', :osi_approved => true}
+        map['MPL-1.0'] = {:fullname => 'Mozilla Public License 1.0', :osi_approved => true}
+        map['MPL-1.1'] = {:fullname => 'Mozilla Public License 1.1', :osi_approved => true}
+        map['MPL-2.0'] = {:fullname => 'Mozilla Public License 2.0', :osi_approved => true}
+        map['MPL-2.0-no-copyleft-exception'] = {:fullname => 'Mozilla Public License 2.0 (no copyleft exception)', :osi_approved => true}
+        map['mpich2'] = {:fullname => 'mpich2 License', :osi_approved => false}
+        map['Multics'] = {:fullname => 'Multics License', :osi_approved => true}
+        map['Mup'] = {:fullname => 'Mup License', :osi_approved => false}
+        map['NASA-1.3'] = {:fullname => 'NASA Open Source Agreement 1.3', :osi_approved => true}
+        map['Naumen'] = {:fullname => 'Naumen Public License', :osi_approved => true}
+        map['NBPL-1.0'] = {:fullname => 'Net Boolean Public License v1', :osi_approved => false}
+        map['NetCDF'] = {:fullname => 'NetCDF license', :osi_approved => false}
+        map['NGPL'] = {:fullname => 'Nethack General Public License', :osi_approved => true}
+        map['NOSL'] = {:fullname => 'Netizen Open Source License', :osi_approved => false}
+        map['NPL-1.0'] = {:fullname => 'Netscape Public License v1.0', :osi_approved => false}
+        map['NPL-1.1'] = {:fullname => 'Netscape Public License v1.1', :osi_approved => false}
+        map['Newsletr'] = {:fullname => 'Newsletr License', :osi_approved => false}
+        map['NLPL'] = {:fullname => 'No Limit Public License', :osi_approved => false}
+        map['Nokia'] = {:fullname => 'Nokia Open Source License', :osi_approved => true}
+        map['NPOSL-3.0'] = {:fullname => 'Non-Profit Open Software License 3.0', :osi_approved => true}
+        map['Noweb'] = {:fullname => 'Noweb License', :osi_approved => false}
+        map['NRL'] = {:fullname => 'NRL License', :osi_approved => false}
+        map['NTP'] = {:fullname => 'NTP License', :osi_approved => true}
+        map['Nunit'] = {:fullname => 'Nunit License', :osi_approved => false}
+        map['OCLC-2.0'] = {:fullname => 'OCLC Research Public License 2.0', :osi_approved => true}
+        map['ODbL-1.0'] = {:fullname => 'ODC Open Database License v1.0', :osi_approved => false}
+        map['PDDL-1.0'] = {:fullname => 'ODC Public Domain Dedication & License 1.0', :osi_approved => false}
+        map['OGTSL'] = {:fullname => 'Open Group Test Suite License', :osi_approved => true}
+        map['OLDAP-2.2.2'] = {:fullname => 'Open LDAP Public License  2.2.2', :osi_approved => false}
+        map['OLDAP-1.1'] = {:fullname => 'Open LDAP Public License v1.1', :osi_approved => false}
+        map['OLDAP-1.2'] = {:fullname => 'Open LDAP Public License v1.2', :osi_approved => false}
+        map['OLDAP-1.3'] = {:fullname => 'Open LDAP Public License v1.3', :osi_approved => false}
+        map['OLDAP-1.4'] = {:fullname => 'Open LDAP Public License v1.4', :osi_approved => false}
+        map['OLDAP-2.0'] = {:fullname => 'Open LDAP Public License v2.0 (or possibly 2.0A and 2.0B)', :osi_approved => false}
+        map['OLDAP-2.0.1'] = {:fullname => 'Open LDAP Public License v2.0.1', :osi_approved => false}
+        map['OLDAP-2.1'] = {:fullname => 'Open LDAP Public License v2.1', :osi_approved => false}
+        map['OLDAP-2.2'] = {:fullname => 'Open LDAP Public License v2.2', :osi_approved => false}
+        map['OLDAP-2.2.1'] = {:fullname => 'Open LDAP Public License v2.2.1', :osi_approved => false}
+        map['OLDAP-2.3'] = {:fullname => 'Open LDAP Public License v2.3', :osi_approved => false}
+        map['OLDAP-2.4'] = {:fullname => 'Open LDAP Public License v2.4', :osi_approved => false}
+        map['OLDAP-2.5'] = {:fullname => 'Open LDAP Public License v2.5', :osi_approved => false}
+        map['OLDAP-2.6'] = {:fullname => 'Open LDAP Public License v2.6', :osi_approved => false}
+        map['OLDAP-2.7'] = {:fullname => 'Open LDAP Public License v2.7', :osi_approved => false}
+        map['OLDAP-2.8'] = {:fullname => 'Open LDAP Public License v2.8', :osi_approved => false}
+        map['OML'] = {:fullname => 'Open Market License', :osi_approved => false}
+        map['OPL-1.0'] = {:fullname => 'Open Public License v1.0', :osi_approved => false}
+        map['OSL-1.0'] = {:fullname => 'Open Software License 1.0', :osi_approved => true}
+        map['OSL-1.1'] = {:fullname => 'Open Software License 1.1', :osi_approved => false}
+        map['OSL-2.0'] = {:fullname => 'Open Software License 2.0', :osi_approved => true}
+        map['OSL-2.1'] = {:fullname => 'Open Software License 2.1', :osi_approved => true}
+        map['OSL-3.0'] = {:fullname => 'Open Software License 3.0', :osi_approved => true}
+        map['OpenSSL'] = {:fullname => 'OpenSSL License', :osi_approved => false}
+        map['PHP-3.0'] = {:fullname => 'PHP License v3.0', :osi_approved => true}
+        map['PHP-3.01'] = {:fullname => 'PHP License v3.01', :osi_approved => false}
+        map['Plexus'] = {:fullname => 'Plexus Classworlds License', :osi_approved => false}
+        map['PostgreSQL'] = {:fullname => 'PostgreSQL License', :osi_approved => true}
+        map['psfrag'] = {:fullname => 'psfrag License', :osi_approved => false}
+        map['psutils'] = {:fullname => 'psutils License', :osi_approved => false}
+        map['Python-2.0'] = {:fullname => 'Python License 2.0', :osi_approved => true}
+        map['QPL-1.0'] = {:fullname => 'Q Public License 1.0', :osi_approved => true}
+        map['Qhull'] = {:fullname => 'Qhull License', :osi_approved => false}
+        map['Rdisc'] = {:fullname => 'Rdisc License', :osi_approved => false}
+        map['RPSL-1.0'] = {:fullname => 'RealNetworks Public Source License v1.0', :osi_approved => true}
+        map['RPL-1.1'] = {:fullname => 'Reciprocal Public License 1.1', :osi_approved => true}
+        map['RPL-1.5'] = {:fullname => 'Reciprocal Public License 1.5', :osi_approved => true}
+        map['RHeCos-1.1'] = {:fullname => 'Red Hat eCos Public License v1.1', :osi_approved => false}
+        map['RSCPL'] = {:fullname => 'Ricoh Source Code Public License', :osi_approved => true}
+        map['Ruby'] = {:fullname => 'Ruby License', :osi_approved => false}
+        map['SAX-PD'] = {:fullname => 'Sax Public Domain Notice', :osi_approved => false}
+        map['Saxpath'] = {:fullname => 'Saxpath License', :osi_approved => false}
+        map['SCEA'] = {:fullname => 'SCEA Shared Source License', :osi_approved => false}
+        map['SWL'] = {:fullname => 'Scheme Widget Library (SWL) Software License Agreement', :osi_approved => false}
+        map['SGI-B-1.0'] = {:fullname => 'SGI Free Software License B v1.0', :osi_approved => false}
+        map['SGI-B-1.1'] = {:fullname => 'SGI Free Software License B v1.1', :osi_approved => false}
+        map['SGI-B-2.0'] = {:fullname => 'SGI Free Software License B v2.0', :osi_approved => false}
+        map['OFL-1.0'] = {:fullname => 'SIL Open Font License 1.0', :osi_approved => false}
+        map['OFL-1.1'] = {:fullname => 'SIL Open Font License 1.1', :osi_approved => true}
+        map['SimPL-2.0'] = {:fullname => 'Simple Public License 2.0', :osi_approved => true}
+        map['Sleepycat'] = {:fullname => 'Sleepycat License', :osi_approved => true}
+        map['SNIA'] = {:fullname => 'SNIA Public License 1.1', :osi_approved => false}
+        map['SMLNJ'] = {:fullname => 'Standard ML of New Jersey License', :osi_approved => false}
+        map['SugarCRM-1.1.3'] = {:fullname => 'SugarCRM Public License v1.1.3', :osi_approved => false}
+        map['SISSL'] = {:fullname => 'Sun Industry Standards Source License v1.1', :osi_approved => true}
+        map['SISSL-1.2'] = {:fullname => 'Sun Industry Standards Source License v1.2', :osi_approved => false}
+        map['SPL-1.0'] = {:fullname => 'Sun Public License v1.0', :osi_approved => true}
+        map['Watcom-1.0'] = {:fullname => 'Sybase Open Watcom Public License 1.0', :osi_approved => true}
+        map['TCL'] = {:fullname => 'TCL/TK License', :osi_approved => false}
+        map['Unlicense'] = {:fullname => 'The Unlicense', :osi_approved => false}
+        map['TMate'] = {:fullname => 'TMate Open Source License', :osi_approved => false}
+        map['TORQUE-1.1'] = {:fullname => 'TORQUE v2.5+ Software License v1.1', :osi_approved => false}
+        map['TOSL'] = {:fullname => 'Trusster Open Source License', :osi_approved => false}
+        map['Unicode-TOU'] = {:fullname => 'Unicode Terms of Use', :osi_approved => false}
+        map['NCSA'] = {:fullname => 'University of Illinois/NCSA Open Source License', :osi_approved => true}
+        map['Vim'] = {:fullname => 'Vim License', :osi_approved => false}
+        map['VOSTROM'] = {:fullname => 'VOSTROM Public License for Open Source', :osi_approved => false}
+        map['VSL-1.0'] = {:fullname => 'Vovida Software License v1.0', :osi_approved => true}
+        map['W3C'] = {:fullname => 'W3C Software Notice and License (2002-12-31)', :osi_approved => true}
+        map['W3C-19980720'] = {:fullname => 'W3C Software Notice and License (1998-07-20)', :osi_approved => false}
+        map['Wsuipa'] = {:fullname => 'Wsuipa License', :osi_approved => false}
+        map['Xnet'] = {:fullname => 'X.Net License', :osi_approved => true}
+        map['X11'] = {:fullname => 'X11 License', :osi_approved => false}
+        map['Xerox'] = {:fullname => 'Xerox License', :osi_approved => false}
+        map['XFree86-1.1'] = {:fullname => 'XFree86 License 1.1', :osi_approved => false}
+        map['xinetd'] = {:fullname => 'xinetd License', :osi_approved => false}
+        map['xpp'] = {:fullname => 'XPP License', :osi_approved => false}
+        map['XSkat'] = {:fullname => 'XSkat License', :osi_approved => false}
+        map['YPL-1.0'] = {:fullname => 'Yahoo! Public License v1.0', :osi_approved => false}
+        map['YPL-1.1'] = {:fullname => 'Yahoo! Public License v1.1', :osi_approved => false}
+        map['Zed'] = {:fullname => 'Zed License', :osi_approved => false}
+        map['Zend-2.0'] = {:fullname => 'Zend License v2.0', :osi_approved => false}
+        map['Zimbra-1.3'] = {:fullname => 'Zimbra Public License v1.3', :osi_approved => false}
+        map['Zimbra-1.4'] = {:fullname => 'Zimbra Public License v1.4', :osi_approved => false}
+        map['Zlib'] = {:fullname => 'zlib License', :osi_approved => true}
+        map['zlib-acknowledgement'] = {:fullname => 'zlib/libpng License with Acknowledgement', :osi_approved => false}
+        map['ZPL-1.1'] = {:fullname => 'Zope Public License 1.1', :osi_approved => false}
+        map['ZPL-2.0'] = {:fullname => 'Zope Public License 2.0', :osi_approved => true}
+        map['ZPL-2.1'] = {:fullname => 'Zope Public License 2.1', :osi_approved => false}
+        map['ICU'] = {:fullname => 'ICU License', :osi_approved => false}
+        map
       end
 
   end
