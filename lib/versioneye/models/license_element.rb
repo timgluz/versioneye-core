@@ -3,8 +3,8 @@ class LicenseElement < Versioneye::Model
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  require 'versioneye/models/traits/license_trait'
-  include VersionEye::LicenseTrait
+  require 'versioneye/models/traits/license_normalizer'
+  include VersionEye::LicenseNormalizer
 
   field :name, type: String
 

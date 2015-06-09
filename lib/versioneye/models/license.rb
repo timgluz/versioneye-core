@@ -3,8 +3,8 @@ class License < Versioneye::Model
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  require 'versioneye/models/traits/license_trait'
-  include VersionEye::LicenseTrait
+  require 'versioneye/models/traits/license_normalizer'
+  include VersionEye::LicenseNormalizer
 
   # This license belongs to the product with this attributes
   field :language     , type: String
@@ -51,66 +51,6 @@ class License < Versioneye::Model
     license = License.new({ :language => language, :prod_key => prod_key, :version => version, :name => name, :url => url, :comments => comments, :distributions => distributions })
     license.save
     license
-  end
-
-  def link
-    if url && !url.empty?
-      return url if url.match(/\Ahttp:\/\//xi) || url.match(/\Ahttps:\/\//xi)
-      return "http://#{url}" if url.match(/\Awww\./xi)
-    end
-    return nil if name.to_s.empty?
-
-    tmp_name = name.gsub(/The /i, "").gsub(" - ", " ").gsub(", ", " ").gsub("Licence", "License").strip
-
-    return 'http://mit-license.org/' if mit_match( tmp_name )
-
-    return 'http://www.json.org/license.html' if json_match( tmp_name )
-
-    return 'http://www.ruby-lang.org/en/about/license.txt' if ruby_match( tmp_name )
-
-    return 'http://www.apache.org/licenses/LICENSE-1.0.txt' if apache_license_10_match( tmp_name )
-    return 'http://www.apache.org/licenses/LICENSE-1.1.txt' if apache_license_11_match( tmp_name )
-    return 'http://www.apache.org/licenses/LICENSE-2.0.txt' if apache_license_20_match( tmp_name )
-
-    return 'http://opensource.org/licenses/MPL-1.0' if mpl_10_match( tmp_name )
-    return 'http://opensource.org/licenses/MPL-1.1' if mpl_11_match( tmp_name )
-    return 'http://opensource.org/licenses/MPL-2.0' if mpl_20_match( tmp_name )
-
-    return 'http://opensource.org/licenses/CPL-1.0' if cpl_10_match( tmp_name )
-
-    return 'http://www.eclipse.org/legal/epl-v10.html' if eclipse_match( tmp_name )
-    return 'http://www.eclipse.org/org/documents/edl-v10.php' if eclipse_distribution_match( tmp_name )
-
-    return 'http://spdx.org/licenses/BSD-4-Clause.html#licenseText'       if bsd_4_clause_match( tmp_name )
-    
-    return 'http://spdx.org/licenses/BSD-3-Clause-Clear.html#licenseText' if bsd_3_clause_clear_match( tmp_name )
-    return 'http://spdx.org/licenses/BSD-3-Clause.html#licenseText'       if bsd_3_clause_match( tmp_name )
-
-    return 'http://spdx.org/licenses/BSD-2-Clause-NetBSD.html#licenseText'  if bsd_2_clause_netbsd_match( tmp_name )
-    return 'http://spdx.org/licenses/BSD-2-Clause-FreeBSD.html#licenseText' if bsd_2_clause_freebsd_match( tmp_name )
-    return 'http://spdx.org/licenses/BSD-2-Clause.html#licenseText'         if bsd_2_clause_match( tmp_name )
-
-    return 'http://opensource.org/licenses/bsd-license' if bsd_match( tmp_name )
-
-    return 'http://www.gnu.org/copyleft/gpl.html'                             if gpl_match( tmp_name )
-    return 'http://www.gnu.org/licenses/old-licenses/gpl-1.0-standalone.html' if gpl_10_match( tmp_name )
-    return 'http://opensource.org/licenses/gpl-2.0'                           if gpl_20_match( tmp_name )
-    return 'http://opensource.org/licenses/GPL-3.0'                           if gpl_30_match( tmp_name )
-
-    return 'http://spdx.org/licenses/LGPL-2.0'       if lgpl_20_match( tmp_name )
-    return 'http://opensource.org/licenses/LGPL-2.1' if lgpl_21_match( tmp_name )
-    return 'http://opensource.org/licenses/LGPL-3.0' if lgpl_3_match( tmp_name )
-    return 'http://spdx.org/licenses/LGPL-3.0+'      if lgpl_3_or_later_match( tmp_name )
-
-    return 'http://opensource.org/licenses/artistic-license-1.0' if artistic_10_match( tmp_name )
-    return 'http://opensource.org/licenses/artistic-license-2.0' if artistic_20_match( tmp_name )
-
-    return 'http://spdx.org/licenses/CDDL-1.0.html' if cddl_match( tmp_name )
-    return 'http://spdx.org/licenses/CDDL-1.1.html' if cddl_11_match( tmp_name )
-    
-    return 'https://glassfish.java.net/nonav/public/CDDL+GPL.html' if cddl_plus_gpl( tmp_name )
-
-    nil
   end
 
   def to_s
