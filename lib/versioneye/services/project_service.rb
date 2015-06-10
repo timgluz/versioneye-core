@@ -440,7 +440,6 @@ class ProjectService < Versioneye::Service
       return false if lcs.nil? || lcs.empty?
         
       lcs.each do |lc|
-        p " - #{projectdependency.name} on_whitelist: #{lc.on_whitelist}"
         return false if lc.on_whitelist == true # TODO strict or not ? 
       end
       return true  
