@@ -53,6 +53,8 @@ module VersionEye
 
       return 'CDDL+GPLv2 with classpath exception' if cddl_gpl2_w_class_exception( tmp_name )
 
+      return 'zlib-acknowledgement' if zlib_acknowledgement_match( tmp_name )
+
       return 'MIT' if mit_match( tmp_name )
 
       return 'Ruby' if ruby_match( tmp_name )
@@ -503,9 +505,12 @@ module VersionEye
       name.match(/\ACDDL\s*\+\s*GPL\s*2\s*with\s*classpath\s*exception\z/i)
     end
 
-
-    
-
+    def zlib_acknowledgement_match name
+      name.match(/\Azlib\/libpng\s*License\s*with\s*Acknowledgement\s*\z/i) ||
+      name.match(/\Azlib\/libpng\s*with\s*Acknowledgement\s*\z/i) ||
+      name.match(/\Azlib-acknowledgement\z/i)
+    end
+  
 
     private 
 
