@@ -18,10 +18,13 @@ describe BitbucketUpdater do
       project.s3_filename = 'Gemfile'
       project.scm_fullname = 'reiz/test_gemi'
       project.scm_branch = 'master'
+      expect( project.save ).to be_truthy
+      id = project.ids 
 
       described_class.new.update project
+      project = Project.find id 
       project.should_not be_nil
-      project.dependencies.count.should > 5
+      expect(project.dependencies.count).to > 5 
     end
 
   end

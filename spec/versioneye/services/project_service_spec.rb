@@ -861,9 +861,6 @@ describe ProjectService do
       mit = LicenseFactory.create_new prod_1, 'MIT'
       gpl = LicenseFactory.create_new prod_2, 'GPL'
 
-      prod_1.licenses.push mit 
-      prod_2.licenses.push gpl
-
       dep_1 = ProjectdependencyFactory.create_new project , prod_1, true, {:version_requested => prod_1.version}
       dep_2 = ProjectdependencyFactory.create_new project , prod_2, true, {:version_requested => prod_2.version}
       dep_3 = ProjectdependencyFactory.create_new project2, prod_3, true, {:version_requested => '0.0.0'}
@@ -878,22 +875,30 @@ describe ProjectService do
       ProjectdependencyService.update_outdated!( dep_5 )
 
       whitelist = LicenseWhitelistFactory.create_new 'OSS', ['MIT']
-      whitelist.save
+      expect( whitelist.save ).to be_truthy
+      
       project.license_whitelist_id = whitelist.id
-      project.save
+      expect( project.save ).to be_truthy
+      
       ProjectService.update_license_numbers! project
+      expect( project.licenses_red ).to eq(1)
+      expect( project.licenses_red_sum ).to eq(0)
+      expect( project.licenses_unknown ).to eq(0)
 
       project2.parent_id = project.id.to_s 
-      project2.save 
+      project2.license_whitelist_id = whitelist.id
+      expect( project2.save ).to be_truthy
       ProjectService.update_license_numbers! project2
+      expect( project2.licenses_red ).to eq(0)
+      expect( project2.licenses_unknown ).to eq(3)
 
-      ProjectService.update_sums( project ) 
-      
+      ProjectService.update_sums( project )       
+      project.licenses_red_sum.should eq( 1 )
+      project.licenses_unknown_sum.should eq( 3 )
+
       project.dep_number_sum.should eq( 5 )
       project.out_number_sum.should eq( 2 )
       project.unknown_number_sum.should eq( 1 )
-      project.licenses_red_sum.should eq( 1 )
-      project.licenses_unknown_sum.should eq( 3 )
     end
 
   end

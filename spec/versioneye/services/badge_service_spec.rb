@@ -158,7 +158,6 @@ describe BadgeService do
       badge = BadgeService.badge_for( key )
       badge.status.should eq('up_to_date')
       worker.exit 
-      Badge.count.should eq(1)
     end
 
     it "fetches unknown badge" do
