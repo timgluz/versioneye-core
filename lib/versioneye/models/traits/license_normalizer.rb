@@ -51,6 +51,8 @@ module VersionEye
       return 'CC-BY-SA-3.0' if cc_by_sa_30_match( tmp_name )
       return 'CC-BY-SA-4.0' if cc_by_sa_40_match( tmp_name )
 
+      return 'CDDL+GPLv2 with classpath exception' if cddl_gpl2_w_class_exception( tmp_name )
+
       return 'MIT' if mit_match( tmp_name )
 
       return 'Ruby' if ruby_match( tmp_name )
@@ -201,6 +203,7 @@ module VersionEye
       name.match(/\AMIT\z/i) ||
       name.match(/\AMIT\s*style\z/i) ||
       name.match(/\AMIT-style\z/i) ||
+      name.match(/\AMIT\s*\/\s*X11\s*\z/i) ||
       name.match(/\AMIT\s*\(MIT\)\z/i)
     end
 
@@ -327,6 +330,7 @@ module VersionEye
       new_name.match(/\AGPL\s*2\z/i) ||
       new_name.match(/\AGPLv2\+\z/i) ||
       new_name.match(/\AGPLv2\.0\+\z/i) ||
+      new_name.match(/\AGPLv2\z/i) ||
       new_name.match(/\AGPL2\+\z/i) ||
       new_name.match(/\AGPL\s*2\+\z/i) ||
       new_name.match(/\AGeneral\s+Public\s+2\s+\(GPL\s+2\)\z/i) ||
@@ -403,6 +407,8 @@ module VersionEye
       new_name.match(/\ALGPLv3\+\+\z/i) ||
       new_name.match(/\ALGPL\s*3\+\z/i) ||
       new_name.match(/\ALGPL\s*v3\+\z/i) ||
+      new_name.match(/\ALGPL\s*v3\s*or\s*later\z/i) ||
+      new_name.match(/\ALGPL\s*3\s*or\s*later\z/i) ||
       new_name.match(/\ALesser\s+General\s+Public\s+3\s+or\s+later\s*\z/i)
     end
 
@@ -490,6 +496,15 @@ module VersionEye
       name.match(/\ACommon\s+Public\s+v\s+1\z/i) || 
       name.match(/\ACommon\s+Public\s+1\z/i)
     end
+
+
+    def cddl_gpl2_w_class_exception name
+      name.match(/\ACDDL\s*\+\s*GPLv2\s*with\s*classpath\s*exception\z/i) ||
+      name.match(/\ACDDL\s*\+\s*GPL\s*2\s*with\s*classpath\s*exception\z/i)
+    end
+
+
+    
 
 
     private 
