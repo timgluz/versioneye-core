@@ -109,6 +109,7 @@ module VersionEye
       spdx_id = spdx_identifier 
       return "http://spdx.org/licenses/#{spdx_id}.html" if spdx_id
       
+      tmp_name = do_replacements(name)
       return 'https://glassfish.java.net/nonav/public/CDDL+GPL.html' if cddl_plus_gpl( tmp_name )
       return 'http://www.eclipse.org/org/documents/edl-v10.php'  if eclipse_distribution_match( tmp_name )
 
