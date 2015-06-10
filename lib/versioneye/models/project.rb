@@ -218,7 +218,10 @@ class Project < Versioneye::Model
   end
 
   def remove_dependencies
-    projectdependencies.each { |dependency| dependency.delete }
+    Projectdependency.where(:project_id => self.ids).each do |dep|
+      dep.delete 
+    end
+    projectdependencies.clear 
   end
 
   def save_dependencies
