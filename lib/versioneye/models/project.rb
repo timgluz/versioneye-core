@@ -348,7 +348,7 @@ class Project < Versioneye::Model
     end
 
     def perpare_name_for_search 
-      self.name_downcase = self.name 
+      self.name_downcase = self.name.downcase  
     end
 
 end
