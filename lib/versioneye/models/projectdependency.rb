@@ -31,6 +31,8 @@ class Projectdependency < Versioneye::Model
 
   field :sv_ids           , type: Array, default: []  # SecurityVulnerability IDs
 
+  field :lwl_violation    , type: String # [nil, partial, yes]
+
   belongs_to :project
 
   embeds_many :license_caches, cascade_callbacks: true

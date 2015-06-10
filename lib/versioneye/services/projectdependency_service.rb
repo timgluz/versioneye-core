@@ -17,6 +17,7 @@ class ProjectdependencyService < Versioneye::Service
 
   def self.update_licenses_for project, dep, product, save_dep = true 
     dep.license_caches.clear
+    dep.lwl_violation = nil 
     product.version = dep.version_requested 
     licenses = product.licenses
     if licenses && !licenses.empty? 
@@ -213,6 +214,7 @@ class ProjectdependencyService < Versioneye::Service
         end
         licenseCach.license_id = license.id.to_s 
         dependency.license_caches.push licenseCach
+        dependency.lwl_violation = 'true' if licenseCach.on_whitelist == false 
         licenseCach.save 
       end
     end

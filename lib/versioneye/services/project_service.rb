@@ -70,6 +70,45 @@ class ProjectService < Versioneye::Service
   end
 
 
+  def self.summary project_id 
+    map = {}
+    project = find project_id
+    summary_single project, map 
+    project.children.each do |child| 
+      summary_single child, map
+    end
+    Hash[map.sort_by {|dep| -dep.last[:dependencies].count}]
+  end
+
+  def self.summary_single project, map = {}
+    name = project.filename 
+    name = project.name if name.to_s.empty? 
+    map[project.ids] = {:id => project.ids, 
+      :name => name, 
+      :dep_number => project.dep_number, 
+      :dep_number_sum => project.dep_number, 
+      :out_number => project.out_number, 
+      :out_number_sum => project.out_number, 
+      :unknown_number => project.unknown_number, 
+      :unknown_number_sum => project.unknown_number, 
+      :licenses_red => project.licenses_red, 
+      :licenses_red_sum => project.licenses_red_sum, 
+      :licenses_unknown => project.licenses_unknown, 
+      :licenses_unknown_sum => project.licenses_unknown_sum, 
+      :dependencies => [], 
+      :licenses => [] }
+    deps = Projectdependency.any_of({:project_id => project.ids, :outdated => true}, {:project_id => project.ids, :prod_key => nil})
+    deps.each do |dep| 
+      map[project.ids][:dependencies].push dep 
+    end
+    deps = Projectdependency.where(:project_id => project.ids, :lwl_violation => 'true' )
+    deps.each do |dep| 
+      map[project.ids][:licenses].push dep 
+    end
+    map 
+  end
+
+
   def self.store project
     raise "project is nil." if project.nil?
 
@@ -380,7 +419,7 @@ class ProjectService < Versioneye::Service
 
   
     def self.update_numbers_for project, child_project, dep_hash = {}
-      child_project.dependencies.each do |dep| 
+      child_project.projectdependencies.each do |dep| 
         key = "#{dep.language}:#{dep.possible_prod_key}:#{dep.version_requested}"
         next if dep_hash.include? key 
 
@@ -400,17 +439,18 @@ class ProjectService < Versioneye::Service
       lcs = projectdependency.license_caches
       return false if lcs.nil? || lcs.empty?
         
-      lcs.each do |lc| 
-        return true if lc.on_whitelist == false 
+      lcs.each do |lc|
+        p " - #{projectdependency.name} on_whitelist: #{lc.on_whitelist}"
+        return false if lc.on_whitelist == true # TODO strict or not ? 
       end
-      return false 
+      return true  
     end
 
 
     def self.on_whitelist?( product, whitelist )
       product.licenses.each do |license|
         on_whitelist = whitelist.include_license_substitute?( license.name_substitute )
-        return true if on_whitelist
+        return true if on_whitelist # TODO strict or not ? 
       end
       false 
     end
