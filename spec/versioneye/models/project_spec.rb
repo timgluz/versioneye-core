@@ -32,7 +32,8 @@ describe Project do
       project.save 
       kid     = ProjectFactory.create_new user
       kid.parent_id = project.id.to_s
-      kid.save  
+      expect( kid.save ).to be_truthy
+      expect( kid.name_downcase ).to eq(kid.name)
       Project.all.count.should eq(2)
       kids = project.children
       kids.should_not be_nil 

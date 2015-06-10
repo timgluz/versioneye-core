@@ -49,7 +49,7 @@ class ProjectService < Versioneye::Service
     when 'license_violations'
       Project.where( filter_options ).desc(:licenses_red_sum).asc(:name)
     else 
-      Project.where( filter_options ).asc(:name).desc(:licenses_red_sum)
+      Project.where( filter_options ).asc(:name_downcase).desc(:licenses_red_sum)
     end
   end
 

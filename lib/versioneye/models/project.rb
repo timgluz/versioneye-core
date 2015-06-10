@@ -28,9 +28,10 @@ class Project < Versioneye::Model
   A_PERIOD_WEEKLY  = 'weekly'
   A_PERIOD_DAILY   = 'daily'
 
-  field :name       , type: String
-  field :description, type: String
-  field :license    , type: String
+  field :name         , type: String
+  field :name_downcase, type: String # downcased name, because MongoDB doesn't support case insensitive search. 
+  field :description  , type: String
+  field :license      , type: String
 
   field :group_id   , type: String # Maven specific
   field :artifact_id, type: String # Maven specific
@@ -93,6 +94,8 @@ class Project < Versioneye::Model
   scope :by_github , ->(reponame){ where(source: A_SOURCE_GITHUB, scm_fullname: reponame) }
 
   attr_accessor :lwl_pdf_list, :has_kids
+
+  before_save :perpare_name_for_search 
 
   def to_s
     "<Project #{language}/#{project_type} #{name}>"
@@ -342,6 +345,10 @@ class Project < Versioneye::Model
 
     def dep_key dep
       "#{dep.language}_#{dep.prod_key}_#{dep.version_current}"
+    end
+
+    def perpare_name_for_search 
+      self.name_downcase = self.name 
     end
 
 end
