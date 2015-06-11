@@ -24,7 +24,7 @@ describe BitbucketUpdater do
       described_class.new.update project
       project = Project.find id 
       project.should_not be_nil
-      expect(project.dependencies.count).to > 5 
+      expect(project.dependencies).to_not be_empty 
     end
 
   end
