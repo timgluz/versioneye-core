@@ -45,9 +45,9 @@ class ProjectService < Versioneye::Service
 
     case sort
     when 'out_dated' 
-      Project.where( filter_options ).desc(:out_number_sum).asc(:name)
+      Project.where( filter_options ).desc(:out_number_sum).asc(:name_downcase)
     when 'license_violations'
-      Project.where( filter_options ).desc(:licenses_red_sum).asc(:name)
+      Project.where( filter_options ).desc(:licenses_red_sum).asc(:name_downcase)
     else 
       Project.where( filter_options ).asc(:name_downcase).desc(:licenses_red_sum)
     end
