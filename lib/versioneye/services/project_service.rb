@@ -419,6 +419,7 @@ class ProjectService < Versioneye::Service
 
   
     def self.update_numbers_for project, child_project, dep_hash = {}
+      lwl = project.license_whitelist
       child_project.projectdependencies.each do |dep| 
         key = "#{dep.language}:#{dep.possible_prod_key}:#{dep.version_requested}"
         next if dep_hash.include? key 
@@ -429,7 +430,9 @@ class ProjectService < Versioneye::Service
         project.out_number_sum       += 1 if dep.outdated 
         project.unknown_number_sum   += 1 if dep.unknown? 
         project.licenses_unknown_sum += 1 if product.nil? || product.licenses.nil? || product.licenses.empty?
-        project.licenses_red_sum     += 1 if red_license?( dep )
+        if lwl && red_license?( dep )
+          project.licenses_red_sum += 1 
+        end
       end
       dep_hash
     end

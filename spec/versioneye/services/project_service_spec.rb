@@ -834,12 +834,15 @@ describe ProjectService do
     it 'updates the sums for a single project' do
       project = Project.new({ :dep_number => 5, :out_number => 1, 
         :unknown_number => 2, :licenses_red => 2, :licenses_unknown => 2 })
+      
       project.dep_number_sum.should eq(0)
       project.out_number_sum.should eq(0)
       project.unknown_number_sum.should eq(0) 
       project.licenses_red_sum.should eq(0)
       project.licenses_unknown_sum.should eq(0) 
+      
       ProjectService.update_sums( project ) 
+      
       project.dep_number_sum.should eq( project.dep_number )
       project.out_number_sum.should eq( project.out_number )
       project.unknown_number_sum.should eq( project.unknown_number )
@@ -899,6 +902,35 @@ describe ProjectService do
       project.dep_number_sum.should eq( 5 )
       project.out_number_sum.should eq( 2 )
       project.unknown_number_sum.should eq( 1 )
+    end
+
+    it 'updates the sums for a project with a child and no LWL' do
+      user     = UserFactory.create_new
+      project1 = ProjectFactory.create_new user, {:name => 'project_1'}, true
+      project2 = ProjectFactory.create_new user, {:name => 'project_2'}, true
+      project2.parent_id = project1.ids 
+      expect( project2.save ).to be_truthy
+
+      prod_1  = ProductFactory.create_new 1
+      prod_2  = ProductFactory.create_new 2
+
+      mit = LicenseFactory.create_new prod_2, 'MIT'
+      expect( License.count ).to eq(1)
+      
+      dep_1 = ProjectdependencyFactory.create_new project1 , prod_1, true, {:version_requested => prod_1.version}
+      dep_2 = ProjectdependencyFactory.create_new project2 , prod_2, true, {:version_requested => prod_2.version}
+
+      ProjectdependencyService.update_outdated!( dep_1 )
+      ProjectdependencyService.update_outdated!( dep_2 )
+      
+      ProjectService.update_license_numbers! project1
+      ProjectService.update_license_numbers! project2
+      
+      ProjectService.update_sums project1
+      
+      # Must be 0 because there is no license whitelist. 
+      expect( project1.licenses_red ).to eq(0)
+      expect( project1.licenses_red_sum ).to eq(0)
     end
 
   end
