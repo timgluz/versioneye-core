@@ -1,7 +1,5 @@
-class SubmittedUrlMailer < ActionMailer::Base
+class SubmittedUrlMailer < SuperMailer
 
-  layout 'email_html_layout'
-  default from: "\"#{Settings.instance.smtp_sender_name}\" <#{Settings.instance.smtp_sender_email}>"
 
   def new_submission_email(submitted_url)
     @base_url = Settings.instance.server_url
@@ -13,6 +11,7 @@ class SubmittedUrlMailer < ActionMailer::Base
     set_from( m )
   end
 
+
   def approved_url_email(submitted_url)
     @submitted_url = submitted_url
     @user = submitted_url.user
@@ -22,6 +21,7 @@ class SubmittedUrlMailer < ActionMailer::Base
     set_from( m )
   end
 
+
   def declined_url_email(submitted_url)
     @submitted_url = submitted_url
     @user = submitted_url.user
@@ -30,6 +30,7 @@ class SubmittedUrlMailer < ActionMailer::Base
     end
     set_from( m )
   end
+
 
   def integrated_url_email(submitted_url, product)
     @base_url = Settings.instance.server_url
@@ -42,11 +43,5 @@ class SubmittedUrlMailer < ActionMailer::Base
     set_from( m )
   end
 
-  private 
-
-    def set_from( mail )
-      mail.from = "\"#{Settings.instance.smtp_sender_name}\" <#{Settings.instance.smtp_sender_email}>"
-      mail  
-    end
 
 end

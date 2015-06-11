@@ -1,4 +1,5 @@
-class NotificationMailer < ActionMailer::Base
+class NotificationMailer < SuperMailer
+
 
   def new_version_email(user, notifications)
     @newsletter = "notification_emails"
@@ -14,6 +15,7 @@ class NotificationMailer < ActionMailer::Base
     set_from( m )
   end
 
+
   def status(count)
     @count = count
     m = mail(:to => 'reiz@versioneye.com', :subject => "#{count} notifications") do |format|
@@ -22,12 +24,9 @@ class NotificationMailer < ActionMailer::Base
     set_from( m )
   end
 
+
   private
 
-    def set_from( mail )
-      mail.from = "\"#{Settings.instance.smtp_sender_name}\" <#{Settings.instance.smtp_sender_email}>"
-      mail  
-    end
 
     def first_names notifications
       names = Array.new
@@ -44,5 +43,6 @@ class NotificationMailer < ActionMailer::Base
       end
       result
     end
+
 
 end

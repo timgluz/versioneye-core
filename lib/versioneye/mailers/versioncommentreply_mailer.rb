@@ -1,6 +1,5 @@
-class VersioncommentreplyMailer < ActionMailer::Base
+class VersioncommentreplyMailer < SuperMailer
 
-  layout 'email_html_layout'
 
   def versioncomment_reply_email(comment_user, reply_user, comment)
     @comment_user = comment_user
@@ -14,11 +13,5 @@ class VersioncommentreplyMailer < ActionMailer::Base
     set_from( m )
   end
 
-  private 
-
-    def set_from( mail )
-      mail.from = "\"#{Settings.instance.smtp_sender_name}\" <#{Settings.instance.smtp_sender_email}>"
-      mail  
-    end
 
 end

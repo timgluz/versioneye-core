@@ -50,6 +50,7 @@ module Versioneye
     require 'versioneye/services_ext/s3'
     require 'versioneye/services_ext/stripe_service'
 
+    require 'versioneye/mailers/super_mailer'
     require 'versioneye/mailers/notification_mailer'
     require 'versioneye/mailers/feedback_mailer'
     require 'versioneye/mailers/newsletter_mailer'

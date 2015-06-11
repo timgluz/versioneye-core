@@ -1,11 +1,11 @@
-class UserMailer < ActionMailer::Base
+class UserMailer < SuperMailer
 
-  layout 'email_html_layout'
 
   def test_email( email )
     m = mail( :to => email, :subject => 'VersionEye Test Email' )
     set_from( m )
   end
+
 
   def verification_email(user, verification, email)
     @user  = user
@@ -17,6 +17,7 @@ class UserMailer < ActionMailer::Base
     set_from( m )
   end
 
+
   def verification_email_only(user, verification, email)
     @user = user
     @verificationlink = "#{Settings.instance.server_url}/users/activate/email/#{verification}"
@@ -25,6 +26,7 @@ class UserMailer < ActionMailer::Base
     end
     set_from( m )
   end
+
 
   def verification_email_reminder(user, verification, email)
     @user  = user
@@ -36,6 +38,7 @@ class UserMailer < ActionMailer::Base
     set_from( m )
   end
 
+
   def collaboration_invitation(collaborator)
     @caller  = collaborator.caller
     @owner   = collaborator.owner
@@ -45,6 +48,7 @@ class UserMailer < ActionMailer::Base
     end
     set_from( m )
   end
+
 
   def new_collaboration( collaborator )
     @caller        = collaborator.caller
@@ -57,6 +61,7 @@ class UserMailer < ActionMailer::Base
     set_from( m )
   end
 
+
   def reset_password(user)
     @user = user
     @url  = "#{Settings.instance.server_url}/updatepassword/#{@user.verification}"
@@ -65,6 +70,7 @@ class UserMailer < ActionMailer::Base
     end
     set_from( m )
   end
+
 
   def new_ticket(user, ticket)
     @fullname = user[:fullname]
@@ -75,6 +81,7 @@ class UserMailer < ActionMailer::Base
     set_from( m )
   end
 
+
   def suggest_packages_email( user )
     @fullname = user[:fullname]
     m = mail(:to => user[:email], :subject => "Follow popular software packages on VersionEye") do |format|
@@ -82,6 +89,7 @@ class UserMailer < ActionMailer::Base
     end
     set_from( m )
   end
+
 
   def non_profit_signup( user, np_domain )
     @user = user
@@ -92,6 +100,7 @@ class UserMailer < ActionMailer::Base
     set_from( m )
   end
 
+
   def fetch_source( user )
     source = "email"
     source = "bitbucket" if user.bitbucket_id
@@ -99,11 +108,5 @@ class UserMailer < ActionMailer::Base
     source
   end
 
-  private 
-
-    def set_from( mail )
-      mail.from = "\"#{Settings.instance.smtp_sender_name}\" <#{Settings.instance.smtp_sender_email}>"
-      mail  
-    end
 
 end

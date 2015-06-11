@@ -1,6 +1,5 @@
-class ProjectMailer < ActionMailer::Base
+class ProjectMailer < SuperMailer
 
-  layout 'email_html_layout'
 
   def projectnotification_email( project, user = nil, unknown_licenses = nil, red_licenses = nil )
     @project_name = project.name
@@ -44,15 +43,6 @@ class ProjectMailer < ActionMailer::Base
     end
     set_from( m )
   end
-
-  
-  private 
-
-  
-    def set_from( mail )
-      mail.from = "\"#{Settings.instance.smtp_sender_name}\" <#{Settings.instance.smtp_sender_email}>"
-      mail  
-    end
 
 
 end
