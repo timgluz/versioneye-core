@@ -64,6 +64,7 @@ class Project < Versioneye::Model
   field :unknown_number_sum  , type: Integer, :default => 0
   field :licenses_red_sum    , type: Integer, :default => 0
   field :licenses_unknown_sum, type: Integer, :default => 0
+  field :sv_count_sum        , type: Integer, :default => 0
 
   field :public         , type: Boolean, :default => false  # visible for everybody
   field :private_project, type: Boolean, :default => false  # private project from GitHub/Bitbucket
@@ -325,6 +326,7 @@ class Project < Versioneye::Model
     self.unknown_number_sum   = self.unknown_number
     self.licenses_red_sum     = self.licenses_red
     self.licenses_unknown_sum = self.licenses_unknown
+    self.sv_count_sum         = self.sv_count
     self.save 
   end
 
@@ -334,6 +336,7 @@ class Project < Versioneye::Model
     self.unknown_number_sum   = 0
     self.licenses_red_sum     = 0
     self.licenses_unknown_sum = 0
+    self.sv_count             = 0 
     self.save 
   end
 

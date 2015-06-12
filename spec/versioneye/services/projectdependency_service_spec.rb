@@ -70,6 +70,8 @@ describe ProjectdependencyService do
       # Testing that the count gets resettet before checking. 
       ProjectdependencyService.update_security @project 
       expect( @project.sv_count).to eq(1)
+      dep = Projectdependency.first
+      expect( dep.sv_ids.count ).to eq(1)
     end
 
   end

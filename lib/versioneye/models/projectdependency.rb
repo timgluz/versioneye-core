@@ -90,8 +90,13 @@ class Projectdependency < Versioneye::Model
       return product if product
     end
 
-    product = Product.fetch_product( language, prod_key )
-    return product if product
+    pk = prod_key 
+    pk = name.to_s.downcase if pk.to_s.empty? 
+    product = Product.fetch_product( language, pk )
+    if product
+      self.update_attribute(:prod_key, pk)
+      return product
+    end
 
     init_product
   end

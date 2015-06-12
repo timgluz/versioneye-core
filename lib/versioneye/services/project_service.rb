@@ -422,7 +422,7 @@ class ProjectService < Versioneye::Service
       lwl = project.license_whitelist
       child_project.projectdependencies.each do |dep| 
         key = "#{dep.language}:#{dep.possible_prod_key}:#{dep.version_requested}"
-        next if dep_hash.include? key 
+        next if dep_hash.include? key
 
         product = dep.product
         dep_hash[key] = dep
@@ -433,6 +433,7 @@ class ProjectService < Versioneye::Service
         if lwl && red_license?( dep )
           project.licenses_red_sum += 1 
         end
+        project.sv_count_sum += dep.sv_ids.count if !dep.sv_ids.empty? 
       end
       dep_hash
     end

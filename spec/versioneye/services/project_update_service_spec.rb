@@ -72,6 +72,35 @@ describe ProjectUpdateService do
       # expect( project.url ).to eq( 'https://www.heise.dem/Gemfile' )
       # expect( project.dependencies ).to_not be_empty
     end
+    it 'will update a multi file project' do 
+      user = UserFactory.create_new
+      gemfile = import_gemfile user 
+      expect( gemfile ).to_not be_nil 
+
+      podfile = import_podfile user 
+      expect( podfile ).to_not be_nil
+
+      podfile.parent_id = gemfile.ids 
+      expect( podfile.save ).to be_truthy
+
+      rails = ProductFactory.create_for_gemfile 'rails', '3.2.6'
+      rails.save 
+
+      jsonkit = ProductFactory.create_for_cocoapods 'jsonkit', '1.1.0' 
+      jsonkit.save 
+
+      add_sv jsonkit
+
+      gemfile = described_class.update gemfile
+      expect( gemfile ).to_not be_nil
+      expect( gemfile.sv_count_sum ).to eq(1)
+
+      add_sv rails
+
+      gemfile = described_class.update gemfile
+      expect( gemfile ).to_not be_nil
+      expect( gemfile.sv_count_sum ).to eq(2)
+    end
   end
 
   describe 'update_from_upload' do
@@ -129,6 +158,30 @@ describe ProjectUpdateService do
       parent.dep_number.should eq(0)
       parent.dep_number_sum.should > 0 
     end
+  end
+
+
+  def import_gemfile user 
+    gemfile = "spec/fixtures/files/Gemfile"
+    file_attachment = Rack::Test::UploadedFile.new(gemfile, "application/octet-stream")
+    file = {'datafile' => file_attachment}
+    ProjectImportService.import_from_upload file, user
+  end
+
+  def import_podfile user 
+    gemfile = "spec/fixtures/files/pod_file/example1/Podfile"
+    file_attachment = Rack::Test::UploadedFile.new(gemfile, "application/octet-stream")
+    file = {'datafile' => file_attachment}
+    ProjectImportService.import_from_upload file, user
+  end
+
+  def add_sv product
+    sv = SecurityVulnerability.new({:language => product.language, :prod_key => product.prod_key, :summary => 'test'})
+    sv.affected_versions << product.version 
+    sv.save
+    version = product.version_by_number product.version 
+    version.sv_ids << sv.ids 
+    version.save
   end
 
 end
