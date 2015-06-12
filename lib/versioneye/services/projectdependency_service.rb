@@ -39,13 +39,15 @@ class ProjectdependencyService < Versioneye::Service
   end
 
   def self.update_security_for project, dep, product, save_dep = true  
+    project.update_attribute(:sv_count, 0)
+    
     version = product.version_by_number dep.version_requested 
     return nil if version.nil? 
 
     dep.sv_ids = version.sv_ids
     dep.save if save_dep
 
-    if version.sv_ids.size > 0 
+    if !version.sv_ids.empty?
       project.sv_count += version.sv_ids.size
       project.save 
     end

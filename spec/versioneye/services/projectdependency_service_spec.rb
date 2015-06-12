@@ -41,31 +41,35 @@ describe ProjectdependencyService do
   describe "update_security" do
 
     it 'updates the dependencies with the securiyt infos' do
-      Projectdependency.count.should eq(0)
+      expect( Projectdependency.count ).to eq(0)
       dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.version_current   = @product.version
       dep.version_requested = @product.version
-      dep.save 
-      Projectdependency.count.should eq(1)
-      @project.dependencies.count.should eq(1)
+      expect( dep.save ).to be_truthy
+      expect( Projectdependency.count ).to eq(1)
+      expect( @project.dependencies.count ).to eq(1)
       
       sv = SecurityVulnerability.new({:language => @product.language, :prod_key => @product.prod_key, :summary => 'test'})
       sv.affected_versions << @product.version 
-      sv.save.should be_truthy
+      expect( sv.save ).to be_truthy
       
       version = @product.version_by_number @product.version 
       version.sv_ids << sv._id.to_s 
-      version.save.should be_truthy
-
-      @project.sv_count.should eq(0)
+      expect( version.save).to be_truthy
+      expect( @project.sv_count).to eq(0)
 
       ProjectdependencyService.update_security @project 
 
-      @project.sv_count.should eq(1)
+      expect( @project.sv_count).to eq(1)
       dep = Projectdependency.first
-      dep.sv_ids.should_not be_empty 
-      dep.sv_ids.count.should eq(1)
-      dep.sv_ids.first.to_s.should eq( sv._id.to_s )
+      expect( dep.sv_ids).to_not be_empty 
+      expect( dep.sv_ids.count ).to eq(1)
+      expect( dep.sv_ids.first.to_s).to eq( sv._id.to_s )
+
+      # After the 2nd checking the sv_count still should be 1. 
+      # Testing that the count gets resettet before checking. 
+      ProjectdependencyService.update_security @project 
+      expect( @project.sv_count).to eq(1)
     end
 
   end
