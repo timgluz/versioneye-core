@@ -29,6 +29,8 @@ class ProjectdependencyService < Versioneye::Service
 
   # Updates projectdependency.sv_ids for each projectdependency of the project
   def self.update_security project 
+    project.update_attribute(:sv_count, 0)
+    project.update_attribute(:sv_count_sum, 0)
     project.projectdependencies.each do |dep| 
       product = dep.find_or_init_product
       update_security_for project, dep, product
@@ -38,9 +40,7 @@ class ProjectdependencyService < Versioneye::Service
     log.error e.backtrace.join "\n"
   end
 
-  def self.update_security_for project, dep, product, save_dep = true  
-    project.update_attribute(:sv_count, 0)
-    
+  def self.update_security_for project, dep, product, save_dep = true    
     version = product.version_by_number dep.version_requested 
     return nil if version.nil? 
 
@@ -48,13 +48,15 @@ class ProjectdependencyService < Versioneye::Service
     dep.save if save_dep
 
     if !version.sv_ids.empty?
-      project.sv_count += version.sv_ids.size
-      project.save 
+      new_count = project.sv_count + version.sv_ids.size
+      project.update_attribute(:sv_count, new_count)
     end
   end
 
 
-  def self.update_licenses_security project 
+  def self.update_licenses_security project
+    project.update_attribute(:sv_count, 0)
+    project.update_attribute(:sv_count_sum, 0)
     Projectdependency.where(:project_id => project.id).each do |dep|
       product = dep.find_or_init_product
       update_licenses_for project, dep, product, false

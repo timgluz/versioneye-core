@@ -93,12 +93,18 @@ describe ProjectUpdateService do
 
       gemfile = described_class.update gemfile
       expect( gemfile ).to_not be_nil
+      expect( gemfile.sv_count ).to eq(0)
       expect( gemfile.sv_count_sum ).to eq(1)
+
+      podfile.reload 
+      expect( podfile.sv_count ).to eq(1)
+      expect( podfile.sv_count_sum ).to eq(1)
 
       add_sv rails
 
       gemfile = described_class.update gemfile
       expect( gemfile ).to_not be_nil
+      expect( gemfile.sv_count ).to eq(1)
       expect( gemfile.sv_count_sum ).to eq(2)
     end
   end

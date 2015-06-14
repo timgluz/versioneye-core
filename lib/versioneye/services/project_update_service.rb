@@ -35,7 +35,7 @@ class ProjectUpdateService < Versioneye::Service
 
     project = update_single project, send_email 
     project.children.each do |child_project|
-      update_single child_project, send_email   
+      update_single child_project, send_email
     end
     ProjectService.update_sums( project )
     project

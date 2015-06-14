@@ -336,7 +336,7 @@ class Project < Versioneye::Model
     self.unknown_number_sum   = 0
     self.licenses_red_sum     = 0
     self.licenses_unknown_sum = 0
-    self.sv_count             = 0 
+    self.sv_count_sum         = 0 
     self.save 
   end
 
