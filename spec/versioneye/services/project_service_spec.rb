@@ -341,6 +341,67 @@ describe ProjectService do
   end
 
 
+  
+  describe 'summary' do
+
+    it 'returns the summary object' do
+      user     = UserFactory.create_new
+      project  = ProjectFactory.create_new user
+      project2 = ProjectFactory.create_new user
+      project2.parent_id = project.ids 
+      project2.save 
+
+      prod_1  = ProductFactory.create_new 1
+      prod_2  = ProductFactory.create_new 2
+      prod_3  = ProductFactory.create_new 3
+
+      dep_1 = ProjectdependencyFactory.create_new project2, prod_1, true
+      dep_2 = ProjectdependencyFactory.create_new project, prod_2, true
+      dep_3 = ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => '0.0.0'}
+
+      LicenseWhitelistService.create user, 'SuperList'
+      LicenseWhitelistService.add user, 'SuperList', 'MIT'
+      LicenseFactory.create_new prod_2, 'GPL'
+
+      expect( LicenseWhitelist.count ).to eq(1)
+      project.license_whitelist_id = LicenseWhitelist.first.ids
+      expect( project.save ).to be_truthy
+
+      add_sv prod_1
+
+      ProjectUpdateService.update project 
+
+      summary = described_class.summary project.ids 
+      expect( summary ).to_not be_nil 
+      
+      expect( summary[project.ids][:out_number] ).to eq(1)
+      expect( summary[project.ids][:out_number_sum] ).to eq(1)
+      expect( summary[project.ids][:sv_count_sum] ).to eq(1)
+      expect( summary[project.ids][:sv_count] ).to eq(0)
+      expect( summary[project.ids][:licenses_red] ).to eq(1)
+      expect( summary[project.ids][:licenses_red_sum] ).to eq(1)
+      expect( summary[project.ids][:dependencies] ).to_not be_empty
+      expect( summary[project.ids][:dependencies].count ).to eq(1)
+      expect( summary[project.ids][:licenses] ).to_not be_empty
+      expect( summary[project.ids][:licenses].count ).to eq(1)
+      
+      expect( summary[project2.ids][:sv_count_sum] ).to eq(1)
+      expect( summary[project2.ids][:sv_count] ).to eq(1)
+      expect( summary[project2.ids][:sv] ).to_not be_empty
+    end
+
+  end  
+  def add_sv product
+    sv = SecurityVulnerability.new({:language => product.language, :prod_key => product.prod_key, :summary => 'test'})
+    sv.affected_versions << product.version 
+    sv.save
+    version = product.version_by_number product.version 
+    version.sv_ids << sv.ids 
+    version.save
+  end
+
+
+
   describe 'ensure_unique_ga' do 
     it 'returns true because its turned off' do 
       Settings.instance.projects_unique_ga = false 

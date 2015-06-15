@@ -1,6 +1,5 @@
 class ProjectService < Versioneye::Service
 
-
   def self.type_by_filename filename
     return nil if filename.to_s.empty?
     return nil if filename.to_s.match(/\/node_modules\//) # Skip workirectory of NPM. 
@@ -94,17 +93,25 @@ class ProjectService < Versioneye::Service
       :licenses_red => project.licenses_red, 
       :licenses_red_sum => project.licenses_red_sum, 
       :licenses_unknown => project.licenses_unknown, 
-      :licenses_unknown_sum => project.licenses_unknown_sum, 
+      :licenses_unknown_sum => project.licenses_unknown_sum,
+      :sv_count => project.sv_count, 
+      :sv_count_sum => project.sv_count_sum, 
       :dependencies => [], 
-      :licenses => [] }
+      :licenses => [], 
+      :sv => [] }
+    
     deps = Projectdependency.any_of({:project_id => project.ids, :outdated => true}, {:project_id => project.ids, :prod_key => nil})
     deps.each do |dep| 
       map[project.ids][:dependencies].push dep 
     end
+    
     deps = Projectdependency.where(:project_id => project.ids, :lwl_violation => 'true' )
     deps.each do |dep| 
       map[project.ids][:licenses].push dep 
     end
+    
+    fill_sv project, map 
+
     map 
   end
 
@@ -416,6 +423,20 @@ class ProjectService < Versioneye::Service
 
   
   private 
+
+
+    def self.fill_sv project, map 
+      # id = Moped::BSON::ObjectId.from_string(project.ids)
+      # id = project.ids 
+      # deps = Projectdependency.collection.find(:project_id => id, 'sv_ids' => {'$not' => {'$size' => 0} } )
+      deps = Projectdependency.where(:project_id => project.ids )
+      deps.each do |dep| 
+        map[project.ids][:sv].push dep if !dep.sv_ids.empty? 
+      end
+    rescue => e 
+      log.error e.message
+      log.error e.backtrace.join("\n")
+    end
 
   
     def self.update_numbers_for project, child_project, dep_hash = {}
