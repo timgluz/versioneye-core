@@ -112,6 +112,10 @@ class Bitbucket < Versioneye::Service
   def self.repo_branch_tree(repo_name, branch, token, secret, directory = '')
     path = "#{A_API_V1_PATH}/repositories/#{repo_name}/src/#{branch}/#{directory}"
     get_json(path, token, secret)
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('/n')
+    nil
   end
 
 
@@ -127,7 +131,7 @@ class Bitbucket < Versioneye::Service
     end
 
     if !branch_tree[:directories].to_a.empty? 
-      project_files_recursive repo_name, branch, token, secret, branch_tree[:directories], project_files
+      project_files_recursive repo_name, branch, token, secret, '', branch_tree[:directories], project_files
     end
 
     project_files.each {|file| file[:uuid] = SecureRandom.hex }
@@ -139,16 +143,20 @@ class Bitbucket < Versioneye::Service
   end
 
 
-  def self.project_files_recursive repo_name, branch, token, secret, directories, project_files
+  def self.project_files_recursive repo_name, branch, token, secret, path = "", directories = nil, project_files = []
     directories.to_a.each do |dir_info|
-      branch_tree = repo_branch_tree(repo_name, branch, token, secret, dir_info) 
+      tree_path = dir_info
+      tree_path = "#{path}/#{dir_info}" if !path.to_s.empty?
+      tree_path = tree_path.gsub("//", "/")
+      branch_tree = repo_branch_tree(repo_name, branch, token, secret, tree_path) 
       next if branch_tree.nil? || branch_tree.empty? 
     
       branch_tree[:files].to_a.each do |file_info|
         project_files << file_info if ProjectService.type_by_filename(file_info[:path]) != nil
       end
       if !branch_tree[:directories].to_a.empty? 
-        project_files_recursive repo_name, branch, token, secret, branch_tree[:directories], project_files
+        path = branch_tree[:path]
+        project_files_recursive repo_name, branch, token, secret, path, branch_tree[:directories], project_files
       end
     end
   rescue => e
