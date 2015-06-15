@@ -256,10 +256,20 @@ describe ProjectdependencyService do
     it "doesnt update because prod_key is nil" do
       dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.prod_key          = nil
+      dep.name              = 'some_random_name_88ask'
       dep.version_requested = '0.1'
       dep.version_current   = nil
       ProjectdependencyService.update_version_current( dep )
       dep.version_current.should eq(nil)
+    end
+
+    it "update because name is same as prod_key" do
+      dep = ProjectdependencyFactory.create_new(@project, @product)
+      dep.prod_key          = nil
+      dep.version_requested = '0.1'
+      dep.version_current   = nil
+      ProjectdependencyService.update_version_current( dep )
+      dep.version_current.should eq('1.0')
     end
 
     it "doesnt update because prod_key is empty" do
