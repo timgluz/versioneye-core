@@ -424,7 +424,7 @@ class ProjectService < Versioneye::Service
   
   private 
 
-
+    # TODO optimize this by only loading affected deps. 
     def self.fill_sv project, map 
       # id = Moped::BSON::ObjectId.from_string(project.ids)
       # id = project.ids 
