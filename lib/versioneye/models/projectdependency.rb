@@ -45,6 +45,13 @@ class Projectdependency < Versioneye::Model
     "<Projectdependency: #{project} depends on #{name} (#{version_label}/#{version_requested}) current: #{version_current} >"
   end
 
+
+  def language_esc lang = nil
+    lang = self.language if lang.nil?
+    return nil if lang.to_s.empty? 
+    Product.encode_language lang
+  end
+
   
   def self.find_by_id id
     Projectdependency.find id
