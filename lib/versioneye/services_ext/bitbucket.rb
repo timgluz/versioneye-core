@@ -112,10 +112,6 @@ class Bitbucket < Versioneye::Service
   def self.repo_branch_tree(repo_name, branch, token, secret, directory = '')
     path = "#{A_API_V1_PATH}/repositories/#{repo_name}/src/#{branch}/#{directory}"
     get_json(path, token, secret)
-  rescue => e
-    log.error e.message
-    log.error e.backtrace.join('/n')
-    nil
   end
 
 
@@ -188,13 +184,12 @@ class Bitbucket < Versioneye::Service
       JSON.parse(response.body, symbolize_names: true)
     rescue => e
       log.error e.message
-      log.error "Got status: #{response.code} #{response.message} body: #{response.body}"
+      log.error "Got status: #{response.code} #{response.message} body: #{response.body} for path: #{path}"
       log.error e.backtrace.join("\n")
       nil
     end
   rescue => e
-    log.error "Fuck up in get_json"
-    log.error e.message
+    log.error "ERROR in get_json for #{path} - #{e.message}"
     log.error e.backtrace.join("\n")
     nil 
   end
