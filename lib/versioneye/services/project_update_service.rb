@@ -2,7 +2,7 @@ class ProjectUpdateService < Versioneye::Service
 
   A_TASK_RUNNING = 'running'
   A_TASK_DONE    = 'done'
-  A_TASK_TTL     = 900 # 900 seconds = 15 minutes
+  A_TASK_TTL     = 420 # 420 seconds = 7 minutes
 
   def self.update_async project, send_email = false 
     return nil if not_updateable?( project )
@@ -14,10 +14,12 @@ class ProjectUpdateService < Versioneye::Service
       return task_status
     end
 
-    msg = "project_#{project.ids}:::#{send_email}"
-    ProjectUpdateProducer.new( msg )
     task_status = A_TASK_RUNNING
     cache.set( task_key, task_status, A_TASK_TTL )
+
+    msg = "project_#{project.ids}:::#{send_email}"
+    ProjectUpdateProducer.new( msg )
+    
     task_status
   end
 
