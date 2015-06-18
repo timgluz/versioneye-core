@@ -79,14 +79,10 @@ class GradleParser < CommonParser
     content = content.gsub(/.*classpath.*$/, "")
 
     vars = extract_vars content
-
-    matches_simple = content.scan( A_DEP_SIMPLE_MATCHER )
-    deps_simple = self.build_dependencies_simple(matches_simple, vars)
-    content = content.gsub(A_DEP_SIMPLE_MATCHER, "")
-
-    matches_short = content.scan( A_DEP_SHORT_MATCHER )
-    deps_short    = self.build_dependencies(matches_short, vars)
-    content = content.gsub(A_DEP_SHORT_MATCHER, "")
+    vars.keys.each do |key|
+      val = vars[key]
+      content = content.gsub("${#{key}}", val)  
+    end
 
     matches_long = content.scan( A_DEP_LONG_MATCHER )
     deps_long    = self.build_dependencies_extd(matches_long, vars)
@@ -95,6 +91,15 @@ class GradleParser < CommonParser
     matches_br = content.scan( A_DEP_BR_MATCHER )
     deps_br    = self.build_dependencies_br( matches_br, vars )
     content = content.gsub(A_DEP_BR_MATCHER, "")
+    
+    matches_short = content.scan( A_DEP_SHORT_MATCHER )
+    deps_short    = self.build_dependencies(matches_short, vars)
+    content = content.gsub(A_DEP_SHORT_MATCHER, "")
+    
+
+    matches_simple = content.scan( A_DEP_SIMPLE_MATCHER )
+    deps_simple = self.build_dependencies_simple(matches_simple, vars)
+    content = content.gsub(A_DEP_SIMPLE_MATCHER, "")
 
     if deps_short[:projectdependencies] && !deps_short[:projectdependencies].empty?
       deps_short[:projectdependencies].each do |dep|
@@ -136,12 +141,13 @@ class GradleParser < CommonParser
     if matches && !matches.empty?
       matches.each do |match|
         mat = match.first
-        mat.gsub!("project.ext.", "")
-        mat.gsub!("ext.", "")
-        mat.gsub!(" ", "")
+        mat = mat.gsub("project.ext.", "")
+        mat = mat.gsub("ext.", "")
+        mat = mat.gsub(" ", "").strip 
         sps = mat.split("=")
         var_key = sps[0]
         var_val = sps[1].gsub("\"", "").gsub("'", "")
+        var_val = var_val.gsub("System.getenv(GROOVY_VERSION)?:", "").strip
         vars[var_key] = var_val
       end
     end
