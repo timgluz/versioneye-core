@@ -332,7 +332,7 @@ describe ProjectdependencyService do
       ProjectdependencyService.mute!( project.id.to_s, 'does_not_exist', true ).should be_falsey
     end
 
-    it 'does mute like expected' do
+    it 'does mute like expected on a single file project' do
       user    = UserFactory.create_new 45 
       expect( user.save ).to be_truthy
 
@@ -378,6 +378,96 @@ describe ProjectdependencyService do
       expect( project.out_number ).to eq(1)
       expect( project.out_number_sum ).to eq(1)
       expect( ProjectService.outdated?(project) ).to be_truthy
+    end
+
+    it 'does mute like expected on a multi file project' do
+      user    = UserFactory.create_new 46
+      expect( user.save ).to be_truthy
+
+      project = ProjectFactory.create_new( user )
+      project.source = Project::A_SOURCE_UPLOAD 
+      expect( project.save ).to be_truthy
+
+      project2 = ProjectFactory.create_new( user, nil, false )
+      project2.source = Project::A_SOURCE_UPLOAD 
+      expect( project2.save ).to be_truthy
+
+      project2.parent_id = project.ids 
+      expect( project2.save ).to be_truthy
+      
+      product = ProductFactory.create_for_gemfile 'rails', '1.0.0'
+      expect( product.save ).to be_truthy
+
+      mongoid = ProductFactory.create_for_gemfile 'mongoid', '4.0.0'
+      expect( mongoid.save ).to be_truthy
+      
+      dependency = ProjectdependencyFactory.create_new(project, product)
+      dependency.project_id = project.ids 
+      dependency.version_label = '0.9.0'
+      dependency.version_requested = '0.9.0'
+      dependency.version_current = '0.9.0'
+      dependency.outdated = true 
+      expect( dependency.save ).to be_truthy
+      expect( dependency.muted ).to be_falsey
+      expect( dependency.outdated ).to be_truthy
+      expect( ProjectService.outdated?(project) ).to be_truthy
+      expect( project.dependencies.count ).to eq(1)
+
+      dependency2 = ProjectdependencyFactory.create_new( project2, mongoid )
+      dependency2.project_id = project2.ids 
+      dependency2.version_label = '0.9.0'
+      dependency2.version_requested = '0.9.0'
+      dependency2.version_current = '4.0.0'
+      dependency2.outdated = true 
+      expect( dependency2.save ).to be_truthy
+      expect( dependency2.muted ).to be_falsey
+      expect( dependency2.outdated ).to be_truthy
+      expect( ProjectService.outdated?( project2 ) ).to be_truthy
+      project2.reload
+      expect( project2.dependencies.count ).to eq(1)
+      expect( project.dependencies.count ).to eq(1)
+
+
+      project2 = ProjectUpdateService.update project2  
+      expect( project2 ).to_not be_nil 
+      
+      expect( project2.dependencies.count ).to eq(1)
+      expect( project2.dep_number ).to eq(1)
+      expect( project2.out_number ).to eq(1)
+      expect( project2.out_number_sum ).to eq(1)
+
+
+      project = ProjectUpdateService.update project  
+      expect( project ).to_not be_nil 
+      
+      expect( project.dependencies.count ).to eq(1)
+      expect( project.dep_number ).to eq(1)
+      expect( project.out_number ).to eq(1)
+      expect( project.out_number_sum ).to eq(2)
+
+
+      expect( ProjectdependencyService.mute!( project2.ids, dependency2.ids, true ) ).to be_truthy
+      dependency2.reload
+      expect( dependency2.muted ).to be_truthy
+      expect( dependency2.outdated ).to be_falsey
+      project2.reload 
+      expect( project2.out_number ).to eq(0)
+      expect( project2.out_number_sum ).to eq(0)
+      expect( ProjectService.outdated?(project2) ).to be_falsey
+
+      project.reload 
+      expect( project.out_number ).to eq(1)
+      expect( project.out_number_sum ).to eq(1)
+      expect( ProjectService.outdated?(project) ).to be_truthy
+
+      expect( ProjectdependencyService.mute!( project2.id.to_s, dependency2.id.to_s, false ) ).to be_truthy
+      dependency.reload
+      expect( dependency.muted ).to be_falsey
+      expect( dependency.outdated ).to be_truthy
+      project2.reload 
+      expect( project2.out_number ).to eq(1)
+      expect( project2.out_number_sum ).to eq(1)
+      expect( ProjectService.outdated?(project2) ).to be_truthy
     end
 
   end

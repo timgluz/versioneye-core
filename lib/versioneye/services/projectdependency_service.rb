@@ -88,9 +88,10 @@ class ProjectdependencyService < Versioneye::Service
       update_project_numbers dependency, project 
     end
     saved = dependency.save
-    project.reload
-    ProjectService.update_sums project 
-    ProjectService.reset_badge project 
+    up = project
+    up = project.parent if project.parent_id 
+    ProjectService.update_sums up
+    ProjectService.reset_badge up 
     saved 
   end
 
@@ -206,6 +207,8 @@ class ProjectdependencyService < Versioneye::Service
         project.out_number = project.out_number.to_i - 1 
         project.out_number_sum = project.out_number_sum.to_i - 1   
       end
+      project.out_number = 0 if project.out_number < 0 
+      project.out_number_sum = 0 if project.out_number_sum < 0
       project.save 
     end
 
