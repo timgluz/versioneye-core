@@ -965,6 +965,58 @@ describe ProjectService do
       project.unknown_number_sum.should eq( 1 )
     end
 
+    it 'updates the sums for a project with a child' do
+
+      user     = UserFactory.create_new
+      project  = ProjectFactory.create_new user, {:name => 'project_1'}, true
+      project2 = ProjectFactory.create_new user, {:name => 'project_2'}, true
+
+      prod_1  = ProductFactory.create_new 1
+      prod_2  = ProductFactory.create_new 2
+      prod_3  = ProductFactory.create_new 3
+      prod_4  = ProductFactory.create_new 4
+
+      mit = LicenseFactory.create_new prod_3, 'MIT'
+      gpl = LicenseFactory.create_new prod_3, 'GPL'
+      expect( License.count ).to eq(2)
+
+      dep_1 = ProjectdependencyFactory.create_new project , prod_1, true, {:version_requested => prod_1.version}
+      dep_2 = ProjectdependencyFactory.create_new project , prod_2, true, {:version_requested => prod_2.version}
+      dep_3 = ProjectdependencyFactory.create_new project2, prod_3, true, {:version_requested => prod_3.version}
+      dep_4 = ProjectdependencyFactory.create_new project2, prod_4, true, {:version_requested => '0.0.0'}
+      dep_5 = ProjectdependencyFactory.create_new project2, prod_1, true, {:version_requested => prod_1.version}
+      dep_6 = ProjectdependencyFactory.create_new project2, nil, true
+
+      ProjectdependencyService.update_outdated!( dep_1 )
+      ProjectdependencyService.update_outdated!( dep_2 )
+      ProjectdependencyService.update_outdated!( dep_3 )
+      ProjectdependencyService.update_outdated!( dep_4 )
+      ProjectdependencyService.update_outdated!( dep_5 )
+
+      whitelist = LicenseWhitelistFactory.create_new 'OSS', ['MIT']
+      whitelist.pessimistic_mode = true 
+      expect( whitelist.save ).to be_truthy
+      
+      project.license_whitelist_id = whitelist.id
+      expect( project.save ).to be_truthy
+      
+      ProjectService.update_license_numbers! project
+      expect( project.licenses_red ).to eq(0)
+      expect( project.licenses_red_sum ).to eq(0)
+      expect( project.licenses_unknown ).to eq(2)
+
+      project2.parent_id = project.ids 
+      project2.license_whitelist_id = whitelist.id
+      expect( project2.save ).to be_truthy
+      ProjectService.update_license_numbers! project2
+      expect( project2.licenses_red ).to eq(1)
+      expect( project2.licenses_unknown ).to eq(3)
+
+      ProjectService.update_sums( project )       
+      project.licenses_red_sum.should eq( 1 )
+      project.licenses_unknown_sum.should eq( 4 )
+    end
+
     it 'updates the sums for a project with a child and no LWL' do
       user     = UserFactory.create_new
       project1 = ProjectFactory.create_new user, {:name => 'project_1'}, true
@@ -992,6 +1044,71 @@ describe ProjectService do
       # Must be 0 because there is no license whitelist. 
       expect( project1.licenses_red ).to eq(0)
       expect( project1.licenses_red_sum ).to eq(0)
+    end
+
+    it 'updates the sums for a project with LWL' do
+      user     = UserFactory.create_new
+      project1 = ProjectFactory.create_new user, {:name => 'project_1'}, true
+
+      prod_1  = ProductFactory.create_new 1
+      prod_2  = ProductFactory.create_new 2
+
+      mit = LicenseFactory.create_new prod_2, 'MIT'
+      mit = LicenseFactory.create_new prod_2, 'GPL'
+      expect( License.count ).to eq(2)
+      
+      dep_1 = ProjectdependencyFactory.create_new project1 , prod_1, true, {:version_requested => prod_1.version}
+      dep_2 = ProjectdependencyFactory.create_new project1 , prod_2, true, {:version_requested => prod_2.version}
+
+      whitelist = LicenseWhitelistFactory.create_new 'OSS', ['MIT']
+      expect( whitelist.save ).to be_truthy
+      
+      project1.license_whitelist_id = whitelist.id
+      expect( project1.save ).to be_truthy
+
+      ProjectdependencyService.update_outdated!( dep_1 )
+      ProjectdependencyService.update_outdated!( dep_2 )
+      
+      ProjectService.update_license_numbers! project1
+      
+      ProjectService.update_sums project1
+      
+      # Must be 0 because there is no license whitelist. 
+      expect( project1.licenses_red ).to eq(0)
+      expect( project1.licenses_red_sum ).to eq(0)
+    end
+
+    it 'updates the sums for a project with pessimistic LWL' do
+      user     = UserFactory.create_new
+      project1 = ProjectFactory.create_new user, {:name => 'project_1'}, true
+
+      prod_1  = ProductFactory.create_new 1
+      prod_2  = ProductFactory.create_new 2
+
+      mit = LicenseFactory.create_new prod_2, 'MIT'
+      mit = LicenseFactory.create_new prod_2, 'GPL'
+      expect( License.count ).to eq(2)
+      
+      dep_1 = ProjectdependencyFactory.create_new project1 , prod_1, true, {:version_requested => prod_1.version}
+      dep_2 = ProjectdependencyFactory.create_new project1 , prod_2, true, {:version_requested => prod_2.version}
+
+      whitelist = LicenseWhitelistFactory.create_new 'OSS', ['MIT']
+      whitelist.pessimistic_mode = true 
+      expect( whitelist.save ).to be_truthy
+      
+      project1.license_whitelist_id = whitelist.id
+      expect( project1.save ).to be_truthy
+
+      ProjectdependencyService.update_outdated!( dep_1 )
+      ProjectdependencyService.update_outdated!( dep_2 )
+      
+      ProjectService.update_license_numbers! project1
+      
+      ProjectService.update_sums project1
+      
+      # Must be 0 because there is no license whitelist. 
+      expect( project1.licenses_red ).to eq(1)
+      expect( project1.licenses_red_sum ).to eq(1)
     end
 
   end

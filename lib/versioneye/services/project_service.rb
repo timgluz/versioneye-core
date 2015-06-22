@@ -377,9 +377,10 @@ class ProjectService < Versioneye::Service
       next if product.nil?
 
       product.version = dep.version_requested
-      next if product.licenses.nil? || product.licenses.empty?
+      licenses = product.licenses
+      next if licenses.nil? || licenses.empty?
 
-      on_white_list = on_whitelist?( product, whitelist )
+      on_white_list = on_whitelist?( licenses, whitelist )
       red << dep if !on_white_list
     end
     red
@@ -451,7 +452,7 @@ class ProjectService < Versioneye::Service
         project.out_number_sum       += 1 if dep.outdated 
         project.unknown_number_sum   += 1 if dep.unknown? 
         project.licenses_unknown_sum += 1 if product.nil? || product.licenses.nil? || product.licenses.empty?
-        if lwl && red_license?( dep )
+        if lwl && red_license?( dep, lwl )
           project.licenses_red_sum += 1 
         end
         project.sv_count_sum += dep.sv_ids.count if !dep.sv_ids.empty? 
@@ -460,23 +461,38 @@ class ProjectService < Versioneye::Service
     end
 
 
-    def self.red_license? projectdependency 
+    def self.red_license? projectdependency, whitelist
       lcs = projectdependency.license_caches
       return false if lcs.nil? || lcs.empty?
-        
-      lcs.each do |lc|
-        return false if lc.on_whitelist == true # TODO strict or not ? 
+      
+      if whitelist.pessimistic_mode == true 
+        lcs.each do |lc|
+          return true if lc.on_whitelist == false
+        end
+        return false
+      else
+        lcs.each do |lc|
+          return false if lc.on_whitelist == true 
+        end 
+        return true 
       end
-      return true  
     end
 
 
-    def self.on_whitelist?( product, whitelist )
-      product.licenses.each do |license|
-        on_whitelist = whitelist.include_license_substitute?( license.name_substitute )
-        return true if on_whitelist # TODO strict or not ? 
+    def self.on_whitelist?( licenses, whitelist )
+      if whitelist.pessimistic_mode == true 
+        licenses.each do |license|
+          on_whitelist = whitelist.include_license_substitute?( license.name_substitute )
+          return false if on_whitelist == false 
+        end  
+        return true 
+      else
+        licenses.each do |license|
+          on_whitelist = whitelist.include_license_substitute?( license.name_substitute )
+          return true if on_whitelist
+        end
+        return false 
       end
-      false 
     end
 
 

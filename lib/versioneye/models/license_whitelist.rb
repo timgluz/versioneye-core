@@ -3,8 +3,9 @@ class LicenseWhitelist < Versioneye::Model
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  field :name,    type: String
-  field :default, type: Boolean, default: false 
+  field :name,             type: String
+  field :default,          type: Boolean, default: false 
+  field :pessimistic_mode, type: Boolean, default: false 
 
   embeds_many :license_elements
 
