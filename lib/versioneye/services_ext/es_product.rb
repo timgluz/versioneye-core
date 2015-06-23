@@ -91,7 +91,6 @@ class EsProduct < Versioneye::Service
   end
 
   def self.index( product )
-    log.info "index #{product.name}"
     Tire.index Settings.instance.elasticsearch_product_index do
       store product.to_indexed_json
       product.update_attribute(:reindex, false)
