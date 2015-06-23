@@ -100,13 +100,16 @@ class ProjectService < Versioneye::Service
       :licenses => [], 
       :sv => [] }
     
-    deps = Projectdependency.any_of({:project_id => project.ids, :outdated => true}, {:project_id => project.ids, :prod_key => nil})
-    deps.each do |dep| 
+    Projectdependency.any_of(
+      {:project_id => project.ids, :outdated => true}, 
+      {:project_id => project.ids, :prod_key => nil} ).each do |dep| 
       map[project.ids][:dependencies].push dep 
     end
-    
-    deps = Projectdependency.where(:project_id => project.ids, :lwl_violation => 'true' )
-    deps.each do |dep| 
+
+    Projectdependency.any_of( 
+      {:project_id => project.ids, :lwl_violation => 'true'},
+      {:project_id => project.ids, :license_caches => nil}, 
+      {:project_id => project.ids, :license_caches.with_size => 0} ).each do |dep| 
       map[project.ids][:licenses].push dep 
     end
     
