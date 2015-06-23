@@ -390,7 +390,7 @@ describe ProjectService do
       expect( summary[project2.ids][:sv] ).to_not be_empty
     end
 
-  end  
+  end
   def add_sv product
     sv = SecurityVulnerability.new({:language => product.language, :prod_key => product.prod_key, :summary => 'test'})
     sv.affected_versions << product.version 
