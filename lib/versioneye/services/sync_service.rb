@@ -115,7 +115,8 @@ class SyncService < Versioneye::Service
   def self.create_product_if_not_exist json
     return nil if json.nil?
 
-    product = Product.fetch_product json[:language], json[:prod_key]
+    language = Product.decode_language json[:language]
+    product = Product.fetch_product language, json[:prod_key]
     if product
       product.add_version json[:version], {:released_at => parsed_date(json[:released_at]) }
       product.save
@@ -124,7 +125,7 @@ class SyncService < Versioneye::Service
     end
 
     product = Product.new
-    product.language      = json[:language]
+    product.language      = language
     product.prod_key      = json[:prod_key]
     product.name          = json[:name]
     product.name_downcase = product.name.to_s.downcase
@@ -158,7 +159,7 @@ class SyncService < Versioneye::Service
 
 
   def self.create_license_if_not_exist json, name, url
-    language = json[:language]
+    language = Product.decode_language json[:language]
     prod_key = json[:prod_key]
     version = json[:version]
     License.find_or_create language, prod_key, version, name, url
@@ -180,7 +181,7 @@ class SyncService < Versioneye::Service
 
 
   def self.create_link_if_not_exist json, name, link
-    language = json[:language]
+    language = Product.decode_language json[:language]
     prod_key = json[:prod_key]
     version = json[:version]
     Versionlink.create_versionlink language, prod_key, version, link, name
@@ -201,7 +202,7 @@ class SyncService < Versioneye::Service
 
 
   def self.create_archive_if_not_exist json, name, link
-    language = json[:language]
+    language = Product.decode_language json[:language]
     prod_key = json[:prod_key]
     version  = json[:version]
     archive  = Versionarchive.new({:language => language, :prod_key => prod_key, :version_id => version, :link => link, :name => name})
@@ -222,7 +223,7 @@ class SyncService < Versioneye::Service
 
 
   def self.create_dependency_if_not_exist json, dependency
-    language = json[:language]
+    language = Product.decode_language json[:language]
     prod_key = json[:prod_key]
     prod_version = json[:version]
 
