@@ -445,6 +445,7 @@ module VersionEye
     def apache_license_10_match name
       new_name = name.gsub(/public/i, '').gsub(/software/i, '').strip
       new_name.match(/ASL\s*1/i) ||
+      new_name.match(/ASLv1/i) ||
       new_name.match(/ASF\s*1/i) ||
       new_name.match(/Apache\s*1/i) ||
       new_name.match(/Apache\s+ASL\s+1/i) 
@@ -453,7 +454,9 @@ module VersionEye
     def apache_license_11_match name
       new_name = name.gsub(/public/i, '').gsub(/software/i, '').strip
       new_name.match(/ASL\s+1\.1/xi) ||
+      new_name.match(/ASLv1\.1/xi) ||
       new_name.match(/ASF\s+1\.1/i) ||
+      new_name.match(/ASFv1\.1/i) ||
       new_name.match(/Apache\s*1\.1/i) ||
       new_name.match(/Apache\s+ASL\s+1\.1/i) 
     end
@@ -461,7 +464,9 @@ module VersionEye
     def apache_license_20_match name
       new_name = name.gsub(/public/i, '').gsub(/software/i, '').strip
       new_name.match(/ASL\s+2/xi) ||
+      new_name.match(/ASLv2/xi) ||
       new_name.match(/ASF\s*2/i) ||
+      new_name.match(/ASFv2/i) ||
       new_name.match(/Apache20/i) ||
       new_name.match(/Apache\s*2/i) ||
       new_name.match(/Apache\s+ASL\s*2/i) ||

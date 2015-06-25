@@ -676,6 +676,10 @@ describe License do
       license.name_substitute.should eq("Apache-1.0")
     end
     it "should return Apache License version 1 name" do
+      license = License.new({:name => "ASLv1"})
+      license.name_substitute.should eq("Apache-1.0")
+    end
+    it "should return Apache License version 1 name" do
       license = License.new({:name => "Apache v1 Lizenz"})
       license.name_substitute.should eq("Apache-1.0")
     end
@@ -695,6 +699,10 @@ describe License do
     end
     it "should return Apache License version 1.1 name" do
       license = License.new({:name => "Apache public v1.1 Lizenz"})
+      license.name_substitute.should eq("Apache-1.1")
+    end
+    it "should return Apache License version 1.1 name" do
+      license = License.new({:name => "ASLv1.1"})
       license.name_substitute.should eq("Apache-1.1")
     end
 
@@ -776,6 +784,10 @@ describe License do
     end
     it "should return Apache License name" do
       license = License.new({:name => "ASL 2"})
+      license.name_substitute.should eq("Apache-2.0")
+    end
+    it "should return Apache License name" do
+      license = License.new({:name => "ASLv2"})
       license.name_substitute.should eq("Apache-2.0")
     end
     it "should return Apache License name" do
