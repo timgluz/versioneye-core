@@ -399,6 +399,7 @@ module VersionEye
       new_name.match(/\ALGPL\s*3\z/i) ||
       new_name.match(/\ALESSER\s+GENERAL\s+PUBLIC\s*3\z/i) ||
       new_name.match(/\ALesser\s+General\s+Public\s*3\s*only\z/i) || 
+      new_name.match(/\ALesser\s+General\s+Public\s+\(LGPL\s+3\)\s*\z/i) || 
       new_name.match(/\ALibrary\s+or\s+Lesser\s+General\s+Public\s+\(LGPL\)\z/i) || 
       new_name.match(/\ALesser\s+General\s+Public\z/i) || 
       new_name.match(/\ALesser\s+General\s+Public\s+\(LGPL\)\z/i)
