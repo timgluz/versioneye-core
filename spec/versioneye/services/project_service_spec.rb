@@ -383,7 +383,7 @@ describe ProjectService do
       expect( summary[project.ids][:dependencies] ).to_not be_empty
       expect( summary[project.ids][:dependencies].count ).to eq(1)
       expect( summary[project.ids][:licenses] ).to_not be_empty
-      expect( summary[project.ids][:licenses].count ).to eq(1)
+      expect( summary[project.ids][:licenses].count ).to eq(2) # 1 red license and 1 unknown. 
       
       expect( summary[project2.ids][:sv_count_sum] ).to eq(1)
       expect( summary[project2.ids][:sv_count] ).to eq(1)
