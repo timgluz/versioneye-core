@@ -14,13 +14,14 @@ class GradleParser < CommonParser
   A_DEP_SIMPLE_MATCHER = /["|']\s*([\w\.\-]+:[\w\.\-]+:[\w\.\-]+)\s*["|']/xi
 
 
-  # (\w+) [\s|\(]?[\'|\"]+ ([\w|\.|\-|\_|\+]+)  :([\w|\.|\-|_|\+]+)  :([$\w|\.|\-|_|\+]+) [\s|\(]?[\'|\"]+
+  # (\w+) [\s|\(]?[\'|\"]+ ([\w|\.|\-|\_|\+]+)  :([\w|\.|\-|_|\+]+)  :([$\w|\.|\-|_|\+]+) [\@\S]* [\s|\(]?[\'|\"]+
   A_DEP_SHORT_MATCHER = /
       (\w+) #scope 
       [\s|\(]?[\'|\"]+ #scope separator
         ([\w|\.|\-|\_|\+]+) #group_id 
         :([\w|\.|\-|_|\+]+) #artifact 
         :([$\w|\.|\-|_|\+]+) #version number
+        [\@\S]*          #classifier
         [\s|\(]?[\'|\"]+ #separator
     /xi
 
