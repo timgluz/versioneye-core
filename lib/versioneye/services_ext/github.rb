@@ -315,7 +315,7 @@ class Github < Versioneye::Service
     if branch_tree.nil? or !branch_tree.has_key?('tree')
       msg = "Can't read tree for repo `#{repo_name}` on branch `#{branch}`."
       log.error msg
-      return
+      return nil 
     end
 
     project_files = branch_tree['tree'].keep_if {|file| ProjectService.type_by_filename(file['path'].to_s) != nil}
