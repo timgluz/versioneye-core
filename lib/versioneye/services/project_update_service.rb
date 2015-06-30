@@ -37,6 +37,8 @@ class ProjectUpdateService < Versioneye::Service
 
     project = update_single project, send_email 
     project.children.each do |child_project|
+      child_project.license_whitelist_id = project.license_whitelist_id
+      child_project.save 
       update_single child_project, send_email
     end
     ProjectService.update_sums( project )
