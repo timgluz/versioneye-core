@@ -51,7 +51,14 @@ class SyncService < Versioneye::Service
     return nil if lang_prod_keys.include?(lang_key)
 
     lang_prod_keys << lang_key
-    sync_product dependency.language, prod_key, false
+
+    key      = prod_key
+    language = dependency.language
+    if dependency.project && dependency.project.project_type.to_s.eql?(Project::A_TYPE_BOWER)
+      key      = dependency.name 
+      language = 'Bower'
+    end
+    sync_product language, key, false
 
     product = Product.fetch_product dependency.language, prod_key
     return nil if product.nil?
@@ -60,6 +67,10 @@ class SyncService < Versioneye::Service
     ProjectdependencyService.update_outdated!( dependency )
     log.info dependency.to_s
     true
+  rescue => e 
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    nil
   end
 
 
