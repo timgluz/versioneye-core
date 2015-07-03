@@ -214,6 +214,39 @@ describe License do
     end
     
 
+    it "check for CDDL and GPL license" do
+      license = License.new({:name => "CDDL+GPL"})
+      license.name_substitute.should eq("CDDL+GPL")
+    end
+    it "check for CDDL and GPL license" do
+      license = License.new({:name => "CDDL + GPL"})
+      license.name_substitute.should eq("CDDL+GPL")
+    end
+    it "check for CDDL and GPL license" do
+      license = License.new({:name => "CDDL plus GPL"})
+      license.name_substitute.should eq("CDDL+GPL")
+    end
+    it "check for CDDL and GPL license" do
+      license = License.new({:name => "COMMON DEVELOPMENT AND DISTRIBUTION (CDDL) plus GPL"})
+      license.name_substitute.should eq("CDDL+GPL")
+    end
+    it "check for CDDL and GPL license" do
+      license = License.new({:name => "COMMON DEVELOPMENT AND DISTRIBUTION plus GPL"})
+      license.name_substitute.should eq("CDDL+GPL")
+    end
+    it "check for CDDL and GPL license" do
+      license = License.new({:name => "COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) plus GPL"})
+      license.name_substitute.should eq("CDDL+GPL")
+    end
+    it "check for CDDL and GPL license" do
+      license = License.new({:name => "CDDL1", :url => "https://glassfish.java.net/nonav/public/CDDL+GPL.html" })
+      license.name_substitute.should eq("CDDL+GPL")
+    end
+    it "check for CDDL and GPL license" do
+      license = License.new({:name => "CDDL1", :url => "https://glassfish.java.net/public/CDDL+GPL.html" })
+      license.name_substitute.should eq("CDDL+GPL")
+    end
+
 
     it "should return CDDL+GPLv2 with classpath exception name" do
       license = License.new({:name => "CDDL  + GPLv2 with classpath exception"})
@@ -275,15 +308,16 @@ describe License do
       license = License.new({:name => "CDDL+GPL 1.1"})
       license.name_substitute.should eq("CDDL+GPLv2 with classpath exception")
     end
-    
-    
-    
-    
-    
-    
-    
+    it "should return CDDL+GPLv2 with classpath exception name" do
+      license = License.new({:name => "GPL2", :url => "https://glassfish.java.net/nonav/public/CDDL+GPL_1_1.html"})
+      license.name_substitute.should eq("CDDL+GPLv2 with classpath exception")
+    end
+    it "should return CDDL+GPLv2 with classpath exception name" do
+      license = License.new({:name => "GPL2", :url => "https://glassfish.java.net/public/CDDL+GPL_1_1.html"})
+      license.name_substitute.should eq("CDDL+GPLv2 with classpath exception")
+    end
 
-
+    
     it "should return BSD-4-Clause-UC name" do
       license = License.new({:name => "BSD 4-clause UC"})
       license.name_substitute.should eq("BSD-4-Clause-UC")
@@ -338,6 +372,10 @@ describe License do
     end
     it "should return BSD 2-Clause name" do
       license = License.new({:name => "2 clause BSdL"})
+      license.name_substitute.should eq("BSD-2-Clause")
+    end
+    it "should return BSD 2-Clause name" do
+      license = License.new({:name => "BSD", :url => 'http://opensource.org/licenses/BSD-2-Clause'})
       license.name_substitute.should eq("BSD-2-Clause")
     end
 
@@ -1157,32 +1195,6 @@ describe License do
     it "check for CPL 1 license" do
       license = License.new({:name => "Common public licence v1.0"})
       license.name_substitute.should eq("CPL-1.0")
-    end
-    
-
-    it "check for CDDL and GPL license" do
-      license = License.new({:name => "CDDL+GPL"})
-      license.name_substitute.should eq("CDDL+GPL")
-    end
-    it "check for CDDL and GPL license" do
-      license = License.new({:name => "CDDL + GPL"})
-      license.name_substitute.should eq("CDDL+GPL")
-    end
-    it "check for CDDL and GPL license" do
-      license = License.new({:name => "CDDL plus GPL"})
-      license.name_substitute.should eq("CDDL+GPL")
-    end
-    it "check for CDDL and GPL license" do
-      license = License.new({:name => "COMMON DEVELOPMENT AND DISTRIBUTION (CDDL) plus GPL"})
-      license.name_substitute.should eq("CDDL+GPL")
-    end
-    it "check for CDDL and GPL license" do
-      license = License.new({:name => "COMMON DEVELOPMENT AND DISTRIBUTION plus GPL"})
-      license.name_substitute.should eq("CDDL+GPL")
-    end
-    it "check for CDDL and GPL license" do
-      license = License.new({:name => "COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) plus GPL"})
-      license.name_substitute.should eq("CDDL+GPL")
     end
     
 
