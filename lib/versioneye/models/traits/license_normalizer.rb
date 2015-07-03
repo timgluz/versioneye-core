@@ -115,7 +115,7 @@ module VersionEye
 
 
     def link
-      if url && !url.empty?
+      if defined?(url) && url && !url.empty?
         return url if url.match(/\Ahttp:\/\//xi) || url.match(/\Ahttps:\/\//xi)
         return "http://#{url}" if url.match(/\Awww\./xi)
       end
@@ -271,7 +271,7 @@ module VersionEye
     def bsd_2_clause_match name
       tmp_name = name.gsub("-", " ").strip 
 
-      if tmp_name.match(/\ABSD\z/i) && url.to_s.match(/opensource\.org\/licenses\/BSD\-2\-Clause/i)
+      if tmp_name.match(/\ABSD\z/i) && defined?(url) && url.to_s.match(/opensource\.org\/licenses\/BSD\-2\-Clause/i)
         return true 
       end 
 
@@ -392,7 +392,7 @@ module VersionEye
     def gpl_30_match name 
       new_name = name.gsub(/gnu/i, "").strip 
 
-      if name.match(/General\s+Public/i) && url.to_s.match(/www\.gnu\.org\/licenses\/gpl\.txt/i)
+      if name.match(/General\s+Public/i) && defined?(url) && url.to_s.match(/www\.gnu\.org\/licenses\/gpl\.txt/i)
         return true 
       end
       
@@ -554,8 +554,10 @@ module VersionEye
 
     # It is with classpath exception as well. 
     def cddl_gpl name
-      if url.to_s.match(/glassfish\.java\.net\/nonav\/public\/CDDL\+GPL\.html\z/i) || 
-         url.to_s.match(/glassfish\.java\.net\/public\/CDDL\+GPL\.html\z/i)
+      if defined?(url) && (
+         url.to_s.match(/glassfish\.java\.net\/nonav\/public\/CDDL\+GPL\.html\z/i) || 
+         url.to_s.match(/glassfish\.java\.net\/public\/CDDL\+GPL\.html\z/i) 
+         )
          return true 
       end
       name.match(/\ACOMMON\s+DEVELOPMENT\s+AND\s+DISTRIBUTION\s+\(CDDL\)\s+plus\s+GPL\z/i) ||
@@ -565,8 +567,10 @@ module VersionEye
     end
 
     def cddl_gpl2_w_class_exception name
-      if url.to_s.match(/glassfish\.java\.net\/public\/CDDL\+GPL_1_1\.html\z/i) || 
+      if defined?(url) && (
+         url.to_s.match(/glassfish\.java\.net\/public\/CDDL\+GPL_1_1\.html\z/i) || 
          url.to_s.match(/glassfish\.java\.net\/nonav\/public\/CDDL\+GPL_1_1\.html\z/i)
+         )
          return true 
       end
       name.match(/\ACOMMON\s+DEVELOPMENT\s+AND\s+DISTRIBUTION\s+\(CDDL\)\s+plus\s+GPL\s*2\s*with\s*classpath\s*exception\z/i) ||
