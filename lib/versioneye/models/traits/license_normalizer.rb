@@ -2,6 +2,12 @@ module VersionEye
   module LicenseNormalizer
 
     
+    A_CDDL_GPL2_W_CPE = 'CDDL+GPLv2 with classpath exception'
+    A_CDDL_GPL        = 'CDDL+GPL' # with calsspaht exception 
+
+    A_EDL_1_0 = 'EDL-1.0'
+    
+
     def name_substitute
       identifier name 
     end
@@ -32,13 +38,19 @@ module VersionEye
 
       tmp_name = do_replacements(name)
 
+      return A_CDDL_GPL2_W_CPE if cddl_gpl2_w_class_exception( tmp_name )
+      return A_CDDL_GPL        if cddl_gpl( tmp_name )
+
+      return 'GPL-2.0-with-classpath-exception' if gpl_20_match_w_cpe( tmp_name )
+
       return 'AGPL-3.0' if agpl_30_match( tmp_name )
       return 'AGPL-1.0' if agpl_10_match( tmp_name )
 
       return 'LGPL-2.1'  if lgpl_21_match( tmp_name )
       return 'LGPL-2.0'  if lgpl_20_match( tmp_name )
-      return 'LGPL-3.0+' if lgpl_3_or_later_match( tmp_name )
       return 'LGPL-3.0'  if lgpl_3_match( tmp_name )
+      return 'LGPL-3.0+' if lgpl_3_or_later_match( tmp_name )
+      
 
       return 'GPL'     if gpl_match( tmp_name )
       return 'GPL-1.0' if gpl_10_match( tmp_name )
@@ -51,11 +63,11 @@ module VersionEye
       return 'CC-BY-SA-3.0' if cc_by_sa_30_match( tmp_name )
       return 'CC-BY-SA-4.0' if cc_by_sa_40_match( tmp_name )
 
-      return 'CDDL+GPLv2 with classpath exception' if cddl_gpl2_w_class_exception( tmp_name )
-
       return 'zlib-acknowledgement' if zlib_acknowledgement_match( tmp_name )
 
       return 'MIT' if mit_match( tmp_name )
+
+      return 'Unlicense' if unlicense_match( tmp_name )
 
       return 'Ruby' if ruby_match( tmp_name )
 
@@ -68,7 +80,6 @@ module VersionEye
       return 'MPL-2.0'  if mpl_20_match( tmp_name )
 
       return 'CDDL-1.1' if cddl_11_match(  tmp_name )
-      return 'CDDL+GPL' if cddl_plus_gpl( tmp_name )
       return 'CDDL-1.0' if cddl_match( tmp_name )
 
       return 'Apache-1.1' if apache_license_11_match( tmp_name )
@@ -76,7 +87,7 @@ module VersionEye
       return 'Apache-2.0' if apache_license_20_match( tmp_name )
 
       return 'EPL-1.0' if eclipse_match( tmp_name ) # Eclipse Public License 1.0
-      return 'EDL-1.0' if eclipse_distribution_match( tmp_name ) # Eclipse Distribution License 1.0
+      return A_EDL_1_0 if eclipse_distribution_match( tmp_name ) # Eclipse Distribution License 1.0
 
       return 'ClArtistic'         if clarified_artistic_match( tmp_name )
       return 'Artistic-1.0'       if artistic_10_match( tmp_name )
@@ -111,11 +122,16 @@ module VersionEye
       return nil if name.to_s.empty?
 
       spdx_id = spdx_identifier 
-      return "http://spdx.org/licenses/#{spdx_id}.html" if spdx_id
-      
-      tmp_name = do_replacements(name)
-      return 'https://glassfish.java.net/nonav/public/CDDL+GPL.html' if cddl_plus_gpl( tmp_name )
-      return 'http://www.eclipse.org/org/documents/edl-v10.php'  if eclipse_distribution_match( tmp_name )
+      if spdx_id
+        return 'https://glassfish.java.net/public/CDDL+GPL.html'     if spdx_id.to_s.eql?( A_CDDL_GPL )
+
+        #       https://glassfish.java.net/nonav/public/CDDL+GPL_1_1.html - same 
+        return 'https://glassfish.java.net/public/CDDL+GPL_1_1.html' if spdx_id.to_s.eql?( A_CDDL_GPL2_W_CPE ) 
+
+        return 'http://www.eclipse.org/org/documents/edl-v10.php'    if spdx_id.to_s.eql?( A_EDL_1_0 )
+
+        return "http://spdx.org/licenses/#{spdx_id}.html"
+      end
 
       nil
     end
@@ -207,6 +223,15 @@ module VersionEye
       name.match(/\AMIT-style\z/i) ||
       name.match(/\AMIT\s*\/\s*X11\s*\z/i) ||
       name.match(/\AMIT\s*\(MIT\)\z/i)
+    end
+
+    def unlicense_match name 
+      name.match(/\APublic\s*domain\s*\(Unlicense\)\z/i) ||
+      name.match(/\AUnlicense\s+\(Public\s+Domain\)\z/i) ||
+      name.match(/\A\(Unlicense\)\z/i) || 
+      name.match(/\AUnlicensed\z/i) || 
+      name.match(/\Aunlicense\.org\z/i) || 
+      name.match(/\Ahttps\:\/\/spdx\.org\/licenses\/Unlicense\.html\z/i)
     end
 
     def eclipse_match name
@@ -341,8 +366,30 @@ module VersionEye
       new_name.match(/\AGeneral\s+Public\s+2\z/i)
     end
 
+    def gpl_20_match_w_cpe name
+      new_name = name.gsub(/gnu/i, "").strip 
+      new_name.match(/\AGeneral\s+Public\s+\(GPL\)\s+2\s+June\s+1991\s+with\s+\"ClassPath\"\s+Exception\z/i) ||
+      new_name.match(/\AGeneral\s+Public\s+\(GPL\)\s+2\s+June\s+1991\s+with\s+ClassPath\s+Exception\z/i) ||
+      new_name.match(/\AGeneral\s*Public\s*2\.0\s*w\/Classpath\s*exception\z/i) ||
+      new_name.match(/\AGeneral\s*Public\s*2\s*w\/Classpath\s*exception\z/i) ||
+      new_name.match(/\AGeneral\s*Public\s*2\s*with\s*the\s*Classpath\s*Exception\z/i) ||
+      new_name.match(/\AGeneral\s*Public\s*2\s*with\s*Classpath\s*Exception\z/i) ||
+      new_name.match(/\AGeneral\s*Public\s*2\s*w\/\s*Classpath\s*Exception\z/i) ||
+      new_name.match(/\AGeneral\s*Public\s*2\s*w\s*Classpath\s*Exception\z/i) ||
+      new_name.match(/\AGeneral\s*Public\s*2\s*\+\s*Classpath\s*Exception\z/i) ||
+      new_name.match(/\AGeneral\s*Public\s*2\s*\+\s*Cpe\z/i) ||
+      new_name.match(/\AGPL\s*2\s*w\/\s*CPE\z/i) ||
+      new_name.match(/\Agplv2\+ce\z/i) ||
+      new_name.match(/\AGPLv2\s*w\/\s*CPE\z/i)
+    end
+
     def gpl_30_match name 
       new_name = name.gsub(/gnu/i, "").strip 
+
+      if name.match(/General\s+Public/i) && url.to_s.match(/http\:\/\/www\.gnu\.org\/licenses\/gpl\.txt/i)
+        return true 
+      end
+      
       new_name.match(/\AGPL3\z/i) ||
       new_name.match(/\AGPL\s*3\z/i) ||
       new_name.match(/\AGPLv3\+\z/i) ||
@@ -402,7 +449,14 @@ module VersionEye
       new_name.match(/\ALesser\s+General\s+Public\s+\(LGPL\s+3\)\s*\z/i) || 
       new_name.match(/\ALibrary\s+or\s+Lesser\s+General\s+Public\s+\(LGPL\)\z/i) || 
       new_name.match(/\ALesser\s+General\s+Public\z/i) || 
-      new_name.match(/\ALesser\s+General\s+Public\s+\(LGPL\)\z/i)
+      new_name.match(/\ALesser\s+General\s+Public\s+\(LGPL\)\z/i) || 
+      
+      new_name.match(/\ALGPL\s*3\+\z/i) ||
+      new_name.match(/\ALGPL\s*v3\+\z/i) ||
+      new_name.match(/\ALGPL\s*v3\s*or\s*later\z/i) ||
+      new_name.match(/\ALGPL\s*3\s*or\s*later\z/i) ||
+      new_name.match(/\ALesser\s+General\s+Public\s+3\s+or\s+later\s*\z/i) || 
+      new_name.match(/\ALesser\s+General\s+Public\s+3\s+or\s+greater\s*\z/i)
     end
 
     def lgpl_3_or_later_match name
@@ -412,7 +466,8 @@ module VersionEye
       new_name.match(/\ALGPL\s*v3\+\z/i) ||
       new_name.match(/\ALGPL\s*v3\s*or\s*later\z/i) ||
       new_name.match(/\ALGPL\s*3\s*or\s*later\z/i) ||
-      new_name.match(/\ALesser\s+General\s+Public\s+3\s+or\s+later\s*\z/i)
+      new_name.match(/\ALesser\s+General\s+Public\s+3\s+or\s+later\s*\z/i) || 
+      new_name.match(/\ALesser\s+General\s+Public\s+3\s+or\s+greater\s*\z/i)
     end
 
     def clarified_artistic_match name
@@ -491,13 +546,31 @@ module VersionEye
       name.match(/\ACommon\s+Development\s+and\s+Distribution\s+\(CDDL\)\s+v1\.1\z/i)
     end
 
-    def cddl_plus_gpl name
+    # It is with classpath exception as well. 
+    def cddl_gpl name
       name.match(/\ACOMMON\s+DEVELOPMENT\s+AND\s+DISTRIBUTION\s+\(CDDL\)\s+plus\s+GPL\z/i) ||
       name.match(/\ACOMMON\s+DEVELOPMENT\s+AND\s+DISTRIBUTION\s+plus\s+GPL\z/i) ||
       name.match(/\ACDDL\s*\+\s*GPL\z/i) || 
       name.match(/\ACDDL\s*plus\s*GPL\z/i)
     end
 
+    def cddl_gpl2_w_class_exception name
+      name.match(/\ACOMMON\s+DEVELOPMENT\s+AND\s+DISTRIBUTION\s+\(CDDL\)\s+plus\s+GPL\s*2\s*with\s*classpath\s*exception\z/i) ||
+      name.match(/\ACOMMON\s+DEVELOPMENT\s+AND\s+DISTRIBUTION\s+plus\s+GPL[v]*\s*2\s*with\s*classpath\s*exception\z/i) ||
+      name.match(/\ACDDL\s*plus\s*GPL\s*2\s*with\s*classpath\s*exception\s*\z/i) || 
+      name.match(/\ACDDL\s*\+\s*GPLv2\s*with\s*classpath\s*exception\s*\z/i) ||
+      name.match(/\ACDDL\s*\+\s*GPL\s*2\s*with\s*classpath\s*exception\s*\z/i) || 
+      name.match(/\ACDDL\s+or\s+GPLv2\s+with\s+exceptions\z/i) || 
+      name.match(/\ACDDL\s+or\s+GPL\s*2\s+with\s+exceptions\z/i) || 
+      name.match(/\ADual\s+consisting\s+of\s+the\s+CDDL\s+1\.1\s+and\s+GPL\s+2\z/i) ||
+      name.match(/\ACDDL\+GPL_1_1\z/i) ||
+      name.match(/\ACDDL\s*\+\s*GPL\s+1\.1\z/i) ||
+      name.match(/\ACDDL\s+1.1\s+\/\s+GPL\s+2\s+dual\z/i) ||
+      name.match(/\ACDDL\/GPLv2\+CE\z/i) ||
+      name.match(/\ACDDL\s*\+\s*GPL2\s*w\/\s*CPE\s*\z/i)
+    end
+
+    
     def cpl_10_match name
       name.match(/\ACPL1\z/i) ||
       name.match(/\ACPL\s+1\z/i) ||
@@ -505,11 +578,6 @@ module VersionEye
       name.match(/\ACommon\s+Public\s+1\z/i)
     end
 
-
-    def cddl_gpl2_w_class_exception name
-      name.match(/\ACDDL\s*\+\s*GPLv2\s*with\s*classpath\s*exception\z/i) ||
-      name.match(/\ACDDL\s*\+\s*GPL\s*2\s*with\s*classpath\s*exception\z/i)
-    end
 
     def zlib_acknowledgement_match name
       name.match(/\Azlib\/libpng\s*License\s*with\s*Acknowledgement\s*\z/i) ||
@@ -547,13 +615,15 @@ module VersionEye
         tmp_name = tmp_name.gsub(/ v4/i, " 4").strip
         tmp_name = tmp_name.gsub(/4\.0/i, "4").strip
         
-        tmp_name = tmp_name.gsub(/Licenses/i, " ").strip 
-        tmp_name = tmp_name.gsub(/Licences/i, " ").strip 
-        tmp_name = tmp_name.gsub(/Lizenzen/i, " ").strip 
-        tmp_name = tmp_name.gsub(/Licenzen/i, " ").strip 
-        tmp_name = tmp_name.gsub(/License/i, " ").strip 
-        tmp_name = tmp_name.gsub(/Licence/i, " ").strip 
-        tmp_name = tmp_name.gsub(/Lizenz/i, " ").strip 
+        if tmp_name.match(/unlicense/i) == nil
+          tmp_name = tmp_name.gsub(/Licenses/i, " ").strip 
+          tmp_name = tmp_name.gsub(/Licences/i, " ").strip 
+          tmp_name = tmp_name.gsub(/Lizenzen/i, " ").strip 
+          tmp_name = tmp_name.gsub(/Licenzen/i, " ").strip 
+          tmp_name = tmp_name.gsub(/License/i, " ").strip 
+          tmp_name = tmp_name.gsub(/Licence/i, " ").strip 
+          tmp_name = tmp_name.gsub(/Lizenz/i, " ").strip 
+        end
 
         tmp_name
       end
