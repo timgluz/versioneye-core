@@ -51,7 +51,6 @@ module VersionEye
       return 'LGPL-3.0'  if lgpl_3_match( tmp_name )
       return 'LGPL-3.0+' if lgpl_3_or_later_match( tmp_name )
       
-
       return 'GPL'     if gpl_match( tmp_name )
       return 'GPL-1.0' if gpl_10_match( tmp_name )
       return 'GPL-2.0' if gpl_20_match( tmp_name )
@@ -265,6 +264,8 @@ module VersionEye
       tmp_name = name.gsub("-", " ").strip 
       tmp_name.match(/\ABSD\z/i) || 
       tmp_name.match(/\ABSD\s*style\z/i) ||
+      tmp_name.match(/\ABerkeley\s+Software\s+Distribution\s+\(BSD\)\s*\z/i) ||
+      tmp_name.match(/\ABerkeley\s+Software\s+Distribution\s*\z/i) ||
       tmp_name.match(/\ABSD\s*like\z/i) 
     end
 

@@ -344,6 +344,15 @@ describe License do
       license = License.new({:name => "BSD like"})
       license.name_substitute.should eq("BSD")
     end
+    it "should return BSD name" do
+      license = License.new({:name => "Berkeley Software Distribution (BSD) License"})
+      license.name_substitute.should eq("BSD")
+    end
+    it "should return BSD name" do
+      license = License.new({:name => "Berkeley Software Distribution License"})
+      license.name_substitute.should eq("BSD")
+    end
+    
 
     
     it "should return BSD 2-Clause name" do
