@@ -100,6 +100,7 @@ class BadgeService < Versioneye::Service
     return Badge::A_UPDATE_SVG    if badge.status.eql?(Badge::A_UPDATE) 
     return Badge::A_NONE_SVG      if badge.status.eql?(Badge::A_NONE)
     return Badge::A_UNKNOWN_SVG   if badge.status.eql?(Badge::A_UNKNOWN)
+    return Badge::A_REF_0_SVG     if badge.status.eql?(Badge::A_REF_0_SVG)
   end
 
 

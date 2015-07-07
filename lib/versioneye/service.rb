@@ -6,6 +6,7 @@ module Versioneye
 
     require 'versioneye/services/analytics_service'
     require 'versioneye/services/badge_service'
+    require 'versioneye/services/badge_ref_service'
     require 'versioneye/services/bitbucket_service'
     require 'versioneye/services/stash_service'
     require 'versioneye/services/circle_element_service'

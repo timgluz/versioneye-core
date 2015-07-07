@@ -41,7 +41,11 @@ class DependencyBadgeWorker < Worker
 
 
     def calculate_badge message
-      BadgeService.update message
+      if message.to_s.match(/ref\z/)
+        BadgeRefService.update message
+      else 
+        BadgeService.update message
+      end
     rescue => e
       log.error e.message
       log.error e.backtrace.join("\n")
