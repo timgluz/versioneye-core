@@ -22,7 +22,7 @@ class Project < Versioneye::Model
   A_SOURCE_GITHUB    = 'github'
   A_SOURCE_BITBUCKET = 'bitbucket'
   A_SOURCE_STASH     = 'stash'
-  A_SOURCE_API       = 'API'  
+  A_SOURCE_API       = 'API'
 
   A_PERIOD_MONTHLY = 'monthly'
   A_PERIOD_WEEKLY  = 'weekly'
