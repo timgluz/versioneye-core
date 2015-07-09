@@ -21,6 +21,7 @@ class MavenRepository < Versioneye::Model
     repos['akka']               = 'http://repo.akka.io/releases'
     repos['ibiblio']            = 'http://mirrors.ibiblio.org/maven2/'
     repos['antelink']           = 'http://maven.antelink.com/content/repositories/central/'
+    repos['alfresco']           = 'https://artifacts.alfresco.com/nexus/content/groups/public/'
     repos['activity']           = 'https://maven.alfresco.com/nexus/content/repositories/activiti-releases/org/activiti/'
     repos['activity_designer']  = 'https://maven.alfresco.com/nexus/content/repositories/activiti/org/activiti/designer/'
     repos['servicemix']         = 'http://svn.apache.org/repos/asf/servicemix/m2-repo'
