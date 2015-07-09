@@ -39,6 +39,8 @@ class BadgeService < Versioneye::Service
     if project.nil? 
       badge.status = Badge::A_UNKNOWN
       badge.svg    = fetch_svg( badge )
+      badge.badge_source = Badge::A_SOURCE_PROJECT
+      badge.badge_type   = Badge::A_TYPE_DEPENDENCY
       badge.save 
       cache.set( key, badge, A_TTL_24H )
       return badge 
@@ -47,10 +49,12 @@ class BadgeService < Versioneye::Service
     outdated = ProjectService.outdated?( project )
     insecure = ProjectService.insecure?( project )
     
-    badge.status = Badge::A_OUT_OF_DATE if outdated == true
-    badge.status = Badge::A_UP_TO_DATE  if outdated == false
-    badge.status = Badge::A_UPDATE      if insecure == true 
-    badge.svg    = fetch_svg( badge )
+    badge.status     = Badge::A_OUT_OF_DATE if outdated == true
+    badge.status     = Badge::A_UP_TO_DATE  if outdated == false
+    badge.status     = Badge::A_UPDATE      if insecure == true 
+    badge_source     = Badge::A_SOURCE_PROJECT
+    badge.badge_type = Badge::A_TYPE_DEPENDENCY
+    badge.svg        = fetch_svg( badge )
     badge.save 
     cache.set( key, badge, A_TTL_6H )
     badge 
@@ -67,8 +71,10 @@ class BadgeService < Versioneye::Service
 
     product = Product.fetch_product language, prod_key
     if product.nil? 
-      badge.status = Badge::A_UNKNOWN
-      badge.svg    = fetch_svg( badge )
+      badge.status       = Badge::A_UNKNOWN
+      badge.badge_source = Badge::A_SOURCE_PRODUCT
+      badge.badge_type   = Badge::A_TYPE_DEPENDENCY
+      badge.svg          = fetch_svg( badge )
       badge.save 
       cache.set( key, badge, A_TTL_24H )
       return badge 
@@ -77,19 +83,23 @@ class BadgeService < Versioneye::Service
     product.version = version if version
     dependencies    = product.dependencies
     if dependencies.nil? || dependencies.empty?
-      badge.status = Badge::A_NONE
-      badge.svg    = fetch_svg( badge )
+      badge.status       = Badge::A_NONE
+      badge.badge_source = Badge::A_SOURCE_PRODUCT
+      badge.badge_type   = Badge::A_TYPE_DEPENDENCY
+      badge.svg          = fetch_svg( badge )
       badge.save 
       cache.set( key, badge, A_TTL_24H )
       return badge
     end
 
     outdated = DependencyService.dependencies_outdated?( dependencies, false )
-    badge.status = Badge::A_OUT_OF_DATE if outdated == true
-    badge.status = Badge::A_UP_TO_DATE  if outdated == false
-    badge.svg    = fetch_svg( badge )
+    badge.status       = Badge::A_OUT_OF_DATE if outdated == true
+    badge.status       = Badge::A_UP_TO_DATE  if outdated == false
+    badge.badge_source = Badge::A_SOURCE_PRODUCT
+    badge.badge_type   = Badge::A_TYPE_DEPENDENCY
+    badge.svg          = fetch_svg( badge )
     badge.save 
-    cache.set( key, badge, A_TTL_6H )
+    cache.set( key, badge, A_TTL_12H )
     badge 
   end
 
@@ -100,20 +110,7 @@ class BadgeService < Versioneye::Service
     return Badge::A_UPDATE_SVG    if badge.status.eql?(Badge::A_UPDATE) 
     return Badge::A_NONE_SVG      if badge.status.eql?(Badge::A_NONE)
     return Badge::A_UNKNOWN_SVG   if badge.status.eql?(Badge::A_UNKNOWN)
-    return Badge::A_REF_0_SVG     if badge.status.eql?(Badge::A_REF_0_SVG)
   end
 
-
-  def self.fetch_svg_from_shieldsio badge 
-    color = 'green'  if badge.status.eql?(Badge::A_UP_TO_DATE) || badge.status.eql?(Badge::A_NONE) 
-    color = 'yellow' if badge.status.eql?(Badge::A_OUT_OF_DATE)
-    url   = "http://img.shields.io/badge/dependencies-#{badge.status}-#{color}.svg?style=flat"
-    response = HttpService.fetch_response url, 1 
-    response.body 
-  rescue => e 
-    log.error e.message
-    log.error e.backtrace.join("\n")
-    nil 
-  end
 
 end

@@ -5,7 +5,7 @@ class StripeFactory
         :card => {
           :number => "4242424242424242",
           :exp_month => 6,
-          :exp_year => 2015,
+          :exp_year => 2019,
           :cvc => "314"
         },
       )

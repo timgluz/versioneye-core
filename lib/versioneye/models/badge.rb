@@ -19,12 +19,25 @@ class Badge < Versioneye::Model
   A_UNKNOWN     = 'unknown'
   A_REF_0       = '0'
 
+  A_SOURCE_PROJECT = 'project'
+  A_SOURCE_PRODUCT = 'product'
+
+  A_TYPE_DEPENDENCY = 'dependency'
+  A_TYPE_REFERENCE  = 'reference'
+
   # project_id or 'lang:::prod_key:::version' or 'lang:::prod_key:::version:::type'
   field :key     , type: String 
 
   # up-to-date or out-of-date
   field :status  , type: String 
+
+  # 'dependency' or 'reference'
+  field :badge_type, type: String
+
+  # 'project' or 'product'
+  field :badge_source, type: String
   
+  # The actual svg xml code 
   field :svg     , type: String
 
   index({ key: 1 }, { name: "key_index", background: true, unique: true })
