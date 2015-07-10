@@ -71,60 +71,60 @@ describe License do
   describe "equals_id?" do 
 
     it "is equal for LGPL-2.0+" do 
-      expect( License.new().equals_id?('LGPL-2.0+', 'LGPL-2.0') ).to be_truthy
+      expect( License.new(:name => 'LGPL-2.0+').equals_id?('LGPL-2.0') ).to be_truthy
     end
     it "is equal for LGPL-2.0+" do 
-      expect( License.new().equals_id?('LGPL-2.0+', 'LGPL-2.0+') ).to be_truthy
+      expect( License.new(:name => 'LGPL-2.0+').equals_id?('LGPL-2.0+') ).to be_truthy
     end
     it "is equal for LGPL-2.0+" do 
-      expect( License.new().equals_id?('LGPL-2.0+', 'LGPL-2.1') ).to be_truthy
+      expect( License.new(:name => 'LGPL-2.0+').equals_id?('LGPL-2.1') ).to be_truthy
     end
     it "is equal for LGPL-2.0+" do 
-      expect( License.new().equals_id?('LGPL-2.0+', 'LGPL-2.1+') ).to be_truthy
+      expect( License.new(:name => 'LGPL-2.0+').equals_id?('LGPL-2.1+') ).to be_truthy
     end
     it "is equal for LGPL-2.0+" do 
-      expect( License.new().equals_id?('LGPL-2.0+', 'LGPL-3.0') ).to be_truthy
+      expect( License.new(:name => 'LGPL-2.0+').equals_id?('LGPL-3.0') ).to be_truthy
     end
     it "is equal for LGPL-2.0+" do 
-      expect( License.new().equals_id?('LGPL-2.0+', 'LGPL-3.0+') ).to be_truthy
+      expect( License.new(:name => 'LGPL-2.0+').equals_id?('LGPL-3.0+') ).to be_truthy
     end
 
     it "is equal for LGPL-2.1+" do 
-      expect( License.new().equals_id?('LGPL-2.1+', 'LGPL-2.0') ).to be_falsey
+      expect( License.new(:name => 'LGPL-2.1+').equals_id?('LGPL-2.0') ).to be_falsey
     end
     it "is equal for LGPL-2.1+" do 
-      expect( License.new().equals_id?('LGPL-2.1+', 'LGPL-2.0+') ).to be_falsey
+      expect( License.new(:name => 'LGPL-2.1+').equals_id?('LGPL-2.0+') ).to be_falsey
     end
     it "is equal for LGPL-2.1+" do 
-      expect( License.new().equals_id?('LGPL-2.1+', 'LGPL-2.1') ).to be_truthy
+      expect( License.new(:name => 'LGPL-2.1+').equals_id?('LGPL-2.1') ).to be_truthy
     end
     it "is equal for LGPL-2.1+" do 
-      expect( License.new().equals_id?('LGPL-2.1+', 'LGPL-2.1+') ).to be_truthy
+      expect( License.new(:name => 'LGPL-2.1+').equals_id?('LGPL-2.1+') ).to be_truthy
     end
     it "is equal for LGPL-2.1+" do 
-      expect( License.new().equals_id?('LGPL-2.1+', 'LGPL-3.0') ).to be_truthy
+      expect( License.new(:name => 'LGPL-2.1+').equals_id?('LGPL-3.0') ).to be_truthy
     end
     it "is equal for LGPL-2.1+" do 
-      expect( License.new().equals_id?('LGPL-2.1+', 'LGPL-3.0+') ).to be_truthy
+      expect( License.new(:name => 'LGPL-2.1+').equals_id?('LGPL-3.0+') ).to be_truthy
     end
 
     it "is equal for LGPL-3.0+" do 
-      expect( License.new().equals_id?('LGPL-3.0+', 'LGPL-2.0') ).to be_falsey
+      expect( License.new(:name => 'LGPL-3.0+').equals_id?('LGPL-2.0') ).to be_falsey
     end
     it "is equal for LGPL-3.0+" do 
-      expect( License.new().equals_id?('LGPL-3.0+', 'LGPL-2.0+') ).to be_falsey
+      expect( License.new(:name => 'LGPL-3.0+').equals_id?('LGPL-2.0+') ).to be_falsey
     end
     it "is equal for LGPL-3.0+" do 
-      expect( License.new().equals_id?('LGPL-3.0+', 'LGPL-2.1') ).to be_falsey
+      expect( License.new(:name => 'LGPL-3.0+').equals_id?('LGPL-2.1') ).to be_falsey
     end
     it "is equal for LGPL-3.0+" do 
-      expect( License.new().equals_id?('LGPL-3.0+', 'LGPL-2.0+') ).to be_falsey
+      expect( License.new(:name => 'LGPL-3.0+').equals_id?('LGPL-2.0+') ).to be_falsey
     end
     it "is equal for LGPL-3.0+" do 
-      expect( License.new().equals_id?('LGPL-3.0+', 'LGPL-3.0') ).to be_truthy
+      expect( License.new(:name => 'LGPL-3.0+').equals_id?('LGPL-3.0') ).to be_truthy
     end
     it "is equal for LGPL-3.0+" do 
-      expect( License.new().equals_id?('LGPL-3.0+', 'LGPL-3.0+') ).to be_truthy
+      expect( License.new(:name => 'LGPL-3.0+').equals_id?('LGPL-3.0+') ).to be_truthy
     end
 
   end

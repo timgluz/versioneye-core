@@ -68,7 +68,7 @@ class LicenseWhitelist < Versioneye::Model
 
   def include_license_substitute? name
     license_elements.each do |license_element|
-      return true if license_element.name_substitute.eql?( name )
+      return true if license_element.equals_id?( name )
     end
     false
   end

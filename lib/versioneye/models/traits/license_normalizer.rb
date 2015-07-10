@@ -139,10 +139,11 @@ module VersionEye
     end
 
 
-    def equals_id?(whitelist_identifier, license_identifier)
-      return true if whitelist_identifier.eql?( license_identifier )
+    def equals_id?( license_identifier )
+      name_sub = self.name_substitute
+      return true if name_sub.eql?( license_identifier )
 
-      if whitelist_identifier.eql?('LGPL-2.0+') && (
+      if name_sub.eql?('LGPL-2.0+') && (
         license_identifier.eql?('LGPL-2.0') || 
         license_identifier.eql?('LGPL-2.0+') || 
         license_identifier.eql?('LGPL-2.1') || 
@@ -153,7 +154,7 @@ module VersionEye
         return true 
       end
 
-      if whitelist_identifier.eql?('LGPL-2.1+') && (
+      if name_sub.eql?('LGPL-2.1+') && (
         license_identifier.eql?('LGPL-2.1') || 
         license_identifier.eql?('LGPL-2.1+') || 
         license_identifier.eql?('LGPL-3.0') || 
@@ -162,7 +163,7 @@ module VersionEye
         return true 
       end
 
-      if whitelist_identifier.eql?('LGPL-3.0+') && (
+      if name_sub.eql?('LGPL-3.0+') && (
         license_identifier.eql?('LGPL-3.0') || 
         license_identifier.eql?('LGPL-3.0+') 
         )
