@@ -101,6 +101,16 @@ class UserMailer < SuperMailer
   end
 
 
+  def deleted( user, why )
+    @user = user
+    @why = why
+    m = mail(:to => 'reiz@versioneye.com', :subject => "User #{user.fullname} deleted") do |format|
+      format.html{ render layout: 'email_html_layout' }
+    end
+    set_from( m )
+  end
+
+
   def fetch_source( user )
     source = "email"
     source = "bitbucket" if user.bitbucket_id

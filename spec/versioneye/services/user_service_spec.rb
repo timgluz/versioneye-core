@@ -7,7 +7,7 @@ describe UserService do
     let(:user)   { UserFactory.create_new(34) }
 
     it "deletes the user in the right way" do
-
+      ActionMailer::Base.deliveries.clear
       email = String.new( user.email )
       username = String.new( user.username )
       user.email.should_not be_nil
@@ -37,6 +37,7 @@ describe UserService do
       user.bitbucket_id.should be_nil
       user.bitbucket_token.should be_nil
       user.bitbucket_secret.should be_nil
+      ActionMailer::Base.deliveries.size.should == 1
     end
 
   end

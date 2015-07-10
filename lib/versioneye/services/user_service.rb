@@ -39,7 +39,7 @@ class UserService < Versioneye::Service
   end
 
   
-  def self.delete user
+  def self.delete user, why = nil
     NotificationService.remove_notifications user
     collaborators = ProjectCollaborator.by_user user
     if !collaborators.nil? && !collaborators.empty?
@@ -72,7 +72,11 @@ class UserService < Versioneye::Service
 
     user.billing_address = nil
     user.products.clear
-    user.save
+    if user.save
+      notify_rob( user, why )
+      return true 
+    end
+    false 
   end
 
   
@@ -126,6 +130,13 @@ class UserService < Versioneye::Service
 
   
   private
+
+    def self.notify_rob user, why 
+      UserMailer.deleted( user, why ).deliver
+    rescue => e 
+      log.error e.message
+      log.error e.backtrace.join("\n")  
+    end
 
   
     def self.create_random_token(length = 25)
