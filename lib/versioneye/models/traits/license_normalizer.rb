@@ -53,10 +53,13 @@ module VersionEye
       return 'LGPL-3.0+' if lgpl_3_or_later_match( tmp_name )
       return 'LGPL-3.0'  if lgpl_3_match( tmp_name )
       
-      return 'GPL'     if gpl_match( tmp_name )
-      return 'GPL-1.0' if gpl_10_match( tmp_name )
-      return 'GPL-2.0' if gpl_20_match( tmp_name )
-      return 'GPL-3.0' if gpl_30_match( tmp_name )
+      return 'GPL-1.0+' if gpl_10_or_later_match( tmp_name )
+      return 'GPL-1.0'  if gpl_10_match( tmp_name )
+      return 'GPL-2.0+' if gpl_20_or_later_match( tmp_name )
+      return 'GPL-2.0'  if gpl_20_match( tmp_name )
+      return 'GPL-3.0+' if gpl_30_or_later_match( tmp_name )
+      return 'GPL-3.0'  if gpl_30_match( tmp_name )
+      return 'GPL'      if gpl_match( tmp_name )
 
       return 'CC-BY-SA-1.0' if cc_by_sa_10_match( tmp_name )
       return 'CC-BY-SA-2.0' if cc_by_sa_20_match( tmp_name )
@@ -166,6 +169,33 @@ module VersionEye
       if name_sub.eql?('LGPL-3.0+') && (
         license_identifier.eql?('LGPL-3.0') || 
         license_identifier.eql?('LGPL-3.0+') 
+        )
+        return true 
+      end
+
+      if name_sub.eql?('GPL-1.0+') && (
+        license_identifier.eql?('GPL-1.0') || 
+        license_identifier.eql?('GPL-1.0+') || 
+        license_identifier.eql?('GPL-2.0') || 
+        license_identifier.eql?('GPL-2.0+') || 
+        license_identifier.eql?('GPL-3.0') || 
+        license_identifier.eql?('GPL-3.0+') 
+        )
+        return true 
+      end
+
+      if name_sub.eql?('GPL-2.0+') && (
+        license_identifier.eql?('GPL-2.0') || 
+        license_identifier.eql?('GPL-2.0+') || 
+        license_identifier.eql?('GPL-3.0') || 
+        license_identifier.eql?('GPL-3.0+') 
+        )
+        return true 
+      end
+
+      if name_sub.eql?('GPL-3.0+') && (
+        license_identifier.eql?('GPL-3.0') || 
+        license_identifier.eql?('GPL-3.0+') 
         )
         return true 
       end
@@ -391,13 +421,33 @@ module VersionEye
     def gpl_10_match name
       new_name = name.gsub(/gnu/i, "").strip 
       new_name.match(/\AGPL1\z/i) ||
+      new_name.match(/\AGPLv1\z/i) ||
       new_name.match(/\AGPL\s+1\z/i) ||
-      new_name.match(/\AGPLv1\+\z/i) ||
       new_name.match(/\AGeneral\s+Public\s+1\s+\(GPL\s+1\)\z/i) ||
       new_name.match(/\AGeneral\s+Public\s+\(GPL\s+1\)\z/i) ||
       new_name.match(/\AGeneral\s+Public\s+1\z/i) ||
       new_name.match(/\AGeneral\s+Public\s+1\s+only\z/i) ||
       new_name.match(/\AGeneral\s+Public\s+1\z/i)
+    end
+
+    def gpl_10_or_later_match name
+      new_name = name.gsub(/gnu/i, "").strip 
+      
+      new_name = name.gsub(/gnu/i, '').strip
+      new_name.match(/\AGPL1\+\z/i) ||
+      new_name.match(/\AGPLv1\+\z/i) ||
+      new_name.match(/\AGPLv1\+\+\z/i) ||
+      new_name.match(/\AGPL\s*1\+\z/i) ||
+      new_name.match(/\AGPL\s*v1\+\z/i) ||
+      new_name.match(/\AGPL\s*v1\s*or\s*later\z/i) ||
+      new_name.match(/\AGPL\s*1\s*or\s*later\z/i) ||
+      new_name.match(/\APublic\s+1\s+or\s+later\s*\z/i) || 
+      new_name.match(/\APublic\s+1\s+or\s+greater\s*\z/i) || 
+      new_name.match(/\AGeneral\s+Public\s+1\s+or\s+later\z/i) || 
+      new_name.match(/\AGeneral\s+Public\s+1\s+or\s+greater\z/i) || 
+      new_name.match(/\AGeneral\s+Public\s+1\+\s+\(GPL\s+1\+\)\z/i) ||
+      new_name.match(/\AGeneral\s+Public\s+\(GPL\s+1\+\)\z/i) ||
+      new_name.match(/\AGeneral\s+Public\s+1\+\z/i)
     end
 
     def gpl_20_match name
@@ -412,6 +462,26 @@ module VersionEye
       new_name.match(/\AGeneral\s+Public\s+\(GPL\s+2\)\z/i) ||
       new_name.match(/\AGeneral\s+Public\s+2\s+only\z/i) || 
       new_name.match(/\AGeneral\s+Public\s+2\z/i)
+    end
+
+    def gpl_20_or_later_match name
+      new_name = name.gsub(/gnu/i, "").strip 
+      
+      new_name = name.gsub(/gnu/i, '').strip
+      new_name.match(/\AGPL2\+\z/i) ||
+      new_name.match(/\AGPLv2\+\z/i) ||
+      new_name.match(/\AGPLv2\+\+\z/i) ||
+      new_name.match(/\AGPL\s*2\+\z/i) ||
+      new_name.match(/\AGPL\s*v2\+\z/i) ||
+      new_name.match(/\AGPL\s*v2\s*or\s*later\z/i) ||
+      new_name.match(/\AGPL\s*2\s*or\s*later\z/i) ||
+      new_name.match(/\APublic\s+2\s+or\s+later\s*\z/i) || 
+      new_name.match(/\APublic\s+2\s+or\s+greater\s*\z/i) || 
+      new_name.match(/\AGeneral\s+Public\s+2\s+or\s+later\z/i) || 
+      new_name.match(/\AGeneral\s+Public\s+2\s+or\s+greater\z/i) || 
+      new_name.match(/\AGeneral\s+Public\s+2\+\s+\(GPL\s+2\+\)\z/i) ||
+      new_name.match(/\AGeneral\s+Public\s+\(GPL\s+2\+\)\z/i) ||
+      new_name.match(/\AGeneral\s+Public\s+2\+\z/i)
     end
 
     def gpl_20_match_w_cpe name
@@ -446,6 +516,26 @@ module VersionEye
       new_name.match(/\AGeneral\s+Public\s+\(GPL\s+3\)\z/i) ||
       new_name.match(/\AGeneral\s+Public\s+3\s+only\z/i) ||
       new_name.match(/\AGeneral\s+Public\s+3\z/i)
+    end
+
+    def gpl_30_or_later_match name
+      new_name = name.gsub(/gnu/i, "").strip 
+      
+      new_name = name.gsub(/gnu/i, '').strip
+      new_name.match(/\AGPL3\+\z/i) ||
+      new_name.match(/\AGPLv3\+\z/i) ||
+      new_name.match(/\AGPLv3\+\+\z/i) ||
+      new_name.match(/\AGPL\s*3\+\z/i) ||
+      new_name.match(/\AGPL\s*v3\+\z/i) ||
+      new_name.match(/\AGPL\s*v3\s*or\s*later\z/i) ||
+      new_name.match(/\AGPL\s*3\s*or\s*later\z/i) ||
+      new_name.match(/\APublic\s+3\s+or\s+later\s*\z/i) || 
+      new_name.match(/\APublic\s+3\s+or\s+greater\s*\z/i) || 
+      new_name.match(/\AGeneral\s+Public\s+3\s+or\s+later\z/i) || 
+      new_name.match(/\AGeneral\s+Public\s+3\s+or\s+greater\z/i) || 
+      new_name.match(/\AGeneral\s+Public\s+3\+\s+\(GPL\s+3\+\)\z/i) ||
+      new_name.match(/\AGeneral\s+Public\s+\(GPL\s+3\+\)\z/i) ||
+      new_name.match(/\AGeneral\s+Public\s+3\+\z/i)
     end
 
     def agpl_10_match name
