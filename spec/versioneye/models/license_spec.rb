@@ -68,6 +68,67 @@ describe License do
 
   end
 
+  describe "equals_id?" do 
+
+    it "is equal for LGPL-2.0+" do 
+      expect( License.new().equals_id?('LGPL-2.0+', 'LGPL-2.0') ).to be_truthy
+    end
+    it "is equal for LGPL-2.0+" do 
+      expect( License.new().equals_id?('LGPL-2.0+', 'LGPL-2.0+') ).to be_truthy
+    end
+    it "is equal for LGPL-2.0+" do 
+      expect( License.new().equals_id?('LGPL-2.0+', 'LGPL-2.1') ).to be_truthy
+    end
+    it "is equal for LGPL-2.0+" do 
+      expect( License.new().equals_id?('LGPL-2.0+', 'LGPL-2.1+') ).to be_truthy
+    end
+    it "is equal for LGPL-2.0+" do 
+      expect( License.new().equals_id?('LGPL-2.0+', 'LGPL-3.0') ).to be_truthy
+    end
+    it "is equal for LGPL-2.0+" do 
+      expect( License.new().equals_id?('LGPL-2.0+', 'LGPL-3.0+') ).to be_truthy
+    end
+
+    it "is equal for LGPL-2.1+" do 
+      expect( License.new().equals_id?('LGPL-2.1+', 'LGPL-2.0') ).to be_falsey
+    end
+    it "is equal for LGPL-2.1+" do 
+      expect( License.new().equals_id?('LGPL-2.1+', 'LGPL-2.0+') ).to be_falsey
+    end
+    it "is equal for LGPL-2.1+" do 
+      expect( License.new().equals_id?('LGPL-2.1+', 'LGPL-2.1') ).to be_truthy
+    end
+    it "is equal for LGPL-2.1+" do 
+      expect( License.new().equals_id?('LGPL-2.1+', 'LGPL-2.1+') ).to be_truthy
+    end
+    it "is equal for LGPL-2.1+" do 
+      expect( License.new().equals_id?('LGPL-2.1+', 'LGPL-3.0') ).to be_truthy
+    end
+    it "is equal for LGPL-2.1+" do 
+      expect( License.new().equals_id?('LGPL-2.1+', 'LGPL-3.0+') ).to be_truthy
+    end
+
+    it "is equal for LGPL-3.0+" do 
+      expect( License.new().equals_id?('LGPL-3.0+', 'LGPL-2.0') ).to be_falsey
+    end
+    it "is equal for LGPL-3.0+" do 
+      expect( License.new().equals_id?('LGPL-3.0+', 'LGPL-2.0+') ).to be_falsey
+    end
+    it "is equal for LGPL-3.0+" do 
+      expect( License.new().equals_id?('LGPL-3.0+', 'LGPL-2.1') ).to be_falsey
+    end
+    it "is equal for LGPL-3.0+" do 
+      expect( License.new().equals_id?('LGPL-3.0+', 'LGPL-2.0+') ).to be_falsey
+    end
+    it "is equal for LGPL-3.0+" do 
+      expect( License.new().equals_id?('LGPL-3.0+', 'LGPL-3.0') ).to be_truthy
+    end
+    it "is equal for LGPL-3.0+" do 
+      expect( License.new().equals_id?('LGPL-3.0+', 'LGPL-3.0+') ).to be_truthy
+    end
+
+  end
+
   describe "link" do
 
     it "should return mit link" do
@@ -724,6 +785,12 @@ describe License do
       license.name_substitute.should eq("LGPL-2.0")
     end
 
+
+    # it "should return LGPL 2.0 name" do
+    #   license = License.new({:name => "GNU Library General Public License v2 or later"})
+    #   license.name_substitute.should eq("LGPL-2.0+")
+    # end
+
     
     it "should return LGPL 2.1 name" do
       license = License.new({:name => "GNU Lesser General Public License v2.1 only"})
@@ -767,47 +834,72 @@ describe License do
       license = License.new({:name => "Lesser General Public License (LGPL v3)"})
       license.name_substitute.should eq("LGPL-3.0")
     end
-    it "should return LGPL 3.0 name" do
+    
+    
+    it "should return LGPL 3.0+ name" do
       license = License.new({:name => "Lesser General Public License, version 3 or greater"})
-      license.name_substitute.should eq("LGPL-3.0")
+      license.name_substitute.should eq("LGPL-3.0+")
     end
-    
-    
-
-
-    it "should return LGPL+3.0+ name" do
-      license = License.new({:name => "GNU Lesser General Public License v3.0 or later"})
-      license.name_substitute.should eq("LGPL-3.0")
-    end
-    it "should return LGPL+3.0+ name" do
-      license = License.new({:name => "Lesser General Public License 3 or later"})
-      license.name_substitute.should eq("LGPL-3.0")
+    it "should return LGPL 3.0+ name" do
+      license = License.new({:name => "LGPL-3.0+"})
+      license.name_substitute.should eq("LGPL-3.0+")
     end
     it "should return LGPL+3.0+ name" do
       license = License.new({:name => "lgpl 3+"})
-      license.name_substitute.should eq("LGPL-3.0")
+      license.name_substitute.should eq("LGPL-3.0+")
     end
     it "should return LGPL+3.0+ name" do
       license = License.new({:name => "lgpl 3.0+"})
-      license.name_substitute.should eq("LGPL-3.0")
+      license.name_substitute.should eq("LGPL-3.0+")
     end
     it "should return LGPL+3.0+ name" do
       license = License.new({:name => "lgplv3+"})
-      license.name_substitute.should eq("LGPL-3.0")
+      license.name_substitute.should eq("LGPL-3.0+")
     end
     it "should return LGPL+3.0+ name" do
       license = License.new({:name => "lgplv3.0+"})
-      license.name_substitute.should eq("LGPL-3.0")
+      license.name_substitute.should eq("LGPL-3.0+")
     end
     it "should return LGPL+3.0+ name" do
       license = License.new({:name => "LGPLv3 or later"})
-      license.name_substitute.should eq("LGPL-3.0")
+      license.name_substitute.should eq("LGPL-3.0+")
+    end
+    it "should return LGPL 3.0 name" do
+      license = License.new({:name => "GNU Library General Public License 3.0 or greater"})
+      license.name_substitute.should eq("LGPL-3.0+")
     end
     it "should return LGPL+3.0+ name" do
       license = License.new({:name => "LGPL version 3 or later"})
-      license.name_substitute.should eq("LGPL-3.0")
+      license.name_substitute.should eq("LGPL-3.0+")
+    end
+    it "should return LGPL+3.0+ name" do
+      license = License.new({:name => "GNU Lesser General Public License v3.0 or later"})
+      license.name_substitute.should eq("LGPL-3.0+")
+    end
+    it "should return LGPL+3.0+ name" do
+      license = License.new({:name => "Lesser General Public License 3 or later"})
+      license.name_substitute.should eq("LGPL-3.0+")
     end
     
+    
+    it "should return LGPL 2.0+ name" do
+      license = License.new({:name => "LGPL-2.0+"})
+      license.name_substitute.should eq("LGPL-2.0+")
+    end
+    it "should return LGPL 3.0 name" do
+      license = License.new({:name => "GNU Library General Public License v2 or later"})
+      license.name_substitute.should eq("LGPL-2.0+")
+    end
+    
+
+    it "should return LGPL 2.1+ name" do
+      license = License.new({:name => "GNU Library General Public License 2.1 or greater"})
+      license.name_substitute.should eq("LGPL-2.1+")
+    end
+    it "should return LGPL 2.1+ name" do
+      license = License.new({:name => "LGPL-2.1+"})
+      license.name_substitute.should eq("LGPL-2.1+")
+    end
 
 
     it "should return AGPL 1.0 name" do

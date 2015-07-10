@@ -46,10 +46,12 @@ module VersionEye
       return 'AGPL-3.0' if agpl_30_match( tmp_name )
       return 'AGPL-1.0' if agpl_10_match( tmp_name )
 
+      return 'LGPL-2.1+' if lgpl_21_or_later_match( tmp_name )
       return 'LGPL-2.1'  if lgpl_21_match( tmp_name )
+      return 'LGPL-2.0+' if lgpl_2_or_later_match( tmp_name )
       return 'LGPL-2.0'  if lgpl_20_match( tmp_name )
-      return 'LGPL-3.0'  if lgpl_3_match( tmp_name )
       return 'LGPL-3.0+' if lgpl_3_or_later_match( tmp_name )
+      return 'LGPL-3.0'  if lgpl_3_match( tmp_name )
       
       return 'GPL'     if gpl_match( tmp_name )
       return 'GPL-1.0' if gpl_10_match( tmp_name )
@@ -134,6 +136,44 @@ module VersionEye
       end
 
       nil
+    end
+
+
+    def equals_id?(whitelist_identifier, license_identifier)
+      return true if whitelist_identifier.eql?( license_identifier )
+
+      if whitelist_identifier.eql?('LGPL-2.0+') && (
+        license_identifier.eql?('LGPL-2.0') || 
+        license_identifier.eql?('LGPL-2.0+') || 
+        license_identifier.eql?('LGPL-2.1') || 
+        license_identifier.eql?('LGPL-2.1+') || 
+        license_identifier.eql?('LGPL-3.0') || 
+        license_identifier.eql?('LGPL-3.0+') 
+        )
+        return true 
+      end
+
+      if whitelist_identifier.eql?('LGPL-2.1+') && (
+        license_identifier.eql?('LGPL-2.1') || 
+        license_identifier.eql?('LGPL-2.1+') || 
+        license_identifier.eql?('LGPL-3.0') || 
+        license_identifier.eql?('LGPL-3.0+') 
+        )
+        return true 
+      end
+
+      if whitelist_identifier.eql?('LGPL-3.0+') && (
+        license_identifier.eql?('LGPL-3.0') || 
+        license_identifier.eql?('LGPL-3.0+') 
+        )
+        return true 
+      end
+
+      false 
+    rescue => e 
+      log.error e 
+      log.error e.backtrace.join("\n")
+      false 
     end
 
 
@@ -456,25 +496,49 @@ module VersionEye
       new_name.match(/\ALesser\s+General\s+Public\s+\(LGPL\s+3\)\s*\z/i) || 
       new_name.match(/\ALibrary\s+or\s+Lesser\s+General\s+Public\s+\(LGPL\)\z/i) || 
       new_name.match(/\ALesser\s+General\s+Public\z/i) || 
-      new_name.match(/\ALesser\s+General\s+Public\s+\(LGPL\)\z/i) || 
-      
-      new_name.match(/\ALGPL\s*3\+\z/i) ||
-      new_name.match(/\ALGPL\s*v3\+\z/i) ||
-      new_name.match(/\ALGPL\s*v3\s*or\s*later\z/i) ||
-      new_name.match(/\ALGPL\s*3\s*or\s*later\z/i) ||
-      new_name.match(/\ALesser\s+General\s+Public\s+3\s+or\s+later\s*\z/i) || 
-      new_name.match(/\ALesser\s+General\s+Public\s+3\s+or\s+greater\s*\z/i)
+      new_name.match(/\ALesser\s+General\s+Public\s+\(LGPL\)\z/i) 
     end
 
     def lgpl_3_or_later_match name
       new_name = name.gsub(/gnu/i, '').strip
+      new_name.match(/\ALGPLv3\+\z/i) ||
       new_name.match(/\ALGPLv3\+\+\z/i) ||
       new_name.match(/\ALGPL\s*3\+\z/i) ||
       new_name.match(/\ALGPL\s*v3\+\z/i) ||
       new_name.match(/\ALGPL\s*v3\s*or\s*later\z/i) ||
       new_name.match(/\ALGPL\s*3\s*or\s*later\z/i) ||
       new_name.match(/\ALesser\s+General\s+Public\s+3\s+or\s+later\s*\z/i) || 
-      new_name.match(/\ALesser\s+General\s+Public\s+3\s+or\s+greater\s*\z/i)
+      new_name.match(/\ALesser\s+General\s+Public\s+3\s+or\s+greater\s*\z/i) || 
+      new_name.match(/\ALibrary\s+General\s+Public\s+3\s+or\s+later\z/i) || 
+      new_name.match(/\ALibrary\s+General\s+Public\s+3\s+or\s+greater\z/i)
+    end
+
+    def lgpl_2_or_later_match name
+      new_name = name.gsub(/gnu/i, '').strip
+      new_name.match(/\ALGPLv2\+\z/i) ||
+      new_name.match(/\ALGPLv2\+\+\z/i) ||
+      new_name.match(/\ALGPL\s*2\+\z/i) ||
+      new_name.match(/\ALGPL\s*v2\+\z/i) ||
+      new_name.match(/\ALGPL\s*v2\s*or\s*later\z/i) ||
+      new_name.match(/\ALGPL\s*2\s*or\s*later\z/i) ||
+      new_name.match(/\ALesser\s+General\s+Public\s+2\s+or\s+later\s*\z/i) || 
+      new_name.match(/\ALesser\s+General\s+Public\s+2\s+or\s+greater\s*\z/i) || 
+      new_name.match(/\ALibrary\s+General\s+Public\s+2\s+or\s+later\z/i) || 
+      new_name.match(/\ALibrary\s+General\s+Public\s+2\s+or\s+greater\z/i)
+    end
+
+    def lgpl_21_or_later_match name
+      new_name = name.gsub(/gnu/i, '').strip
+      new_name.match(/\ALGPLv2\.1\+\z/i) ||
+      new_name.match(/\ALGPLv2\.1\+\+\z/i) ||
+      new_name.match(/\ALGPL\s*2\.1\+\z/i) ||
+      new_name.match(/\ALGPL\s*v2\.1\+\z/i) ||
+      new_name.match(/\ALGPL\s*v2\.1\s*or\s*later\z/i) ||
+      new_name.match(/\ALGPL\s*2\.1\s*or\s*later\z/i) ||
+      new_name.match(/\ALesser\s+General\s+Public\s+2\.1\s+or\s+later\s*\z/i) || 
+      new_name.match(/\ALesser\s+General\s+Public\s+2\.1\s+or\s+greater\s*\z/i) || 
+      new_name.match(/\ALibrary\s+General\s+Public\s+2\.1\s+or\s+later\z/i) || 
+      new_name.match(/\ALibrary\s+General\s+Public\s+2\.1\s+or\s+greater\z/i)
     end
 
     def clarified_artistic_match name
@@ -948,6 +1012,24 @@ module VersionEye
         map['ZPL-2.0'] = {:fullname => 'Zope Public License 2.0', :osi_approved => true}
         map['ZPL-2.1'] = {:fullname => 'Zope Public License 2.1', :osi_approved => false}
         map['ICU'] = {:fullname => 'ICU License', :osi_approved => false}
+
+        map['eCos-2.0']                         = {:fullname => 'eCos license version 2.0', :osi_approved => false}
+        map['GPL-1.0+']                         = {:fullname => 'GNU General Public License v1.0 or later', :osi_approved => false}
+        map['GPL-2.0+']                         = {:fullname => 'GNU General Public License v2.0 or later', :osi_approved => false}
+        map['GPL-2.0-with-autoconf-exception']  = {:fullname => 'GNU General Public License v2.0 w/Autoconf exception', :osi_approved => false}
+        map['GPL-2.0-with-bison-exception']     = {:fullname => 'GNU General Public License v2.0 w/Bison exception', :osi_approved => false}
+        map['GPL-2.0-with-classpath-exception'] = {:fullname => 'GNU General Public License v2.0 w/Classpath exception', :osi_approved => false}
+        map['GPL-2.0-with-font-exception']      = {:fullname => 'GNU General Public License v2.0 w/Font exception', :osi_approved => false}
+        map['GPL-2.0-with-GCC-exception']       = {:fullname => 'GNU General Public License v2.0 w/GCC Runtime Library exception', :osi_approved => false}
+        map['GPL-3.0+']                         = {:fullname => 'GNU General Public License v3.0 or later', :osi_approved => false}
+        map['GPL-3.0-with-autoconf-exception']  = {:fullname => 'GNU General Public License v3.0 w/Autoconf exception', :osi_approved => false}
+        map['GPL-3.0-with-GCC-exception']       = {:fullname => 'GNU General Public License v3.0 w/GCC Runtime Library exception', :osi_approved => false}
+        map['LGPL-2.1+']                        = {:fullname => 'GNU Lesser General Public License v2.1 or later', :osi_approved => false}
+        map['LGPL-3.0+']                        = {:fullname => 'GNU Lesser General Public License v3.0 or later', :osi_approved => false}
+        map['LGPL-2.0+']                        = {:fullname => 'GNU Library General Public License v2 or later', :osi_approved => false}
+        map['StandardML-NJ']                    = {:fullname => 'Standard ML of New Jersey License', :osi_approved => false}
+        map['WXwindows']                        = {:fullname => 'wxWindows Library License', :osi_approved => false}
+
         map
       end
 
