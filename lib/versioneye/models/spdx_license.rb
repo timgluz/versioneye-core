@@ -11,6 +11,10 @@ class SpdxLicense < Versioneye::Model
   index({ identifier: 1 }, { name: "identifier_index", background: true, unique: true })
 
 
+  def to_s 
+    "#{identifier} - #{fullname} - #{osi_approved}"
+  end
+
   def self.identifier_by_fullname_regex name 
     SpdxLicense.where(:fullname => /\A#{name.strip}\z/i ).first
   rescue => e 
