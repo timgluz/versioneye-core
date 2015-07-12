@@ -47,14 +47,11 @@ class Product < Versioneye::Model
   validates_presence_of :name     , :message => 'name      is mandatory!'
 
   # For indexing use task: rake db:mongoid:create_indexes
-  index({ prod_key: 1, language: 1, version: 1 }, { name: "prod_key_language_version_index", unique: true, background: true })
   index({ prod_key: 1, language: 1 },    { name: "prod_key_language_index", unique: true, background: true })
+  index({ group_id: 1, artifact_id: 1 }, { name: "group_id_artifact_id_index", background: true })
   index({ name: 1 },                     { name: "name_index", background: true })
   index({ name_downcase: 1 },            { name: "name_downcase_index", background: true })
-  index({ group_id: 1, artifact_id: 1 }, { name: "group_id_artifact_id_index", background: true })
   index({ prod_type: 1, name: 1 },       { name: "prod_type_name_index", background: true })
-  index({ used_by_count: -1 },           { name: "used_by_count_index", background: true })
-  index({ followers:  -1},               { name: "followers_index", background: true})
   index({ created_at: -1},               { name: "created_at_index", background: true})
   index({ updated_at: -1},               { name: "updated_at_index", background: true})
   index({ updated_at: -1, language: -1}, { name: "updated_language_index", background: true})
