@@ -59,6 +59,21 @@ describe Dependency do
 
   end
 
+  describe "main_scope" do 
+    it 'returns the right for bower' do 
+      expect( described_class.main_scope("TypeScript", "Bower") ).to eql(Dependency::A_SCOPE_REQUIRE)
+    end
+    it 'returns the right for Java' do 
+      expect( described_class.main_scope("Java") ).to eql(Dependency::A_SCOPE_COMPILE)
+    end
+    it 'returns the right for Java' do 
+      expect( described_class.main_scope("Node.JS") ).to eql(Dependency::A_SCOPE_COMPILE)
+    end
+    it 'returns the right for Ruby' do 
+      expect( described_class.main_scope("Ruby") ).to eql(Dependency::A_SCOPE_RUNTIME)
+    end
+  end
+
   context "find_by_context" do
 
     describe "find_by" do

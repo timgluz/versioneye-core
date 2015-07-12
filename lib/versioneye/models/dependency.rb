@@ -14,7 +14,7 @@ class Dependency < Versioneye::Model
   A_SCOPE_PROVIDED    = 'provided'    # Java Maven
   A_SCOPE_TEST        = 'test'        # Java Maven
   A_SCOPE_COMPILE     = 'compile'     # NPM, Maven and many more! 
-  A_SCOPE_DEVELOPMENT = 'development' # NPM
+  A_SCOPE_DEVELOPMENT = 'development' # NPM, Bower 
   A_SCOPE_BUNDLED     = 'bundled'     # NPM
   A_SCOPE_OPTIONAL    = 'optional'    # NPM
 
@@ -113,14 +113,18 @@ class Dependency < Versioneye::Model
     self.update_known() if self.known.nil?
   end
 
-  def self.main_scope( language )
+  def self.main_scope( language, prod_type = nil )
+    if prod_type.to_s.eql?( Project::A_TYPE_BOWER )
+      return A_SCOPE_REQUIRE
+    end
+    
     if language.eql?( Product::A_LANGUAGE_RUBY )
       return A_SCOPE_RUNTIME
     elsif language.eql?( Product::A_LANGUAGE_JAVA ) || language.eql?( Product::A_LANGUAGE_CLOJURE ) || language.eql?( Product::A_LANGUAGE_BIICODE )
       return A_SCOPE_COMPILE
     elsif language.eql?( Product::A_LANGUAGE_NODEJS)
       return A_SCOPE_COMPILE
-    elsif language.eql?( Product::A_LANGUAGE_PHP ) || language.eql?(Product::A_LANGUAGE_JAVASCRIPT)
+    elsif language.eql?( Product::A_LANGUAGE_PHP ) || language.eql?( Product::A_LANGUAGE_JAVASCRIPT )
       return A_SCOPE_REQUIRE
     end
   end

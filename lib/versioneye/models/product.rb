@@ -328,7 +328,7 @@ class Product < Versioneye::Model
 
   def dependencies scope = nil
     dependencies_cache ||= {}
-    scope = Dependency.main_scope(self.language) unless scope
+    scope = Dependency.main_scope( self.language, self.prod_type ) unless scope
     if dependencies_cache[scope].nil?
       dependencies_cache[scope] = Dependency.find_by_lang_key_version_scope( language, prod_key, version, scope )
     end
