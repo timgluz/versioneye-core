@@ -46,10 +46,10 @@ class Dependency < Versioneye::Model
   field :parsed_version , type: String
   field :outdated, type: Boolean
 
+  index({ language: 1, prod_key: 1, prod_version: 1, dep_prod_key: 1, version: 1, scope: 1 }, { name: "parent_fk_index", background: true, unique: true, drop_dups: true})
   index({ language: 1, prod_key: 1, prod_version: 1 }, { name: "prod_key_lang_ver_index", background: true })
   index({ language: 1, dep_prod_key: 1 }, { name: "language_dep_prod_key_index" , background: true })
   index({ group_id: 1, artifact_id: 1 }, { name: "groupid_artifactid_index" , background: true })
-
 
 
   def self.remove_dependencies language, prod_key, version
