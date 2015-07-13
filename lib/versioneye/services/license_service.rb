@@ -56,7 +56,34 @@ class LicenseService < Versioneye::Service
         # p "#{z} - product not found for #{group_id}/#{artifact_id}"
       end
     end
+  end
 
+
+  def self.import_websites_from_properties_file file_path
+    z = 0 
+    content = File.read(file_path)
+    content.split("\n").each do |line|
+      next if line.to_s.empty? 
+      
+      sps = line.split("=")
+      gav = sps[0]
+      link = sps[1]
+      group_id     = gav.split("|")[0]
+      artifact_id  = gav.split("|")[1]
+      
+      product = Product.find_by_group_and_artifact group_id.downcase, artifact_id.downcase
+      if product 
+        z +=1 
+        p "#{z} - #{group_id}:#{artifact_id} - #{link}"
+
+        vl = Versionlink.create_project_link( product.language, product.prod_key, link, "Website" )
+
+        p " - created new verisonlink #{vl.to_s}"
+      else 
+        # z +=1 
+        # p "#{z} - product not found for #{group_id}/#{artifact_id}"
+      end
+    end
   end
 
   
