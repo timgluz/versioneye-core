@@ -58,7 +58,7 @@ class License < Versioneye::Model
   end
 
   def to_s
-    "[License for (#{language}/#{prod_key}/#{version}) : #{name}]"
+    "[License for (#{language}/#{prod_key}/#{version}) : #{name}/#{url}]"
   end
 
 end
