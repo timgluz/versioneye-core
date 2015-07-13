@@ -414,6 +414,10 @@ describe License do
       license.name_substitute.should eq("CDDL+GPLv2 with classpath exception")
     end
     it "should return CDDL+GPLv2 with classpath exception name" do
+      license = License.new({:name => "CDDL v1.1 and GPL v2"})
+      license.name_substitute.should eq("CDDL+GPLv2 with classpath exception")
+    end
+    it "should return CDDL+GPLv2 with classpath exception name" do
       license = License.new({:name => "CDDL v1.1 / GPL v2 dual license"})
       license.name_substitute.should eq("CDDL+GPLv2 with classpath exception")
     end
@@ -1013,6 +1017,18 @@ describe License do
       license.name_substitute.should eq("LGPL-3.0")
     end
     it "should return LGPL 3.0 name" do
+      license = License.new({:name => "GNU General Lesser Public License (LGPL) version 3.0"})
+      license.name_substitute.should eq("LGPL-3.0")
+    end
+    it "should return LGPL 3.0 name" do
+      license = License.new({:name => "GNU Lesser General Public License"})
+      license.name_substitute.should eq("LGPL-3.0")
+    end
+    it "should return LGPL 3.0 name" do
+      license = License.new({:name => "Gnu Lesser Public License"})
+      license.name_substitute.should eq("LGPL-3.0")
+    end
+    it "should return LGPL 3.0 name" do
       license = License.new({:name => "lgplv3"})
       license.name_substitute.should eq("LGPL-3.0")
     end
@@ -1028,6 +1044,7 @@ describe License do
       license = License.new({:name => "Lesser General Public License (LGPL v3)"})
       license.name_substitute.should eq("LGPL-3.0")
     end
+
     
     
     it "should return LGPL 3.0+ name" do

@@ -566,7 +566,8 @@ module VersionEye
       new_name.match(/\ALesser\s+General\s+Public\s+2\s+only\z/i) ||
       new_name.match(/\ALesser\s+General\s+Public\s+2\z/i) || 
       new_name.match(/\ALesser\s+General\s+Public\s*\(LGPL\)\s*2\z/i) || 
-      new_name.match(/\ALesser\s+General\s+Public\s*\(LGPL\)\s*2\s+only\z/i) 
+      new_name.match(/\ALesser\s+General\s+Public\s*\(LGPL\)\s*2\s+only\z/i) || 
+      new_name.match(/\AGeneral\s+Lesser\s+Public\s+\(LGPL\)\s+2\z/i) 
     end
 
     def lgpl_21_match name
@@ -575,10 +576,14 @@ module VersionEye
       new_name.match(/\ALGPLv2\.1\z/i) ||
       new_name.match(/\ALesser\s+General\s+Public\s*2\.1\s+only\z/i) ||
       new_name.match(/\ALesser\s+General\s+Public\s*2\.1\z/i) ||
-      new_name.match(/\ALesser\s+General\s+Public\s*\(LGPL\)\s*2\.1\z/i) 
+      new_name.match(/\ALesser\s+General\s+Public\s*\(LGPL\)\s*2\.1\z/i) || 
+      new_name.match(/\AGeneral\s+Lesser\s+Public\s+\(LGPL\)\s+2\.1\z/i) 
     end
 
     def lgpl_3_match name
+      if name.match(/\AGnu\s+Lesser\s+Public\z/i)
+        return true 
+      end
       new_name = name.gsub(/gnu/i, '').strip
       new_name.match(/\ALGPLv3\z/i) ||
       new_name.match(/\ALGPL\s*3\z/i) ||
@@ -587,7 +592,8 @@ module VersionEye
       new_name.match(/\ALesser\s+General\s+Public\s+\(LGPL\s+3\)\s*\z/i) || 
       new_name.match(/\ALibrary\s+or\s+Lesser\s+General\s+Public\s+\(LGPL\)\z/i) || 
       new_name.match(/\ALesser\s+General\s+Public\z/i) || 
-      new_name.match(/\ALesser\s+General\s+Public\s+\(LGPL\)\z/i) 
+      new_name.match(/\ALesser\s+General\s+Public\s+\(LGPL\)\z/i) || 
+      new_name.match(/\AGeneral\s+Lesser\s+Public\s+\(LGPL\)\s+3\z/i) 
     end
 
     def lgpl_3_or_later_match name
@@ -741,7 +747,8 @@ module VersionEye
       name.match(/\ACDDL\s*\+\s*GPL\s+1\.1\z/i) ||
       name.match(/\ACDDL\s+1.1\s+\/\s+GPL\s+2\s+dual\z/i) ||
       name.match(/\ACDDL\/GPLv2\+CE\z/i) ||
-      name.match(/\ACDDL\s*\+\s*GPL2\s*w\/\s*CPE\s*\z/i)
+      name.match(/\ACDDL\s*\+\s*GPL2\s*w\/\s*CPE\s*\z/i) || 
+      name.match(/\ACDDL\s*1\.1\s+and\s+GPL\s+2\z/i)
     end
 
     
