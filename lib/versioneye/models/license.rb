@@ -58,7 +58,11 @@ class License < Versioneye::Model
   end
 
   def to_s
-    "[License for (#{language}/#{prod_key}/#{version}) : #{name}/#{url}]"
+    if url 
+      return "[License for (#{language}/#{prod_key}/#{version}) : #{name}/#{url}]"
+    else 
+      return "[License for (#{language}/#{prod_key}/#{version}) : #{name}]"
+    end
   end
 
 end
