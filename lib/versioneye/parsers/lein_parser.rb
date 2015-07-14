@@ -19,6 +19,9 @@ class LeinParser < CommonParser
   end
 
   def parse_content(content)
+    return nil if content.to_s.empty?
+    return nil if content.to_s.strip.eql?('Not Found')
+
     xml_content = transform_to_xml content
 
     doc = Nokogiri::HTML(xml_content)

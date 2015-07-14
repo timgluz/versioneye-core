@@ -16,6 +16,9 @@ class PomJsonParser < CommonParser
 
 
   def parse_content( content )
+    return nil if content.to_s.empty?
+    return nil if content.to_s.strip.eql?('Not Found')
+    
     pom_json = JSON.parse( content )
     return nil if pom_json.nil?
 

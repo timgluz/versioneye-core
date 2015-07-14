@@ -9,7 +9,8 @@ class PythonSetupParser < RequirementsParser
 
 
   def parse_content(doc)
-    return nil if doc.nil? or doc.empty?
+    return nil if doc.to_s.empty?
+    return nil if doc.to_s.strip.eql?('Not Found')
 
     requirements = parse_requirements( doc )
     # extras       = parse_extras( doc )

@@ -21,6 +21,9 @@ class PackageParser < CommonParser
 
   
   def parse_content( content )
+    return nil if content.to_s.empty?
+    return nil if content.to_s.strip.eql?('Not Found')
+    
     data = JSON.parse( content )
     return nil if data.nil?
 

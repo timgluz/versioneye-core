@@ -19,7 +19,8 @@ class RequirementsParser < CommonParser
 
 
   def parse_content( txt )
-    return nil if txt.nil? || txt.empty?
+    return nil if txt.to_s.empty?
+    return nil if txt.to_s.strip.eql?('Not Found')
 
     project = Project.new({:project_type => Project::A_TYPE_PIP, :language => Product::A_LANGUAGE_PYTHON })
 

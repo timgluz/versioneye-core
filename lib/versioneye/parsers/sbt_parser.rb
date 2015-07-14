@@ -33,6 +33,7 @@ class SbtParser < CommonParser
 
   def parse_content( content )
     return nil if content.to_s.empty?
+    return nil if content.to_s.strip.eql?('Not Found')
 
     content = content.gsub(/\/\*.*?\*\//mxi, "")              # remove comments /* */ 
     content = content.gsub(/\A\/\/.*$/xi, "")                 # remove comments // 

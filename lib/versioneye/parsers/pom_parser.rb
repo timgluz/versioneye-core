@@ -16,6 +16,9 @@ class PomParser < CommonParser
   end
 
   def parse_content( content )
+    return nil if content.to_s.empty?
+    return nil if content.to_s.strip.eql?('Not Found')
+
     doc        = fetch_xml( content )
     project    = init_project( doc )
     properties = fetch_properties( doc )

@@ -11,6 +11,7 @@ class ComposerLockParser < ComposerParser
 
   def parse_content( data )
     return nil if data.to_s.empty?
+    return nil if data.to_s.strip.eql?('Not Found')
 
     content = JSON.parse( data )
     project = init_project

@@ -20,6 +20,7 @@ class BiicodeParser < CommonParser
 
   def parse_content( content )
     return nil if content.to_s.empty? 
+    return nil if content.to_s.strip.eql?('Not Found')
 
     project = init_project 
     section = ''

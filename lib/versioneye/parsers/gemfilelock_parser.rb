@@ -20,6 +20,9 @@ class GemfilelockParser < GemfileParser
   end
 
   def parse_content(content)
+    return nil if content.to_s.empty?
+    return nil if content.to_s.strip.eql?('Not Found')
+
     dependecies_matcher = /([\w|\d|\.|\-|\_]+) (\(.*\))/
 
     matches = content.scan( dependecies_matcher )
