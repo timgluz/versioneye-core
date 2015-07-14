@@ -1,5 +1,6 @@
 class UrlUpdater < CommonUpdater
 
+  
   def update( project, send_email = false )
     return nil if project.nil?
     return nil if project.url.to_s.empty? 
@@ -16,6 +17,9 @@ class UrlUpdater < CommonUpdater
   rescue => e
     log.error "ERROR occured by parsing #{project.url} - #{e.message}"
     log.error e.backtrace.join("\n")
+    message = "Project could not be parsed from URL: #{project.url}. Please make sure that the URL exists."
+    store_parsing_errors project, message
   end
+
 
 end

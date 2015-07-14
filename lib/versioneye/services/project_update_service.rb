@@ -53,6 +53,7 @@ class ProjectUpdateService < Versioneye::Service
   def self.update_single project, send_email = false
     return nil if not_updateable?( project )
 
+    project.parsing_errors = []
     updater = UpdateStrategy.updater_for project.source
     updater.update project, send_email
     project

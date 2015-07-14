@@ -2,14 +2,22 @@ class GithubUpdater < CommonUpdater
 
 
   def update project, send_email = false
+    project.parsing_errors = []
     project_file = fetch_project_file project
     if project_file.to_s.strip.empty?
-      log.error "Importing project file from Github failed."
+      message = "Project could not be parsed from the GitHub API. Please make sure that the credentials are still valid and the repository still exists."
+      log.error message
+      store_parsing_errors project, message
       return nil
     end
 
     new_project = parse project_file
     update_old_with_new project, new_project, send_email
+  rescue => e
+    log.error "ERROR occured by parsing project from GitHub API - #{e.message}"
+    log.error e.backtrace.join("\n")
+    message = "Project could not be parsed from the GitHub API. Please make sure that the credentials are still valid and the repository still exists. - #{e.message}"
+    store_parsing_errors project, message
   end
 
 

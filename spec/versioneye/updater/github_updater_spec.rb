@@ -31,6 +31,7 @@ describe GithubUpdater do
         described_class.new.update project
         project.should_not be_nil
         project.dependencies.count.should == 15
+        expect( project.parsing_errors.count ).to eq(0)
       end
       WebMock.allow_net_connect!
     end
@@ -47,6 +48,23 @@ describe GithubUpdater do
         described_class.new.update project
         project.should_not be_nil
         project.dependencies.count.should == 4
+        expect( project.parsing_errors.count ).to eq(0)
+      end
+      WebMock.allow_net_connect!
+    end
+
+    it 'returns a project with errors because repository does not exist' do
+      user = UserFactory.create_new
+      project = ProjectFactory.default user
+      project.s3_filename = 'Example/Podfile'
+      project.scm_fullname = 'xing/XNGAPIClient_na'
+      project.scm_branch = 'masterio'
+
+      WebMock.disable_net_connect!
+      VCR.use_cassette('github_updater_podfile_1', allow_playback_repeats: true) do
+        described_class.new.update project
+        project.should_not be_nil
+        expect( project.parsing_errors.count ).to eq(1)
       end
       WebMock.allow_net_connect!
     end

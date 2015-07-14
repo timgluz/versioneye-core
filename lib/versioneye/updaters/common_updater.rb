@@ -30,6 +30,19 @@ class CommonUpdater < Versioneye::Service
   end
 
 
+  def store_parsing_errors project, error_message
+    return nil if project.nil? || error_message.to_s.empty?
+
+    project.parsing_errors = []
+    project.parsing_errors << error_message
+
+    project.save 
+  rescue => e 
+    log.error "ERROR occured store_parsing_errors - #{e.message}"
+    log.error e.backtrace.join("\n")
+  end
+
+
   private
 
   

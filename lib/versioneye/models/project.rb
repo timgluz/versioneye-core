@@ -72,6 +72,8 @@ class Project < Versioneye::Model
 
   field :license_whitelist_id, type: String
 
+  field :parsing_errors , type: Array, :default => []
+
   validates :name       , presence: true
   validates :project_key, presence: true
 
