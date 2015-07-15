@@ -1010,6 +1010,10 @@ describe License do
       license = License.new({:name => "LGPL-2.1"})
       license.name_substitute.should eq("LGPL-2.1")
     end
+    it "should return LGPL 2.1 name" do
+      license = License.new({:name => "GNU Lesser General Public License Version 2.1, February 1999"})
+      license.name_substitute.should eq("LGPL-2.1")
+    end
 
 
     it "should return LGPL 3.0 name" do
@@ -1342,6 +1346,10 @@ describe License do
       license = License.new({:name => "Eclipse Public License 1.0"})
       license.name_substitute.should eq("EPL-1.0")
     end
+    it "should return eclipse public license name" do
+      license = License.new({:name => "Eclipse Public License (EPL) 1.0"})
+      license.name_substitute.should eq("EPL-1.0")
+    end
 
 
     it "should return eclipse distributed license name" do
@@ -1358,6 +1366,14 @@ describe License do
     end
     it "should return eclipse distributed license name" do
       license = License.new({:name => "EDLv1"})
+      license.name_substitute.should eq("EDL-1.0")
+    end
+    it "should return eclipse distributed license name" do
+      license = License.new({:name => "Eclipse Distribution License v. 1.0"})
+      license.name_substitute.should eq("EDL-1.0")
+    end
+    it "should return eclipse distributed license name" do
+      license = License.new({:name => "Eclipse Distribution License (New BSD License)"})
       license.name_substitute.should eq("EDL-1.0")
     end
 
@@ -1559,6 +1575,11 @@ describe License do
     it "check for CC-BY-SA-4.0 license" do
       license = License.new({:name => "Creative Commons Attribution share alike 4.0"})
       license.name_substitute.should eq("CC-BY-SA-4.0")
+    end
+
+    it "check for SAP DEVELOPER LICENSE AGREEMENT license" do
+      license = License.new({:name => "SAP DEVELOPER LICENSE AGREEMENT"})
+      license.name_substitute.should eq("SAP DEVELOPER LICENSE AGREEMENT")
     end
 
     it "check Zlib" do

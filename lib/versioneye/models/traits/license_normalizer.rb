@@ -114,6 +114,8 @@ module VersionEye
       return 'PHP-3.01' if php_301_match( tmp_name )
       return 'PHP-3.0'  if php_30_match( tmp_name )
 
+      return 'SAP DEVELOPER LICENSE AGREEMENT' if sap_dla_match( tmp_name )
+
       nil 
     end
 
@@ -131,6 +133,7 @@ module VersionEye
         return 'https://glassfish.java.net/public/CDDL+GPL.html'     if spdx_id.to_s.eql?( A_CDDL_GPL )
 
         #       https://glassfish.java.net/nonav/public/CDDL+GPL_1_1.html - same 
+        #       https://glassfish.java.net/public/CDDL+GPL_1_1.html
         return 'https://glassfish.java.net/public/CDDL+GPL_1_1.html' if spdx_id.to_s.eql?( A_CDDL_GPL2_W_CPE ) 
 
         return 'http://www.eclipse.org/org/documents/edl-v10.php'    if spdx_id.to_s.eql?( A_EDL_1_0 )
@@ -207,6 +210,13 @@ module VersionEye
       false 
     end
 
+
+    
+
+    def sap_dla_match name
+      name.match(/\ASAP\s+DEVELOPER\s+LICENSE\s+AGREEMENT\z/i) ||
+      name.match(/\ASAP\s+DEV\s+LICENSE\s+AGREEMENT\z/i)
+    end
 
     def php_301_match name
       name.match(/\APHP\s+3.01\z/i) ||
@@ -316,7 +326,8 @@ module VersionEye
       name.match(/\AEclipse\s*Public\s*1\z/i) ||
       name.match(/\AEclipse\s*Public\s*v1\z/i) ||
       name.match(/\AEclipse\s*Public\s*v\s*1\z/i) ||
-      name.match(/\AEclipse\s*Public\s*1\z/i)
+      name.match(/\AEclipse\s*Public\s*1\z/i) || 
+      name.match(/\AEclipse\s*Public\s*\(EPL\)\s*1\s*\z/i)
     end
 
     def eclipse_distribution_match name
@@ -328,7 +339,9 @@ module VersionEye
       name.match(/\AEclipse\s*Distribution\s*1\z/i) ||
       name.match(/\AEclipse\s*Distribution\s*v1\z/i) ||
       name.match(/\AEclipse\s*Distribution\s*vs*1\z/i) ||
-      name.match(/\AEclipse\s*Distribution\s*1\z/i)
+      name.match(/\AEclipse\s*Distribution\s*1\z/i) || 
+      name.match(/\AEclipse\s*Distribution\s*\(New\s*BSD\s*\)\z/i) || 
+      name.match(/\AEclipse\s*Distribution\s*v\.\s*1\z/i) 
     end
 
     def bsd_match name
@@ -577,7 +590,8 @@ module VersionEye
       new_name.match(/\ALesser\s+General\s+Public\s*2\.1\s+only\z/i) ||
       new_name.match(/\ALesser\s+General\s+Public\s*2\.1\z/i) ||
       new_name.match(/\ALesser\s+General\s+Public\s*\(LGPL\)\s*2\.1\z/i) || 
-      new_name.match(/\AGeneral\s+Lesser\s+Public\s+\(LGPL\)\s+2\.1\z/i) 
+      new_name.match(/\AGeneral\s+Lesser\s+Public\s+\(LGPL\)\s+2\.1\z/i) || 
+      new_name.match(/\ALesser\s+General\s+Public\s+2\.1\s+February\s+1999\z/)
     end
 
     def lgpl_3_match name
