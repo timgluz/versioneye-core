@@ -70,3 +70,9 @@ class MavenRepository < Versioneye::Model
   end
 
 end
+
+# https://repository.jboss.org/nexus/content/repositories/releases
+# http://maven.restlet.org/
+# https://repository.jboss.org/nexus/content/repositories/thirdparty-releases/
+# http://artifactory.javassh.com/public-releases
+# http://maven.vaadin.com/vaadin-addons
