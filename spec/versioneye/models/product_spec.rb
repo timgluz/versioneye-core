@@ -51,6 +51,20 @@ describe Product do
   end
 
 
+  describe "add_tag" do
+    it 'adds the tag' do
+      prod = Product.new({:group_id => "org", :artifact_id => "apache"})
+      expect( prod.tags ).to be_nil
+      prod.add_tag "xml"
+      expect( prod.tags ).to_not be_nil
+      expect( prod.tags.count ).to eq(1)
+      expect( prod.tags.first ).to eq('xml')
+      prod.add_tag "xml"
+      expect( prod.tags.count ).to eq(1)
+    end
+  end
+
+
   describe "find_by_id" do
 
     it "return nil. Because input is nil" do

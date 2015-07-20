@@ -98,6 +98,11 @@ class Product < Versioneye::Model
     artifact_id
   end
 
+  def add_tag tag_name 
+    self.tags = [] if tags.nil? 
+    self.tags.push( tag_name ) if !self.tags.include?( tag_name )
+  end
+
   ######## SEARCH METHODS ####################
 
   def self.find_by_id id
