@@ -38,6 +38,11 @@ class Developer < Versioneye::Model
   end
 
 
+  def to_param 
+    self.name.gsub(" ", "_").downcase
+  end
+
+
   def product 
     Product.fetch_product language, prod_key
   end 

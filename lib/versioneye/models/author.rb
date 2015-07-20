@@ -3,7 +3,6 @@ class Author < Versioneye::Model
   include Mongoid::Document
   include Mongoid::Timestamps
 
-
   field :name_id         , type: String # name without white spaces and downcased
   field :name            , type: String # This is the real name of the developer!
   field :email           , type: String
