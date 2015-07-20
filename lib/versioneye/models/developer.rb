@@ -21,6 +21,8 @@ class Developer < Versioneye::Model
   field :timezone        , type: String
   field :contributor     , type: Boolean, default: false
 
+  field :to_author       , type: Boolean, default: false
+
 
   index({ language: 1, prod_key: 1, version: 1, name: 1 }, { name: "language_prod_key_version_name_index", background: true, unique: true, drop_dups: true })
   index({ language: 1, prod_key: 1, version: 1 },          { name: "language_prod_key_version_index",      background: true })

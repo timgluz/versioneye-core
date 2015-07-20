@@ -16,6 +16,7 @@ module Versioneye
     require 'versioneye/models/crawler_task'
     require 'versioneye/models/dependency'
     require 'versioneye/models/developer'
+    require 'versioneye/models/author'
     require 'versioneye/models/error_message'
     require 'versioneye/models/event'
     require 'versioneye/models/email_setting'

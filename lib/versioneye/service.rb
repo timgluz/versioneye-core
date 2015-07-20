@@ -5,6 +5,7 @@ module Versioneye
     require 'versioneye/cache'
 
     require 'versioneye/services/analytics_service'
+    require 'versioneye/services/author_service'
     require 'versioneye/services/badge_service'
     require 'versioneye/services/badge_ref_service'
     require 'versioneye/services/bitbucket_service'
