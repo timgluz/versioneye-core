@@ -55,6 +55,7 @@ class Product < Versioneye::Model
   index({ created_at: -1},               { name: "created_at_index", background: true})
   index({ updated_at: -1},               { name: "updated_at_index", background: true})
   index({ updated_at: -1, language: -1}, { name: "updated_language_index", background: true})
+  index({ tags: 1},                      { name: "tags_index", background: true})
 
   attr_accessor :version_newest, :project_usage 
   attr_accessor :released_days_ago, :released_ago_in_words, :released_ago_text
@@ -101,6 +102,11 @@ class Product < Versioneye::Model
   def add_tag tag_name 
     self.tags = [] if tags.nil? 
     self.tags.push( tag_name ) if !self.tags.include?( tag_name )
+  end
+
+  def remove_tag tag_name 
+    self.tags = [] if tags.nil? 
+    self.tags.delete( tag_name )
   end
 
   ######## SEARCH METHODS ####################
