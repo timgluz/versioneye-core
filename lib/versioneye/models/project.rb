@@ -153,6 +153,12 @@ class Project < Versioneye::Model
     deps.any_in(muted: [true])
   end
 
+  def muted_dependencies_count
+    deps = muted_dependencies
+    return 0 if deps.nil? 
+    deps.count 
+  end
+
   def self.find_by_id( id )
     Project.find( id )
   rescue => e

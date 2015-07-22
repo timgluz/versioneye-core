@@ -331,6 +331,8 @@ describe Project do
       muted.count.should eq(1)
       muted.first._id.should eql(dep_3._id)
 
+      expect( project.muted_dependencies_count ).to eq(1)
+
       user.remove
       project.remove
     end

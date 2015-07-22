@@ -69,7 +69,7 @@ class ProjectdependencyService < Versioneye::Service
   end
 
 
-  def self.mute! project_id, dependency_id, mute_status
+  def self.mute! project_id, dependency_id, mute_status, mute_message = nil 
     project = Project.find_by_id( project_id )
     return false if project.nil?
 
@@ -82,11 +82,11 @@ class ProjectdependencyService < Versioneye::Service
     if mute_status == true
       dependency.outdated = false
       dependency.outdated_updated_at = DateTime.now
-      update_project_numbers dependency, project 
+      dependency.mute_message = mute_message
     else
       update_outdated! dependency
-      update_project_numbers dependency, project 
     end
+    update_project_numbers dependency, project 
     saved = dependency.save
     up = project
     up = project.parent if project.parent_id 

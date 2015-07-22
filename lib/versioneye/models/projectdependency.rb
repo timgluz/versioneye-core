@@ -28,6 +28,7 @@ class Projectdependency < Versioneye::Model
   field :outdated           , type: Boolean
   field :outdated_updated_at, type: DateTime, :default => DateTime.now
   field :muted              , type: Boolean , :default => false
+  field :mute_message       , type: String
 
   field :sv_ids           , type: Array, default: []  # SecurityVulnerability IDs
 

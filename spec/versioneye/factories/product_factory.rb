@@ -33,13 +33,6 @@ FactoryGirl.define do
       transient do
         versions_count 6
       end
-
-      after(:create) do |product, evaluator|
-        FactoryGirl.create_list(
-          :dependency, evaluator.versions_count,
-          version: FactoryGirl.generate(:product_version)
-        )
-      end
     end
   end
 end
