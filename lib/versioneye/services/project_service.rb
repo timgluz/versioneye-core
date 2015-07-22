@@ -90,6 +90,7 @@ class ProjectService < Versioneye::Service
       :out_number_sum => project.out_number, 
       :unknown_number => project.unknown_number, 
       :unknown_number_sum => project.unknown_number, 
+      :muted_dependencies_count => project.muted_dependencies_count,
       :licenses_red => project.licenses_red, 
       :licenses_red_sum => project.licenses_red_sum, 
       :licenses_unknown => project.licenses_unknown, 
