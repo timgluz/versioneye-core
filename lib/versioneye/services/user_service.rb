@@ -35,7 +35,7 @@ class UserService < Versioneye::Service
     user.verification = create_random_token
     user.encrypt_password
     user.save
-    UserMailer.reset_password( user ).deliver
+    UserMailer.reset_password( user ).deliver_now
   end
 
   
@@ -132,7 +132,7 @@ class UserService < Versioneye::Service
   private
 
     def self.notify_rob user, why 
-      UserMailer.deleted( user, why ).deliver
+      UserMailer.deleted( user, why ).deliver_now
     rescue => e 
       log.error e.message
       log.error e.backtrace.join("\n")  

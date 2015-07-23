@@ -18,7 +18,7 @@ class SubmittedUrlService < Versioneye::Service
 
     submitted_url.integrated = true
     if submitted_url.save
-      SubmittedUrlMailer.integrated_url_email(submitted_url, product).deliver
+      SubmittedUrlMailer.integrated_url_email(submitted_url, product).deliver_now
       return true
     end
 

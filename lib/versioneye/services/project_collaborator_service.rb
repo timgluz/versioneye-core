@@ -34,7 +34,7 @@ class ProjectCollaboratorService < Versioneye::Service
 
     project.collaborators << new_collaborator
 
-    UserMailer.new_collaboration(new_collaborator).deliver
+    UserMailer.new_collaboration(new_collaborator).deliver_now
   end
 
 
@@ -49,7 +49,7 @@ class ProjectCollaboratorService < Versioneye::Service
     project.collaborators << new_collaborator
 
     if collaborator_info.to_s.match( User::A_EMAIL_REGEX )
-      UserMailer.collaboration_invitation( new_collaborator ).deliver
+      UserMailer.collaboration_invitation( new_collaborator ).deliver_now
     end
   end
 

@@ -25,7 +25,7 @@ class CommonUpdater < Versioneye::Service
 
     if active_email && ( outdated_deps || license_alerts )
       log.info "Send out email notification for project #{old_project.name} to user #{old_project.user.fullname}"
-      ProjectMailer.projectnotification_email( old_project, nil, unknown_licenses, red_licenses ).deliver
+      ProjectMailer.projectnotification_email( old_project, nil, unknown_licenses, red_licenses ).deliver_now
     end
   end
 

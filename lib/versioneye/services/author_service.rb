@@ -65,7 +65,7 @@ class AuthorService < Versioneye::Service
     return if authors.empty?
     
     p "invite user #{user.username} to edit"
-    UserMailer.invited_user_author( user, authors ).deliver 
+    UserMailer.invited_user_author( user, authors ).deliver_now
   end
 
 

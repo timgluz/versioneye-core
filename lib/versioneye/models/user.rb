@@ -124,7 +124,7 @@ class User < Versioneye::Model
   end
 
   def send_verification_email
-    UserMailer.verification_email(self, self.verification, self.email).deliver
+    UserMailer.verification_email(self, self.verification, self.email).deliver_now
   rescue => e
     User.log.error e.message
     User.log.error e.backtrace.join("\n")
@@ -140,7 +140,7 @@ class User < Versioneye::Model
 
   def send_verification_reminder
     if self.verification && self.deleted_user != true
-      UserMailer.verification_email_reminder(self, self.verification, self.email).deliver
+      UserMailer.verification_email_reminder(self, self.verification, self.email).deliver_now
     end
   rescue => e
     User.log.error e.message
@@ -149,7 +149,7 @@ class User < Versioneye::Model
 
   def send_suggestions
     return nil if deleted_user || email_inactive
-    UserMailer.suggest_packages_email(self).deliver
+    UserMailer.suggest_packages_email(self).deliver_now
   rescue => e
     User.log.error e.message
     User.log.error e.backtrace.join("\n")
@@ -484,7 +484,7 @@ class User < Versioneye::Model
       return true if npd.nil?
 
       self.free_private_projects = npd.free_projects
-      UserMailer.non_profit_signup(self, npd).deliver
+      UserMailer.non_profit_signup(self, npd).deliver_now
       return true
     end
 

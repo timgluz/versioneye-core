@@ -7,7 +7,7 @@ class NotificationService < Versioneye::Service
     user_ids.each do |id|
       count += process_user( id )
     end
-    # NotificationMailer.status( count ).deliver
+    # NotificationMailer.status( count ).deliver_now
     log.info "Send out #{count} notification emails"
     count
   rescue => e
@@ -47,7 +47,7 @@ class NotificationService < Versioneye::Service
 
     notis = uniq_products notifications  
     notis.sort_by {|notice| [notice.product.language]}
-    NotificationMailer.new_version_email( user, notis ).deliver
+    NotificationMailer.new_version_email( user, notis ).deliver_now
     log.info "Send notifications to user #{user.fullname}"
     mark_as_sent notifications
     MailTrack.add user.ids, 'new_version_email', nil

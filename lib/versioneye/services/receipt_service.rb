@@ -135,7 +135,7 @@ class ReceiptService < Versioneye::Service
 
 
   def self.email receipt, pdf
-    ReceiptMailer.receipt_email(receipt, pdf).deliver
+    ReceiptMailer.receipt_email(receipt, pdf).deliver_now
   end
 
 

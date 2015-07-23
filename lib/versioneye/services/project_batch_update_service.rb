@@ -44,7 +44,7 @@ class ProjectBatchUpdateService < Versioneye::Service
     col_projects = fetch_affected_collaboration_projects user, period
     return nil if (projects.nil? || projects.empty?) && (col_projects.nil? || col_projects.empty?)
 
-    ProjectMailer.projectnotifications_email( user, projects, col_projects, period ).deliver
+    ProjectMailer.projectnotifications_email( user, projects, col_projects, period ).deliver_now
     MailTrack.add user.ids, A_EMAIL_TEMPLATE_1, period
   rescue => e 
     log.error e.message
