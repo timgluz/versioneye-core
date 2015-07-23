@@ -29,6 +29,46 @@ class AuthorService < Versioneye::Service
   end
 
 
+  def self.update_maintainers
+    User.all.each do |user|
+      update_maintainer user   
+    end
+  end
+
+  def self.update_maintainer user 
+    return if user.deleted_user == true
+      
+    authors = Author.where(:emails => user.email)
+    return if authors.empty? 
+    
+    authors.each do |author| 
+      author.products.each do |product| 
+        if user.add_maintainer(product)
+          p "#{user.username} can edit #{product}"
+        end
+      end
+    end
+    user.save 
+  end
+
+
+  def self.invite_users_to_edit
+    User.all.each do |user|
+      invite_user_to_edit user   
+    end
+  end
+
+  def self.invite_user_to_edit
+    return if user.deleted_user == true
+      
+    authors = Author.where(:emails => user.email)
+    return if authors.empty?
+    
+    p "invite user #{user.username} to edit"
+    UserMailer.invited_user_author( user, authors ).deliver 
+  end
+
+
   private 
 
 

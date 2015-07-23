@@ -62,6 +62,16 @@ class UserMailer < SuperMailer
   end
 
 
+  def invited_user_author( user, authors )
+    @user    = user 
+    @authors = authors
+    m = mail( :to => user.email, :subject => "Edit your VersionEye pages." ) do |format|
+      format.html{ render layout: 'email_html_layout' }
+    end
+    set_from( m )
+  end
+
+
   def reset_password(user)
     @user = user
     @url  = "#{Settings.instance.server_url}/updatepassword/#{@user.verification}"

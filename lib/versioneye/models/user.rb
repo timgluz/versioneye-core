@@ -440,6 +440,15 @@ class User < Versioneye::Model
     self.encrypted_password = encrypt(password)
   end
 
+  def add_maintainer key 
+    self.maintainer = [] if self.maintainer.nil? 
+    if !self.maintainer.include?(key)
+      self.maintainer.push( key ) 
+      return true 
+    end
+    false 
+  end
+
   private
 
     def check_terms
