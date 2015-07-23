@@ -242,12 +242,14 @@ class Project < Versioneye::Model
 
   def muted_prod_keys
     prod_keys = Array.new
+    mute_messages = {}
     muted_deps = muted_dependencies
     muted_deps.each do |dep|
       key = dep_key(dep)
-      prod_keys.push key
+      prod_keys << key 
+      mute_messages[key] = dep.mute_message
     end
-    prod_keys
+    {:keys => prod_keys, :messages => mute_messages}
   end
 
   def make_project_key!
@@ -297,12 +299,15 @@ class Project < Versioneye::Model
   end
 
   def overwrite_dependencies( new_dependencies )
-    muted_keys = muted_prod_keys
+    muted_deps    = muted_prod_keys
+    muted_keys    = muted_deps[:keys]
+    mute_messages = muted_deps[:messages]
     remove_dependencies
     new_dependencies.each do |dep|
       key = dep_key(dep)
       if muted_keys.include?( key )
         dep.muted = true 
+        dep.mute_message = mute_messages[key]
         dep.outdated = false 
         dep.outdated_updated_at = DateTime.now
         self.out_number = self.out_number.to_i - 1 

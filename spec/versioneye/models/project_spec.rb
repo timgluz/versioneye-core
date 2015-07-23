@@ -312,7 +312,7 @@ describe Project do
       unmuted = project.unmuted_dependencies
       unmuted.should_not be_nil
       unmuted.count.should eq(3)
-      project.muted_prod_keys.should be_empty
+      project.muted_prod_keys[:keys].should be_empty
 
       dep_3.muted = true
       dep_3.save
@@ -321,7 +321,7 @@ describe Project do
       unmuted.should_not be_nil
       unmuted.count.should eq(2)
 
-      prod_keys = project.muted_prod_keys
+      prod_keys = project.muted_prod_keys[:keys]
       prod_keys.should_not be_empty
       prod_keys.count.should eq(1)
       prod_keys.first.should eql("#{dep_3.language}_#{dep_3.prod_key}_#{dep_3.version_current}")
@@ -342,6 +342,7 @@ describe Project do
     it "overwrites dependencies" do
       user = UserFactory.create_new 1066
       user.nil?.should be_falsey
+      
       project = ProjectFactory.create_new user
       project.save
 
@@ -364,6 +365,7 @@ describe Project do
       dep_3.version_current = "2.0.0"
       dep_3.version_requested = "1.0.0"
       dep_3.muted = true
+      dep_3.mute_message = "Not good."
       dep_3.save
 
       old_deps = [dep_1.id.to_s, dep_2.id.to_s, dep_3.id.to_s, ]
@@ -404,6 +406,8 @@ describe Project do
       muted = proj_db.muted_dependencies
       muted.count.should eq(1)
       muted.first.prod_key.should eql( dep_6.prod_key )
+      expect(muted.first.muted).to be_truthy
+      expect(muted.first.mute_message).to eq('Not good.')
 
       proj_db.dependencies.each do |dep|
         old_deps.include?( dep.id.to_s ).should be_falsey
