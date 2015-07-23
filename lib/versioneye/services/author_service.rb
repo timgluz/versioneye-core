@@ -58,7 +58,7 @@ class AuthorService < Versioneye::Service
     end
   end
 
-  def self.invite_user_to_edit
+  def self.invite_user_to_edit user 
     return if user.deleted_user == true
       
     authors = Author.where(:emails => user.email)
