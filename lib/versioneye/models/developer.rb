@@ -39,7 +39,8 @@ class Developer < Versioneye::Model
 
 
   def to_param 
-    self.name.gsub(" ", "_").downcase
+    return self.name.gsub(" ", "_").downcase if !self.name.to_s.empty? 
+    self.developer.gsub(" ", "_").downcase if !self.developer.to_s.empty? 
   end
 
 

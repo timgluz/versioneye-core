@@ -37,7 +37,8 @@ class Author < Versioneye::Model
 
 
   def to_param
-    name_id
+    return name_id if !name_id.to_s.empty? 
+    encode_name(name) if !name.to_s.empty? 
   end
 
 
