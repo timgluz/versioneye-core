@@ -90,7 +90,9 @@ class Bitbucket < Versioneye::Service
     return if data.nil? or not data.is_a?(Hash)
 
     branches = []
-    data.each_pair {|k, v| branches << v[:branch]}
+    data.keys.each do |key| 
+      branches.push key.to_s 
+    end
     branches
   end
 
