@@ -9,23 +9,27 @@ class AuthorService < Versioneye::Service
 
 
   def self.dev_to_author dev
+    product = dev.product
+    if product.nil?
+      log.error "ERROR - developer #{dev.ids} without product!"
+      return nil
+    end
+
     author = fetch_author dev
     if author.nil?
-      p " -- ERROR for #{dev.email}"
-      return
+      log.error " -- ERROR - could not fetch author for #{dev.ids} - #{dev.email}"
+      return nil
     end
 
     author.update_from dev
-
-    product = dev.product
-    id = nil
-    id = product.ids if product
-    author.add_product id, dev.language, dev.prod_key
+    author.add_product product.ids, dev.language, dev.prod_key
     if author.save
       dev.update_attributes :to_author => true
-      p author.name_id
+      log.info "dev to author - #{author.name_id}"
+      return author
     else
-      p "ERROR - #{author.errors.full_messages.to_sentence}"
+      log.error "ERROR - #{author.errors.full_messages.to_sentence}"
+      return nil
     end
   end
 
