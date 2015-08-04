@@ -2,25 +2,25 @@
   Hey <%= @user.fullname %>,
 </p>
 <p>
-  You are a great guy because you contribute to open source software. 
-  Based on your email address this are the author profiles which could 
+  You are a great guy because you contribute to open source software.
+  Based on your email address this are the author profiles which could
   be matched with your user account:
 </p>
 <p>
-  <% @authors.each do |author| %> 
+  <% @authors.each do |author| %>
     <a href="<%= Settings.instance.server_url %>/authors/<%= author.name_id %>" ><%= author.name_id %></a><br/>
-  <% end %> 
+  <% end %>
 </p>
 <p>
   Now you have write access to this pages on VersionEye:
 </p>
 <p>
-  <% @user.maintainer.each do |lang_prod_key| %> 
+  <% @user.maintainer.each do |lang_prod_key| %>
     <% sps = lang_prod_key.split("::") %>
     <% language = sps[0] %>
     <% prod_key = sps[1] %>
     <a href="<%= Settings.instance.server_url %>/<%= language %>/<%= Product.encode_prod_key(prod_key) %>/edit" ><%= prod_key %></a><br/>
-  <% end %> 
+  <% end %>
 </p>
 <p>
   With great power comes great responsibility. Edit carefully.
