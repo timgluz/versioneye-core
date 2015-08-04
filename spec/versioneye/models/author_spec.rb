@@ -7,7 +7,7 @@ describe Author do
       author = Author.new({ :name => "Hans Mueller", :email => "hans@heine.de" })
       author.update_name_id
       expect( author.save ).to be_truthy
-      expect( author.name_id ).not_to be_nil 
+      expect( author.name_id ).not_to be_nil
     end
   end
 
@@ -35,15 +35,15 @@ describe Author do
       author.update_name_id
       expect( author.save ).to be_truthy
       expect( author.add_product( 'id', 'PHP', 'symfony/symfony' ) ).to be_truthy
-      
-      author = Author.first 
+
+      author = Author.first
       expect( author.products.first ).to eq('php::symfony/symfony')
       expect( author.products.count ).to eq(1)
 
       expect( author.add_product( 'id', 'PHP', 'symfony/symfony' ) ).to be_truthy
 
-      author = Author.first 
-      expect( author.products.count ).to eq(1) # still one because unique 
+      author = Author.first
+      expect( author.products.count ).to eq(1) # still one because unique
     end
   end
 
@@ -53,11 +53,11 @@ describe Author do
       author.update_name_id
       expect( author.save ).to be_truthy
 
-      dev = Developer.new({ :name => "Max Krax", :email => 'max@google.de', 
-      :homepage => 'www.heise.de', :organization => 'heise', :organization_url => 'www.heise.de/orga', 
+      dev = Developer.new({ :name => "Max Krax", :email => 'max@google.de',
+      :homepage => 'www.heise.de', :organization => 'heise', :organization_url => 'www.heise.de/orga',
       :role => 'CTO', :timezone => 'UTC' })
-      
-      author.update_from dev 
+
+      author.update_from dev
 
       expect( author.name_id ).to eq('hans_mueller')
       expect( author.name ).to eq('Max Krax')
