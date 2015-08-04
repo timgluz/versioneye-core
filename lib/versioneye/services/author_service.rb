@@ -70,20 +70,17 @@ class AuthorService < Versioneye::Service
   end
 
 
-  private
-
-
-    def self.fetch_author dev
-      if dev.name.to_s.empty?
-        author = Author.where( :email => dev.email ).first
-        author = Author.where( :emails => dev.email ).first if author.nil?
-        return nil
-      end
-      name_id = Author.encode_name( dev.name )
-      author = Author.where( :name_id => name_id ).first
-      author = Author.new({:name_id => name_id}) if author.nil?
-      author
+  def self.fetch_author dev
+    if dev.name.to_s.empty?
+      author = Author.where( :email => dev.email ).first
+      author = Author.where( :emails => dev.email ).first if author.nil?
+      return author
     end
+    name_id = Author.encode_name( dev.name )
+    author = Author.where( :name_id => name_id ).first
+    author = Author.new({:name_id => name_id, :name => dev.name}) if author.nil?
+    author
+  end
 
 
 end
