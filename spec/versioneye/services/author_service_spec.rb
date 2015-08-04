@@ -92,4 +92,75 @@ describe AuthorService do
 
   end
 
+  describe "update_authors" do
+
+    it "updates the authors" do
+      expect( Author.count ).to be(0)
+
+      product = ProductFactory.create_new
+      dev = Developer.new({:name => "hans", :email => 'test@web.de', :language => product.language, :prod_key => product.prod_key, :version => product.version})
+      expect( dev.save ).to be_truthy
+
+      AuthorService.update_authors product.language
+      expect( Author.count ).to be(1)
+    end
+
+  end
+
+
+  describe "update_maintainers" do
+
+    it "updates the maintainers" do
+      user = UserFactory.create_new
+      user.email = "test@web.de"
+      expect( user.save ).to be_truthy
+      expect( user.maintainer ).to be_nil
+
+      product = ProductFactory.create_new
+      dev = Developer.new({:name => "hans", :email => 'test@web.de', :language => product.language, :prod_key => product.prod_key, :version => product.version})
+      expect( dev.save ).to be_truthy
+
+      AuthorService.update_authors product.language
+      expect( Author.count ).to be(1)
+
+      AuthorService.update_maintainers
+      user = User.first
+      expect( user.maintainer ).to_not be_nil
+      expect( user.maintainer ).to_not be_empty
+
+      key = "#{product.language}::#{product.prod_key}".downcase
+      expect( user.maintainer.include?( key ) ).to be_truthy
+    end
+
+  end
+
+
+  describe "invite_users_to_edit" do
+
+    it "invites a user to edit" do
+      user = UserFactory.create_new
+      user.email = "test@web.de"
+      expect( user.save ).to be_truthy
+      expect( user.maintainer ).to be_nil
+
+      product = ProductFactory.create_new
+      dev = Developer.new({:name => "hans", :email => 'test@web.de', :language => product.language, :prod_key => product.prod_key, :version => product.version})
+      expect( dev.save ).to be_truthy
+
+      AuthorService.update_authors product.language
+      expect( Author.count ).to be(1)
+
+      AuthorService.update_maintainers
+
+      ActionMailer::Base.deliveries.clear
+      ActionMailer::Base.deliveries.size.should == 0
+
+      AuthorService.invite_users_to_edit
+
+      ActionMailer::Base.deliveries.size.should == 1
+    end
+
+  end
+
+
 end
