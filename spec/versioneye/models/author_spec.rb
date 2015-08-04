@@ -20,12 +20,31 @@ describe Author do
     end
   end
 
-  describe "to_s" do
+  describe "to_param" do
     it "returns the right value" do
       author = Author.new({ :name => "Hans Mueller", :email => "hans@heine.de" })
       author.update_name_id
       expect( author.save ).to be_truthy
       expect( author.to_param ).to eq('hans_mueller')
+    end
+    it "returns the right value" do
+      author = Author.new({ :name => "Hans Mueller", :email => "hans@heine.de" })
+      expect( author.to_param ).to eq('hans_mueller')
+    end
+  end
+
+  describe "encode_name" do
+    it "replaces white spaces" do
+      expect( Author.encode_name("this is") ).to eq("this_is")
+    end
+    it "replaces white spaces and Umlaute" do
+      expect( Author.encode_name("Mike Würth") ).to eq("mike_wuerth")
+    end
+    it "replaces white spaces and Umlaute" do
+      expect( Author.encode_name("Mike Wärth") ).to eq("mike_waerth")
+    end
+    it "replaces white spaces and Umlaute" do
+      expect( Author.encode_name("Mike Örth") ).to eq("mike_oerth")
     end
   end
 

@@ -38,7 +38,7 @@ class Author < Versioneye::Model
 
   def to_param
     return name_id if !name_id.to_s.empty?
-    encode_name(name) if !name.to_s.empty?
+    Author.encode_name(name) if !name.to_s.empty?
   end
 
 
@@ -48,7 +48,10 @@ class Author < Versioneye::Model
 
 
   def self.encode_name name
-    name.gsub(" ", "_").downcase
+    name.gsub(" ", "_").gsub("ß", "ss")
+      .gsub("ü", "ue").gsub("Ü", "Ue")
+      .gsub("ä", "ae").gsub("Ä", "Ae")
+      .gsub("ö", "oe").gsub("Ö", "Oe").downcase
   end
 
 
