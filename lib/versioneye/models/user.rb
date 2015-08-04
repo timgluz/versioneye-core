@@ -105,7 +105,7 @@ class User < Versioneye::Model
 
   attr_accessor :password, :new_username
 
-  
+
   def to_param
     username
   end
@@ -296,11 +296,11 @@ class User < Versioneye::Model
     user = User.find_by_id(user_api.user_id)
     return nil if user.nil?
 
-    user 
-  rescue => e 
-    log.error e.message 
+    user
+  rescue => e
+    log.error e.message
     log.error e.backtrace.join("\n")
-    nil 
+    nil
   end
 
   def api
@@ -417,9 +417,9 @@ class User < Versioneye::Model
   end
 
   def fetch_or_create_permissions
-    if self.user_permission.nil? 
-      self.user_permission = UserPermission.new 
-      self.user_permission.save 
+    if self.user_permission.nil?
+      self.user_permission = UserPermission.new
+      self.user_permission.save
     end
     self.user_permission
   end
@@ -440,13 +440,13 @@ class User < Versioneye::Model
     self.encrypted_password = encrypt(password)
   end
 
-  def add_maintainer key 
-    self.maintainer = [] if self.maintainer.nil? 
+  def add_maintainer key
+    self.maintainer = [] if self.maintainer.nil?
     if !self.maintainer.include?(key)
-      self.maintainer.push( key ) 
-      return true 
+      self.maintainer.push( key )
+      return true
     end
-    false 
+    false
   end
 
   private
