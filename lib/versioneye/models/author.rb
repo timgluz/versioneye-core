@@ -13,7 +13,7 @@ class Author < Versioneye::Model
   field :timezone        , type: String
   field :contributor     , type: Boolean, default: false
 
-  field :emails        , type: Array, default: []  
+  field :emails        , type: Array, default: []
   field :emails_count  , type: Integer, default: 0
 
   field :languages        , type: Array, default: []  # Uniq. language codes
@@ -37,8 +37,8 @@ class Author < Versioneye::Model
 
 
   def to_param
-    return name_id if !name_id.to_s.empty? 
-    encode_name(name) if !name.to_s.empty? 
+    return name_id if !name_id.to_s.empty?
+    encode_name(name) if !name.to_s.empty?
   end
 
 
@@ -47,39 +47,39 @@ class Author < Versioneye::Model
   end
 
 
-  def self.encode_name name 
+  def self.encode_name name
     name.gsub(" ", "_").downcase
   end
 
 
-  def add_product id, language, prod_key 
+  def add_product id, language, prod_key
     key = "#{language}::#{prod_key}".downcase
-    self.products = [] if products.nil? 
+    self.products = [] if products.nil?
     self.products.push( key ) if !products.include?(key)
-    self.products_count = self.products.count 
+    self.products_count = self.products.count
     self.product_ids.push( id ) if id && !product_ids.include?( id )
-    
+
     self.languages.push( language ) if !self.languages.include?( language )
-    self.languages_count = self.languages.count 
-    
+    self.languages_count = self.languages.count
+
     self.save
   end
 
 
   def update_from developer
-    self.name             = developer.name             if !developer.name.to_s.empty? 
-    self.email            = developer.email            if !developer.email.to_s.empty? 
-    self.homepage         = developer.homepage         if !developer.homepage.to_s.empty? 
-    self.organization     = developer.organization     if !developer.organization.to_s.empty? 
-    self.organization_url = developer.organization_url if !developer.organization_url.to_s.empty? 
-    self.role             = developer.role             if !developer.role.to_s.empty? 
-    self.timezone         = developer.timezone         if !developer.timezone.to_s.empty? 
-    self.contributor      = developer.contributor      if !developer.contributor.to_s.empty? 
+    self.name             = developer.name             if !developer.name.to_s.empty?
+    self.email            = developer.email            if !developer.email.to_s.empty?
+    self.homepage         = developer.homepage         if !developer.homepage.to_s.empty?
+    self.organization     = developer.organization     if !developer.organization.to_s.empty?
+    self.organization_url = developer.organization_url if !developer.organization_url.to_s.empty?
+    self.role             = developer.role             if !developer.role.to_s.empty?
+    self.timezone         = developer.timezone         if !developer.timezone.to_s.empty?
+    self.contributor      = developer.contributor      if !developer.contributor.to_s.empty?
     if !self.emails.include?( developer.email )
       self.emails.push developer.email
-      self.emails_count = self.emails.count 
+      self.emails_count = self.emails.count
     end
-    self.save 
+    self.save
   end
 
 

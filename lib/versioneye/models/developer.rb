@@ -29,7 +29,7 @@ class Developer < Versioneye::Model
   index({ language: 1, prod_key: 1 },                      { name: "language_prod_key_index",              background: true })
   index({ name: 1 }, { name: "name_index", background: true })
 
-  
+
   before_save :update_lang_key
 
 
@@ -38,22 +38,22 @@ class Developer < Versioneye::Model
   end
 
 
-  def to_param 
-    return self.name.gsub(" ", "_").downcase if !self.name.to_s.empty? 
-    self.developer.gsub(" ", "_").downcase if !self.developer.to_s.empty? 
+  def to_param
+    return self.name.gsub(" ", "_").downcase if !self.name.to_s.empty?
+    self.developer.gsub(" ", "_").downcase if !self.developer.to_s.empty?
   end
 
 
-  def product 
+  def product
     Product.fetch_product language, prod_key
-  end 
+  end
 
 
   def update_lang_key
     self.lang_key = "#{language}:::#{prod_key}".downcase
-  end 
+  end
 
-  
+
   def self.find_by language, prod_key, version, name = nil
     if name.nil?
       return Developer.where( language: language, prod_key: prod_key, version: version )
@@ -61,6 +61,6 @@ class Developer < Versioneye::Model
       return Developer.where( language: language, prod_key: prod_key, version: version, name: name )
     end
   end
-  
+
 
 end
