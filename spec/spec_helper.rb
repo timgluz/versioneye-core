@@ -9,7 +9,6 @@ end
 require 'rack/test'
 require 'stripe'
 require 'versioneye-core'
-require 'rspec/autorun'
 require 'mongoid'
 require 'database_cleaner'
 require 'rubygems'
