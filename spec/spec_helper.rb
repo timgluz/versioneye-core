@@ -58,7 +58,7 @@ RSpec.configure do |config|
     p "---"
     p "*** YOU ARE NOT IN A TEST ENVIRONMENT! ***"
     p "---"
-    return nil 
+    return nil
   end
 
   Stripe.api_key = Settings.instance.stripe_secret_key
