@@ -9,8 +9,8 @@ development:
       # Provides the hosts the default session can connect to. Must be an array
       # of host:port pairs. (required)
       hosts:
-        - 172.16.172.128:27017
-  options: 
+        - 172.16.148.134:27017
+  options:
     raise_not_found_error: false
 
 test:
@@ -18,8 +18,8 @@ test:
     default:
       database: veye_test
       hosts:
-        - 172.16.172.128:27017
-  options: 
+        - 172.16.148.134:27017
+  options:
     raise_not_found_error: false
 
 
@@ -38,5 +38,5 @@ production:
         - <%= ENV['MONGO_RS_2_ADDR'] ||= 'localhost' %>:<%= ENV['MONGO_RS_2_PORT'] ||= '27017' %>
         - <%= ENV['MONGO_RS_3_ADDR'] ||= 'localhost' %>:<%= ENV['MONGO_RS_3_PORT'] ||= '27017' %>
         # - localhost:27017
-  options: 
+  options:
     raise_not_found_error: false
