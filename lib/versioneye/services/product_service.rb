@@ -96,22 +96,22 @@ class ProductService < Versioneye::Service
 
   def self.update_products products
     products.each do |product|
-      self.update_meta_data product  
+      self.update_meta_data product
     end
   end
 
 
-  def self.update_meta_data product, update_used_by = true  
+  def self.update_meta_data product, update_used_by = true
     self.update_version_data  product, false
-    if update_used_by == true 
+    if update_used_by == true
       self.update_used_by_count product, false
-    end 
+    end
     self.update_average_release_time product
     self.update_followers_for product
-    product.save 
+    product.save
   rescue => e
     log.error e.message
-    log.error e.backtrace.join("\n")  
+    log.error e.backtrace.join("\n")
   end
 
 
@@ -138,13 +138,13 @@ class ProductService < Versioneye::Service
 
 
   def self.update_used_by_count product, persist = true
-    prod_keys = nil 
+    prod_keys = nil
     if product.group_id && product.artifact_id
       prod_keys = Dependency.where(:group_id => product.group_id, :artifact_id => product.artifact_id).distinct(:prod_key)
     else
       prod_keys = Dependency.where(:language => product.language, :dep_prod_key => product.prod_key).distinct(:prod_key)
     end
-    
+
     count = prod_keys.count
     return nil if count == product.used_by_count
 
@@ -192,24 +192,24 @@ class ProductService < Versioneye::Service
 
   def self.remove product
     EsProduct.remove( product )
-    
+
     archives = Versionarchive.where( :language => product.language, :prod_key => product.prod_key )
     if archives && !archives.empty?
-      archives.each do |archive| 
+      archives.each do |archive|
         archive.delete
       end
     end
 
     links = Versionlink.where( :language => product.language, :prod_key => product.prod_key )
     if links && !links.empty?
-      links.each do |link| 
+      links.each do |link|
         link.delete
       end
     end
 
     dependencies = Dependency.where( :language => product.language, :prod_key => product.prod_key )
     if dependencies && !dependencies.empty?
-      dependencies.each do |dependency| 
+      dependencies.each do |dependency|
         dependency.delete
       end
     end

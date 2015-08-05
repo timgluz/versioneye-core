@@ -26,7 +26,7 @@ class VersionService < Versioneye::Service
       end
     end
     filtered = versions if filtered.empty?
-    if filtered.size > 1 
+    if filtered.size > 1
       sorted = Naturalsorter::Sorter.sort_version_by_method( filtered, 'to_s', false )
       return sorted.first
     end
@@ -124,7 +124,7 @@ class VersionService < Versioneye::Service
   def self.versions_start_with( versions, val )
     return [] if versions.nil? || versions.empty?
     versions.dup.keep_if {|ver| ver[:version].to_s.match(/^#{val}/)}
-  rescue => e 
+  rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
     []
@@ -196,7 +196,7 @@ class VersionService < Versioneye::Service
   end
 
 
-  # Returns a sub range from a version range string 
+  # Returns a sub range from a version range string
   def self.from_ranges( versions, version_string )
     version_splitted = version_string.split(",")
     prod = Product.new
@@ -230,12 +230,12 @@ class VersionService < Versioneye::Service
         new_range = VersionService.newest_but_not( version_array, verso, true, stability)
         prod.versions = new_range
       elsif verso.match(/\A=/) || verso.match(/\A\w/)
-        versions.each do |version| 
+        versions.each do |version|
           prod.versions << version if version.to_s.eql?(verso)
         end
       end
     end
-    prod.versions  
+    prod.versions
   end
 
 

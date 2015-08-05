@@ -27,7 +27,7 @@ class LanguageService < Versioneye::Service
   end
 
 
-  def self.update_distinct_languages 
+  def self.update_distinct_languages
     languages = Product.all.distinct(:language)
     save_in_cache A_KEY, languages
     languages

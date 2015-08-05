@@ -5,22 +5,22 @@ class ProjectdependencyService < Versioneye::Service
   A_SECONDS_PER_DAY = 24 * 60 * 60 # 24h * 60min * 60s = 86400
 
   # Updates projectdependency.license_caches for each projectdependency of the project
-  def self.update_licenses project 
-    project.projectdependencies.each do |dep| 
+  def self.update_licenses project
+    project.projectdependencies.each do |dep|
       product = dep.find_or_init_product
       update_licenses_for project, dep, product
     end
-  rescue => e 
+  rescue => e
     log.error e.message
     log.error e.backtrace.join "\n"
   end
 
-  def self.update_licenses_for project, dep, product, save_dep = true 
+  def self.update_licenses_for project, dep, product, save_dep = true
     dep.license_caches.clear
-    dep.lwl_violation = nil 
-    product.version = dep.version_requested 
+    dep.lwl_violation = nil
+    product.version = dep.version_requested
     licenses = product.licenses
-    if licenses && !licenses.empty? 
+    if licenses && !licenses.empty?
       fill_license_cache project, dep, licenses
     end
     dep.save if save_dep
@@ -28,21 +28,21 @@ class ProjectdependencyService < Versioneye::Service
 
 
   # Updates projectdependency.sv_ids for each projectdependency of the project
-  def self.update_security project 
+  def self.update_security project
     project.update_attribute(:sv_count, 0)
     project.update_attribute(:sv_count_sum, 0)
-    project.projectdependencies.each do |dep| 
+    project.projectdependencies.each do |dep|
       product = dep.find_or_init_product
       update_security_for project, dep, product
     end
-  rescue => e 
+  rescue => e
     log.error e.message
     log.error e.backtrace.join "\n"
   end
 
-  def self.update_security_for project, dep, product, save_dep = true    
-    version = product.version_by_number dep.version_requested 
-    return nil if version.nil? 
+  def self.update_security_for project, dep, product, save_dep = true
+    version = product.version_by_number dep.version_requested
+    return nil if version.nil?
 
     dep.sv_ids = version.sv_ids
     dep.save if save_dep
@@ -60,16 +60,16 @@ class ProjectdependencyService < Versioneye::Service
     Projectdependency.where(:project_id => project.id).each do |dep|
       product = dep.find_or_init_product
       update_licenses_for project, dep, product, false
-      update_security_for project, dep, product, false 
-      dep.save 
+      update_security_for project, dep, product, false
+      dep.save
     end
-  rescue => e 
+  rescue => e
     log.error e.message
-    log.error e.backtrace.join "\n"  
+    log.error e.backtrace.join "\n"
   end
 
 
-  def self.mute! project_id, dependency_id, mute_status, mute_message = nil 
+  def self.mute! project_id, dependency_id, mute_status, mute_message = nil
     project = Project.find_by_id( project_id )
     return false if project.nil?
 
@@ -86,13 +86,13 @@ class ProjectdependencyService < Versioneye::Service
     else
       update_outdated! dependency
     end
-    update_project_numbers dependency, project 
+    update_project_numbers dependency, project
     saved = dependency.save
     up = project
-    up = project.parent if project.parent_id 
+    up = project.parent if project.parent_id
     ProjectService.update_sums up
-    ProjectService.reset_badge up 
-    saved 
+    ProjectService.reset_badge up
+    saved
   end
 
 
@@ -153,7 +153,7 @@ class ProjectdependencyService < Versioneye::Service
     if projectdependency.prod_key.nil?
       update_prod_key projectdependency
     end
-    
+
     product = projectdependency.product
     return false if product.nil?
 
@@ -196,20 +196,20 @@ class ProjectdependencyService < Versioneye::Service
   end
 
 
-  private 
+  private
 
 
-    def self.update_project_numbers dependency, project 
-      if dependency.outdated 
-        project.out_number = project.out_number.to_i + 1 
-        project.out_number_sum = project.out_number_sum.to_i + 1 
-      else 
-        project.out_number = project.out_number.to_i - 1 
-        project.out_number_sum = project.out_number_sum.to_i - 1   
+    def self.update_project_numbers dependency, project
+      if dependency.outdated
+        project.out_number = project.out_number.to_i + 1
+        project.out_number_sum = project.out_number_sum.to_i + 1
+      else
+        project.out_number = project.out_number.to_i - 1
+        project.out_number_sum = project.out_number_sum.to_i - 1
       end
-      project.out_number = 0 if project.out_number < 0 
+      project.out_number = 0 if project.out_number < 0
       project.out_number_sum = 0 if project.out_number_sum < 0
-      project.save 
+      project.save
     end
 
 
@@ -219,10 +219,10 @@ class ProjectdependencyService < Versioneye::Service
         if project.license_whitelist
           licenseCach.on_whitelist = project.license_whitelist.include_license_substitute?( license.name_substitute )
         end
-        licenseCach.license_id = license.id.to_s 
+        licenseCach.license_id = license.id.to_s
         dependency.license_caches.push licenseCach
-        dependency.lwl_violation = 'true' if licenseCach.on_whitelist == false 
-        licenseCach.save 
+        dependency.lwl_violation = 'true' if licenseCach.on_whitelist == false
+        licenseCach.save
       end
     end
 

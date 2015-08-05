@@ -55,7 +55,7 @@ class SyncService < Versioneye::Service
     key      = prod_key
     language = dependency.language
     if dependency.project && dependency.project.project_type.to_s.eql?(Project::A_TYPE_BOWER)
-      key      = dependency.name 
+      key      = dependency.name
       language = 'Bower'
     end
     sync_product language, key, false
@@ -67,7 +67,7 @@ class SyncService < Versioneye::Service
     ProjectdependencyService.update_outdated!( dependency )
     log.info dependency.to_s
     true
-  rescue => e 
+  rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
     nil
@@ -85,11 +85,11 @@ class SyncService < Versioneye::Service
 
     json[:versions].each do |ver|
       new_version = product_preload.nil? || product_preload.version_by_number(ver[:version]).nil?
-      next if new_version == false && skip_known_versions == true 
-      
-      product = sync_version( language, prod_key, ver[:version] ) 
+      next if new_version == false && skip_known_versions == true
 
-      if product && new_version == true 
+      product = sync_version( language, prod_key, ver[:version] )
+
+      if product && new_version == true
         NewestService.create_newest( product, ver[:version] )
         NewestService.create_notifications(product, ver[:version])
       end
@@ -116,7 +116,7 @@ class SyncService < Versioneye::Service
     handle_archives json
     handle_dependencies json
 
-    product 
+    product
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
@@ -131,7 +131,7 @@ class SyncService < Versioneye::Service
     if product
       product.add_version json[:version], {:released_at => parsed_date(json[:released_at]) }
       product.save
-      ProductService.update_version_data product, true 
+      ProductService.update_version_data product, true
       return product
     end
 
@@ -148,8 +148,8 @@ class SyncService < Versioneye::Service
     product.save
     product.add_version json[:version], {:released_at => parsed_date(json[:released_at]) }
     product.save
-    ProductService.update_version_data product, true 
-    product 
+    ProductService.update_version_data product, true
+    product
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")

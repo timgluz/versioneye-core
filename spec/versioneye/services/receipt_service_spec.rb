@@ -6,7 +6,7 @@ describe ReceiptService do
     Plan.create_defaults
     region = 'eu-west-1'
     creds = Aws::Credentials.new(ENV['AWS_ACCESS_KEY_ID'], ENV['AWS_SECRET_ACCESS_KEY'])
-    Aws.config[:credentials] = creds 
+    Aws.config[:credentials] = creds
   end
 
   describe "process_receipts" do

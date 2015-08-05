@@ -1,10 +1,10 @@
 class DependencyService < Versioneye::Service
 
   A_DAY = 86400 # 86400 seconds = 24 hours
-  A_FIVE_DAYS = 432000 
-  A_DEPENDENCY_TTL = 432000 
+  A_FIVE_DAYS = 432000
+  A_DEPENDENCY_TTL = 432000
 
-  
+
   def self.dependencies_outdated?( dependencies, cached = false )
     return false if dependencies.nil? || dependencies.empty?
 
@@ -41,14 +41,14 @@ class DependencyService < Versioneye::Service
     product = dependency.product
     return false if product.nil?
 
-    if product.versions.nil? || product.versions.empty? 
-      dependency.outdated = false 
+    if product.versions.nil? || product.versions.empty?
+      dependency.outdated = false
       dependency.current_version = '0.0.0+NA'
-      dependency.save 
-      return false 
+      dependency.save
+      return false
     end
 
-    newest_product_version = product.version 
+    newest_product_version = product.version
     if update_newest_version
       newest_product_version = VersionService.newest_version_number( product.versions )
     end
@@ -73,7 +73,7 @@ class DependencyService < Versioneye::Service
       return false
     end
 
-    # This is for the case that the parsed version is higher than our newest version in the database! 
+    # This is for the case that the parsed version is higher than our newest version in the database!
     newest_version = Naturalsorter::Sorter.sort_version([dependency.parsed_version, newest_product_version]).last
     if VersionService.equal(newest_version, parsed_version)
       dependency.outdated = false
@@ -97,7 +97,7 @@ class DependencyService < Versioneye::Service
     end
 
     if ( dependency.version.to_s.empty? || dependency.version.to_s.eql?("*") ) && product
-      dependency.parsed_version = product.version 
+      dependency.parsed_version = product.version
       return
     end
 
@@ -136,7 +136,7 @@ class DependencyService < Versioneye::Service
     deps = product.all_dependencies( version )
     return if deps.nil? || deps.empty?
 
-    update_dependencies_for deps 
+    update_dependencies_for deps
     product.update_attribute(:dep_count, deps.count)
   rescue => e
     log.error e.message
@@ -144,7 +144,7 @@ class DependencyService < Versioneye::Service
   end
 
 
-  def self.update_dependencies_for deps 
+  def self.update_dependencies_for deps
     deps.each do |dependency|
       cache_outdated?( dependency )
     end

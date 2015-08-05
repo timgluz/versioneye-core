@@ -3,10 +3,10 @@ class ProjectBatchUpdateService < Versioneye::Service
   A_EMAIL_TEMPLATE_1 = 'projectnotifications_email'
 
 =begin
-  This method iterates through all users and sends out 
-  a project notification email to each user. The project notification email 
-  contains a status list with all projects of the user.  The list 
-  includes projects which belong to the user and projects where 
+  This method iterates through all users and sends out
+  a project notification email to each user. The project notification email
+  contains a status list with all projects of the user.  The list
+  includes projects which belong to the user and projects where
   the user is collaborator.
 =end
   def self.update_all period
@@ -38,7 +38,7 @@ class ProjectBatchUpdateService < Versioneye::Service
 
     return nil if MailTrack.send_already? user.ids, A_EMAIL_TEMPLATE_1, period
 
-    perform_update user, period  
+    perform_update user, period
 
     projects     = fetch_affected_projects user, period
     col_projects = fetch_affected_collaboration_projects user, period
@@ -46,7 +46,7 @@ class ProjectBatchUpdateService < Versioneye::Service
 
     ProjectMailer.projectnotifications_email( user, projects, col_projects, period ).deliver_now
     MailTrack.add user.ids, A_EMAIL_TEMPLATE_1, period
-  rescue => e 
+  rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
   end
@@ -60,7 +60,7 @@ class ProjectBatchUpdateService < Versioneye::Service
 
     log.info "process #{period} projects for #{user.fullname}"
     update_projects projects, false
-    update_projects col_projects, false 
+    update_projects col_projects, false
   end
 
 
@@ -94,9 +94,9 @@ class ProjectBatchUpdateService < Versioneye::Service
       collaborations.each do |collab|
         if collab.project.nil?
           collab.remove
-          next 
+          next
         end
-        projects << collab.project 
+        projects << collab.project
       end
       projects
     end
@@ -105,7 +105,7 @@ class ProjectBatchUpdateService < Versioneye::Service
       projects = []
       pros = fetch_collaboration_projects user, period
       pros.each do |project|
-        projects << project if project.licenses_red_sum > 0 || project.out_number_sum > 0 
+        projects << project if project.licenses_red_sum > 0 || project.out_number_sum > 0
       end
       projects
     end

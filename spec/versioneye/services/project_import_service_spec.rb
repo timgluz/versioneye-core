@@ -23,8 +23,8 @@ describe ProjectImportService do
     it 'imports from privat github' do
       github_user.github_id = "652130"
       github_user.github_token = '666666666666777777777777777'
-      github_user.free_private_projects = 1 
-      github_user.save 
+      github_user.free_private_projects = 1
+      github_user.save
       VCR.use_cassette('import_from_privat_github_allowed', allow_playback_repeats: true) do
         project = ProjectImportService.import_from_github github_user, 'versioneye/versioneye-core', 'Gemfile', 'master'
         project.should_not be_nil
@@ -37,7 +37,7 @@ describe ProjectImportService do
       github_user.github_id = "652130"
       github_user.github_token = '666666666666777777777777777'
       github_user.free_private_projects = 0
-      github_user.save 
+      github_user.save
       VCR.use_cassette('import_from_privat_github_not_allowed', allow_playback_repeats: true) do
         expect { ProjectImportService.import_from_github(github_user, 'versioneye/versioneye-core', 'Gemfile', 'master') }.to raise_error
       end
@@ -128,7 +128,7 @@ describe ProjectImportService do
         project.dependencies.should_not be_empty
         project.name.should eq('reiz/test_gemi')
         project.source.should eq(Project::A_SOURCE_BITBUCKET)
-        sleep 2 
+        sleep 2
         project.children.count.should eq(1)
         worker.exit
       end
@@ -168,7 +168,7 @@ describe ProjectImportService do
 
 
 
-  # TODO Tests for Stash !! 
+  # TODO Tests for Stash !!
 
 
 

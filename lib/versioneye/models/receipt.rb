@@ -95,8 +95,8 @@ class Receipt < Versioneye::Model
     self.closed       = invoice[:closed]
 
     invoice.lines.each do |line|
-      receipt_line = ReceiptLine.new 
-      receipt_line.update_from line 
+      receipt_line = ReceiptLine.new
+      receipt_line.update_from line
       receipt_lines << receipt_line
     end
   end
@@ -140,7 +140,7 @@ class Receipt < Versioneye::Model
     "#{date_str}-VersionEye-#{receipt_nr}.pdf"
   end
 
-  def to_s 
+  def to_s
     filename
   end
 

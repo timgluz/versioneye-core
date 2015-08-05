@@ -2,14 +2,14 @@ require 'spec_helper'
 
 describe ProjectUpdateService do
 
-  describe 'status_for' do 
-    it 'returns done for not existing project' do 
+  describe 'status_for' do
+    it 'returns done for not existing project' do
       expect( described_class.status_for 'sfafgas-NAN---' ).to eq('done')
     end
   end
 
-  describe 'update_async' do 
-    it 'updates async and returns the right status code' do 
+  describe 'update_async' do
+    it 'updates async and returns the right status code' do
       gemfile = "spec/fixtures/files/Gemfile"
       file_attachment = Rack::Test::UploadedFile.new(gemfile, "application/octet-stream")
       file = {'datafile' => file_attachment}
@@ -28,7 +28,7 @@ describe ProjectUpdateService do
       expect( described_class.status_for project.ids ).to eq('running')
 
       worker = Thread.new{ ProjectUpdateWorker.new.work }
-      sleep 2 
+      sleep 2
       expect( described_class.status_for project.ids ).to eq('done')
       worker.exit
     end
@@ -72,22 +72,22 @@ describe ProjectUpdateService do
       # expect( project.url ).to eq( 'https://www.heise.dem/Gemfile' )
       # expect( project.dependencies ).to_not be_empty
     end
-    it 'will update a multi file project' do 
+    it 'will update a multi file project' do
       user = UserFactory.create_new
-      gemfile = import_gemfile user 
-      expect( gemfile ).to_not be_nil 
+      gemfile = import_gemfile user
+      expect( gemfile ).to_not be_nil
 
-      podfile = import_podfile user 
+      podfile = import_podfile user
       expect( podfile ).to_not be_nil
 
-      podfile.parent_id = gemfile.ids 
+      podfile.parent_id = gemfile.ids
       expect( podfile.save ).to be_truthy
 
       rails = ProductFactory.create_for_gemfile 'rails', '3.2.6'
-      rails.save 
+      rails.save
 
-      jsonkit = ProductFactory.create_for_cocoapods 'jsonkit', '1.1.0' 
-      jsonkit.save 
+      jsonkit = ProductFactory.create_for_cocoapods 'jsonkit', '1.1.0'
+      jsonkit.save
 
       add_sv jsonkit
 
@@ -96,7 +96,7 @@ describe ProjectUpdateService do
       expect( gemfile.sv_count ).to eq(0)
       expect( gemfile.sv_count_sum ).to eq(1)
 
-      podfile.reload 
+      podfile.reload
       expect( podfile.sv_count ).to eq(1)
       expect( podfile.sv_count_sum ).to eq(1)
 
@@ -148,7 +148,7 @@ describe ProjectUpdateService do
       project.name = 'child'
       project.s3_filename = 'Gemfile'
       project.source = Project::A_SOURCE_UPLOAD
-      project.parent_id = parent.ids 
+      project.parent_id = parent.ids
       project.save.should be_truthy
       Project.count.should == 2
 
@@ -160,21 +160,21 @@ describe ProjectUpdateService do
       project.dep_number_sum.should > 0
       Project.count.should == 2
 
-      parent.reload 
+      parent.reload
       parent.dep_number.should eq(0)
-      parent.dep_number_sum.should > 0 
+      parent.dep_number_sum.should > 0
     end
   end
 
 
-  def import_gemfile user 
+  def import_gemfile user
     gemfile = "spec/fixtures/files/Gemfile"
     file_attachment = Rack::Test::UploadedFile.new(gemfile, "application/octet-stream")
     file = {'datafile' => file_attachment}
     ProjectImportService.import_from_upload file, user
   end
 
-  def import_podfile user 
+  def import_podfile user
     gemfile = "spec/fixtures/files/pod_file/example1/Podfile"
     file_attachment = Rack::Test::UploadedFile.new(gemfile, "application/octet-stream")
     file = {'datafile' => file_attachment}
@@ -183,10 +183,10 @@ describe ProjectUpdateService do
 
   def add_sv product
     sv = SecurityVulnerability.new({:language => product.language, :prod_key => product.prod_key, :summary => 'test'})
-    sv.affected_versions << product.version 
+    sv.affected_versions << product.version
     sv.save
-    version = product.version_by_number product.version 
-    version.sv_ids << sv.ids 
+    version = product.version_by_number product.version
+    version.sv_ids << sv.ids
     version.save
   end
 

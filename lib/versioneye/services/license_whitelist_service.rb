@@ -37,56 +37,56 @@ class LicenseWhitelistService < Versioneye::Service
     success
   end
 
-  def self.default user, list_name 
+  def self.default user, list_name
     list = index( user )
-    list.each do |lwl| 
+    list.each do |lwl|
       if lwl.name.eql?( list_name )
-        lwl.default = true 
-      else 
+        lwl.default = true
+      else
         lwl.default = false
       end
-      lwl.save 
-    end  
+      lwl.save
+    end
   end
 
-  
-  def self.fetch_default_id user 
+
+  def self.fetch_default_id user
     list = index( user )
-    list.each do |lwl| 
-      return lwl.id.to_s if lwl.default == true 
+    list.each do |lwl|
+      return lwl.id.to_s if lwl.default == true
     end
     nil
   end
 
 
-  def self.update_project project, user, lwl_name 
-    return false if project.nil? 
+  def self.update_project project, user, lwl_name
+    return false if project.nil?
 
     lwl = fetch_by user, lwl_name
-    lwl_id = nil 
-    lwl_id = lwl.id.to_s if lwl 
+    lwl_id = nil
+    lwl_id = lwl.id.to_s if lwl
 
     project.license_whitelist_id = lwl_id
     ProjectService.update_license_numbers! project
 
-    project.children.each do |child| 
+    project.children.each do |child|
       child.license_whitelist_id = lwl_id
-      ProjectService.update_license_numbers! child 
+      ProjectService.update_license_numbers! child
     end
-    ProjectService.update_sums project 
-    true 
-  rescue => e 
+    ProjectService.update_sums project
+    true
+  rescue => e
     log.error e.message
     log.error e.backtrace.join "\n"
-    false 
+    false
   end
 
   # Returns true if user has permission to edit lwl for enterprise
-  def self.enterprise_permission user 
-    return false if user.nil? 
-    return true  if user.admin == true  
-    return true  if user.fetch_or_create_permissions.lwl == true 
-    return false 
+  def self.enterprise_permission user
+    return false if user.nil?
+    return true  if user.admin == true
+    return true  if user.fetch_or_create_permissions.lwl == true
+    return false
   end
 
   private
@@ -114,7 +114,7 @@ class LicenseWhitelistService < Versioneye::Service
     end
 
     def self.create_for_enterprise user, name
-      return false if enterprise_permission(user) == false  
+      return false if enterprise_permission(user) == false
       create_for user, name
     end
 
@@ -125,7 +125,7 @@ class LicenseWhitelistService < Versioneye::Service
     end
 
     def self.add_license_for_enterprise user, list_name, license_name
-      return false if enterprise_permission(user) == false  
+      return false if enterprise_permission(user) == false
       license_whitelist = LicenseWhitelist.by_name( list_name ).first
       license_whitelist.add_license_element license_name
       license_whitelist.save
@@ -138,7 +138,7 @@ class LicenseWhitelistService < Versioneye::Service
     end
 
     def self.remove_license_for_enterprise user, list_name, license_name
-      return false if enterprise_permission(user) == false  
+      return false if enterprise_permission(user) == false
       license_whitelist = LicenseWhitelist.by_name( list_name ).first
       license_whitelist.remove_license_element license_name
       license_whitelist.save

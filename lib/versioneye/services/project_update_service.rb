@@ -4,7 +4,7 @@ class ProjectUpdateService < Versioneye::Service
   A_TASK_DONE    = 'done'
   A_TASK_TTL     = 420 # 420 seconds = 7 minutes
 
-  def self.update_async project, send_email = false 
+  def self.update_async project, send_email = false
     return nil if not_updateable?( project )
 
     task_key    = "task_#{project.ids}"
@@ -19,26 +19,26 @@ class ProjectUpdateService < Versioneye::Service
 
     msg = "project_#{project.ids}:::#{send_email}"
     ProjectUpdateProducer.new( msg )
-    
+
     task_status
   end
 
-  
-  def self.status_for project_id 
+
+  def self.status_for project_id
     task_key    = "task_#{project_id}"
     task_status = cache.get( task_key )
     task_status = A_TASK_DONE if task_status.to_s.empty?
     task_status
   end
 
-  
+
   def self.update project, send_email = false
     return nil if not_updateable?( project )
 
-    project = update_single project, send_email 
+    project = update_single project, send_email
     project.children.each do |child_project|
       child_project.license_whitelist_id = project.license_whitelist_id
-      child_project.save 
+      child_project.save
       update_single child_project, send_email
     end
     ProjectService.update_sums( project )
@@ -72,33 +72,33 @@ class ProjectUpdateService < Versioneye::Service
     cache.delete( project.id.to_s )
     project.update_from new_project
     project.source = Project::A_SOURCE_API if api_created
-    ProjectService.update_license_numbers! project 
+    ProjectService.update_license_numbers! project
     update_numbers project
 
     project
   end
 
 
-  private 
+  private
 
 
-    def self.update_numbers project 
+    def self.update_numbers project
       if !project.parent_id.to_s.empty?
-        ProjectService.update_sums project.parent 
-      else 
-        ProjectService.update_sums project 
+        ProjectService.update_sums project.parent
+      else
+        ProjectService.update_sums project
       end
-    rescue => e 
+    rescue => e
       log.error e.message
-      log.error e.backtrace.join("\n")  
+      log.error e.backtrace.join("\n")
     end
 
 
     def self.not_updateable?( project )
       return true if project.nil?
       return true if project.user_id.nil? || project.user.nil?
-      return true if project.user.deleted_user == true  
-      return false 
+      return true if project.user.deleted_user == true
+      return false
     end
 
 

@@ -21,18 +21,18 @@ describe ProjectdependencyService do
       dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.version_current   = @product.version
       dep.version_requested = @product.version
-      dep.save 
+      dep.save
       Projectdependency.count.should eq(1)
       @project.dependencies.count.should eq(1)
-      
-      license = LicenseFactory.create_new @product, "MIT"
-      license.save 
-      dep.license_caches.should be_empty 
 
-      ProjectdependencyService.update_licenses @project 
+      license = LicenseFactory.create_new @product, "MIT"
+      license.save
+      dep.license_caches.should be_empty
+
+      ProjectdependencyService.update_licenses @project
 
       dep = Projectdependency.first
-      dep.license_caches.should_not be_empty 
+      dep.license_caches.should_not be_empty
       dep.license_caches.count.should eq(1)
       dep.license_caches.first.name.should eq('MIT')
     end
@@ -48,27 +48,27 @@ describe ProjectdependencyService do
       expect( dep.save ).to be_truthy
       expect( Projectdependency.count ).to eq(1)
       expect( @project.dependencies.count ).to eq(1)
-      
+
       sv = SecurityVulnerability.new({:language => @product.language, :prod_key => @product.prod_key, :summary => 'test'})
-      sv.affected_versions << @product.version 
+      sv.affected_versions << @product.version
       expect( sv.save ).to be_truthy
-      
-      version = @product.version_by_number @product.version 
-      version.sv_ids << sv._id.to_s 
+
+      version = @product.version_by_number @product.version
+      version.sv_ids << sv._id.to_s
       expect( version.save).to be_truthy
       expect( @project.sv_count).to eq(0)
 
-      ProjectdependencyService.update_security @project 
+      ProjectdependencyService.update_security @project
 
       expect( @project.sv_count).to eq(1)
       dep = Projectdependency.first
-      expect( dep.sv_ids).to_not be_empty 
+      expect( dep.sv_ids).to_not be_empty
       expect( dep.sv_ids.count ).to eq(1)
       expect( dep.sv_ids.first.to_s).to eq( sv._id.to_s )
 
-      # After the 2nd checking the sv_count still should be 1. 
-      # Testing that the count gets resettet before checking. 
-      ProjectdependencyService.update_security @project 
+      # After the 2nd checking the sv_count still should be 1.
+      # Testing that the count gets resettet before checking.
+      ProjectdependencyService.update_security @project
       expect( @project.sv_count).to eq(1)
       dep = Projectdependency.first
       expect( dep.sv_ids.count ).to eq(1)
@@ -333,29 +333,29 @@ describe ProjectdependencyService do
     end
 
     it 'does mute like expected on a single file project' do
-      user    = UserFactory.create_new 45 
+      user    = UserFactory.create_new 45
       expect( user.save ).to be_truthy
 
       project = ProjectFactory.create_new( user )
-      project.source = Project::A_SOURCE_UPLOAD 
+      project.source = Project::A_SOURCE_UPLOAD
       expect( project.save ).to be_truthy
-      
+
       product = ProductFactory.create_for_gemfile 'rails', '1.0.0'
       expect( product.save ).to be_truthy
-      
+
       dependency = ProjectdependencyFactory.create_new(project, product)
-      dependency.project_id = project.ids 
+      dependency.project_id = project.ids
       dependency.version_label = '0.9.0'
       dependency.version_requested = '0.9.0'
       dependency.version_current = '0.9.0'
-      dependency.outdated = true 
+      dependency.outdated = true
       expect( dependency.save ).to be_truthy
       expect( dependency.muted ).to be_falsey
       expect( dependency.outdated ).to be_truthy
       expect( ProjectService.outdated?(project) ).to be_truthy
 
-      project = ProjectUpdateService.update project  
-      expect( project ).to_not be_nil 
+      project = ProjectUpdateService.update project
+      expect( project ).to_not be_nil
       expect( project.dependencies.count ).to eq(1)
       expect( project.dep_number ).to eq(1)
       expect( project.out_number ).to eq(1)
@@ -365,7 +365,7 @@ describe ProjectdependencyService do
       dependency.reload
       expect( dependency.muted ).to be_truthy
       expect( dependency.outdated ).to be_falsey
-      project.reload 
+      project.reload
       expect( project.out_number ).to eq(0)
       expect( project.out_number_sum ).to eq(0)
       expect( ProjectService.outdated?(project) ).to be_falsey
@@ -374,7 +374,7 @@ describe ProjectdependencyService do
       dependency.reload
       expect( dependency.muted ).to be_falsey
       expect( dependency.outdated ).to be_truthy
-      project.reload 
+      project.reload
       expect( project.out_number ).to eq(1)
       expect( project.out_number_sum ).to eq(1)
       expect( ProjectService.outdated?(project) ).to be_truthy
@@ -385,28 +385,28 @@ describe ProjectdependencyService do
       expect( user.save ).to be_truthy
 
       project = ProjectFactory.create_new( user )
-      project.source = Project::A_SOURCE_UPLOAD 
+      project.source = Project::A_SOURCE_UPLOAD
       expect( project.save ).to be_truthy
 
       project2 = ProjectFactory.create_new( user, nil, false )
-      project2.source = Project::A_SOURCE_UPLOAD 
+      project2.source = Project::A_SOURCE_UPLOAD
       expect( project2.save ).to be_truthy
 
-      project2.parent_id = project.ids 
+      project2.parent_id = project.ids
       expect( project2.save ).to be_truthy
-      
+
       product = ProductFactory.create_for_gemfile 'rails', '1.0.0'
       expect( product.save ).to be_truthy
 
       mongoid = ProductFactory.create_for_gemfile 'mongoid', '4.0.0'
       expect( mongoid.save ).to be_truthy
-      
+
       dependency = ProjectdependencyFactory.create_new(project, product)
-      dependency.project_id = project.ids 
+      dependency.project_id = project.ids
       dependency.version_label = '0.9.0'
       dependency.version_requested = '0.9.0'
       dependency.version_current = '0.9.0'
-      dependency.outdated = true 
+      dependency.outdated = true
       expect( dependency.save ).to be_truthy
       expect( dependency.muted ).to be_falsey
       expect( dependency.outdated ).to be_truthy
@@ -414,11 +414,11 @@ describe ProjectdependencyService do
       expect( project.dependencies.count ).to eq(1)
 
       dependency2 = ProjectdependencyFactory.create_new( project2, mongoid )
-      dependency2.project_id = project2.ids 
+      dependency2.project_id = project2.ids
       dependency2.version_label = '0.9.0'
       dependency2.version_requested = '0.9.0'
       dependency2.version_current = '4.0.0'
-      dependency2.outdated = true 
+      dependency2.outdated = true
       expect( dependency2.save ).to be_truthy
       expect( dependency2.muted ).to be_falsey
       expect( dependency2.outdated ).to be_truthy
@@ -428,18 +428,18 @@ describe ProjectdependencyService do
       expect( project.dependencies.count ).to eq(1)
 
 
-      project2 = ProjectUpdateService.update project2  
-      expect( project2 ).to_not be_nil 
-      
+      project2 = ProjectUpdateService.update project2
+      expect( project2 ).to_not be_nil
+
       expect( project2.dependencies.count ).to eq(1)
       expect( project2.dep_number ).to eq(1)
       expect( project2.out_number ).to eq(1)
       expect( project2.out_number_sum ).to eq(1)
 
 
-      project = ProjectUpdateService.update project  
-      expect( project ).to_not be_nil 
-      
+      project = ProjectUpdateService.update project
+      expect( project ).to_not be_nil
+
       expect( project.dependencies.count ).to eq(1)
       expect( project.dep_number ).to eq(1)
       expect( project.out_number ).to eq(1)
@@ -450,12 +450,12 @@ describe ProjectdependencyService do
       dependency2.reload
       expect( dependency2.muted ).to be_truthy
       expect( dependency2.outdated ).to be_falsey
-      project2.reload 
+      project2.reload
       expect( project2.out_number ).to eq(0)
       expect( project2.out_number_sum ).to eq(0)
       expect( ProjectService.outdated?(project2) ).to be_falsey
 
-      project.reload 
+      project.reload
       expect( project.out_number ).to eq(1)
       expect( project.out_number_sum ).to eq(1)
       expect( ProjectService.outdated?(project) ).to be_truthy
@@ -464,7 +464,7 @@ describe ProjectdependencyService do
       dependency.reload
       expect( dependency.muted ).to be_falsey
       expect( dependency.outdated ).to be_truthy
-      project2.reload 
+      project2.reload
       expect( project2.out_number ).to eq(1)
       expect( project2.out_number_sum ).to eq(1)
       expect( ProjectService.outdated?(project2) ).to be_truthy

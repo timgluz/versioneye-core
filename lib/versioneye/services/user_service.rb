@@ -1,6 +1,6 @@
 class UserService < Versioneye::Service
 
-  
+
   def self.search(term)
     EsUser.search( term )
   rescue => e
@@ -9,7 +9,7 @@ class UserService < Versioneye::Service
     return []
   end
 
-  
+
   def self.valid_user?(user, flash)
     unless User.email_valid?(user.email)
       flash[:error] = 'page_signup_error_email'
@@ -28,7 +28,7 @@ class UserService < Versioneye::Service
     true
   end
 
-  
+
   def self.reset_password user
     random_value = create_random_value
     user.password = random_value # prevents using old password
@@ -38,7 +38,7 @@ class UserService < Versioneye::Service
     UserMailer.reset_password( user ).deliver_now
   end
 
-  
+
   def self.delete user, why = nil
     NotificationService.remove_notifications user
     collaborators = ProjectCollaborator.by_user user
@@ -74,12 +74,12 @@ class UserService < Versioneye::Service
     user.products.clear
     if user.save
       notify_rob( user, why )
-      return true 
+      return true
     end
-    false 
+    false
   end
 
-  
+
   def self.active_users
     User.all.select do |user|
       ( (!user['product_ids'].nil? && user['product_ids'].count > 0) or
@@ -89,7 +89,7 @@ class UserService < Versioneye::Service
     end
   end
 
-  
+
   def self.update_languages
     User.all.each do |user|
       products = user.products
@@ -106,7 +106,7 @@ class UserService < Versioneye::Service
     false
   end
 
-  
+
   def self.all_users_paged
     count = User.count()
     page = 100
@@ -128,22 +128,22 @@ class UserService < Versioneye::Service
     log.error e.backtrace.join("\n")
   end
 
-  
+
   private
 
-    def self.notify_rob user, why 
+    def self.notify_rob user, why
       UserMailer.deleted( user, why ).deliver_now
-    rescue => e 
+    rescue => e
       log.error e.message
-      log.error e.backtrace.join("\n")  
+      log.error e.backtrace.join("\n")
     end
 
-  
+
     def self.create_random_token(length = 25)
       SecureRandom.urlsafe_base64(length)
     end
 
-  
+
     def self.create_random_value
       chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
       value = ''

@@ -2,7 +2,7 @@ class ProjectService < Versioneye::Service
 
   def self.type_by_filename filename
     return nil if filename.to_s.empty?
-    return nil if filename.to_s.match(/\/node_modules\//) # Skip workirectory of NPM. 
+    return nil if filename.to_s.match(/\/node_modules\//) # Skip workirectory of NPM.
 
     trimmed_name = filename.split('?')[0]
     return Project::A_TYPE_RUBYGEMS  if (!(/Gemfile\z/ =~ trimmed_name).nil?)        or (!(/Gemfile.lock\z/  =~ trimmed_name).nil?)
@@ -19,7 +19,7 @@ class ProjectService < Versioneye::Service
     return nil
   end
 
-  
+
   def self.corresponding_file filename
     return nil if filename.to_s.empty?
     trimmed_name = filename.split('?')[0]
@@ -29,25 +29,25 @@ class ProjectService < Versioneye::Service
     return nil
   end
 
-  
+
   def self.index( user, filter = {}, sort = nil)
     filter_options            = {:parent_id => nil}
     filter_options[:language] = filter[:language]  if filter[:language] && !filter[:language].to_s.eql?('ALL')
     filter_options[:name]     = /#{filter[:name]}/i if filter[:name] && !filter[:name].to_s.strip.empty?
     if filter[:scope].to_s == 'all_public'
-      filter_options[:public] = true 
-    elsif filter[:scope].to_s == 'all' && user.admin == true 
+      filter_options[:public] = true
+    elsif filter[:scope].to_s == 'all' && user.admin == true
       # Do nothing. Admin can see ALL projects
-    else 
-      filter_options[:user_id] = user.ids 
+    else
+      filter_options[:user_id] = user.ids
     end
 
     case sort
-    when 'out_dated' 
+    when 'out_dated'
       Project.where( filter_options ).desc(:out_number_sum).asc(:name_downcase)
     when 'license_violations'
       Project.where( filter_options ).desc(:licenses_red_sum).asc(:name_downcase)
-    else 
+    else
       Project.where( filter_options ).asc(:name_downcase).desc(:licenses_red_sum)
     end
   end
@@ -60,7 +60,7 @@ class ProjectService < Versioneye::Service
     nil
   end
 
-  
+
   def self.find_child parent_id, child_id
     Project.where( :id => child_id, :parent_id => parent_id ).first
   rescue => e
@@ -69,54 +69,54 @@ class ProjectService < Versioneye::Service
   end
 
 
-  def self.summary project_id 
+  def self.summary project_id
     map = {}
     project = find project_id
-    summary_single project, map 
-    project.children.each do |child| 
+    summary_single project, map
+    project.children.each do |child|
       summary_single child, map
     end
     Hash[map.sort_by {|dep| -dep.last[:dependencies].count}]
   end
 
   def self.summary_single project, map = {}
-    name = project.filename 
-    name = project.name if name.to_s.empty? 
-    map[project.ids] = {:id => project.ids, 
-      :name => name, 
-      :dep_number => project.dep_number, 
-      :dep_number_sum => project.dep_number, 
-      :out_number => project.out_number, 
-      :out_number_sum => project.out_number, 
-      :unknown_number => project.unknown_number, 
-      :unknown_number_sum => project.unknown_number, 
+    name = project.filename
+    name = project.name if name.to_s.empty?
+    map[project.ids] = {:id => project.ids,
+      :name => name,
+      :dep_number => project.dep_number,
+      :dep_number_sum => project.dep_number,
+      :out_number => project.out_number,
+      :out_number_sum => project.out_number,
+      :unknown_number => project.unknown_number,
+      :unknown_number_sum => project.unknown_number,
       :muted_dependencies_count => project.muted_dependencies_count,
-      :licenses_red => project.licenses_red, 
-      :licenses_red_sum => project.licenses_red_sum, 
-      :licenses_unknown => project.licenses_unknown, 
+      :licenses_red => project.licenses_red,
+      :licenses_red_sum => project.licenses_red_sum,
+      :licenses_unknown => project.licenses_unknown,
       :licenses_unknown_sum => project.licenses_unknown_sum,
-      :sv_count => project.sv_count, 
-      :sv_count_sum => project.sv_count_sum, 
-      :dependencies => [], 
-      :licenses => [], 
+      :sv_count => project.sv_count,
+      :sv_count_sum => project.sv_count_sum,
+      :dependencies => [],
+      :licenses => [],
       :sv => [] }
-    
+
     Projectdependency.any_of(
-      {:project_id => project.ids, :outdated => true}, 
-      {:project_id => project.ids, :prod_key => nil} ).each do |dep| 
-      map[project.ids][:dependencies].push dep 
+      {:project_id => project.ids, :outdated => true},
+      {:project_id => project.ids, :prod_key => nil} ).each do |dep|
+      map[project.ids][:dependencies].push dep
     end
 
-    Projectdependency.any_of( 
+    Projectdependency.any_of(
       {:project_id => project.ids, :lwl_violation => 'true'},
-      {:project_id => project.ids, :license_caches => nil}, 
-      {:project_id => project.ids, :license_caches.with_size => 0} ).each do |dep| 
-      map[project.ids][:licenses].push dep 
+      {:project_id => project.ids, :license_caches => nil},
+      {:project_id => project.ids, :license_caches.with_size => 0} ).each do |dep|
+      map[project.ids][:licenses].push dep
     end
-    
-    fill_sv project, map 
 
-    map 
+    fill_sv project, map
+
+    map
   end
 
 
@@ -130,14 +130,14 @@ class ProjectService < Versioneye::Service
     ensure_unique_ga( project )
     ensure_unique_scm( project )
 
-    default_lwl_id = LicenseWhitelistService.fetch_default_id project.user 
+    default_lwl_id = LicenseWhitelistService.fetch_default_id project.user
     project.license_whitelist_id = default_lwl_id
     project.make_project_key!
     if project.save
       project.save_dependencies
       update_license_numbers!( project )
       ProjectdependencyService.update_security project
-      SyncService.sync_project_async project # For Enterprise environment only! 
+      SyncService.sync_project_async project # For Enterprise environment only!
     else
       err_msg = "Can't save project: #{project.errors.full_messages.to_json}"
       log.error err_msg
@@ -147,12 +147,12 @@ class ProjectService < Versioneye::Service
   end
 
 
-  def self.ensure_unique_ga project 
-    return true if Settings.instance.projects_unique_ga == false 
-    return true if project.group_id.to_s.empty? && project.artifact_id.to_s.empty? 
-    
-    project = Project.find_by_ga( project.group_id, project.artifact_id )    
-    return true if project.nil? 
+  def self.ensure_unique_ga project
+    return true if Settings.instance.projects_unique_ga == false
+    return true if project.group_id.to_s.empty? && project.artifact_id.to_s.empty?
+
+    project = Project.find_by_ga( project.group_id, project.artifact_id )
+    return true if project.nil?
 
     err_msg = "A project with same GroupId and ArtifactId exist already. Project ID: #{project.id.to_s}"
     log.error err_msg
@@ -160,101 +160,101 @@ class ProjectService < Versioneye::Service
   end
 
 
-  def self.ensure_unique_scm project 
-    return true if Settings.instance.projects_unique_scm == false 
+  def self.ensure_unique_scm project
+    return true if Settings.instance.projects_unique_scm == false
     return true if project.scm_fullname.to_s.empty?
-    
+
     project = Project.where(:source => project.source, :scm_fullname => project.scm_fullname, :scm_branch => project.scm_branch, :s3_filename => project.s3_filename).first
-    return true if project.nil? 
+    return true if project.nil?
 
     err_msg = "The project file is already monitored by VersionEye. Project ID: #{project.id.to_s}"
     log.error err_msg
     raise err_msg
   end
 
-  
+
   def self.merge_by_ga group_id, artifact_id, subproject_id, user_id
     parent = Project.by_user_id(user_id).find_by_ga(group_id, artifact_id)
     resp = merge( parent.id.to_s, subproject_id, user_id )
     update_sums parent
-    resp 
+    resp
   end
 
 
-  def self.merge project_id, subproject_id, user_id 
+  def self.merge project_id, subproject_id, user_id
     project    = find project_id
-    subproject = find subproject_id 
-    return false if project.nil? || subproject.nil?  
+    subproject = find subproject_id
+    return false if project.nil? || subproject.nil?
     return false if subproject.parent_id        # subproject has already a parent project!
     return false if project.parent_id           # project is already a subproject!
     return false if !subproject.children.empty? # subproject is a parent project!
-    return false if project.id.to_s.eql?(subproject.id.to_s) # project & subproject are the same! 
+    return false if project.id.to_s.eql?(subproject.id.to_s) # project & subproject are the same!
 
     user = User.find user_id
-    return false if user.nil? 
-    
+    return false if user.nil?
+
     if !project.collaborator?(user)
       raise "User has no permission to merge this project!"
     end
 
-    subproject.parent_id = project.id 
+    subproject.parent_id = project.id
     subproject.license_whitelist_id = project.license_whitelist_id
     subproject.save
 
     reset_badge project
     reset_badge subproject
 
-    ProjectUpdateService.update_async project 
-    true 
+    ProjectUpdateService.update_async project
+    true
   end
 
 
-  def self.unmerge project_id, subproject_id, user_id 
+  def self.unmerge project_id, subproject_id, user_id
     project    = find project_id
     subproject = Project.where( :id => subproject_id, :parent_id => project_id ).first
-    return false if project.nil? || subproject.nil? 
+    return false if project.nil? || subproject.nil?
 
     user = User.find user_id
-    return false if user.nil? 
-    
+    return false if user.nil?
+
     if !project.collaborator?(user)
       raise "User has no permission to unmerge this project!"
     end
 
-    subproject.parent_id = nil 
-    subproject.save 
+    subproject.parent_id = nil
+    subproject.save
 
     reset_badge project
     reset_badge subproject
 
-    ProjectUpdateService.update_async project 
-    ProjectUpdateService.update_async subproject 
-    true 
+    ProjectUpdateService.update_async project
+    ProjectUpdateService.update_async subproject
+    true
   end
 
 
   def self.destroy_by user, project_id
     project = Project.find_by_id( project_id )
     return false if project.nil?
-    
-    if project.collaborator?( user ) || user.admin == true 
-      destroy project 
-    else 
+
+    if project.collaborator?( user ) || user.admin == true
+      destroy project
+    else
       raise "User has no permission to delete this project!"
     end
   end
 
-  
+
   def self.destroy project
-    return false if project.nil?  
-    
-    project.children.each do |child_project| 
-      destroy_single child_project.id 
+    return false if project.nil?
+
+    project.children.each do |child_project|
+      destroy_single child_project.id
     end
     destroy_single project.id
   end
 
-  
+
   def self.destroy_single project_id
     project = Project.find_by_id( project_id )
     return false if project.nil?
@@ -314,11 +314,11 @@ class ProjectService < Versioneye::Service
 
   def self.insecure_single?( project )
     return false if project.language.eql?(Product::A_LANGUAGE_PHP) && !project.filename.eql?('composer.lock')
-    
+
     project.projectdependencies.each do |dep|
       return true if !dep.sv_ids.to_a.empty?
     end
-    return false 
+    return false
   end
 
 
@@ -403,64 +403,64 @@ class ProjectService < Versioneye::Service
 
 
   def self.update_sums( project )
-    return if project.nil? 
+    return if project.nil?
 
-    if project.children.empty? 
+    if project.children.empty?
       project.sum_own!
-      return nil 
+      return nil
     end
 
     dep_hash = {}
     project.sum_reset!
-    project.children.each do |child_project| 
+    project.children.each do |child_project|
       update_numbers_for project, child_project, dep_hash
       child_project.sum_own!
     end
     update_numbers_for project, project, dep_hash
-    project.save 
-    project 
+    project.save
+    project
   end
 
 
-  def self.reset_badge project 
+  def self.reset_badge project
     cache.delete project.id.to_s
     Badge.where(:key => project.id.to_s ).delete
   end
 
-  
-  private 
 
-    # TODO optimize this by only loading affected deps. 
-    def self.fill_sv project, map 
+  private
+
+    # TODO optimize this by only loading affected deps.
+    def self.fill_sv project, map
       # id = Moped::BSON::ObjectId.from_string(project.ids)
-      # id = project.ids 
+      # id = project.ids
       # deps = Projectdependency.collection.find(:project_id => id, 'sv_ids' => {'$not' => {'$size' => 0} } )
       deps = Projectdependency.where(:project_id => project.ids )
-      deps.each do |dep| 
-        map[project.ids][:sv].push dep if !dep.sv_ids.empty? 
+      deps.each do |dep|
+        map[project.ids][:sv].push dep if !dep.sv_ids.empty?
       end
-    rescue => e 
+    rescue => e
       log.error e.message
       log.error e.backtrace.join("\n")
     end
 
-  
+
     def self.update_numbers_for project, child_project, dep_hash = {}
       lwl = project.license_whitelist
-      child_project.projectdependencies.each do |dep| 
+      child_project.projectdependencies.each do |dep|
         key = "#{dep.language}:#{dep.possible_prod_key}:#{dep.version_requested}"
         next if dep_hash.include? key
 
         product = dep.product
         dep_hash[key] = dep
-        project.dep_number_sum       += 1 
-        project.out_number_sum       += 1 if dep.outdated 
-        project.unknown_number_sum   += 1 if dep.unknown? 
+        project.dep_number_sum       += 1
+        project.out_number_sum       += 1 if dep.outdated
+        project.unknown_number_sum   += 1 if dep.unknown?
         project.licenses_unknown_sum += 1 if product.nil? || product.licenses.nil? || product.licenses.empty?
         if lwl && red_license?( dep, lwl )
-          project.licenses_red_sum += 1 
+          project.licenses_red_sum += 1
         end
-        project.sv_count_sum += dep.sv_ids.count if !dep.sv_ids.empty? 
+        project.sv_count_sum += dep.sv_ids.count if !dep.sv_ids.empty?
       end
       dep_hash
     end
@@ -469,34 +469,34 @@ class ProjectService < Versioneye::Service
     def self.red_license? projectdependency, whitelist
       lcs = projectdependency.license_caches
       return false if lcs.nil? || lcs.empty?
-      
-      if whitelist.pessimistic_mode == true 
+
+      if whitelist.pessimistic_mode == true
         lcs.each do |lc|
           return true if lc.on_whitelist == false
         end
         return false
       else
         lcs.each do |lc|
-          return false if lc.on_whitelist == true 
-        end 
-        return true 
+          return false if lc.on_whitelist == true
+        end
+        return true
       end
     end
 
 
     def self.on_whitelist?( licenses, whitelist )
-      if whitelist.pessimistic_mode == true 
+      if whitelist.pessimistic_mode == true
         licenses.each do |license|
           on_whitelist = whitelist.include_license_substitute?( license.name_substitute )
-          return false if on_whitelist == false 
-        end  
-        return true 
+          return false if on_whitelist == false
+        end
+        return true
       else
         licenses.each do |license|
           on_whitelist = whitelist.include_license_substitute?( license.name_substitute )
           return true if on_whitelist
         end
-        return false 
+        return false
       end
     end
 

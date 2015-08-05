@@ -13,34 +13,34 @@ class ProjectImportService < Versioneye::Service
   def self.import_from_github_multi user, repo_name, filename, branch = 'master'
     private_project = Github.private_repo? user.github_token, repo_name
     check_permission_for_github_repo user, repo_name, private_project
-    
+
     project = import_from_github user, repo_name, filename, branch, false, private_project
-    
+
     lock_file = ProjectService.corresponding_file filename
     if lock_file
       key = "github_child:::#{user.username}:::#{repo_name}:::#{lock_file}:::#{branch}:::#{project.id}"
       GitRepoFileImportProducer.new( key )
     end
-    
+
     ProjectService.update_sums( project )
     project
   end
 
-  def self.import_child_from_github user, repo_name, lock_file, branch, project 
-    child = import_from_github user, repo_name, lock_file, branch, false 
+  def self.import_child_from_github user, repo_name, lock_file, branch, project
+    child = import_from_github user, repo_name, lock_file, branch, false
     child.parent_id = project.id.to_s
     child.save
     ProjectService.update_sums( child.parent )
-    child 
-  rescue => e 
+    child
+  rescue => e
     log.error e.message
   end
 
-  def self.import_from_github user, repo_name, filename, branch = 'master', check_permission = true, private_project = nil 
+  def self.import_from_github user, repo_name, filename, branch = 'master', check_permission = true, private_project = nil
     if private_project.nil?
-      private_project = Github.private_repo? user.github_token, repo_name 
-    end 
-    if check_permission 
+      private_project = Github.private_repo? user.github_token, repo_name
+    end
+    if check_permission
       check_permission_for_github_repo user, repo_name, private_project
     end
 
@@ -69,7 +69,7 @@ class ProjectImportService < Versioneye::Service
       public: Settings.instance.default_project_public
     })
 
-    ProjectService.store( project ) 
+    ProjectService.store( project )
   end
 
 
@@ -84,13 +84,13 @@ class ProjectImportService < Versioneye::Service
     check_permission_for_bitbucket_repo user, private_project
 
     project = import_from_bitbucket user, repo_name, filename, branch, false, repo
-    
+
     lock_file = ProjectService.corresponding_file filename
     if lock_file
       key = "bitbucket_child:::#{user.username}:::#{repo_name}:::#{lock_file}:::#{branch}:::#{project.id}"
       GitRepoFileImportProducer.new( key )
     end
-    
+
     ProjectService.update_sums( project )
     project
   end
@@ -100,15 +100,15 @@ class ProjectImportService < Versioneye::Service
     child.parent_id = project.id.to_s
     child.save
     ProjectService.update_sums( project )
-    child 
-  rescue => e 
+    child
+  rescue => e
     log.error e.message
   end
 
   def self.import_from_bitbucket(user, repo_name, filename, branch = "master", check_permission = true, repo = nil)
     if repo.nil?
       repo = BitbucketRepo.by_user(user).by_fullname(repo_name).shift
-    end 
+    end
     private_project = repo[:private]
 
     if check_permission
@@ -169,7 +169,7 @@ class ProjectImportService < Versioneye::Service
     child = import_from_stash user, repo_name, lock_file, branch
     child.parent_id = project.id.to_s
     child.save
-  rescue => e 
+  rescue => e
     log.error e.message
   end
 
@@ -253,22 +253,22 @@ class ProjectImportService < Versioneye::Service
   end
 
 
-  def self.check_permission_for_github_repo user, repo_name, private_project = nil 
-    if private_project.nil? 
+  def self.check_permission_for_github_repo user, repo_name, private_project = nil
+    if private_project.nil?
       private_project = Github.private_repo? user.github_token, repo_name
     end
-    if allowed_to_add_project?(user, private_project) == false 
+    if allowed_to_add_project?(user, private_project) == false
       raise "The selected project file is in a private repository. Please upgrade your plan to monitor the selected project."
     end
-    true 
+    true
   end
 
 
-  def self.check_permission_for_bitbucket_repo user, private_project 
-    if allowed_to_add_project?(user, private_project) == false 
+  def self.check_permission_for_bitbucket_repo user, private_project
+    if allowed_to_add_project?(user, private_project) == false
       raise "The selected project file is in a private repository. Please upgrade your plan to monitor the selected project."
     end
-    true 
+    true
   end
 
 
@@ -281,18 +281,18 @@ class ProjectImportService < Versioneye::Service
 
   def self.task_status( key )
     task_status = cache.get( key )
-    if task_status && 
-      ( task_status.to_s == A_TASK_RUNNING || 
-        task_status.to_s.match(/\Adone_/)  || 
+    if task_status &&
+      ( task_status.to_s == A_TASK_RUNNING ||
+        task_status.to_s.match(/\Adone_/)  ||
         task_status.to_s.match(/\Aerror_/) )
       log.debug "status for #{key} is #{task_status}"
       return task_status
     end
-  
+
     task_status = A_TASK_RUNNING
     cache.set( key, task_status, A_TASK_TTL )
-    
-    yield 
+
+    yield
 
     task_status
   end

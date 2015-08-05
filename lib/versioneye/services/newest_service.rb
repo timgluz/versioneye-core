@@ -18,7 +18,7 @@ class NewestService < Versioneye::Service
     false
   end
 
-  
+
   def self.create_notifications(product, version_number, logger = nil)
     new_notifications = 0
     subscribers = product.users
@@ -48,16 +48,16 @@ class NewestService < Versioneye::Service
 
 
   def self.run_worker
-    loop do 
+    loop do
       post_process
-      update_nils      
+      update_nils
       multi_log "sleep for a while"
       sleep 60
     end
   end
 
 
-  def self.update_nils 
+  def self.update_nils
     Dependency.where(:current_version => nil, :dep_prod_key.ne => nil, :known => true).each do |dep|
       DependencyService.outdated?( dep )
       multi_log "update #{dep.language}:#{dep.dep_prod_key}"
@@ -67,19 +67,19 @@ class NewestService < Versioneye::Service
 
   def self.post_process
     newests = Newest.any_of( {:processed => false}, {:processed => nil} )
-    newests.each do |newest| 
-      process newest 
+    newests.each do |newest|
+      process newest
     end
   end
 
-  
-  def self.process newest 
-    product = newest.product 
-    return nil if product.nil? 
+
+  def self.process newest
+    product = newest.product
+    return nil if product.nil?
 
     multi_log "---"
     multi_log "update_meta_data for #{product.language}:#{product.prod_key}"
-    ProductService.update_meta_data product, false 
+    ProductService.update_meta_data product, false
 
     multi_log "update_dependencies for #{product.language}:#{product.prod_key}"
     update_dependencies product, newest.version
@@ -87,8 +87,8 @@ class NewestService < Versioneye::Service
     multi_log "update_projectdependencies for #{product.language}:#{product.prod_key}"
     update_projectdependencies product, newest.version
 
-    newest.processed = true 
-    newest.save 
+    newest.processed = true
+    newest.save
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
@@ -99,9 +99,9 @@ class NewestService < Versioneye::Service
     if !product.group_id.to_s.empty? && !product.artifact_id.to_s.empty?
       update_current_version_maven product
       update_outdated_maven( product )
-    else 
-      update_current_version( product ) 
-      update_outdated( product ) 
+    else
+      update_current_version( product )
+      update_outdated( product )
     end
     multi_log "update product dependencies for #{product.language}:#{product.prod_key}:#{version}"
     DependencyService.update_dependencies product, version
@@ -110,29 +110,29 @@ class NewestService < Versioneye::Service
     log.error e.backtrace.join("\n")
   end
 
-  
-  def self.update_current_version_maven product 
+
+  def self.update_current_version_maven product
     multi_log "update_current_version_maven for #{product.language}:#{product.prod_key}"
     Dependency.where(
-      :group_id => product.group_id, 
+      :group_id => product.group_id,
       :artifact_id => product.artifact_id
       ).update_all(:current_version => product.version)
   end
 
-  
-  def self.update_current_version product 
+
+  def self.update_current_version product
     multi_log "update_current_version for #{product.language}:#{product.prod_key}"
     Dependency.where(
-      :language => product.language, 
+      :language => product.language,
       :dep_prod_key => product.prod_key
       ).update_all(:current_version => product.version)
   end
 
 
-  def self.update_outdated_maven product 
+  def self.update_outdated_maven product
     multi_log "update_outdated_maven for #{product.language}:#{product.prod_key}"
     dependencies = Dependency.where(
-      :group_id => product.group_id, 
+      :group_id => product.group_id,
       :artifact_id => product.artifact_id)
     dependencies.each do |dependency|
       DependencyService.soft_outdated?( dependency, product )
@@ -140,10 +140,10 @@ class NewestService < Versioneye::Service
   end
 
 
-  def self.update_outdated product 
+  def self.update_outdated product
     multi_log "update_outdated for #{product.language}:#{product.prod_key}"
     dependencies = Dependency.where(
-      :language => product.language, 
+      :language => product.language,
       :dep_prod_key => product.prod_key)
     dependencies.each do |dependency|
       DependencyService.soft_outdated?( dependency, product )
@@ -155,24 +155,24 @@ class NewestService < Versioneye::Service
     if !product.group_id.to_s.empty? && !product.artifact_id.to_s.empty?
       update_current_version_maven_pd product
       update_outdated_maven_pd( product )
-    else 
+    else
       update_current_for_pd product
-      update_outdated_pd product 
+      update_outdated_pd product
     end
   end
 
-  def self.update_current_version_maven_pd product 
+  def self.update_current_version_maven_pd product
     multi_log "update_current_version_maven for #{product.language}:#{product.prod_key}"
     Projectdependency.where(
-      :group_id => product.group_id, 
+      :group_id => product.group_id,
       :artifact_id => product.artifact_id
       ).update_all(:version_current => product.version)
   end
 
-  def self.update_outdated_maven_pd product 
+  def self.update_outdated_maven_pd product
     multi_log "update_outdated_maven for #{product.language}:#{product.prod_key}"
     dependencies = Projectdependency.where(
-      :group_id => product.group_id, 
+      :group_id => product.group_id,
       :artifact_id => product.artifact_id)
     dependencies.each do |dependency|
       ProjectdependencyService.update_outdated!( dependency )
@@ -182,14 +182,14 @@ class NewestService < Versioneye::Service
 
   def self.update_current_for_pd product
     Projectdependency.where(
-      :language => product.language, 
+      :language => product.language,
       :prod_key => product.prod_key
       ).update_all(:version_current => product.version)
   end
 
-  def self.update_outdated_pd product 
+  def self.update_outdated_pd product
     dependencies = Projectdependency.where(
-      :language => product.language, 
+      :language => product.language,
       :prod_key => product.prod_key)
     dependencies.each do |dependency|
       ProjectdependencyService.update_outdated!( dependency )
@@ -198,12 +198,12 @@ class NewestService < Versioneye::Service
   end
 
 
-  private 
+  private
 
 
-    def self.multi_log msg 
-      p msg 
-      log.info msg 
+    def self.multi_log msg
+      p msg
+      log.info msg
     end
 
 

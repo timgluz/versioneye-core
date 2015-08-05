@@ -2,7 +2,7 @@ class NewsletterService < Versioneye::Service
 
 
   def self.send_newsletter_features
-    count = 0    
+    count = 0
     UserService.all_users_paged do |users|
       users.each do |user|
         next if user.deleted_user || user.email_inactive

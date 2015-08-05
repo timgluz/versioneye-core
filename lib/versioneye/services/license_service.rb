@@ -26,11 +26,11 @@ class LicenseService < Versioneye::Service
 
 
   def self.import_from_properties_file file_path
-    z = 0 
+    z = 0
     content = File.read(file_path)
     content.split("\n").each do |line|
-      next if line.to_s.empty? 
-      
+      next if line.to_s.empty?
+
       sps = line.split("=")
       gav = sps[0]
       lic = sps[1]
@@ -40,19 +40,19 @@ class LicenseService < Versioneye::Service
       license_link = lic.split("|")[1]
       # p "#{group_id}:#{artifact_id} - #{license_name} - #{license_link}"
       product = Product.find_by_group_and_artifact group_id.downcase, artifact_id.downcase
-      if product 
-        z +=1 
+      if product
+        z +=1
         p "#{z} - #{license_name} - #{group_id}:#{artifact_id} - #{license_link}"
 
-        product.versions.each do |version| 
-          product.version = version.to_s 
-          next if !product.licenses.empty? 
+        product.versions.each do |version|
+          product.version = version.to_s
+          next if !product.licenses.empty?
 
           license = License.find_or_create product.language, product.prod_key, version.to_s, license_name, license_link
           p " - created new license #{license.to_s}"
         end
-      else 
-        # z +=1 
+      else
+        # z +=1
         # p "#{z} - product not found for #{group_id}/#{artifact_id}"
       end
     end
@@ -60,36 +60,36 @@ class LicenseService < Versioneye::Service
 
 
   def self.import_websites_from_properties_file file_path
-    z = 0 
+    z = 0
     content = File.read(file_path)
     content.split("\n").each do |line|
-      next if line.to_s.empty? 
-      
+      next if line.to_s.empty?
+
       sps = line.split("=")
       gav = sps[0]
       link = sps[1]
       group_id     = gav.split("|")[0]
       artifact_id  = gav.split("|")[1]
-      
+
       product = Product.find_by_group_and_artifact group_id.downcase, artifact_id.downcase
-      if product 
-        z +=1 
+      if product
+        z +=1
         p "#{z} - #{group_id}:#{artifact_id} - #{link}"
 
         vl = Versionlink.create_project_link( product.language, product.prod_key, link, "Website" )
 
         p " - created new verisonlink #{vl.to_s}"
-      else 
-        # z +=1 
+      else
+        # z +=1
         # p "#{z} - product not found for #{group_id}/#{artifact_id}"
       end
     end
   end
 
-  
+
   private
 
-  
+
     def self.create_spdx_license name, identifier, approved
       spdx = SpdxLicense.new :fullname => name, :identifier => identifier, :osi_approved => approved
       spdx.save
