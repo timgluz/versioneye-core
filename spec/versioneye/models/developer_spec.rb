@@ -27,4 +27,16 @@ describe Developer do
 
   end
 
+  describe "to_param" do
+    it "returns the name" do
+      expect( Developer.new({:name => "hans Ko"}).to_param ).to eq('hans_ko')
+    end
+    it "returns the developer value" do
+      expect( Developer.new({:developer => "hans Mo"}).to_param ).to eq('hans_mo')
+    end
+    it "returns the name" do
+      expect( Developer.new({:name => "hans Kä"}).to_param ).to eq('hans_kae')
+    end
+  end
+
 end
