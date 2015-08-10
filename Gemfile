@@ -24,7 +24,6 @@ gem 'wkhtmltopdf-binary' , '~> 0.9.9.1'
 gem 'mongoid'            , '~> 4.0.2'
 gem 'will_paginate_mongoid', '2.0.1'
 
-
 group :development do
   gem 'jeweler', '~> 2.0.1'
 end
