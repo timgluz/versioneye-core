@@ -7,13 +7,13 @@ class GitReposImportWorker < Worker
     channel = connection.create_channel
     queue   = channel.queue("git_repos_import", :durable => true)
 
-    log_msg = " [*] Waiting for messages in #{queue.name}. To exit press CTRL+C"
+    log_msg = " [*] GitReposImportWorker Waiting for messages in #{queue.name}. To exit press CTRL+C"
     puts log_msg
     log.info log_msg
 
     begin
       queue.subscribe(:manual_ack => true, :block => true) do |delivery_info, properties, body|
-        msg = " [x] Received #{body}"
+        msg = " [x] GitReposImportWorker Received #{body}"
         puts msg
         log.info msg
 
