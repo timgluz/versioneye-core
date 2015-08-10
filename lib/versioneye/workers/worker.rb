@@ -7,11 +7,15 @@ class Worker
   end
 
   def self.log
-    Versioneye::Log.instance.log
+    ActiveSupport::Logger.new('log/worker.log')
   end
 
   def log
-    Versioneye::Log.instance.log
+    Worker.log
+  end
+
+  def logger
+    Worker.log
   end
 
   def self.cache

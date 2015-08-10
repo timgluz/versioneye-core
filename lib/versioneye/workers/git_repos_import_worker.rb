@@ -12,7 +12,7 @@ class GitReposImportWorker < Worker
     log.info log_msg
 
     begin
-      queue.subscribe(:ack => true, :block => true) do |delivery_info, properties, body|
+      queue.subscribe(:manual_ack => true, :block => true) do |delivery_info, properties, body|
         msg = " [x] Received #{body}"
         puts msg
         log.info msg
@@ -78,7 +78,7 @@ class GitReposImportWorker < Worker
 
     def import_github_repos user
       return nil if user.nil?
-      
+
       user_task_key = "#{user[:username]}-#{user[:github_id]}"
       log.info "Fetch Repositories for #{user_task_key} from GitHub and cache them in DB."
 
