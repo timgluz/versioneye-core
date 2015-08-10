@@ -57,6 +57,11 @@ class Bitbucket < Versioneye::Service
     repos = []
     while true do
       data = get_json(path, token, secret)
+      if data.nil? || data.empty?
+        log.error "data is nil for #{path}"
+        break
+      end
+
       repos.concat(data[:values]) if data.has_key?(:values)
 
       break if !data.has_key?(:next) or data[:next].to_s.empty?
@@ -90,8 +95,8 @@ class Bitbucket < Versioneye::Service
     return if data.nil? or not data.is_a?(Hash)
 
     branches = []
-    data.keys.each do |key| 
-      branches.push key.to_s 
+    data.keys.each do |key|
+      branches.push key.to_s
     end
     branches
   end
@@ -128,7 +133,7 @@ class Bitbucket < Versioneye::Service
       ProjectService.type_by_filename(file_info[:path]) != nil
     end
 
-    if !branch_tree[:directories].to_a.empty? 
+    if !branch_tree[:directories].to_a.empty?
       project_files_recursive repo_name, branch, token, secret, '', branch_tree[:directories], project_files
     end
 
@@ -146,13 +151,13 @@ class Bitbucket < Versioneye::Service
       tree_path = dir_info
       tree_path = "#{path}/#{dir_info}" if !path.to_s.empty?
       tree_path = tree_path.gsub("//", "/")
-      branch_tree = repo_branch_tree(repo_name, branch, token, secret, tree_path) 
-      next if branch_tree.nil? || branch_tree.empty? 
-    
+      branch_tree = repo_branch_tree(repo_name, branch, token, secret, tree_path)
+      next if branch_tree.nil? || branch_tree.empty?
+
       branch_tree[:files].to_a.each do |file_info|
         project_files << file_info if ProjectService.type_by_filename(file_info[:path]) != nil
       end
-      if !branch_tree[:directories].to_a.empty? 
+      if !branch_tree[:directories].to_a.empty?
         path = branch_tree[:path]
         project_files_recursive repo_name, branch, token, secret, path, branch_tree[:directories], project_files
       end
@@ -193,7 +198,7 @@ class Bitbucket < Versioneye::Service
   rescue => e
     log.error "ERROR in get_json for #{path} - #{e.message}"
     log.error e.backtrace.join("\n")
-    nil 
+    nil
   end
 
 
