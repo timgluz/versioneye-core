@@ -29,7 +29,7 @@ class Project < Versioneye::Model
   A_PERIOD_DAILY   = 'daily'
 
   field :name         , type: String
-  field :name_downcase, type: String # downcased name, because MongoDB doesn't support case insensitive search. 
+  field :name_downcase, type: String # downcased name, because MongoDB doesn't support case insensitive search.
   field :description  , type: String
   field :license      , type: String
 
@@ -58,7 +58,7 @@ class Project < Versioneye::Model
   field :licenses_unknown, type: Integer, :default => 0
   field :sv_count        , type: Integer, :default => 0
 
-  # These are the numbers summed up from all children 
+  # These are the numbers summed up from all children
   field :dep_number_sum      , type: Integer, :default => 0
   field :out_number_sum      , type: Integer, :default => 0
   field :unknown_number_sum  , type: Integer, :default => 0
@@ -68,7 +68,7 @@ class Project < Versioneye::Model
 
   field :public         , type: Boolean, :default => false  # visible for everybody
   field :private_project, type: Boolean, :default => false  # private project from GitHub/Bitbucket
-  field :parent_id      , type: String,  :default => nil    # id of the parent project. 
+  field :parent_id      , type: String,  :default => nil    # id of the parent project.
 
   field :license_whitelist_id, type: String
 
@@ -98,45 +98,45 @@ class Project < Versioneye::Model
 
   attr_accessor :lwl_pdf_list, :has_kids
 
-  before_save :perpare_name_for_search 
+  before_save :perpare_name_for_search
 
   def to_s
     "<Project #{language}/#{project_type} #{name}>"
   end
 
-  def ids 
-    id.to_s 
+  def ids
+    id.to_s
   end
 
-  def parent 
+  def parent
     Project.find parent_id
-  end 
+  end
 
-  def children 
+  def children
     Project.where(:parent_id => self.id.to_s)
   end
 
-  def scopes 
+  def scopes
     return [] if self.projectdependencies.nil? || self.projectdependencies.empty?
     scopes = []
-    self.projectdependencies.each do |dependency| 
+    self.projectdependencies.each do |dependency|
       scopes << dependency.scope if !scopes.include?( dependency.scope )
     end
     scopes
   end
 
   def dependencies(scope = nil)
-    return self.projectdependencies if scope.nil? 
+    return self.projectdependencies if scope.nil?
     return self.projectdependencies if self.projectdependencies.nil? || self.projectdependencies.empty?
     deps = []
-    self.projectdependencies.each do |dependency| 
+    self.projectdependencies.each do |dependency|
       deps << dependency if dependency.scope.eql?(scope)
     end
     deps
   end
 
   def sorted_dependencies_by_rank( deps = nil )
-    deps = self.dependencies if deps.nil? 
+    deps = self.dependencies if deps.nil?
     return deps if deps.nil? or deps.empty?
     deps.sort_by {|dep| dep[:status_rank] }
   end
@@ -155,8 +155,8 @@ class Project < Versioneye::Model
 
   def muted_dependencies_count
     deps = muted_dependencies
-    return 0 if deps.nil? 
-    deps.count 
+    return 0 if deps.nil?
+    deps.count
   end
 
   def self.find_by_id( id )
@@ -180,7 +180,7 @@ class Project < Versioneye::Model
   end
 
   def show_dependency_badge?
-    true 
+    true
   end
 
   def visible_for_user?(user)
@@ -211,8 +211,8 @@ class Project < Versioneye::Model
 
   def license_whitelist_name
     lwl = license_whitelist
-    return lwl.name if lwl 
-    nil 
+    return lwl.name if lwl
+    nil
   end
 
   def collaborator?( user )
@@ -231,9 +231,9 @@ class Project < Versioneye::Model
 
   def remove_dependencies
     Projectdependency.where(:project_id => self.ids).each do |dep|
-      dep.delete 
+      dep.delete
     end
-    projectdependencies.clear 
+    projectdependencies.clear
   end
 
   def save_dependencies
@@ -246,7 +246,7 @@ class Project < Versioneye::Model
     muted_deps = muted_dependencies
     muted_deps.each do |dep|
       key = dep_key(dep)
-      prod_keys << key 
+      prod_keys << key
       mute_messages[key] = dep.mute_message
     end
     {:keys => prod_keys, :messages => mute_messages}
@@ -294,7 +294,7 @@ class Project < Versioneye::Model
     end
 
     self.overwrite_dependencies( new_project.projectdependencies )
-    
+
     self.save
   end
 
@@ -306,11 +306,11 @@ class Project < Versioneye::Model
     new_dependencies.each do |dep|
       key = dep_key(dep)
       if muted_keys.include?( key )
-        dep.muted = true 
+        dep.muted = true
         dep.mute_message = mute_messages[key]
-        dep.outdated = false 
+        dep.outdated = false
         dep.outdated_updated_at = DateTime.now
-        self.out_number = self.out_number.to_i - 1 
+        self.out_number = self.out_number.to_i - 1
       end
       projectdependencies.push dep
       dep.save
@@ -334,13 +334,13 @@ class Project < Versioneye::Model
   end
 
   def sum_own!
-    self.dep_number_sum       = self.dep_number 
+    self.dep_number_sum       = self.dep_number
     self.out_number_sum       = self.out_number
     self.unknown_number_sum   = self.unknown_number
     self.licenses_red_sum     = self.licenses_red
     self.licenses_unknown_sum = self.licenses_unknown
     self.sv_count_sum         = self.sv_count
-    self.save 
+    self.save
   end
 
   def sum_reset!
@@ -349,8 +349,8 @@ class Project < Versioneye::Model
     self.unknown_number_sum   = 0
     self.licenses_red_sum     = 0
     self.licenses_unknown_sum = 0
-    self.sv_count_sum         = 0 
-    self.save 
+    self.sv_count_sum         = 0
+    self.save
   end
 
   def get_binding
@@ -363,8 +363,8 @@ class Project < Versioneye::Model
       "#{dep.language}_#{dep.prod_key}_#{dep.version_current}"
     end
 
-    def perpare_name_for_search 
-      self.name_downcase = self.name.downcase  
+    def perpare_name_for_search
+      self.name_downcase = self.name.downcase
     end
 
 end

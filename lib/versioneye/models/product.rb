@@ -15,10 +15,10 @@ class Product < Versioneye::Model
   field :prod_type    , type: String # Identifies the package manager
   field :language     , type: String
   field :version      , type: String, default: '0.0.0+NA' # latest stable version
-  field :tags         , type: Array  # Array of keywords 
+  field :tags         , type: Array  # Array of keywords
 
-  field :group_id   , type: String # Maven specific - GroupID lower case 
-  field :artifact_id, type: String # Maven specific - ArtifactId lower case 
+  field :group_id   , type: String # Maven specific - GroupID lower case
+  field :artifact_id, type: String # Maven specific - ArtifactId lower case
   field :parent_id  , type: String # Maven specific
   field :group_id_orig   , type: String # Maven specific
   field :artifact_id_orig, type: String # Maven specific
@@ -57,7 +57,7 @@ class Product < Versioneye::Model
   index({ updated_at: -1, language: -1}, { name: "updated_language_index", background: true})
   index({ tags: 1},                      { name: "tags_index", background: true})
 
-  attr_accessor :version_newest, :project_usage 
+  attr_accessor :version_newest, :project_usage
   attr_accessor :released_days_ago, :released_ago_in_words, :released_ago_text
   attr_accessor :in_my_products, :dependencies_cache
 
@@ -88,24 +88,24 @@ class Product < Versioneye::Model
     return name
   end
 
-  def group_id_original 
-    return group_id_orig if !group_id_orig.to_s.empty? 
+  def group_id_original
+    return group_id_orig if !group_id_orig.to_s.empty?
     group_id
   end
 
-  def artifact_id_original 
-    return artifact_id_orig if !artifact_id_orig.to_s.empty? 
+  def artifact_id_original
+    return artifact_id_orig if !artifact_id_orig.to_s.empty?
     return name if !name.to_s.empty?
     artifact_id
   end
 
-  def add_tag tag_name 
-    self.tags = [] if tags.nil? 
+  def add_tag tag_name
+    self.tags = [] if tags.nil?
     self.tags.push( tag_name ) if !self.tags.include?( tag_name )
   end
 
-  def remove_tag tag_name 
-    self.tags = [] if tags.nil? 
+  def remove_tag tag_name
+    self.tags = [] if tags.nil?
     self.tags.delete( tag_name )
   end
 
@@ -347,7 +347,7 @@ class Product < Versioneye::Model
   end
 
   def all_dependencies( version = nil )
-    version = self.version if version.to_s.empty? 
+    version = self.version if version.to_s.empty?
     Dependency.find_by_lang_key_and_version( language, prod_key, version)
   end
 
