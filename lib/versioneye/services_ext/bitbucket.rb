@@ -17,8 +17,8 @@ class Bitbucket < Versioneye::Service
     OAuth::Consumer.new(Settings.instance.bitbucket_token, Settings.instance.bitbucket_secret,
                        site: Settings.instance.bitbucket_base_url,
                        request_token_path: "/api/1.0/oauth/request_token",
-                       access_token_url: "/api/1.0/oauth/access_token",
-                       authorize_path: "/api/1.0/oauth/authenticate")
+                       access_token_path: "/site/oauth2/access_token",
+                       authorize_path: "/site/oauth2/authorize")
   end
 
 
@@ -177,12 +177,19 @@ class Bitbucket < Versioneye::Service
   def self.get_json(path, token, secret, raw = false, params = {}, headers = {})
     url = URI.encode "#{Settings.instance.bitbucket_base_url}#{path}"
     oauth = init_oauth_client
-    token = OAuth::AccessToken.new(oauth, token, secret)
-    oauth_params = {consumer: oauth, token: token, request_uri: url}
+    token_obj = OAuth::AccessToken.new(oauth, token, secret)
+
+    # oauth_params = {consumer: oauth, token: token, request_uri: url}
+
     request_headers = A_DEFAULT_HEADERS
     request_headers.merge! headers
 
-    response = token.get(path, request_headers)
+    response = token_obj.get(path, request_headers)
+
+    # if response.code.to_i != 200
+    #   TODO
+    # end
+
     if raw == true
       return response.body
     end
