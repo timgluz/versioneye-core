@@ -17,8 +17,8 @@ class Bitbucket < Versioneye::Service
     OAuth::Consumer.new(Settings.instance.bitbucket_token, Settings.instance.bitbucket_secret,
                        site: Settings.instance.bitbucket_base_url,
                        request_token_path: "/api/1.0/oauth/request_token",
-                       access_token_path: "/site/oauth2/access_token",
-                       authorize_path: "/site/oauth2/authorize")
+                       access_token_path:  "/api/1.0/oauth/access_token",  # "/site/oauth2/access_token",
+                       authorize_path:     "/api/1.0/oauth/authenticate")  # "/site/oauth2/authorize"
   end
 
 

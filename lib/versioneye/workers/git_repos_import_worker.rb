@@ -31,6 +31,7 @@ class GitReposImportWorker < Worker
 
   private
 
+  
     def import_all_repos msg
       reload_settings()
       provider = msg.split(":::").first
