@@ -134,7 +134,7 @@ class Bitbucket < Versioneye::Service
     end
 
     if !branch_tree[:directories].to_a.empty?
-      project_files_recursive repo_name, branch, token, secret, '', branch_tree[:directories], project_files
+      project_files_recursive repo_name, branch, token, secret, '', branch_tree[:directories], project_files, 0
     end
 
     project_files.each {|file| file[:uuid] = SecureRandom.hex }
@@ -146,7 +146,7 @@ class Bitbucket < Versioneye::Service
   end
 
 
-  def self.project_files_recursive repo_name, branch, token, secret, path = "", directories = nil, project_files = []
+  def self.project_files_recursive repo_name, branch, token, secret, path = "", directories = nil, project_files = [], deepnes = 0
     directories.to_a.each do |dir_info|
       tree_path = dir_info
       tree_path = "#{path}/#{dir_info}" if !path.to_s.empty?
@@ -157,9 +157,10 @@ class Bitbucket < Versioneye::Service
       branch_tree[:files].to_a.each do |file_info|
         project_files << file_info if ProjectService.type_by_filename(file_info[:path]) != nil
       end
-      if !branch_tree[:directories].to_a.empty?
+      if !branch_tree[:directories].to_a.empty? && deepnes.to_i < 5
         path = branch_tree[:path]
-        project_files_recursive repo_name, branch, token, secret, path, branch_tree[:directories], project_files
+        deepnes += 1
+        project_files_recursive repo_name, branch, token, secret, path, branch_tree[:directories], project_files, deepnes
       end
     end
   rescue => e
