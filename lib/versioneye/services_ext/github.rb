@@ -343,7 +343,7 @@ class Github < Versioneye::Service
     branches.each do |branch|
       branch_name  = branch[:name]
       next if branch_name.to_s.eql?('gh-pages')
-      
+
       branch_key   = encode_db_key(branch_name)
       branch_sha   = branch[:commit][:sha]
       branch_files = project_files_from_branch(repo_name, token, branch_sha)

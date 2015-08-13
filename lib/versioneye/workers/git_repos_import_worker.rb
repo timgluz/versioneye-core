@@ -31,7 +31,7 @@ class GitReposImportWorker < Worker
 
   private
 
-  
+
     def import_all_repos msg
       reload_settings()
       provider = msg.split(":::").first
@@ -83,7 +83,6 @@ class GitReposImportWorker < Worker
       user_task_key = "#{user[:username]}-#{user[:github_id]}"
       log.info "Fetch Repositories for #{user_task_key} from GitHub and cache them in DB."
 
-      n_repos    = Github.count_user_repos user # Repos without Orgas
       orga_names = Github.orga_names( user.github_token )
 
       cache.set( user_task_key, GitHubService::A_TASK_RUNNING, GitHubService::A_TASK_TTL )
