@@ -222,7 +222,7 @@ class PackageParser < CommonParser
 
         major = semver.major + 1
         upper_range = "#{major}.0.0"
-        if start.scan(/\./).count == 2
+        if start.match(/0\.\d+\.\d+\z/i)
           minor = semver.minor + 1
           upper_range = "0.#{minor}.0"
         end
