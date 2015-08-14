@@ -19,16 +19,16 @@ class PackageParser < CommonParser
     nil
   end
 
-  
+
   def parse_content( content )
     return nil if content.to_s.empty?
     return nil if content.to_s.strip.eql?('Not Found')
-    
+
     data = JSON.parse( content )
     return nil if data.nil?
 
     project = init_project( data )
-    
+
     dependencies = data['dependencies']
     if dependencies && !dependencies.empty?
       parse_dependencies dependencies, project
@@ -71,14 +71,14 @@ class PackageParser < CommonParser
   def parse_line( package_name, version_label, project, scope = Dependency::A_SCOPE_COMPILE )
     product    = Product.fetch_product( Product::A_LANGUAGE_NODEJS, package_name )
     dependency = init_dependency( product, package_name )
-    dependency.scope = scope 
+    dependency.scope = scope
     parse_requested_version( version_label, dependency, product )
     project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
     project.unknown_number += 1 if product.nil?
     project.projectdependencies.push dependency
   end
 
-  
+
   # It is important that this method is not writing int the database!
   #
   def parse_requested_version(version, dependency, product)
@@ -266,7 +266,7 @@ class PackageParser < CommonParser
     end
   end
 
-  
+
   def init_project( data )
     project = Project.new
     project.project_type = Project::A_TYPE_NPM
@@ -289,7 +289,7 @@ class PackageParser < CommonParser
     dependency
   end
 
-  
+
   def pre_process version
     if version.match(/\A\d*\z/) || version.match(/\A\d*\.\d*\z/)
       version = "#{version}.*"
