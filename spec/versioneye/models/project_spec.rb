@@ -9,61 +9,61 @@ describe Project do
     @user.save
   end
 
-  
-  describe "to_s" do 
-    it 'returns to_s' do 
+
+  describe "to_s" do
+    it 'returns to_s' do
       project = Project.new({:language => 'Java', :project_type => 'Maven2', :name => 'pomi' })
       project.to_s.should eq("<Project Java/Maven2 pomi>")
     end
   end
 
 
-  describe "children" do 
-    it 'returns an empty array' do 
+  describe "children" do
+    it 'returns an empty array' do
       project = Project.new({:language => 'Java', :project_type => 'Maven2', :name => 'pomi' })
       kids = project.children
-      kids.should_not be_nil 
+      kids.should_not be_nil
       kids.should be_empty
     end
 
-    it 'returns an empty array' do 
+    it 'returns an empty array' do
       user = UserFactory.create_new 1079
       project = ProjectFactory.create_new user
-      project.save 
+      project.save
       kid     = ProjectFactory.create_new user
       kid.parent_id = project.id.to_s
       expect( kid.save ).to be_truthy
       expect( kid.name_downcase ).to eq(kid.name)
       Project.all.count.should eq(2)
       kids = project.children
-      kids.should_not be_nil 
+      kids.should_not be_nil
       kids.count.should eq(1)
     end
   end
 
 
-  describe "filename" do 
-    it 'returns the nacked filename' do 
+  describe "filename" do
+    it 'returns the nacked filename' do
       project = Project.new({ :s3_filename => 'pom.xml' })
       project.filename.should eq("pom.xml")
     end
-    it 'returns the filtered filename' do 
+    it 'returns the filtered filename' do
       project = Project.new({ :s3_filename => '85773722_pom.xml' })
       project.filename.should eq("pom.xml")
     end
   end
 
 
-  describe "sum_own!" do 
-    it 'sums own' do 
-      project = Project.new({ :dep_number => 5, :out_number => 1, 
+  describe "sum_own!" do
+    it 'sums own' do
+      project = Project.new({ :dep_number => 5, :out_number => 1,
         :unknown_number => 2, :licenses_red => 2, :licenses_unknown => 2 })
       project.dep_number_sum.should eq(0)
       project.out_number_sum.should eq(0)
-      project.unknown_number_sum.should eq(0) 
+      project.unknown_number_sum.should eq(0)
       project.licenses_red_sum.should eq(0)
-      project.licenses_unknown_sum.should eq(0) 
-      project.sum_own! 
+      project.licenses_unknown_sum.should eq(0)
+      project.sum_own!
       project.dep_number_sum.should eq( project.dep_number )
       project.out_number_sum.should eq( project.out_number )
       project.unknown_number_sum.should eq( project.unknown_number )
@@ -73,24 +73,24 @@ describe Project do
   end
 
 
-  describe "show_dependency_badge?" do 
-    it 'shows the badge' do 
+  describe "show_dependency_badge?" do
+    it 'shows the badge' do
       project = Project.new({ :language => 'Java' })
       project.show_dependency_badge?().should be_truthy
     end
-    it 'shows the badge always!' do 
+    it 'shows the badge always!' do
       project = Project.new({ :language => 'Puki' })
       project.show_dependency_badge?().should be_truthy
     end
   end
 
 
-  describe "license_whitelist?" do 
-    it 'returns nil' do 
+  describe "license_whitelist?" do
+    it 'returns nil' do
       project = Project.new
       project.license_whitelist.should be_nil
     end
-    it 'returns nil' do 
+    it 'returns nil' do
       lwl = LicenseWhitelistFactory.create_new 'OkForMe'
       lwl.save.should be_truthy
       project = Project.new({:license_whitelist_id => lwl.id.to_s})
@@ -100,42 +100,42 @@ describe Project do
   end
 
 
-  describe "private_project_count_by_user" do 
-    it 'returns 0' do 
+  describe "private_project_count_by_user" do
+    it 'returns 0' do
       Project.private_project_count_by_user(nil).should eq(0)
     end
     it 'returns 0 because user has only public projects' do
-      user = UserFactory.create_new 
+      user = UserFactory.create_new
       new_project = ProjectFactory.create_new user
-      new_project.private_project = false 
-      new_project.save 
+      new_project.private_project = false
+      new_project.save
       Project.private_project_count_by_user( user.id.to_s ).should eq(0)
     end
     it 'returns 1 because user has only 1 private project' do
-      user = UserFactory.create_new 
+      user = UserFactory.create_new
       new_project = ProjectFactory.create_new user
-      new_project.private_project = true 
-      new_project.save 
+      new_project.private_project = true
+      new_project.save
       Project.private_project_count_by_user( user.id.to_s ).should eq(1)
     end
     it 'returns 1. User has 1 private and 1 public project' do
-      user = UserFactory.create_new 
+      user = UserFactory.create_new
       new_project = ProjectFactory.create_new user
       new_project.private_project = false
-      new_project.save 
+      new_project.save
       new_project2 = ProjectFactory.create_new user
-      new_project2.private_project = true 
-      new_project2.save 
+      new_project2.private_project = true
+      new_project2.save
       Project.private_project_count_by_user( user.id.to_s ).should eq(1)
     end
     it 'returns 2. User has 2 private' do
-      user = UserFactory.create_new 
+      user = UserFactory.create_new
       new_project = ProjectFactory.create_new user
-      new_project.private_project = true 
-      new_project.save 
+      new_project.private_project = true
+      new_project.save
       new_project2 = ProjectFactory.create_new user
-      new_project2.private_project = true 
-      new_project2.save 
+      new_project2.private_project = true
+      new_project2.save
       Project.private_project_count_by_user( user.id.to_s ).should eq(2)
     end
   end
@@ -272,12 +272,12 @@ describe Project do
       @test_project.visible_for_user?( col_user ).should be_falsey
       @test_project.visible_for_user?( nil ).should be_falsey
       @test_project.visible_for_user?( @test_user ).should be_truthy
-      
-      col_user.admin = true 
-      col_user.save 
+
+      col_user.admin = true
+      col_user.save
       @test_project.visible_for_user?( col_user ).should be_truthy
       col_user.admin = false
-      col_user.save 
+      col_user.save
 
       @test_project.public = true
       @test_project.save
@@ -342,7 +342,7 @@ describe Project do
     it "overwrites dependencies" do
       user = UserFactory.create_new 1066
       user.nil?.should be_falsey
-      
+
       project = ProjectFactory.create_new user
       project.save
 
@@ -601,6 +601,17 @@ describe Project do
       deps.last.id.to_s.should eq(dep_1.id.to_s)
     end
 
+  end
+
+  describe "auditlogs" do
+    it 'reads the audtilogs for the current project' do
+      expect( Auditlog.count ).to eq(0)
+      user = UserFactory.create_new
+      project = ProjectFactory.create_new user
+      expect( Auditlog.add(user, "Project", project.ids, 'changed name')).to be_truthy
+      expect( Auditlog.count ).to eq(1)
+      expect( project.auditlogs.count ).to eq(1)
+    end
   end
 
 end

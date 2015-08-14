@@ -357,6 +357,10 @@ class Project < Versioneye::Model
     binding()
   end
 
+  def auditlogs
+    Auditlog.where(:domain_id => self.ids).desc(:created_at)
+  end
+
   private
 
     def dep_key dep
