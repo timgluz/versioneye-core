@@ -219,9 +219,18 @@ class PackageParser < CommonParser
         dependency.version_requested = ver
       else
         start = ver
+
         major = semver.major + 1
         upper_range = "#{major}.0.0"
+        if start.scan(/\./).count == 2
+          minor = semver.minor + 1
+          upper_range = "0.#{minor}.0"
+        end
+
         version_range   = VersionService.version_range(product.versions, start, upper_range )
+        version_range.each do |version|
+          version_range.delete version if version.to_s.eql?(upper_range)
+        end
         highest_version = VersionService.newest_version_from( version_range )
         if highest_version
           dependency.version_requested = highest_version.to_s

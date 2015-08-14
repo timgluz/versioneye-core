@@ -28,17 +28,20 @@ describe PackageParser do
 
       product14 = create_product('mocha'        , 'mocha'        , '1.16.2', ['1.0.0' , '1.16.0', '1.16.2' ] )
       product15 = create_product('bruno'        , 'bruno'        , '1.12.1', ['1.0.0' , '1.12.0', '1.12.1' ] )
-      product15 = create_product('gulp'         , 'gulp'         , '1.12.1', ['1.0.0' , '1.12.0', '1.12.1' ] )
+      product16 = create_product('gulp'         , 'gulp'         , '1.12.1', ['1.0.0' , '1.12.0', '1.12.1' ] )
 
-      product15 = create_product('async'        , 'async'        , '0.0.0', ['0.0.0' , '0.8.0', '0.9.0' ] )
+      product17 = create_product('async'        , 'async'        , '0.0.0', ['0.0.0' , '0.8.0', '0.9.0' ] )
 
-      product15 = create_product('gulp-webserver', 'gulp-webserver', '0.9.1', ['0.9.1' , '0.9.0' ] )
+      product18 = create_product('gulp-webserver', 'gulp-webserver', '0.9.1', ['0.9.1' , '0.9.0' ] )
+
+      product19 = create_product('eslint'       , 'eslint'       , '1.1.0', ['0.24.0' , '0.24.1', '1.0.0', '1.1.0' ] )
+      product20 = create_product('inquirer'     , 'inquirer'     , '0.9.0', ['0.9.0' , '0.8.5', '0.8.4', '0.8.3', '0.8.2', '0.8.0', '0.7.3', '0.7.2' ] )
 
 
       parser = PackageParser.new
       project = parser.parse('http://s3.amazonaws.com/veye_test_env/package.json')
       project.should_not be_nil
-      project.dependencies.size.should eql(18)
+      project.dependencies.size.should eql(20)
 
       dep_01 = project.dependencies.first
       dep_01.name.should eql('connect-redis')
@@ -152,11 +155,27 @@ describe PackageParser do
 
       dep_17 = project.dependencies[17]
       dep_17.name.should eql('gulp-webserver')
+      dep_17.version_label.should eql('^0.9.*')
       dep_17.version_requested.should eql('0.9.1')
       dep_17.version_current.should eql('0.9.1')
       dep_17.comperator.should eql('^')
-      dep_17.version_label.should eql('^0.9.*')
       dep_17.outdated?().should be_falsey
+
+      dep_18 = project.dependencies[18]
+      dep_18.name.should eql('eslint')
+      dep_18.version_label.should eql('^0.24.0')
+      dep_18.version_requested.should eql('0.24.1')
+      dep_18.version_current.should eql('1.1.0')
+      dep_18.comperator.should eql('^')
+      dep_18.outdated?().should be_truthy
+
+      dep_19 = project.dependencies[19]
+      dep_19.name.should eql('inquirer')
+      dep_19.version_label.should eql('^0.8.0')
+      dep_19.version_requested.should eql('0.8.5')
+      dep_19.version_current.should eql('0.9.0')
+      dep_19.comperator.should eql('^')
+      dep_19.outdated?().should be_truthy
     end
 
   end
