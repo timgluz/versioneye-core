@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-gem 'bundler'            , '~> 1.10.4'
+gem 'bundler'            , '~> 1.10.6'
 gem 'naturalsorter'      , '~> 3.0.10'
 gem 'log4r'              , '~> 1.1.0'
 gem 'dalli'              , '~> 2.7.0'
