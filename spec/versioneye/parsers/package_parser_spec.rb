@@ -33,7 +33,7 @@ describe PackageParser do
       product15 = create_product('async'        , 'async'        , '0.0.0', ['0.0.0' , '0.8.0', '0.9.0' ] )
 
       product15 = create_product('gulp-webserver', 'gulp-webserver', '0.9.1', ['0.9.1' , '0.9.0' ] )
-      
+
 
       parser = PackageParser.new
       project = parser.parse('http://s3.amazonaws.com/veye_test_env/package.json')
