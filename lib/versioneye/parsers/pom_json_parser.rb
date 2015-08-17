@@ -18,7 +18,7 @@ class PomJsonParser < CommonParser
   def parse_content( content )
     return nil if content.to_s.empty?
     return nil if content.to_s.strip.eql?('Not Found')
-    
+
     pom_json = JSON.parse( content )
     return nil if pom_json.nil?
 
@@ -27,7 +27,7 @@ class PomJsonParser < CommonParser
       version     = json_dep['version']
       name        = json_dep['name']
       scope       = json_dep['scope']
-      scope       = 'compile' if scope.to_s.empty? 
+      scope       = 'compile' if scope.to_s.empty?
       spliti      = name.split(':')
       group_id    = spliti[0].to_s.downcase
       artifact_id = spliti[1].to_s.downcase
@@ -42,7 +42,7 @@ class PomJsonParser < CommonParser
     project.name        = pom_json['name']
     project.group_id    = pom_json['group_id']
     project.artifact_id = pom_json['artifact_id']
-    project.allow_zero_deps = true 
+    project.allow_zero_deps = true
     project
   end
 
@@ -55,7 +55,7 @@ class PomJsonParser < CommonParser
     dependency.artifact_id = artifact_id
     dependency.version_requested = version
     dependency.version_label = version
-    dependency.scope       = scope 
+    dependency.scope       = scope
     dependency
   end
 
