@@ -10,25 +10,27 @@ class ProjectBatchUpdateService < Versioneye::Service
   the user is collaborator.
 =end
   def self.update_all period
+    project_ids = []
     UserService.all_users_paged do |users|
-      update_for users, period
+      update_for users, period, project_ids
     end
+    project_ids
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
   end
 
 
-  def self.update_for users, period
+  def self.update_for users, period, project_ids = nil
     return nil if users.nil? || users.empty?
 
     users.each do |user|
-      process user, period
+      process user, period, project_ids
     end
   end
 
 
-  def self.process user, period
+  def self.process user, period, project_ids = nil
     return nil if user.nil?
     return nil if user.deleted_user == true
     return nil if user.email_inactive == true
@@ -38,7 +40,7 @@ class ProjectBatchUpdateService < Versioneye::Service
 
     return nil if MailTrack.send_already? user.ids, A_EMAIL_TEMPLATE_1, period
 
-    perform_update user, period
+    perform_update user, period, project_ids
 
     projects     = fetch_affected_projects user, period
     col_projects = fetch_affected_collaboration_projects user, period
@@ -53,22 +55,25 @@ class ProjectBatchUpdateService < Versioneye::Service
 
 
   # Update the projects. Re parse the project files and update the numbers!
-  def self.perform_update user, period
+  def self.perform_update user, period, project_ids = nil
     projects     = fetch_projects user, period
     col_projects = fetch_collaboration_projects user, period
     return nil if (projects.nil? || projects.empty?) && (col_projects.nil? || col_projects.empty?)
 
     log.info "process #{period} projects for #{user.fullname}"
-    update_projects projects, false
-    update_projects col_projects, false
+    update_projects projects, false, project_ids
+    update_projects col_projects, false, project_ids
   end
 
 
-  def self.update_projects projects, send_email = false
+  def self.update_projects projects, send_email = false, project_ids = nil
     return nil if projects.nil? || projects.empty?
 
     projects.each do |project|
+      next if project_ids && project_ids.include?(project.ids)
+
       ProjectUpdateService.update project, send_email
+      project_ids.push(project.ids) if project_ids
     end
   end
 

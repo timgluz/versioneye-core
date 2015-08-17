@@ -152,7 +152,8 @@ describe ProjectBatchUpdateService do
       expect( project.save ).to be_truthy
 
       ActionMailer::Base.deliveries.clear
-      ProjectBatchUpdateService.update_all Project::A_PERIOD_DAILY
+      project_ids = ProjectBatchUpdateService.update_all Project::A_PERIOD_DAILY
+      expect( project_ids.count ).to eq(1)
       expect( ActionMailer::Base.deliveries.size ).to eq(2)
       expect( ProjectCollaborator.count ).to eq(1)
     end
