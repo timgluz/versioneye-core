@@ -29,11 +29,11 @@ class Reference  < Versioneye::Model
     filter = prod_keys[skip..limit]
     return nil if filter.nil? || filter.empty?
 
-    if group_id && artifact_id 
+    if group_id && artifact_id
       return Product.where(:group_id.ne => nil, :artifact_id.ne => nil, :prod_key.in => filter)
-    else 
+    else
       return Product.where(:language => language, :prod_key.in => filter)
-    end 
+    end
   rescue => e
     log.error e.message
     nil
