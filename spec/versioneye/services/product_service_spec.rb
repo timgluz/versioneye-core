@@ -178,7 +178,7 @@ describe ProductService do
 
       dependency = Dependency.new({ :language => prod_2.language,
         :prod_key => prod_2.prod_key, :prod_version => prod_2.version,
-        :dep_prod_key => prod_1.prod_key, :version => prod_1.version, 
+        :dep_prod_key => prod_1.prod_key, :version => prod_1.version,
         :group_id => prod_1.group_id, :artifact_id => prod_1.artifact_id})
       dependency.save
 
@@ -242,7 +242,7 @@ describe ProductService do
       product_2 = ProductFactory.create_new 2
       dependency = Dependency.new({ :language => product_2.language,
         :prod_key => product_2.prod_key, :prod_version => product_2.version,
-        :dep_prod_key => product_1.prod_key, :version => product_1.version, 
+        :dep_prod_key => product_1.prod_key, :version => product_1.version,
         :group_id => product_1.group_id, :artifact_id => product_1.artifact_id})
       dependency.save
       product_1.save
@@ -255,12 +255,12 @@ describe ProductService do
       product_2 = ProductFactory.create_new 2
       dependency = Dependency.new({ :language => product_2.language,
         :prod_key => product_2.prod_key, :prod_version => product_2.version,
-        :dep_prod_key => product_1.prod_key, :version => product_1.version, 
+        :dep_prod_key => product_1.prod_key, :version => product_1.version,
         :group_id => product_1.group_id, :artifact_id => product_1.artifact_id})
       dependency.save
       dependency2 = Dependency.new({ :language => product_2.language,
         :prod_key => product_2.prod_key, :prod_version => "dev-master",
-        :dep_prod_key => product_1.prod_key, :version => product_1.version, 
+        :dep_prod_key => product_1.prod_key, :version => product_1.version,
         :group_id => product_1.group_id, :artifact_id => product_1.artifact_id})
       dependency2.save
       product_1.save
@@ -274,12 +274,12 @@ describe ProductService do
       product_3 = ProductFactory.create_new 3
       dependency = Dependency.new({ :language => product_2.language,
         :prod_key => product_2.prod_key, :prod_version => product_2.version,
-        :dep_prod_key => product_1.prod_key, :version => product_1.version, 
+        :dep_prod_key => product_1.prod_key, :version => product_1.version,
         :group_id => product_1.group_id, :artifact_id => product_1.artifact_id})
       dependency.save
       dependency2 = Dependency.new({ :language => product_3.language,
         :prod_key => product_3.prod_key, :prod_version => product_3.version,
-        :dep_prod_key => product_1.prod_key, :version => product_1.version, 
+        :dep_prod_key => product_1.prod_key, :version => product_1.version,
         :group_id => product_1.group_id, :artifact_id => product_1.artifact_id})
       dependency2.save
       product_1.save
