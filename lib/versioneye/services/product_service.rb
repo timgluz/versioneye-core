@@ -148,8 +148,13 @@ class ProductService < Versioneye::Service
     count = prod_keys.count
     return nil if count == product.used_by_count
 
+    prod_keys_sorted = []
+    Product.where(:prod_key.in => prod_keys).desc(:used_by_count).each do |prod|
+      prod_keys_sorted << prod.prod_key if !prod_keys_sorted.include?( prod.prod_key )
+    end
+
     reference = Reference.find_or_create_by(:language => product.language, :prod_key => product.prod_key )
-    reference.update_from prod_keys
+    reference.update_from prod_keys_sorted
     if product.group_id && product.artifact_id
       reference.group_id = product.group_id
       reference.artifact_id = product.artifact_id
