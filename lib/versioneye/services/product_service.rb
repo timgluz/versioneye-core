@@ -66,7 +66,7 @@ class ProductService < Versioneye::Service
 
   def self.all_products_paged
     count = Product.count()
-    page = 1000
+    page = 100
     iterations = count / page
     iterations += 1
     (0..iterations).each do |i|
@@ -98,6 +98,9 @@ class ProductService < Versioneye::Service
     products.each do |product|
       self.update_meta_data product
     end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
 
