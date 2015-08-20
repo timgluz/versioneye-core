@@ -30,9 +30,9 @@ class Reference  < Versioneye::Model
     return nil if filter.nil? || filter.empty?
 
     if group_id && artifact_id
-      return Product.where(:group_id.ne => nil, :artifact_id.ne => nil, :prod_key.in => filter)
+      return Product.where(:group_id.ne => nil, :artifact_id.ne => nil, :prod_key.in => filter).desc(:used_by_count)
     else
-      return Product.where(:language => language, :prod_key.in => filter)
+      return Product.where(:language => language, :prod_key.in => filter).desc(:used_by_count)
     end
   rescue => e
     log.error e.message
