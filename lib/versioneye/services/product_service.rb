@@ -162,7 +162,7 @@ class ProductService < Versioneye::Service
     end
     reference.save
 
-    product.used_by_count = count
+    product.used_by_count = prod_keys_sorted.count
     product.save if persist
   rescue => e
     log.error e.message
