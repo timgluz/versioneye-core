@@ -148,9 +148,8 @@ class ProductService < Versioneye::Service
       prod_keys = Dependency.where(:language => product.language, :dep_prod_key => product.prod_key).distinct(:prod_key)
     end
 
-    # TODO this is just tmp.
-    # count = prod_keys.count
-    # return nil if count == product.used_by_count
+    count = prod_keys.count
+    return nil if count == product.used_by_count
 
     prod_keys_sorted = []
     Product.where(:prod_key.in => prod_keys).desc(:used_by_count).each do |prod|
