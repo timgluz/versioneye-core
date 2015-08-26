@@ -2,7 +2,7 @@ class Projectdependency < Versioneye::Model
 
   require 'naturalsorter'
 
-  # This Model describes the relationship between a project and a software component / dependency 
+  # This Model describes the relationship between a project and a software component / dependency
   # This Model describes 1 dependency of a project
 
   include Mongoid::Document
@@ -38,7 +38,7 @@ class Projectdependency < Versioneye::Model
 
   embeds_many :license_caches, cascade_callbacks: true
 
-  
+
   index({project_id: 1}, { name: "project_index", background: true})
 
 
@@ -49,11 +49,11 @@ class Projectdependency < Versioneye::Model
 
   def language_esc lang = nil
     lang = self.language if lang.nil?
-    return nil if lang.to_s.empty? 
+    return nil if lang.to_s.empty?
     Product.encode_language lang
   end
 
-  
+
   def self.find_by_id id
     Projectdependency.find id
   rescue => e
@@ -61,17 +61,17 @@ class Projectdependency < Versioneye::Model
   end
 
 
-  def version 
+  def version
     version_requested
   end
 
 
-  def security_vulnerabilities 
-    return nil if sv_ids.to_a.empty? 
+  def security_vulnerabilities
+    return nil if sv_ids.to_a.empty?
     SecurityVulnerability.where(:_id.in => sv_ids)
   end
 
-  
+
   def product
     if project && project.project_type.to_s.eql?( Project::A_TYPE_BOWER )
       product = Product.fetch_bower name
@@ -86,7 +86,7 @@ class Projectdependency < Versioneye::Model
     Product.fetch_product( self.language, self.prod_key.to_s.downcase )
   end
 
-  
+
   def find_or_init_product
     if project && project.project_type.to_s.eql?( Project::A_TYPE_BOWER )
       product = Product.fetch_bower name
@@ -98,8 +98,8 @@ class Projectdependency < Versioneye::Model
       return product if product
     end
 
-    pk = prod_key 
-    pk = name.to_s.downcase if pk.to_s.empty? 
+    pk = prod_key
+    pk = name.to_s.downcase if pk.to_s.empty?
     product = Product.fetch_product( language, pk )
     if product
       self.update_attribute(:prod_key, pk)
@@ -109,7 +109,7 @@ class Projectdependency < Versioneye::Model
     init_product
   end
 
-  
+
   def possible_prod_key
     return self.prod_key if !self.prod_key.to_s.empty?
 
@@ -120,12 +120,12 @@ class Projectdependency < Versioneye::Model
     possible_prod_key
   end
 
-  
+
   def unknown?
     prod_key.nil? && ext_link.nil?
   end
 
-  
+
   def known?
     !self.unknown?
   end
@@ -135,10 +135,10 @@ class Projectdependency < Versioneye::Model
     binding()
   end
 
-  
+
   private
 
-  
+
     def init_product
       product             = Product.new
       product.name        = self.name
