@@ -4,9 +4,9 @@ describe DependencyBadgeWorker do
 
 
   describe 'import_from_bitbucket_async' do
-    
+
     it 'imports from bitbucket async' do
-      
+
       rails = Product.new({:prod_type => Project::A_TYPE_RUBYGEMS,
         :language => Product::A_LANGUAGE_RUBY, :prod_key => 'rails',
         :name => 'rails', :version => "4.0.0"})
@@ -25,7 +25,7 @@ describe DependencyBadgeWorker do
       dependency.dep_prod_key = product.prod_key
       dependency.scope = Dependency::A_SCOPE_RUNTIME
       dependency.version = "3.0.0"
-      dependency.save 
+      dependency.save
 
       language = rails.language
       prod_key = rails.prod_key
@@ -36,15 +36,15 @@ describe DependencyBadgeWorker do
       Badge.count.should eq(0)
 
       worker = Thread.new{ described_class.new.work }
-      DependencyService.cache.get(key).should be_nil 
+      DependencyService.cache.get(key).should be_nil
       DependencyBadgeProducer.new("#{language}:::#{prod_key}:::#{version}")
-      sleep 3 
+      sleep 3
       worker.exit
 
       Badge.count.should eq(1)
       badge = Badge.first
       badge.status.should eq('out_of_date')
-      BadgeService.cache.get(key).should_not be_nil 
+      BadgeService.cache.get(key).should_not be_nil
     end
 
   end

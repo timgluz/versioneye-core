@@ -2,15 +2,15 @@ class CommonUpdater < Versioneye::Service
 
 
   def update_old_with_new old_project, new_project, send_email = false
-    return nil if old_project.nil? || new_project.nil? 
-    
+    return nil if old_project.nil? || new_project.nil?
+
     old_project.update_from new_project
     ProjectService.reset_badge old_project
 
     SyncService.sync_project_async old_project # For Enterprise environment
 
     ProjectdependencyService.update_licenses_security old_project
-    
+
     unknown_licenses = ProjectService.unknown_licenses( old_project )
     red_licenses     = ProjectService.red_licenses( old_project )
     old_project.licenses_red = red_licenses.count
@@ -36,8 +36,8 @@ class CommonUpdater < Versioneye::Service
     project.parsing_errors = []
     project.parsing_errors << error_message
 
-    project.save 
-  rescue => e 
+    project.save
+  rescue => e
     log.error "ERROR occured store_parsing_errors - #{e.message}"
     log.error e.backtrace.join("\n")
   end
@@ -45,7 +45,7 @@ class CommonUpdater < Versioneye::Service
 
   private
 
-  
+
     def log
       Versioneye::Log.instance.log
     end
