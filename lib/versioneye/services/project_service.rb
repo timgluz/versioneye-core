@@ -131,7 +131,9 @@ class ProjectService < Versioneye::Service
     ensure_unique_scm( project )
 
     default_lwl_id = LicenseWhitelistService.fetch_default_id project.user
+    default_cwl_id = ComponentWhitelistService.fetch_default_id project.user
     project.license_whitelist_id = default_lwl_id
+    project.component_whitelist_id = default_cwl_id
     project.make_project_key!
     if project.save
       project.save_dependencies

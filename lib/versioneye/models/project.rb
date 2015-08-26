@@ -224,7 +224,7 @@ class Project < Versioneye::Model
     nil
   end
 
-  def license_whitelist_name
+  def component_whitelist_name
     cwl = component_whitelist
     return cwl.name if cwl
     nil

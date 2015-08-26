@@ -103,11 +103,11 @@ describe Projectdependency do
   describe 'cwl_key' do
     it 'returns gav' do
       dep = Projectdependency.new(:group_id => "org.spring", :artifact_id => "sponk-core", :version_requested => "1.0.0")
-      expect( dep.cwl_key ).to eql("org.spring::sponk-core::1.0.0")
+      expect( dep.cwl_key ).to eql("org.spring:sponk-core:1.0.0")
     end
     it 'returns language prod_key and version' do
       dep = Projectdependency.new(:language => "Ruby", :prod_key => "rails", :version_requested => "1.0.0")
-      expect( dep.cwl_key ).to eql("ruby::rails::1.0.0")
+      expect( dep.cwl_key ).to eql("ruby:rails:1.0.0")
     end
   end
 

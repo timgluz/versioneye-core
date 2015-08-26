@@ -33,7 +33,7 @@ class ComponentWhitelist < Versioneye::Model
   end
 
   def add element
-    self.components << element.downcase if !is_on_list?(element)
+    self.components << element.downcase.gsub(" ", "") if !is_on_list?(element)
   end
 
   def remove element
@@ -44,7 +44,7 @@ class ComponentWhitelist < Versioneye::Model
     return true if self.components.include?(element)
 
     components.each do |component|
-      return true if element.match( /\A#{component}::/ )
+      return true if element.match( /\A#{component}/ )
     end
 
     false

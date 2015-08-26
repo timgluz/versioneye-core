@@ -121,8 +121,8 @@ class Projectdependency < Versioneye::Model
   end
 
   def cwl_key
-    return "#{group_id}::#{artifact_id}::#{version_requested}" if !group_id.to_s.empty? && !artifact_id.to_s.empty?
-    "#{language.downcase}::#{prod_key}::#{version_requested}"
+    return "#{group_id}:#{artifact_id}:#{version_requested}" if !group_id.to_s.empty? && !artifact_id.to_s.empty?
+    "#{language.downcase}:#{prod_key}:#{version_requested}"
   end
 
 

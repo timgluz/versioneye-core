@@ -40,45 +40,57 @@ describe ComponentWhitelist do
   describe 'is_on_list?' do
     it 'returns true because on list' do
       cwl = ComponentWhitelist.new({:name => 'MIT'})
-      cwl.add "junit::junit"
+      cwl.add "junit:junit"
       expect( cwl.save ).to be_truthy
-      expect( cwl.is_on_list?("junit::junit") ).to be_truthy
+      expect( cwl.is_on_list?("junit:junit") ).to be_truthy
     end
     it 'returns true because on list' do
       cwl = ComponentWhitelist.new({:name => 'MIT'})
-      cwl.add "junit::junit"
+      cwl.add "junit:junit"
       expect( cwl.save ).to be_truthy
-      expect( cwl.is_on_list?("junit::junit::2.0") ).to be_truthy
+      expect( cwl.is_on_list?("junit:junit:2.0") ).to be_truthy
     end
     it 'returns true because on list' do
       cwl = ComponentWhitelist.new({:name => 'MIT'})
-      cwl.add "net.sf.jasperreports::jasperreports::3.6.0"
+      cwl.add "net.sf.jasperreports:jasperreports:3.6.0"
       expect( cwl.save ).to be_truthy
-      expect( cwl.is_on_list?("net.sf.jasperreports::jasperreports::3.6.0") ).to be_truthy
+      expect( cwl.is_on_list?("net.sf.jasperreports:jasperreports:3.6.0") ).to be_truthy
     end
     it 'returns true because on list' do
       cwl = ComponentWhitelist.new({:name => 'MIT'})
       cwl.add "net.sf.jasperreports"
       expect( cwl.save ).to be_truthy
-      expect( cwl.is_on_list?("net.sf.jasperreports::jasperreports-core::4.6.0") ).to be_truthy
+      expect( cwl.is_on_list?("net.sf.jasperreports:jasperreports-core:4.6.0") ).to be_truthy
+    end
+    it 'returns true because on list' do
+      cwl = ComponentWhitelist.new({:name => 'MIT'})
+      cwl.add "org.apache"
+      expect( cwl.save ).to be_truthy
+      expect( cwl.is_on_list?("org.apache.maven:maven-core:4.6.0") ).to be_truthy
     end
     it 'returns false because not on list' do
       cwl = ComponentWhitelist.new({:name => 'MIT'})
-      cwl.add "net.sf.jasperreports::jasperreports::3.6.0"
+      cwl.add "net.sf.jasperreports:jasperreports:3.6.0"
       expect( cwl.save ).to be_truthy
-      expect( cwl.is_on_list?("net.sf.jasperreports::jasperreports::3.6.1") ).to be_falsey
+      expect( cwl.is_on_list?("net.sf.jasperreports:jasperreports:3.6.1") ).to be_falsey
+    end
+    it 'returns true because not on list' do
+      cwl = ComponentWhitelist.new({:name => 'MIT'})
+      cwl.add "net.sf.jasperreports:jasperreports"
+      expect( cwl.save ).to be_truthy
+      expect( cwl.is_on_list?("net.sf.jasperreports:jasperreports-core:3.6.1") ).to be_truthy
     end
     it 'returns false because not on list' do
       cwl = ComponentWhitelist.new({:name => 'MIT'})
-      cwl.add "net.sf.jasperreports::jasperreports"
+      cwl.add "net.sf.jasperreports:jasperreports:"
       expect( cwl.save ).to be_truthy
-      expect( cwl.is_on_list?("net.sf.jasperreports::jasperreports-core::3.6.1") ).to be_falsey
+      expect( cwl.is_on_list?("net.sf.jasperreports:jasperreports-core:3.6.1") ).to be_falsey
     end
     it 'returns false because not on list' do
       cwl = ComponentWhitelist.new({:name => 'MIT'})
-      cwl.add "net.sf.jasperreports::jasperreports"
+      cwl.add "net.sf.jasperreports:jasperreports"
       expect( cwl.save ).to be_truthy
-      expect( cwl.is_on_list?("com.sf.jasperreports::jasperreports::3.6.1") ).to be_falsey
+      expect( cwl.is_on_list?("com.sf.jasperreports:jasperreports:3.6.1") ).to be_falsey
     end
   end
 
@@ -100,22 +112,22 @@ describe ComponentWhitelist do
       cwl = ComponentWhitelist.new({:name => 'CWL'})
       cwl.user = user
       expect( cwl.save ).to be_truthy
-      cwl.add "junit::junit"
+      cwl.add "junit:junit"
       expect( cwl.save ).to be_truthy
       cwl = ComponentWhitelist.first
-      expect( cwl.components.first ).to eq("junit::junit")
+      expect( cwl.components.first ).to eq("junit:junit")
     end
     it 'adds the same elements twice' do
       user = UserFactory.create_new
       cwl = ComponentWhitelist.new({:name => 'CWL'})
       cwl.user = user
       expect( cwl.save ).to be_truthy
-      cwl.add "junit::junit"
-      cwl.add "junit::junit"
+      cwl.add "junit:junit"
+      cwl.add "junit:junit"
       expect( cwl.save ).to be_truthy
       cwl = ComponentWhitelist.first
       expect( cwl.components.count ).to eq(1)
-      expect( cwl.components.first ).to eq("junit::junit")
+      expect( cwl.components.first ).to eq("junit:junit")
     end
   end
 
@@ -124,9 +136,9 @@ describe ComponentWhitelist do
       user = UserFactory.create_new
       cwl = ComponentWhitelist.new({:name => 'CWL'})
       cwl.user = user
-      cwl.add "junit::junit"
+      cwl.add "junit:junit"
       cwl.save
-      cwl.remove "junit::junit"
+      cwl.remove "junit:junit"
       cwl.save
       cwl = ComponentWhitelist.first
       expect( cwl.components.empty? ).to be_truthy
