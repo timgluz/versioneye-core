@@ -35,7 +35,7 @@ group :test do
   gem 'rspec'           , '~> 3.3.0'
   gem 'database_cleaner', '~> 1.4.1'
   gem 'factory_girl'    , '~> 4.5.0'
-  gem 'capybara'        , '~> 2.4.1'
+  gem 'capybara'        , '~> 2.5.0'
   gem 'capybara-firebug', '~> 2.1.0'
   gem 'vcr'             , '~> 2.9.3',  :require => false
   gem 'webmock'         , '~> 1.21.0', :require => false
