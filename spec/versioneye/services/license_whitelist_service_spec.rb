@@ -256,4 +256,41 @@ describe LicenseWhitelistService do
 
   end
 
+
+  describe 'update_project' do
+
+    it 'returns false because no project' do
+      expect( LicenseWhitelistService.update_project nil, nil, nil ).to be_falsy
+    end
+
+    it 'updates the project with the given lwl' do
+      user = UserFactory.create_new 1
+
+      LicenseWhitelistService.create user, 'SuperList'
+      LicenseWhitelistService.add user, 'SuperList', 'MIT'
+
+      project = ProjectFactory.create_new user
+      prod_1  = ProductFactory.create_new 1
+      dep_1   = ProjectdependencyFactory.create_new project, prod_1, true
+      dep_1.version_requested = prod_1.version
+      dep_1.save
+      LicenseFactory.create_new prod_1, 'GPL'
+
+      project_2 = ProjectFactory.create_new user
+      prod_2  = ProductFactory.create_new 2
+      dep_2   = ProjectdependencyFactory.create_new project_2, prod_2, true
+      dep_2.version_requested = prod_2.version
+      dep_2.save
+      LicenseFactory.create_new prod_2, 'GPL'
+      project_2.parent_id = project.ids
+      project_2.save
+
+      expect( LicenseWhitelistService.update_project(project, user, 'SuperList') ).to be_truthy
+      project = Project.first
+      expect( project.licenses_red ).to eq(1)
+      expect( project.licenses_red_sum ).to eq(2)
+    end
+
+  end
+
 end
