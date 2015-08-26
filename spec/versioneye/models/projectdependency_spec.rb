@@ -99,6 +99,47 @@ describe Projectdependency do
     end
   end
 
+
+  describe 'cwl_key' do
+    it 'returns gav' do
+      dep = Projectdependency.new(:group_id => "org.spring", :artifact_id => "sponk-core", :version_requested => "1.0.0")
+      expect( dep.cwl_key ).to eql("org.spring::sponk-core::1.0.0")
+    end
+    it 'returns language prod_key and version' do
+      dep = Projectdependency.new(:language => "Ruby", :prod_key => "rails", :version_requested => "1.0.0")
+      expect( dep.cwl_key ).to eql("ruby::rails::1.0.0")
+    end
+  end
+
+
+  describe 'find_by_id' do
+    it 'returns the dep' do
+      dep = Projectdependency.new(:language => "Java", :prod_key => 'org.spring/sponk-core', :group_id => "org.spring", :artifact_id => "sponk-core", :version_requested => "1.0.0")
+      expect( dep.save ).to be_truthy
+      expect( Projectdependency.find_by_id(dep.ids) ).to_not be_nil
+    end
+    it 'returns nil' do
+      expect( Projectdependency.find_by_id( 'faf' ) ).to be_nil
+    end
+  end
+
+
+  describe 'version' do
+    it 'returns version_requested' do
+      dep = Projectdependency.new( :version_requested => "1.0.0" )
+      expect( dep.version ).to eql( dep.version_requested )
+    end
+  end
+
+
+  describe 'language_esc' do
+    it 'returns encoded language' do
+      dep = Projectdependency.new( :language => "Node.JS" )
+      expect( dep.language_esc ).to eql( 'nodejs' )
+    end
+  end
+
+
   describe 'product' do
 
     it 'returns the right product' do
@@ -119,6 +160,47 @@ describe Projectdependency do
       pr.should_not be_nil
       pr.prod_key.should eq('log4r')
       dep_1.to_s.should eq("<Projectdependency: #{project} depends on log4r (3.2.1/) current: 3.2.1 >")
+    end
+
+    it 'returns the right product for bower' do
+      project.project_type = Project::A_TYPE_BOWER
+      project.save
+
+      log4r = ProductFactory.create_for_bower 'log4r', '3.2.1'
+      log4r.save
+
+      dep_1 = ProjectdependencyFactory.create_new project, log4r
+      dep_1.version_label = '3.2.1'
+      dep_1.version_current = '3.2.1'
+      dep_1.save
+      project.dependencies.count.should eq(1)
+
+      dep_1.known?().should be_truthy
+      pr = dep_1.product
+      expect( pr ).to_not be_nil
+      expect( pr.prod_key).to eq('log4r')
+      expect( dep_1.to_s ).to eq("<Projectdependency: #{project} depends on log4r (3.2.1/) current: 3.2.1 >")
+    end
+
+    it 'returns the right product for maven' do
+      project.project_type = Project::A_TYPE_MAVEN2
+      project.save
+
+      log4r = ProductFactory.create_for_maven 'org.spring', 'spring-core', '3.2.1'
+      log4r.save
+
+      dep_1 = ProjectdependencyFactory.create_new project, log4r
+      dep_1.version_label = '3.2.1'
+      dep_1.version_current = '3.2.1'
+      dep_1.save
+      project.dependencies.count.should eq(1)
+
+      dep_1.known?().should be_truthy
+      pr = dep_1.product
+      expect( pr ).to_not be_nil
+      expect( pr.prod_key).to eq('org.spring/spring-core')
+      expect( pr.group_id).to eq('org.spring')
+      expect( pr.artifact_id).to eq('spring-core')
     end
 
   end

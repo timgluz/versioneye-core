@@ -71,6 +71,7 @@ class Project < Versioneye::Model
   field :parent_id      , type: String,  :default => nil    # id of the parent project.
 
   field :license_whitelist_id, type: String
+  field :component_whitelist_id, type: String
 
   field :parsing_errors , type: Array, :default => []
 
@@ -212,6 +213,20 @@ class Project < Versioneye::Model
   def license_whitelist_name
     lwl = license_whitelist
     return lwl.name if lwl
+    nil
+  end
+
+  def component_whitelist
+    return nil if component_whitelist_id.to_s.empty?
+    ComponentWhitelist.find component_whitelist_id
+  rescue => e
+    log.error e.message
+    nil
+  end
+
+  def license_whitelist_name
+    cwl = component_whitelist
+    return cwl.name if cwl
     nil
   end
 

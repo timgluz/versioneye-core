@@ -26,16 +26,106 @@ describe ProjectdependencyService do
       @project.dependencies.count.should eq(1)
 
       license = LicenseFactory.create_new @product, "MIT"
-      license.save
+      expect( license.save ).to be_truthy
+
       dep.license_caches.should be_empty
 
       ProjectdependencyService.update_licenses @project
 
       dep = Projectdependency.first
-      dep.license_caches.should_not be_empty
-      dep.license_caches.count.should eq(1)
-      dep.license_caches.first.name.should eq('MIT')
+      expect( dep.license_caches ).to_not be_empty
+      expect( dep.license_caches.count).to eq(1)
+      expect( dep.license_caches.first.name).to eq('MIT')
+      expect( dep.license_caches.first.on_whitelist).to be_nil
     end
+
+    it 'updates the dependencies with the license infos, dependency is conform with lwl' do
+      Projectdependency.count.should eq(0)
+      dep = ProjectdependencyFactory.create_new(@project, @product)
+      dep.version_current   = @product.version
+      dep.version_requested = @product.version
+      dep.save
+      Projectdependency.count.should eq(1)
+
+      license = LicenseFactory.create_new @product, "MIT"
+      expect( license.save ).to be_truthy
+
+      lwl = LicenseWhitelistFactory.create_new 'MY_SECRET_WHITELIST', ['mit']
+      lwl.save
+      @project.license_whitelist_id = lwl.ids
+      @project.save
+
+      ProjectdependencyService.update_licenses @project
+
+      dep = Projectdependency.first
+      expect( dep.license_caches ).to_not be_empty
+      expect( dep.license_caches.count).to eq(1)
+      expect( dep.license_caches.first.name).to eq('MIT')
+      expect( dep.license_caches.first.on_whitelist).to_not be_nil
+      expect( dep.license_caches.first.on_whitelist).to be_truthy
+      expect( dep.license_caches.first.is_whitelisted?).to be_truthy
+    end
+
+    it 'updates the dependencies with the license infos, dependency violates lwl' do
+      Projectdependency.count.should eq(0)
+      dep = ProjectdependencyFactory.create_new(@project, @product)
+      dep.version_current   = @product.version
+      dep.version_requested = @product.version
+      dep.save
+      Projectdependency.count.should eq(1)
+
+      license = LicenseFactory.create_new @product, "GPL-3.0"
+      expect( license.save ).to be_truthy
+
+      lwl = LicenseWhitelistFactory.create_new 'MY_SECRET_WHITELIST', ['mit']
+      lwl.save
+      @project.license_whitelist_id = lwl.ids
+      @project.save
+
+      ProjectdependencyService.update_licenses @project
+
+      dep = Projectdependency.first
+      expect( dep.license_caches ).to_not be_empty
+      expect( dep.license_caches.count).to eq(1)
+      expect( dep.license_caches.first.name).to eq('GPL-3.0')
+      expect( dep.license_caches.first.on_whitelist).to_not be_nil
+      expect( dep.license_caches.first.on_whitelist).to be_falsey
+      expect( dep.license_caches.first.is_whitelisted?).to be_falsey
+    end
+
+    it 'updates the dependencies with the license infos, dependency violates lwl but is on cwl' do
+      Projectdependency.count.should eq(0)
+      dep = ProjectdependencyFactory.create_new(@project, @product)
+      dep.version_current   = @product.version
+      dep.version_requested = @product.version
+      dep.save
+      Projectdependency.count.should eq(1)
+
+      license = LicenseFactory.create_new @product, "GPL-3.0"
+      expect( license.save ).to be_truthy
+
+      lwl = LicenseWhitelistFactory.create_new 'MY_SECRET_WHITELIST', ['mit']
+      lwl.save
+      @project.license_whitelist_id = lwl.ids
+
+      cwl = ComponentWhitelist.new({:name => 'my_cwl'})
+      cwl.add dep.cwl_key
+      cwl.save
+      @project.component_whitelist_id = cwl.ids
+      @project.save
+
+      ProjectdependencyService.update_licenses @project
+
+      dep = Projectdependency.first
+      expect( dep.license_caches ).to_not be_empty
+      expect( dep.license_caches.count).to eq(1)
+      expect( dep.license_caches.first.name).to eq('GPL-3.0')
+      expect( dep.license_caches.first.on_whitelist).to_not be_nil
+      expect( dep.license_caches.first.on_whitelist).to be_falsey
+      expect( dep.license_caches.first.on_cwl).to be_truthy
+      expect( dep.license_caches.first.is_whitelisted?).to be_truthy
+    end
+
   end
 
   describe "update_security" do
