@@ -49,6 +49,7 @@ class Author < Versioneye::Model
 
   def self.encode_name name
     name.gsub(" ", "_").gsub("ß", "ss")
+      .gsub("/", ":")
       .gsub("ü", "ue").gsub("Ü", "Ue")
       .gsub("ä", "ae").gsub("Ä", "Ae")
       .gsub("ö", "oe").gsub("Ö", "Oe").downcase
