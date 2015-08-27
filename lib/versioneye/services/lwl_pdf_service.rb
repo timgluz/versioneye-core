@@ -92,8 +92,8 @@ class LwlPdfService < Versioneye::Service
             uvalue = create_uniq_identifier(line)
             next if uniq_array.include?(uvalue)
 
-            dto[:whitelisted] << line if lc.on_whitelist
-            dto[:violated]    << line if !lc.on_whitelist
+            dto[:whitelisted] << line if lc.is_whitelisted? == true
+            dto[:violated]    << line if lc.is_whitelisted? == false
           end
         else
           line[:license] = 'UNKNOWN'
