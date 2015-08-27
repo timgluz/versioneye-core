@@ -154,7 +154,7 @@ GEM
       sawyer (~> 0.6.0, >= 0.5.3)
     optionable (0.2.0)
     origin (2.1.1)
-    pdfkit (0.8.1)
+    pdfkit (0.8.2)
     persistent_http (1.0.6)
       gene_pool (>= 1.3)
     persistent_httparty (0.1.2)
