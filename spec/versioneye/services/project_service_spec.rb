@@ -378,8 +378,10 @@ describe ProjectService do
       expect( summary[project.ids][:out_number_sum] ).to eq(1)
       expect( summary[project.ids][:sv_count_sum] ).to eq(1)
       expect( summary[project.ids][:sv_count] ).to eq(0)
+
       expect( summary[project.ids][:licenses_red] ).to eq(1)
       expect( summary[project.ids][:licenses_red_sum] ).to eq(1)
+
       expect( summary[project.ids][:dependencies] ).to_not be_empty
       expect( summary[project.ids][:dependencies].count ).to eq(1)
       expect( summary[project.ids][:licenses] ).to_not be_empty
@@ -881,10 +883,12 @@ describe ProjectService do
       project.license_whitelist_id = whitelist.id
       project.save
 
+      ProjectdependencyService.update_licenses project
+
       red = ProjectService.red_licenses project
-      red.should_not be_empty
-      red.count.should eq(1)
-      red.first.name.should eq(dep_2.name)
+      expect( red ).to_not be_empty
+      expect( red.count ).to eq(1)
+      expect( red.first.name ).to eq(dep_2.name)
     end
 
   end
