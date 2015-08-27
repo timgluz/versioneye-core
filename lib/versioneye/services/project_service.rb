@@ -369,8 +369,8 @@ class ProjectService < Versioneye::Service
     unknown
   end
 
-
-  # Returns the projectdependencies which violate the license whitelist.
+  # Returns the projectdependencies which violate the
+  # license whitelist AND are not on the component whitelist
   def self.red_licenses( project )
     red = []
     return red if project.nil? || project.projectdependencies.empty? || project.license_whitelist_id.nil?
@@ -380,15 +380,10 @@ class ProjectService < Versioneye::Service
     return red if whitelist.license_elements.nil? || whitelist.license_elements.empty?
 
     project.projectdependencies.each do |dep|
-      product = dep.product
-      next if product.nil?
+      license_caches = dep.license_caches
+      next if license_caches.nil? || license_caches.empty?
 
-      product.version = dep.version_requested
-      licenses = product.licenses
-      next if licenses.nil? || licenses.empty?
-
-      on_white_list = on_whitelist?( licenses, whitelist )
-      red << dep if !on_white_list
+      red << dep if whitelisted?( license_caches, whitelist ) == false
     end
     red
   end
@@ -486,17 +481,15 @@ class ProjectService < Versioneye::Service
     end
 
 
-    def self.on_whitelist?( licenses, whitelist )
+    def self.whitelisted? license_caches, whitelist
       if whitelist.pessimistic_mode == true
-        licenses.each do |license|
-          on_whitelist = whitelist.include_license_substitute?( license.name_substitute )
-          return false if on_whitelist == false
+        license_caches.each do |lc|
+          return false if lc.is_whitelisted? == false
         end
         return true
       else
-        licenses.each do |license|
-          on_whitelist = whitelist.include_license_substitute?( license.name_substitute )
-          return true if on_whitelist
+        license_caches.each do |lc|
+          return true if lc.is_whitelisted? == true
         end
         return false
       end
