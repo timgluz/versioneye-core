@@ -163,12 +163,27 @@
       <% end %>
 
       <p>
-        <b>Whitelist:</b> <%= project.license_whitelist.name %> <span class="small">(<%= project.license_whitelist.id %>)</span></br>
+        <b>License Whitelist:</b> <%= project.license_whitelist.name %> <span class="small">(<%= project.license_whitelist.id %>)</span></br>
         <b>Bill of materials:</b>
       </p>
 
-      <% project.license_whitelist.license_elements.each do |lwle| %>
-        <div>- <%= lwle.name %> </div>
+      <p>
+        <% project.license_whitelist.license_elements.each do |lwle| %>
+          <div>- <%= lwle.name %> </div>
+        <% end %>
+      </p>
+
+      <% if project.component_whitelist && !project.component_whitelist.components.empty? %>
+        <p>
+          <b>Component Whitelist:</b> <%= project.component_whitelist.name %> <span class="small">(<%= project.component_whitelist.id %>)</span></br>
+          <b>Bill of materials:</b>
+        </p>
+
+        <p>
+          <% project.component_whitelist.components.each do |component| %>
+            <div>- <%= component %> </div>
+          <% end %>
+        </p>
       <% end %>
 
     </div>
