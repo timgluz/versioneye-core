@@ -1,7 +1,7 @@
 class ProjectUpdateWorker < Worker
 
 # This worker handels the period update jobs (DAILY, WEEKLY, MONTHLY)
-# And the single project updates. 
+# And the single project updates.
 
   def work
     connection = get_connection
@@ -67,7 +67,7 @@ class ProjectUpdateWorker < Worker
     pp  = msg.gsub("project_", "")
     pps = pp.split(":::")
     project_id = pps[0]
-    send_email = false 
+    send_email = false
     send_email = true if pps[1].eql?('true')
     project = Project.find project_id
     log.info " - ProjectUpdateService.update #{project_id}"
