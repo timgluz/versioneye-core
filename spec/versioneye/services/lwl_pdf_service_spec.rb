@@ -2,6 +2,34 @@ require 'spec_helper'
 
 describe LwlPdfService do
 
+
+  describe 'prepare_kids' do
+    it 'preparse the kids' do
+      user = UserFactory.create_new 1
+      lwl = LicenseWhitelist.new({:name => 'OkForMe', :user_id => user.id})
+      lwl.save.should be_truthy
+
+      prod_1  = ProductFactory.create_new 1
+      project = ProjectFactory.create_new user
+      parent  = ProjectFactory.create_new user
+      dep_1   = ProjectdependencyFactory.create_new project, prod_1, true
+      dep_1.save
+
+      project.parent_id = parent.ids
+      project.save
+
+      project.lwl_pdf_list.should be_nil
+
+      kids = described_class.prepare_kids parent, false
+      expect( kids ).to_not be_nil
+
+      kids.first.lwl_pdf_list[:unknown].count.should eq(1)
+      kids.first.lwl_pdf_list[:whitelisted].count.should eq(0)
+      kids.first.lwl_pdf_list[:violated].count.should eq(0)
+    end
+  end
+
+
   describe 'fill_dto' do
 
     it 'it fills the dto' do
