@@ -1,23 +1,45 @@
+<div>
+<div style="max-width: 500px; margin-left: auto; margin-right: auto;">
 Hey <%= @user.fullname %>,
 
 <p>
-  Now VersionEye has notifications for <a href="http://blog.versioneye.com/2015/05/14/php-security-vulnerabilities/">security vulnerabilities</a>! This new feature currently only works for <a href="https://www.versioneye.com/php">PHP</a>. Right now we have 118 security vulnerabilities in our database which affects some of the most used PHP frameworks and libraries. 
-</p>
-<p>
-  If VersionEye is monitoring your PHP project directly on GitHub/Bitbucket or Stash, you will see a Security tab in your project view. 
-</p>
-<p>
-  Read the full article about this new feature <a href="http://blog.versioneye.com/2015/05/14/php-security-vulnerabilities/">here</a>. 
-</p>
-<p>
-  This feature is very new and we heavily rely on your feedback. Please try it out and let us know when you find anything odd.
+  It's a while ago since the last newsletter. Here are the greatest innovations since the last newsletter.
 </p>
 
-<p>   
-  We'd love to hear from you!
-</p>  
+<h2>Component Whitelist</h2>
+<p>
+  Since last week VersionEye supports <a href="http://blog.versioneye.com/2015/08/26/component-whitelist/">component whitelists</a>. The component whitelist is an extension to the <a href="http://blog.versioneye.com/2014/09/15/license-whitelist/">license whitelist</a>. Dependencies which would usually violate the license whitelist can be whitelisted through a component whitelist. That makes specially sense if you bought a commercial license for a GPL dependency or if you have permission from the OS vendor to use certain components in a project. Here are some blog posts to the component whitelist:
+</p>
+<ul>
+  <li><a href="http://blog.versioneye.com/2015/08/26/component-whitelist/">Component Whitelist</a></li>
+  <li><a href="http://blog.versioneye.com/2015/09/02/improved-componente-whitelist/">First improvements</a></li>
+  <li><a href="http://blog.versioneye.com/2015/09/02/how-to-component-whitelist-non-java-dependencies/">How to component whitelist non Java dependencies</a></li>
+</ul>
+
+<h2>VersionEye SBT Plugin</h2>
+<p>
+  Now VersionEye has a <a href="https://github.com/versioneye/versioneye_sbt_plugin">plugin for Scala SBT</a>. The SBT plugin is maintained by <a href="https://twitter.com/mp911de">Mark Paluch</a> and is fully open source under the MIT license. It works similar to the <a href="https://github.com/versioneye/versioneye_maven_plugin">VersionEye Maven Plugin</a>. It is specially useful if your project is not on GitHub/Bitbucket or if you want to integrate VersionEye into your CI-System.
+</p>
+<p>
+  Please give it a try and let us know how it works for you. For feedback simply open a ticket <a href="https://github.com/versioneye/versioneye_sbt_plugin/issues">here</a>.
+</p>
+
+<h2>Thank You</h2>
+<p>
+  Thank you for using VersionEye, giving feedback and helping to make the product even better. Usually the summer is very lame, but this summer is pretty hot.
+</p>
+<p style="text-align: center;">
+  <img src="https://versioneye.files.wordpress.com/2015/09/versioneye-growth.png" style="width: 350px;" />
+</p>
+
+<br/>
+<p>
+  Your feedback is highly appreciated. I will work hard to keep up the good work.
+</p>
 <br/>
 Best Regards, <br/>
-Your VersionEye Team <br/>
+Robert @ VersionEye <br/>
 <a href="<%= Settings.instance.server_url %>?utm_medium=email&amp;utm_source=newsletter"><%= Settings.instance.server_url %></a>
 <br/>
+</div>
+</div>
