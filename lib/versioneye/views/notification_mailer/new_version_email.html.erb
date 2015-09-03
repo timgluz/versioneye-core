@@ -1,10 +1,10 @@
 <div>
   <p>
-    Hello <%= @user.fullname %>, 
+    Hello <%= @user.fullname %>,
   </p>
   <p>
     There are new releases out there.<br/>
-    Watch all your notifications anytime <a href="<%= Settings.instance.server_url %>//notifications">here online</a>. 
+    Watch all your notifications anytime <a href="<%= Settings.instance.server_url %>//notifications">here online</a>.
   </p>
 </div>
 <p>
@@ -12,7 +12,7 @@
     <% @notifications.each do |notification| %>
       <% product = notification.product %>
       <% next if product.nil? %>
-      <% product.version = notification.version_id %> 
+      <% product.version = notification.version_id %>
       <tr>
         <td style="vertical-align: top;">
           <% version = product.version_by_number( notification.version_id ) %>
@@ -37,7 +37,7 @@
             <ul style="padding-left: 0px;">
             <% proj_ids.each_with_index do |project_hash, i| %>
               <% project = Project.find_by_id( project_hash[:project_id] ) %>
-              <li style="font-size: 12px;"><%= link_to( project.name, "#{@link}/user/projects/#{project.id.to_s}" ) %> (<%= (project_hash[:version_requested]) %>)</li> 
+              <li style="font-size: 12px;"><%= link_to( project.name, "#{@link}/user/projects/#{project.id.to_s}" ) %> (<%= (project_hash[:version_requested]) %>)</li>
             <% end %>
             </ul>
             <br/>
