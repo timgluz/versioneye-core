@@ -164,6 +164,12 @@ class User < Versioneye::Model
     if name.include?("-")
       name = name.gsub!("-", "")
     end
+    if name.include?("@")
+      name = name.gsub!("@", "")
+    end
+    if name.include?(".")
+      name = name.gsub!(".", "")
+    end
     user = User.find_by_username(name)
     if user
       name = name + create_random_value
