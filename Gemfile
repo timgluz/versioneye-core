@@ -35,7 +35,7 @@ group :test do
   gem 'fakes3'          , '0.2.1'
   gem 'simplecov'       , '~> 0.10.0'
   gem 'rspec'           , '~> 3.3.0'
-  gem 'database_cleaner', '~> 1.5.0'
+  gem 'database_cleaner', '~> 1.4.1'
   gem 'factory_girl'    , '~> 4.5.0'
   gem 'capybara'        , '~> 2.5.0'
   gem 'capybara-firebug', '~> 2.1.0'
