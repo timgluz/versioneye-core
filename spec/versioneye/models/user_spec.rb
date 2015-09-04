@@ -471,10 +471,12 @@ describe User do
       user = User.all.first
       prod = ProductFactory.create_new
       user.products.push prod
+      user.save
       User.non_followers.count.should eql(User.all.count - 1)
 
-      user[:product_ids] = Array.new
-      user.save
+      user.products = nil
+      expect(user.save).to be_truthy
+      expect(user.products).to be_empty
       User.non_followers.count.should eql(User.all.count)
 
       user[:product_ids] = nil
