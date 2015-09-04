@@ -18,4 +18,8 @@ class ApiCall < Versioneye::Model
   scope :by_api_key, ->(api_key){ where(api_key: api_key) }
   scope :today,      ->{ where(:created_at.gte => Date.today.midnight, :created_at.lt => Date.tomorrow.midnight) }
 
+  def user
+    User.find user_id
+  end
+
 end
