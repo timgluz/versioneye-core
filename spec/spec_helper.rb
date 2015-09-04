@@ -20,6 +20,8 @@ require 'vcr'
 require 'webmock'
 require 'fakeweb'
 
+require 'versioneye/mocks/ldap_mock'
+
 require 'versioneye/domain_factories/api_factory'
 require 'versioneye/domain_factories/dependency_factory'
 require 'versioneye/domain_factories/notification_factory'

@@ -4,6 +4,7 @@ module Versioneye
     require 'versioneye/log'
     require 'versioneye/cache'
 
+    require 'versioneye/services/auth_service'
     require 'versioneye/services/analytics_service'
     require 'versioneye/services/author_service'
     require 'versioneye/services/badge_service'
@@ -33,6 +34,7 @@ module Versioneye
     require 'versioneye/services/email_setting_service'
     require 'versioneye/services/reference_service'
     require 'versioneye/services/language_service'
+    require 'versioneye/services/ldap_service'
     require 'versioneye/services/component_whitelist_service'
     require 'versioneye/services/license_whitelist_service'
     require 'versioneye/services/license_service'
