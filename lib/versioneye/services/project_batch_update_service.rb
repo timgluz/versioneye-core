@@ -8,7 +8,7 @@ class ProjectBatchUpdateService < Versioneye::Service
   the user is collaborator.
 =end
   def self.update_all period
-    project_ids = []
+    project_ids = [] # temp. project_id cache to avoid parsing the same project twice.
     UserService.all_users_paged do |users|
       update_for users, period, project_ids
     end
@@ -85,11 +85,13 @@ class ProjectBatchUpdateService < Versioneye::Service
       user.projects.by_period( period ).parents
     end
 
+
     def self.fetch_affected_projects user, period
       return [] if user.projects.nil? || user.projects.empty?
 
       user.projects.by_period( period ).parents.any_of({:out_number_sum.gt => 0},{:licenses_red_sum.gt => 0})
     end
+
 
     def self.fetch_collaboration_projects user, period
       collaborations = ProjectCollaborator.by_user( user ).where(:period => period)
@@ -103,6 +105,7 @@ class ProjectBatchUpdateService < Versioneye::Service
       end
       projects
     end
+
 
     def self.fetch_affected_collaboration_projects user, period
       projects = []
