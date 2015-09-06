@@ -1,7 +1,5 @@
 class ProjectBatchUpdateService < Versioneye::Service
 
-  A_EMAIL_TEMPLATE_1 = 'projectnotifications_email'
-
 =begin
   This method iterates through all users and sends out
   a project notification email to each user. The project notification email
@@ -38,7 +36,7 @@ class ProjectBatchUpdateService < Versioneye::Service
     uns = UserNotificationSetting.fetch_or_create_notification_setting( user )
     return nil if uns.project_emails == false
 
-    return nil if MailTrack.send_already? user.ids, A_EMAIL_TEMPLATE_1, period
+    return nil if MailTrack.send_already? user.ids, MailTrack::A_TEMPLATE_PROJECT_NOTI, period
 
     perform_update user, period, project_ids
 
@@ -47,7 +45,7 @@ class ProjectBatchUpdateService < Versioneye::Service
     return nil if (projects.nil? || projects.empty?) && (col_projects.nil? || col_projects.empty?)
 
     ProjectMailer.projectnotifications_email( user, projects, col_projects, period ).deliver_now
-    MailTrack.add user.ids, A_EMAIL_TEMPLATE_1, period
+    MailTrack.add user.ids, MailTrack::A_TEMPLATE_PROJECT_NOTI, period
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")

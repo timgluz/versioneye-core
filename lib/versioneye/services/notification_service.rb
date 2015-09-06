@@ -50,7 +50,7 @@ class NotificationService < Versioneye::Service
     NotificationMailer.new_version_email( user, notis ).deliver_now
     log.info "Send notifications to user #{user.fullname}"
     mark_as_sent notifications
-    MailTrack.add user.ids, 'new_version_email', nil
+    MailTrack.add user.ids, MailTrack::A_TEMPLATE_NEW_VERSION, nil
     return true
   rescue => e
     log.error e.message
