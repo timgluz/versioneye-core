@@ -26,14 +26,22 @@ describe ProductService do
 
     it "creates a follower" do
       response = ProductService.follow product.language, product.prod_key, user
-      response.should be_truthy
+      expect( response ).to be_truthy
+
       prod = Product.fetch_product( product.language, product.prod_key )
-      prod.users.count.should eq(1)
-      prod.followers.should eq(1)
+      expect( prod.users.count ).to eq(1)
+      expect( prod.followers).to eq(1)
+
       subscribers = prod.users
       subscribers.size.should eq(1)
       sub_user = subscribers.first
       sub_user.email.should eql(user.email)
+
+      expect( user ).to_not be_nil
+      id = user.id
+      user_db = User.find id
+      expect( user_db.products.count ).to eq(1)
+      expect( user_db.products.size  ).to eq(1)
     end
 
   end

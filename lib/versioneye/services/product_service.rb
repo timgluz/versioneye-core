@@ -37,6 +37,7 @@ class ProductService < Versioneye::Service
       product.followers = 0 if product.followers.nil?
       product.followers += 1
       result = product.save
+      user.products.push product
     end
     result
   rescue => e
@@ -55,6 +56,7 @@ class ProductService < Versioneye::Service
       product.followers = 0 if product.followers.nil?
       product.followers -= 1
       result = product.save
+      user.products.delete product
     end
     result
   rescue => e
