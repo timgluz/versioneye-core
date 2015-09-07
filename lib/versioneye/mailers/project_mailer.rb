@@ -45,4 +45,16 @@ class ProjectMailer < SuperMailer
   end
 
 
+  def security_email user, projects
+    @newsletter = "project_emails"
+    @user = user
+    @projects = projects
+    @base_url = Settings.instance.server_url
+    m = mail(:to => user.email, :subject => "Security Notifications") do |format|
+      format.html{ render layout: 'email_html_layout' }
+    end
+    set_from( m )
+  end
+
+
 end

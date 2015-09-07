@@ -26,6 +26,7 @@ module Versioneye
     require 'versioneye/services/project_parse_service'
     require 'versioneye/services/projectdependency_service'
     require 'versioneye/services/receipt_service'
+    require 'versioneye/services/security_notification_service'
     require 'versioneye/services/statistic_service'
     require 'versioneye/services/submitted_url_service'
     require 'versioneye/services/user_service'
