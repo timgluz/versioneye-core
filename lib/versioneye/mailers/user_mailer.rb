@@ -63,7 +63,7 @@ class UserMailer < SuperMailer
 
 
   def invited_user_author( user, authors )
-    @user    = user 
+    @user    = user
     @authors = authors
     m = mail( :to => user.email, :subject => "Edit your VersionEye pages." ) do |format|
       format.html{ render layout: 'email_html_layout' }
