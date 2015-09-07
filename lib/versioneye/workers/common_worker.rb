@@ -12,7 +12,7 @@ class CommonWorker < Worker
     log.info log_msg
 
     begin
-      queue.subscribe(:ack => true, :block => true) do |delivery_info, properties, message|
+      queue.subscribe(:manual_ack => true, :block => true) do |delivery_info, properties, message|
         puts " [x] Received #{message}"
 
         process_work message

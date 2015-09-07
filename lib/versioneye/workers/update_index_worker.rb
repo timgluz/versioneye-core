@@ -12,7 +12,7 @@ class UpdateIndexWorker < Worker
     log.info log_msg
 
     begin
-      queue.subscribe(:ack => true, :block => true) do |delivery_info, properties, body|
+      queue.subscribe(:manual_ack => true, :block => true) do |delivery_info, properties, body|
         msg = " [x] Received #{body}"
         puts msg
         log.info msg

@@ -16,7 +16,7 @@ class GitRepoFileImportWorker < Worker
     log.info log_msg
 
     begin
-      queue.subscribe(:ack => true, :block => true) do |delivery_info, properties, body|
+      queue.subscribe(:manual_ack => true, :block => true) do |delivery_info, properties, body|
         msg = " [x] Received #{body}"
         puts msg
         log.info msg
@@ -49,14 +49,14 @@ class GitRepoFileImportWorker < Worker
       filename  = sps[3]
       branch    = sps[4]
       parent_id = sps[5]
-      
+
       user = User.find_by_username username
-      if user.nil? 
+      if user.nil?
         cache.set( message, "error_User `#{username}` not found!", A_TASK_TTL )
-        return 
+        return
       end
 
-      project = nil 
+      project = nil
       if provider.eql?("stash")
         project = ProjectImportService.import_from_stash_multi user, repo_name, filename, branch
       elsif provider.eql?("github")
@@ -70,10 +70,10 @@ class GitRepoFileImportWorker < Worker
         parent = Project.find parent_id
         project = ProjectImportService.import_child_from_bitbucket user, repo_name, filename, branch, parent
       end
-      
-      if project 
+
+      if project
         cache.set( message, "done_#{project.id.to_s}", A_TASK_TTL )
-      end 
+      end
     rescue => e
       cache.set( message, "error_#{e.message}", A_TASK_TTL )
       log.error e.message
