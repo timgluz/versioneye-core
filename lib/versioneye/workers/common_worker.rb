@@ -40,6 +40,8 @@ class CommonWorker < Worker
       StatisticService.update_all
     elsif message.eql?("send_verification_reminders")
       User.send_verification_reminders
+    elsif message.eql?("send_security_notifications")
+      SecurityNotificationService.process
     elsif message.eql?("process_receipts")
       ReceiptService.process_receipts
     elsif message.eql?("update_smc_meta_data_all")
