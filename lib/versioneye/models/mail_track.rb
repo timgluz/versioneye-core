@@ -28,6 +28,14 @@ class MailTrack < Versioneye::Model
     MailTrack.where(:user_id => user_id, :template => template_name, :period => period, :created_at.gt => time_ago)
   end
 
+  def user
+    User.find self.user_id
+  end
+
+  def project
+    Project.find self.project_id
+  end
+
   def self.date_for period
     if period.eql?(Project::A_PERIOD_DAILY)
       return DateTime.now - 24.hours
