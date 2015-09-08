@@ -4,6 +4,8 @@ class Plan < Versioneye::Model
   include Mongoid::Timestamps
 
   A_PLAN_TRIAL_0      = '03_trial_0'
+
+  # DEPRECATED START
   A_PLAN_TRIAL_1      = '03_trial_1'
 
   A_PLAN_PERSONAL_3   = '03_personal_3'
@@ -13,6 +15,15 @@ class Plan < Versioneye::Model
   A_PLAN_BUSINESS_25  = '03_business_25'
   A_PLAN_BUSINESS_50  = '03_business_50'
   A_PLAN_BUSINESS_100 = '03_business_100'
+  # DEPRECATED END
+
+  A_PLAN_FREE    = '04_free'
+  A_PLAN_MICRO   = '04_micro'
+  A_PLAN_SMALL   = '04_small'
+  A_PLAN_MEDIUM  = '04_medium'
+  A_PLAN_LARGE   = '04_large'
+  A_PLAN_XLARGE  = '04_xlarge'
+  A_PLAN_XXLARGE = '04_xxlarge'
 
   field :name_id         , type: String
   field :name            , type: String
@@ -25,86 +36,88 @@ class Plan < Versioneye::Model
     Plan.where(:name_id => name_id).shift
   end
 
-  def self.create_defaults
+  def self.create_free_plan
     trial_0 = Plan.new
     trial_0.name_id = A_PLAN_TRIAL_0
     trial_0.name = 'Trial / Free'
     trial_0.price = '0'
     trial_0.private_projects = 1
     trial_0.save
+  end
 
-    trial_1 = Plan.new
-    trial_1.name_id = A_PLAN_TRIAL_1
-    trial_1.name = 'Trial / Starter'
-    trial_1.price = '1'
-    trial_1.private_projects = 2
-    trial_1.save
+  def self.create_defaults
+    micro = Plan.new
+    micro.name_id = A_PLAN_FREE
+    micro.name = 'Free'
+    micro.price = '1'
+    micro.private_projects = 1
+    micro.save
 
-    personal_1 = Plan.new
-    personal_1.name_id = A_PLAN_PERSONAL_3
-    personal_1.name = 'Personal / Small'
-    personal_1.price = '3'
-    personal_1.private_projects = 5
-    personal_1.save
+    micro = Plan.new
+    micro.name_id = A_PLAN_MICRO
+    micro.name = 'Micro'
+    micro.price = '7'
+    micro.private_projects = 5
+    micro.save
 
-    personal_2 = Plan.new
-    personal_2.name_id = A_PLAN_PERSONAL_6
-    personal_2.name = 'Personal / Normal'
-    personal_2.price = '6'
-    personal_2.private_projects = 10
-    personal_2.save
+    small = Plan.new
+    small.name_id = A_PLAN_SMALL
+    small.name = 'Small'
+    small.price = '12'
+    small.private_projects = 10
+    small.save
 
-    personal_3 = Plan.new
-    personal_3.name_id = A_PLAN_PERSONAL_9
-    personal_3.name = 'Personal / Big'
-    personal_3.price = '9'
-    personal_3.private_projects = 15
-    personal_3.save
+    medium = Plan.new
+    medium.name_id = A_PLAN_MEDIUM
+    medium.name = 'Medium'
+    medium.price = '22'
+    medium.private_projects = 20
+    medium.save
 
-    business_1 = Plan.new
-    business_1.name_id = A_PLAN_BUSINESS_25
-    business_1.name = 'Business / Small'
-    business_1.price = '25'
-    business_1.private_projects = 50
-    business_1.save
+    large = Plan.new
+    large.name_id = A_PLAN_LARGE
+    large.name = 'Large'
+    large.price = '50'
+    large.private_projects = 50
+    large.save
 
-    business_2 = Plan.new
-    business_2.name_id = A_PLAN_BUSINESS_50
-    business_2.name = 'Business / Normal'
-    business_2.price = '50'
-    business_2.private_projects = 100
-    business_2.save
+    xlarge = Plan.new
+    xlarge.name_id = A_PLAN_XLARGE
+    xlarge.name = 'X-Large'
+    xlarge.price = '100'
+    xlarge.private_projects = 100
+    xlarge.save
 
-    business_3 = Plan.new
-    business_3.name_id = A_PLAN_BUSINESS_100
-    business_3.name = 'Business / Big'
-    business_3.price = '100'
-    business_3.private_projects = 200
-    business_3.save
+    xxlarge = Plan.new
+    xxlarge.name_id = A_PLAN_XXLARGE
+    xxlarge.name = 'XX-Large'
+    xxlarge.price = '250'
+    xxlarge.private_projects = 250
+    xxlarge.save
   end
 
   def self.current_plans
-    Plan.where(name_id: /\A03/)
+    Plan.where(name_id: /\A04/)
   end
 
   def self.free_plan
-    Plan.where(name_id: A_PLAN_TRIAL_0).shift
+    Plan.where(name_id: A_PLAN_FREE).shift
   end
 
-  def self.personal_plan
-    Plan.where(name_id: A_PLAN_PERSONAL_3).shift
+  def self.micro
+    Plan.where(name_id: A_PLAN_MICRO).shift
   end
 
-  def self.personal_plan_6
-    Plan.where(name_id: A_PLAN_PERSONAL_6).shift
+  def self.small
+    Plan.where(name_id: A_PLAN_SMALL).shift
   end
 
-  def self.business_small_plan
-    Plan.where(name_id: A_PLAN_BUSINESS_25).shift
+  def self.medium
+    Plan.where(name_id: A_PLAN_MEDIUM).shift
   end
 
-  def self.business_normal_plan
-    Plan.where(name_id: A_PLAN_BUSINESS_50).shift
+  def self.large
+    Plan.where(name_id: A_PLAN_LARGE).shift
   end
 
 end

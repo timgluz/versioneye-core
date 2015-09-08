@@ -10,10 +10,10 @@ describe StripeService do
 
     it "creates a customer" do
       token = StripeFactory.token
-      personal_plan = Plan.personal_plan
+      small = Plan.small
       email = 'hans@wur.st'
 
-      customer = described_class.create_customer token[:id], personal_plan.name_id, email
+      customer = described_class.create_customer token[:id], small.name_id, email
       customer.should_not be_nil
       customer.id.should_not be_nil
       customer.email.should eq(email)
@@ -21,10 +21,10 @@ describe StripeService do
 
     it "does not create a customer" do
       token = 'error_token'
-      personal_plan = Plan.personal_plan
+      small = Plan.small
       email = 'hans@wur.st'
 
-      customer = described_class.create_customer token, personal_plan.name_id, email
+      customer = described_class.create_customer token, small.name_id, email
       customer.should be_nil
     end
 
@@ -34,9 +34,9 @@ describe StripeService do
 
     it 'fetches the correct customer' do
       token = StripeFactory.token
-      personal_plan = Plan.personal_plan
+      small = Plan.small
       email = 'hans@wur.st'
-      customer = described_class.create_customer token[:id], personal_plan.name_id, email
+      customer = described_class.create_customer token[:id], small.name_id, email
 
       id = customer.id
       cust = described_class.fetch_customer id
@@ -62,9 +62,9 @@ describe StripeService do
     it 'updates the customer' do
       token = StripeFactory.token
       token_id = token[:id]
-      personal_plan = Plan.personal_plan
+      small = Plan.small
       email = 'hans@wur.st'
-      customer = described_class.create_customer token_id, personal_plan.name_id, email
+      customer = described_class.create_customer token_id, small.name_id, email
       customer.should_not be_nil
 
       user = UserFactory.create_new 1
@@ -74,7 +74,7 @@ describe StripeService do
 
       new_token = StripeFactory.token
       token_id = new_token[:id]
-      business_plan = Plan.business_small_plan
+      business_plan = Plan.medium
       cust = described_class.update_customer user, token_id, business_plan.name_id
       cust.should_not be_nil
       cust[:subscription][:plan][:id].should eq(business_plan.name_id)
@@ -94,8 +94,8 @@ describe StripeService do
       user.stripe_customer_id.should be_nil
       token = StripeFactory.token
       token_id = token[:id]
-      personal_plan = Plan.personal_plan.name_id
-      customer = described_class.create_or_update_customer user, token_id, personal_plan
+      small = Plan.small.name_id
+      customer = described_class.create_or_update_customer user, token_id, small
       customer.should_not be_nil
       customer.id.should_not be_nil
     end
@@ -104,15 +104,15 @@ describe StripeService do
       user = UserFactory.create_new 1
       token = StripeFactory.token
       token_id = token[:id]
-      personal_plan = Plan.personal_plan.name_id
+      small = Plan.small.name_id
 
-      customer = described_class.create_customer token_id, personal_plan, user.email
+      customer = described_class.create_customer token_id, small, user.email
       user.stripe_customer_id = customer.id
-      user.save.should be_truthy
+      expect( user.save ).to be_truthy
 
       token = StripeFactory.token
       token_id = token[:id]
-      business_plan = Plan.business_small_plan.name_id
+      business_plan = Plan.medium.name_id
       customer = described_class.create_or_update_customer user, token_id, business_plan
       customer.should_not be_nil
       customer.id.should_not be_nil
@@ -132,10 +132,10 @@ describe StripeService do
 
     it 'returns true' do
       token = StripeFactory.token
-      personal_plan = Plan.personal_plan
+      small = Plan.small
       email = 'hans@wur.st'
 
-      customer = described_class.create_customer token[:id], personal_plan.name_id, email
+      customer = described_class.create_customer token[:id], small.name_id, email
       customer.should_not be_nil
 
       cust = described_class.fetch_customer customer.id
@@ -161,10 +161,10 @@ describe StripeService do
     end
     it 'returns the invoice' do
       token = StripeFactory.token
-      personal_plan = Plan.personal_plan
+      small = Plan.small
       email = 'hans@wur.st'
 
-      customer = described_class.create_customer token[:id], personal_plan.name_id, email
+      customer = described_class.create_customer token[:id], small.name_id, email
       customer.should_not be_nil
       invoices = customer.invoices
       invoices.should_not be_nil

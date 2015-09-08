@@ -3,7 +3,7 @@ class StripeService < Versioneye::Service
   require 'stripe'
 
   def self.fetch_customer customer_id, api_key = nil
-    return Stripe::Customer.retrieve(customer_id, api_key) if !api_key.to_s.empty? 
+    return Stripe::Customer.retrieve(customer_id, api_key) if !api_key.to_s.empty?
     return Stripe::Customer.retrieve customer_id
   rescue => e
     log.error e.message
@@ -58,8 +58,8 @@ class StripeService < Versioneye::Service
 
 
   def self.get_invoice invoice_id, api_key = nil
-    return Stripe::Invoice.retrieve(invoice_id, api_key) if !api_key.to_s.empty? 
-    return Stripe::Invoice.retrieve invoice_id 
+    return Stripe::Invoice.retrieve(invoice_id, api_key) if !api_key.to_s.empty?
+    return Stripe::Invoice.retrieve invoice_id
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")

@@ -212,7 +212,7 @@ describe ProjectImportService do
 
     it "allows because user has a plan and no projects" do
       Plan.create_defaults
-      plan = Plan.by_name_id( Plan::A_PLAN_PERSONAL_3 )
+      plan = Plan.by_name_id( Plan::A_PLAN_SMALL )
       user = github_user
       user.plan = plan
       user.save
@@ -221,7 +221,7 @@ describe ProjectImportService do
 
     it "denies because user has a plan and to many private projects already" do
       Plan.create_defaults
-      plan = Plan.by_name_id( Plan::A_PLAN_PERSONAL_3 )
+      plan = Plan.by_name_id( Plan::A_PLAN_SMALL )
       user = github_user
       user.plan = plan
       user.save
@@ -231,7 +231,7 @@ describe ProjectImportService do
 
     it "allows because user has a plan and to many private projects already, but 1 additional free project" do
       Plan.create_defaults
-      plan = Plan.by_name_id( Plan::A_PLAN_PERSONAL_3 )
+      plan = Plan.by_name_id( Plan::A_PLAN_SMALL )
       user = github_user
       user.plan = plan
       user.free_private_projects = 1
@@ -242,7 +242,7 @@ describe ProjectImportService do
 
     it "denises because user has a plan and to many private projects already" do
       Plan.create_defaults
-      plan = Plan.by_name_id( Plan::A_PLAN_PERSONAL_3 )
+      plan = Plan.by_name_id( Plan::A_PLAN_SMALL )
       user = github_user
       user.plan = plan
       user.free_private_projects = 1

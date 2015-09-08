@@ -7,7 +7,7 @@ describe SubscriptionMailer do
     it 'should have the new plan' do
 
       Plan.create_defaults
-      plan = Plan.business_small_plan
+      plan = Plan.medium
 
       user = UserFactory.create_new
       user.plan = plan

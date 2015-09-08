@@ -23,7 +23,7 @@ class LdapService < Versioneye::Service
                            :password => password,
                            :method => auth_method.to_sym } }
 
-    ldap = Net::LDAP.new( ldap_args )
+    ldap = Net::LDAP.new( ldap_args ) if ldap.nil?
 
     encryption = Settings.instance.ldap_encryption.to_s
     if !encryption.empty? && !encryption.strip.downcase.eql?('none')
