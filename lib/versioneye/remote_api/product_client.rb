@@ -9,9 +9,11 @@ class ProductClient < Versioneye::Service
   def self.show language, prod_key, version = nil
     return nil if language.to_s.empty? || prod_key.to_s.empty?
 
+    env     = Settings.instance.environment
+    api_key = GlobalSetting.get env, 'api_key'
     encoded_language = encod_language language
     encoded_prod_key = encode prod_key
-    url = "#{A_API}#{A_API_VERSION}#{A_API_ENDPOINT_PRODUCT}/#{encoded_language}/#{encoded_prod_key}"
+    url = "#{A_API}#{A_API_VERSION}#{A_API_ENDPOINT_PRODUCT}/#{encoded_language}/#{encoded_prod_key}?api_key=#{api_key}"
     if version
       url += "?prod_version=#{version}"
     end
@@ -24,7 +26,7 @@ class ProductClient < Versioneye::Service
 
     encoded_language = encod_language language
     encoded_prod_key = encode prod_key
-    url = "#{A_API}#{A_API_VERSION}#{A_API_ENDPOINT_PRODUCT}/#{encoded_language}/#{encoded_prod_key}/versions"
+    url = "#{A_API}#{A_API_VERSION}#{A_API_ENDPOINT_PRODUCT}/#{encoded_language}/#{encoded_prod_key}/versions?api_key=#{api_key}"
     json = fetch_json url
   end
 
