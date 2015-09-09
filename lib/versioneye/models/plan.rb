@@ -49,7 +49,7 @@ class Plan < Versioneye::Model
     micro = Plan.new
     micro.name_id = A_PLAN_FREE
     micro.name = 'Free'
-    micro.price = '1'
+    micro.price = '0'
     micro.private_projects = 1
     micro.save
 
