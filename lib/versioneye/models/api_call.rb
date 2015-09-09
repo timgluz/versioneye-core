@@ -3,12 +3,19 @@ class ApiCall < Versioneye::Model
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  A_OP_CREATE = 'CREATE'
+  A_OP_UPDATE = 'UPDATE'
+  A_OP_DELETE = 'DELETE'
+
   field :api_key    , type: String
   field :user_id    , type: String
+  field :project_id , type: String
+  field :operation  , type: String
   field :fullpath   , type: String
   field :http_method, type: String
   field :ip         , type: String
 
+  index({ created_at: 1, ip: 1 }, { name: "created_at_id_key_index", background: false })
   index({ api_key: 1 }, { name: "api_key_index", background: true })
   index({ user_id: 1 }, { name: "user_id_index", background: true })
 
@@ -20,6 +27,10 @@ class ApiCall < Versioneye::Model
 
   def user
     User.find user_id
+  end
+
+  def project
+    Project.find project_id
   end
 
 end
