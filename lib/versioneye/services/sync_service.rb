@@ -79,6 +79,11 @@ class SyncService < Versioneye::Service
     return nil if json.nil?
 
     json.deep_symbolize_keys!
+    if !json[:error].to_s.empty?
+      log.error "Error in response from VersionEye API: #{json[:error]}"
+      return nil
+    end
+
     return nil if json[:versions].nil?
 
     product_preload = Product.fetch_product language, prod_key

@@ -39,4 +39,8 @@ class Api < Versioneye::Model
     self.api_key = Api.generate_api_key(length)
   end
 
+  def user
+    User.find user_id
+  end
+
 end

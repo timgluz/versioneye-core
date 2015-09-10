@@ -14,11 +14,14 @@ class ProductClient < Versioneye::Service
     encoded_language = encod_language language
     encoded_prod_key = encode prod_key
     url = "#{A_API}#{A_API_VERSION}#{A_API_ENDPOINT_PRODUCT}/#{encoded_language}/#{encoded_prod_key}"
-    if !api_key.to_s.empty?
-      url = "#{url}?api_key=#{api_key}"
-    end
     if version
       url += "?prod_version=#{version}"
+    end
+    if version && !api_key.to_s.empty?
+      url = "#{url}&api_key=#{api_key}"
+    end
+    if version.to_s.empty? && !api_key.to_s.empty?
+      url = "#{url}?api_key=#{api_key}"
     end
     json = fetch_json url
   end
