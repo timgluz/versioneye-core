@@ -76,4 +76,14 @@ class CommonParser
     dependency
   end
 
+  def fetch_xml( content )
+    doc = Nokogiri::XML( content )
+    return nil if doc.nil?
+
+    doc.remove_namespaces!
+    return nil if doc.nil?
+
+    doc
+  end
+
 end

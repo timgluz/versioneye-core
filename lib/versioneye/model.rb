@@ -23,6 +23,7 @@ module Versioneye
     require 'versioneye/models/enterprise_lead'
     require 'versioneye/models/github_repo'
     require 'versioneye/models/stash_repo'
+    require 'versioneye/models/scm_changelog_entry'
     require 'versioneye/models/json_cache'
     require 'versioneye/models/language'
     require 'versioneye/models/language_daily_stats'

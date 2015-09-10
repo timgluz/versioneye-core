@@ -130,24 +130,15 @@ class PomParser < CommonParser
     project
   end
 
-  def fetch_xml( content )
-    doc = Nokogiri::XML( content )
-    return nil if doc.nil?
-
-    doc.remove_namespaces!
-    return nil if doc.nil?
-
-    doc
-  end
 
   def fetch_product dependency
-    product = nil 
-    if dependency.group_id.to_s.empty? 
+    product = nil
+    if dependency.group_id.to_s.empty?
       group_id = 'org.apache.maven.plugins'
       product = Product.find_by_group_and_artifact(group_id, dependency.artifact_id )
-      dependency.group_id = group_id if product 
-    else 
-      product = Product.find_by_group_and_artifact(dependency.group_id, dependency.artifact_id )  
+      dependency.group_id = group_id if product
+    else
+      product = Product.find_by_group_and_artifact(dependency.group_id, dependency.artifact_id )
     end
     product
   end
