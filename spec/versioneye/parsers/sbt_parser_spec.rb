@@ -64,30 +64,30 @@ describe SbtParser do
 
     end
 
-    it 'parse from url' do 
+    it 'parse from url' do
       parser = SbtParser.new
       project = parser.parse( "https://s3.amazonaws.com/veye_test_env/sbt_1/build.sbt" )
       project.should_not be_nil
       expect(project.dependencies.size).to eq(22)
 
       dep = dep_by_GA('com.typesafe.akka', 'akka-actor', project)
-      expect( dep ).to_not be_nil 
+      expect( dep ).to_not be_nil
       expect( dep.version_requested ).to eq('2.3.11')
 
       dep = dep_by_GA('io.spray', 'spray-can', project)
-      expect( dep ).to_not be_nil 
+      expect( dep ).to_not be_nil
       expect( dep.version_requested ).to eq('1.3.3')
       expect( dep.scope ).to eq('compile')
 
       dep = dep_by_GA('io.spray', 'spray-testkit', project)
-      expect( dep ).to_not be_nil 
+      expect( dep ).to_not be_nil
       expect( dep.version_requested ).to eq('1.3.3')
       expect( dep.scope ).to eq('test')
 
-      
+
 
       dep = dep_by_GA('com.hybris.service-sdk.libraries', 'logging', project)
-      expect( dep ).to_not be_nil 
+      expect( dep ).to_not be_nil
       expect( dep.version_requested ).to eq('3.12.0')
 
       dep = dep_by_GA('', '', project)
@@ -97,10 +97,10 @@ describe SbtParser do
 
 
   def dep_by_GA(group, artifact, project)
-    project.dependencies.each do |dep| 
+    project.dependencies.each do |dep|
       return dep if dep.group_id.eql?(group) && dep.artifact_id.eql?(artifact)
     end
-    nil 
+    nil
   end
 
 end

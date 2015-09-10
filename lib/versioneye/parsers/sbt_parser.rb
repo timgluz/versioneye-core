@@ -6,19 +6,19 @@ class SbtParser < CommonParser
   A_VAL_MATCHER = /\s*val\s*(\S+)\s*=\s*\"(\S+)\"/xi
 
   # matches "<GROUP_ID>" %% "<ARTIFACT_ID" % CONSTANT
-  A_DEP_VAL_MATCHER = /\"(\S+)\"\s*\%+\s*\"(\S+)\"\s*\%+\s*(\S+)\s*[,\n]/xi 
+  A_DEP_VAL_MATCHER = /\"(\S+)\"\s*\%+\s*\"(\S+)\"\s*\%+\s*(\S+)\s*[,\n]/xi
 
   # matches "<GROUP_ID>" %% "<ARTIFACT_ID" % "VERSION"
-  A_DEP_MATCHER = /\"(\S+)\"\s*\%+\s*\"(\S+)\"\s*\%+\s*\"(\S+)\"/xi  
+  A_DEP_MATCHER = /\"(\S+)\"\s*\%+\s*\"(\S+)\"\s*\%+\s*\"(\S+)\"/xi
 
   # matches "<GROUP_ID>" %% "<ARTIFACT_ID" % CONSTANT  % "SCOPE"
   #         "<GROUP_ID>" %% "<ARTIFACT_ID" % "VERSION" % "SCOPE"
   A_DEP_SCOPE_MATCHER = /\"(\S+)\"\s*\%+\s*\"(\S+)\"\s*\%+\s*(\S+)\s*\%+\s*\"(\S+)\"/xi
 
-  # matches 
+  # matches
   # A_DEP_SCOPE_MATCHER = /\"(\S+)\"\s*\%+\s*\"(\S+)\"\s*\%+\s*\"(\S+)\"\s*\%+\s*\"(\S+)\"/xi
 
-  
+
   def parse( url )
     return nil if url.nil?
 
@@ -35,8 +35,8 @@ class SbtParser < CommonParser
     return nil if content.to_s.empty?
     return nil if content.to_s.strip.eql?('Not Found')
 
-    content = content.gsub(/\/\*.*?\*\//mxi, "")              # remove comments /* */ 
-    content = content.gsub(/\A\/\/.*$/xi, "")                 # remove comments // 
+    content = content.gsub(/\/\*.*?\*\//mxi, "")              # remove comments /* */
+    content = content.gsub(/\A\/\/.*$/xi, "")                 # remove comments //
     content = content.gsub(/[^[https:][http:]]\/\/.*$/xi, "") # remove comments // without http[s]
 
     vals = {}
@@ -84,7 +84,7 @@ class SbtParser < CommonParser
 
   def fill_deps dependencies, deps, keys
     return if dependencies.nil? || dependencies[:projectdependencies].nil? || dependencies[:projectdependencies].empty?
-    
+
     dependencies[:projectdependencies].each do |dep|
       key = "#{dep.group_id}:#{dep.artifact_id}"
       deps[:projectdependencies] << dep if keys[key].to_s.empty?
@@ -97,7 +97,7 @@ class SbtParser < CommonParser
     matches.each do |row|
       map[row[0]] = row[1]
     end
-    map 
+    map
   end
 
 
@@ -150,7 +150,7 @@ class SbtParser < CommonParser
     version = version.gsub(/,\z/, '')
     version = version.gsub('"', '')
     version = version.gsub("'", '')
-    version = vals[version] if !vals[version].to_s.empty? 
+    version = vals[version] if !vals[version].to_s.empty?
 
     if product.nil?
       dependency.version_requested = version
