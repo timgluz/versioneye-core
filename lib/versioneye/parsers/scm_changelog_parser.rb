@@ -38,9 +38,9 @@ class ScmChangelogParser < CommonParser
           if ch.name.casecmp('action') == 0
             changelog.action = ch.text.strip
           elsif ch.name.casecmp('name') == 0
-            changelog.file = ch.name.strip
+            changelog.file = ch.text.strip
           elsif ch.name.casecmp('revision') == 0
-            changelog.revision = ch.name.strip
+            changelog.revision = ch.text.strip
           end
         end
       end

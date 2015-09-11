@@ -15,6 +15,7 @@ describe ScmChangelogParser do
       expect( entries ).to_not be_nil
       expect( entries.count ).to eq(4)
       expect( entries.first.author ).to eq('Robert Reiz <robert.reiz.81@gmail.com>')
+      expect( entries.first.file ).to eq('README.md')
     end
   end
 
