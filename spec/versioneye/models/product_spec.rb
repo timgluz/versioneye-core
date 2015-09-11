@@ -79,6 +79,33 @@ describe Product do
   end
 
 
+  describe "scm_changelogs" do
+    it 'returns the scm_changelogs' do
+      expect( ScmChangelogEntry.count ).to eq(0)
+      product = ProductFactory.create_new
+      scm_change = ScmChangelogEntry.new({:author => 'reiz',
+        :file => 'pom.xml', :message => 'good change',
+        :language => product.language, :prod_key => product.prod_key,
+        :version => product.version})
+      expect( scm_change.save ).to be_truthy
+      logs = product.scm_changelogs
+      expect( logs ).to_not be_nil
+      expect( logs ).to_not be_empty
+      expect( logs.count ).to eq(1)
+      expect( ScmChangelogEntry.count ).to eq(1)
+    end
+    it 'returns an empty array' do
+      expect( ScmChangelogEntry.count ).to eq(0)
+      product = ProductFactory.create_new
+      logs = product.scm_changelogs
+      expect( logs ).to_not be_nil
+      expect( logs ).to be_empty
+      expect( logs.count ).to eq(0)
+      expect( ScmChangelogEntry.count ).to eq(0)
+    end
+  end
+
+
   describe "find_by_id" do
 
     it "return nil. Because input is nil" do

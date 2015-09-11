@@ -248,11 +248,16 @@ class Product < Versioneye::Model
     return language.capitalize
   end
 
-  def update_in_my_products array_of_product_ids
-    self.in_my_products = array_of_product_ids.include?(_id.to_s)
+  def language_esc lang = nil
+    lang = self.language if lang.nil?
+    Product.encode_language lang
   end
 
   ########## ELSE #############
+
+  def update_in_my_products array_of_product_ids
+    self.in_my_products = array_of_product_ids.include?(_id.to_s)
+  end
 
   def released_at
     ver = version_by_number version
@@ -289,11 +294,6 @@ class Product < Versioneye::Model
     else
       nameversion
     end
-  end
-
-  def language_esc lang = nil
-    lang = self.language if lang.nil?
-    Product.encode_language lang
   end
 
   def license_info
@@ -398,6 +398,10 @@ class Product < Versioneye::Model
 
   def auditlogs
     Auditlog.where(:domain_id => self.id.to_s).desc(:created_at)
+  end
+
+  def scm_changelogs
+    ScmChangelogEntry.where(:language => language, :prod_key => prod_key, :version => version)
   end
 
   private
