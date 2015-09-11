@@ -1,19 +1,19 @@
 module VersionEye
   module LicenseNormalizer
 
-    
+
     A_CDDL_GPL2_W_CPE = 'CDDL+GPLv2 with classpath exception'
-    A_CDDL_GPL        = 'CDDL+GPL' # with calsspaht exception 
+    A_CDDL_GPL        = 'CDDL+GPL' # with calsspaht exception
 
     A_EDL_1_0 = 'EDL-1.0'
-    
+
 
     def name_substitute
-      identifier name 
+      identifier name
     end
 
-    
-    def identifier name 
+
+    def identifier name
       return 'unknown' if name.to_s.empty?
 
       # return name if name.size > 100
@@ -21,20 +21,20 @@ module VersionEye
       return spdx_id if spdx_id
 
       name.gsub("Licence", "License")
-    rescue => e 
-      log.error e 
+    rescue => e
+      log.error e
       log.error e.backtrace.join("\n")
-      name 
+      name
     end
 
-    
+
     # http://spdx.org/licenses/
-    def spdx_identifier 
+    def spdx_identifier
 
       spdx = spdx_2_0_map
 
       spdx_id = has_id_or_fullname?(spdx, name)
-      return spdx_id if !spdx_id.to_s.empty? 
+      return spdx_id if !spdx_id.to_s.empty?
 
       tmp_name = do_replacements(name)
 
@@ -52,7 +52,7 @@ module VersionEye
       return 'LGPL-2.0'  if lgpl_20_match( tmp_name )
       return 'LGPL-3.0+' if lgpl_3_or_later_match( tmp_name )
       return 'LGPL-3.0'  if lgpl_3_match( tmp_name )
-      
+
       return 'GPL-1.0+' if gpl_10_or_later_match( tmp_name )
       return 'GPL-1.0'  if gpl_10_match( tmp_name )
       return 'GPL-2.0+' if gpl_20_or_later_match( tmp_name )
@@ -108,7 +108,7 @@ module VersionEye
       return 'BSD-2-Clause-NetBSD'  if bsd_2_clause_netbsd_match( tmp_name )
       return 'BSD-2-Clause-FreeBSD' if bsd_2_clause_freebsd_match( tmp_name )
       return 'BSD-2-Clause'         if bsd_2_clause_match( tmp_name )
-      
+
       return 'BSD' if bsd_match( tmp_name )
 
       return 'PHP-3.01' if php_301_match( tmp_name )
@@ -116,7 +116,7 @@ module VersionEye
 
       return 'SAP DEVELOPER LICENSE AGREEMENT' if sap_dla_match( tmp_name )
 
-      nil 
+      nil
     end
 
 
@@ -127,14 +127,14 @@ module VersionEye
       end
       return nil if name.to_s.empty?
 
-      spdx_id = spdx_identifier 
+      spdx_id = spdx_identifier
       if spdx_id
-        #       https://glassfish.java.net/nonav/public/CDDL+GPL.html - same 
+        #       https://glassfish.java.net/nonav/public/CDDL+GPL.html - same
         return 'https://glassfish.java.net/public/CDDL+GPL.html'     if spdx_id.to_s.eql?( A_CDDL_GPL )
 
-        #       https://glassfish.java.net/nonav/public/CDDL+GPL_1_1.html - same 
+        #       https://glassfish.java.net/nonav/public/CDDL+GPL_1_1.html - same
         #       https://glassfish.java.net/public/CDDL+GPL_1_1.html
-        return 'https://glassfish.java.net/public/CDDL+GPL_1_1.html' if spdx_id.to_s.eql?( A_CDDL_GPL2_W_CPE ) 
+        return 'https://glassfish.java.net/public/CDDL+GPL_1_1.html' if spdx_id.to_s.eql?( A_CDDL_GPL2_W_CPE )
 
         return 'http://www.eclipse.org/org/documents/edl-v10.php'    if spdx_id.to_s.eql?( A_EDL_1_0 )
 
@@ -150,68 +150,68 @@ module VersionEye
       return true if name_sub.eql?( license_identifier )
 
       if name_sub.eql?('LGPL-2.0+') && (
-        license_identifier.eql?('LGPL-2.0') || 
-        license_identifier.eql?('LGPL-2.0+') || 
-        license_identifier.eql?('LGPL-2.1') || 
-        license_identifier.eql?('LGPL-2.1+') || 
-        license_identifier.eql?('LGPL-3.0') || 
-        license_identifier.eql?('LGPL-3.0+') 
+        license_identifier.eql?('LGPL-2.0') ||
+        license_identifier.eql?('LGPL-2.0+') ||
+        license_identifier.eql?('LGPL-2.1') ||
+        license_identifier.eql?('LGPL-2.1+') ||
+        license_identifier.eql?('LGPL-3.0') ||
+        license_identifier.eql?('LGPL-3.0+')
         )
-        return true 
+        return true
       end
 
       if name_sub.eql?('LGPL-2.1+') && (
-        license_identifier.eql?('LGPL-2.1') || 
-        license_identifier.eql?('LGPL-2.1+') || 
-        license_identifier.eql?('LGPL-3.0') || 
-        license_identifier.eql?('LGPL-3.0+') 
+        license_identifier.eql?('LGPL-2.1') ||
+        license_identifier.eql?('LGPL-2.1+') ||
+        license_identifier.eql?('LGPL-3.0') ||
+        license_identifier.eql?('LGPL-3.0+')
         )
-        return true 
+        return true
       end
 
       if name_sub.eql?('LGPL-3.0+') && (
-        license_identifier.eql?('LGPL-3.0') || 
-        license_identifier.eql?('LGPL-3.0+') 
+        license_identifier.eql?('LGPL-3.0') ||
+        license_identifier.eql?('LGPL-3.0+')
         )
-        return true 
+        return true
       end
 
       if name_sub.eql?('GPL-1.0+') && (
-        license_identifier.eql?('GPL-1.0') || 
-        license_identifier.eql?('GPL-1.0+') || 
-        license_identifier.eql?('GPL-2.0') || 
-        license_identifier.eql?('GPL-2.0+') || 
-        license_identifier.eql?('GPL-3.0') || 
-        license_identifier.eql?('GPL-3.0+') 
+        license_identifier.eql?('GPL-1.0') ||
+        license_identifier.eql?('GPL-1.0+') ||
+        license_identifier.eql?('GPL-2.0') ||
+        license_identifier.eql?('GPL-2.0+') ||
+        license_identifier.eql?('GPL-3.0') ||
+        license_identifier.eql?('GPL-3.0+')
         )
-        return true 
+        return true
       end
 
       if name_sub.eql?('GPL-2.0+') && (
-        license_identifier.eql?('GPL-2.0') || 
-        license_identifier.eql?('GPL-2.0+') || 
-        license_identifier.eql?('GPL-3.0') || 
-        license_identifier.eql?('GPL-3.0+') 
+        license_identifier.eql?('GPL-2.0') ||
+        license_identifier.eql?('GPL-2.0+') ||
+        license_identifier.eql?('GPL-3.0') ||
+        license_identifier.eql?('GPL-3.0+')
         )
-        return true 
+        return true
       end
 
       if name_sub.eql?('GPL-3.0+') && (
-        license_identifier.eql?('GPL-3.0') || 
-        license_identifier.eql?('GPL-3.0+') 
+        license_identifier.eql?('GPL-3.0') ||
+        license_identifier.eql?('GPL-3.0+')
         )
-        return true 
+        return true
       end
 
-      false 
-    rescue => e 
-      log.error e 
+      false
+    rescue => e
+      log.error e
       log.error e.backtrace.join("\n")
-      false 
+      false
     end
 
 
-    
+
 
     def sap_dla_match name
       name.match(/\ASAP\s+DEVELOPER\s+LICENSE\s+AGREEMENT\z/i) ||
@@ -224,48 +224,48 @@ module VersionEye
     end
 
     def php_30_match name
-      name.match(/\APHP\s*3\z/i) || 
+      name.match(/\APHP\s*3\z/i) ||
       name.match(/\APHPv3\z/i)
     end
 
     # Creative Commons Attribution Share Alike 1.0
     def cc_by_sa_10_match name
       name.match(/\ACC\s+BY\s+SA\s+1\z/i) ||
-      name.match(/\ACreative\s+Commons\s+Attribution\s+Share\s+Alike\s+1\z/i) || 
-      name.match(/\ACreative\s+Commons\s+1\s+BY\s+SA\z/i) || 
-      name.match(/\ACC\s+1\s+BY\s+SA\z/i) 
+      name.match(/\ACreative\s+Commons\s+Attribution\s+Share\s+Alike\s+1\z/i) ||
+      name.match(/\ACreative\s+Commons\s+1\s+BY\s+SA\z/i) ||
+      name.match(/\ACC\s+1\s+BY\s+SA\z/i)
     end
 
     # Creative Commons Attribution Share Alike 2.0
     def cc_by_sa_20_match name
       name.match(/\ACC\s+BY\s+SA\s+2\z/i) ||
-      name.match(/\ACreative\s+Commons\s+Attribution\s+Share\s+Alike\s+2\z/i) || 
-      name.match(/\ACreative\s+Commons\s+2\s+BY\s+SA\z/i) || 
-      name.match(/\ACC\s+2\s+BY\s+SA\z/i) 
+      name.match(/\ACreative\s+Commons\s+Attribution\s+Share\s+Alike\s+2\z/i) ||
+      name.match(/\ACreative\s+Commons\s+2\s+BY\s+SA\z/i) ||
+      name.match(/\ACC\s+2\s+BY\s+SA\z/i)
     end
 
     # Creative Commons Attribution Share Alike 2.5
     def cc_by_sa_25_match name
       name.match(/\ACC\s+BY\s+SA\s+2\.5\z/i) ||
-      name.match(/\ACreative\s+Commons\s+Attribution\s+Share\s+Alike\s+2\.5\z/i) || 
-      name.match(/\ACreative\s+Commons\s+2\.5\s+BY\s+SA\z/i) || 
-      name.match(/\ACC\s+2\.5\s+BY\s+SA\z/i) 
+      name.match(/\ACreative\s+Commons\s+Attribution\s+Share\s+Alike\s+2\.5\z/i) ||
+      name.match(/\ACreative\s+Commons\s+2\.5\s+BY\s+SA\z/i) ||
+      name.match(/\ACC\s+2\.5\s+BY\s+SA\z/i)
     end
 
     # Creative Commons Attribution Share Alike 3.0
     def cc_by_sa_30_match name
       name.match(/\ACC\s+BY\s+SA\s+3\z/i) ||
-      name.match(/\ACreative\s+Commons\s+Attribution\s+Share\s+Alike\s+3\z/i) || 
-      name.match(/\ACreative\s+Commons\s+3\s+BY\s+SA\z/i) || 
-      name.match(/\ACC\s+3\s+BY\s+SA\z/i) 
+      name.match(/\ACreative\s+Commons\s+Attribution\s+Share\s+Alike\s+3\z/i) ||
+      name.match(/\ACreative\s+Commons\s+3\s+BY\s+SA\z/i) ||
+      name.match(/\ACC\s+3\s+BY\s+SA\z/i)
     end
 
     # Creative Commons Attribution Share Alike 4.0
     def cc_by_sa_40_match name
       name.match(/\ACC\s+BY\s+SA\s+4\z/i) ||
-      name.match(/\ACreative\s+Commons\s+Attribution\s+Share\s+Alike\s+4\z/i) || 
-      name.match(/\ACreative\s+Commons\s+4\s+BY\s+SA\z/i) || 
-      name.match(/\ACC\s+4\s+BY\s+SA\z/i) 
+      name.match(/\ACreative\s+Commons\s+Attribution\s+Share\s+Alike\s+4\z/i) ||
+      name.match(/\ACreative\s+Commons\s+4\s+BY\s+SA\z/i) ||
+      name.match(/\ACC\s+4\s+BY\s+SA\z/i)
     end
 
     def json_match name
@@ -275,21 +275,21 @@ module VersionEye
     def mpl_10_match name
       name.match(/\AMozilla\s*Public\s*1\z/i) ||
       name.match(/\AMozilla\s*Public\s*1\s*\(MPL\s*1\)\z/i) ||
-      name.match(/\AMPL\s*1\z/i) || 
+      name.match(/\AMPL\s*1\z/i) ||
       name.match(/\AMPLv1\z/i)
     end
 
     def mpl_11_match name
       name.match(/\AMozilla\s+Public\s+1\.1\z/i) ||
       name.match(/\AMozilla\s+Public\s+1\.1\s+\(MPL\s+1\.1\)\z/i) ||
-      name.match(/\AMPL\s*1\.1\z/i) || 
+      name.match(/\AMPL\s*1\.1\z/i) ||
       name.match(/\AMPLv1\.1\z/i)
     end
 
     def mpl_20_match name
       name.match(/\AMozilla\s*Public\s*2\z/i) ||
       name.match(/\AMozilla\s*Public\s*2\s*\(MPL\s*2\)\z/i) ||
-      name.match(/\AMPL\s*2\z/i) || 
+      name.match(/\AMPL\s*2\z/i) ||
       name.match(/\AMPLv2\z/i)
     end
 
@@ -306,13 +306,13 @@ module VersionEye
       name.match(/\AMIT\s*\(MIT\)\z/i)
     end
 
-    def unlicense_match name 
+    def unlicense_match name
       name.match(/\APublic\s*domain\s*\(Unlicense\)\z/i) ||
       name.match(/\AUnlicense\s+\(Public\s+Domain\)\z/i) ||
-      name.match(/\A\(Unlicense\)\z/i) || 
-      name.match(/\AUnlicensed\z/i) || 
-      name.match(/\Aunlicense\.org\z/i) || 
-      name.match(/\Ahttp\:\/\/spdx\.org\/licenses\/Unlicense\.html\z/i) || 
+      name.match(/\A\(Unlicense\)\z/i) ||
+      name.match(/\AUnlicensed\z/i) ||
+      name.match(/\Aunlicense\.org\z/i) ||
+      name.match(/\Ahttp\:\/\/spdx\.org\/licenses\/Unlicense\.html\z/i) ||
       name.match(/\Ahttps\:\/\/spdx\.org\/licenses\/Unlicense\.html\z/i)
     end
 
@@ -326,7 +326,7 @@ module VersionEye
       name.match(/\AEclipse\s*Public\s*1\z/i) ||
       name.match(/\AEclipse\s*Public\s*v1\z/i) ||
       name.match(/\AEclipse\s*Public\s*v\s*1\z/i) ||
-      name.match(/\AEclipse\s*Public\s*1\z/i) || 
+      name.match(/\AEclipse\s*Public\s*1\z/i) ||
       name.match(/\AEclipse\s*Public\s*\(EPL\)\s*1\s*\z/i)
     end
 
@@ -339,50 +339,50 @@ module VersionEye
       name.match(/\AEclipse\s*Distribution\s*1\z/i) ||
       name.match(/\AEclipse\s*Distribution\s*v1\z/i) ||
       name.match(/\AEclipse\s*Distribution\s*vs*1\z/i) ||
-      name.match(/\AEclipse\s*Distribution\s*1\z/i) || 
-      name.match(/\AEclipse\s*Distribution\s*\(New\s*BSD\s*\)\z/i) || 
-      name.match(/\AEclipse\s*Distribution\s*v\.\s*1\z/i) 
+      name.match(/\AEclipse\s*Distribution\s*1\z/i) ||
+      name.match(/\AEclipse\s*Distribution\s*\(New\s*BSD\s*\)\z/i) ||
+      name.match(/\AEclipse\s*Distribution\s*v\.\s*1\z/i)
     end
 
     def bsd_match name
-      tmp_name = name.gsub("-", " ").strip 
-      tmp_name.match(/\ABSD\z/i) || 
+      tmp_name = name.gsub("-", " ").strip
+      tmp_name.match(/\ABSD\z/i) ||
       tmp_name.match(/\ABSD\s*style\z/i) ||
       tmp_name.match(/\ABerkeley\s+Software\s+Distribution\s+\(BSD\)\s*\z/i) ||
       tmp_name.match(/\ABerkeley\s+Software\s+Distribution\s*\z/i) ||
-      tmp_name.match(/\ABSD\s*like\z/i) 
+      tmp_name.match(/\ABSD\s*like\z/i)
     end
 
     def bsd_2_clause_match name
-      tmp_name = name.gsub("-", " ").strip 
+      tmp_name = name.gsub("-", " ").strip
 
       if tmp_name.match(/\ABSD\z/i) && defined?(url) && url.to_s.match(/opensource\.org\/licenses\/BSD\-2\-Clause/i)
-        return true 
-      end 
+        return true
+      end
 
-      tmp_name.match(/BSD\s*2\s*Clause/i) || 
-      tmp_name.match(/BSD\s*2\s*clause\s*\"Simplified\"/i) || 
-      tmp_name.match(/BSD\s*2\s*clause\s*Simplified/i) || 
-      tmp_name.match(/2\s*clause\s*BSD/i) || 
-      tmp_name.match(/2\s*clause\s*BSDL/i) || 
-      tmp_name.match(/Simplified\s*BSD/i) 
+      tmp_name.match(/BSD\s*2\s*Clause/i) ||
+      tmp_name.match(/BSD\s*2\s*clause\s*\"Simplified\"/i) ||
+      tmp_name.match(/BSD\s*2\s*clause\s*Simplified/i) ||
+      tmp_name.match(/2\s*clause\s*BSD/i) ||
+      tmp_name.match(/2\s*clause\s*BSDL/i) ||
+      tmp_name.match(/Simplified\s*BSD/i)
     end
 
     def bsd_2_clause_freebsd_match name
-      tmp_name = name.gsub("-", " ").strip 
-      tmp_name.match(/BSD\s*2\s*Clause\s*FreeBSD/i) || 
-      tmp_name.match(/BSD\s*2\s*FreeBSD/i) || 
-      tmp_name.match(/FreeBSD/i) 
+      tmp_name = name.gsub("-", " ").strip
+      tmp_name.match(/BSD\s*2\s*Clause\s*FreeBSD/i) ||
+      tmp_name.match(/BSD\s*2\s*FreeBSD/i) ||
+      tmp_name.match(/FreeBSD/i)
     end
 
     def bsd_2_clause_netbsd_match name
-      tmp_name = name.gsub("-", " ").strip 
-      tmp_name.match(/BSD\s*2\s*clause\s*NetBSD/i) || 
-      tmp_name.match(/BSD\s*2\s*NetBSD/i) 
+      tmp_name = name.gsub("-", " ").strip
+      tmp_name.match(/BSD\s*2\s*clause\s*NetBSD/i) ||
+      tmp_name.match(/BSD\s*2\s*NetBSD/i)
     end
 
     def bsd_3_clause_match name
-      tmp_name = name.gsub("-", " ").strip 
+      tmp_name = name.gsub("-", " ").strip
       tmp_name.match(/BSD\s*3/i) ||
       tmp_name.match(/BSDv3/i) ||
       tmp_name.match(/BSDv3.0/i) ||
@@ -393,22 +393,22 @@ module VersionEye
       tmp_name.match(/3\s*clause\s*BSDL/i) ||
       tmp_name.match(/\ARevised\s*BSD\z/i) ||
       tmp_name.match(/\ARevised\s*BSDL\z/i) ||
-      tmp_name.match(/\ANew\s*BSD\z/i) || 
+      tmp_name.match(/\ANew\s*BSD\z/i) ||
       tmp_name.match(/\ABSD\s*Revised\z/i) ||
-      tmp_name.match(/\ABSD\s*New\z/i) || 
+      tmp_name.match(/\ABSD\s*New\z/i) ||
       tmp_name.match(/\ABSD\s*3\s*clause\s*\"New\"\s*or\s*\"Revised\"\z/i)
     end
 
-    def bsd_3_clause_clear_match name 
-      new_name = name.gsub("-", " ").strip 
+    def bsd_3_clause_clear_match name
+      new_name = name.gsub("-", " ").strip
       return true if new_name.match(/BSD 3 Clause Clear/i)
       return true if new_name.match(/Clear BSD/i)
-      return false 
+      return false
     end
 
 
     def bsd_4_clause_UC_match name
-      tmp_name = name.gsub("-", " ").strip 
+      tmp_name = name.gsub("-", " ").strip
       tmp_name.match(/BSD\s*4\s*clause\s+\(University\s+of\s+California\s+Specific\)/i) ||
       tmp_name.match(/BSD\s*4\s*clause\s+\(University\s+of\s+California\)/i) ||
       tmp_name.match(/BSD\s*4\s+UC/i) ||
@@ -416,7 +416,7 @@ module VersionEye
     end
 
     def bsd_4_clause_match name
-      tmp_name = name.gsub("-", " ").strip 
+      tmp_name = name.gsub("-", " ").strip
       tmp_name.match(/BSD\s*4\s*clause/i) ||
       tmp_name.match(/BSD\s*4/i) ||
       tmp_name.match(/4\s*clause\s*BSD/i) ||
@@ -427,12 +427,12 @@ module VersionEye
 
     def gpl_match name
       name.match(/\AGPL\z/i) ||
-      name.match(/\AGNU\s+General\s+Public\s+Library\z/i) || 
+      name.match(/\AGNU\s+General\s+Public\s+Library\z/i) ||
       name.match(/\AGNU\s+General\s+Public\s+\(GPL\)\z/i)
     end
 
     def gpl_10_match name
-      new_name = name.gsub(/gnu/i, "").strip 
+      new_name = name.gsub(/gnu/i, "").strip
       new_name.match(/\AGPL1\z/i) ||
       new_name.match(/\AGPLv1\z/i) ||
       new_name.match(/\AGPL\s+1\z/i) ||
@@ -444,8 +444,8 @@ module VersionEye
     end
 
     def gpl_10_or_later_match name
-      new_name = name.gsub(/gnu/i, "").strip 
-      
+      new_name = name.gsub(/gnu/i, "").strip
+
       new_name = name.gsub(/gnu/i, '').strip
       new_name.match(/\AGPL1\+\z/i) ||
       new_name.match(/\AGPLv1\+\z/i) ||
@@ -454,17 +454,17 @@ module VersionEye
       new_name.match(/\AGPL\s*v1\+\z/i) ||
       new_name.match(/\AGPL\s*v1\s*or\s*later\z/i) ||
       new_name.match(/\AGPL\s*1\s*or\s*later\z/i) ||
-      new_name.match(/\APublic\s+1\s+or\s+later\s*\z/i) || 
-      new_name.match(/\APublic\s+1\s+or\s+greater\s*\z/i) || 
-      new_name.match(/\AGeneral\s+Public\s+1\s+or\s+later\z/i) || 
-      new_name.match(/\AGeneral\s+Public\s+1\s+or\s+greater\z/i) || 
+      new_name.match(/\APublic\s+1\s+or\s+later\s*\z/i) ||
+      new_name.match(/\APublic\s+1\s+or\s+greater\s*\z/i) ||
+      new_name.match(/\AGeneral\s+Public\s+1\s+or\s+later\z/i) ||
+      new_name.match(/\AGeneral\s+Public\s+1\s+or\s+greater\z/i) ||
       new_name.match(/\AGeneral\s+Public\s+1\+\s+\(GPL\s+1\+\)\z/i) ||
       new_name.match(/\AGeneral\s+Public\s+\(GPL\s+1\+\)\z/i) ||
       new_name.match(/\AGeneral\s+Public\s+1\+\z/i)
     end
 
     def gpl_20_match name
-      new_name = name.gsub(/gnu/i, "").strip 
+      new_name = name.gsub(/gnu/i, "").strip
       new_name.match(/\AGPL\s*2\z/i) ||
       new_name.match(/\AGPLv2\+\z/i) ||
       new_name.match(/\AGPLv2\.0\+\z/i) ||
@@ -473,13 +473,13 @@ module VersionEye
       new_name.match(/\AGPL\s*2\+\z/i) ||
       new_name.match(/\AGeneral\s+Public\s+2\s+\(GPL\s+2\)\z/i) ||
       new_name.match(/\AGeneral\s+Public\s+\(GPL\s+2\)\z/i) ||
-      new_name.match(/\AGeneral\s+Public\s+2\s+only\z/i) || 
+      new_name.match(/\AGeneral\s+Public\s+2\s+only\z/i) ||
       new_name.match(/\AGeneral\s+Public\s+2\z/i)
     end
 
     def gpl_20_or_later_match name
-      new_name = name.gsub(/gnu/i, "").strip 
-      
+      new_name = name.gsub(/gnu/i, "").strip
+
       new_name = name.gsub(/gnu/i, '').strip
       new_name.match(/\AGPL2\+\z/i) ||
       new_name.match(/\AGPLv2\+\z/i) ||
@@ -488,17 +488,17 @@ module VersionEye
       new_name.match(/\AGPL\s*v2\+\z/i) ||
       new_name.match(/\AGPL\s*v2\s*or\s*later\z/i) ||
       new_name.match(/\AGPL\s*2\s*or\s*later\z/i) ||
-      new_name.match(/\APublic\s+2\s+or\s+later\s*\z/i) || 
-      new_name.match(/\APublic\s+2\s+or\s+greater\s*\z/i) || 
-      new_name.match(/\AGeneral\s+Public\s+2\s+or\s+later\z/i) || 
-      new_name.match(/\AGeneral\s+Public\s+2\s+or\s+greater\z/i) || 
+      new_name.match(/\APublic\s+2\s+or\s+later\s*\z/i) ||
+      new_name.match(/\APublic\s+2\s+or\s+greater\s*\z/i) ||
+      new_name.match(/\AGeneral\s+Public\s+2\s+or\s+later\z/i) ||
+      new_name.match(/\AGeneral\s+Public\s+2\s+or\s+greater\z/i) ||
       new_name.match(/\AGeneral\s+Public\s+2\+\s+\(GPL\s+2\+\)\z/i) ||
       new_name.match(/\AGeneral\s+Public\s+\(GPL\s+2\+\)\z/i) ||
       new_name.match(/\AGeneral\s+Public\s+2\+\z/i)
     end
 
     def gpl_20_match_w_cpe name
-      new_name = name.gsub(/gnu/i, "").strip 
+      new_name = name.gsub(/gnu/i, "").strip
       new_name.match(/\AGeneral\s+Public\s+\(GPL\)\s+2\s+June\s+1991\s+with\s+\"ClassPath\"\s+Exception\z/i) ||
       new_name.match(/\AGeneral\s+Public\s+\(GPL\)\s+2\s+June\s+1991\s+with\s+ClassPath\s+Exception\z/i) ||
       new_name.match(/\AGeneral\s*Public\s*2\.0\s*w\/Classpath\s*exception\z/i) ||
@@ -514,13 +514,13 @@ module VersionEye
       new_name.match(/\AGPLv2\s*w\/\s*CPE\z/i)
     end
 
-    def gpl_30_match name 
-      new_name = name.gsub(/gnu/i, "").strip 
+    def gpl_30_match name
+      new_name = name.gsub(/gnu/i, "").strip
 
       if name.match(/General\s+Public/i) && defined?(url) && url.to_s.match(/www\.gnu\.org\/licenses\/gpl\.txt/i)
-        return true 
+        return true
       end
-      
+
       new_name.match(/\AGPL3\z/i) ||
       new_name.match(/\AGPL\s*3\z/i) ||
       new_name.match(/\AGPLv3\+\z/i) ||
@@ -532,8 +532,8 @@ module VersionEye
     end
 
     def gpl_30_or_later_match name
-      new_name = name.gsub(/gnu/i, "").strip 
-      
+      new_name = name.gsub(/gnu/i, "").strip
+
       new_name = name.gsub(/gnu/i, '').strip
       new_name.match(/\AGPL3\+\z/i) ||
       new_name.match(/\AGPLv3\+\z/i) ||
@@ -542,10 +542,10 @@ module VersionEye
       new_name.match(/\AGPL\s*v3\+\z/i) ||
       new_name.match(/\AGPL\s*v3\s*or\s*later\z/i) ||
       new_name.match(/\AGPL\s*3\s*or\s*later\z/i) ||
-      new_name.match(/\APublic\s+3\s+or\s+later\s*\z/i) || 
-      new_name.match(/\APublic\s+3\s+or\s+greater\s*\z/i) || 
-      new_name.match(/\AGeneral\s+Public\s+3\s+or\s+later\z/i) || 
-      new_name.match(/\AGeneral\s+Public\s+3\s+or\s+greater\z/i) || 
+      new_name.match(/\APublic\s+3\s+or\s+later\s*\z/i) ||
+      new_name.match(/\APublic\s+3\s+or\s+greater\s*\z/i) ||
+      new_name.match(/\AGeneral\s+Public\s+3\s+or\s+later\z/i) ||
+      new_name.match(/\AGeneral\s+Public\s+3\s+or\s+greater\z/i) ||
       new_name.match(/\AGeneral\s+Public\s+3\+\s+\(GPL\s+3\+\)\z/i) ||
       new_name.match(/\AGeneral\s+Public\s+\(GPL\s+3\+\)\z/i) ||
       new_name.match(/\AGeneral\s+Public\s+3\+\z/i)
@@ -577,10 +577,10 @@ module VersionEye
       new_name.match(/\ALGPLv2\z/i) ||
       new_name.match(/\ALGPLv2\.0\z/i) ||
       new_name.match(/\ALesser\s+General\s+Public\s+2\s+only\z/i) ||
-      new_name.match(/\ALesser\s+General\s+Public\s+2\z/i) || 
-      new_name.match(/\ALesser\s+General\s+Public\s*\(LGPL\)\s*2\z/i) || 
-      new_name.match(/\ALesser\s+General\s+Public\s*\(LGPL\)\s*2\s+only\z/i) || 
-      new_name.match(/\AGeneral\s+Lesser\s+Public\s+\(LGPL\)\s+2\z/i) 
+      new_name.match(/\ALesser\s+General\s+Public\s+2\z/i) ||
+      new_name.match(/\ALesser\s+General\s+Public\s*\(LGPL\)\s*2\z/i) ||
+      new_name.match(/\ALesser\s+General\s+Public\s*\(LGPL\)\s*2\s+only\z/i) ||
+      new_name.match(/\AGeneral\s+Lesser\s+Public\s+\(LGPL\)\s+2\z/i)
     end
 
     def lgpl_21_match name
@@ -589,25 +589,25 @@ module VersionEye
       new_name.match(/\ALGPLv2\.1\z/i) ||
       new_name.match(/\ALesser\s+General\s+Public\s*2\.1\s+only\z/i) ||
       new_name.match(/\ALesser\s+General\s+Public\s*2\.1\z/i) ||
-      new_name.match(/\ALesser\s+General\s+Public\s*\(LGPL\)\s*2\.1\z/i) || 
-      new_name.match(/\AGeneral\s+Lesser\s+Public\s+\(LGPL\)\s+2\.1\z/i) || 
+      new_name.match(/\ALesser\s+General\s+Public\s*\(LGPL\)\s*2\.1\z/i) ||
+      new_name.match(/\AGeneral\s+Lesser\s+Public\s+\(LGPL\)\s+2\.1\z/i) ||
       new_name.match(/\ALesser\s+General\s+Public\s+2\.1\s+February\s+1999\z/)
     end
 
     def lgpl_3_match name
       if name.match(/\AGnu\s+Lesser\s+Public\z/i)
-        return true 
+        return true
       end
       new_name = name.gsub(/gnu/i, '').strip
       new_name.match(/\ALGPLv3\z/i) ||
       new_name.match(/\ALGPL\s*3\z/i) ||
       new_name.match(/\ALESSER\s+GENERAL\s+PUBLIC\s*3\z/i) ||
-      new_name.match(/\ALesser\s+General\s+Public\s*3\s*only\z/i) || 
-      new_name.match(/\ALesser\s+General\s+Public\s+\(LGPL\s+3\)\s*\z/i) || 
-      new_name.match(/\ALibrary\s+or\s+Lesser\s+General\s+Public\s+\(LGPL\)\z/i) || 
-      new_name.match(/\ALesser\s+General\s+Public\z/i) || 
-      new_name.match(/\ALesser\s+General\s+Public\s+\(LGPL\)\z/i) || 
-      new_name.match(/\AGeneral\s+Lesser\s+Public\s+\(LGPL\)\s+3\z/i) 
+      new_name.match(/\ALesser\s+General\s+Public\s*3\s*only\z/i) ||
+      new_name.match(/\ALesser\s+General\s+Public\s+\(LGPL\s+3\)\s*\z/i) ||
+      new_name.match(/\ALibrary\s+or\s+Lesser\s+General\s+Public\s+\(LGPL\)\z/i) ||
+      new_name.match(/\ALesser\s+General\s+Public\z/i) ||
+      new_name.match(/\ALesser\s+General\s+Public\s+\(LGPL\)\z/i) ||
+      new_name.match(/\AGeneral\s+Lesser\s+Public\s+\(LGPL\)\s+3\z/i)
     end
 
     def lgpl_3_or_later_match name
@@ -618,9 +618,9 @@ module VersionEye
       new_name.match(/\ALGPL\s*v3\+\z/i) ||
       new_name.match(/\ALGPL\s*v3\s*or\s*later\z/i) ||
       new_name.match(/\ALGPL\s*3\s*or\s*later\z/i) ||
-      new_name.match(/\ALesser\s+General\s+Public\s+3\s+or\s+later\s*\z/i) || 
-      new_name.match(/\ALesser\s+General\s+Public\s+3\s+or\s+greater\s*\z/i) || 
-      new_name.match(/\ALibrary\s+General\s+Public\s+3\s+or\s+later\z/i) || 
+      new_name.match(/\ALesser\s+General\s+Public\s+3\s+or\s+later\s*\z/i) ||
+      new_name.match(/\ALesser\s+General\s+Public\s+3\s+or\s+greater\s*\z/i) ||
+      new_name.match(/\ALibrary\s+General\s+Public\s+3\s+or\s+later\z/i) ||
       new_name.match(/\ALibrary\s+General\s+Public\s+3\s+or\s+greater\z/i)
     end
 
@@ -632,9 +632,9 @@ module VersionEye
       new_name.match(/\ALGPL\s*v2\+\z/i) ||
       new_name.match(/\ALGPL\s*v2\s*or\s*later\z/i) ||
       new_name.match(/\ALGPL\s*2\s*or\s*later\z/i) ||
-      new_name.match(/\ALesser\s+General\s+Public\s+2\s+or\s+later\s*\z/i) || 
-      new_name.match(/\ALesser\s+General\s+Public\s+2\s+or\s+greater\s*\z/i) || 
-      new_name.match(/\ALibrary\s+General\s+Public\s+2\s+or\s+later\z/i) || 
+      new_name.match(/\ALesser\s+General\s+Public\s+2\s+or\s+later\s*\z/i) ||
+      new_name.match(/\ALesser\s+General\s+Public\s+2\s+or\s+greater\s*\z/i) ||
+      new_name.match(/\ALibrary\s+General\s+Public\s+2\s+or\s+later\z/i) ||
       new_name.match(/\ALibrary\s+General\s+Public\s+2\s+or\s+greater\z/i)
     end
 
@@ -646,27 +646,27 @@ module VersionEye
       new_name.match(/\ALGPL\s*v2\.1\+\z/i) ||
       new_name.match(/\ALGPL\s*v2\.1\s*or\s*later\z/i) ||
       new_name.match(/\ALGPL\s*2\.1\s*or\s*later\z/i) ||
-      new_name.match(/\ALesser\s+General\s+Public\s+2\.1\s+or\s+later\s*\z/i) || 
-      new_name.match(/\ALesser\s+General\s+Public\s+2\.1\s+or\s+greater\s*\z/i) || 
-      new_name.match(/\ALibrary\s+General\s+Public\s+2\.1\s+or\s+later\z/i) || 
+      new_name.match(/\ALesser\s+General\s+Public\s+2\.1\s+or\s+later\s*\z/i) ||
+      new_name.match(/\ALesser\s+General\s+Public\s+2\.1\s+or\s+greater\s*\z/i) ||
+      new_name.match(/\ALibrary\s+General\s+Public\s+2\.1\s+or\s+later\z/i) ||
       new_name.match(/\ALibrary\s+General\s+Public\s+2\.1\s+or\s+greater\z/i)
     end
 
     def clarified_artistic_match name
       name.match(/\AClarified\s+Artistic\s*\z/i) ||
-      name.match(/\AClArtistic\z/i) 
+      name.match(/\AClArtistic\z/i)
     end
 
     def artistic_10_match name
       name.match(/\AArtistic\s*\z/i) ||
-      name.match(/\AArtistic\s*1\z/i) 
+      name.match(/\AArtistic\s*1\z/i)
     end
-    
+
     def artistic_10_perl name
       name.match(/\AArtistic\s*Perl\z/i) ||
       name.match(/\AArtistic\s*\(Perl\)\z/i) ||
       name.match(/\AArtistic\s*1\s+Perl\z/i) ||
-      name.match(/\AArtistic\s*1\s+\(Perl\)\z/i) 
+      name.match(/\AArtistic\s*1\s+\(Perl\)\z/i)
     end
 
     def artistic_10_cl8 name
@@ -686,7 +686,7 @@ module VersionEye
       new_name.match(/ASLv1/i) ||
       new_name.match(/ASF\s*1/i) ||
       new_name.match(/Apache\s*1/i) ||
-      new_name.match(/Apache\s+ASL\s+1/i) 
+      new_name.match(/Apache\s+ASL\s+1/i)
     end
 
     def apache_license_11_match name
@@ -696,7 +696,7 @@ module VersionEye
       new_name.match(/ASF\s+1\.1/i) ||
       new_name.match(/ASFv1\.1/i) ||
       new_name.match(/Apache\s*1\.1/i) ||
-      new_name.match(/Apache\s+ASL\s+1\.1/i) 
+      new_name.match(/Apache\s+ASL\s+1\.1/i)
     end
 
     def apache_license_20_match name
@@ -708,7 +708,7 @@ module VersionEye
       new_name.match(/Apache20/i) ||
       new_name.match(/Apache\s*2/i) ||
       new_name.match(/Apache\s+ASL\s*2/i) ||
-      new_name.match(/Apache/i) 
+      new_name.match(/Apache/i)
     end
 
     def cddl_match name
@@ -728,48 +728,48 @@ module VersionEye
       name.match(/\ACommon\s+Development\s+and\s+Distribution\s+\(CDDL\)\s+v1\.1\z/i)
     end
 
-    # It is with classpath exception as well. 
+    # It is with classpath exception as well.
     def cddl_gpl name
       if defined?(url) && (
-         url.to_s.match(/glassfish\.java\.net\/nonav\/public\/CDDL\+GPL\.html\z/i) || 
-         url.to_s.match(/glassfish\.java\.net\/public\/CDDL\+GPL\.html\z/i) 
+         url.to_s.match(/glassfish\.java\.net\/nonav\/public\/CDDL\+GPL\.html\z/i) ||
+         url.to_s.match(/glassfish\.java\.net\/public\/CDDL\+GPL\.html\z/i)
          )
-         return true 
+         return true
       end
       name.match(/\ACOMMON\s+DEVELOPMENT\s+AND\s+DISTRIBUTION\s+\(CDDL\)\s+plus\s+GPL\z/i) ||
       name.match(/\ACOMMON\s+DEVELOPMENT\s+AND\s+DISTRIBUTION\s+plus\s+GPL\z/i) ||
-      name.match(/\ACDDL\s*\+\s*GPL\z/i) || 
+      name.match(/\ACDDL\s*\+\s*GPL\z/i) ||
       name.match(/\ACDDL\s*plus\s*GPL\z/i)
     end
 
     def cddl_gpl2_w_class_exception name
       if defined?(url) && (
-         url.to_s.match(/glassfish\.java\.net\/public\/CDDL\+GPL_1_1\.html\z/i) || 
+         url.to_s.match(/glassfish\.java\.net\/public\/CDDL\+GPL_1_1\.html\z/i) ||
          url.to_s.match(/glassfish\.java\.net\/nonav\/public\/CDDL\+GPL_1_1\.html\z/i)
          )
-         return true 
+         return true
       end
       name.match(/\ACOMMON\s+DEVELOPMENT\s+AND\s+DISTRIBUTION\s+\(CDDL\)\s+plus\s+GPL\s*2\s*with\s*classpath\s*exception\z/i) ||
       name.match(/\ACOMMON\s+DEVELOPMENT\s+AND\s+DISTRIBUTION\s+plus\s+GPL[v]*\s*2\s*with\s*classpath\s*exception\z/i) ||
-      name.match(/\ACDDL\s*plus\s*GPL\s*2\s*with\s*classpath\s*exception\s*\z/i) || 
+      name.match(/\ACDDL\s*plus\s*GPL\s*2\s*with\s*classpath\s*exception\s*\z/i) ||
       name.match(/\ACDDL\s*\+\s*GPLv2\s*with\s*classpath\s*exception\s*\z/i) ||
-      name.match(/\ACDDL\s*\+\s*GPL\s*2\s*with\s*classpath\s*exception\s*\z/i) || 
-      name.match(/\ACDDL\s+or\s+GPLv2\s+with\s+exceptions\z/i) || 
-      name.match(/\ACDDL\s+or\s+GPL\s*2\s+with\s+exceptions\z/i) || 
+      name.match(/\ACDDL\s*\+\s*GPL\s*2\s*with\s*classpath\s*exception\s*\z/i) ||
+      name.match(/\ACDDL\s+or\s+GPLv2\s+with\s+exceptions\z/i) ||
+      name.match(/\ACDDL\s+or\s+GPL\s*2\s+with\s+exceptions\z/i) ||
       name.match(/\ADual\s+consisting\s+of\s+the\s+CDDL\s+1\.1\s+and\s+GPL\s+2\z/i) ||
       name.match(/\ACDDL\+GPL_1_1\z/i) ||
       name.match(/\ACDDL\s*\+\s*GPL\s+1\.1\z/i) ||
       name.match(/\ACDDL\s+1.1\s+\/\s+GPL\s+2\s+dual\z/i) ||
       name.match(/\ACDDL\/GPLv2\+CE\z/i) ||
-      name.match(/\ACDDL\s*\+\s*GPL2\s*w\/\s*CPE\s*\z/i) || 
+      name.match(/\ACDDL\s*\+\s*GPL2\s*w\/\s*CPE\s*\z/i) ||
       name.match(/\ACDDL\s*1\.1\s+and\s+GPL\s+2\z/i)
     end
 
-    
+
     def cpl_10_match name
       name.match(/\ACPL1\z/i) ||
       name.match(/\ACPL\s+1\z/i) ||
-      name.match(/\ACommon\s+Public\s+v\s+1\z/i) || 
+      name.match(/\ACommon\s+Public\s+v\s+1\z/i) ||
       name.match(/\ACommon\s+Public\s+1\z/i)
     end
 
@@ -779,23 +779,23 @@ module VersionEye
       name.match(/\Azlib\/libpng\s*with\s*Acknowledgement\s*\z/i) ||
       name.match(/\Azlib-acknowledgement\z/i)
     end
-  
 
-    private 
 
-      def has_id_or_fullname?(map, name) 
+    private
+
+      def has_id_or_fullname?(map, name)
         map.keys.each do |key|
           return key if key.upcase.eql?(name.upcase)
           return key if map[key][:fullname].upcase.eql?(name.upcase)
         end
-        nil 
+        nil
       end
-      
-      def do_replacements name 
+
+      def do_replacements name
         tmp_name = name.gsub(/\AThe /i, "").gsub(" - ", " ").gsub(", ", " ").strip
         tmp_name = tmp_name.gsub("-", " ").strip
         tmp_name = tmp_name.gsub(/version/i, " ").strip
-        
+
         tmp_name = tmp_name.gsub(/ v1/i, " 1").strip
         tmp_name = tmp_name.gsub(/1\.0/i, "1").strip
 
@@ -809,15 +809,15 @@ module VersionEye
 
         tmp_name = tmp_name.gsub(/ v4/i, " 4").strip
         tmp_name = tmp_name.gsub(/4\.0/i, "4").strip
-        
+
         if tmp_name.match(/unlicense/i) == nil
-          tmp_name = tmp_name.gsub(/Licenses/i, " ").strip 
-          tmp_name = tmp_name.gsub(/Licences/i, " ").strip 
-          tmp_name = tmp_name.gsub(/Lizenzen/i, " ").strip 
-          tmp_name = tmp_name.gsub(/Licenzen/i, " ").strip 
-          tmp_name = tmp_name.gsub(/License/i, " ").strip 
-          tmp_name = tmp_name.gsub(/Licence/i, " ").strip 
-          tmp_name = tmp_name.gsub(/Lizenz/i, " ").strip 
+          tmp_name = tmp_name.gsub(/Licenses/i, " ").strip
+          tmp_name = tmp_name.gsub(/Licences/i, " ").strip
+          tmp_name = tmp_name.gsub(/Lizenzen/i, " ").strip
+          tmp_name = tmp_name.gsub(/Licenzen/i, " ").strip
+          tmp_name = tmp_name.gsub(/License/i, " ").strip
+          tmp_name = tmp_name.gsub(/Licence/i, " ").strip
+          tmp_name = tmp_name.gsub(/Lizenz/i, " ").strip
         end
 
         tmp_name
@@ -828,7 +828,7 @@ module VersionEye
       end
 
       def init_spdx_2_0_map
-        # This is autogenerated by the SPDX license crawler. 
+        # This is autogenerated by the SPDX license crawler.
         map = {}
         map['Glide'] = {:fullname => '3dfx Glide License', :osi_approved => false}
         map['Abstyles'] = {:fullname => 'Abstyles License', :osi_approved => false}
