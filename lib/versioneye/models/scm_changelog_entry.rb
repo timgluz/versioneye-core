@@ -7,11 +7,12 @@ class ScmChangelogEntry < Versioneye::Model
   field :prod_key   , type: String
   field :version    , type: String
 
-  field :change_date, type: DateTime, :default => DateTime.now
-  field :author     , type: String
-  field :action     , type: String
-  field :file       , type: String
-  field :revision   , type: String
-  field :message    , type: String
+  field :change_date  , type: DateTime, :default => DateTime.now
+  field :author       , type: String
+  field :action       , type: String
+  field :file         , type: String
+  field :revision     , type: String
+  field :revision_base, type: String
+  field :message      , type: String
 
 end

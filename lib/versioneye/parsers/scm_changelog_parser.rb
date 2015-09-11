@@ -9,9 +9,13 @@ class ScmChangelogParser < CommonParser
 
     entries = []
     doc = fetch_xml( content )
+    base = nil
+    base_nodes = doc.xpath('//changelog/revision_base')
+    base = base_nodes.first.text.strip if base_nodes && !base_nodes.empty?
     doc.xpath('//changeset/changelog-entry').each do |node|
       changelog = ScmChangelogEntry.new
       parse_changelog_entry node, changelog
+      changelog.revision_base = base
       entries << changelog
     end
     entries
