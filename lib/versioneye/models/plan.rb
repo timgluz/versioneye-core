@@ -38,7 +38,7 @@ class Plan < Versioneye::Model
 
   def self.create_free_plan
     trial_0 = Plan.new
-    trial_0.name_id = A_PLAN_TRIAL_0
+    trial_0.name_id = A_PLAN_FREE
     trial_0.name = 'Trial / Free'
     trial_0.price = '0'
     trial_0.private_projects = 1
