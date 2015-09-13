@@ -1,49 +1,49 @@
-class ProductMigration < Versioneye::Service 
+class ProductMigration < Versioneye::Service
 
   require 'builder'
 
-  def self.migrate 
-    count = 0 
-    Product.where(:language => 'Java', :created_at.lt => '2012-07-30').each do |product| 
-      next if product.versions.empty? 
+  def self.migrate
+    count = 0
+    Product.where(:language => 'Java', :created_at.lt => '2012-07-30').each do |product|
+      next if product.versions.empty?
       group_id = product.group_id.gsub(".", "/")
-      product.versions.each do |version| 
-        next if version.to_s.empty? 
+      product.versions.each do |version|
+        next if version.to_s.empty?
 
-        product.version = version.to_s 
-        archives = product.archives 
-        next if archives.nil? || archives.empty? 
+        product.version = version.to_s
+        archives = product.archives
+        next if archives.nil? || archives.empty?
 
         archives.each do |archive|
-          begin 
-            next if version.to_s.empty? 
+          begin
+            next if version.to_s.empty?
 
-            if archive.link.to_s.empty? 
-              archive.remove 
+            if archive.link.to_s.empty?
+              archive.remove
             end
 
-            if archive.link.match(/#{version.to_s}/i).nil? 
+            if archive.link.match(/#{version.to_s}/i).nil?
               p archive
               p "- "
 
-              product.dependencies.each do |dep| 
-                dep.delete 
+              product.dependencies.each do |dep|
+                dep.delete
               end
-              product.http_version_links.each do |link| 
-                link.delete 
+              product.http_version_links.each do |link|
+                link.delete
               end
 
-              product.remove_version version.to_s 
+              product.remove_version version.to_s
               archive.delete
 
-              count += 1 
-              p count 
+              count += 1
+              p count
             end
-          rescue => e 
+          rescue => e
             p "link: #{archive.link} - #{version.to_s}"
             p e.message
             p e.backtrace.join("\n")
-          end 
+          end
         end
       end
     end
@@ -55,10 +55,10 @@ class ProductMigration < Versioneye::Service
     uris = Hash.new
     sitemap_count = 1
 
-    ProductService.all_products_paged do |products| 
+    ProductService.all_products_paged do |products|
       products.each do |product|
         next if product.nil?
-        
+
         uri = "#{product.language_esc}/#{product.to_param}/#{product.version_to_url_param}"
         modified = DateTime.now.strftime("%Y-%m-%d")
         p "#{modified} - #{uri}"
@@ -71,7 +71,7 @@ class ProductMigration < Versioneye::Service
         uris = Hash.new
         sitemap_count += 1
       end
-    end 
+    end
 
     logger.info "#{uris.count}"
     logger.info "sitemap count: #{sitemap_count}"
@@ -102,4 +102,4 @@ class ProductMigration < Versioneye::Service
     xml_file.close
   end
 
-end 
+end

@@ -81,7 +81,7 @@ class LanguageDailyStats < Versioneye::Model
     that_day_doc.count_releases
     that_day_doc.count_language_packages
     that_day_doc.count_language_artifacts
-    that_day_doc.save 
+    that_day_doc.save
   end
 
   def count_releases
@@ -146,11 +146,11 @@ class LanguageDailyStats < Versioneye::Model
 
   def self.count_artifacts language, until_date
     ag = Product.collection.aggregate(
-      { '$unwind' => "$versions" }, 
-      { '$match' => {'language' => "#{language}"} }, 
-      { '$group' => { '_id' => '', 'count' => {'$sum' => 1} } } 
+      { '$unwind' => "$versions" },
+      { '$match' => {'language' => "#{language}"} },
+      { '$group' => { '_id' => '', 'count' => {'$sum' => 1} } }
     )
-    return ag.first["count"] if ag && ag.first 
+    return ag.first["count"] if ag && ag.first
     return 0
   rescue => e
     log.error e.message
@@ -160,19 +160,19 @@ class LanguageDailyStats < Versioneye::Model
 
 
   def inc_version(metric_key, val = 1)
-    self[metric_key]['new_version'] += val 
+    self[metric_key]['new_version'] += val
   end
 
   def inc_novel(metric_key, val =  1)
-    self[metric_key]['novel_package'] += val 
+    self[metric_key]['novel_package'] += val
   end
 
   def inc_total_package(metric_key, val =  1)
-    self[metric_key]['total_package'] += val 
+    self[metric_key]['total_package'] += val
   end
 
   def inc_total_artifact(metric_key, val = 1)
-    self[metric_key]['total_artifact'] += val 
+    self[metric_key]['total_artifact'] += val
   end
 
   def metrics
@@ -360,10 +360,10 @@ class LanguageDailyStats < Versioneye::Model
     self.language_timeline30(lang, 'novel_package')
   end
 
-  private 
+  private
 
-    # In the UI all variants of JavaScript are bundled/displayed as JavaScript! 
-    def normalize_language lang 
+    # In the UI all variants of JavaScript are bundled/displayed as JavaScript!
+    def normalize_language lang
       return Product::A_LANGUAGE_JAVASCRIPT if lang.eql?("PureScript")
       return Product::A_LANGUAGE_JAVASCRIPT if lang.eql?("CoffeeScript")
       return Product::A_LANGUAGE_JAVASCRIPT if lang.eql?("ActionScript")
