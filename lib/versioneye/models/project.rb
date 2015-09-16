@@ -32,6 +32,7 @@ class Project < Versioneye::Model
   field :name_downcase, type: String # downcased name, because MongoDB doesn't support case insensitive search.
   field :description  , type: String
   field :license      , type: String
+  field :version      , type: String
 
   field :group_id   , type: String # Maven specific
   field :artifact_id, type: String # Maven specific

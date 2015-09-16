@@ -282,6 +282,7 @@ class PackageParser < CommonParser
     project.language     = Product::A_LANGUAGE_NODEJS
     project.name         = data['name']
     project.description  = data['description']
+    project.version      = data['version']
     project
   end
 
