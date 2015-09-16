@@ -55,6 +55,24 @@ class ProductMigration < Versioneye::Service
     uris = Hash.new
     sitemap_count = 1
 
+    AuthorService.all_authors_paged do |authors|
+      authors.each do |author|
+        next if author.nil?
+
+        uri = "authors/#{author.to_param}"
+        modified = DateTime.now.strftime("%Y-%m-%d")
+        p "#{modified} - #{uri}"
+        uris[uri] = {:uri => uri, :modified => modified}
+      end
+      if uris.count > 49000
+        logger.info "#{uris.count}"
+        logger.info "sitemap count: #{sitemap_count}"
+        write_to_xml(uris, "sitemap-#{sitemap_count}.xml")
+        uris = Hash.new
+        sitemap_count += 1
+      end
+    end
+
     ProductService.all_products_paged do |products|
       products.each do |product|
         next if product.nil?

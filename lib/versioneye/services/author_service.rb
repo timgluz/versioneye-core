@@ -87,4 +87,26 @@ class AuthorService < Versioneye::Service
   end
 
 
+  def self.all_authors_paged
+    count = Author.count()
+    page = 100
+    iterations = count / page
+    iterations += 1
+    (0..iterations).each do |i|
+      skip = i * page
+      authors = Author.all().skip(skip).limit(page)
+
+      yield authors
+
+      co = i * page
+      log_msg = "all_authors_paged iteration: #{i} - authors processed: #{co}"
+      p log_msg
+      log.info log_msg
+    end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+  end
+
+
 end
