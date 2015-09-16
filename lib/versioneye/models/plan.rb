@@ -120,4 +120,8 @@ class Plan < Versioneye::Model
     Plan.where(name_id: A_PLAN_LARGE).shift
   end
 
+  def self.xlarge
+    Plan.where(name_id: A_PLAN_XLARGE).shift
+  end
+
 end
