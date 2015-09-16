@@ -18,12 +18,12 @@ class Plan < Versioneye::Model
   # DEPRECATED END
 
   A_PLAN_FREE    = '04_free'
-  A_PLAN_MICRO   = '04_micro'
-  A_PLAN_SMALL   = '04_small'
-  A_PLAN_MEDIUM  = '04_medium'
-  A_PLAN_LARGE   = '04_large'
-  A_PLAN_XLARGE  = '04_xlarge'
-  A_PLAN_XXLARGE = '04_xxlarge'
+  A_PLAN_MICRO   = '04_micro'   # € 7   - 5
+  A_PLAN_SMALL   = '04_small'   # € 12  - 10
+  A_PLAN_MEDIUM  = '04_medium'  # € 22  - 20
+  A_PLAN_LARGE   = '04_large'   # € 50  - 50
+  A_PLAN_XLARGE  = '04_xlarge'  # € 100 - 100
+  A_PLAN_XXLARGE = '04_xxlarge' # € 250 - 250
 
   field :name_id         , type: String
   field :name            , type: String
@@ -98,6 +98,10 @@ class Plan < Versioneye::Model
 
   def self.current_plans
     Plan.where(name_id: /\A04/)
+  end
+
+  def self.old_plans
+    Plan.where(name_id: /\A03/)
   end
 
   def self.free_plan
