@@ -30,16 +30,16 @@ class Newest < Versioneye::Model
 
   def product
     if !self.product_id.to_s.empty?
-      product = product_by_id 
+      product = product_by_id
       return product if product
-    end 
+    end
     return Product.fetch_product self.language, self.prod_key
   end
 
-  def product_by_id 
-    Product.find(self.product_id) 
-  rescue => e 
-    nil 
+  def product_by_id
+    Product.find(self.product_id)
+  rescue => e
+    nil
   end
 
   def self.fetch_newest language, prod_key, version

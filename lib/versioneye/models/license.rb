@@ -51,16 +51,16 @@ class License < Versioneye::Model
     license = License.new({ :language => language, :prod_key => prod_key, :version => version, :name => name, :url => url, :comments => comments, :distributions => distributions })
     if license.save
       log.info "new license (#{name}) for #{language}:#{prod_key}:#{version}"
-    else 
+    else
       log.error "Can't save license (#{name}) for #{language}:#{prod_key}:#{version} because #{license.errors.full_messages.to_json}"
     end
     license
   end
 
   def to_s
-    if url 
+    if url
       return "[License for (#{language}/#{prod_key}/#{version}) : #{name}/#{url}]"
-    else 
+    else
       return "[License for (#{language}/#{prod_key}/#{version}) : #{name}]"
     end
   end
