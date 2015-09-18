@@ -2,41 +2,49 @@
   <div style="max-width: 500px; margin-left: auto; margin-right: auto;">
   Hey <%= @user.fullname %>,
 
-  <p>
-    It's a while ago since the last newsletter. Here are the greatest innovations since the last newsletter.
+  <p style="padding-bottom: 20px;">
+    Here are some important news for you.
   </p>
 
-  <h2>Component Whitelist</h2>
+  <h2>NPM module for VersionEye</h2>
   <p>
-    Since last week VersionEye supports <a href="http://blog.versioneye.com/2015/08/26/component-whitelist/">component whitelists</a>. The component whitelist is an extension to the <a href="http://blog.versioneye.com/2014/09/15/license-whitelist/">license whitelist</a>. Dependencies which would usually violate the license whitelist can be whitelisted through a component whitelist. That makes specially sense if you bought a commercial license for a GPL dependency or if you have permission from the OS vendor to use certain components in a project. Here are some blog posts to the component whitelist:
-  </p>
-  <ul>
-    <li><a href="http://blog.versioneye.com/2015/08/26/component-whitelist/">Component Whitelist</a></li>
-    <li><a href="http://blog.versioneye.com/2015/09/02/improved-componente-whitelist/">First improvements</a></li>
-    <li><a href="http://blog.versioneye.com/2015/09/02/how-to-component-whitelist-non-java-dependencies/">How to component whitelist non Java dependencies</a></li>
-  </ul>
-
-  <h2>VersionEye SBT Plugin</h2>
-  <p>
-    Now VersionEye has a <a href="https://github.com/versioneye/versioneye_sbt_plugin">plugin for Scala SBT</a>. The SBT plugin is maintained by <a href="https://twitter.com/mp911de">Mark Paluch</a> and is fully open source under the MIT license. It works similar to the <a href="https://github.com/versioneye/versioneye_maven_plugin">VersionEye Maven Plugin</a>. It is specially useful if your project is not on GitHub/Bitbucket or if you want to integrate VersionEye into your CI-System.
-  </p>
-  <p>
-    Please give it a try and let us know how it works for you. For feedback simply open a ticket <a href="https://github.com/versioneye/versioneye_sbt_plugin/issues">here</a>.
-  </p>
-
-  <h2>Thank You</h2>
-  <p>
-    Thank you for using VersionEye, giving feedback and helping to make the product even better. <b>You are aweomse!</b>
-    <br/>
-    Usually the summer is very lame, but this summer is pretty hot.
+    The engineers from <a href="http://www.onwerk.de/">Onwerk</a> published the NPM module for VersionEye.
+    Checkout how they use the VersionEye API to keep their Node.JS projects up-to-date.
+    Read more <a href="http://blog.versioneye.com/2015/09/15/npm-module-for-versioneye/">here</a>.
   </p>
   <p style="text-align: center;">
-    <img src="https://versioneye.files.wordpress.com/2015/09/versioneye-growth.png" style="width: 350px;" />
+    <img src="https://versioneye.files.wordpress.com/2015/09/onwerk-versioneye-integration.png" style="width: 400px;" />
+  </p>
+
+  <h2>New Pricing</h2>
+  <p>
+    There are new monthly plans for VersionEye. The new pricing is more consistent
+    and easier to understand. Please check out the new <a href="https://www.versioneye.com/pricing">pricing page</a>.
+    <br/>
+    The old plans are going to be continued. You don't have to switch to a new plan if you don't want.
+    <b>The old plans can be booked until 1st of October</b>. After that the old plans are closed for
+    booking and only the <a href="http://blog.versioneye.com/2015/09/18/new-pricing-2/">new plans</a> are available.
+  </p>
+
+  <h2>API Rate Limits</h2>
+  <p>
+    The <a href="https://www.versioneye.com/api/">VersionEye API</a> becomes more and more popular. There are already a lot of
+    plugins and add ons build on top of the VersionEye API. In the last couple months
+    the API responded to more than 17 Million API requests. Because of the growing
+    traffic these rate limits have been introduced.
+
+    <ul>
+      <li>10 calls per hour for non authenticated calls.</li>
+      <li>50 calls per hour for authenticated calls with an API key.</li>
+    </ul>
+
+    If you want to have a higher rate limit please write a email to
+    support@versioneye.com with your use case.
   </p>
 
   <br/>
   <p>
-    Your feedback is highly appreciated. I will work hard to keep up the good work.
+    Your feedback is highly appreciated. Simply reply to this email if you want to give feedback.
   </p>
   <br/>
   Best Regards, <br/>
