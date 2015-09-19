@@ -19,7 +19,7 @@ class NewsletterService < Versioneye::Service
 
 
   def self.send_email( user )
-    NewsletterMailer.newsletter_new_features_email( user ).deliver
+    NewsletterMailer.newsletter_new_features_email( user ).deliver_now
     log.info "Sent new feature newsletter to #{user.fullname}"
     1
   rescue => e
