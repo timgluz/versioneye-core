@@ -68,6 +68,9 @@ class ProjectUpdateService < Versioneye::Service
     return nil if project.nil?
 
     new_project = ProjectParseService.project_from file
+    if new_project.nil?
+      raise "project file could not be parsed. Maybe the file is empty? Or not valid?"
+    end
     cache.delete( new_project.id.to_s )
     cache.delete( project.id.to_s )
     project.update_from new_project
