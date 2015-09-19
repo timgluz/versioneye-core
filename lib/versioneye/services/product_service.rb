@@ -38,6 +38,7 @@ class ProductService < Versioneye::Service
       product.followers += 1
       result = product.save
       user.products.push product
+      user.save
     end
     result
   rescue => e
@@ -57,6 +58,7 @@ class ProductService < Versioneye::Service
       product.followers -= 1
       result = product.save
       user.products.delete product
+      user.save
     end
     result
   rescue => e
