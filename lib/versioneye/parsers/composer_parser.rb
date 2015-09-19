@@ -21,7 +21,7 @@ class ComposerParser < CommonParser
 
     json_content = JSON.parse( data )
     project = init_project
-    
+
     dependencies = json_content['require']
     if dependencies && !dependencies.empty?
       parse_dependencies dependencies, project, json_content
@@ -38,8 +38,8 @@ class ComposerParser < CommonParser
     end
 
     dependencies = project.dependencies
-    return nil if dependencies.nil? || dependencies.empty? 
-    
+    return nil if dependencies.nil? || dependencies.empty?
+
     self.update_project( project, json_content )
     project
   rescue => e
@@ -65,11 +65,11 @@ class ComposerParser < CommonParser
     response.body
   end
 
-  
+
   def process_dependency key, value, project, data, scope = Dependency::A_SCOPE_COMPILE
-    product    = Product.fetch_product( Product::A_LANGUAGE_PHP, key )
+    product    = fetch_product_for key
     dependency = init_projectdependency( key, product )
-    dependency.scope = scope 
+    dependency.scope = scope
     parse_requested_version( value, dependency, product )
     if product.nil?
       dep_in_ext_repo = dependency_in_repositories?( dependency, data )
@@ -79,7 +79,7 @@ class ComposerParser < CommonParser
     project.projectdependencies.push dependency
   end
 
-  
+
   def update_project project, data
     name                = data['name']
     description         = data['description']
@@ -90,7 +90,7 @@ class ComposerParser < CommonParser
     project.dep_number  = project.dependencies.size
   end
 
-  
+
   # It is important that this method is NOT writing into the database!
   #
   def parse_requested_version version, dependency, product
@@ -244,7 +244,7 @@ class ComposerParser < CommonParser
 
   end
 
-  
+
   # TODO write tests
   #
   def dependency_in_repositories? dependency, data
@@ -270,7 +270,7 @@ class ComposerParser < CommonParser
     false
   end
 
-  
+
   def init_project url = nil
     project              = Project.new
     project.project_type = Project::A_TYPE_COMPOSER
@@ -279,15 +279,31 @@ class ComposerParser < CommonParser
     project
   end
 
-  
+
   private
 
-  
+
+    def fetch_product_for key
+      return nil if key.to_s.empty?
+      if key.to_s.match(/\Anpm-asset\//)
+        new_key = key.gsub("npm-asset/", "")
+        return Product.fetch_product( Product::A_LANGUAGE_NODEJS, new_key )
+      elsif key.to_s.match(/\Abower-asset\//)
+        new_key = key.gsub("bower-asset/", "")
+        return Product.fetch_bower( new_key )
+      else
+        return Product.fetch_product( Product::A_LANGUAGE_PHP, key )
+      end
+    end
+
+
     def init_projectdependency key, product
       dependency          = Projectdependency.new
       dependency.name     = key
       dependency.language = Product::A_LANGUAGE_PHP
       if product
+        dependency.name            = product.name
+        dependency.language        = product.language
         dependency.prod_key        = product.prod_key
         dependency.version_current = product.version
       end

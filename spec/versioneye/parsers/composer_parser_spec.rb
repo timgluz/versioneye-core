@@ -146,11 +146,21 @@ describe ComposerParser do
       product_22.versions.push( Version.new({ :version => "dev-master"  }) )
       product_22.save
 
+      product_23 = ProductFactory.create_for_bower("bootstrap", "3.3")
+      product_23.versions.push( Version.new({ :version => "3.3"       }) )
+      product_23.versions.push( Version.new({ :version => "1.4.0"       }) )
+      product_23.save
+
+      product_24 = ProductFactory.create_for_npm("request", "1.0.0")
+      product_24.versions.push( Version.new({ :version => "1.0.0"       }) )
+      product_24.versions.push( Version.new({ :version => "0.1.0"       }) )
+      product_24.save
+
 
       parser  = ComposerParser.new
       project = parser.parse("https://s3.amazonaws.com/veye_test_env/composer.json")
       project.should_not be_nil
-      project.dependencies.size.should eql(22)
+      project.dependencies.size.should eql(24)
 
 
       dep_01 = fetch_by_name(project.dependencies, "symfony/symfony")
@@ -295,6 +305,22 @@ describe ComposerParser do
       dep_21.version_requested.should eql('2.1.0')
       dep_21.version_current.should   eql('2.1.0')
       dep_21.comperator.should        eql('=')
+
+      dep_21 = fetch_by_name(project.dependencies, "bootstrap")
+      dep_21.name.should              eql('bootstrap')
+      dep_21.version_label.should     eql('3.3')
+      dep_21.version_requested.should eql('3.3')
+      dep_21.version_current.should   eql('3.3')
+      dep_21.comperator.should        eql('=')
+      dep_21.language.should          eql(Product::A_LANGUAGE_JAVASCRIPT)
+
+      dep_21 = fetch_by_name(project.dependencies, "request")
+      dep_21.name.should              eql('request')
+      dep_21.version_label.should     eql('1.0.0')
+      dep_21.version_requested.should eql('1.0.0')
+      dep_21.version_current.should   eql('1.0.0')
+      dep_21.comperator.should        eql('=')
+      dep_21.language.should          eql(Product::A_LANGUAGE_NODEJS)
     end
 
   end
