@@ -235,6 +235,9 @@ class ProjectImportService < Versioneye::Service
   def self.import_from_upload file, user = nil, api_created = false
     project_name = file['datafile'].original_filename
     project = ProjectParseService.project_from file
+    if project.nil?
+      raise "project file could not be parsed. Maybe the file is empty? Or not valid?"
+    end
 
     if project.name.to_s.empty?
       project_name = file['datafile'].original_filename
