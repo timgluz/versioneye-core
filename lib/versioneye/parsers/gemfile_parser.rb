@@ -20,7 +20,7 @@ class GemfileParser < CommonParser
   end
 
   def parse_content( gemfile )
-    return nil if gemfile.to_s.empty?
+    return nil if gemfile.to_s.strip.empty?
     return nil if gemfile.to_s.strip.eql?('Not Found')
 
     project = init_project
