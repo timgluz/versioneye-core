@@ -52,6 +52,10 @@ describe LicenseCach do
       license = LicenseCach.new({:on_cwl => false, :on_whitelist => false})
       expect( license.is_whitelisted? ).to be_falsey
     end
+    it 'returns nil' do
+      license = LicenseCach.new({:on_cwl => nil, :on_whitelist => nil})
+      expect( license.is_whitelisted? ).to be_nil
+    end
   end
 
 end
