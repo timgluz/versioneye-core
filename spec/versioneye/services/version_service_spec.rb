@@ -223,6 +223,19 @@ describe VersionService do
       newest.should_not be_nil
       newest.should eq('2.0.5')
     end
+
+    it "returns newest version for 1.0.*@dev" do
+      versions = []
+      versions << Version.new({version: "0.0.5"})
+      versions << Version.new({version: "1.0.0"})
+      versions << Version.new({version: "1.0.0-alpha3"})
+      versions << Version.new({version: "dev-master"})
+      versions << Version.new({version: "dev-support_old"})
+
+      newest = VersionService.newest_version_from_wildcard( versions, '1.0.*', "dev" )
+      newest.should_not be_nil
+      newest.should eq('1.0.0-alpha3')
+    end
   end
 
   describe "version_approximately_greater_than_starter" do
