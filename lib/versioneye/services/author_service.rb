@@ -15,7 +15,7 @@ class AuthorService < Versioneye::Service
       return nil
     end
 
-    author = fetch_author dev
+    author = find_or_create_author_by dev
     if author.nil?
       log.error " -- ERROR - could not fetch author for #{dev.ids} - #{dev.email}"
       return nil
@@ -74,7 +74,7 @@ class AuthorService < Versioneye::Service
   end
 
 
-  def self.fetch_author dev
+  def self.find_or_create_author_by dev
     if dev.name.to_s.empty?
       author = Author.where( :email => dev.email ).first
       author = Author.where( :emails => dev.email ).first if author.nil?
@@ -82,7 +82,10 @@ class AuthorService < Versioneye::Service
     end
     name_id = Author.encode_name( dev.name )
     author = Author.where( :name_id => name_id ).first
-    author = Author.new({:name_id => name_id, :name => dev.name}) if author.nil?
+    if author.nil?
+      author = Author.new({:name_id => name_id, :name => dev.name})
+      log.info "New Author #{name_id}"
+    end
     author
   end
 
