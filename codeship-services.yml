@@ -17,7 +17,6 @@ mongodb:
    - "27017:27017"
    - "28017:28017"
   container_name: "mongodb"
-  restart: always
 
 
 elasticsearch:
@@ -25,7 +24,6 @@ elasticsearch:
   ports:
    - "9200:9200"
   container_name: "elasticsearch"
-  restart: always
 
 
 memcached:
@@ -33,7 +31,6 @@ memcached:
   ports:
    - "11211:11211"
   container_name: "memcached"
-  restart: always
 
 
 rabbitmq:
@@ -41,4 +38,3 @@ rabbitmq:
   ports:
   - "5672:5672"
   container_name: "rabbitmq"
-  restart: always
