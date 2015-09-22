@@ -1,0 +1,44 @@
+app:
+  build:
+    image: app
+    dockerfile_path: Dockerfile
+  environment:
+    RAILS_ENV: test
+  links:
+    - mongodb
+    - elasticsearch
+    - memcached
+    - rabbitmq
+
+
+mongodb:
+  image: reiz/mongodb:2.6.6
+  ports:
+   - "27017:27017"
+   - "28017:28017"
+  container_name: "mongodb"
+  restart: always
+
+
+elasticsearch:
+  image: reiz/elasticsearch:0.9.1
+  ports:
+   - "9200:9200"
+  container_name: "elasticsearch"
+  restart: always
+
+
+memcached:
+  image: reiz/memcached:1.4.14
+  ports:
+   - "11211:11211"
+  container_name: "memcached"
+  restart: always
+
+
+rabbitmq:
+  image: reiz/rabbitmq:3.4.2
+  ports:
+  - "5672:5672"
+  container_name: "rabbitmq"
+  restart: always
