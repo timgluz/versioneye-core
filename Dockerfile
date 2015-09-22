@@ -1,4 +1,4 @@
-FROM        reiz/ruby:2.2.2
+FROM reiz/ruby:2.2.2
 MAINTAINER  Robert Reiz <reiz@versioneye.com>
 
 ENV RAILS_ENV test
