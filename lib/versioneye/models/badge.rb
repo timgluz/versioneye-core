@@ -10,7 +10,7 @@ class Badge < Versioneye::Model
   A_UNKNOWN_SVG   = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"149\" height=\"20\"><linearGradient id=\"b\" x2=\"0\" y2=\"100%\"><stop offset=\"0\" stop-color=\"#bbb\" stop-opacity=\".1\"/><stop offset=\"1\" stop-opacity=\".1\"/></linearGradient><mask id=\"a\"><rect width=\"149\" height=\"20\" rx=\"3\" fill=\"#fff\"/></mask><g mask=\"url(#a)\"><path fill=\"#555\" d=\"M0 0h88v20H0z\"/><path fill=\"#9f9f9f\" d=\"M88 0h61v20H88z\"/><path fill=\"url(#b)\" d=\"M0 0h149v20H0z\"/></g><g fill=\"#fff\" text-anchor=\"middle\" font-family=\"DejaVu Sans,Verdana,Geneva,sans-serif\" font-size=\"11\"><text x=\"44\" y=\"15\" fill=\"#010101\" fill-opacity=\".3\">dependencies</text><text x=\"44\" y=\"14\">dependencies</text><text x=\"117.5\" y=\"15\" fill=\"#010101\" fill-opacity=\".3\">unknown</text><text x=\"117.5\" y=\"14\">unknown</text></g></svg>"
 
   A_REF_0_SVG   = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"88\" height=\"20\"><linearGradient id=\"b\" x2=\"0\" y2=\"100%\"><stop offset=\"0\" stop-color=\"#bbb\" stop-opacity=\".1\"/><stop offset=\"1\" stop-opacity=\".1\"/></linearGradient><mask id=\"a\"><rect width=\"88\" height=\"20\" rx=\"3\" fill=\"#fff\"/></mask><g mask=\"url(#a)\"><path fill=\"#555\" d=\"M0 0h71v20H0z\"/><path fill=\"#e05d44\" d=\"M71 0h17v20H71z\"/><path fill=\"url(#b)\" d=\"M0 0h88v20H0z\"/></g><g fill=\"#fff\" text-anchor=\"middle\" font-family=\"DejaVu Sans,Verdana,Geneva,sans-serif\" font-size=\"11\"><text x=\"35.5\" y=\"15\" fill=\"#010101\" fill-opacity=\".3\">references</text><text x=\"35.5\" y=\"14\">references</text><text x=\"78.5\" y=\"15\" fill=\"#010101\" fill-opacity=\".3\">0</text><text x=\"78.5\" y=\"14\">0</text></g></svg>"
-  A_REF_TEMPLATE_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"123\" height=\"20\"><linearGradient id=\"b\" x2=\"0\" y2=\"100%\"><stop offset=\"0\" stop-color=\"#bbb\" stop-opacity=\".1\"/><stop offset=\"1\" stop-opacity=\".1\"/></linearGradient><mask id=\"a\"><rect width=\"123\" height=\"20\" rx=\"3\" fill=\"#fff\"/></mask><g mask=\"url(#a)\"><path fill=\"#555\" d=\"M0 0h71v20H0z\"/><path fill=\"#97CA00\" d=\"M71 0h52v20H71z\"/><path fill=\"url(#b)\" d=\"M0 0h123v20H0z\"/></g><g fill=\"#fff\" text-anchor=\"middle\" font-family=\"DejaVu Sans,Verdana,Geneva,sans-serif\" font-size=\"11\"><text x=\"35.5\" y=\"15\" fill=\"#010101\" fill-opacity=\".3\">references</text><text x=\"35.5\" y=\"14\">references</text><text x=\"96\" y=\"15\" fill=\"#010101\" fill-opacity=\".3\">TMP</text><text x=\"96\" y=\"14\">TMP</text></g></svg>" 
+  A_REF_TEMPLATE_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"123\" height=\"20\"><linearGradient id=\"b\" x2=\"0\" y2=\"100%\"><stop offset=\"0\" stop-color=\"#bbb\" stop-opacity=\".1\"/><stop offset=\"1\" stop-opacity=\".1\"/></linearGradient><mask id=\"a\"><rect width=\"123\" height=\"20\" rx=\"3\" fill=\"#fff\"/></mask><g mask=\"url(#a)\"><path fill=\"#555\" d=\"M0 0h71v20H0z\"/><path fill=\"#97CA00\" d=\"M71 0h52v20H71z\"/><path fill=\"url(#b)\" d=\"M0 0h123v20H0z\"/></g><g fill=\"#fff\" text-anchor=\"middle\" font-family=\"DejaVu Sans,Verdana,Geneva,sans-serif\" font-size=\"11\"><text x=\"35.5\" y=\"15\" fill=\"#010101\" fill-opacity=\".3\">references</text><text x=\"35.5\" y=\"14\">references</text><text x=\"96\" y=\"15\" fill=\"#010101\" fill-opacity=\".3\">TMP</text><text x=\"96\" y=\"14\">TMP</text></g></svg>"
 
   A_UP_TO_DATE  = 'up_to_date'
   A_OUT_OF_DATE = 'out_of_date'
@@ -26,18 +26,18 @@ class Badge < Versioneye::Model
   A_TYPE_REFERENCE  = 'reference'
 
   # project_id or 'lang:::prod_key:::version' or 'lang:::prod_key:::version:::type'
-  field :key     , type: String 
+  field :key     , type: String
 
   # up-to-date or out-of-date
-  field :status  , type: String 
+  field :status  , type: String
 
   # 'dependency' or 'reference'
   field :badge_type, type: String
 
   # 'project' or 'product'
   field :badge_source, type: String
-  
-  # The actual svg xml code 
+
+  # The actual svg xml code
   field :svg     , type: String
 
   index({ key: 1 }, { name: "key_index", background: true, unique: true })
