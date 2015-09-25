@@ -46,7 +46,6 @@ class Project < Versioneye::Model
   field :url           , type: String
   field :source        , type: String,  :default => A_SOURCE_UPLOAD
   field :s3_filename   , type: String
-  field :allow_zero_deps, type: Boolean, :default => false
 
   field :scm_fullname  , type: String # repo name, for example 'reiz/gemify'
   field :scm_branch    , type: String, default: "master"
