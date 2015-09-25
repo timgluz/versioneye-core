@@ -55,6 +55,10 @@ class ProjectImportService < Versioneye::Service
     parser    = ProjectParseService.parser_for file_name
     project   = ProjectParseService.parse_content parser, file_txt, file_name
 
+    if project.nil?
+      raise "The project file could not be parsed. Maybe it's not valid?"
+    end
+
     project.update_attributes({
       name: repo_name,
       project_type: project_file[:type],
@@ -129,6 +133,11 @@ class ProjectImportService < Versioneye::Service
     file_name = filename.split("/").last
     parser  = ProjectParseService.parser_for file_name
     project = ProjectParseService.parse_content parser, project_file, file_name
+
+    if project.nil?
+      raise "The project file could not be parsed. Maybe it's not valid?"
+    end
+
     revision = BitbucketRepo.revision_for user, repo_name, branch, filename
 
     project.update_attributes({
@@ -189,6 +198,10 @@ class ProjectImportService < Versioneye::Service
     project_type = ProjectService.type_by_filename filename
     content = StashService.pure_text_from project_file
     project = StashService.parse_content content, filename
+
+    if project.nil?
+      raise "The project file could not be parsed. Maybe it's not valid?"
+    end
 
     project.update_attributes({
       name: repo_name,
