@@ -19,17 +19,17 @@ class BiicodeParser < CommonParser
 
 
   def parse_content( content )
-    return nil if content.to_s.empty? 
+    return nil if content.to_s.empty?
     return nil if content.to_s.strip.eql?('Not Found')
 
-    project = init_project 
+    project = init_project
     section = ''
     content.each_line do |line|
       if line.strip.match(/\[\S*\]/i)
-        section = line.strip.downcase 
-        next 
+        section = line.strip.downcase
+        next
       end
-      if section.eql?('[requirements]') && !line.strip.empty? 
+      if section.eql?('[requirements]') && !line.strip.empty?
         parse_line( line, project )
       end
     end
@@ -43,11 +43,11 @@ class BiicodeParser < CommonParser
 
 
   def parse_line( line, project )
-    return nil if line.to_s.empty? 
-    return nil if line.strip.match(/\A\#/) # skip comment lines 
+    return nil if line.to_s.empty?
+    return nil if line.strip.match(/\A\#/) # skip comment lines
 
-    owner      = nil 
-    block_name = nil 
+    owner      = nil
+    block_name = nil
     track      = 'master'
     version    = nil
 
@@ -66,10 +66,10 @@ class BiicodeParser < CommonParser
       version    = long_match[4]
     end
 
-    return nil if short_match.nil? && long_match.nil? 
+    return nil if short_match.nil? && long_match.nil?
 
     prod_key   = "#{owner}/#{owner}/#{block_name}/#{track}"
-    product    = Product.fetch_product Product::A_LANGUAGE_BIICODE, prod_key    
+    product    = Product.fetch_product Product::A_LANGUAGE_BIICODE, prod_key
     dependency = init_dependency( product, prod_key )
 
     parse_requested_version( version, dependency, product )
@@ -78,7 +78,7 @@ class BiicodeParser < CommonParser
     project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
     project.unknown_number += 1 if product.nil?
     dependency
-  end  
+  end
 
 
   # It is important that this method is not writing into the database!
@@ -103,7 +103,7 @@ class BiicodeParser < CommonParser
     dependency.version_label     = version
     dependency.comperator        = '='
 
-    dependency    
+    dependency
   end
 
 
