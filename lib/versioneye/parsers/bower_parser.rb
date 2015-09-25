@@ -20,9 +20,9 @@ class BowerParser < PackageParser
 
 
   def parse_content( content )
-    return nil if content.to_s.empty? 
+    return nil if content.to_s.empty?
     return nil if content.to_s.strip.eql?('Not Found')
-    
+
     data = JSON.parse( content )
     return nil if data.nil?
 
@@ -38,9 +38,6 @@ class BowerParser < PackageParser
       parse_dependencies dependencies, project, Dependency::A_SCOPE_DEVELOPMENT
     end
 
-    dependencies = project.dependencies
-    return nil if dependencies.nil? || dependencies.empty?
-    
     project.dep_number = project.dependencies.size
     project
   rescue => e
@@ -60,7 +57,7 @@ class BowerParser < PackageParser
   def parse_line( package_name, version_label, project, scope = Dependency::A_SCOPE_COMPILE )
     product    = Product.fetch_bower package_name
     dependency = init_dependency( product, package_name )
-    dependency.scope = scope 
+    dependency.scope = scope
     parse_requested_version( version_label, dependency, product )
     project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
     project.unknown_number += 1 if product.nil?

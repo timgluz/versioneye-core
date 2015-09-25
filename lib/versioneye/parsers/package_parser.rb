@@ -49,9 +49,6 @@ class PackageParser < CommonParser
       parse_dependencies optionalDependencies, project, Dependency::A_SCOPE_OPTIONAL
     end
 
-    dependencies = project.dependencies
-    return nil if dependencies.nil? || dependencies.empty?
-
     project.dep_number = project.dependencies.size
     project
   rescue => e
