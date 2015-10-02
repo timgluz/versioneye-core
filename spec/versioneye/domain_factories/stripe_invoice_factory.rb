@@ -12,11 +12,11 @@ class StripeInvoiceFactory
     invoice[:closed]       = true
     invoice[:lines]        = [{
       :type => 'invoiceitem',
-      :amount => '600', 
-      :currency => 'eur', 
-      :description => 'this is a test', 
-      :period => {:start => 1349738951, :end => 1349738953}, 
-      :plan => {:id => Plan::A_PLAN_PERSONAL_6, :name => 'Personal / Normal'}
+      :amount => '600',
+      :currency => 'eur',
+      :description => 'this is a test',
+      :period => {:start => 1349738951, :end => 1349738953},
+      :plan => {:id => Plan::A_PLAN_MICRO, :name => 'Personal / Normal'}
     }]
     invoice
   end

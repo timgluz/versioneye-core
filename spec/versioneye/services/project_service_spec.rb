@@ -323,21 +323,6 @@ describe ProjectService do
       Project.first.project_key.should_not be_nil
     end
 
-    it 'doesnt stores a project' do
-      user    = UserFactory.create_new
-      project = ProjectFactory.create_new user, nil, false
-
-      Product.count.should == 0
-      Project.count.should == 0
-      Projectdependency.count.should == 0
-
-      expect { described_class.store(project) }.to raise_exception
-
-      Product.count.should == 0
-      Project.count.should == 0
-      Projectdependency.count.should == 0
-    end
-
   end
 
 

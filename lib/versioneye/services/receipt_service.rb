@@ -31,7 +31,7 @@ class ReceiptService < Versioneye::Service
 
     users.each do |user|
       next if user.nil?
-      next if user.plan.name_id.eql?(Plan::A_PLAN_TRIAL_0)
+      next if user.plan.name_id.eql?(Plan::A_PLAN_FREE)
       next if user.stripe_token.to_s.empty?
       next if user.stripe_customer_id.to_s.empty?
 

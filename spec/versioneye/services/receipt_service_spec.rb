@@ -16,22 +16,22 @@ describe ReceiptService do
     end
 
     it 'iterates' do
-      token = StripeFactory.token
-      token_id = token[:id]
-      personal_plan = Plan.small
-      email = 'hans@wur.st'
-      customer = StripeService.create_customer token_id, personal_plan.name_id, email
+      token      = StripeFactory.token
+      token_id   = token[:id]
+      small_plan = Plan.small
+      email      = 'hans@wur.st'
+      customer   = StripeService.create_customer token_id, small_plan.name_id, email
 
-      user = UserFactory.create_new 1
-      user.plan = Plan.small
-      user.billing_address = BillingAddressFactory.create_new
+      user                    = UserFactory.create_new 1
+      user.plan               = Plan.small
+      user.billing_address    = BillingAddressFactory.create_new
       user.stripe_customer_id = customer.id
-      user.stripe_token = token_id
+      user.stripe_token       = token_id
       user.save
 
-      Receipt.count.should == 0
+      expect( Receipt.count ).to eq( 0 )
       described_class.process_receipts
-      Receipt.count.should == 1
+      expect( Receipt.count ).to eq( 1 )
       rec = Receipt.first
       rec.plan_id = Plan.small.name_id
       rec.total.should eq('1200')
