@@ -3,20 +3,6 @@ class Plan < Versioneye::Model
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  A_PLAN_TRIAL_0      = '03_trial_0'
-
-  # DEPRECATED START
-  A_PLAN_TRIAL_1      = '03_trial_1'
-
-  A_PLAN_PERSONAL_3   = '03_personal_3'
-  A_PLAN_PERSONAL_6   = '03_personal_6'
-  A_PLAN_PERSONAL_9   = '03_personal_9'
-
-  A_PLAN_BUSINESS_25  = '03_business_25'
-  A_PLAN_BUSINESS_50  = '03_business_50'
-  A_PLAN_BUSINESS_100 = '03_business_100'
-  # DEPRECATED END
-
   A_PLAN_FREE    = '04_free'
   A_PLAN_MICRO   = '04_micro'   # € 7   - 5
   A_PLAN_SMALL   = '04_small'   # € 12  - 10
@@ -98,10 +84,6 @@ class Plan < Versioneye::Model
 
   def self.current_plans
     Plan.where(name_id: /\A04/)
-  end
-
-  def self.old_plans
-    Plan.where(name_id: /\A03/)
   end
 
   def self.free_plan
