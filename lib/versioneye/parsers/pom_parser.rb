@@ -96,7 +96,7 @@ class PomParser < CommonParser
   end
 
   def parse_requested_version(version_number, dependency, product)
-    if version_number.nil? || version_number.empty?
+    if version_number.to_s.empty?
       self.update_requested_with_current(dependency, product)
       return
     end
@@ -109,12 +109,20 @@ class PomParser < CommonParser
       dependency.version_requested = version
       dependency.version_label = version
 
-    # TODO implement more cases
+    elsif version.upcase.eql?('RELEASE')
+      newest = VersionService.newest_version_from( product.versions, 'stable')
+      dependency.version_requested = newest.to_s
+      dependency.version_label = version
+
+    elsif version.upcase.eql?('LATEST')
+      newest = VersionService.newest_version_from( product.versions, 'dev')
+      dependency.version_requested = newest.to_s
+      dependency.version_label = version
 
     else
       dependency.version_requested = version
-      dependency.comperator = "="
       dependency.version_label = version
+      dependency.comperator = "="
 
     end
   end

@@ -4,6 +4,12 @@ describe PomParser do
 
   describe "parse" do
 
+    def fetch_by_name(dependencies, name)
+      dependencies.each do |dep|
+        return dep if dep.name.eql? name
+      end
+    end
+
     it "parse from https the file correctly" do
       parser = PomParser.new
       project = parser.parse("https://s3.amazonaws.com/veye_test_env/pom.xml")
@@ -36,67 +42,99 @@ describe PomParser do
       product_8 = ProductFactory.create_for_maven("org.apache.maven.plugins", "maven-surefire-report-plugin", "2.4.2")
       product_8.save
 
+      product_9 = ProductFactory.create_for_maven("org.testng", "testng", "3.4")
+      product_9.save
+      product_9.add_version "4.0"
+      product_9.add_version "4.5"
+      product_9.add_version "5.0.0-SNAPSHOT"
+      product_9.save
+
+      product_10 = ProductFactory.create_for_maven("org.assertj", "assertj-core", "2.0.0")
+      product_10.save
+      product_10.add_version "1.0"
+      product_10.add_version "1.5"
+      product_10.add_version "3.0.0-SNAPSHOT"
+      product_10.save
+
       parser = PomParser.new
       project = parser.parse("https://s3.amazonaws.com/veye_test_env/pom.xml")
       project.should_not be_nil
 
-      dependency_01 = project.dependencies.first
+      dependency_01 = fetch_by_name project.dependencies, 'junit'
       dependency_01.name.should eql("junit")
       dependency_01.version_requested.should eql("4.4")
       dependency_01.version_current.should eql("4.4")
       dependency_01.comperator.should eql("=")
       dependency_01.scope.should eql(Dependency::A_SCOPE_TEST)
 
-      dependency_02 = project.dependencies[1]
+      dependency_02 = fetch_by_name project.dependencies, 'commons-logging'
       dependency_02.name.should eql("commons-logging")
       dependency_02.version_requested.should eql("1.1")
       dependency_02.version_current.should eql("1.1")
       dependency_02.comperator.should eql("=")
       dependency_02.scope.should eql("compile")
 
-      dependency_03 = project.dependencies[2]
+      dependency_03 = fetch_by_name project.dependencies, 'commons-logging-api'
       dependency_03.name.should eql("commons-logging-api")
       dependency_03.version_requested.should eql("1.1")
       dependency_03.version_current.should eql("1.1")
       dependency_03.comperator.should eql("=")
       dependency_03.scope.should eql("compile")
 
-      dependency_04 = project.dependencies[3]
+      dependency_04 = fetch_by_name project.dependencies, 'log4j'
       dependency_04.name.should eql("log4j")
       dependency_04.version_requested.should eql("1.2.15")
       dependency_04.version_current.should eql("1.2.15")
       dependency_04.comperator.should eql("=")
       dependency_04.scope.should eql("compile")
 
-      dependency_05 = project.dependencies[4]
+      dependency_05 = fetch_by_name project.dependencies, 'mail'
       dependency_05.name.should eql("mail")
       dependency_05.version_requested.should eql("1.4")
       dependency_05.version_current.should eql("1.4")
       dependency_05.comperator.should eql("=")
       dependency_05.scope.should eql("compile")
 
-      dependency_06 = project.dependencies[5]
+      dependency_06 = fetch_by_name project.dependencies, 'commons-email'
       dependency_06.name.should eql("commons-email")
       dependency_06.version_requested.should eql("1.2")
       dependency_06.version_current.should eql("1.4")
       dependency_06.comperator.should eql("=")
       dependency_06.scope.should eql("compile")
 
-      dependency_06 = project.dependencies[6]
-      dependency_06.name.should eql("maven-project-info-reports-plugin")
-      dependency_06.version_requested.should eql("1.0")
-      dependency_06.version_current.should eql("1.0")
-      dependency_06.comperator.should eql("=")
-      dependency_06.scope.should eql("plugin")
-
-      dependency_07 = project.dependencies[8]
-      dependency_07.name.should eql("maven-surefire-report-plugin")
-      dependency_07.group_id.should eql("org.apache.maven.plugins")
-      dependency_07.version_requested.should eql("2.4.2")
-      dependency_07.version_current.should eql("2.4.2")
+      dependency_07 = fetch_by_name project.dependencies, 'maven-project-info-reports-plugin'
+      dependency_07.name.should eql("maven-project-info-reports-plugin")
+      dependency_07.version_requested.should eql("1.0")
+      dependency_07.version_current.should eql("1.0")
       dependency_07.comperator.should eql("=")
       dependency_07.scope.should eql("plugin")
+      dependency_07.outdated.should eql(false)
 
+      dependency_08 = fetch_by_name project.dependencies, 'maven-surefire-report-plugin'
+      dependency_08.name.should eql("maven-surefire-report-plugin")
+      dependency_08.group_id.should eql("org.apache.maven.plugins")
+      dependency_08.version_requested.should eql("2.4.2")
+      dependency_08.version_current.should eql("2.4.2")
+      dependency_08.comperator.should eql("=")
+      dependency_08.scope.should eql("plugin")
+      dependency_08.outdated.should eql(false)
+
+      dependency_09 = fetch_by_name project.dependencies, 'testng'
+      dependency_09.name.should eql("testng")
+      dependency_09.version_requested.should eql("4.5")
+      dependency_09.version_current.should eql("4.5")
+      dependency_09.comperator.should eql("=")
+      dependency_09.scope.should eql("test")
+      dependency_09.outdated.should eql(false)
+
+      dependency_09 = fetch_by_name project.dependencies, 'assertj-core'
+      dependency_09.name.should eql("assertj-core")
+      dependency_09.version_label.should eql('LATEST')
+      dependency_09.version_requested.should eql("3.0.0-SNAPSHOT")
+      dependency_09.version_current.should eql("2.0.0")
+      dependency_09.comperator.should eql("=")
+      dependency_09.outdated.should eql(false)
+      dependency_09.scope.should eql("test")
     end
 
   end
