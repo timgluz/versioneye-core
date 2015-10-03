@@ -1,6 +1,7 @@
 require 'versioneye/parsers/common_parser'
+require 'versioneye/parsers/pom_parser'
 
-class PomJsonParser < CommonParser
+class PomJsonParser < PomParser
 
 
   def parse(url)
@@ -33,6 +34,7 @@ class PomJsonParser < CommonParser
       artifact_id = spliti[1].to_s.downcase
       dependency  = init_dependency(name, group_id, artifact_id, version, scope)
       product     = Product.find_by_group_and_artifact(dependency.group_id, dependency.artifact_id )
+      parse_requested_version(version, dependency, product)
       dependency.prod_key     = product.prod_key if product
       project.unknown_number += 1 if product.nil?
       project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
@@ -59,3 +61,4 @@ class PomJsonParser < CommonParser
   end
 
 end
+
