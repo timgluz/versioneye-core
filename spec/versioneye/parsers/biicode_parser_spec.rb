@@ -47,7 +47,7 @@ describe BiicodeParser do
       dep_3 = project.dependencies[2]
       dep_3.name.should eql("nat/nat/nat/master")
       dep_3.version_requested.should eql("0")
-      dep_3.version_current.should be_nil 
+      dep_3.version_current.should be_nil
       dep_3.comperator.should eql("=")
       dep_3.unknown?.should be_truthy
 
