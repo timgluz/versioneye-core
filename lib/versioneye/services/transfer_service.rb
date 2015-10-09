@@ -32,4 +32,27 @@ class TransferService < Versioneye::Service
   end
 
 
+  def self.download_receipts
+    bucket_name = 'veye-prod-receipt'
+    s3 = Aws::S3::Client.new
+    s3.list_objects(bucket: bucket_name).each do |response|
+      response.contents.each do |content|
+        obj_key = content.key
+        download obj_key
+      end
+    end
+  end
+
+
+  private
+
+
+    def self.download obj_key
+      filename = "/Users/reiz/stripe/#{obj_key}"
+      File.open(filename, 'wb') do |file|
+        reap = s3.get_object({ bucket: bucket_name, key: obj_key }, target: file)
+      end
+      p "downloaded file to #{filename}"
+    end
+
 end
