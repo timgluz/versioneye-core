@@ -82,3 +82,15 @@ module Versioneye
 
   end
 end
+
+# Monkey patch for MongoID 5 update.
+# They removed `remove_all` and here we add it back!
+module Mongo
+  class Collection
+    class View
+      def remove_all
+        remove(0)
+      end
+    end
+  end
+end

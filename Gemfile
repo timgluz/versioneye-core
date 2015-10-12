@@ -21,7 +21,7 @@ gem 'pdfkit'             , '~> 0.8.0'
 gem 'bunny'              , '~> 2.2.0'
 gem 'wkhtmltopdf-binary' , '~> 0.9.9.1'
 
-gem 'mongoid'            , '~> 4.0.2'
+gem 'mongoid'            , '~> 5.0.0'
 gem 'will_paginate_mongoid', '2.0.1'
 
 gem 'net-ldap', '0.11'
