@@ -1,4 +1,4 @@
-FROM reiz/ruby:2.2.2
+FROM reiz/ruby:2.2.3
 MAINTAINER  Robert Reiz <reiz@versioneye.com>
 
 ENV RAILS_ENV test
@@ -20,8 +20,7 @@ RUN gem install bundler --version 1.10.6
 
 RUN wget -O /usr/local/lib/ruby/site_ruby/2.2.0/rubygems/ssl_certs/AddTrustExternalCARoot-2048.pem https://raw.githubusercontent.com/rubygems/rubygems/master/lib/rubygems/ssl_certs/AddTrustExternalCARoot-2048.pem
 
-RUN rm -Rf   /rails
-RUN mkdir -p /rails; mkdir -p /rails/log; mkdir -p /rails/pids
+RUN rm -Rf /rails; mkdir -p /rails; mkdir -p /rails/log; mkdir -p /rails/pids
 
 COPY Gemfile Gemfile.lock /rails/
 
