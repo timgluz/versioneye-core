@@ -11,6 +11,16 @@ class S3 < Versioneye::Service
   end
 
 
+  def self.presigned_url obj_key, bucket_name = Settings.instance.s3_receipt_bucket, expire = 2.minutes.to_i
+    presigner = Aws::S3::Presigner.new
+    presigner.presigned_url(:get_object,
+                        bucket: bucket_name,
+                        key: obj_key,
+                        expires_in: expire
+                        ).to_s
+  end
+
+
   def self.url_for object, region = 'eu-west-1'
     return nil if object.to_s.empty?
 
