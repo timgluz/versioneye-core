@@ -19,7 +19,7 @@ class S3 < Versioneye::Service
 
     encoded_name = URI.encode( object.to_s )
     bucket_name  = Settings.instance.s3_projects_bucket
-    bucket_name  = Settings.instance.s3_receipt_bucke if object.is_a? Receipt
+    bucket_name  = Settings.instance.s3_receipt_bucket if object.is_a? Receipt
 
     s3 = Aws::S3::Resource.new(:region => region)
     bucket = s3.bucket( bucket_name )
