@@ -238,9 +238,7 @@ class PackageParser < CommonParser
 
     elsif version.match(/\.x\z/i) || version.match(/\.\*\z/i)
       # X Version Ranges or .* version range
-      ver = version[0..version.length - 2]
-      versions = VersionService.versions_start_with( product.versions, ver )
-      versions << version[0..version.length - 3]
+      versions = VersionService.wildcard_versions( product.versions, version, true )
       highest_version = VersionService.newest_version_from(versions)
       if highest_version
         dependency.version_requested = highest_version.to_s
