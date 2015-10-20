@@ -15,6 +15,7 @@ class ProjectdependencyService < Versioneye::Service
     log.error e.backtrace.join "\n"
   end
 
+
   def self.update_licenses_for project, dep, product, save_dep = true
     dep.license_caches.clear
     dep.lwl_violation = nil
@@ -40,17 +41,17 @@ class ProjectdependencyService < Versioneye::Service
     log.error e.backtrace.join "\n"
   end
 
+
   def self.update_security_for project, dep, product, save_dep = true
     version = product.version_by_number dep.version_requested
     return nil if version.nil?
+    return nil if version.sv_ids.empty?
 
     dep.sv_ids = version.sv_ids
     dep.save if save_dep
 
-    if !version.sv_ids.empty?
-      new_count = project.sv_count + version.sv_ids.size
-      project.update_attribute(:sv_count, new_count)
-    end
+    new_count = project.sv_count + version.sv_ids.size
+    project.update_attribute(:sv_count, new_count)
   end
 
 
