@@ -236,31 +236,53 @@ class VersionService < Versioneye::Service
     version_splitted.each do |verso|
       verso.gsub!(" ", "")
       stability = VersionTagRecognizer.stability_tag_for verso
+
+      # >=
       if verso.match(/\A>=/)
         verso.gsub!(">=", "")
         version_array = prod.versions.empty? ? versions : prod.versions
         new_range = VersionService.greater_than_or_equal( version_array, verso, true, stability )
         prod.versions = new_range
+
+      # >
       elsif verso.match(/\A>/)
         verso.gsub!(">", "")
         version_array = prod.versions.empty? ? versions : prod.versions
         new_range = VersionService.greater_than( version_array, verso, true, stability )
         prod.versions = new_range
+
+      # <=
       elsif verso.match(/\A<=/)
         verso.gsub!("<=", "")
         version_array = prod.versions.empty? ? versions : prod.versions
         new_range = VersionService.smaller_than_or_equal( version_array, verso, true, stability )
         prod.versions = new_range
+
+      # <
       elsif verso.match(/\A</)
         verso.gsub!("<", "")
         version_array = prod.versions.empty? ? versions : prod.versions
         new_range = VersionService.smaller_than( version_array, verso, true, stability )
         prod.versions = new_range
+
+      # ~> | Approximately greater than | Pessimistic Version Constraint
+      elsif verso.match(/\A~>/)
+        ver = verso.gsub("~>", "")
+        ver = ver.gsub(" ", "")
+        starter   = VersionService.version_approximately_greater_than_starter( ver )
+        new_range = VersionService.versions_start_with( versions, starter )
+        new_range.each do |version|
+          prod.versions.push version
+        end
+
+      # !=
       elsif verso.match(/\A!=/)
         verso.gsub!("!=", "")
         version_array = prod.versions.empty? ? versions : prod.versions
         new_range = VersionService.newest_but_not( version_array, verso, true, stability)
         prod.versions = new_range
+
+      # =
       elsif verso.match(/\A=/) || verso.match(/\A\w/)
         if verso.match(/\.x\z/i) || verso.match(/\.\*\z/i)
           new_versions = VersionService.wildcard_versions( versions, verso )
