@@ -21,6 +21,10 @@ class Version < Versioneye::Model
     version.to_s
   end
 
+  def eql?( obj )
+    self.to_s.eql?( obj.to_s )
+  end
+
   def as_json(parameter=nil)
     {
       :version    => self.version,
