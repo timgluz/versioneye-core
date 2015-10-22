@@ -282,8 +282,9 @@ class VersionService < Versioneye::Service
         new_range = VersionService.newest_but_not( version_array, verso, true, stability)
         prod.versions = new_range
 
-      # =
-      elsif verso.match(/\A=/) || verso.match(/\A\w/)
+      # = or ==
+      elsif verso.match(/\A==/) || verso.match(/\A=/) || verso.match(/\A\w/)
+        verso = verso.gsub(/\A==/, "").gsub(/\A=/, "")
         if verso.match(/\.x\z/i) || verso.match(/\.\*\z/i)
           new_versions = VersionService.wildcard_versions( versions, verso )
           new_versions.each do |version|

@@ -663,6 +663,33 @@ describe VersionService do
       versions.last.to_s.should eq("2.1.1")
     end
 
+    it "returns the right values" do
+      product.versions = Array.new
+      product.versions.push( Version.new( { :version => "2.0.0" } ) )
+      product.versions.push( Version.new( { :version => "2.0.1" } ) )
+      versions = VersionService.from_or_ranges(product.versions, "=2.0.0")
+      versions.size.should eq(1)
+      versions.first.to_s.should eq("2.0.0")
+    end
+
+    it "returns the right values" do
+      product.versions = Array.new
+      product.versions.push( Version.new( { :version => "2.0.0" } ) )
+      product.versions.push( Version.new( { :version => "2.0.1" } ) )
+      versions = VersionService.from_or_ranges(product.versions, "==2.0.0")
+      versions.size.should eq(1)
+      versions.first.to_s.should eq("2.0.0")
+    end
+
+    it "returns the right values" do
+      product.versions = Array.new
+      product.versions.push( Version.new( { :version => "2.0.0" } ) )
+      product.versions.push( Version.new( { :version => "2.0.1" } ) )
+      versions = VersionService.from_or_ranges(product.versions, "2.0.0")
+      versions.size.should eq(1)
+      versions.first.to_s.should eq("2.0.0")
+    end
+
   end
 
 
