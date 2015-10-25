@@ -27,6 +27,7 @@ class MavenRepository < Versioneye::Model
     repos['servicemix']         = 'http://svn.apache.org/repos/asf/servicemix/m2-repo'
     repos['springRelease']      = 'http://maven.springframework.org/release/'
     repos['springMilestone']    = 'http://maven.springframework.org/milestone/'
+    repos['springPlugins']      = 'http://repo.spring.io/plugins-release/'
     repos['primeFaces']         = 'http://repository.primefaces.org/'
     repos['iceFaces']           = 'http://anonsvn.icesoft.org/repo/maven2/releases/'
     repos['glassfish']          = 'http://download.java.net/maven/glassfish/'
@@ -76,3 +77,5 @@ end
 # https://repository.jboss.org/nexus/content/repositories/thirdparty-releases/
 # http://artifactory.javassh.com/public-releases
 # http://maven.vaadin.com/vaadin-addons
+
+# mr = MavenRepository.new( { :name => "springPlugins", :url => 'http://repo.spring.io/plugins-release/', :language => Product::A_LANGUAGE_JAVA } )
