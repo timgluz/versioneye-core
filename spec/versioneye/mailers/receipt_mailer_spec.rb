@@ -18,7 +18,7 @@ describe ReceiptMailer do
 
       email.to.should eq( [user.email] )
       email.encoded.should include( "Hello #{user.fullname}" )
-      email.encoded.should include( "This a receipt for your monthly subscription at VersionEye" )
+      email.encoded.should include( "This is a receipt for your monthly subscription at VersionEye" )
       email.encoded.should include( "Handelsregister" )
 
       email.attachments.count.should == 1
