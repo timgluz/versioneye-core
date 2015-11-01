@@ -7,7 +7,7 @@ gem 'dalli'              , '~> 2.7.0'
 gem 'kgio'               , '~> 2.10.0'   # 20% performance boost for dalli
 gem 'oauth'              , '~> 0.4.7'
 gem 'aws-sdk'            , '~> 2.1.3'
-gem 'stripe'             , '~> 1.30.1'
+gem 'stripe'             , '~> 1.31.0'
 gem 'tire'               , '~> 0.6.2'
 gem 'octokit'            , '~> 4.1.0'
 gem 'semverly'           , '~> 1.0.0'
@@ -24,7 +24,7 @@ gem 'wkhtmltopdf-binary' , '~> 0.9.9.1'
 gem 'mongoid'            , '~> 4.0.2'
 gem 'will_paginate_mongoid', '2.0.1'
 
-gem 'net-ldap', '0.11'
+gem 'net-ldap', '0.12.0'
 
 group :development do
   gem 'jeweler', '~> 2.0.1'
