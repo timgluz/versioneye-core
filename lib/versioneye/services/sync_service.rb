@@ -75,6 +75,61 @@ class SyncService < Versioneye::Service
 
 
   def self.sync_product language, prod_key, skip_known_versions = true
+    sync_product_versions language, prod_key, skip_known_versions
+    sync_security language, prod_key
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    nil
+  end
+
+
+  def self.sync_security language, prod_key
+    json = SecurityClient.index language, prod_key
+    return nil if json.nil?
+
+    json.deep_symbolize_keys!
+    if !json[:error].to_s.empty?
+      log.error "Error in response from VersionEye API: #{json[:error]}"
+      return nil
+    end
+
+    return nil if json[:results].to_a.empty?
+
+    product = Product.fetch_product language, prod_key
+    json[:results].each do |svjson|
+      update_svobject( product, svjson )
+    end
+  end
+
+
+  def self.update_svobject product, svjson
+    sv = SecurityVulnerability.find_or_create_by(
+      {
+       :language => svjson[:language],
+       :prod_key => svjson[:prod_key],
+       :name_id => svjson[:name_id]
+      }
+    )
+    sv.update_from svjson
+    reset_svids product, sv
+  end
+
+
+  def self.reset_svids product, sv
+    return nil if product.nil? || sv.nil?
+
+    product.versions.each do |version|
+      version.sv_ids = []
+    end
+    sv.affected_versions.each do |version|
+      product.add_svid version, sv
+    end
+    product.save
+  end
+
+
+  def self.sync_product_versions language, prod_key, skip_known_versions = true
     json = ProductClient.versions language, prod_key
     return nil if json.nil?
 

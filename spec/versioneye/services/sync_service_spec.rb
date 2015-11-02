@@ -27,6 +27,33 @@ describe SyncService do
   end
 
 
+  describe 'sync_security' do
+
+    it 'syncs sv' do
+      env     = Settings.instance.environment
+      GlobalSetting.set env, 'api_key', 'b7f7c65e66d38f511'
+
+      expect( Product.count ).to eq(0)
+      expect( SecurityVulnerability.count ).to eq(0)
+      VCR.use_cassette('sync_security_aws', allow_playback_repeats: true) do
+        SyncService.sync_product 'PHP', 'aws/aws-sdk-php'
+      end
+      expect( SecurityVulnerability.count ).to eq(1)
+      expect( SecurityVulnerability.first.language ).to eq('PHP')
+      expect( SecurityVulnerability.first.prod_key ).to eq('aws/aws-sdk-php')
+      expect( SecurityVulnerability.first.name_id ).to eq('2015-08-31')
+      expect( SecurityVulnerability.first.summary ).to eq('Security Misconfiguration Vulnerability in the AWS SDK for PHP')
+      expect( SecurityVulnerability.first.cve ).to eq('CVE-2015-5723')
+      expect( SecurityVulnerability.first.affected_versions.count > 0 ).to be_truthy
+      expect( Product.count ).to eq(1)
+      expect( Product.first.version_by_number('3.0.0').sv_ids.count ).to eq(1)
+      expect( Product.first.version_by_number('3.2.0').sv_ids.count ).to eq(1)
+      expect( Product.first.version_by_number('3.3.0').sv_ids.count ).to eq(0)
+    end
+
+  end
+
+
   describe 'sync_project' do
 
     it 'syncs projects' do

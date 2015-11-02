@@ -524,6 +524,33 @@ describe Product do
   end
 
 
+  describe 'add_svid' do
+
+    it 'adds the sv id' do
+      product = ProductFactory.create_for_maven 'junit', 'junit', '1.0.0'
+      product.add_version('1.0.1')
+      product.add_version('1.1.1')
+      product.add_version('1.2.0')
+      product.add_version('2.0.0')
+      expect( product.save ).to be_truthy
+
+      sv = SecurityVulnerability.new({:name_id => 'test', :language => product.language, :prod_key => product.prod_key})
+      expect( sv.save ).to be_truthy
+
+      expect( product.add_svid('1.0.1', sv) ).to be_truthy
+      expect( product.add_svid('1.0.1', sv) ).to be_falsey
+
+      product.reload
+      version = product.version_by_number '1.0.1'
+      expect( version.sv_ids.count ).to eql(1)
+      expect( version.sv_ids.first ).to eql( sv.ids )
+      version = product.version_by_number '1.0.0'
+      expect( version.sv_ids ).to be_empty
+    end
+
+  end
+
+
 
 
 

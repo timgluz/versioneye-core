@@ -98,6 +98,8 @@ module Versioneye
     require 'versioneye/updaters/upload_updater'
     require 'versioneye/updaters/url_updater'
 
+    require 'versioneye/remote_api/common_client'
+    require 'versioneye/remote_api/security_client'
     require 'versioneye/remote_api/product_client'
     require 'versioneye/remote_api/me_client'
 

@@ -216,6 +216,15 @@ class Product < Versioneye::Model
     end
   end
 
+  def add_svid version_number, sv
+    version = version_by_number version_number
+    return false if version.nil?
+    return false if version.sv_ids.include?(sv.ids)
+
+    version.sv_ids << sv.ids
+    version.save
+  end
+
   ######## ENCODE / DECODE ###################
 
   def self.encode_prod_key prod_key
