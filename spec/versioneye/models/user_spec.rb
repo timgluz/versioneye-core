@@ -449,6 +449,18 @@ describe User do
       github_user.username.should eql("HansReiz")
     end
 
+    it "does create a username and replace @" do
+      github_user.fullname = "Hans@Reiz"
+      github_user.create_username
+      github_user.username.should eql("HansReiz")
+    end
+
+    it "does create a username and replace ." do
+      github_user.fullname = "Hans.Reiz"
+      github_user.create_username
+      github_user.username.should eql("HansReiz")
+    end
+
     it "does create a username with a randomValue" do
       github_user.fullname = "Robert Reiz"
       github_user.create_username
