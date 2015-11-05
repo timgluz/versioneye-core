@@ -2,6 +2,50 @@ require 'spec_helper'
 
 describe UserService do
 
+
+  describe 'valid_user?' do
+
+    it 'returns false because email not valid' do
+      user = User.new({:email => ''})
+      expect( UserService.valid_user?(user, {}) ).to be_falsey
+    end
+
+    it 'returns false because fullname is not valid' do
+      user = User.new({:email => 'valid@email.de'})
+      expect( UserService.valid_user?(user, {}) ).to be_falsey
+    end
+
+    it 'returns false because no password' do
+      user = User.new({:email => 'valid@email.de', :fullname => "full name"})
+      expect( UserService.valid_user?(user, {}) ).to be_falsey
+    end
+
+    it 'returns false because no terms' do
+      user = User.new({:email => 'valid@email.de', :fullname => "full name", :password => 'my_super_secret'})
+      expect( UserService.valid_user?(user, {}) ).to be_falsey
+    end
+
+    it 'returns true because user is valid' do
+      user = User.new({:email => 'valid@email.de', :fullname => "full name", :password => 'my_super_secret', :terms => true})
+      expect( UserService.valid_user?(user, {}) ).to be_truthy
+    end
+
+  end
+
+
+  describe 'all_users_paged' do
+
+    it 'iterates over all users' do
+      user1 = UserFactory.create_new "hans"
+      user2 = UserFactory.create_new "tanz"
+      UserService.all_users_paged do |users|
+        expect( users.count ).to eq(2)
+      end
+    end
+
+  end
+
+
   describe "delete" do
 
     let(:user)   { UserFactory.create_new(34) }
