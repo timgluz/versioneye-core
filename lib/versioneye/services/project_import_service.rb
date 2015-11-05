@@ -5,6 +5,33 @@ class ProjectImportService < Versioneye::Service
   A_TASK_TTL     = 60 # 60 seconds = 1 minute
 
 
+  def self.import_all_github user, pfs = ['Gemfile', 'package.json', 'pom.xml', 'bower.json', 'Podfile', 'build.gradle']
+    user.github_repos.where(:fullname => /\Ablinkist/).each do |repo|
+      next if repo.branches.to_a.empty?
+
+      branch = ''
+      branch = 'master'  if repo.branches.include?("master")
+      branch = 'develop' if repo.branches.include?('develop')
+      next if branch.empty?
+
+      import_all_github_from user, repo, branch, pfs
+    end
+  end
+
+  def self.import_all_github_from user, repo, branch, pfs
+    repo.project_files[branch].each do |pf|
+      path = pf['path']
+      if pfs.include?( path )
+        p "import - #{user.username} - #{repo.fullname} - #{path} - #{branch}"
+        import_from_github_multi user, repo.fullname, pf['path'], branch
+      end
+    end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+  end
+
+
   def self.import_from_github_async user, repo_name, filename, branch = 'master'
     key = "github:::#{user.username}:::#{repo_name}:::#{filename}:::#{branch}"
     task_status( key ){ GitRepoFileImportProducer.new( key ) }
