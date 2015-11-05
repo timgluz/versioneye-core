@@ -73,7 +73,7 @@ class LwlService < Versioneye::Service
     def self.build_line dep
       dep_name = dep.name
       dep_name = dep.artifact_id if !dep.artifact_id.to_s.empty?
-      {:component => dep_name, :group_id => dep.group_id, :version => dep.version_requested}
+      {:language => dep.language, :component => dep_name, :group_id => dep.group_id, :version => dep.version_requested}
     end
 
 
