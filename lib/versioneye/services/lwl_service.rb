@@ -44,23 +44,36 @@ class LwlService < Versioneye::Service
     def self.fill_dto_with dependencies, dto, uniq_array
       uvalue = ''
       dependencies.each do |dep|
-        line = build_line(dep)
         if dep.license_caches && !dep.license_caches.empty?
-          dep.license_caches.each do |lc|
-            line[:license] = lc.name
-            uvalue = create_uniq_identifier(line)
-            next if uniq_array.include?(uvalue)
-
-            dto[:whitelisted] << line if lc.is_whitelisted? == true
-            dto[:violated]    << line if lc.is_whitelisted? == false
-          end
+          line_per_license( dep, dto, uniq_array )
         else
-          line[:license] = 'UNKNOWN'
-          uvalue = create_uniq_identifier(line)
-          dto[:unknown] << line if !uniq_array.include?(uvalue)
+          unknown_line( dep, dto, uniq_array )
         end
+      end
+    end
 
-        uniq_array << uvalue if !uniq_array.include?(uvalue)
+
+    def self.line_per_license dep, dto, uniq_array
+      dep.license_caches.each do |lc|
+        line = build_line(dep)
+        line[:license] = lc.name
+        uvalue = create_uniq_identifier(line)
+        next if uniq_array.include?(uvalue)
+
+        uniq_array << uvalue
+        dto[:whitelisted] << line if lc.is_whitelisted? == true
+        dto[:violated]    << line if lc.is_whitelisted? == false
+      end
+    end
+
+
+    def self.unknown_line dep, dto, uniq_array
+      line = build_line(dep)
+      line[:license] = 'UNKNOWN'
+      uvalue = create_uniq_identifier(line)
+      if !uniq_array.include?(uvalue)
+        dto[:unknown] << line
+        uniq_array << uvalue
       end
     end
 
