@@ -6,7 +6,7 @@ class ProjectImportService < Versioneye::Service
 
 
   def self.import_all_github user, pfs = ['Gemfile', 'package.json', 'pom.xml', 'bower.json', 'Podfile', 'build.gradle']
-    user.github_repos.where(:fullname => /\Ablinkist/).each do |repo|
+    user.github_repos.where(:fullname => /\Ablinkist/, :private => true).each do |repo|
       next if repo.branches.to_a.empty?
 
       branch = ''
