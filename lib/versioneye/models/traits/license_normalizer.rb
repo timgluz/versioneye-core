@@ -295,6 +295,7 @@ module VersionEye
 
     def ruby_match name
       name.match(/\ARuby\s+1\.8\z/i) ||
+      name.match(/\Asame\s+as\s+ruby's\z/i) ||
       name.match(/\ARuby\z/i)
     end
 
