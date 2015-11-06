@@ -225,7 +225,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.1)
-    vcr (2.9.3)
+    vcr (3.0.0)
     webmock (1.22.3)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
@@ -274,7 +274,7 @@ DEPENDENCIES
   simplecov (~> 0.10.0)
   stripe (~> 1.31.0)
   tire (~> 0.6.2)
-  vcr (~> 2.9.3)
+  vcr (~> 3.0.0)
   webmock (~> 1.22.0)
   will_paginate_mongoid (= 2.0.1)
   wkhtmltopdf-binary (~> 0.9.9.1)
