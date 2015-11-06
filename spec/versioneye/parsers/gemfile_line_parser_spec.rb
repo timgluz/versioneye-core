@@ -116,7 +116,7 @@ describe GemfileParser do
   describe "init_dependency" do
 
     it "inits the dependency with product" do
-      product = ProductFactory.create_new
+      product = ProductFactory.create_for_gemfile 'rails', '4.0.0'
       gem_name = "rails"
       dependency = @parser.init_dependency( product, gem_name )
       dependency.should_not be_nil
