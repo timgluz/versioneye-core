@@ -41,8 +41,8 @@ class GemfileParser < CommonParser
 
     return nil if gem_name.nil?
 
-    version    = fetch_version  ( line_elements )
-    product    = Product.fetch_product Product::A_LANGUAGE_RUBY, gem_name
+    version    = fetch_version( line_elements )
+    product    = fetch_product_for gem_name
     dependency = init_dependency( product, gem_name )
 
     parse_requested_version( version, dependency, product )
@@ -228,10 +228,22 @@ class GemfileParser < CommonParser
     dependency.name     = gem_name
     dependency.language = Product::A_LANGUAGE_RUBY
     if product
+      dependency.name            = product.name
+      dependency.language        = product.language
       dependency.prod_key        = product.prod_key
       dependency.version_current = product.version
     end
     dependency
+  end
+
+  def fetch_product_for key
+    return nil if key.to_s.empty?
+    if key.to_s.match(/\Arails-assets-/)
+      new_key = key.gsub("rails-assets-", "")
+      return Product.fetch_bower( new_key )
+    else
+      return Product.fetch_product( Product::A_LANGUAGE_RUBY, key )
+    end
   end
 
 end
