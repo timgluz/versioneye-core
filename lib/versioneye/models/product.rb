@@ -195,6 +195,7 @@ class Product < Versioneye::Model
     version_hash = version_hash.merge(hash) if !hash.nil? and !hash.empty?
     version = Version.new(version_hash)
     versions.push( version )
+    version.save
   end
 
   def remove_version version_string
@@ -386,7 +387,7 @@ class Product < Versioneye::Model
   end
 
   def archives
-    downloads = Versionarchive.archives( self.language, self.prod_key, self.version.to_s )
+    Versionarchive.archives( self.language, self.prod_key, self.version.to_s )
   end
 
   def self.unique_languages_for_product_ids(product_ids)
