@@ -4,8 +4,7 @@ class S3 < Versioneye::Service
 
 
   def self.set_aws_crendentials
-    Aws.config[:credentials] = Aws::Credentials.new(Settings.instance.aws_access_key_id,
-                                                    Settings.instance.aws_secret_access_key)
+    Aws.config[:credentials] = Aws::Credentials.new(Settings.instance.aws_access_key_id, Settings.instance.aws_secret_access_key)
     Aws.config[:region] = 'eu-west-1'
     Aws.config
   end

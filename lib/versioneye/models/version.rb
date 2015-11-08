@@ -9,7 +9,7 @@ class Version < Versioneye::Model
   field :pom            , type: String # maven specific
   field :tag            , type: String # biicode specific - git tag string
   field :status         , type: String # biicode specific - [STABLE, DEV]
-  field :released_at    , type: DateTime
+  field :released_at    , type: DateTime, default: DateTime.now
   field :released_string, type: String
   field :sv_ids         , type: Array, default: []  # SecurityVulnerability IDs
 
@@ -50,7 +50,7 @@ class Version < Versioneye::Model
   end
 
   def released_or_detected
-    return released_at if released_at
+    return released_at if !released_at.nil? && !released_at.to_s.empty?
     created_at
   end
 
