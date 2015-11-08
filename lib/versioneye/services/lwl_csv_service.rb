@@ -53,11 +53,12 @@ class LwlCsvService < LwlService
 
 
     def self.cal_name dep
+      language = dep[:language]
       comp_name = dep[:component]
       if dep[:group_id]
         comp_name = "#{dep[:group_id]}/#{dep[:component]}"
       end
-      comp_name
+      "(#{language}) #{comp_name}"
     end
 
 
