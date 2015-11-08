@@ -16,6 +16,7 @@ class Project < Versioneye::Model
   A_TYPE_R         = 'R'
   A_TYPE_COCOAPODS = 'CocoaPods'
   A_TYPE_BIICODE   = 'Biicode'
+  A_TYPE_CHEF      = 'Chef'
 
   A_SOURCE_UPLOAD    = 'upload'
   A_SOURCE_URL       = 'url'

@@ -1,13 +1,13 @@
 class LanguageService < Versioneye::Service
 
 
-  A_DISTINCT_LANGUAGES = ["Java", "PHP", "CSS", "Ruby", "Python", "Node.JS", "CoffeeScript", "HTML", "JavaScript", "Clojure", "Objective-C", "R", "Biicode", "PureScript", "Go", "Haskell", "Perl", "C#", "TypeScript", "Handlebars", "Opa", "C", "none", "Nix", "Shell", "wisp", "LiveScript", "Makefile", "ApacheConf", "C++", "ActionScript", "Scala", "Processing", "PowerShell", "Dart", "XSLT", "Lua", "XML", "ASP", "TeX", "Liquid", "Groovy", "Gettext Catalog", "Cirru", "Smarty", "Eagle", "Puppet", "SuperCollider"]
+  A_DISTINCT_LANGUAGES = ["Java", "PHP", "CSS", "Ruby", "Python", "Node.JS", "CoffeeScript", "HTML", "JavaScript", "Clojure", "Objective-C", "R", "Biicode", "PureScript", "Go", "Haskell", "Perl", "C#", "TypeScript", "Handlebars", "Opa", "C", "none", "Nix", "Shell", "wisp", "LiveScript", "Makefile", "ApacheConf", "C++", "ActionScript", "Scala", "Processing", "PowerShell", "Dart", "XSLT", "Lua", "XML", "ASP", "TeX", "Liquid", "Groovy", "Gettext Catalog", "Cirru", "Smarty", "Eagle", "Puppet", "SuperCollider", "Chef"]
   A_KEY = "distinct_languages"
 
 
   def self.language_for lang_string
     languages = distinct_languages
-    languages << 'nodejs'
+    languages << 'nodejs' if !languages.include?('nodejs')
     languages.each do |lang|
       return lang if /\A#{lang}\z/i =~ lang_string || /\A#{lang}\/.*\z/i =~ lang_string
       return lang if lang_string.match(/c\+\+/i)
