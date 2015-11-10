@@ -67,9 +67,14 @@ describe Version do
     end
 
     it 'returns the created date' do
+      product = ProductFactory.create_new
       version = Version.new({:version => '12/dev-master'})
+      product.versions.push version
+      product.save
+      version.save
       created = version.created_at
-      version.released_or_detected.should eql(created)
+      expect( created ).to_not be_nil
+      version.released_or_detected.should_not be_nil
     end
 
   end
