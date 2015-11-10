@@ -145,6 +145,7 @@ describe ProjectdependencyService do
 
       version = @product.version_by_number @product.version
       version.sv_ids << sv._id.to_s
+      version.sv_ids << "crawling error"
       expect( version.save).to be_truthy
       expect( @project.sv_count).to eq(0)
 
@@ -159,6 +160,7 @@ describe ProjectdependencyService do
       # After the 2nd checking the sv_count still should be 1.
       # Testing that the count gets resettet before checking.
       ProjectdependencyService.update_security @project
+      @project.reload
       expect( @project.sv_count).to eq(1)
       dep = Projectdependency.first
       expect( dep.sv_ids.count ).to eq(1)

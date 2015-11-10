@@ -30,9 +30,10 @@ class ProjectdependencyService < Versioneye::Service
 
   # Updates projectdependency.sv_ids for each projectdependency of the project
   def self.update_security project
+    project.sv_count = 0
     project.update_attribute(:sv_count, 0)
     project.update_attribute(:sv_count_sum, 0)
-    project.projectdependencies.each do |dep|
+    Projectdependency.where(:project_id => project.id).each do |dep|
       product = dep.find_or_init_product
       update_security_for project, dep, product
     end
@@ -45,12 +46,20 @@ class ProjectdependencyService < Versioneye::Service
   def self.update_security_for project, dep, product, save_dep = true
     version = product.version_by_number dep.version_requested
     return nil if version.nil?
-    return nil if version.sv_ids.empty?
+    return nil if version.sv_ids.to_a.empty?
 
-    dep.sv_ids = version.sv_ids
-    dep.save if save_dep
+    version.sv_ids.each do |sv_id|
+      sv = SecurityVulnerability.find sv_id
+      if sv.nil?
+        version.sv_ids.delete sv_id
+        version.save
+        next
+      end
+      dep.sv_ids << sv_id if !dep.sv_ids.include?(sv_id)
+      dep.save if save_dep
+    end
 
-    new_count = project.sv_count + version.sv_ids.size
+    new_count = project.sv_count + dep.sv_ids.size
     project.update_attribute(:sv_count, new_count)
   end
 
