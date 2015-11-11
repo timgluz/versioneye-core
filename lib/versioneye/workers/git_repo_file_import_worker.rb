@@ -11,26 +11,19 @@ class GitRepoFileImportWorker < Worker
     channel = connection.create_channel
     queue   = channel.queue("git_repo_file_import", :durable => true)
 
-    log_msg = " [*] Waiting for messages in #{queue.name}. To exit press CTRL+C"
+    log_msg = " [*] GitRepoFileImportWorker waiting for messages in #{queue.name}. To exit press CTRL+C"
     puts log_msg
     log.info log_msg
 
     begin
       queue.subscribe(:manual_ack => true, :block => true) do |delivery_info, properties, body|
-        msg = " [x] Received #{body}"
-        puts msg
-        log.info msg
-
+        multi_log " [x] GitRepoFileImportWorker received #{body}"
         import body
-
-        msg = " - job done for #{body}"
-        puts msg
-        log.info msg
-
         channel.ack(delivery_info.delivery_tag)
+        multi_log " - job done for #{body}"
       end
     rescue => e
-      log.error e.message
+      log.error "ERROR in GitRepoFileImportWorker: #{e.message}"
       log.error e.backtrace.join("\n")
       connection.close
     end
@@ -76,7 +69,7 @@ class GitRepoFileImportWorker < Worker
       end
     rescue => e
       cache.set( message, "error_#{e.message}", A_TASK_TTL )
-      log.error e.message
+      log.error "ERROR in GitRepoFileImportWorker: #{e.message}"
       log.error e.backtrace.join("\n")
     end
 

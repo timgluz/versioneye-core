@@ -11,23 +11,19 @@ class GitRepoImportWorker < Worker
     channel = connection.create_channel
     queue   = channel.queue("git_repo_import", :durable => true)
 
-    log_msg = " [*] Waiting for messages in #{queue.name}. To exit press CTRL+C"
+    log_msg = " [*] GitRepoImportWorker waiting for messages in #{queue.name}. To exit press CTRL+C"
     puts log_msg
     log.info log_msg
 
     begin
       queue.subscribe(:manual_ack => true, :block => true) do |delivery_info, properties, body|
-        msg = " [x] Received #{body}"
-        puts msg
-        log.info msg
-
+        multi_log " [x] GitRepoImportWorker Received #{body}"
         handle body
         cache.set( body, GitHubService::A_TASK_DONE, A_TASK_TTL )
-
         channel.ack(delivery_info.delivery_tag)
       end
     rescue => e
-      log.error e.message
+      log.error "ERROR in GitRepoImportWorker: #{e.message}"
       log.error e.backtrace.join("\n")
       connection.close
     end
@@ -68,9 +64,7 @@ class GitRepoImportWorker < Worker
       end
       name = repo[:fullname]
 
-      log_msg = "Reading Stash / `#{name}` took: #{time}"
-      puts log_msg
-      log.info log_msg
+      multi_log "Reading Stash / `#{name}` took: #{time}"
     rescue => e
       log.error e.message
       log.error e.backtrace.join("\n")
@@ -88,9 +82,7 @@ class GitRepoImportWorker < Worker
       name = repo[:full_name]
       name = repo[:fullname] if name.to_s.empty?
 
-      log_msg = "Reading `#{name}` took: #{time}"
-      puts log_msg
-      log.info log_msg
+      multi_log "Reading `#{name}` took: #{time}"
     rescue => e
       log.error e.message
       log.error e.backtrace.join("\n")
@@ -109,9 +101,7 @@ class GitRepoImportWorker < Worker
       name = repo[:full_name]
       name = repo[:fullname] if name.to_s.empty?
 
-      log_msg = "Reading GitHub / `#{name}` took: #{time}"
-      puts log_msg
-      log.info log_msg
+      multi_log "Reading GitHub / `#{name}` took: #{time}"
     rescue => e
       log.error e.message
       log.error e.backtrace.join("\n")
