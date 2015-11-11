@@ -60,6 +60,7 @@ class ProjectdependencyService < Versioneye::Service
     end
 
     new_count = project.sv_count + dep.sv_ids.size
+    project.sv_count = new_count
     project.update_attribute(:sv_count, new_count)
   end
 
