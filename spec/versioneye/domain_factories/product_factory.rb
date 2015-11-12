@@ -127,6 +127,15 @@ class ProductFactory
     product
   end
 
+  def self.create_for_chef(name, version)
+    product = Product.new({:name => name, :name_downcase => name.downcase, :prod_key => name})
+    product.language = Product::A_LANGUAGE_CHEF
+    product.prod_type = Project::A_TYPE_CHEF
+    product.versions.push( Version.new(:version => version) )
+    product.version = version
+    product
+  end
+
 
   def self.create_for_pip(name, version)
     product = Product.new name: name,

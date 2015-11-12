@@ -1,5 +1,6 @@
 class ProjectService < Versioneye::Service
 
+
   def self.type_by_filename filename
     return nil if filename.to_s.empty?
     return nil if filename.to_s.match(/\/node_modules\//) # Skip workirectory of NPM.
@@ -16,6 +17,7 @@ class ProjectService < Versioneye::Service
     return Project::A_TYPE_BOWER     if (!(/bower.json\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_BIICODE   if (!(/biicode.conf\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_COCOAPODS if (!(/Podfile\z/ =~ trimmed_name).nil?)  or (!(/.podfile\z/ =~ trimmed_name).nil?) or (!(/Podfile.lock\z/ =~ trimmed_name).nil?)
+    return Project::A_TYPE_CHEF      if (!(/Berksfile.lock\z/ =~ trimmed_name).nil?)  or (!(/Berksfile\z/ =~ trimmed_name).nil?) or (!(/metadata.rb\z/ =~ trimmed_name).nil?)
     return nil
   end
 
@@ -23,9 +25,11 @@ class ProjectService < Versioneye::Service
   def self.corresponding_file filename
     return nil if filename.to_s.empty?
     trimmed_name = filename.split('?')[0]
-    return 'Gemfile.lock'  if (/Gemfile\z/ =~ trimmed_name) == 0
-    return 'composer.lock' if (/composer.json\z/ =~ trimmed_name) == 0
-    return 'Podfile.lock'  if (/Podfile\z/ =~ trimmed_name) == 0
+    return 'Gemfile.lock'   if (/Gemfile\z/ =~ trimmed_name) == 0
+    return 'composer.lock'  if (/composer.json\z/ =~ trimmed_name) == 0
+    return 'Podfile.lock'   if (/Podfile\z/ =~ trimmed_name) == 0
+    return 'Berksfile.lock' if (/metadata.rb\z/ =~ trimmed_name) == 0
+    return 'Berksfile.lock' if (/Berksfile\z/ =~ trimmed_name) == 0
     return nil
   end
 

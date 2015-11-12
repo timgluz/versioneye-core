@@ -1,4 +1,5 @@
 require 'versioneye/parsers/common_parser'
+require 'versioneye/parsers/gemfile_parser'
 
 class GemfilelockParser < GemfileParser
 
@@ -58,7 +59,7 @@ class GemfilelockParser < GemfileParser
         dependency.version_current = product.version
       else
         dependency.name = name
-        dependency.language = Product::A_LANGUAGE_RUBY
+        dependency.language = language
         unknowns += 1
       end
       parse_requested_version(version, dependency, product)

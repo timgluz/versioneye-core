@@ -2,6 +2,21 @@ require 'versioneye/parsers/common_parser'
 
 class GemfileParser < CommonParser
 
+  attr_accessor :language, :type, :keyword
+
+  def language
+    Product::A_LANGUAGE_RUBY
+  end
+
+  def type
+    Project::A_TYPE_RUBYGEMS
+  end
+
+  def keyword
+    'gem'
+  end
+
+
   # Parser for Gemfile. For Ruby.
   # http://gembundler.com/man/gemfile.5.html
   # http://guides.rubygems.org/patterns/#semantic_versioning
@@ -19,6 +34,7 @@ class GemfileParser < CommonParser
     nil
   end
 
+
   def parse_content( gemfile )
     return nil if gemfile.to_s.strip.empty?
     return nil if gemfile.to_s.strip.eql?('Not Found')
@@ -28,12 +44,14 @@ class GemfileParser < CommonParser
       parse_line( line, project )
     end
     project.dep_number = project.dependencies.size
+    update_project gemfile, project
     project
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
     nil
   end
+
 
   def parse_line( line, project )
     line_elements = fetch_line_elements( line )
@@ -51,6 +69,7 @@ class GemfileParser < CommonParser
     project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
     project.unknown_number += 1 if product.nil?
   end
+
 
   # It is important that this method is not writing into the database!
   def parse_requested_version(version_number, dependency, product)
@@ -152,22 +171,25 @@ class GemfileParser < CommonParser
     end
   end
 
+
   def fetch_line_elements( line )
     line = replace_comments( line )
     line = line.strip
     line.split(",")
   end
 
+
   def fetch_gem_name( line_elements )
     gem_name = line_elements.first
     return nil if gem_name.nil? || gem_name.empty?
-    return nil if gem_name.match(/^gem /).nil? # TODO check git as well !
-    gem_name.gsub!("gem ", "")
+    return nil if gem_name.match(/^#{keyword} /).nil? # TODO check git as well !
+    gem_name.gsub!("#{keyword} ", "")
     gem_name = gem_name.strip
     gem_name = gem_name.gsub('"', '')
     gem_name = gem_name.gsub("'", "")
     gem_name.split(" ").first
   end
+
 
   def fetch_version( line_elements )
     version = ""
@@ -206,6 +228,7 @@ class GemfileParser < CommonParser
     version.gsub("'", "")
   end
 
+
   def replace_comments( value )
     return nil unless value
     comment = value.match(/#.*/)
@@ -215,18 +238,20 @@ class GemfileParser < CommonParser
     value
   end
 
+
   def init_project( url = nil )
     project = Project.new
-    project.project_type = Project::A_TYPE_RUBYGEMS
-    project.language     = Product::A_LANGUAGE_RUBY
+    project.project_type = type
+    project.language     = language
     project.url          = url
     project
   end
 
+
   def init_dependency( product, gem_name )
     dependency          = Projectdependency.new
     dependency.name     = gem_name
-    dependency.language = Product::A_LANGUAGE_RUBY
+    dependency.language = language
     if product
       dependency.name            = product.name
       dependency.language        = product.language
@@ -236,14 +261,35 @@ class GemfileParser < CommonParser
     dependency
   end
 
+
   def fetch_product_for key
     return nil if key.to_s.empty?
     if key.to_s.match(/\Arails-assets-/)
       new_key = key.gsub("rails-assets-", "")
       return Product.fetch_bower( new_key )
     else
-      return Product.fetch_product( Product::A_LANGUAGE_RUBY, key )
+      return Product.fetch_product( language, key )
     end
   end
+
+
+  def update_project gemfile, project
+    gemfile.each_line do |line|
+      if line.match(/\Aname /)
+        project.name = line.gsub("name", "").gsub("\n", "").gsub("'", "").gsub("\"", "").strip
+      elsif line.match(/\Aversion /)
+        project.version = line.gsub("version", "").gsub("\n", "").gsub("'", "").gsub("\"", "").strip
+      elsif line.match(/\Adescription /)
+        project.description = line.gsub("description", "").gsub("\n", "").gsub("'", "").gsub("\"", "").strip
+      elsif line.match(/\Alicense /)
+        project.license = line.gsub("license", "").gsub("\n", "").gsub("'", "").gsub("\"", "").strip
+      end
+    end
+    nil
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+  end
+
 
 end

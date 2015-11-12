@@ -70,6 +70,9 @@ module Versioneye
     require 'versioneye/mailers/versioncomment_mailer'
     require 'versioneye/mailers/versioncommentreply_mailer'
 
+    require 'versioneye/parsers/berksfile_parser'
+    require 'versioneye/parsers/berksfilelock_parser'
+    require 'versioneye/parsers/metadata_parser'
     require 'versioneye/parsers/biicode_parser'
     require 'versioneye/parsers/bower_parser'
     require 'versioneye/parsers/common_parser'

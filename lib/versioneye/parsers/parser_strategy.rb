@@ -44,6 +44,15 @@ class ParserStrategy
           return GemfileParser.new
         end
 
+      when Project::A_TYPE_CHEF
+        if url.match(/Berksfile\.lock/)
+          return BerksfilelockParser.new
+        elsif url.match(/Berksfile/)
+          return BerksfileParser.new
+        elsif url.match(/metadata\.rb/)
+          return MetadataParser.new
+        end
+
       when Project::A_TYPE_COMPOSER
         if url.match(/composer\.lock/i)
           return ComposerLockParser.new
