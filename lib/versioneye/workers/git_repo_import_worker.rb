@@ -11,9 +11,7 @@ class GitRepoImportWorker < Worker
     channel = connection.create_channel
     queue   = channel.queue("git_repo_import", :durable => true)
 
-    log_msg = " [*] GitRepoImportWorker waiting for messages in #{queue.name}. To exit press CTRL+C"
-    puts log_msg
-    log.info log_msg
+    multi_log " [*] GitRepoImportWorker waiting for messages in #{queue.name}. To exit press CTRL+C"
 
     begin
       queue.subscribe(:manual_ack => true, :block => true) do |delivery_info, properties, body|
@@ -64,7 +62,7 @@ class GitRepoImportWorker < Worker
       end
       name = repo[:fullname]
 
-      multi_log "Reading Stash / `#{name}` took: #{time}"
+      multi_log "GitRepoImportWorker: Reading Stash / `#{name}` took: #{time}"
     rescue => e
       log.error e.message
       log.error e.backtrace.join("\n")
@@ -82,7 +80,7 @@ class GitRepoImportWorker < Worker
       name = repo[:full_name]
       name = repo[:fullname] if name.to_s.empty?
 
-      multi_log "Reading `#{name}` took: #{time}"
+      multi_log "GitRepoImportWorker: Reading `#{name}` took: #{time}"
     rescue => e
       log.error e.message
       log.error e.backtrace.join("\n")
@@ -101,7 +99,7 @@ class GitRepoImportWorker < Worker
       name = repo[:full_name]
       name = repo[:fullname] if name.to_s.empty?
 
-      multi_log "Reading GitHub / `#{name}` took: #{time}"
+      multi_log "GitRepoImportWorker: Reading GitHub / `#{name}` took: #{time}"
     rescue => e
       log.error e.message
       log.error e.backtrace.join("\n")
