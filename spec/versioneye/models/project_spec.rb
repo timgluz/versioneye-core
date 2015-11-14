@@ -212,39 +212,32 @@ describe Project do
     end
   end
 
-  describe "collaborator" do
+  describe "collaborator?" do
     before(:each) do
       @test_user = UserFactory.create_new 10021
       @test_user.nil?.should be_falsey
       @test_project = ProjectFactory.create_new @test_user
     end
 
+    it 'returns true because user is nil' do
+      expect( @test_project.collaborator?( nil ) ).to be_falsey
+    end
     it "project factory generated project_key passes validation" do
       col_user     = UserFactory.create_new 10022
-      collaborator = ProjectCollaborator.new(:project_id => @test_project._id,
-                                             :owner_id => @test_user._id,
-                                             :caller_id => @test_user._id )
-      collaborator.save
-      @test_project.collaborators << collaborator
-      @test_project.collaborator( col_user ).should be_nil
-      @test_project.collaborator( @test_user ).should be_nil
-      @test_project.collaborator( nil ).should be_nil
+      non_col_user = UserFactory.create_new 10023
+      team = Team.new(:name => 'test')
+      team.save
+      tm = TeamMember.new({ :user => col_user, :team => team })
+      tm.save
+      expect( team.team_members.count ).to eq(1)
 
-      @test_project.collaborator?( col_user ).should be_falsey
-      @test_project.collaborator?( nil ).should be_falsey
-      @test_project.collaborator?( @test_user ).should be_truthy
+      @test_project.teams.push team
 
-      collaborator.user_id = col_user._id
-      collaborator.save
-      collaborator_db = @test_project.collaborator( col_user )
-      collaborator_db.should_not be_nil
-      collaborator_db.user.username.should eql( col_user.username )
-      @test_project.collaborator?( col_user ).should be_truthy
+      expect(team.projects.count).to eq(1)
+      expect(@test_project.teams.count).to eq(1)
 
-      @test_project.remove_collaborators
-      @test_project.collaborators.size.should eq(0)
-      @test_project.collaborators.count.should eq(0)
-      @test_project.collaborator( col_user ).should be_nil
+      expect(@test_project.is_collaborator?(col_user)).to be_truthy
+      expect(@test_project.is_collaborator?(non_col_user)).to be_falsey
     end
   end
 

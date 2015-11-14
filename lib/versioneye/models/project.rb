@@ -82,6 +82,7 @@ class Project < Versioneye::Model
   belongs_to :user
   has_many   :projectdependencies
   has_many   :collaborators, class_name: 'ProjectCollaborator'
+  has_and_belongs_to_many :teams
 
   index({project_key: 1, project_type: 1}, { name: "key_type_index",  background: true})
   index({user_id: 1, private_project: 1},  { name: "user_id_private_index", background: true})
@@ -194,13 +195,15 @@ class Project < Versioneye::Model
     return false
   end
 
-  def collaborator( user )
+  def is_collaborator?( user )
     return nil if user.nil?
-    return nil if collaborators.nil? || collaborators.size == 0
-    collaborators.each do |collaborator|
-      return collaborator if user._id.to_s.eql?( collaborator.user_id.to_s )
+    return nil if teams.nil? || teams.empty?
+    teams.each do |team|
+      team.team_members.each do |tm|
+        return true if tm.user.ids.eql?(user.ids)
+      end
     end
-    nil
+    false
   end
 
   def license_whitelist
