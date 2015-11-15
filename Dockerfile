@@ -20,4 +20,7 @@ RUN apk update && \
 
 RUN rm -Rf /app; mkdir -p /app; mkdir -p /app/log; mkdir -p /app/pids
 COPY Gemfile Gemfile.lock /app/
-RUN cd /app && bundle config build.nokogiri --use-system-libraries && bundle install
+RUN cd /app && \
+    gem install bundler --version 1.10.6 && \
+    bundle config build.nokogiri --use-system-libraries && \
+    bundle install
