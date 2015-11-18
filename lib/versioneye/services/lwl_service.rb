@@ -22,7 +22,7 @@ class LwlService < Versioneye::Service
     uniq_array = []
     dto = { :whitelisted => [], :unknown => [], :violated => [] }
 
-    fill_dto_with project.dependencies, dto, uniq_array
+    fill_dto_with project.dependencies, dto, uniq_array, project.license_whitelist
 
     if flatten && project.children && !project.children.empty?
       project.children.each do |child|
@@ -41,11 +41,10 @@ class LwlService < Versioneye::Service
   private
 
 
-    def self.fill_dto_with dependencies, dto, uniq_array
-      uvalue = ''
+    def self.fill_dto_with dependencies, dto, uniq_array, license_whitelist = nil
       dependencies.each do |dep|
         if dep.license_caches && !dep.license_caches.empty?
-          line_per_license( dep, dto, uniq_array )
+          line_per_license( dep, dto, uniq_array, license_whitelist )
         else
           unknown_line( dep, dto, uniq_array )
         end
@@ -53,16 +52,33 @@ class LwlService < Versioneye::Service
     end
 
 
-    def self.line_per_license dep, dto, uniq_array
+    def self.line_per_license dep, dto, uniq_array, license_whitelist = nil
+      # whitelisted is true if a dependency has a dual/multi lincese and at least
+      # one of them is on the license whitelist
+      whitelisted = false
+      lines = []
+
       dep.license_caches.each do |lc|
         line = build_line(dep)
         line[:license] = lc.name
+        line[:whitelisted] = lc.is_whitelisted?
+        lines << line
+        whitelisted = true if lc.is_whitelisted?
+      end
+
+      lines.each do |line|
         uvalue = create_uniq_identifier(line)
         next if uniq_array.include?(uvalue)
 
         uniq_array << uvalue
-        dto[:whitelisted] << line if lc.is_whitelisted? == true
-        dto[:violated]    << line if lc.is_whitelisted? == false
+        if line[:whitelisted] == true
+          dto[:whitelisted] << line
+          next
+        end
+        if line[:whitelisted] == false && license_whitelist && license_whitelist.pessimistic_mode == false && whitelisted
+          next
+        end
+        dto[:violated] << line
       end
     end
 
