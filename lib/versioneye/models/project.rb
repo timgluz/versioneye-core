@@ -217,6 +217,16 @@ class Project < Versioneye::Model
     nil
   end
 
+  def unknown_license_deps
+    deps = []
+    projectdependencies.each do |dep|
+      if (dep.license_caches.to_a.empty?) || (dep.license_caches.count == 1 && dep.license_caches.first.name.casecmp('unknown') == 0)
+        deps.push(dep)
+      end
+    end
+    deps
+  end
+
   def component_whitelist
     return nil if component_whitelist_id.to_s.empty?
     ComponentWhitelist.find component_whitelist_id
