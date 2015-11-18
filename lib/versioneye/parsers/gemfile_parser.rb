@@ -270,6 +270,10 @@ class GemfileParser < CommonParser
     else
       return Product.fetch_product( language, key )
     end
+  rescue => e
+    log.error "ERROR in fetch_product_for -> #{e.message}"
+    log.error e.backtrace.join("\n")
+    nil
   end
 
 
