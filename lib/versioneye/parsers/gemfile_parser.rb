@@ -55,7 +55,8 @@ class GemfileParser < CommonParser
 
 
   def parse_line( line, project )
-    line          = line.encode('UTF-8', :invalid => :replace)
+    line          = line.unpack('C*').pack('U*') if !line.valid_encoding?
+    line          = line.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
     line          = line.delete("\n")
     line          = line.delete("\t")
     line_elements = fetch_line_elements( line )
