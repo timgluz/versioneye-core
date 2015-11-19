@@ -5,6 +5,7 @@ ENV RAILS_ENV test
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
+ENV LC_CTYPE=en_US.UTF-8
 
 ENV BUILD_PACKAGES bash curl-dev ruby-dev build-base libxml2-dev libxslt-dev libffi-dev
 ENV RUBY_PACKAGES ruby ruby-io-console ruby-bundler
