@@ -76,7 +76,8 @@ class ProjectdependencyService < Versioneye::Service
       dep.save
     end
     pcount2 = Projectdependency.where(:project_id => project.id).count
-    if pcount2 > pcount1
+    if pcount2 > pcount1 && pcount2 > project.projectdependencies.count
+      project.reload
       update_licenses_security( project )
     end
   rescue => e
