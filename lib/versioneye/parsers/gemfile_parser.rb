@@ -55,6 +55,8 @@ class GemfileParser < CommonParser
 
 
   def parse_line( line, project )
+    line          = line.delete("\n")
+    line          = line.delete("\t")
     line_elements = fetch_line_elements( line )
     gem_name      = fetch_gem_name( line_elements )
 
