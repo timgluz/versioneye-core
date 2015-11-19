@@ -26,7 +26,7 @@ class LwlService < Versioneye::Service
 
     if flatten && project.children && !project.children.empty?
       project.children.each do |child|
-        fill_dto_with child.dependencies, dto, uniq_array
+        fill_dto_with child.dependencies, dto, uniq_array, project.license_whitelist
       end
     end
 
