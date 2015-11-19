@@ -39,6 +39,7 @@ class GemfileParser < CommonParser
     return nil if gemfile.to_s.strip.empty?
     return nil if gemfile.to_s.strip.eql?('Not Found')
 
+    gemfile = gemfile.encode("UTF-8")
     project = init_project
     gemfile.each_line do |line|
       parse_line( line, project )
