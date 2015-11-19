@@ -9,7 +9,7 @@ gem 'oauth'              , '~> 0.4.7'
 gem 'aws-sdk'            , '~> 2.2.0'
 gem 'stripe'             , '~> 1.31.0'
 gem 'tire'               , '~> 0.6.2'
-gem 'octokit'            , '~> 4.1.0'
+gem 'octokit'            , '~> 4.2.0'
 gem 'semverly'           , '~> 1.0.0'
 gem 'httparty'           , '~> 0.13.1'
 gem 'persistent_httparty', '~> 0.1.0'
@@ -32,7 +32,7 @@ end
 
 group :test do
   gem 'rack-test'       , '0.6.3'
-  gem 'fakes3'          , '0.2.1'
+  gem 'fakes3'          , '0.2.2'
   gem 'simplecov'       , '~> 0.10.0'
   gem 'rspec'           , '~> 3.4.0'
   gem 'database_cleaner', '~> 1.5.1'
