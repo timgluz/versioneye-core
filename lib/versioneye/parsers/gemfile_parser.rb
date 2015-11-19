@@ -264,7 +264,7 @@ class GemfileParser < CommonParser
 
 
   def fetch_product_for key
-    loge.info "GemfileParser.fetch_product_for #{key}"
+    log.info "GemfileParser.fetch_product_for #{key}"
     return nil if key.to_s.empty?
     if key.to_s.match(/\Arails-assets-/)
       new_key = key.gsub("rails-assets-", "")
