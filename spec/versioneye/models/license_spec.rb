@@ -1577,6 +1577,31 @@ describe License do
       license.name_substitute.should eq("CC-BY-SA-4.0")
     end
 
+    it "check for CC0-1.0 license" do
+      license = License.new({:name => "CC0-1"})
+      license.name_substitute.should eq("CC0-1.0")
+    end
+    it "check for CC0-1.0 license" do
+      license = License.new({:name => "CC0-1.0"})
+      license.name_substitute.should eq("CC0-1.0")
+    end
+    it "check for CC0-1.0 license" do
+      license = License.new({:name => "CC0 1.0"})
+      license.name_substitute.should eq("CC0-1.0")
+    end
+    it "check for CC0-1.0 license" do
+      license = License.new({:name => "CC0 1.0 Universal"})
+      license.name_substitute.should eq("CC0-1.0")
+    end
+    it "check for CC0-1.0 license" do
+      license = License.new({:name => "CC0 1 Universal"})
+      license.name_substitute.should eq("CC0-1.0")
+    end
+    it "check for CC0-1.0 license" do
+      license = License.new({:name => "cc0-1 universal"})
+      license.name_substitute.should eq("CC0-1.0")
+    end
+
     it "check for SAP DEVELOPER LICENSE AGREEMENT license" do
       license = License.new({:name => "SAP DEVELOPER LICENSE AGREEMENT"})
       license.name_substitute.should eq("SAP DEVELOPER LICENSE AGREEMENT")
