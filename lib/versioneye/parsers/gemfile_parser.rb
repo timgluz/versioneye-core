@@ -48,7 +48,7 @@ class GemfileParser < CommonParser
     update_project gemfile, project
     project
   rescue => e
-    log.error e.message
+    log.error "ERROR in parse_content(#{gemfile}) -> #{e.message}"
     log.error e.backtrace.join("\n")
     nil
   end
@@ -69,6 +69,10 @@ class GemfileParser < CommonParser
     project.projectdependencies.push dependency
     project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
     project.unknown_number += 1 if product.nil?
+  rescue => e
+    log.error "ERROR in parse_line(#{line}) -> #{e.message}"
+    log.error e.backtrace.join("\n")
+    nil
   end
 
 
@@ -264,7 +268,6 @@ class GemfileParser < CommonParser
 
 
   def fetch_product_for key
-    log.info "GemfileParser.fetch_product_for #{key}"
     return nil if key.to_s.empty?
     if key.to_s.match(/\Arails-assets-/)
       new_key = key.gsub("rails-assets-", "")
@@ -273,7 +276,7 @@ class GemfileParser < CommonParser
       return Product.fetch_product( language, key )
     end
   rescue => e
-    log.error "ERROR in fetch_product_for -> #{e.message}"
+    log.error "ERROR in fetch_product_for(#{key}) -> #{e.message}"
     log.error e.backtrace.join("\n")
     nil
   end
