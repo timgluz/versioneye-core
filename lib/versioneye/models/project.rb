@@ -80,6 +80,7 @@ class Project < Versioneye::Model
   validates :project_key, presence: true
 
   belongs_to :user
+  belongs_to :organisation
   has_many   :projectdependencies
   has_many   :collaborators, class_name: 'ProjectCollaborator'
   has_and_belongs_to_many :teams

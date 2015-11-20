@@ -37,6 +37,7 @@ module Versioneye
     require 'versioneye/models/maven_repository'
     require 'versioneye/models/newest'
     require 'versioneye/models/notification'
+    require 'versioneye/models/organisation'
     require 'versioneye/models/team'
     require 'versioneye/models/team_member'
     require 'versioneye/models/pom'

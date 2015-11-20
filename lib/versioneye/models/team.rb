@@ -7,6 +7,8 @@ class Team < Versioneye::Model
 
   has_many :members, class_name: 'TeamMember'
 
+  belongs_to :organisation
+
   validates_presence_of   :name, :message => 'is mandatory!'
 
   def add_member user
