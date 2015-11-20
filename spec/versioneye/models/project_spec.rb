@@ -100,6 +100,39 @@ describe Project do
   end
 
 
+  describe "unknown_license_deps" do
+    it 'returns an empty array' do
+      project = Project.new
+      expect( project.unknown_license_deps ).to be_empty
+    end
+    it 'returns nil' do
+      user = UserFactory.create_new
+      project = ProjectFactory.create_new user
+
+      lwl = LicenseWhitelistFactory.create_new 'OkForMe', ['MIT']
+      expect( lwl.save ).to be_truthy
+
+      project.license_whitelist_id = lwl.id.to_s
+      expect( project.save ).to be_truthy
+
+      product_1 = ProductFactory.create_new 1
+      product_2 = ProductFactory.create_new 2
+
+      LicenseFactory.create_new product_1, 'MIT'
+      dep1 = ProjectdependencyFactory.create_new project, product_1
+      dep1.version_requested = product_1.version
+      dep1.save
+      dep2 = ProjectdependencyFactory.create_new project, product_2
+      dep2.version_requested = product_2.version
+      dep2.save
+
+      ProjectdependencyService.update_licenses project
+      project.reload
+      expect(project.unknown_license_deps.count).to eq(1)
+    end
+  end
+
+
   describe "private_project_count_by_user" do
     it 'returns 0' do
       Project.private_project_count_by_user(nil).should eq(0)

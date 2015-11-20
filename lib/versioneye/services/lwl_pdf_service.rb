@@ -11,6 +11,9 @@ class LwlPdfService < LwlService
 
   def self.compile_all_html projects, lwl, cwl, flatten = true
     projects.each do |project|
+      project.license_whitelist_id   = lwl.ids if lwl && project.license_whitelist_id.to_s.empty?
+      project.component_whitelist_id = cwl.ids if cwl && project.component_whitelist_id.to_s.empty?
+      project.save
       fill_dto project, flatten
     end
 

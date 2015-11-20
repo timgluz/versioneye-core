@@ -39,6 +39,7 @@ class GemfileParser < CommonParser
     return nil if gemfile.to_s.strip.empty?
     return nil if gemfile.to_s.strip.eql?('Not Found')
 
+    gemfile = gemfile.encode("UTF-8")
     project = init_project
     gemfile.each_line do |line|
       parse_line( line, project )
@@ -47,13 +48,19 @@ class GemfileParser < CommonParser
     update_project gemfile, project
     project
   rescue => e
-    log.error e.message
+    log.error "ERROR in parse_content(#{gemfile}) -> #{e.message}"
     log.error e.backtrace.join("\n")
     nil
   end
 
 
   def parse_line( line, project )
+    if !line.valid_encoding?
+      line = line.unpack('C*').pack('U*')
+      line = line.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
+    end
+    line          = line.delete("\n")
+    line          = line.delete("\t")
     line_elements = fetch_line_elements( line )
     gem_name      = fetch_gem_name( line_elements )
 
@@ -68,6 +75,10 @@ class GemfileParser < CommonParser
     project.projectdependencies.push dependency
     project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
     project.unknown_number += 1 if product.nil?
+  rescue => e
+    log.error "ERROR in parse_line(#{line}) -> #{e.message}"
+    log.error e.backtrace.join("\n")
+    nil
   end
 
 
@@ -270,6 +281,10 @@ class GemfileParser < CommonParser
     else
       return Product.fetch_product( language, key )
     end
+  rescue => e
+    log.error "ERROR in fetch_product_for(#{key}) -> #{e.message}"
+    log.error e.backtrace.join("\n")
+    nil
   end
 
 

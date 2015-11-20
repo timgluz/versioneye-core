@@ -33,7 +33,7 @@ class ProjectdependencyService < Versioneye::Service
     project.sv_count = 0
     project.update_attribute(:sv_count, 0)
     project.update_attribute(:sv_count_sum, 0)
-    Projectdependency.where(:project_id => project.id).each do |dep|
+    project.projectdependencies.each do |dep|
       product = dep.find_or_init_product
       update_security_for project, dep, product
     end
@@ -68,11 +68,17 @@ class ProjectdependencyService < Versioneye::Service
   def self.update_licenses_security project
     project.update_attribute(:sv_count, 0)
     project.update_attribute(:sv_count_sum, 0)
-    Projectdependency.where(:project_id => project.id).each do |dep|
+    pcount1 = Projectdependency.where(:project_id => project.id).count
+    project.projectdependencies.each do |dep|
       product = dep.find_or_init_product
       update_licenses_for project, dep, product, false
       update_security_for project, dep, product, false
       dep.save
+    end
+    pcount2 = Projectdependency.where(:project_id => project.id).count
+    if pcount2 > pcount1 && pcount2 > project.projectdependencies.count
+      project.reload
+      update_licenses_security( project )
     end
   rescue => e
     log.error e.message

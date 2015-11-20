@@ -67,6 +67,8 @@ module VersionEye
       return 'CC-BY-SA-3.0' if cc_by_sa_30_match( tmp_name )
       return 'CC-BY-SA-4.0' if cc_by_sa_40_match( tmp_name )
 
+      return 'CC0-1.0' if cc0_1_match( tmp_name )
+
       return 'zlib-acknowledgement' if zlib_acknowledgement_match( tmp_name )
 
       return 'MIT' if mit_match( tmp_name )
@@ -266,6 +268,13 @@ module VersionEye
       name.match(/\ACreative\s+Commons\s+Attribution\s+Share\s+Alike\s+4\z/i) ||
       name.match(/\ACreative\s+Commons\s+4\s+BY\s+SA\z/i) ||
       name.match(/\ACC\s+4\s+BY\s+SA\z/i)
+    end
+
+    # Creative Commons Universal
+    def cc0_1_match name
+      name.match(/\ACC0\s+1\z/i) ||
+      name.match(/\ACC0\s+1\.0\z/i) ||
+      name.match(/\ACC0\s+1\s+Universal\z/i)
     end
 
     def json_match name
