@@ -18,6 +18,7 @@ module Versioneye
     require 'versioneye/services/notification_service'
     require 'versioneye/services/newsletter_service'
     require 'versioneye/services/newest_service'
+    require 'versioneye/services/organisation_service'
     require 'versioneye/services/product_service'
     require 'versioneye/services/project_service'
     require 'versioneye/services/project_import_service'

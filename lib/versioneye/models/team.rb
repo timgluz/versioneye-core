@@ -3,6 +3,8 @@ class Team < Versioneye::Model
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  A_OWNERS = 'Owners'
+
   field :name, type: String
 
   has_many :members, class_name: 'TeamMember'
