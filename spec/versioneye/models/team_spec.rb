@@ -5,7 +5,9 @@ describe Team do
   describe "add_member" do
     it "adds an member" do
       user = UserFactory.create_new
-      team = Team.new({:name => 'owner'})
+      orga = Organisation.new({:name => 'Orga'})
+      expect( orga.save ).to be_truthy
+      team = Team.new({:name => 'owner', :organisation_id => orga.ids })
       expect(team.save).to be_truthy
       expect(team.add_member(user)).to be_truthy
       expect(Team.first.members.count).to eq(1)
@@ -24,7 +26,9 @@ describe Team do
   describe "remove_member" do
     it "remove an member" do
       user = UserFactory.create_new
-      team = Team.new({:name => 'owner'})
+      orga = Organisation.new({:name => 'Orga'})
+      expect( orga.save ).to be_truthy
+      team = Team.new({:name => 'owner', :organisation_id => orga.ids })
       expect(team.save).to be_truthy
       expect(team.add_member(user)).to be_truthy
       expect(Team.first.members.count).to eq(1)

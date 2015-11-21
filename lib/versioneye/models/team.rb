@@ -12,6 +12,9 @@ class Team < Versioneye::Model
   belongs_to :organisation
 
   validates_presence_of   :name, :message => 'is mandatory!'
+  validates_presence_of   :organisation, :message => 'is mandatory!'
+
+  scope :by_organisation, ->(organisation) { where(organisation_id: organisation.ids) }
 
   def add_member user
     return false if user.nil?

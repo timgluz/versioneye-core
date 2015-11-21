@@ -15,6 +15,25 @@ class OrganisationService < Versioneye::Service
   end
 
 
+  def self.owner? orga, user
+    team = Team.where(:organisation_id => orga.ids, :name => Team::A_OWNERS).first
+    team.members.each do |member|
+      return true if member.user.ids.eql?(user.ids)
+    end
+    false
+  end
+
+
+  def self.member? orga, user
+    orga.teams.each do |team|
+      team.members.each do |member|
+        return true if member.user.ids.eql?(user.ids)
+      end
+    end
+    false
+  end
+
+
   def self.index user
     tms = TeamMember.where(:user_id => user.ids)
     return [] if tms.empty?
@@ -23,6 +42,7 @@ class OrganisationService < Versioneye::Service
     orga_ids = []
     tms.each do |tm|
       orga = tm.team.organisation
+      next if orga.nil?
       next if orga_ids.include?(orga.ids)
 
       orga_ids.push(orga.ids)

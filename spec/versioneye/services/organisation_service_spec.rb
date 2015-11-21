@@ -32,6 +32,41 @@ describe OrganisationService do
 
   end
 
+
+  describe "owner?" do
+
+    it "returns true because owner" do
+      user2 = UserFactory.create_new 2
+      user = UserFactory.create_new
+      user.fullname = 'HansTanz'
+      expect( user.save ).to be_truthy
+      orga = OrganisationService.create_new user, "myorga"
+      expect( orga ).to_not be_nil
+
+      expect( OrganisationService.owner?(orga, user) ).to be_truthy
+      expect( OrganisationService.owner?(orga, user2) ).to be_falsey
+    end
+
+  end
+
+
+  describe "member?" do
+
+    it "returns true because owner" do
+      user2 = UserFactory.create_new 2
+      user = UserFactory.create_new
+      user.fullname = 'HansTanz'
+      expect( user.save ).to be_truthy
+      orga = OrganisationService.create_new user, "myorga"
+      expect( orga ).to_not be_nil
+
+      expect( OrganisationService.member?(orga, user) ).to be_truthy
+      expect( OrganisationService.member?(orga, user2) ).to be_falsey
+    end
+
+  end
+
+
   describe "index" do
 
     it "returns a uniq. list of orgas" do
