@@ -17,6 +17,8 @@ class OrganisationService < Versioneye::Service
 
   def self.owner? orga, user
     team = Team.where(:organisation_id => orga.ids, :name => Team::A_OWNERS).first
+    return false if team.nil?
+
     team.members.each do |member|
       return true if member.user.ids.eql?(user.ids)
     end

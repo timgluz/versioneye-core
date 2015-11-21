@@ -5,14 +5,8 @@ class ProjectFactory
       log.error "User was unspecified or empty."
     end
 
-    if user.is_a? Mongoid::Document
-      user_id = user.id.to_s
-    else
-      user_id = user.to_s
-    end
-
     project_data =  {
-                      :user_id  =>  user_id,
+                      :user_id  =>  user.ids,
                       :name     => "test_project"
                     }
 

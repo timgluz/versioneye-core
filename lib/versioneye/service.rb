@@ -47,7 +47,6 @@ module Versioneye
     require 'versioneye/services/sync_service'
     require 'versioneye/services/transfer_service'
     require 'versioneye/services/enterprise_service'
-    require 'versioneye/services/project_collaborator_service'
     require 'versioneye/services/scm_meta_data_service'
 
     require 'versioneye/services_ext/bitbucket'

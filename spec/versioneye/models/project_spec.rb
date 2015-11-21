@@ -245,28 +245,28 @@ describe Project do
     end
   end
 
-  describe "collaborator?" do
+  describe "is_collaborator?" do
     before(:each) do
       @test_user = UserFactory.create_new 10021
       @test_user.nil?.should be_falsey
       @test_project = ProjectFactory.create_new @test_user
     end
 
-    it 'returns true because user is nil' do
-      expect( @test_project.collaborator?( nil ) ).to be_falsey
+    it 'returns false because user is nil' do
+      expect( @test_project.is_collaborator?( nil ) ).to be_falsey
     end
     it "project factory generated project_key passes validation" do
       col_user     = UserFactory.create_new 10022
       non_col_user = UserFactory.create_new 10023
-      team = Team.new(:name => 'test')
-      team.save
-      tm = TeamMember.new({ :user => col_user, :team => team })
-      tm.save
-      expect( team.team_members.count ).to eq(1)
+
+      orga = Organisation.new({:name => 'name'})
+      orga.save
+      team = Team.new(:name => 'test', :organisation_id => orga.ids)
+      expect( team.save ).to be_truthy
+      expect( team.add_member(col_user) ).to be_truthy
+      expect( team.members.count ).to eq(1)
 
       @test_project.teams.push team
-
-      expect(team.projects.count).to eq(1)
       expect(@test_project.teams.count).to eq(1)
 
       expect(@test_project.is_collaborator?(col_user)).to be_truthy
@@ -290,31 +290,37 @@ describe Project do
 
     it "project factory generated project_key passes validation" do
       col_user = UserFactory.create_new 1024
-      collaborator = ProjectCollaborator.new(:project_id => @test_project._id,
-                                             :owner_id => @test_user._id,
-                                             :caller_id => @test_user._id )
-      collaborator.save
-      @test_project.collaborators << collaborator
+
       @test_project.visible_for_user?( col_user ).should be_falsey
-      @test_project.visible_for_user?( nil ).should be_falsey
-      @test_project.visible_for_user?( @test_user ).should be_truthy
 
       col_user.admin = true
       col_user.save
       @test_project.visible_for_user?( col_user ).should be_truthy
+
       col_user.admin = false
       col_user.save
+      @test_project.visible_for_user?( col_user ).should be_falsey
 
       @test_project.public = true
       @test_project.save
       @test_project.visible_for_user?( col_user ).should be_truthy
+
       @test_project.public = false
       @test_project.save
       @test_project.visible_for_user?( col_user ).should be_falsey
-      @test_project.visible_for_user?( @test_user ).should be_truthy
-      collaborator.user_id = col_user._id
-      collaborator.save
+
+      orga = Organisation.new({:name => 'name'})
+      orga.save
+      team = Team.new(:name => 'test', :organisation_id => orga.ids)
+      expect( team.save ).to be_truthy
+      expect( team.add_member(col_user) ).to be_truthy
+      expect( team.members.count ).to eq(1)
+
+      @test_project.organisation_id = orga.ids
+      @test_project.teams << team
+      @test_project.save
       @test_project.visible_for_user?( col_user ).should be_truthy
+      @test_project.visible_for_user?( nil ).should be_falsey
       @test_project.visible_for_user?( @test_user ).should be_truthy
     end
   end

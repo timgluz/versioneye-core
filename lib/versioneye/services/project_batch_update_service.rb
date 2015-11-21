@@ -94,14 +94,12 @@ class ProjectBatchUpdateService < Versioneye::Service
 
 
     def self.fetch_collaboration_projects user, period
-      collaborations = ProjectCollaborator.by_user( user ).where(:period => period)
       projects = []
-      collaborations.each do |collab|
-        if collab.project.nil?
-          collab.remove
-          next
+      orgas = OrganisationService.index user
+      orgas.each do |orga|
+        orga.projects.each do |project|
+          projects << project if project.is_collaborator?( user )
         end
-        projects << collab.project
       end
       projects
     end
