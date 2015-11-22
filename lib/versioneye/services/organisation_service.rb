@@ -40,13 +40,15 @@ class OrganisationService < Versioneye::Service
   end
 
 
-  def self.index user
+  def self.index user, only_owners = false
     tms = TeamMember.where(:user_id => user.ids)
     return [] if tms.empty?
 
     organisations = []
     orga_ids = []
     tms.each do |tm|
+      next if only_owners == true && !tm.team.name.eql?(Team::A_OWNERS)
+      
       orga = tm.team.organisation
       next if orga.nil?
       next if orga_ids.include?(orga.ids)
