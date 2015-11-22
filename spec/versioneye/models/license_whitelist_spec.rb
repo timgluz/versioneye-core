@@ -19,10 +19,13 @@ describe LicenseWhitelist do
   describe 'find_by' do
     it 'returns the search element' do
       user = UserFactory.create_new
+      orga = Organisation.new({:name => 'orga'})
+      orga.save
       license = LicenseWhitelist.new({:name => 'MIT'})
       license.user = user
+      license.organisation = orga
       license.save
-      lw = LicenseWhitelist.fetch_by user, 'MIT'
+      lw = LicenseWhitelist.fetch_by orga, 'MIT'
       expect(license).not_to be_nil
     end
   end
