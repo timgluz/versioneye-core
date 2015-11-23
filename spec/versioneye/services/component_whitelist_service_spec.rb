@@ -4,38 +4,18 @@ describe ComponentWhitelistService do
 
   describe 'index' do
 
-    it 'returns the list for the given user' do
-      user = UserFactory.create_new 1
-      cwl = ComponentWhitelist.new({:name => 'OkForMe', :user_id => user.id})
+    it 'returns the list for the given orga' do
+      orga = Organisation.new :name => 'orga'
+      cwl = ComponentWhitelist.new({:name => 'OkForMe', :organisation_id => orga.id})
       expect( cwl.save ).to be_truthy
 
-      cwl = ComponentWhitelist.new({:name => 'HubaBuba', :user_id => 'asgfasga'})
+      cwl = ComponentWhitelist.new({:name => 'HubaBuba', :organisation_id => 'asgfasga'})
       expect( cwl.save ).to be_truthy
 
-      cwls = ComponentWhitelistService.index user
+      cwls = ComponentWhitelistService.index orga
       expect( cwls ).to_not be_nil
       expect( cwls.first.name ).to eq("OkForMe")
       expect( cwls.count ).to eq(1)
-    end
-
-    it 'returns the all whitelists in enterprise env' do
-      user  = UserFactory.create_new 1
-      admin = UserFactory.create_new 2
-
-      lwl = ComponentWhitelist.new({:name => 'OkForMe', :user_id => admin.id})
-      expect( lwl.save ).to be_truthy
-
-      lwl = ComponentWhitelist.new({:name => 'HubaBuba', :user_id => admin.id})
-      expect( lwl.save ).to be_truthy
-
-      Settings.instance.instance_variable_set(:@environment, 'enterprise')
-
-      lwls = ComponentWhitelistService.index user
-      expect( lwls ).to_not be_nil
-      expect( lwls.count ).to eq(2)
-      expect( lwls.first.name ).to eq("OkForMe")
-
-      Settings.instance.instance_variable_set(:@environment, 'test')
     end
 
   end
@@ -43,36 +23,17 @@ describe ComponentWhitelistService do
 
   describe 'fetch_by' do
 
-    it 'returns the list for the given user' do
-      user = UserFactory.create_new 1
-      cwl = ComponentWhitelist.new({:name => 'OkForMe', :user_id => user.id})
+    it 'returns the list for the given orga' do
+      orga = Organisation.new :name => 'orga'
+      cwl = ComponentWhitelist.new({:name => 'OkForMe', :organisation_id => orga.id})
       cwl.save
 
-      cwl = ComponentWhitelist.new({:name => 'HubaBuba', :user_id => 'asgfasga'})
+      cwl = ComponentWhitelist.new({:name => 'HubaBuba', :organisation_id => 'asgfasga'})
       cwl.save
 
-      cw = ComponentWhitelistService.fetch_by user, 'OkForMe'
+      cw = ComponentWhitelistService.fetch_by orga, 'OkForMe'
       expect( cw ).to_not be_nil
       expect( cw.name ).to eq('OkForMe')
-    end
-
-    it 'returns the list with given name, even if user is not owner of the list (Enterprise env)' do
-      user  = UserFactory.create_new 1
-      admin = UserFactory.create_new 2
-
-      cwl = ComponentWhitelist.new({:name => 'OkForMe', :user_id => admin.id})
-      cwl.save
-
-      cwl = ComponentWhitelist.new({:name => 'HubaBuba', :user_id => admin.id})
-      cwl.save
-
-      Settings.instance.instance_variable_set(:@environment, 'enterprise')
-
-      cw = ComponentWhitelistService.fetch_by user, 'OkForMe'
-      expect( cw ).to_not be_nil
-      expect( cw.name ).to eq("OkForMe")
-
-      Settings.instance.instance_variable_set(:@environment, 'test')
     end
 
   end
@@ -81,25 +42,13 @@ describe ComponentWhitelistService do
   describe 'create_for' do
 
     it 'create a list for a user' do
-      user = UserFactory.create_new 1
-      resp = ComponentWhitelistService.create user, 'SuperList'
+      orga = Organisation.new :name => 'orga'
+      expect( orga.save ).to be_truthy
+      resp = ComponentWhitelistService.create orga, 'SuperList'
       expect( resp ).to be_truthy
       expect( ComponentWhitelist.count ).to eq(1)
-      expect( ComponentWhitelist.first.user.ids ).to eq(user.ids)
-    end
-
-    it 'returns the list with given name, even if user is not owner of the list (Enterprise env)' do
-      user  = UserFactory.create_new 1
-      admin = UserFactory.create_new 2
-      admin.admin = true
-      admin.save
-
-      Settings.instance.instance_variable_set(:@environment, 'enterprise')
-
-      expect( ComponentWhitelistService.create(user, 'SuperList') ).to be_falsy
-      expect( ComponentWhitelistService.create(admin, 'SuperList') ).to be_truthy
-
-      Settings.instance.instance_variable_set(:@environment, 'test')
+      expect( ComponentWhitelist.first.organisation ).to_not be_nil
+      expect( ComponentWhitelist.first.organisation.ids ).to eq(orga.ids)
     end
 
   end
@@ -108,29 +57,14 @@ describe ComponentWhitelistService do
   describe 'add' do
 
     it 'add new license to list for a user' do
-      user = UserFactory.create_new 1
+      orga = Organisation.new :name => 'orga'
 
-      expect(ComponentWhitelistService.create(user, 'SuperList')).to be_truthy
-      expect(ComponentWhitelistService.add(user, 'SuperList', 'MIT')).to be_truthy
+      expect(ComponentWhitelistService.create(orga, 'SuperList')).to be_truthy
+      expect(ComponentWhitelistService.add(orga, 'SuperList', 'MIT')).to be_truthy
 
-      list = ComponentWhitelistService.fetch_by user, 'SuperList'
+      list = ComponentWhitelistService.fetch_by orga, 'SuperList'
       expect( list.components.count ).to eq(1)
       expect( list.components.first ).to eq('mit')
-    end
-
-    it 'add new license to list for user (Enterprise env)' do
-      user  = UserFactory.create_new 1
-      admin = UserFactory.create_new 2
-      admin.admin = true
-      admin.save
-
-      Settings.instance.instance_variable_set(:@environment, 'enterprise')
-
-      expect(ComponentWhitelistService.create(admin, 'SuperList')).to be_truthy
-      expect(ComponentWhitelistService.add(user,     'SuperList', 'MIT')).to be_falsy
-      expect(ComponentWhitelistService.add(admin,    'SuperList', 'MIT')).to be_truthy
-
-      Settings.instance.instance_variable_set(:@environment, 'test')
     end
 
   end
@@ -138,42 +72,17 @@ describe ComponentWhitelistService do
 
   describe 'remove' do
 
-    it 'remove license from list for a user' do
-      user = UserFactory.create_new 1
+    it 'remove license from list for a orga' do
+      orga = Organisation.new :name => 'orga'
 
-      ComponentWhitelistService.create user, 'SuperList'
-      ComponentWhitelistService.add user, 'SuperList', 'mit'
-      list = ComponentWhitelistService.fetch_by user, 'SuperList'
+      ComponentWhitelistService.create orga, 'SuperList'
+      ComponentWhitelistService.add orga, 'SuperList', 'mit'
+      list = ComponentWhitelistService.fetch_by orga, 'SuperList'
       expect( list.components.count ).to eq(1)
 
-      expect( ComponentWhitelistService.remove user, 'SuperList', 'mit' ).to be_truthy
-      list = ComponentWhitelistService.fetch_by user, 'SuperList'
+      expect( ComponentWhitelistService.remove orga, 'SuperList', 'mit' ).to be_truthy
+      list = ComponentWhitelistService.fetch_by orga, 'SuperList'
       expect( list.components.count ).to eq(0)
-    end
-
-    it 'remove license from list for a user (Enterprise env)' do
-      user  = UserFactory.create_new 1
-      admin = UserFactory.create_new 2
-      admin.admin = true
-      admin.save
-
-      Settings.instance.instance_variable_set(:@environment, 'enterprise')
-
-      ComponentWhitelistService.create admin, 'SuperList'
-      ComponentWhitelistService.add admin, 'SuperList', 'mit'
-      expect( ComponentWhitelistService.fetch_by(admin, 'SuperList').components.count ).to eq(1)
-
-      expect( ComponentWhitelistService.remove user, 'SuperList', 'MIT' ).to be_falsy
-
-      list = ComponentWhitelistService.fetch_by admin, 'SuperList'
-      expect( list.components.count ).to eq(1)
-
-      expect( ComponentWhitelistService.remove admin, 'SuperList', 'MIT' ).to be_truthy
-
-      list = ComponentWhitelistService.fetch_by admin, 'SuperList'
-      expect( list.components.count ).to eq(0)
-
-      Settings.instance.instance_variable_set(:@environment, 'test')
     end
 
   end
@@ -209,24 +118,24 @@ describe ComponentWhitelistService do
   describe 'default' do
 
     it 'sets the default' do
-      user = UserFactory.create_new 1
-      expect( ComponentWhitelistService.create user, 'SuperList').to be_truthy
-      expect( ComponentWhitelistService.create user, 'MyList'   ).to be_truthy
-      expect( ComponentWhitelistService.create user, 'YourList' ).to be_truthy
+      orga = Organisation.new :name => 'orga'
+      expect( ComponentWhitelistService.create orga, 'SuperList').to be_truthy
+      expect( ComponentWhitelistService.create orga, 'MyList'   ).to be_truthy
+      expect( ComponentWhitelistService.create orga, 'YourList' ).to be_truthy
 
       expect( ComponentWhitelist.count ).to eq(3)
       ComponentWhitelist.all.each do |cwl|
         expect( cwl.default ).to be_falsy
       end
 
-      ComponentWhitelistService.default user, 'MyList'
-      cwl = ComponentWhitelist.fetch_by user, 'MyList'
+      ComponentWhitelistService.default orga, 'MyList'
+      cwl = ComponentWhitelist.fetch_by orga, 'MyList'
       expect( cwl.default ).to be_truthy
 
-      cwl = ComponentWhitelist.fetch_by user, 'SuperList'
+      cwl = ComponentWhitelist.fetch_by orga, 'SuperList'
       expect( cwl.default ).to be_falsy
 
-      cwl = ComponentWhitelist.fetch_by user, 'YourList'
+      cwl = ComponentWhitelist.fetch_by orga, 'YourList'
       expect( cwl.default ).to be_falsy
     end
 
@@ -236,20 +145,20 @@ describe ComponentWhitelistService do
   describe 'fetch_default_id' do
 
     it 'returns nil because there is no default' do
-      user = UserFactory.create_new 1
-      ComponentWhitelistService.create user, 'SuperList'
-      expect( ComponentWhitelistService.fetch_default_id(user) ).to be_nil
+      orga = Organisation.new :name => 'orga'
+      ComponentWhitelistService.create orga, 'SuperList'
+      expect( ComponentWhitelistService.fetch_default_id(orga) ).to be_nil
     end
 
     it 'returns the default_id' do
-      user = UserFactory.create_new 1
-      ComponentWhitelistService.create user, 'SuperList'
-      ComponentWhitelistService.create user, 'MyList'
+      orga = Organisation.new :name => 'orga'
+      ComponentWhitelistService.create orga, 'SuperList'
+      ComponentWhitelistService.create orga, 'MyList'
 
-      ComponentWhitelistService.default user, 'MyList'
-      cwl = ComponentWhitelist.fetch_by user, 'MyList'
+      ComponentWhitelistService.default orga, 'MyList'
+      cwl = ComponentWhitelist.fetch_by orga, 'MyList'
 
-      expect( ComponentWhitelistService.fetch_default_id(user) ).to eq(cwl.ids)
+      expect( ComponentWhitelistService.fetch_default_id(orga) ).to eq(cwl.ids)
     end
 
   end
@@ -263,6 +172,7 @@ describe ComponentWhitelistService do
 
     it 'updates the project with the given lwl' do
       user = UserFactory.create_new 1
+      orga = Organisation.new :name => 'orga'
 
       project = ProjectFactory.create_new user
       prod_1  = ProductFactory.create_new 1
@@ -278,11 +188,11 @@ describe ComponentWhitelistService do
       project_2.parent_id = project.ids
       project_2.save
 
-      ComponentWhitelistService.create user, 'SuperList'
-      ComponentWhitelistService.add user, 'SuperList', dep_1.cwl_key
-      ComponentWhitelistService.add user, 'SuperList', dep_2.cwl_key
+      ComponentWhitelistService.create orga, 'SuperList'
+      ComponentWhitelistService.add orga, 'SuperList', dep_1.cwl_key
+      ComponentWhitelistService.add orga, 'SuperList', dep_2.cwl_key
 
-      expect( ComponentWhitelistService.update_project(project, user, 'SuperList') ).to be_truthy
+      expect( ComponentWhitelistService.update_project(project, orga, 'SuperList') ).to be_truthy
       project = Project.first
       expect( project.licenses_red ).to eq(0)
       expect( project.licenses_red_sum ).to eq(0)
