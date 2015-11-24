@@ -392,7 +392,7 @@ class ProjectService < Versioneye::Service
   def self.update_license_numbers!( project )
     return nil if project.nil? || project.projectdependencies.empty?
 
-    ProjectdependencyService.update_licenses project
+    ProjectdependencyService.update_licenses_security project
     project.licenses_unknown = unknown_licenses( project ).count
     project.licenses_red = red_licenses( project ).count
     project.save
