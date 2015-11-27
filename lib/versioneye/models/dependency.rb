@@ -30,10 +30,10 @@ class Dependency < Versioneye::Model
 
   # This attributes describe the dependency itself!
   field :dep_prod_key, type: String   # prod_key of the dependency (Foreign Key)
-  field :version     , type: String   # version of the dependency. This is the unfiltered version string. It is not parsed yet.
   field :name        , type: String
   field :group_id    , type: String   # Maven specific
   field :artifact_id , type: String   # Maven specific
+  field :version     , type: String   # version of the dependency. This is the unfiltered version string. It is not parsed yet.
   field :scope       , type: String
 
   # known or unknown dependency.
