@@ -486,6 +486,27 @@ describe Product do
   end
 
 
+  describe 'add_repository' do
+
+    it 'adds new repository' do
+      product = Product.new
+      product.add_repository "http://my_repo.org"
+      expect(product.repositories.size).to eq(1)
+      product.add_repository "http://my_repo.org"
+      expect(product.repositories.size).to eq(1)
+    end
+
+    it 'doesnt add new version because its existing already' do
+      product = Product.new
+      product.add_repository "http://my_repo.org"
+      expect(product.repositories.size).to eq(1)
+      product.add_repository "http://my_repo.com"
+      expect(product.repositories.size).to eq(2)
+    end
+
+  end
+
+
   describe 'remove_version' do
 
     it 'removes a version' do
