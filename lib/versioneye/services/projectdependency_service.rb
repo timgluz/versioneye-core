@@ -20,10 +20,7 @@ class ProjectdependencyService < Versioneye::Service
     dep.license_caches.clear
     dep.lwl_violation = nil
     product.version = dep.version_requested
-    licenses = product.licenses
-    if licenses && !licenses.empty?
-      fill_license_cache project, dep, licenses
-    end
+    fill_license_cache project, dep, product.licenses
     dep.save if save_dep
   end
 
