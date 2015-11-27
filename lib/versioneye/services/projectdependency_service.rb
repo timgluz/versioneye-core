@@ -231,22 +231,28 @@ class ProjectdependencyService < Versioneye::Service
 
 
     def self.fill_license_cache project, dependency, licenses
-      licenses.each do |license|
-        next if license.nil?
+      if licenses && !licenses.empty?
+        licenses.each do |license|
+          next if license.nil?
 
-        licenseCach = LicenseCach.new({:name => license.name_substitute, :url => license.link} )
-        licenseCach.license_id = license.id.to_s
+          licenseCach = LicenseCach.new({:name => license.name_substitute, :url => license.link} )
+          licenseCach.license_id = license.id.to_s
 
-        if project.license_whitelist
-          licenseCach.on_whitelist = project.license_whitelist.include_license_substitute?( license.name_substitute )
+          if project.license_whitelist
+            licenseCach.on_whitelist = project.license_whitelist.include_license_substitute?( license.name_substitute )
+          end
+
+          if project.component_whitelist
+            licenseCach.on_cwl = project.component_whitelist.is_on_list?( dependency.cwl_key )
+          end
+
+          dependency.license_caches.push licenseCach
+          dependency.lwl_violation = 'true' if licenseCach.on_whitelist == false
+          licenseCach.save
         end
-
-        if project.component_whitelist
-          licenseCach.on_cwl = project.component_whitelist.is_on_list?( dependency.cwl_key )
-        end
-
+      elsif project.component_whitelist && project.component_whitelist.is_on_list?( dependency.cwl_key )
+        licenseCach = LicenseCach.new({:name => "N/A", :on_cwl => true} )
         dependency.license_caches.push licenseCach
-        dependency.lwl_violation = 'true' if licenseCach.on_whitelist == false
         licenseCach.save
       end
     end
