@@ -51,6 +51,7 @@ class ProjectService < Versioneye::Service
         filter_options[:organisation_id] = filter[:organisation].to_s
       else
         filter_options[:user_id] = user.ids
+        filter_options[:organisation_id] = nil
       end
     end
 
