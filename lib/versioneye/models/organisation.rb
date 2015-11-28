@@ -26,4 +26,18 @@ class Organisation < Versioneye::Model
     name
   end
 
+  def owner_team
+    teams.each do |team|
+      return team if team.name.eql?(Team::A_OWNERS)
+    end
+    nil
+  end
+
+  def team_by name
+    teams.each do |team|
+      return team if team.name.eql?(name)
+    end
+    nil
+  end
+
 end
