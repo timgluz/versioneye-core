@@ -12,7 +12,8 @@ RUN apt-get install -y libfontconfig1 # mandatory for PDFKit
 RUN gem install bundler --version 1.10.6
 RUN rm -Rf /app; mkdir -p /app; mkdir -p /app/log; mkdir -p /app/pids
 
-ADD . /app
+ADD Gemfile /app/Gemfile
+ADD Gemfile.lock /app/Gemfile.lock
 
 WORKDIR /app
 
