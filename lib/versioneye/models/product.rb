@@ -210,6 +210,16 @@ class Product < Versioneye::Model
     false
   end
 
+  def add_repository src, repo_type = nil
+    repositories.each do |repo|
+      return nil if repo.src.eql?(src)
+    end
+    repo = Repository.new(:src => src, :repotype => repo_type )
+    repositories.push( repo )
+    repo.save
+    save
+  end
+
   def check_nil_version
     if versions && !versions.empty? && (version.nil? || version.eql?('0.0.0+NA'))
       self.version = sorted_versions.first
