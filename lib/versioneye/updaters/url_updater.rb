@@ -1,9 +1,9 @@
 class UrlUpdater < CommonUpdater
 
-  
+
   def update( project, send_email = false )
     return nil if project.nil?
-    return nil if project.url.to_s.empty? 
+    return nil if project.url.to_s.empty?
 
     parser = parser_for project.url
     if parser.nil?
