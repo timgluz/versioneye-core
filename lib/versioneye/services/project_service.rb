@@ -43,7 +43,15 @@ class ProjectService < Versioneye::Service
     elsif filter[:scope].to_s == 'all' && user.admin == true
       # Do nothing. Admin can see ALL projects
     else
-      filter_options[:user_id] = user.ids
+      organisation = nil
+      if filter[:organisation] && !filter[:organisation].to_s.strip.empty?
+        organisation = Organisation.find filter[:organisation].to_s
+      end
+      if organisation && OrganisationService.member?( organisation, user )
+        filter_options[:organisation_id] = filter[:organisation].to_s
+      else
+        filter_options[:user_id] = user.ids
+      end
     end
 
     case sort
