@@ -1,7 +1,7 @@
 class SyncService < Versioneye::Service
 
 
-  def self.logger
+  def self.log
     ActiveSupport::Logger.new('log/sync.log')
   end
 
