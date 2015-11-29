@@ -1,6 +1,11 @@
 class SyncService < Versioneye::Service
 
 
+  def self.logger
+    ActiveSupport::Logger.new('log/sync.log')
+  end
+
+
   def self.sync
     sync_projectdependencies Projectdependency.all
   end
@@ -100,6 +105,7 @@ class SyncService < Versioneye::Service
     json[:results].each do |svjson|
       update_svobject( product, svjson )
     end
+    log.info "synced security infos for #{language}:#{prod_key}"
   end
 
 
