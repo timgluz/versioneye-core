@@ -21,4 +21,23 @@ describe TeamService do
 
   end
 
+  describe "add" do
+    it 'should add 1 new team member and send out 1 email' do
+      user  = UserFactory.create_new 1
+      owner = UserFactory.create_new 2
+
+      orga = Organisation.new({:name => 'Orga'})
+      expect( orga.save ).to be_truthy
+
+      team = Team.new({:name => 'owner', :organisation_id => orga.ids })
+      expect( team.save ).to be_truthy
+      expect( team.add_member(owner) ).to be_truthy
+
+      ActionMailer::Base.deliveries.clear
+      TeamService.add team.name, orga.ids, user.username, owner
+
+      expect( Team.where( :organisation_id => orga.ids, :name => 'owner' ).first.members.count ).to eq(2)
+    end
+  end
+
 end
