@@ -88,61 +88,6 @@ describe UserMailer do
 
   end
 
-  describe 'collaboration_invitation' do
-
-    it 'should contain the message for the new collaborator' do
-
-      owner        = UserFactory.create_new
-      project      = ProjectFactory.create_new owner
-      project_col  = ProjectCollaborator.new({:owner_id => owner.id.to_s, :caller_id => owner.id.to_s })
-      project_col.project = project
-      project_col.invitation_email = 'test@test.de'
-      project.save
-
-      email = described_class.collaboration_invitation( project_col )
-
-      email.to.should eq( ['test@test.de'] )
-      email.subject.should eq('Invitation to project collabration')
-      email.encoded.should include( "Hey Dude" )
-      email.encoded.should include( "#{owner.fullname} invites you" )
-      email.encoded.should include( "#{project.name}" )
-      email.encoded.should include( "Handelsregister" )
-
-      ActionMailer::Base.deliveries.clear
-      email.deliver!
-      ActionMailer::Base.deliveries.size.should == 1
-    end
-
-  end
-
-  describe 'new_collaboration' do
-
-    it 'should contain the verification link' do
-
-      owner        = UserFactory.create_new 1
-      collaborator = UserFactory.create_new 2
-      project      = ProjectFactory.create_new owner
-      project_col  = ProjectCollaborator.new({:user_id => collaborator.id.to_s, :owner_id => owner.id.to_s, :caller_id => owner.id.to_s })
-      project_col.project = project
-      project.save
-
-      email = described_class.new_collaboration( project_col )
-
-      email.to.should eq( [collaborator.email] )
-      email.subject.should eq("#{project_col.caller.fullname} added you as collaborator")
-      email.encoded.should include( "Hey #{collaborator.fullname}" )
-      email.encoded.should include( "#{owner.fullname} added you as collaborator" )
-      email.encoded.should include( "#{project.name}" )
-      email.encoded.should include( 'user/collaborations' )
-      email.encoded.should include( 'Handelsregister' )
-
-      ActionMailer::Base.deliveries.clear
-      email.deliver!
-      ActionMailer::Base.deliveries.size.should == 1
-    end
-
-  end
-
   describe 'reset_password' do
 
     it 'contain link to update the password' do

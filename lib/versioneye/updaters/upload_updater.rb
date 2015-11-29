@@ -27,7 +27,7 @@ class UploadUpdater < CommonUpdater
     project.sum_own!
 
     return project if send_email == false
-    return project if project.user.email_inactive == false
+    return project if project.user && project.user.email_inactive == false
 
     outdated_deps  = project.out_number > 0
     # The next line is commented out because right now the user can not edit licenses

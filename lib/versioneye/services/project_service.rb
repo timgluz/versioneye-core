@@ -43,7 +43,16 @@ class ProjectService < Versioneye::Service
     elsif filter[:scope].to_s == 'all' && user.admin == true
       # Do nothing. Admin can see ALL projects
     else
-      filter_options[:user_id] = user.ids
+      organisation = nil
+      if filter[:organisation] && !filter[:organisation].to_s.strip.empty?
+        organisation = Organisation.find filter[:organisation].to_s
+      end
+      if organisation && OrganisationService.member?( organisation, user )
+        filter_options[:organisation_id] = filter[:organisation].to_s
+      else
+        filter_options[:user_id] = user.ids
+        filter_options[:organisation_id] = nil
+      end
     end
 
     case sort
@@ -195,7 +204,7 @@ class ProjectService < Versioneye::Service
     user = User.find user_id
     return false if user.nil?
 
-    if !project.collaborator?(user)
+    if !project.is_collaborator?(user)
       raise "User has no permission to merge this project!"
     end
 
@@ -219,7 +228,7 @@ class ProjectService < Versioneye::Service
     user = User.find user_id
     return false if user.nil?
 
-    if !project.collaborator?(user)
+    if !project.is_collaborator?(user)
       raise "User has no permission to unmerge this project!"
     end
 
@@ -239,7 +248,7 @@ class ProjectService < Versioneye::Service
     project = Project.find_by_id( project_id )
     return false if project.nil?
 
-    if project.collaborator?( user ) || user.admin == true
+    if project.is_collaborator?( user ) || user.admin == true
       destroy project
     else
       raise "User has no permission to delete this project!"
@@ -262,7 +271,6 @@ class ProjectService < Versioneye::Service
     return false if project.nil?
 
     project.remove_dependencies
-    project.remove_collaborators
     project.remove
   end
 
@@ -273,17 +281,19 @@ class ProjectService < Versioneye::Service
   def self.user_product_index_map user, add_collaborated = true
     indexes = Hash.new
     projects = user.projects
-
     if projects
       project_prod_index projects, indexes
     end
-
     return indexes if add_collaborated == false
 
-    collaborated_projects = Project.by_collaborator(user)
-    if collaborated_projects
-      project_prod_index collaborated_projects, indexes
+    collaborated_projects = []
+    orgas = OrganisationService.index( user )
+    orgas.each do |orga|
+      orga.projects.each do |project|
+        collaborated_projects << project if project.is_collaborator?( user )
+      end
     end
+    project_prod_index collaborated_projects, indexes
 
     indexes
   end

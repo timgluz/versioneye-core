@@ -8,12 +8,15 @@ class ComponentWhitelist < Versioneye::Model
   field :components,       type: Array, default: []
 
   belongs_to :user
+  belongs_to :organisation
 
   validates_presence_of :name, :message => 'is mandatory!'
 
-  index({user_id: 1, name: 1},  { name: "user_id_name", background: true, unique: true })
+  # TODO remove this index
+  # index({user_id: 1, name: 1},  { name: "user_id_name", background: true, unique: true })
 
   scope :by_user, ->(user) { where(user_id: user[:_id].to_s) }
+  scope :by_orga, ->(orga) { where(organisation_id: orga.ids) }
   scope :by_name, ->(name)  { where(name:  name ) }
 
   def to_s
@@ -28,8 +31,8 @@ class ComponentWhitelist < Versioneye::Model
     self.name = params[:name]
   end
 
-  def self.fetch_by user, name
-    self.by_user(user).by_name(name).first
+  def self.fetch_by organisation, name
+    self.by_orga(organisation).by_name(name).first
   end
 
   def add element

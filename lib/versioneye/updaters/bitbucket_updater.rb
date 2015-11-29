@@ -22,7 +22,7 @@ class BitbucketUpdater < CommonUpdater
 
 
   def fetch_project_file project
-    user = project.user
+    user = user_for project
     filename = project.filename
     filename = 'pom.xml' if filename.eql? 'pom.json'
     repo_name = project.scm_fullname

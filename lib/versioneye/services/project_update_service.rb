@@ -99,8 +99,8 @@ class ProjectUpdateService < Versioneye::Service
 
     def self.not_updateable?( project )
       return true if project.nil?
-      return true if project.user_id.nil? || project.user.nil?
-      return true if project.user.deleted_user == true
+      return true if (project.user_id.nil? || project.user.nil?) && (project.organisation.nil?)
+      return true if project.user && project.user.deleted_user == true
       return false
     end
 

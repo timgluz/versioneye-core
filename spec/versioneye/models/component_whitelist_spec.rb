@@ -28,12 +28,12 @@ describe ComponentWhitelist do
 
   describe 'find_by' do
     it 'returns the search element' do
-      user = UserFactory.create_new
-      license = ComponentWhitelist.new({:name => 'MIT'})
-      license.user = user
-      license.save
-      lw = ComponentWhitelist.fetch_by user, 'MIT'
-      expect(license).not_to be_nil
+      orga = Organisation.new :name => 'orga'
+      cwl = ComponentWhitelist.new({:name => 'MIT'})
+      cwl.organisation = orga
+      cwl.save
+      lw = ComponentWhitelist.fetch_by orga, 'MIT'
+      expect(cwl).not_to be_nil
     end
   end
 
@@ -97,8 +97,9 @@ describe ComponentWhitelist do
   describe 'auditlogs' do
     it 'returns the auditlogs' do
       user = UserFactory.create_new
+      orga = Organisation.new :name => 'orga'
       cwl = ComponentWhitelist.new({:name => 'CWL'})
-      cwl.user = user
+      cwl.organisation = orga
       cwl.save
       Auditlog.add(user, "ComponentWhitelist", cwl.id.to_s, 'Added junit:junit')
       expect( cwl.auditlogs ).to_not be_nil
@@ -108,9 +109,9 @@ describe ComponentWhitelist do
 
   describe 'add' do
     it 'adds some elements' do
-      user = UserFactory.create_new
+      orga = Organisation.new :name => 'orga'
       cwl = ComponentWhitelist.new({:name => 'CWL'})
-      cwl.user = user
+      cwl.organisation = orga
       expect( cwl.save ).to be_truthy
       cwl.add "junit:junit"
       expect( cwl.save ).to be_truthy
@@ -118,9 +119,9 @@ describe ComponentWhitelist do
       expect( cwl.components.first ).to eq("junit:junit")
     end
     it 'adds the same elements twice' do
-      user = UserFactory.create_new
+      orga = Organisation.new :name => 'orga'
       cwl = ComponentWhitelist.new({:name => 'CWL'})
-      cwl.user = user
+      cwl.organisation = orga
       expect( cwl.save ).to be_truthy
       cwl.add "junit:junit"
       cwl.add "junit:junit"
@@ -133,9 +134,9 @@ describe ComponentWhitelist do
 
   describe 'remove' do
     it 'adds some elements' do
-      user = UserFactory.create_new
+      orga = Organisation.new :name => 'orga'
       cwl = ComponentWhitelist.new({:name => 'CWL'})
-      cwl.user = user
+      cwl.organisation = orga
       cwl.add "junit:junit"
       cwl.save
       cwl.remove "junit:junit"

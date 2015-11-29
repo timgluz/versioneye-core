@@ -6,11 +6,13 @@ describe LwlPdfService do
   describe 'process' do
     it 'processes a simple project' do
       user = UserFactory.create_new 1
-      lwl = LicenseWhitelist.new({:name => 'OkForMe', :user_id => user.id})
+      orga = Organisation.new :name => 'orga'
+      lwl = LicenseWhitelist.new({:name => 'OkForMe', :organisation_id => orga.ids})
       expect(lwl.save).to be_truthy
 
       prod_1  = ProductFactory.create_new 1
       project = ProjectFactory.create_new user
+      project.organisation_id = orga.ids
       project.license_whitelist_id = lwl.ids
       project.save
       dep_1   = ProjectdependencyFactory.create_new project, prod_1, true
@@ -26,14 +28,17 @@ describe LwlPdfService do
   describe 'process_all' do
     it 'processes N projects' do
       user = UserFactory.create_new 1
-      lwl = LicenseWhitelist.new({:name => 'OkForMe', :user_id => user.id})
+      orga = Organisation.new :name => 'orga'
+      lwl = LicenseWhitelist.new({:name => 'OkForMe', :organisation_id => orga.ids})
       expect(lwl.save).to be_truthy
 
       prod_1  = ProductFactory.create_new 1
       project = ProjectFactory.create_new user
+      project.organisation_id = orga.ids
       project.license_whitelist_id = lwl.ids
       project.save
       project2 = ProjectFactory.create_new user, {:user_id => user.ids, :name => "test_2"}
+      project2.organisation_id = orga.ids
       project2.license_whitelist_id = lwl.ids
       project2.save
       dep_1   = ProjectdependencyFactory.create_new project, prod_1, true
@@ -54,7 +59,8 @@ describe LwlPdfService do
   describe 'prepare_kids' do
     it 'preparse the kids' do
       user = UserFactory.create_new 1
-      lwl = LicenseWhitelist.new({:name => 'OkForMe', :user_id => user.id})
+      orga = Organisation.new :name => 'orga'
+      lwl  = LicenseWhitelist.new({:name => 'OkForMe', :organisation_id => orga.ids})
       expect(lwl.save).to be_truthy
 
       prod_1  = ProductFactory.create_new 1
@@ -64,7 +70,11 @@ describe LwlPdfService do
       dep_1.save
 
       project.parent_id = parent.ids
+      project.organisation_id = orga.ids
       project.save
+
+      parent.organisation_id = orga.ids
+      parent.save
 
       expect(project.lwl_pdf_list).to be_nil
 
@@ -82,7 +92,8 @@ describe LwlPdfService do
 
     it 'it fills the dto with an empty line' do
       user = UserFactory.create_new 1
-      lwl = LicenseWhitelist.new({:name => 'OkForMe', :user_id => user.id})
+      orga = Organisation.new :name => 'orga'
+      lwl = LicenseWhitelist.new({:name => 'OkForMe', :organisation_id => orga.ids})
       expect(lwl.save).to be_truthy
 
       prod_1  = ProductFactory.create_new 1
@@ -100,12 +111,14 @@ describe LwlPdfService do
 
     it 'it fills the dto with 1 whitelisted line' do
       user = UserFactory.create_new 1
-      lwl = LicenseWhitelist.new({:name => 'OkForMe', :user_id => user.id})
+      orga = Organisation.new :name => 'orga'
+      lwl  = LicenseWhitelist.new({:name => 'OkForMe', :organisation_id => orga.id})
       expect(lwl.save).to be_truthy
-      LicenseWhitelistService.add user, 'OkForMe', 'MIT'
+      LicenseWhitelistService.add orga, 'OkForMe', 'MIT'
 
       prod_1  = ProductFactory.create_new 1
       project = ProjectFactory.create_new user
+      project.organisation_id = orga.ids
       project.license_whitelist_id = lwl.id
       project.save
 
@@ -113,7 +126,6 @@ describe LwlPdfService do
       dep_1.license_caches = []
       dep_1.license_caches << LicenseCach.new({:name => 'MIT', :on_whitelist => true})
       dep_1.save
-      p dep_1.license_caches
 
       expect(project.lwl_pdf_list).to be_nil
       described_class.fill_dto project, false
@@ -125,12 +137,14 @@ describe LwlPdfService do
 
     it 'it fills the dto, only 1 dependency on the list because uniq contstraint!' do
       user = UserFactory.create_new 1
-      lwl = LicenseWhitelist.new({:name => 'OkForMe', :user_id => user.id})
+      orga = Organisation.new :name => "orga"
+      lwl = LicenseWhitelist.new({:name => 'OkForMe', :organisation_id => orga.id})
       expect(lwl.save).to be_truthy
-      LicenseWhitelistService.add user, 'OkForMe', 'MIT'
+      LicenseWhitelistService.add orga, 'OkForMe', 'MIT'
 
       prod_1    = ProductFactory.create_new 1
       project_1 = ProjectFactory.create_new user
+      project_1.organisation_id = orga.ids
       project_1.license_whitelist_id = lwl.id
       project_1.save
 
@@ -140,6 +154,7 @@ describe LwlPdfService do
       dep_1.save
 
       project_2 = ProjectFactory.create_new user
+      project_2.organisation_id = orga.ids
       project_2.license_whitelist_id = lwl.id
       project_2.parent_id = project_1.id
       project_2.save
@@ -160,12 +175,14 @@ describe LwlPdfService do
 
     it 'it fills the dto, 2 dependency on the list because not unique and not flatten!' do
       user = UserFactory.create_new 1
-      lwl = LicenseWhitelist.new({:name => 'OkForMe', :user_id => user.id})
+      orga = Organisation.new :name => "orga"
+      lwl = LicenseWhitelist.new({:name => 'OkForMe', :organisation_id => orga.id})
       expect(lwl.save).to be_truthy
-      LicenseWhitelistService.add user, 'OkForMe', 'MIT'
+      LicenseWhitelistService.add orga, 'OkForMe', 'MIT'
 
-      prod_1  = ProductFactory.create_new 1
+      prod_1    = ProductFactory.create_new 1
       project_1 = ProjectFactory.create_new user
+      project_1.organisation_id = orga.ids
       project_1.license_whitelist_id = lwl.id
       project_1.save
 
@@ -175,6 +192,7 @@ describe LwlPdfService do
       dep_1.save
 
       project_2 = ProjectFactory.create_new user
+      project_2.organisation_id = orga.ids
       project_2.license_whitelist_id = lwl.id
       project_2.parent_id = project_1.id
       project_2.save
@@ -195,12 +213,14 @@ describe LwlPdfService do
 
     it 'fils the dto with 2 lines from 1 dependency, because of dual license' do
       user = UserFactory.create_new 1
-      lwl  = LicenseWhitelist.new({:name => 'OkForMe', :user_id => user.id, :pessimistic_mode => true})
+      orga = Organisation.new :name => "orga"
+      lwl  = LicenseWhitelist.new({:name => 'OkForMe', :organisation_id => orga.id, :pessimistic_mode => true})
       expect(lwl.save).to be_truthy
-      LicenseWhitelistService.add user, 'OkForMe', 'MIT'
+      LicenseWhitelistService.add orga, 'OkForMe', 'MIT'
 
       prod_1    = ProductFactory.create_new 1
       project_1 = ProjectFactory.create_new user
+      project_1.organisation_id = orga.ids
       project_1.license_whitelist_id = lwl.id
       project_1.save
 
@@ -210,7 +230,7 @@ describe LwlPdfService do
       dep_1.license_caches << LicenseCach.new({:name => 'GPL-3.0', :on_whitelist => false})
       dep_1.save
 
-      expect(project_1.lwl_pdf_list).to be_nil
+      expect( project_1.lwl_pdf_list ).to be_nil
       described_class.fill_dto project_1, true
 
       expect(project_1.lwl_pdf_list[:unknown].count).to eq(0)
@@ -222,14 +242,16 @@ describe LwlPdfService do
 
     it 'fils the dto with 1 line from 1 dependency, dual license, but pessimistic_mode = true' do
       user = UserFactory.create_new 1
-      lwl  = LicenseWhitelist.new({:name => 'OkForMe', :user_id => user.id, :pessimistic_mode => false})
+      orga = Organisation.new :name => "orga"
+      lwl  = LicenseWhitelist.new({:name => 'OkForMe', :organisation_id => orga.ids, :pessimistic_mode => false})
       expect(lwl.save).to be_truthy
-      LicenseWhitelistService.add user, 'OkForMe', 'MIT'
+      LicenseWhitelistService.add orga, 'OkForMe', 'MIT'
 
       prod_1    = ProductFactory.create_new 1
       project_1 = ProjectFactory.create_new user
+      project_1.organisation_id = orga.ids
       project_1.license_whitelist_id = lwl.id
-      project_1.save
+      expect( project_1.save ).to be_truthy
 
       dep_1 = ProjectdependencyFactory.create_new project_1, prod_1, true
       dep_1.license_caches = []
