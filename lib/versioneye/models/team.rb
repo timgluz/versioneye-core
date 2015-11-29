@@ -16,6 +16,14 @@ class Team < Versioneye::Model
 
   scope :by_organisation, ->(organisation) { where(organisation_id: organisation.ids) }
 
+  def to_s
+    name
+  end
+
+  def to_param
+    name
+  end
+
   def add_member user
     return false if user.nil?
     self.members.each do |member|
