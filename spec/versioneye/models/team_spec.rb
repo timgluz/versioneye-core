@@ -4,14 +4,14 @@ describe Team do
 
   describe "to_s" do
     it "returns the name" do
-      team = Team.new({:name => 'owner', :organisation_id => orga.ids })
+      team = Team.new({:name => 'owner' })
       expect(team.to_s).to eq('owner')
     end
   end
 
   describe "to_param" do
     it "returns the name" do
-      team = Team.new({:name => 'owner', :organisation_id => orga.ids })
+      team = Team.new({:name => 'owner' })
       expect(team.to_param).to eq('owner')
     end
   end
