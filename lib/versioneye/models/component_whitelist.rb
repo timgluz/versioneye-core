@@ -12,9 +12,6 @@ class ComponentWhitelist < Versioneye::Model
 
   validates_presence_of :name, :message => 'is mandatory!'
 
-  # TODO remove this index
-  # index({user_id: 1, name: 1},  { name: "user_id_name", background: true, unique: true })
-
   scope :by_user, ->(user) { where(user_id: user[:_id].to_s) }
   scope :by_orga, ->(orga) { where(organisation_id: orga.ids) }
   scope :by_name, ->(name)  { where(name:  name ) }
