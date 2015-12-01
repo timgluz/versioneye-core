@@ -16,10 +16,10 @@ class GradleParser < CommonParser
 
   # (\w+) [\s|\(]?[\'|\"]+ ([\w|\.|\-|\_|\+]+)  :([\w|\.|\-|_|\+]+)  :([$\w|\.|\-|_|\+]+) [\@\S]* [\s|\(]?[\'|\"]+
   A_DEP_SHORT_MATCHER = /
-      (\w+) #scope 
+      (\w+) #scope
       [\s|\(]?[\'|\"]+ #scope separator
-        ([\w|\.|\-|\_|\+]+) #group_id 
-        :([\w|\.|\-|_|\+]+) #artifact 
+        ([\w|\.|\-|\_|\+]+) #group_id
+        :([\w|\.|\-|_|\+]+) #artifact
         :([$\w|\.|\-|_|\+]+) #version number
         [\@\S]*          #classifier
         [\s|\(]?[\'|\"]+ #separator
@@ -75,15 +75,15 @@ class GradleParser < CommonParser
     return nil if content.to_s.empty?
     return nil if content.to_s.strip.eql?('Not Found')
 
-    content = content.gsub(/\/\*.*?\*\//mxi, "") # remove comments /* */ 
-    content = content.gsub(/\A\/\/.*$/xi, "") # remove comments // 
+    content = content.gsub(/\/\*.*?\*\//mxi, "") # remove comments /* */
+    content = content.gsub(/\A\/\/.*$/xi, "") # remove comments //
     content = content.gsub(/[^[https:][http:]]\/\/.*$/xi, "") # remove comments // without http[s]
     content = content.gsub(/.*classpath.*$/, "")
 
     vars = extract_vars content
     vars.keys.each do |key|
       val = vars[key]
-      content = content.gsub("${#{key}}", val)  
+      content = content.gsub("${#{key}}", val)
     end
 
     matches_long = content.scan( A_DEP_LONG_MATCHER )
@@ -93,11 +93,11 @@ class GradleParser < CommonParser
     matches_br = content.scan( A_DEP_BR_MATCHER )
     deps_br    = self.build_dependencies_br( matches_br, vars )
     content = content.gsub(A_DEP_BR_MATCHER, "")
-    
+
     matches_short = content.scan( A_DEP_SHORT_MATCHER )
     deps_short    = self.build_dependencies(matches_short, vars)
     content = content.gsub(A_DEP_SHORT_MATCHER, "")
-    
+
 
     matches_simple = content.scan( A_DEP_SIMPLE_MATCHER )
     deps_simple = self.build_dependencies_simple(matches_simple, vars)
@@ -145,7 +145,7 @@ class GradleParser < CommonParser
         mat = match.first
         mat = mat.gsub("project.ext.", "")
         mat = mat.gsub("ext.", "")
-        mat = mat.gsub(" ", "").strip 
+        mat = mat.gsub(" ", "").strip
         sps = mat.split("=")
         var_key = sps[0]
         var_val = sps[1].gsub("\"", "").gsub("'", "")
