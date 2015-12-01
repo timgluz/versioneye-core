@@ -430,8 +430,11 @@ class ProjectService < Versioneye::Service
 
 
   def self.reset_badge project
-    cache.delete project.id.to_s
-    Badge.where(:key => project.id.to_s ).delete
+    pid = project.id.to_s
+    cache.delete pid
+    cache.delete "#{pid}__flat"
+    Badge.where(:key => pid ).delete
+    Badge.where(:key => "#{pid}__flat" ).delete
   end
 
 
