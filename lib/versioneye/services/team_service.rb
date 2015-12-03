@@ -14,13 +14,51 @@ class TeamService < Versioneye::Service
     team = Team.where(:name => team_name, :organisation_id => orga_id).first
     user = User.find_by_username username
     team.add_member user
-    TeamMailer.add_new_member(orga, team, user, owner).deliver
+    TeamMailer.add_new_member(orga, team, user, owner).deliver_now
     true
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
     false
   end
+
+
+  # Assign a number of projects to a team
+  def self.assign orga_id, team_name, project_ids, user
+    orga = Organisation.find orga_id
+    if orga.nil?
+      raise "Organisation `#{orga_id}` doesn't exist"
+    end
+
+    if !OrganisationService.owner?( orga, user )
+      raise "You have to be in the Owners team to do mass assignment."
+    end
+
+    team = Team.where(:name => team_name, :organisation_id => orga_id).first
+    if team.nil?
+      raise "Team `#{team_name}` doesn't exist inside of the #{orga.name} organisation."
+    end
+
+    project_ids.each do |project_id|
+      add_project_to_team( project_id, orga, team )
+    end
+    true
+  end
+
+
+  private
+
+
+    def self.add_project_to_team project_id, orga, team
+      project = Project.where(:id => project_id, :organisation_id => orga.ids).first
+      return nil if project.nil?
+
+      project.teams = [team]
+      project.save
+    rescue => e
+      log.error e.message
+      log.error e.backtrace.join("\n")
+    end
 
 
 end
