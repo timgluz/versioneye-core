@@ -14,5 +14,6 @@ class ScmChangelogEntry < Versioneye::Model
   field :revision     , type: String
   field :revision_base, type: String
   field :message      , type: String
+  field :message_md   , type: Boolean, :default => false
 
 end
