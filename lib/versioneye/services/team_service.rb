@@ -13,13 +13,13 @@ class TeamService < Versioneye::Service
     orga = Organisation.find orga_id
     team = Team.where(:name => team_name, :organisation_id => orga_id).first
     user = User.find_by_username username
+    if user.nil?
+      raise "User with username '#{username}' not found."
+    end
+    
     team.add_member user
     TeamMailer.add_new_member(orga, team, user, owner).deliver_now
     true
-  rescue => e
-    log.error e.message
-    log.error e.backtrace.join("\n")
-    false
   end
 
 
