@@ -57,15 +57,13 @@ class SyncService < Versioneye::Service
 
     lang_prod_keys << lang_key
 
-    key      = prod_key
-    language = dependency.language
-    if dependency.project && dependency.project.project_type.to_s.eql?(Project::A_TYPE_BOWER)
-      key      = dependency.name
-      language = 'Bower'
-    end
+    is_bower_project = dependency.project && dependency.project.project_type.to_s.eql?(Project::A_TYPE_BOWER)
+    key      = is_bower_project ? dependency.name : prod_key
+    language = is_bower_project ? 'Bower' : dependency.language
+
     sync_product language, key, false
 
-    product = Product.fetch_product dependency.language, prod_key
+    product = is_bower_project ? Product.fetch_bower(key) : Product.fetch_product(dependency.language, prod_key)
     return nil if product.nil?
 
     dependency.prod_key = prod_key
@@ -147,7 +145,7 @@ class SyncService < Versioneye::Service
 
     return nil if json[:versions].nil?
 
-    product_preload = Product.fetch_product language, prod_key
+    product_preload = language.to_s.eql?('Bower') ? Product.fetch_bower(prod_key) : Product.fetch_product(language, prod_key) 
 
     json[:versions].each do |ver|
       new_version = product_preload.nil? || product_preload.version_by_number(ver[:version]).nil?
