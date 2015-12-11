@@ -16,7 +16,7 @@ class TeamService < Versioneye::Service
     if user.nil?
       raise "User with username '#{username}' not found."
     end
-    
+
     team.add_member user
     TeamMailer.add_new_member(orga, team, user, owner).deliver_now
     true
