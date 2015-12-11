@@ -31,8 +31,10 @@ class ReceiptService < Versioneye::Service
 
     users.each do |user|
       next if user.nil?
+      next if user.deleted_user == true
       next if user.plan.name_id.eql?(Plan::A_PLAN_FREE)
       next if user.plan.name_id.eql?('03_free')
+      next if user.plan.name_id.eql?('04_free')
       next if user.plan.name_id.match(/_free\Z/)
       next if user.stripe_token.to_s.empty?
       next if user.stripe_customer_id.to_s.empty?
@@ -79,7 +81,7 @@ class ReceiptService < Versioneye::Service
 
     receipt
   rescue => e
-    log.error "#{user.username} - #{e.message}"
+    log.error "ERROR for user #{user.username} - #{e.message}"
     log.error e.backtrace.join("\n")
   end
 
