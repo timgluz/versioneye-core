@@ -216,6 +216,9 @@ class PackageParser < CommonParser
         dependency.version_requested = ver
       else
         start = ver
+        if start.count(".") == 1
+          start = "#{start}.0"
+        end
 
         major = semver.major + 1
         upper_range = "#{major}.0.0"
