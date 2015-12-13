@@ -33,7 +33,7 @@ end
 group :test do
   gem 'rack-test'       , '0.6.3'
   gem 'fakes3'          , '0.2.2'
-  gem 'simplecov'       , '~> 0.10.0'
+  gem 'simplecov'       , '~> 0.11.1'
   gem 'rspec'           , '~> 3.4.0'
   gem 'database_cleaner', '~> 1.5.1'
   gem 'factory_girl'    , '~> 4.5.0'
