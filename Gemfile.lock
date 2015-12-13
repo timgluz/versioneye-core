@@ -245,7 +245,7 @@ PLATFORMS
 DEPENDENCIES
   actionmailer (~> 4.2.2)
   aws-sdk (~> 2.2.0)
-  bundler (~> 1.10.6)
+  bundler (~> 1.11.0)
   bunny (~> 2.2.0)
   capybara (~> 2.5.0)
   capybara-firebug (~> 2.1.0)
@@ -280,4 +280,4 @@ DEPENDENCIES
   wkhtmltopdf-binary (~> 0.9.9.1)
 
 BUNDLED WITH
-   1.10.6
+   1.11.0
