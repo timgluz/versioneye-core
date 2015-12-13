@@ -41,4 +41,17 @@ class Organisation < Versioneye::Model
     nil
   end
 
+  def unknown_license_deps
+    deps = []
+    projects.each do |project|
+      pdeps = project.unknown_license_deps
+      pdeps.each do |dep|
+        next if deps.include?( dep.to_s )
+        deps.push dep.to_s
+        p dep.to_s
+      end
+    end
+    deps
+  end
+
 end
