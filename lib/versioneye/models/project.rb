@@ -235,7 +235,7 @@ class Project < Versioneye::Model
   def unknown_license_deps
     deps = []
     projectdependencies.each do |dep|
-      if (dep.license_caches.to_a.empty?) || (dep.license_caches.count == 1 && dep.license_caches.first.name.casecmp('unknown') == 0)
+      if (dep.license_caches.nil? || dep.license_caches.to_a.empty?) || (dep.license_caches.count == 1 && dep.license_caches.first.name.casecmp('unknown') == 0)
         deps.push(dep)
       end
     end
