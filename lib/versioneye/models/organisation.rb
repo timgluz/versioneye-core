@@ -46,9 +46,13 @@ class Organisation < Versioneye::Model
     projects.each do |project|
       pdeps = project.unknown_license_deps
       pdeps.each do |dep|
-        next if deps.include?( dep.to_s )
-        deps.push dep.to_s
-        p dep.to_s
+        prod_key = dep.prod_key
+        prod_key = "#{dep.group_id}/#{dep.artifact_id}" if prod_key.to_s.empty?
+        k = "#{dep.language}:#{prod_key}:#{dep.version_requested}"
+        next if deps.include?( k )
+        next if k.match(/com\.hybris/)
+        deps.push k
+        p "#{k} - #{dep.ids}"
       end
     end
     deps
