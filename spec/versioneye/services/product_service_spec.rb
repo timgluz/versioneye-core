@@ -115,9 +115,9 @@ describe ProductService do
 
     it 'returns the estimated release time' do
       product[:average_release_time].should eq(0)
-      version_1 = Version.new :created_at => DateTime.new(2014, 01, 01)
-      version_2 = Version.new :created_at => DateTime.new(2014, 02, 01)
-      version_3 = Version.new :created_at => DateTime.new(2014, 03, 02)
+      version_1 = Version.new :released_at => DateTime.new(2014, 01, 01)
+      version_2 = Version.new :released_at => DateTime.new(2014, 02, 01)
+      version_3 = Version.new :released_at => DateTime.new(2014, 03, 02)
       product.versions = [version_1, version_2, version_3]
       arl = ProductService.update_average_release_time product
       product[:average_release_time].should eq(20)

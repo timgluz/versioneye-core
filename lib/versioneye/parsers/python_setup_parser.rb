@@ -81,7 +81,7 @@ class PythonSetupParser < RequirementsParser
   end
 
 
-  #reads content between start_matcher and end_matcher
+  # reads content between start_matcher and end_matcher
   def slice_content(doc, keyword, start_matcher, end_matcher, include_matchers = false)
     return nil if doc.nil? or doc.empty?
 

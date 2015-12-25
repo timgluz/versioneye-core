@@ -378,7 +378,8 @@ describe Product do
       results.should_not be_nil
       results.size.should eq(2)
       results.first.name.should eq('xiki')
-      results.last.name.should eq('tire')
+      last = results.count - 1
+      results.all[last].name.should eq('tire')
     end
 
   end
@@ -486,6 +487,27 @@ describe Product do
   end
 
 
+  describe 'add_repository' do
+
+    it 'adds new repository' do
+      product = Product.new
+      product.add_repository "http://my_repo.org"
+      expect(product.repositories.size).to eq(1)
+      product.add_repository "http://my_repo.org"
+      expect(product.repositories.size).to eq(1)
+    end
+
+    it 'doesnt add new version because its existing already' do
+      product = Product.new
+      product.add_repository "http://my_repo.org"
+      expect(product.repositories.size).to eq(1)
+      product.add_repository "http://my_repo.com"
+      expect(product.repositories.size).to eq(2)
+    end
+
+  end
+
+
   describe 'remove_version' do
 
     it 'removes a version' do
@@ -519,6 +541,33 @@ describe Product do
       product = Product.new({:version => '2.0.0'})
       product.check_nil_version
       product.version.should eq('2.0.0')
+    end
+
+  end
+
+
+  describe 'add_svid' do
+
+    it 'adds the sv id' do
+      product = ProductFactory.create_for_maven 'junit', 'junit', '1.0.0'
+      product.add_version('1.0.1')
+      product.add_version('1.1.1')
+      product.add_version('1.2.0')
+      product.add_version('2.0.0')
+      expect( product.save ).to be_truthy
+
+      sv = SecurityVulnerability.new({:name_id => 'test', :language => product.language, :prod_key => product.prod_key})
+      expect( sv.save ).to be_truthy
+
+      expect( product.add_svid('1.0.1', sv) ).to be_truthy
+      expect( product.add_svid('1.0.1', sv) ).to be_falsey
+
+      product.reload
+      version = product.version_by_number '1.0.1'
+      expect( version.sv_ids.count ).to eql(1)
+      expect( version.sv_ids.first ).to eql( sv.ids )
+      version = product.version_by_number '1.0.0'
+      expect( version.sv_ids ).to be_empty
     end
 
   end

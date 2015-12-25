@@ -146,9 +146,11 @@ class LanguageDailyStats < Versioneye::Model
 
   def self.count_artifacts language, until_date
     ag = Product.collection.aggregate(
+      [
       { '$unwind' => "$versions" },
-      { '$match' => {'language' => "#{language}"} },
+      { '$match' => {'language' => "#{language}", 'versions.created_at' => {'$lte': until_date } } },
       { '$group' => { '_id' => '', 'count' => {'$sum' => 1} } }
+      ]
     )
     return ag.first["count"] if ag && ag.first
     return 0

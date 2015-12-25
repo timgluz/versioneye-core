@@ -41,12 +41,14 @@ class UserService < Versioneye::Service
 
   def self.delete user, why = nil
     NotificationService.remove_notifications user
-    collaborators = ProjectCollaborator.by_user user
-    if !collaborators.nil? && !collaborators.empty?
-      collaborators.each do |project_collaborator|
-        project_collaborator.remove
+
+    orgas = OrganisationService.index user
+    orgas.each do |orga|
+      orga.teams.each do |team|
+        team.remove_member user
       end
     end
+
     emails = user.emails
     if emails && !emails.empty?
       emails.each do |email|

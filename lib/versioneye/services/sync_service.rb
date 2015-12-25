@@ -1,6 +1,11 @@
 class SyncService < Versioneye::Service
 
 
+  def self.log
+    ActiveSupport::Logger.new('log/sync.log')
+  end
+
+
   def self.sync
     sync_projectdependencies Projectdependency.all
   end
@@ -52,15 +57,13 @@ class SyncService < Versioneye::Service
 
     lang_prod_keys << lang_key
 
-    key      = prod_key
-    language = dependency.language
-    if dependency.project && dependency.project.project_type.to_s.eql?(Project::A_TYPE_BOWER)
-      key      = dependency.name
-      language = 'Bower'
-    end
+    is_bower_project = dependency.project && dependency.project.project_type.to_s.eql?(Project::A_TYPE_BOWER)
+    key      = is_bower_project ? dependency.name : prod_key
+    language = is_bower_project ? 'Bower' : dependency.language
+
     sync_product language, key, false
 
-    product = Product.fetch_product dependency.language, prod_key
+    product = is_bower_project ? Product.fetch_bower(key) : Product.fetch_product(dependency.language, prod_key)
     return nil if product.nil?
 
     dependency.prod_key = prod_key
@@ -75,6 +78,62 @@ class SyncService < Versioneye::Service
 
 
   def self.sync_product language, prod_key, skip_known_versions = true
+    sync_product_versions language, prod_key, skip_known_versions
+    sync_security language, prod_key
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    nil
+  end
+
+
+  def self.sync_security language, prod_key
+    json = SecurityClient.index language, prod_key
+    return nil if json.nil?
+
+    json.deep_symbolize_keys!
+    if !json[:error].to_s.empty?
+      log.error "Error in response from VersionEye API: #{json[:error]}"
+      return nil
+    end
+
+    return nil if json[:results].to_a.empty?
+
+    product = Product.fetch_product language, prod_key
+    json[:results].each do |svjson|
+      update_svobject( product, svjson )
+    end
+    log.info "synced security infos for #{language}:#{prod_key}"
+  end
+
+
+  def self.update_svobject product, svjson
+    sv = SecurityVulnerability.find_or_create_by(
+      {
+       :language => svjson[:language],
+       :prod_key => svjson[:prod_key],
+       :name_id => svjson[:name_id]
+      }
+    )
+    sv.update_from svjson
+    reset_svids product, sv
+  end
+
+
+  def self.reset_svids product, sv
+    return nil if product.nil? || sv.nil?
+
+    product.versions.each do |version|
+      version.sv_ids = []
+    end
+    sv.affected_versions.each do |version|
+      product.add_svid version, sv
+    end
+    product.save
+  end
+
+
+  def self.sync_product_versions language, prod_key, skip_known_versions = true
     json = ProductClient.versions language, prod_key
     return nil if json.nil?
 
@@ -86,7 +145,7 @@ class SyncService < Versioneye::Service
 
     return nil if json[:versions].nil?
 
-    product_preload = Product.fetch_product language, prod_key
+    product_preload = language.to_s.eql?('Bower') ? Product.fetch_bower(prod_key) : Product.fetch_product(language, prod_key) 
 
     json[:versions].each do |ver|
       new_version = product_preload.nil? || product_preload.version_by_number(ver[:version]).nil?

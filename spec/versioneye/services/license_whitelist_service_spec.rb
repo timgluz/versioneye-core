@@ -2,63 +2,18 @@ require 'spec_helper'
 
 describe LicenseWhitelistService do
 
-  describe 'enterprise_permission' do
-
-    it 'returns false because user is nil' do
-      LicenseWhitelistService.enterprise_permission(nil).should be_falsy
-    end
-    it 'returns false because user is not admin' do
-      user = UserFactory.create_new 1
-      user.admin = false
-      user.fetch_or_create_permissions.lwl = false
-      LicenseWhitelistService.enterprise_permission(user).should be_falsy
-    end
-    it 'returns true because user is admin' do
-      user = UserFactory.create_new 1
-      user.admin = true
-      user.fetch_or_create_permissions.lwl = false
-      LicenseWhitelistService.enterprise_permission(user).should be_truthy
-    end
-    it 'returns true because user has lwl permission' do
-      user = UserFactory.create_new 1
-      user.admin = false
-      user.fetch_or_create_permissions.lwl = true
-      LicenseWhitelistService.enterprise_permission(user).should be_truthy
-    end
-
-  end
-
   describe 'index' do
 
-    it 'returns the list for the given user' do
-      user = UserFactory.create_new 1
-      lwl = LicenseWhitelist.new({:name => 'OkForMe', :user_id => user.id})
+    it 'returns the list for the given orga' do
+      orga = Organisation.new :name => "orga"
+      lwl = LicenseWhitelist.new({ :name => 'OkForMe', :organisation_id => orga.id })
       lwl.save.should be_truthy
-      lwl = LicenseWhitelist.new({:name => 'HubaBuba', :user_id => 'asgfasga'})
+      lwl = LicenseWhitelist.new({:name => 'HubaBuba', :organisation_id => 'asgfasga'})
       lwl.save.should be_truthy
-      lwls = LicenseWhitelistService.index user
+      lwls = LicenseWhitelistService.index orga
       lwls.should_not be_nil
       lwls.first.name.should eq("OkForMe")
       lwls.count.should == 1
-    end
-
-    it 'returns the all whitelists in enterprise env' do
-      user  = UserFactory.create_new 1
-      admin = UserFactory.create_new 2
-
-      lwl = LicenseWhitelist.new({:name => 'OkForMe', :user_id => admin.id})
-      lwl.save.should be_truthy
-      lwl = LicenseWhitelist.new({:name => 'HubaBuba', :user_id => admin.id})
-      lwl.save.should be_truthy
-
-      Settings.instance.instance_variable_set(:@environment, 'enterprise')
-
-      lwls = LicenseWhitelistService.index user
-      lwls.should_not be_nil
-      lwls.count.should == 2
-      lwls.first.name.should eq("OkForMe")
-
-      Settings.instance.instance_variable_set(:@environment, 'test')
     end
 
   end
@@ -66,32 +21,14 @@ describe LicenseWhitelistService do
   describe 'fetch_by' do
 
     it 'returns the list for the given user' do
-      user = UserFactory.create_new 1
-      lwl = LicenseWhitelist.new({:name => 'OkForMe', :user_id => user.id})
+      orga = Organisation.new :name => "orga"
+      lwl = LicenseWhitelist.new({:name => 'OkForMe', :organisation_id => orga.id})
       lwl.save.should be_truthy
       lwl = LicenseWhitelist.new({:name => 'HubaBuba', :user_id => 'asgfasga'})
       lwl.save.should be_truthy
-      lw = LicenseWhitelistService.fetch_by user, 'OkForMe'
+      lw = LicenseWhitelistService.fetch_by orga, 'OkForMe'
       lw.should_not be_nil
       lw.name.should eq('OkForMe')
-    end
-
-    it 'returns the list with given name, even if user is not owner of the list (Enterprise env)' do
-      user  = UserFactory.create_new 1
-      admin = UserFactory.create_new 2
-
-      lwl = LicenseWhitelist.new({:name => 'OkForMe', :user_id => admin.id})
-      lwl.save.should be_truthy
-      lwl = LicenseWhitelist.new({:name => 'HubaBuba', :user_id => admin.id})
-      lwl.save.should be_truthy
-
-      Settings.instance.instance_variable_set(:@environment, 'enterprise')
-
-      lw = LicenseWhitelistService.fetch_by user, 'OkForMe'
-      lw.should_not be_nil
-      lw.name.should eq("OkForMe")
-
-      Settings.instance.instance_variable_set(:@environment, 'test')
     end
 
   end
@@ -99,26 +36,9 @@ describe LicenseWhitelistService do
   describe 'create_for' do
 
     it 'create a list for a user' do
-      user = UserFactory.create_new 1
-      resp = LicenseWhitelistService.create user, 'SuperList'
+      orga = Organisation.new :name => "orga"
+      resp = LicenseWhitelistService.create orga, 'SuperList'
       resp.should be_truthy
-    end
-
-    it 'returns the list with given name, even if user is not owner of the list (Enterprise env)' do
-      user  = UserFactory.create_new 1
-      admin = UserFactory.create_new 2
-      admin.admin = true
-      admin.save
-
-      Settings.instance.instance_variable_set(:@environment, 'enterprise')
-
-      resp = LicenseWhitelistService.create user, 'SuperList'
-      resp.should be_falsy
-
-      resp = LicenseWhitelistService.create admin, 'SuperList'
-      resp.should be_truthy
-
-      Settings.instance.instance_variable_set(:@environment, 'test')
     end
 
   end
@@ -126,34 +46,14 @@ describe LicenseWhitelistService do
   describe 'add' do
 
     it 'add new license to list for a user' do
-      user = UserFactory.create_new 1
-      resp = LicenseWhitelistService.create user, 'SuperList'
+      orga = Organisation.new :name => "orga"
+      resp = LicenseWhitelistService.create orga, 'SuperList'
       resp.should be_truthy
-      resp = LicenseWhitelistService.add user, 'SuperList', 'MIT'
+      resp = LicenseWhitelistService.add orga, 'SuperList', 'MIT'
       resp.should be_truthy
-      list = LicenseWhitelistService.fetch_by user, 'SuperList'
+      list = LicenseWhitelistService.fetch_by orga, 'SuperList'
       list.license_elements.count.should eq(1)
       list.license_elements.first.name.should eq('MIT')
-    end
-
-    it 'add new license to list for user (Enterprise env)' do
-      user  = UserFactory.create_new 1
-      admin = UserFactory.create_new 2
-      admin.admin = true
-      admin.save
-
-      Settings.instance.instance_variable_set(:@environment, 'enterprise')
-
-      resp = LicenseWhitelistService.create admin, 'SuperList'
-      resp.should be_truthy
-
-      resp = LicenseWhitelistService.add user, 'SuperList', 'MIT'
-      resp.should be_falsy
-
-      resp = LicenseWhitelistService.add admin, 'SuperList', 'MIT'
-      resp.should be_truthy
-
-      Settings.instance.instance_variable_set(:@environment, 'test')
     end
 
   end
@@ -161,12 +61,12 @@ describe LicenseWhitelistService do
   describe 'default' do
 
     it 'sets the default' do
-      user = UserFactory.create_new 1
-      resp = LicenseWhitelistService.create user, 'SuperList'
+      orga = Organisation.new :name => "orga"
+      resp = LicenseWhitelistService.create orga, 'SuperList'
       resp.should be_truthy
-      resp = LicenseWhitelistService.create user, 'MyList'
+      resp = LicenseWhitelistService.create orga, 'MyList'
       resp.should be_truthy
-      resp = LicenseWhitelistService.create user, 'YourList'
+      resp = LicenseWhitelistService.create orga, 'YourList'
       resp.should be_truthy
 
       LicenseWhitelist.count.should eq(3)
@@ -174,12 +74,12 @@ describe LicenseWhitelistService do
         lwl.default.should be_falsy
       end
 
-      LicenseWhitelistService.default user, 'MyList'
-      lwl = LicenseWhitelist.fetch_by user, 'MyList'
+      LicenseWhitelistService.default orga, 'MyList'
+      lwl = LicenseWhitelist.fetch_by orga, 'MyList'
       lwl.default.should be_truthy
-      lwl = LicenseWhitelist.fetch_by user, 'SuperList'
+      lwl = LicenseWhitelist.fetch_by orga, 'SuperList'
       lwl.default.should be_falsy
-      lwl = LicenseWhitelist.fetch_by user, 'YourList'
+      lwl = LicenseWhitelist.fetch_by orga, 'YourList'
       lwl.default.should be_falsy
     end
 
@@ -188,25 +88,25 @@ describe LicenseWhitelistService do
   describe 'fetch_default_id' do
 
     it 'returns nil because there is no default' do
-      user = UserFactory.create_new 1
-      resp = LicenseWhitelistService.create user, 'SuperList'
+      orga = Organisation.new :name => "orga"
+      resp = LicenseWhitelistService.create orga, 'SuperList'
       resp.should be_truthy
 
       LicenseWhitelist.count.should eq(1)
-      LicenseWhitelistService.fetch_default_id(user).should be_nil
+      LicenseWhitelistService.fetch_default_id(orga).should be_nil
     end
 
     it 'returns the default_id' do
-      user = UserFactory.create_new 1
-      resp = LicenseWhitelistService.create user, 'SuperList'
+      orga = Organisation.new :name => "orga"
+      resp = LicenseWhitelistService.create orga, 'SuperList'
       resp.should be_truthy
-      resp = LicenseWhitelistService.create user, 'MyList'
+      resp = LicenseWhitelistService.create orga, 'MyList'
       resp.should be_truthy
 
-      LicenseWhitelistService.default user, 'MyList'
-      lwl = LicenseWhitelist.fetch_by user, 'MyList'
+      LicenseWhitelistService.default orga, 'MyList'
+      lwl = LicenseWhitelist.fetch_by orga, 'MyList'
 
-      LicenseWhitelistService.fetch_default_id(user).should eq(lwl.id.to_s)
+      LicenseWhitelistService.fetch_default_id(orga).should eq(lwl.id.to_s)
     end
 
   end
@@ -214,44 +114,16 @@ describe LicenseWhitelistService do
   describe 'remove' do
 
     it 'remove license from list for a user' do
-      user = UserFactory.create_new 1
+      orga = Organisation.new :name => "orga"
 
-      resp = LicenseWhitelistService.create user, 'SuperList'
-      resp = LicenseWhitelistService.add user, 'SuperList', 'MIT'
-      list = LicenseWhitelistService.fetch_by user, 'SuperList'
+      resp = LicenseWhitelistService.create orga, 'SuperList'
+      resp = LicenseWhitelistService.add orga, 'SuperList', 'MIT'
+      list = LicenseWhitelistService.fetch_by orga, 'SuperList'
       list.license_elements.count.should eq(1)
-      resp = LicenseWhitelistService.remove user, 'SuperList', 'MIT'
+      resp = LicenseWhitelistService.remove orga, 'SuperList', 'MIT'
       resp.should be_truthy
-      list = LicenseWhitelistService.fetch_by user, 'SuperList'
+      list = LicenseWhitelistService.fetch_by orga, 'SuperList'
       list.license_elements.count.should eq(0)
-    end
-
-    it 'remove license from list for a user (Enterprise env)' do
-      user  = UserFactory.create_new 1
-      admin = UserFactory.create_new 2
-      admin.admin = true
-      admin.save
-
-      Settings.instance.instance_variable_set(:@environment, 'enterprise')
-
-      resp = LicenseWhitelistService.create admin, 'SuperList'
-      resp = LicenseWhitelistService.add admin, 'SuperList', 'MIT'
-      list = LicenseWhitelistService.fetch_by admin, 'SuperList'
-      list.license_elements.count.should eq(1)
-
-      resp = LicenseWhitelistService.remove user, 'SuperList', 'MIT'
-      resp.should be_falsy
-
-      list = LicenseWhitelistService.fetch_by admin, 'SuperList'
-      list.license_elements.count.should eq(1)
-
-      resp = LicenseWhitelistService.remove admin, 'SuperList', 'MIT'
-      resp.should be_truthy
-
-      list = LicenseWhitelistService.fetch_by admin, 'SuperList'
-      list.license_elements.count.should eq(0)
-
-      Settings.instance.instance_variable_set(:@environment, 'test')
     end
 
   end
@@ -264,12 +136,15 @@ describe LicenseWhitelistService do
     end
 
     it 'updates the project with the given lwl' do
-      user = UserFactory.create_new 1
+      orga = Organisation.new :name => "orga"
 
-      LicenseWhitelistService.create user, 'SuperList'
-      LicenseWhitelistService.add user, 'SuperList', 'MIT'
+      LicenseWhitelistService.create orga, 'SuperList'
+      LicenseWhitelistService.add orga, 'SuperList', 'MIT'
 
+      user = UserFactory.create_new
       project = ProjectFactory.create_new user
+      project.organisation_id = orga.ids
+      expect( project.save ).to be_truthy
       prod_1  = ProductFactory.create_new 1
       dep_1   = ProjectdependencyFactory.create_new project, prod_1, true
       dep_1.version_requested = prod_1.version
@@ -277,6 +152,8 @@ describe LicenseWhitelistService do
       LicenseFactory.create_new prod_1, 'GPL'
 
       project_2 = ProjectFactory.create_new user
+      project_2.organisation_id = orga.ids
+      project_2.save
       prod_2  = ProductFactory.create_new 2
       dep_2   = ProjectdependencyFactory.create_new project_2, prod_2, true
       dep_2.version_requested = prod_2.version
@@ -285,7 +162,7 @@ describe LicenseWhitelistService do
       project_2.parent_id = project.ids
       project_2.save
 
-      expect( LicenseWhitelistService.update_project(project, user, 'SuperList') ).to be_truthy
+      expect( LicenseWhitelistService.update_project(project, orga, 'SuperList') ).to be_truthy
       project = Project.first
       expect( project.licenses_red ).to eq(1)
       expect( project.licenses_red_sum ).to eq(2)

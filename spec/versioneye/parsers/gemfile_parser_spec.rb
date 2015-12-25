@@ -74,12 +74,14 @@ describe GemfileParser do
       dep_1.name.should eql("rails")
       dep_1.version_requested.should eql("3.2.6")
       dep_1.comperator.should eql("=")
+      expect( dep_1.language ).to eql(Product::A_LANGUAGE_RUBY)
 
       dep_2 = project.dependencies[1]
       dep_2.name.should eql("jquery-rails")
       dep_2.version_requested.should eql("1.0.0")
       dep_2.version_current.should eql("1.0.0")
       dep_2.comperator.should eql("=")
+      expect( dep_2.language ).to eql(Product::A_LANGUAGE_RUBY)
 
       dep_3 = project.dependencies[2]
       dep_3.name.should eql("execjs")
@@ -87,6 +89,7 @@ describe GemfileParser do
       dep_3.version_current.should eql("1.4.0")
       dep_3.version_label.should eql("1.4.0")
       dep_3.comperator.should eql("<")
+      expect( dep_3.language ).to eql(Product::A_LANGUAGE_RUBY)
 
       dep_4 = project.dependencies[3]
       dep_4.name.should eql("therubyracer")
@@ -94,6 +97,7 @@ describe GemfileParser do
       dep_4.version_current.should eql("0.11.3")
       dep_4.version_label.should eql("0.10.1")
       dep_4.comperator.should eql(">")
+      expect( dep_4.language ).to eql(Product::A_LANGUAGE_RUBY)
 
       dep_5 = project.dependencies[4]
       dep_5.name.should eql("will_paginate")

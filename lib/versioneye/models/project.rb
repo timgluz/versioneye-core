@@ -16,6 +16,7 @@ class Project < Versioneye::Model
   A_TYPE_R         = 'R'
   A_TYPE_COCOAPODS = 'CocoaPods'
   A_TYPE_BIICODE   = 'Biicode'
+  A_TYPE_CHEF      = 'Chef'
 
   A_SOURCE_UPLOAD    = 'upload'
   A_SOURCE_URL       = 'url'
@@ -33,6 +34,7 @@ class Project < Versioneye::Model
   field :description  , type: String
   field :license      , type: String
   field :version      , type: String
+  field :packaging    , type: String
 
   field :group_id   , type: String # Maven specific
   field :artifact_id, type: String # Maven specific
@@ -79,8 +81,9 @@ class Project < Versioneye::Model
   validates :project_key, presence: true
 
   belongs_to :user
+  belongs_to :organisation
   has_many   :projectdependencies
-  has_many   :collaborators, class_name: 'ProjectCollaborator'
+  has_and_belongs_to_many :teams
 
   index({project_key: 1, project_type: 1}, { name: "key_type_index",  background: true})
   index({user_id: 1, private_project: 1},  { name: "user_id_private_index", background: true})
@@ -88,7 +91,6 @@ class Project < Versioneye::Model
   index({name: 1},    { name: "name_index",    background: true})
   index({source: 1},  { name: "source_index",  background: true})
 
-  scope :by_collaborator, ->(user){ all_in(_id: ProjectCollaborator.by_user(user).to_a.map(&:project_id)) }
   scope :by_user   , ->(user)    { where(user_id: user[:_id].to_s) }
   scope :by_user_id, ->(user_id) { where(user_id: user_id.to_s) }
   scope :by_id     , ->(id)      { where(_id: id.to_s) }
@@ -185,21 +187,35 @@ class Project < Versioneye::Model
   end
 
   def visible_for_user?(user)
-    return true  if self[:public]
     return false if user.nil?
+    return true  if self[:public]
     return true  if user.admin
-    return true  if self.user_id.to_s == user[:_id].to_s
-    return true  if ProjectCollaborator.collaborator?(self[:_id], user[:_id])
+    return true  if self.user_id.to_s.eql?(user.ids)
+    return true  if is_orga_member?(user)
     return false
   end
 
-  def collaborator( user )
-    return nil if user.nil?
-    return nil if collaborators.nil? || collaborators.size == 0
-    collaborators.each do |collaborator|
-      return collaborator if user._id.to_s.eql?( collaborator.user_id.to_s )
+  def is_collaborator?( user )
+    return false if user.nil?
+    return true if self.user_id.to_s.eql?(user.ids)
+    return true if organisation && OrganisationService.owner?( organisation, user ) == true
+
+    if teams && !teams.empty?
+      teams.each do |team|
+        team.members.each do |tm|
+          return true if tm.user.ids.eql?(user.ids)
+        end
+      end
     end
-    nil
+
+    false
+  end
+
+  def is_orga_member?(user)
+    if organisation
+      return OrganisationService.member?( organisation, user )
+    end
+    false
   end
 
   def license_whitelist
@@ -216,6 +232,16 @@ class Project < Versioneye::Model
     nil
   end
 
+  def unknown_license_deps
+    deps = []
+    projectdependencies.each do |dep|
+      if (dep.license_caches.nil? || dep.license_caches.to_a.empty?) || (dep.license_caches.count == 1 && dep.license_caches.first.name.casecmp('unknown') == 0)
+        deps.push(dep)
+      end
+    end
+    deps
+  end
+
   def component_whitelist
     return nil if component_whitelist_id.to_s.empty?
     ComponentWhitelist.find component_whitelist_id
@@ -228,16 +254,6 @@ class Project < Versioneye::Model
     cwl = component_whitelist
     return cwl.name if cwl
     nil
-  end
-
-  def collaborator?( user )
-    return false if user.nil?
-    return true if !self.user.nil? && self.user.username.eql?( user.username )
-    !collaborator( user ).nil?
-  end
-
-  def remove_collaborators
-    collaborators.each { |collaborator| collaborator.remove }
   end
 
   def known_dependencies
@@ -314,6 +330,7 @@ class Project < Versioneye::Model
   end
 
   def overwrite_dependencies( new_dependencies )
+    return nil if new_dependencies.nil? || new_dependencies.empty?
     muted_deps    = muted_prod_keys
     muted_keys    = muted_deps[:keys]
     mute_messages = muted_deps[:messages]

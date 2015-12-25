@@ -18,6 +18,7 @@ module Versioneye
     require 'versioneye/services/notification_service'
     require 'versioneye/services/newsletter_service'
     require 'versioneye/services/newest_service'
+    require 'versioneye/services/organisation_service'
     require 'versioneye/services/product_service'
     require 'versioneye/services/project_service'
     require 'versioneye/services/project_import_service'
@@ -29,6 +30,7 @@ module Versioneye
     require 'versioneye/services/security_notification_service'
     require 'versioneye/services/statistic_service'
     require 'versioneye/services/submitted_url_service'
+    require 'versioneye/services/team_service'
     require 'versioneye/services/user_service'
     require 'versioneye/services/admin_service'
     require 'versioneye/services/version_service'
@@ -45,7 +47,6 @@ module Versioneye
     require 'versioneye/services/sync_service'
     require 'versioneye/services/transfer_service'
     require 'versioneye/services/enterprise_service'
-    require 'versioneye/services/project_collaborator_service'
     require 'versioneye/services/scm_meta_data_service'
 
     require 'versioneye/services_ext/bitbucket'
@@ -69,7 +70,11 @@ module Versioneye
     require 'versioneye/mailers/receipt_mailer'
     require 'versioneye/mailers/versioncomment_mailer'
     require 'versioneye/mailers/versioncommentreply_mailer'
+    require 'versioneye/mailers/team_mailer'
 
+    require 'versioneye/parsers/berksfile_parser'
+    require 'versioneye/parsers/berksfilelock_parser'
+    require 'versioneye/parsers/metadata_parser'
     require 'versioneye/parsers/biicode_parser'
     require 'versioneye/parsers/bower_parser'
     require 'versioneye/parsers/common_parser'
@@ -98,6 +103,8 @@ module Versioneye
     require 'versioneye/updaters/upload_updater'
     require 'versioneye/updaters/url_updater'
 
+    require 'versioneye/remote_api/common_client'
+    require 'versioneye/remote_api/security_client'
     require 'versioneye/remote_api/product_client'
     require 'versioneye/remote_api/me_client'
 

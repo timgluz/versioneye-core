@@ -15,20 +15,19 @@ class ProjectdependencyService < Versioneye::Service
     log.error e.backtrace.join "\n"
   end
 
+
   def self.update_licenses_for project, dep, product, save_dep = true
     dep.license_caches.clear
     dep.lwl_violation = nil
     product.version = dep.version_requested
-    licenses = product.licenses
-    if licenses && !licenses.empty?
-      fill_license_cache project, dep, licenses
-    end
+    fill_license_cache project, dep, product.licenses
     dep.save if save_dep
   end
 
 
   # Updates projectdependency.sv_ids for each projectdependency of the project
   def self.update_security project
+    project.sv_count = 0
     project.update_attribute(:sv_count, 0)
     project.update_attribute(:sv_count_sum, 0)
     project.projectdependencies.each do |dep|
@@ -40,28 +39,43 @@ class ProjectdependencyService < Versioneye::Service
     log.error e.backtrace.join "\n"
   end
 
+
   def self.update_security_for project, dep, product, save_dep = true
     version = product.version_by_number dep.version_requested
     return nil if version.nil?
+    return nil if version.sv_ids.to_a.empty?
 
-    dep.sv_ids = version.sv_ids
-    dep.save if save_dep
-
-    if !version.sv_ids.empty?
-      new_count = project.sv_count + version.sv_ids.size
-      project.update_attribute(:sv_count, new_count)
+    version.sv_ids.each do |sv_id|
+      sv = SecurityVulnerability.find sv_id
+      if sv.nil?
+        version.sv_ids.delete sv_id
+        version.save
+        next
+      end
+      dep.sv_ids << sv_id if !dep.sv_ids.include?(sv_id)
+      dep.save if save_dep
     end
+
+    new_count = project.sv_count + dep.sv_ids.size
+    project.sv_count = new_count
+    project.update_attribute(:sv_count, new_count)
   end
 
 
   def self.update_licenses_security project
     project.update_attribute(:sv_count, 0)
     project.update_attribute(:sv_count_sum, 0)
-    Projectdependency.where(:project_id => project.id).each do |dep|
+    pcount1 = Projectdependency.where(:project_id => project.id).count
+    project.projectdependencies.each do |dep|
       product = dep.find_or_init_product
       update_licenses_for project, dep, product, false
       update_security_for project, dep, product, false
       dep.save
+    end
+    pcount2 = Projectdependency.where(:project_id => project.id).count
+    if pcount2 > pcount1 && pcount2 > project.projectdependencies.count
+      project.reload
+      update_licenses_security( project )
     end
   rescue => e
     log.error e.message
@@ -214,22 +228,29 @@ class ProjectdependencyService < Versioneye::Service
 
 
     def self.fill_license_cache project, dependency, licenses
-      licenses.each do |license|
-        next if license.nil?
+      if licenses && !licenses.empty?
+        licenses.each do |license|
+          next if license.nil?
 
-        licenseCach = LicenseCach.new({:name => license.name_substitute, :url => license.link} )
-        licenseCach.license_id = license.id.to_s
+          licenseCach = LicenseCach.new({:name => license.name_substitute, :url => license.link} )
+          licenseCach.license_id = license.id.to_s
 
-        if project.license_whitelist
-          licenseCach.on_whitelist = project.license_whitelist.include_license_substitute?( license.name_substitute )
+          if project.license_whitelist
+            licenseCach.on_whitelist = project.license_whitelist.include_license_substitute?( license.name_substitute )
+          end
+
+          if project.component_whitelist
+            licenseCach.on_cwl = project.component_whitelist.is_on_list?( dependency.cwl_key )
+          end
+
+          dependency.license_caches.push licenseCach
+          dependency.lwl_violation = 'true' if licenseCach.on_whitelist == false
+          licenseCach.save
         end
-
-        if project.component_whitelist
-          licenseCach.on_cwl = project.component_whitelist.is_on_list?( dependency.cwl_key )
-        end
-
+      elsif project.component_whitelist && project.component_whitelist.is_on_list?( dependency.cwl_key )
+        licenseCach = LicenseCach.new({:name => "N/A", :on_cwl => true} )
         dependency.license_caches.push licenseCach
-        dependency.lwl_violation = 'true' if licenseCach.on_whitelist == false
+        dependency.lwl_violation = nil
         licenseCach.save
       end
     end

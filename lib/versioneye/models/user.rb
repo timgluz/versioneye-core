@@ -52,7 +52,7 @@ class User < Versioneye::Model
 
   field :languages, type: String
 
-  # Contains the language :: prod_key pairs for the packages which user is maintainer for.
+  # Contains the <language::prod_key> pairs for the packages which user is maintainer for.
   field :maintainer, type: Array
 
   field :email_send_error, type: String

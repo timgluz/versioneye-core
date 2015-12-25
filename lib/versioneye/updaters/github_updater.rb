@@ -24,7 +24,8 @@ class GithubUpdater < CommonUpdater
   def fetch_project_file project
     filename = project.filename
     filename = 'pom.xml' if filename.eql? 'pom.json'
-    Github.fetch_project_file_from_branch project.scm_fullname, filename, project.scm_branch, project.user.github_token
+    user = user_for project
+    Github.fetch_project_file_from_branch project.scm_fullname, filename, project.scm_branch, user.github_token
   end
 
 

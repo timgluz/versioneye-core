@@ -1,5 +1,6 @@
 class ProjectService < Versioneye::Service
 
+
   def self.type_by_filename filename
     return nil if filename.to_s.empty?
     return nil if filename.to_s.match(/\/node_modules\//) # Skip workirectory of NPM.
@@ -7,15 +8,16 @@ class ProjectService < Versioneye::Service
     trimmed_name = filename.split('?')[0]
     return Project::A_TYPE_RUBYGEMS  if (!(/Gemfile\z/ =~ trimmed_name).nil?)        or (!(/Gemfile.lock\z/  =~ trimmed_name).nil?)
     return Project::A_TYPE_COMPOSER  if (!(/composer.json\z/ =~ trimmed_name).nil?)  or (!(/composer.lock\z/ =~ trimmed_name).nil?)
-    return Project::A_TYPE_PIP       if (!(/requirements\S*.txt\z/ =~ trimmed_name).nil?)  or (!(/setup.py\z/ =~ trimmed_name).nil?) or (!(/pip.log\z/ =~ trimmed_name).nil?)
+    return Project::A_TYPE_PIP       if (!(/\S*.txt\z/ =~ trimmed_name).nil?)  or (!(/setup.py\z/ =~ trimmed_name).nil?) or (!(/pip.log\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_NPM       if (!(/package.json\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_GRADLE    if (!(/.gradle\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_SBT       if (!(/.sbt\z/ =~ trimmed_name).nil?)
-    return Project::A_TYPE_MAVEN2    if (!(/pom.xml\z/ =~ trimmed_name).nil?)  or (!(/pom.json\z/ =~ trimmed_name).nil?)
+    return Project::A_TYPE_MAVEN2    if (!(/pom.xml\z/ =~ trimmed_name).nil?) or (!(/.pom\z/ =~ trimmed_name).nil?) or (!(/external-dependencies.xml\z/ =~ trimmed_name).nil?) or (!(/pom.json\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_LEIN      if (!(/project.clj\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_BOWER     if (!(/bower.json\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_BIICODE   if (!(/biicode.conf\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_COCOAPODS if (!(/Podfile\z/ =~ trimmed_name).nil?)  or (!(/.podfile\z/ =~ trimmed_name).nil?) or (!(/Podfile.lock\z/ =~ trimmed_name).nil?)
+    return Project::A_TYPE_CHEF      if (!(/Berksfile.lock\z/ =~ trimmed_name).nil?)  or (!(/Berksfile\z/ =~ trimmed_name).nil?) or (!(/metadata.rb\z/ =~ trimmed_name).nil?)
     return nil
   end
 
@@ -23,9 +25,11 @@ class ProjectService < Versioneye::Service
   def self.corresponding_file filename
     return nil if filename.to_s.empty?
     trimmed_name = filename.split('?')[0]
-    return 'Gemfile.lock'  if (/Gemfile\z/ =~ trimmed_name) == 0
-    return 'composer.lock' if (/composer.json\z/ =~ trimmed_name) == 0
-    return 'Podfile.lock'  if (/Podfile\z/ =~ trimmed_name) == 0
+    return 'Gemfile.lock'   if (/Gemfile\z/ =~ trimmed_name) == 0
+    return 'composer.lock'  if (/composer.json\z/ =~ trimmed_name) == 0
+    return 'Podfile.lock'   if (/Podfile\z/ =~ trimmed_name) == 0
+    return 'Berksfile.lock' if (/metadata.rb\z/ =~ trimmed_name) == 0
+    return 'Berksfile.lock' if (/Berksfile\z/ =~ trimmed_name) == 0
     return nil
   end
 
@@ -39,7 +43,16 @@ class ProjectService < Versioneye::Service
     elsif filter[:scope].to_s == 'all' && user.admin == true
       # Do nothing. Admin can see ALL projects
     else
-      filter_options[:user_id] = user.ids
+      organisation = nil
+      if filter[:organisation] && !filter[:organisation].to_s.strip.empty?
+        organisation = Organisation.find filter[:organisation].to_s
+      end
+      if organisation && OrganisationService.member?( organisation, user )
+        filter_options[:organisation_id] = filter[:organisation].to_s
+      else
+        filter_options[:user_id] = user.ids
+        filter_options[:organisation_id] = nil
+      end
     end
 
     case sort
@@ -191,7 +204,7 @@ class ProjectService < Versioneye::Service
     user = User.find user_id
     return false if user.nil?
 
-    if !project.collaborator?(user)
+    if !project.is_collaborator?(user)
       raise "User has no permission to merge this project!"
     end
 
@@ -215,7 +228,7 @@ class ProjectService < Versioneye::Service
     user = User.find user_id
     return false if user.nil?
 
-    if !project.collaborator?(user)
+    if !project.is_collaborator?(user)
       raise "User has no permission to unmerge this project!"
     end
 
@@ -235,7 +248,7 @@ class ProjectService < Versioneye::Service
     project = Project.find_by_id( project_id )
     return false if project.nil?
 
-    if project.collaborator?( user ) || user.admin == true
+    if project.is_collaborator?( user ) || user.admin == true
       destroy project
     else
       raise "User has no permission to delete this project!"
@@ -258,7 +271,6 @@ class ProjectService < Versioneye::Service
     return false if project.nil?
 
     project.remove_dependencies
-    project.remove_collaborators
     project.remove
   end
 
@@ -269,17 +281,19 @@ class ProjectService < Versioneye::Service
   def self.user_product_index_map user, add_collaborated = true
     indexes = Hash.new
     projects = user.projects
-
     if projects
       project_prod_index projects, indexes
     end
-
     return indexes if add_collaborated == false
 
-    collaborated_projects = Project.by_collaborator(user)
-    if collaborated_projects
-      project_prod_index collaborated_projects, indexes
+    collaborated_projects = []
+    orgas = OrganisationService.index( user )
+    orgas.each do |orga|
+      orga.projects.each do |project|
+        collaborated_projects << project if project.is_collaborator?( user )
+      end
     end
+    project_prod_index collaborated_projects, indexes
 
     indexes
   end
@@ -388,7 +402,7 @@ class ProjectService < Versioneye::Service
   def self.update_license_numbers!( project )
     return nil if project.nil? || project.projectdependencies.empty?
 
-    ProjectdependencyService.update_licenses project
+    ProjectdependencyService.update_licenses_security project
     project.licenses_unknown = unknown_licenses( project ).count
     project.licenses_red = red_licenses( project ).count
     project.save
@@ -416,8 +430,11 @@ class ProjectService < Versioneye::Service
 
 
   def self.reset_badge project
-    cache.delete project.id.to_s
-    Badge.where(:key => project.id.to_s ).delete
+    pid = project.id.to_s
+    cache.delete pid
+    cache.delete "#{pid}__flat"
+    Badge.where(:key => pid ).delete
+    Badge.where(:key => "#{pid}__flat" ).delete
   end
 
 
@@ -465,12 +482,12 @@ class ProjectService < Versioneye::Service
 
       if whitelist.pessimistic_mode == true
         lcs.each do |lc|
-          return true if lc.on_whitelist == false
+          return true if lc.is_whitelisted? == false
         end
         return false
       else
         lcs.each do |lc|
-          return false if lc.on_whitelist == true
+          return false if lc.is_whitelisted? == true
         end
         return true
       end

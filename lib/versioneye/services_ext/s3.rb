@@ -4,10 +4,19 @@ class S3 < Versioneye::Service
 
 
   def self.set_aws_crendentials
-    Aws.config[:credentials] = Aws::Credentials.new(Settings.instance.aws_access_key_id,
-                                                    Settings.instance.aws_secret_access_key)
+    Aws.config[:credentials] = Aws::Credentials.new(Settings.instance.aws_access_key_id, Settings.instance.aws_secret_access_key)
     Aws.config[:region] = 'eu-west-1'
     Aws.config
+  end
+
+
+  def self.presigned_url obj_key, bucket_name = Settings.instance.s3_receipt_bucket, expire = 2.minutes.to_i
+    presigner = Aws::S3::Presigner.new
+    presigner.presigned_url(:get_object,
+                        bucket: bucket_name,
+                        key: obj_key,
+                        expires_in: expire
+                        ).to_s
   end
 
 
@@ -19,7 +28,7 @@ class S3 < Versioneye::Service
 
     encoded_name = URI.encode( object.to_s )
     bucket_name  = Settings.instance.s3_projects_bucket
-    bucket_name  = Settings.instance.s3_receipt_bucke if object.is_a? Receipt
+    bucket_name  = Settings.instance.s3_receipt_bucket if object.is_a? Receipt
 
     s3 = Aws::S3::Resource.new(:region => region)
     bucket = s3.bucket( bucket_name )

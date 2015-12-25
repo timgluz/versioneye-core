@@ -195,6 +195,7 @@ class Product < Versioneye::Model
     version_hash = version_hash.merge(hash) if !hash.nil? and !hash.empty?
     version = Version.new(version_hash)
     versions.push( version )
+    version.save
   end
 
   def remove_version version_string
@@ -209,11 +210,30 @@ class Product < Versioneye::Model
     false
   end
 
+  def add_repository src, repo_type = nil
+    repositories.each do |repo|
+      return nil if repo.src.eql?(src)
+    end
+    repo = Repository.new(:src => src, :repotype => repo_type )
+    repositories.push( repo )
+    repo.save
+    save
+  end
+
   def check_nil_version
     if versions && !versions.empty? && (version.nil? || version.eql?('0.0.0+NA'))
       self.version = sorted_versions.first
       self.save
     end
+  end
+
+  def add_svid version_number, sv
+    version = version_by_number version_number
+    return false if version.nil?
+    return false if version.sv_ids.include?(sv.ids)
+
+    version.sv_ids << sv.ids
+    version.save
   end
 
   ######## ENCODE / DECODE ###################
@@ -377,7 +397,7 @@ class Product < Versioneye::Model
   end
 
   def archives
-    downloads = Versionarchive.archives( self.language, self.prod_key, self.version.to_s )
+    Versionarchive.archives( self.language, self.prod_key, self.version.to_s )
   end
 
   def self.unique_languages_for_product_ids(product_ids)

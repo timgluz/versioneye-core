@@ -134,7 +134,10 @@ class PomParser < CommonParser
     project.group_id     = doc.xpath('//project/groupId').text
     project.artifact_id  = doc.xpath('//project/artifactId').text
     project.name         = doc.xpath('//project/name').text
-    project.name         = doc.xpath('//project/artifactId').text if project.name.to_s.empty?
+    project.name         = project.artifact_id if project.name.to_s.empty?
+    project.version      = doc.xpath('//project/version').text
+    project.packaging    = doc.xpath('//project/packaging').text
+    project.description  = doc.xpath('//project/description').text
     project
   end
 

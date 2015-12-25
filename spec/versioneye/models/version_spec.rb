@@ -46,6 +46,19 @@ describe Version do
 
   end
 
+  describe 'eql?' do
+
+    it 'is true' do
+      a = Version.new({:version => '1.0.0'})
+      Version.new({:version => '1.0.0'}).eql?(a).should be_truthy
+    end
+    it 'is false' do
+      a = Version.new({:version => '1.0.1'})
+      Version.new({:version => '1.0.0'}).eql?(a).should be_falsey
+    end
+
+  end
+
   describe 'released_or_detected' do
 
     it 'returns the released date' do
@@ -54,9 +67,14 @@ describe Version do
     end
 
     it 'returns the created date' do
+      product = ProductFactory.create_new
       version = Version.new({:version => '12/dev-master'})
+      product.versions.push version
+      product.save
+      version.save
       created = version.created_at
-      version.released_or_detected.should eql(created)
+      expect( created ).to_not be_nil
+      version.released_or_detected.should_not be_nil
     end
 
   end

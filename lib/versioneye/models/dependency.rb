@@ -13,8 +13,8 @@ class Dependency < Versioneye::Model
   A_SCOPE_REQUIRE     = 'require'     # PHP Composer, Bower
   A_SCOPE_PROVIDED    = 'provided'    # Java Maven
   A_SCOPE_TEST        = 'test'        # Java Maven
-  A_SCOPE_COMPILE     = 'compile'     # NPM, Maven and many more! 
-  A_SCOPE_DEVELOPMENT = 'development' # NPM, Bower 
+  A_SCOPE_COMPILE     = 'compile'     # NPM, Maven and many more!
+  A_SCOPE_DEVELOPMENT = 'development' # NPM, Bower
   A_SCOPE_BUNDLED     = 'bundled'     # NPM
   A_SCOPE_OPTIONAL    = 'optional'    # NPM
 
@@ -30,10 +30,10 @@ class Dependency < Versioneye::Model
 
   # This attributes describe the dependency itself!
   field :dep_prod_key, type: String   # prod_key of the dependency (Foreign Key)
-  field :version     , type: String   # version of the dependency. This is the unfiltered version string. It is not parsed yet.
   field :name        , type: String
   field :group_id    , type: String   # Maven specific
   field :artifact_id , type: String   # Maven specific
+  field :version     , type: String   # version of the dependency. This is the unfiltered version string. It is not parsed yet.
   field :scope       , type: String
 
   # known or unknown dependency.
@@ -117,7 +117,7 @@ class Dependency < Versioneye::Model
     if prod_type.to_s.eql?( Project::A_TYPE_BOWER )
       return A_SCOPE_REQUIRE
     end
-    
+
     if language.eql?( Product::A_LANGUAGE_RUBY )
       return A_SCOPE_RUNTIME
     elsif language.eql?( Product::A_LANGUAGE_JAVA ) || language.eql?( Product::A_LANGUAGE_CLOJURE ) || language.eql?( Product::A_LANGUAGE_BIICODE )
@@ -154,12 +154,13 @@ class Dependency < Versioneye::Model
     self.prod_type = Project::A_TYPE_BOWER     if self.language.eql?(Product::A_LANGUAGE_JAVASCRIPT)
     self.prod_type = Project::A_TYPE_COCOAPODS if self.language.eql?(Product::A_LANGUAGE_OBJECTIVEC)
     self.prod_type = Project::A_TYPE_BIICODE   if self.language.eql?(Product::A_LANGUAGE_BIICODE)
+    self.prod_type = Project::A_TYPE_CHEF      if self.language.eql?(Product::A_LANGUAGE_CHEF)
     self
   end
 
-  private 
+  private
 
-    def self.language_array language 
+    def self.language_array language
       langs = [language]
       if language.eql?(Product::A_LANGUAGE_CLOJURE || language.eql?(Product::A_LANGUAGE_JAVA))
         langs = [Product::A_LANGUAGE_CLOJURE, Product::A_LANGUAGE_JAVA]

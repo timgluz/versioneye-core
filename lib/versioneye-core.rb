@@ -29,6 +29,8 @@ class VersioneyeCore
   def init_mongodb
     puts " - initialize MongoDB for #{Settings.instance.environment} "
     Mongoid.load!("config/mongoid.yml", Settings.instance.environment)
+    Mongoid.logger.level = Logger::ERROR
+    Mongo::Logger.logger.level = Logger::ERROR
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")

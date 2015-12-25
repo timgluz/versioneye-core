@@ -117,12 +117,18 @@ describe ProjectBatchUpdateService do
       expect( project.out_number_sum ).to eq(1) # It's 1 because child project has 1 out-dated dependency
     end
 
-    it 'sends out 2 emails because of collaboration project' do
+   it 'sends out 2 emails because of collaboration project' do
       product = ProductFactory.create_for_cocoapods 'JSONKit', '2.0.0'
       expect( product.save ).to be_truthy
 
       owner   = UserFactory.create_new 1023
       user    = UserFactory.create_new 1024
+
+      orga    = Organisation.new(:name => "orga")
+      orga.save
+      team    = Team.new( :name => 'name', :organisation_id => orga.ids )
+      expect( team.save ).to be_truthy
+      expect( team.add_member(user) ).to be_truthy
 
       parser  = PodfileParser.new
       project = parser.parse_file './spec/fixtures/files/pod_file/example1/Podfile'
@@ -131,32 +137,18 @@ describe ProjectBatchUpdateService do
       project.user_id = owner.ids
       project.period = Project::A_PERIOD_DAILY
       project.sum_own!
+      project.organisation_id = orga.ids
+      expect( project.teams.push(team) ).to be_truthy
       expect( project.save ).to be_truthy
       expect( project.out_number_sum ).to eq(1)
       expect( project.licenses_red_sum ).to eq(0)
-
-      collaborator = ProjectCollaborator.new(:project_id => 'NaN',
-                                             :owner_id => owner._id,
-                                             :caller_id => owner._id,
-                                             :user_id => user._id,
-                                             :period => Project::A_PERIOD_DAILY )
-      expect( collaborator.save ).to be_truthy
-
-      collaborator = ProjectCollaborator.new(:project_id => project._id,
-                                             :owner_id => owner._id,
-                                             :caller_id => owner._id,
-                                             :user_id => user._id,
-                                             :period => Project::A_PERIOD_DAILY )
-      expect( collaborator.save ).to be_truthy
-      project.collaborators << collaborator
       expect( project.save ).to be_truthy
 
       ActionMailer::Base.deliveries.clear
       project_ids = ProjectBatchUpdateService.update_all Project::A_PERIOD_DAILY
       expect( project_ids.count ).to eq(1)
       expect( ActionMailer::Base.deliveries.size ).to eq(2)
-      expect( ProjectCollaborator.count ).to eq(1)
-    end
+   end
 
   end
 

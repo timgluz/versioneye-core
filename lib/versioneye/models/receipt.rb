@@ -66,6 +66,14 @@ class Receipt < Versioneye::Model
 
   before_save :pre_process
 
+  def self.by_invoice id
+    Receipt.where(:invoice_id => id).first
+  end
+
+  def self.by_user id
+    Receipt.where(:user_id => id).desc(:invoice_date)
+  end
+
   def pre_process
     return false if company_mandatory? && company.to_s.empty?
     return false if taxid_mandatory? && taxid.to_s.empty?

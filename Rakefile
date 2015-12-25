@@ -56,8 +56,8 @@ namespace :versioneye do
 
   desc "start git repo file import worker"
   task :git_repo_file_import_worker do
-    VersioneyeCore.new 
-    GitRepoFileImportWorker.new.work 
+    VersioneyeCore.new
+    GitRepoFileImportWorker.new.work
   end
 
-end 
+end

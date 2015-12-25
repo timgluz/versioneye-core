@@ -41,7 +41,7 @@ class Github < Versioneye::Service
 
   def self.user token
     client = OctokitApi.client token
-    client.user.to_hash 
+    client.user.to_hash
   rescue => e
     log.error e.message
     log.error e.backtrace.join( "\n" )
@@ -156,8 +156,8 @@ class Github < Versioneye::Service
 
     branch_docs = self.repo_branches(fullname, token)
     if branch_docs
-      branches = [] 
-      branch_docs.each do |branch| 
+      branches = []
+      branch_docs.each do |branch|
         next if branch[:name].to_s.eql?('gh-pages')
         branches << branch[:name]
       end
@@ -183,7 +183,7 @@ class Github < Versioneye::Service
   end
 
   def self.create_or_update_repos user, data
-    return nil if data.nil? || data.empty? 
+    return nil if data.nil? || data.empty?
 
     data.each do |repo|
       next if repo.nil?
@@ -315,7 +315,7 @@ class Github < Versioneye::Service
     if branch_tree.nil? or !branch_tree.has_key?('tree')
       msg = "Can't read tree for repo `#{repo_name}` on branch `#{branch}`."
       log.error msg
-      return nil 
+      return nil
     end
 
     project_files = branch_tree['tree'].keep_if {|file| ProjectService.type_by_filename(file['path'].to_s) != nil}

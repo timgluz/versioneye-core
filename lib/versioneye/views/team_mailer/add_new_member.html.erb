@@ -1,0 +1,15 @@
+<p>
+  Hey <%= @user.fullname %>,
+</p>
+<p>
+  <%= @owner.fullname %> added you as collaborator to the team <a href="<%= @server_url %>/organisations/<%= @orga.name %>/teams/<%= @team.name %>"><%= @team.name %></a>
+  in the organisation <a href="<%= @server_url %>/organisations/<%= @orga.name %>"><%= @orga.name %></a>.
+  If you don't want to be a member of that team you can remove yourself from the list.
+</p>
+<p>
+  Thanks for joining and have a great day!
+</p>
+<p>
+  Your VersionEye Team<br/>
+  <a href="<%= Settings.instance.server_url %>?utm_medium=email&amp;utm_source=collaboration_invitation"><%= Settings.instance.server_url %></a>
+</p>

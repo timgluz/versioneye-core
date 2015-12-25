@@ -100,7 +100,8 @@ describe NewestService do
       p_dep_1.save
 
       NewestService.create_newest product_1, '2.0.0'
-      newest = Newest.last
+      last = Newest.count - 1
+      newest = Newest.all[last]
 
       product_1.add_version '2.0.0'
       product_1.save

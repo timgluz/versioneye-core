@@ -462,23 +462,15 @@ describe ProjectService do
       dep_2 = ProjectdependencyFactory.create_new project, prod_2, true, {:version_requested => '0.1.0'}
       dep_3 = ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => '0.0.0'}
 
-      collaborator = ProjectCollaborator.new(:project_id => project._id,
-                                              :owner_id => owner._id,
-                                              :caller_id => owner._id )
-      collaborator.save
-      project.collaborators << collaborator
-
       Product.count.should == 3
       Project.count.should == 1
       Projectdependency.count.should == 3
-      ProjectCollaborator.count.should == 1
 
       ProjectService.destroy_single project.id
 
       Product.count.should == 3
       Project.count.should == 0
       Projectdependency.count.should == 0
-      ProjectCollaborator.count.should == 0
     end
 
   end
@@ -523,12 +515,15 @@ describe ProjectService do
     it 'destroys a project' do
       user    = UserFactory.create_new
       project = ProjectFactory.create_new user, nil, true
+      project.user_id = user.ids
+      expect( project.save ).to be_truthy
+      expect( project.user_id.to_s.eql?(user.ids) ).to be_truthy
 
-      prod_1  = ProductFactory.create_new 1
-      dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1.0.0'}
+      prod_1 = ProductFactory.create_new 1
+      dep_1  = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1.0.0'}
 
       Project.count.should == 1
-      ProjectService.destroy_by(user, project).should be_truthy
+      ProjectService.destroy_by( user, project.ids ).should be_truthy
       Project.count.should == 0
     end
 
@@ -615,20 +610,6 @@ describe ProjectService do
       project2 = Project.find project2.id.to_s
       project2.parent_id.should_not be_empty
       project2.parent_id.to_s.should eq( project.id.to_s )
-    end
-
-    it 'throws exception because user is not a collaborator' do
-      user    = UserFactory.create_new 1, true
-      hacker  = UserFactory.create_new 2, true
-
-      project = ProjectFactory.create_new user, nil, true
-      prod_1  = ProductFactory.create_new 1
-      dep_1   = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1.0.0'}
-
-      project2 = ProjectFactory.create_new user, nil, true
-      dep_1    = ProjectdependencyFactory.create_new project2, prod_1, true, {:version_requested => '1.0.0'}
-
-      expect { ProjectService.merge(project.id, project2.id, hacker.id) }.to raise_exception
     end
 
   end

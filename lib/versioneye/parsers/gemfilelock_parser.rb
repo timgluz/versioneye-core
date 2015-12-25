@@ -1,4 +1,5 @@
 require 'versioneye/parsers/common_parser'
+require 'versioneye/parsers/gemfile_parser'
 
 class GemfilelockParser < GemfileParser
 
@@ -39,24 +40,28 @@ class GemfilelockParser < GemfileParser
     nil
   end
 
-  def build_dependencies(matches)
+  def build_dependencies( matches )
     unknowns, out_number = 0, 0
     deps = Hash.new
 
     matches.each do |row|
-      name = row[0]
+      name = get_name row
+
       version_match = row[1]
       version = version_match.gsub('(', '').gsub(')', '')
       dependency = Projectdependency.new
 
-      product = Product.fetch_product( Product::A_LANGUAGE_RUBY, name )
+      product = fetch_product_for row[0]
       if product
-        dependency.prod_key = product.prod_key
+        dependency.name            = product.name
+        dependency.language        = product.language
+        dependency.prod_key        = product.prod_key
+        dependency.version_current = product.version
       else
+        dependency.name = name
+        dependency.language = language
         unknowns += 1
       end
-      dependency.name = name
-      dependency.language = Product::A_LANGUAGE_RUBY
       parse_requested_version(version, dependency, product)
 
       dep = deps[name]
@@ -74,6 +79,15 @@ class GemfilelockParser < GemfileParser
     end
 
     {:unknown_number => unknowns, :out_number => out_number, :projectdependencies => data}
+  end
+
+
+  def get_name row
+    name = row[0]
+    if name.to_s.match(/\Arails-assets-/)
+      name = name.gsub("rails-assets-", "")
+    end
+    name
   end
 
 end

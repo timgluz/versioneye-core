@@ -17,7 +17,7 @@ class CommonUpdater < Versioneye::Service
     old_project.licenses_unknown = unknown_licenses.count
     old_project.save
 
-    active_email   = send_email && old_project.user.email_inactive == false
+    active_email   = send_email && old_project.user && old_project.user.email_inactive == false
     outdated_deps  = old_project.out_number > 0
     # The next line is commented out because right now the user can not edit licenses
     # license_alerts = !unknown_licenses.empty? || !red_licenses.empty?
@@ -40,6 +40,19 @@ class CommonUpdater < Versioneye::Service
   rescue => e
     log.error "ERROR occured store_parsing_errors - #{e.message}"
     log.error e.backtrace.join("\n")
+  end
+
+
+  def user_for project
+    return project.user if project.user
+    if project.teams && !project.teams.empty?
+      return project.teams.first.members.first.user
+    end
+    nil
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    nil
   end
 
 

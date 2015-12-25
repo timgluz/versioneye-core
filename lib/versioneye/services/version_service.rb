@@ -120,10 +120,18 @@ class VersionService < Versioneye::Service
     range
   end
 
+  # for wildcard version like 1.2.x or 1.2.*
+  def self.wildcard_versions( versions, version, include_v = false )
+    ver = version[0..version.length - 2]
+    versions = VersionService.versions_start_with( versions, ver )
+    versions << version[0..version.length - 3] if include_v == true
+    versions
+  end
+
 
   def self.versions_start_with( versions, val )
     return [] if versions.nil? || versions.empty?
-    versions.dup.keep_if {|ver| ver[:version].to_s.match(/^#{val}/)}
+    versions.dup.keep_if {|ver| ver[:version].to_s.match(/\A#{val}/)}
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
@@ -196,7 +204,34 @@ class VersionService < Versioneye::Service
   end
 
 
-  # Returns a sub range from a version range string
+  # For ranges like "<3.11 || >= 4 <4.5"
+  def self.from_or_ranges versions, version_string
+    filtered_versions = []
+    sps = version_string.split("||")
+    sps.each do |vs|
+      v = clean_range vs.strip
+      v = v.gsub(" ", ",")
+      filtered = from_ranges(versions, v)
+      filtered.each do |ver|
+        filtered_versions << ver
+      end
+    end
+    filtered_versions
+  end
+
+  def self.clean_range version_string
+    expr = version_string.gsub("> ", ">")
+    expr = expr.gsub("< ", "<")
+    expr = expr.gsub("= ", "=")
+    expr = expr.gsub("~ ", "~")
+    expr
+  end
+
+
+  # Returns a sub range from a version range string for example:
+  # >=1.0, <1.2
+  # 2.0.X, 2.1.X
+  # ~> 2.0.0
   def self.from_ranges( versions, version_string )
     version_splitted = version_string.split(",")
     prod = Product.new
@@ -204,34 +239,64 @@ class VersionService < Versioneye::Service
     version_splitted.each do |verso|
       verso.gsub!(" ", "")
       stability = VersionTagRecognizer.stability_tag_for verso
+
+      # >=
       if verso.match(/\A>=/)
         verso.gsub!(">=", "")
         version_array = prod.versions.empty? ? versions : prod.versions
         new_range = VersionService.greater_than_or_equal( version_array, verso, true, stability )
         prod.versions = new_range
+
+      # >
       elsif verso.match(/\A>/)
         verso.gsub!(">", "")
         version_array = prod.versions.empty? ? versions : prod.versions
         new_range = VersionService.greater_than( version_array, verso, true, stability )
         prod.versions = new_range
+
+      # <=
       elsif verso.match(/\A<=/)
         verso.gsub!("<=", "")
         version_array = prod.versions.empty? ? versions : prod.versions
         new_range = VersionService.smaller_than_or_equal( version_array, verso, true, stability )
         prod.versions = new_range
+
+      # <
       elsif verso.match(/\A</)
         verso.gsub!("<", "")
         version_array = prod.versions.empty? ? versions : prod.versions
         new_range = VersionService.smaller_than( version_array, verso, true, stability )
         prod.versions = new_range
+
+      # ~> | Approximately greater than | Pessimistic Version Constraint
+      elsif verso.match(/\A~>/)
+        ver = verso.gsub("~>", "")
+        ver = ver.gsub(" ", "")
+        starter   = VersionService.version_approximately_greater_than_starter( ver )
+        new_range = VersionService.versions_start_with( versions, starter )
+        new_range.each do |version|
+          prod.versions.push version
+        end
+
+      # !=
       elsif verso.match(/\A!=/)
         verso.gsub!("!=", "")
         version_array = prod.versions.empty? ? versions : prod.versions
         new_range = VersionService.newest_but_not( version_array, verso, true, stability)
         prod.versions = new_range
-      elsif verso.match(/\A=/) || verso.match(/\A\w/)
-        versions.each do |version|
-          prod.versions << version if version.to_s.eql?(verso)
+
+      # = or ==
+      elsif verso.match(/\A==/) || verso.match(/\A=/) || verso.match(/\A\w/)
+        verso = verso.gsub(/\A==/, "").gsub(/\A=/, "")
+        if verso.match(/\.x\z/i) || verso.match(/\.\*\z/i)
+          new_versions = VersionService.wildcard_versions( versions, verso )
+          new_versions.each do |version|
+            prod.versions << version
+          end
+        else
+          versions.each do |version|
+            prod.versions << version if version.to_s.eql?(verso)
+          end
         end
       end
     end

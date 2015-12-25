@@ -1,30 +1,20 @@
-FROM reiz/ruby:2.2.2
+FROM        ruby:2.2.3
 MAINTAINER  Robert Reiz <reiz@versioneye.com>
 
-ENV RAILS_ENV test
-ENV BUNDLE_GEMFILE /rails/Gemfile
-
+ENV RAILS_ENV enterprise
+ENV BUNDLE_GEMFILE /app/Gemfile
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
-
-WORKDIR /rails
+ENV LC_CTYPE=en_US.UTF-8
 
 RUN apt-get install -y libfontconfig1 # mandatory for PDFKit
+RUN gem install bundler --version 1.11.0
+RUN rm -Rf /app; mkdir -p /app; mkdir -p /app/log; mkdir -p /app/pids
 
-RUN gem install rubygems-update
-RUN update_rubygems
-RUN gem update --system
+ADD Gemfile /app/Gemfile
+ADD Gemfile.lock /app/Gemfile.lock
 
-RUN gem install bundler --version 1.10.6
-
-RUN wget -O /usr/local/lib/ruby/site_ruby/2.2.0/rubygems/ssl_certs/AddTrustExternalCARoot-2048.pem https://raw.githubusercontent.com/rubygems/rubygems/master/lib/rubygems/ssl_certs/AddTrustExternalCARoot-2048.pem
-
-RUN rm -Rf   /rails
-RUN mkdir -p /rails; mkdir -p /rails/log; mkdir -p /rails/pids
-
-COPY Gemfile Gemfile.lock /rails/
+WORKDIR /app
 
 RUN bundle install
-
-COPY . /rails

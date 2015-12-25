@@ -50,7 +50,7 @@ require 'versioneye/factories/version_factory'
 
 Mongoid.load!("config/mongoid.yml", :test)
 Mongoid.logger.level = Logger::ERROR
-# Moped.logger.level   = Logger::ERROR
+Mongo::Logger.logger.level = Logger::ERROR
 
 RSpec.configure do |config|
 

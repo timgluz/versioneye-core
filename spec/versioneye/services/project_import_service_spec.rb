@@ -128,7 +128,7 @@ describe ProjectImportService do
         project.dependencies.should_not be_empty
         project.name.should eq('reiz/test_gemi')
         project.source.should eq(Project::A_SOURCE_BITBUCKET)
-        sleep 2
+        sleep 10
         project.children.count.should eq(1)
         worker.exit
       end

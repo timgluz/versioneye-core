@@ -21,7 +21,7 @@
       <% @projects.each do |project| %>
         <div style="background-color: #F2DEDE; padding: 10px; margin-bottom: 2px;">
           <a href="<%= @base_url %>/user/projects/<%= project.id.to_s %>#tab-security"><%= project.name %></a> -
-          <%= project.sv_count %> security vulnerabilities
+          <%= pluralize(project.sv_count, 'security vulnerability') %>
         </div>
       <% end %>
     </div>

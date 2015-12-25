@@ -158,9 +158,9 @@ class Bitbucket < Versioneye::Service
         project_files << file_info if ProjectService.type_by_filename(file_info[:path]) != nil
       end
       if !branch_tree[:directories].to_a.empty? && deepnes.to_i < 5
-        path = branch_tree[:path]
+        new_path = String.new( branch_tree[:path] )
         deepnes += 1
-        project_files_recursive repo_name, branch, token, secret, path, branch_tree[:directories], project_files, deepnes
+        project_files_recursive repo_name, branch, token, secret, new_path, branch_tree[:directories], project_files, deepnes
       end
     end
   rescue => e
@@ -196,12 +196,12 @@ class Bitbucket < Versioneye::Service
     end
 
     begin
-      JSON.parse(response.body, symbolize_names: true)
+      return JSON.parse(response.body, symbolize_names: true)
     rescue => e
       log.error e.message
       log.error "Got status: #{response.code} #{response.message} body: #{response.body} for path: #{path}"
       log.error e.backtrace.join("\n")
-      nil
+      return nil
     end
   rescue => e
     log.error "ERROR in get_json for #{path} - #{e.message}"

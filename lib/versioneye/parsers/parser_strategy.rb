@@ -10,7 +10,7 @@ class ParserStrategy
         end
 
       when Project::A_TYPE_PIP
-        if url.match(/requirements\S*.txt/) || url.match(/pip.log/)
+        if url.match(/\S*.txt/) || url.match(/pip.log/)
           return RequirementsParser.new
         else
           return PythonSetupParser.new
@@ -42,6 +42,15 @@ class ParserStrategy
           return GemfilelockParser.new
         else
           return GemfileParser.new
+        end
+
+      when Project::A_TYPE_CHEF
+        if url.match(/Berksfile\.lock/)
+          return BerksfilelockParser.new
+        elsif url.match(/Berksfile/)
+          return BerksfileParser.new
+        elsif url.match(/metadata\.rb/)
+          return MetadataParser.new
         end
 
       when Project::A_TYPE_COMPOSER
