@@ -57,9 +57,19 @@ describe SyncService do
   describe 'sync_project' do
 
     it 'syncs projects' do
-      project = Project.new
-      project.projectdependencies << Projectdependency.new({:language => 'Ruby', :name => 'vcr'})
-      project.projectdependencies << Projectdependency.new({:language => 'Ruby', :name => 'log4r'})
+      env     = Settings.instance.environment
+      GlobalSetting.set env, 'api_key', 'MY_API_TEST_KEY'
+
+      user = UserFactory.create_new
+      project = ProjectFactory.create_new user
+      expect(project.save).to be_truthy
+
+      pdep1 = Projectdependency.new({:language => 'Ruby', :name => 'vcr', :project_id => project.ids})
+      expect( pdep1.save ).to be_truthy
+      pdep2 = Projectdependency.new({:language => 'Ruby', :name => 'log4r', :project_id => project.ids})
+      expect( pdep2.save ).to be_truthy
+
+      expect( project.projectdependencies.count ).to eq(2)
 
       Product.count.should == 0
       VCR.use_cassette('sync_project_log4r', allow_playback_repeats: true) do

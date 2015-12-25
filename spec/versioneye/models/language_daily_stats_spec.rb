@@ -282,18 +282,17 @@ describe LanguageDailyStats do
       prod.add_version("11.11.11")
       prod.save
 
-      # This is 2 days in the Future
-      after_tomorrow = prod.versions.first.created_at + 2.days
-      p "after_tomorrow: #{after_tomorrow}"
-      version = Version.new({:version => '1.1.1', :created_at => after_tomorrow, :updated_at => after_tomorrow })
+      # This is 20 days in the Future
+      x_days_in_future = prod.versions.first.created_at + 20.days
+      version = Version.new({:version => '1.1.1', :created_at => x_days_in_future, :updated_at => x_days_in_future })
       prod.versions.push version
       prod.save
 
       prod.versions.count.should eq(3)
 
-      that_day = prod.created_at
+      that_day = prod.created_at + 1.hours
       vals = LanguageDailyStats.count_artifacts(prod.language, that_day)
-      vals.should eq(3) # Found only 2 because 3rd is in future!
+      vals.should eq(2) # Found only 2 because 3rd is in future!
     end
   end
 

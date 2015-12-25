@@ -141,16 +141,18 @@ describe UserService do
       Versioncomment.delete_all
     end
 
-    it "returns 2 user,when she commented and he has active project" do
+    it "returns 2 user, when she commented and he has active project" do
+      expect( User.count ).to eq(6)
+      expect( UserService.active_users.count ).to eql(0)
       she                 = User.all.first
-      he                  = User.all.last
+      he                  = User.all[4]
       project             = Project.new
       project.user        = she
       project.name        = "test"
       project.project_key = "test"
-      project.save
-      Versioncomment.new(user_id: he.id, product_key: "1", version: "1", comment: "1").save
-      UserService.active_users.count.should eql(2)
+      expect( project.save ).to be_truthy
+      expect( Versioncomment.new(user_id: he.id, product_key: "1", version: "1", comment: "1").save ).to be_truthy
+      expect( UserService.active_users.count ).to eql(2)
       Project.delete_all
       Versioncomment.delete_all
     end

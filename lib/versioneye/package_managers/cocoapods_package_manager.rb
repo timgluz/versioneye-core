@@ -111,7 +111,6 @@ end
 
 
 ## Monkey Patch CocoaPods, so we are able to parse from URLs
-
 module Pod
 
   class Podfile

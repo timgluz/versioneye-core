@@ -378,7 +378,8 @@ describe Product do
       results.should_not be_nil
       results.size.should eq(2)
       results.first.name.should eq('xiki')
-      results.last.name.should eq('tire')
+      last = results.count - 1
+      results.all[last].name.should eq('tire')
     end
 
   end
