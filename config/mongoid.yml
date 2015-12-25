@@ -10,8 +10,11 @@ development:
       # of host:port pairs. (required)
       hosts:
         - 172.16.148.134:27017
+      options:
+        max_pool_size: 20
   options:
     raise_not_found_error: false
+    scope_overwrite_exception: true
 
 
 test:
@@ -20,8 +23,11 @@ test:
       database: veye_test
       hosts:
         - 172.16.148.134:27017
+      options:
+        max_pool_size: 20
   options:
     raise_not_found_error: false
+    scope_overwrite_exception: true
 
 
 production:
@@ -38,6 +44,9 @@ production:
         - <%= ENV['DB_PORT_27017_TCP_ADDR'] ||= 'localhost' %>:<%= ENV['DB_PORT_27017_TCP_PORT'] ||= '27017' %>
         - <%= ENV['MONGO_RS_2_ADDR'] ||= 'localhost' %>:<%= ENV['MONGO_RS_2_PORT'] ||= '27017' %>
         - <%= ENV['MONGO_RS_3_ADDR'] ||= 'localhost' %>:<%= ENV['MONGO_RS_3_PORT'] ||= '27017' %>
-        # - localhost:27017
+      options:
+        max_pool_size: 20
+        # replica_set: my_replica_set
   options:
     raise_not_found_error: false
+    scope_overwrite_exception: true
