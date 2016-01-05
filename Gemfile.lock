@@ -117,7 +117,6 @@ GEM
     json (1.8.3)
     jwt (1.5.2)
     kgio (2.10.0)
-    log4r (1.1.10)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     mail (2.6.3)
@@ -223,12 +222,12 @@ GEM
       unf_ext
     unf_ext (0.0.7.1)
     vcr (3.0.1)
-    webmock (1.22.3)
-      addressable (>= 2.3.6)
+    webmock (1.22.5)
+      addressable (< 2.4.0)
       crack (>= 0.3.2)
       hashdiff
     websocket (1.2.2)
-    will_paginate (3.0.7)
+    will_paginate (3.1.0)
     will_paginate_mongoid (2.0.1)
       mongoid
       will_paginate (~> 3.0)
@@ -256,7 +255,6 @@ DEPENDENCIES
   jeweler (~> 2.0.1)
   json (~> 1.8.0)
   kgio (~> 2.10.0)
-  log4r (~> 1.1.0)
   mongoid (~> 5.0.0)
   naturalsorter (~> 3.0.11)
   net-ldap (~> 0.12.1)
