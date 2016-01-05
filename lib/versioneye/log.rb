@@ -8,9 +8,34 @@ module Versioneye
     include Singleton
 
     def initialize
+      p "initialize"
+
       environment = ENV['RAILS_ENV']
       environment = 'development' if environment.to_s.empty?
-      @logger = ActiveSupport::Logger.new("log/#{environment}.log", 10, 10485760) # 10485760 = 10 MB
+      filename = "log/#{environment}.log"
+
+      @logger = ActiveSupport::Logger.new(filename, 10, 10485760) # 10485760 = 10 MB
+      @logger.formatter = Versioneye::Formatter.new
+    end
+
+    def log
+      @logger
+    end
+
+  end
+
+
+  class DynLog
+
+    def initialize filename = nil, count = 10, size = 10485760 # 10485760 = 10 MB
+      p "initialize"
+
+      if filename.to_s.empty?
+        environment = ENV['RAILS_ENV']
+        environment = 'development' if environment.to_s.empty?
+        filename = "log/#{environment}.log"
+      end
+      @logger = ActiveSupport::Logger.new(filename, count, size)
       @logger.formatter = Versioneye::Formatter.new
     end
 
@@ -31,7 +56,10 @@ module Versioneye
       formatted_time     = time.strftime("%Y-%m-%d %H:%M:%S.") << time.usec.to_s[0..2].rjust(3)
       color              = SEVERITY_TO_COLOR_MAP[severity]
 
-      "\033[0;37m#{formatted_time}\033[0m [\033[#{color}m#{formatted_severity}\033[0m] #{msg.strip} (pid:#{$$})\n"
+      message = msg
+      message = msg.strip if msg.is_a?( String.class )
+
+      "\033[0;37m#{formatted_time}\033[0m [\033[#{color}m#{formatted_severity}\033[0m] #{message} (pid:#{$$})\n"
     end
   end
 
