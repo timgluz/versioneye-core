@@ -2,7 +2,10 @@ class SyncService < Versioneye::Service
 
 
   def self.log
-    ActiveSupport::Logger.new('log/sync.log')
+    if !defined?(@@dynLog) || @@dynLog.nil?
+      @@dynLog = Versioneye::DynLog.new("log/sync.log", 10).log
+    end
+    @@dynLog
   end
 
 
