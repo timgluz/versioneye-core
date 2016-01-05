@@ -9,7 +9,6 @@ class Worker
   def self.log
     if !defined?(@@dynLog) || @@dynLog.nil?
       @@dynLog = Versioneye::DynLog.new("log/worker.log", 10).log
-      p "new DynLog"
     end
     @@dynLog
   end
