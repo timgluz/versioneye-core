@@ -7,7 +7,11 @@ class Worker
   end
 
   def self.log
-    ActiveSupport::Logger.new('log/worker.log')
+    if !defined?(@@dynLog) || @@dynLog.nil?
+      @@dynLog = Versioneye::DynLog.new("log/worker.log", 10).log
+      p "new DynLog"
+    end
+    @@dynLog
   end
 
   def log
