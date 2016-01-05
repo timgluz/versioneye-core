@@ -17,10 +17,11 @@
   <outputter name="file_outputter"
              type="Log4r::RollingFileOutputter"
              maxsize="2MB"
+             maxtime="10"
              level="DEBUG"
-             filename="#{RAILS_ROOT}/log/#{RAILS_ENV}.log"
+             filename="log/logger_.log"
              trunc="false"
-             maxBackupIndex="2">
+             maxBackupIndex="10">
     <formatter type="PatternFormatter" pattern="[%5l %d] %C: %M [%t]"/>
   </outputter>
 
