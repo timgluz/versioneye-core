@@ -45,7 +45,7 @@ class TransferService < Versioneye::Service
     s3.list_objects(bucket: bucket_name).each do |response|
       response.contents.each do |content|
         obj_key = content.key
-        download s3, obj_key
+        download s3, bucket_name, obj_key
       end
     end
   end
@@ -54,12 +54,13 @@ class TransferService < Versioneye::Service
   private
 
 
-    def self.download s3, obj_key
+    def self.download s3, bucket_name, obj_key
       filename = "/Users/reiz/stripe/#{obj_key}"
       File.open(filename, 'wb') do |file|
         reap = s3.get_object({ bucket: bucket_name, key: obj_key }, target: file)
       end
       p "downloaded file to #{filename}"
     end
+
 
 end
