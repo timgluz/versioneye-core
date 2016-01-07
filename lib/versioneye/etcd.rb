@@ -12,7 +12,7 @@ module Versioneye
       etcd_port = ENV['ETCD_PORT']
       etcd_port = 2379 if etcd_port.to_s.empty?
 
-      if !etcd_id.to_s.empty?
+      if !etcd_ip.to_s.empty?
         @client = Etcd.client( host: etcd_ip, port: etcd_port )
       end
     end
