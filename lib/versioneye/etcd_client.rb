@@ -2,7 +2,7 @@ require 'singleton'
 require 'etcd'
 
 module Versioneye
-  class Etcd
+  class EtcdClient
     include Singleton
 
     def initialize
@@ -17,7 +17,7 @@ module Versioneye
       end
     end
 
-    def client
+    def etcd
       @client
     end
 

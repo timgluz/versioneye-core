@@ -105,8 +105,8 @@ class VersioneyeCore
 
   def init_etcd
     puts " - initialize Etcd!"
-    Versioneye::Etcd.instance.client
-    Versioneye::Etcd.instance.setBackendEnvs
+    Versioneye::EtcdClient.instance.etcd
+    Versioneye::EtcdClient.instance.setBackendEnvs
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
