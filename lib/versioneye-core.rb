@@ -13,6 +13,7 @@ class VersioneyeCore
 
   def initialize
     puts "start initialize versioneye-core"
+    init_etcd
     init_logger
     init_mongodb
     init_settings
@@ -97,6 +98,15 @@ class VersioneyeCore
   def init_memcached
     puts " - initialize init_memcached!"
     Versioneye::Cache.instance.mc
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+  end
+
+  def init_etcd
+    puts " - initialize Etcd!"
+    Versioneye::Etcd.instance.client
+    Versioneye::Etcd.instance.setBackendEnvs
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")

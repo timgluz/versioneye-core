@@ -3,6 +3,7 @@ module Versioneye
 
     require 'versioneye/log'
     require 'versioneye/cache'
+    require 'versioneye/etcd'
 
     require 'versioneye/services/auth_service'
     require 'versioneye/services/analytics_service'
@@ -164,6 +165,14 @@ module Versioneye
 
     def cache
       Versioneye::Cache.instance.mc
+    end
+
+    def self.etcd
+      Versioneye::Etcd.instance.client
+    end
+
+    def etcd
+      Versioneye::Etcd.instance.client
     end
 
   end
