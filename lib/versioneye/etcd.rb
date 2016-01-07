@@ -1,4 +1,5 @@
 require 'singleton'
+require 'etcd'
 
 module Versioneye
   class Etcd
@@ -9,9 +10,10 @@ module Versioneye
 
       etcd_ip   = ENV['ETCD_IP']
       etcd_port = ENV['ETCD_PORT']
+      etcd_port = 2379 if etcd_port.to_s.empty?
 
       if !etcd_id.to_s.empty?
-        @client = Etcd.client( host: etcd_id, port: etcd_port )
+        @client = Etcd.client( host: etcd_ip, port: etcd_port )
       end
     end
 
@@ -20,6 +22,21 @@ module Versioneye
     end
 
     def setBackendEnvs
+      setMongoEnvs
+      setRabbitEnvs
+    end
+
+    def setRabbitEnvs
+      return nil if @client.nil?
+
+      rabbit_ip   = @client.get('/rabbit/ip').value
+      rabbit_port = @client.get('/rabbit/port').value
+
+      ENV['RM_PORT_5672_TCP_ADDR'] = rabbit_ip   if !rabbit_ip.to_s.empty?
+      ENV['RM_PORT_5672_TCP_PORT'] = rabbit_port if !rabbit_port.to_s.empty?
+    end
+
+    def setMongoEnvs
       return nil if @client.nil?
 
       mongo1_ip = @client.get('/mongodb/replica/host1/ip').value
