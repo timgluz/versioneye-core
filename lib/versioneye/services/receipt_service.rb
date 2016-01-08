@@ -38,7 +38,8 @@ class ReceiptService < Versioneye::Service
       next if user.plan.name_id.eql?('03_free')
       next if user.plan.name_id.eql?('03_trial_0')
       next if user.plan.name_id.eql?('04_free')
-      next if user.plan.name_id.match(/_free\Z/)
+      next if user.plan.name.match(/Free\Z/i)
+      next if user.plan.name.match(/Starter\Z/i)
       next if user.stripe_token.to_s.empty?
       next if user.stripe_customer_id.to_s.empty?
 
