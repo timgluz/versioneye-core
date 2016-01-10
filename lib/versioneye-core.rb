@@ -107,6 +107,7 @@ class VersioneyeCore
     puts " - initialize Etcd!"
     Versioneye::EtcdClient.instance.etcd
     Versioneye::EtcdClient.instance.setBackendEnvs
+    Settings.instance.load_settings
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
