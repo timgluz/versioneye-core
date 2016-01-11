@@ -30,7 +30,7 @@ class TeamService < Versioneye::Service
       raise "Organisation `#{orga_id}` doesn't exist"
     end
 
-    if !OrganisationService.owner?( orga, user )
+    if !OrganisationService.allowed_to_assign_teams?( orga, user )
       raise "You have to be in the Owners team to do mass assignment."
     end
 
