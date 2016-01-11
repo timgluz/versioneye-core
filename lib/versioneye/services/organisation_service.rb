@@ -48,6 +48,14 @@ class OrganisationService < Versioneye::Service
     return false
   end
 
+  def self.allowed_to_assign_teams? orga, user
+    return false if orga.nil? || user.nil?
+    return false if !member?( orga, user )
+    return true  if owner?( orga, user )
+    return true  if orga.matattp == true
+    return false
+  end
+
 
   # Returns all organisations there the given user
   # is member in. If `only_owners` is true, only the

@@ -9,7 +9,8 @@ class Organisation < Versioneye::Model
   field :email,    type: String
   field :website,  type: String
 
-  field :mattp,    type: Boolean, default: false # mattp = member allowe to transfer projects
+  field :mattp,    type: Boolean, default: false # mattp = member allowed to transfer projects
+  field :matattp,  type: Boolean, default: false # mattp = member allowed to assign teams to projects
 
   has_many :projects
   has_many :teams
