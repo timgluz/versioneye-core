@@ -40,6 +40,15 @@ class OrganisationService < Versioneye::Service
   end
 
 
+  def self.allowed_to_transfer_projects? orga, user
+    return false if orga.nil? || user.nil?
+    return false if !member?( orga, user )
+    return true  if owner?( orga, user )
+    return true  if orga.mattp == true
+    return false
+  end
+
+
   # Returns all organisations there the given user
   # is member in. If `only_owners` is true, only the
   # organisations are returned there the given user
@@ -61,6 +70,16 @@ class OrganisationService < Versioneye::Service
       organisations.push(orga)
     end
     organisations
+  end
+
+
+  def self.orgas_allowed_to_transfer user
+    organisations = index( user, false )
+    orgas = []
+    organisations.each do |orga|
+      orgas.push(orga) if OrganisationService.allowed_to_transfer_projects?( orga, user )
+    end
+    orgas
   end
 
 
