@@ -236,6 +236,20 @@ class Product < Versioneye::Model
     version.save
   end
 
+  def remove_double_versions
+    uv = []
+    versions.each do |version|
+      if uv.include?(version.to_s)
+        p "remove #{version.to_s}"
+        version.delete
+      else
+        p "add #{version.to_s}"
+        uv.push version.to_s
+      end
+    end
+    uv
+  end
+
   ######## ENCODE / DECODE ###################
 
   def self.encode_prod_key prod_key
