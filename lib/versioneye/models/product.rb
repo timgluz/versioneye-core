@@ -69,7 +69,6 @@ class Product < Versioneye::Model
   end
 
   def save(*arg)
-    log.info( "save product #{self.ids}" )
     self.name_downcase = self.name.downcase if self.name
     super
   end
