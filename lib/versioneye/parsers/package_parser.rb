@@ -126,18 +126,6 @@ class PackageParser < CommonParser
       dependency.version_label = 'X'
       dependency.comperator = '='
 
-    elsif version.match(/\.x\z/i) || version.match(/\.\*\z/i)
-      # X Version Ranges or .* version range
-      versions = VersionService.wildcard_versions( product.versions, version, true )
-      highest_version = VersionService.newest_version_from(versions)
-      if highest_version
-        dependency.version_requested = highest_version.to_s
-      else
-        dependency.version_requested = version
-      end
-      dependency.comperator = "="
-      dependency.version_label = version
-
     elsif version.casecmp('latest') == 0
       # Start Matching. Matches everything.
       dependency.version_requested = product.version
@@ -200,17 +188,22 @@ class PackageParser < CommonParser
     elsif version.match(/\A~/)
       # Tilde Version Ranges -> Pessimistic Version Constraint
       # ~1.2.3 = >=1.2.3 <1.3.0
+
+      dependency.version_label = version
+      dependency.comperator = "~"
+
       ver = version.gsub("\>", "")
       ver = ver.gsub("~", "")
       ver = ver.gsub(" ", "")
+      ver = ver.gsub(/\.\*\z/i, ".0")
+      ver = ver.gsub(/\.x\z/i, ".0")
+
       highest_version = VersionService.version_tilde_newest(product.versions, ver)
       if highest_version
         dependency.version_requested = highest_version.to_s
       else
         dependency.version_requested = ver
       end
-      dependency.comperator = "~"
-      dependency.version_label = ver
 
     elsif version.match(/\A\^/)
       # Compatible with operator
@@ -250,6 +243,18 @@ class PackageParser < CommonParser
           dependency.version_requested = ver
         end
       end
+
+    elsif version.match(/\.x\z/i) || version.match(/\.\*\z/i)
+      # X Version Ranges or .* version range
+      versions = VersionService.wildcard_versions( product.versions, version, true )
+      highest_version = VersionService.newest_version_from(versions)
+      if highest_version
+        dependency.version_requested = highest_version.to_s
+      else
+        dependency.version_requested = version
+      end
+      dependency.comperator = "="
+      dependency.version_label = version
 
     elsif version.match(/ - /i)
       # Version Ranges

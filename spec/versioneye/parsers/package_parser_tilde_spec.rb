@@ -15,11 +15,12 @@ describe PackageParser do
       product1 = create_product('eslint'   , 'eslint'   , '1.1.0', ['0.24.0' , '0.24.1', '1.0.0', '1.1.0' ] )
       product2 = create_product('inquirer' , 'inquirer' , '0.9.0', ['0.9.0' , '0.8.5', '0.8.4', '0.8.3', '0.8.2', '0.8.0', '0.7.3', '0.7.2' ] )
       product3 = create_product('gcloud'   , 'gcloud'   , '0.2.0', ['0.20.0' , '0.21.0', '0.22.0', '0.23.0', '0.24.0', '0.24.1', '0.25.0', '0.25.1', '0.26.0', '0.26.1' ] )
+      product4 = create_product('express'  , 'express'   , '4.13.3', ['4.0.0' , '4.1.0', '4.13.3' ] )
 
       parser = PackageParser.new
       project = parser.parse('https://s3.amazonaws.com/veye_test_env/npm_1/package.json')
       project.should_not be_nil
-      project.dependencies.size.should eql(3)
+      project.dependencies.size.should eql(4)
 
       dep_1 = project.dependencies[0]
       dep_1.name.should eql('eslint')
@@ -44,6 +45,14 @@ describe PackageParser do
       dep_3.version_current.should eql('0.26.1')
       dep_3.comperator.should eql('^')
       dep_3.outdated?().should be_truthy
+
+      dep_4 = project.dependencies[3]
+      dep_4.name.should eql('express')
+      dep_4.version_label.should eql('~4.*')
+      dep_4.version_requested.should eql('4.13.3')
+      dep_4.version_current.should eql('4.13.3')
+      dep_4.comperator.should eql('~')
+      dep_4.outdated?().should be_falsey
     end
 
   end
