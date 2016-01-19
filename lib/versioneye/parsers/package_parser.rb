@@ -120,11 +120,23 @@ class PackageParser < CommonParser
       dependency.version_label = '*'
       dependency.comperator = '='
 
-    elsif version.match(/\A\*\z/)
+    elsif version.match(/\A\X\z/)
       # Start Matching. Matches everything.
       dependency.version_requested = product.version
       dependency.version_label = 'X'
       dependency.comperator = '='
+
+    elsif version.match(/\.x\z/i) || version.match(/\.\*\z/i)
+      # X Version Ranges or .* version range
+      versions = VersionService.wildcard_versions( product.versions, version, true )
+      highest_version = VersionService.newest_version_from(versions)
+      if highest_version
+        dependency.version_requested = highest_version.to_s
+      else
+        dependency.version_requested = version
+      end
+      dependency.comperator = "="
+      dependency.version_label = version
 
     elsif version.casecmp('latest') == 0
       # Start Matching. Matches everything.
@@ -238,18 +250,6 @@ class PackageParser < CommonParser
           dependency.version_requested = ver
         end
       end
-
-    elsif version.match(/\.x\z/i) || version.match(/\.\*\z/i)
-      # X Version Ranges or .* version range
-      versions = VersionService.wildcard_versions( product.versions, version, true )
-      highest_version = VersionService.newest_version_from(versions)
-      if highest_version
-        dependency.version_requested = highest_version.to_s
-      else
-        dependency.version_requested = version
-      end
-      dependency.comperator = "="
-      dependency.version_label = version
 
     elsif version.match(/ - /i)
       # Version Ranges
