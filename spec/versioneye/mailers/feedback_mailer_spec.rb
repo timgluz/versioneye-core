@@ -5,7 +5,7 @@ describe FeedbackMailer do
   describe 'feedback_email' do
 
     it 'should have the right content' do
-      email = described_class.feedback_email( "Hans Tanz", "hans@tanz.de", "VersionEye is awesome" )
+      email = FeedbackMailer.feedback_email( "Hans Tanz", "hans@tanz.de", "VersionEye is awesome" )
 
       email.encoded.should include( "Hans Tanz" )
       email.encoded.should include( 'VersionEye is awesome' )

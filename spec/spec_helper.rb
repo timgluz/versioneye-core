@@ -73,6 +73,10 @@ RSpec.configure do |config|
   config.before(:each) do
     DatabaseCleaner.clean
     FakeWeb.clean_registry
+    models = Mongoid.models
+    models.each do |model|
+      model.all.each(&:delete)
+    end
   end
 
   #include FactoryGirl into test DSL
