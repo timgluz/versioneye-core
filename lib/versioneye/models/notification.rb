@@ -7,7 +7,7 @@ class Notification < Versioneye::Model
   field :read          , type: Boolean, default: false
   field :sent_email    , type: Boolean, default: false
   field :email_disabled, type: Boolean, default: false
-  field :classification, type: String # nil for follow. Oterwise project. 
+  field :classification, type: String # nil for follow. Oterwise project.
 
   belongs_to :user
   belongs_to :product
