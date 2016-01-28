@@ -13,10 +13,10 @@ class HttpService < Versioneye::Service
 
     if proxy_addr.to_s.empty?
       http = Net::HTTP.new uri.host, uri.port
-    elsif !proxy_addr.to_s.empty? && !proxy_user.to_s.empty? && !proxy_pass.to_s.empty?
-      http = Net::HTTP.new uri.host, uri.port, proxy_addr, proxy_port, proxy_user, proxy_pass
-    elsif !proxy_addr.to_s.empty? && proxy_user.to_s.empty?
-      http = Net::HTTP.new uri.host, uri.port, proxy_addr, proxy_port
+    elsif !proxy_addr.to_s.empty? && !proxy_port.to_s.empty? && !proxy_user.to_s.empty? && !proxy_pass.to_s.empty?
+      http = Net::HTTP.new uri.host, uri.port, proxy_addr, proxy_port.to_i, proxy_user, proxy_pass
+    elsif !proxy_addr.to_s.empty? && !proxy_port.to_s.empty? && proxy_user.to_s.empty?
+      http = Net::HTTP.new uri.host, uri.port, proxy_addr, proxy_port.to_i
     end
 
     http.read_timeout = timeout # in seconds
