@@ -22,6 +22,7 @@ class HttpService < Versioneye::Service
     http.read_timeout = timeout # in seconds
     if uri.port == 443
       http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE # Only for AXA!
     end
     path  = uri.path
     query = uri.query
