@@ -9,6 +9,7 @@ class Api < Versioneye::Model
   field :enterprise_projects, type: Integer, default: 1
   field :rate_limit         , type: Integer, default: 50
   field :active             , type: Boolean, default: true
+  field :update_di          , type: Boolean, default: false # Update Docker Images
 
 
   index({ api_key: 1 }, { name: "api_key_index", unique: true, background: true })
