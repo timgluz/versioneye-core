@@ -47,6 +47,14 @@ class Projectdependency < Versioneye::Model
   end
 
 
+  def list_licenses
+    p " - #{self.language}:#{self.prod_key}"
+    license_caches.each do |lc|
+      p " -- #{lc.to_s}"
+    end
+  end
+
+
   def language_esc lang = nil
     lang = self.language if lang.nil?
     return nil if lang.to_s.empty?
