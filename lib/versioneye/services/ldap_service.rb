@@ -7,18 +7,21 @@ class LdapService < Versioneye::Service
   def self.auth_by login, password, ldap = Net::LDAP.new
     Settings.instance.reload_from_db GlobalSetting.new
 
-    auth_method = Settings.instance.ldap_auth.to_s
+    env = Settings.instance.environment
+    auth_method = GlobalSetting.get env, 'ldap_auth'
     auth_method = "simple" if auth_method.to_s.empty?
 
-    username = Settings.instance.ldap_username_pattern
+    username = GlobalSetting.get env, 'ldap_username_pattern'
     username = username.gsub("LOGIN", login)
 
-    filter = Settings.instance.ldap_filter
+    filter = GlobalSetting.get env, 'ldap_filter'
     filter = filter.gsub("LOGIN", login)
 
-    ldap_args = {:host => Settings.instance.ldap_host,
-                 :port => Settings.instance.ldap_port,
-                 :base => Settings.instance.ldap_base,
+    ldap_base = GlobalSetting.get env, 'ldap_base'
+
+    ldap_args = {:host => GlobalSetting.get env, 'ldap_host',
+                 :port => GlobalSetting.get env, 'ldap_port',
+                 :base => ldap_base,
                  :auth => {:username => username,
                            :password => password,
                            :method => auth_method.to_sym } }
@@ -31,7 +34,7 @@ class LdapService < Versioneye::Service
     end
 
     if ldap.bind == true
-      return ldap.search(:base => Settings.instance.ldap_base, :filter => filter)
+      return ldap.search(:base => ldap_base, :filter => filter)
     end
 
     result = ldap.get_operation_result
