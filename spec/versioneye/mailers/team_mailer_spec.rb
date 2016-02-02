@@ -22,7 +22,7 @@ describe TeamMailer do
       email.encoded.should include( "added you as collaborator to the team" )
 
       ActionMailer::Base.deliveries.clear
-      email.deliver!
+      email.deliver_now!
       ActionMailer::Base.deliveries.size.should == 1
     end
 

@@ -13,7 +13,7 @@ describe FeedbackMailer do
       email.from.should eq([Settings.instance.smtp_sender_email])
 
       ActionMailer::Base.deliveries.clear
-      email.deliver!
+      email.deliver_now!
       ActionMailer::Base.deliveries.size.should == 1
     end
 

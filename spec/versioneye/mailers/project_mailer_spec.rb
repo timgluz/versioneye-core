@@ -30,7 +30,7 @@ describe ProjectMailer do
       email.encoded.should include( ">1<" )
 
       ActionMailer::Base.deliveries.clear
-      email.deliver!
+      email.deliver_now!
       ActionMailer::Base.deliveries.size.should == 1
     end
 
@@ -67,7 +67,7 @@ describe ProjectMailer do
       email.encoded.should include( ">2<" )
 
       ActionMailer::Base.deliveries.clear
-      email.deliver!
+      email.deliver_now!
       ActionMailer::Base.deliveries.size.should == 1
     end
 
@@ -101,7 +101,7 @@ describe ProjectMailer do
       email.encoded.should include( "1 security vulnerability" )
 
       ActionMailer::Base.deliveries.clear
-      email.deliver!
+      email.deliver_now!
       ActionMailer::Base.deliveries.size.should == 1
     end
 
@@ -130,7 +130,7 @@ describe ProjectMailer do
       email.encoded.should include( "2 security vulnerabilities" )
 
       ActionMailer::Base.deliveries.clear
-      email.deliver!
+      email.deliver_now!
       ActionMailer::Base.deliveries.size.should == 1
     end
 

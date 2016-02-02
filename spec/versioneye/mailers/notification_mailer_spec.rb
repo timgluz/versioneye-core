@@ -29,7 +29,7 @@ describe NotificationMailer do
       email.encoded.should include( "http://localhost:3000" )
 
       ActionMailer::Base.deliveries.clear
-      email.deliver!
+      email.deliver_now!
       ActionMailer::Base.deliveries.size.should == 1
     end
 
@@ -48,7 +48,7 @@ describe NotificationMailer do
       email.encoded.should include( 'Robert Reiz' )
 
       ActionMailer::Base.deliveries.clear
-      email.deliver!
+      email.deliver_now!
       ActionMailer::Base.deliveries.size.should == 1
     end
 

@@ -26,7 +26,7 @@ describe VersioncommentMailer do
       email.encoded.should include( "Handelsregister" )
 
       ActionMailer::Base.deliveries.clear
-      email.deliver!
+      email.deliver_now!
       ActionMailer::Base.deliveries.size.should == 1
     end
 

@@ -24,7 +24,7 @@ describe ReceiptMailer do
       email.attachments.count.should == 1
 
       ActionMailer::Base.deliveries.clear
-      email.deliver!
+      email.deliver_now!
       ActionMailer::Base.deliveries.size.should == 1
     end
 

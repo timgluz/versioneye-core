@@ -13,7 +13,7 @@ describe NewsletterMailer do
       email.encoded.should include( '68163 Mannheim' )
 
       ActionMailer::Base.deliveries.clear
-      email.deliver!
+      email.deliver_now!
       ActionMailer::Base.deliveries.size.should == 1
     end
 
