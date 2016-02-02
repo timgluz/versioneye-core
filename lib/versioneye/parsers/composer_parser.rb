@@ -15,7 +15,7 @@ class ComposerParser < CommonParser
     nil
   end
 
-  def parse_content( data )
+  def parse_content( data, token = nil )
     if data.to_s.empty?
       log.error "data is empty!"
       return nil
