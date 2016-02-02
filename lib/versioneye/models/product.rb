@@ -12,6 +12,7 @@ class Product < Versioneye::Model
   field :name         , type: String
   field :name_downcase, type: String
   field :prod_key     , type: String # Unique identifier inside a language
+  field :prod_key_dc  , type: String # prod_key downcased .. important for NPM
   field :prod_type    , type: String # Identifies the package manager
   field :language     , type: String
   field :version      , type: String, default: '0.0.0+NA' # latest stable version
@@ -122,8 +123,9 @@ class Product < Versioneye::Model
     return nil if lang.to_s.strip.empty? || key.to_s.strip.empty?
     return Product.find_by_key( key ) if lang.eql? 'package'
 
-    product = Product.find_by_lang_key( lang, key.downcase )
-    product = Product.find_by_lang_key( lang, key ) if product.nil?
+    product = Product.find_by_lang_key( lang, key )
+    product = Product.find_by_lang_key( lang, key.downcase ) if product.nil?
+    product = Product.where(:language => lang, :prod_key_dc => key.downcase) if ( product.nil? && lang.eql?( A_LANGUAGE_NODEJS ) )
     product
   end
 
