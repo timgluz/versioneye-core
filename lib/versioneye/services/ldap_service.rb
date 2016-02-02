@@ -19,8 +19,8 @@ class LdapService < Versioneye::Service
 
     ldap_base = GlobalSetting.get env, 'ldap_base'
 
-    ldap_args = {:host => GlobalSetting.get env, 'ldap_host'
-                 :port => GlobalSetting.get env, 'ldap_port'
+    ldap_args = {:host => GlobalSetting.get(env, 'ldap_host')
+                 :port => GlobalSetting.get(env, 'ldap_port')
                  :base => ldap_base,
                  :auth => {:username => username,
                            :password => password,
