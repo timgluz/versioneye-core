@@ -16,11 +16,13 @@ class ProjectParseService < Versioneye::Service
   end
 
 
-  def self.parse_content parser, content, file_name
+  def self.parse_content parser, content, file_name, token = nil
     return nil if parser.nil? || content.to_s.empty?
 
-    if parser.respond_to? "parse_content"
+    if parser.respond_to? "parse_content" && token.nil?
       return parser.parse_content content
+    elsif parser.respond_to? "parse_content" && token
+      return parser.parse_content content, token
     end
 
     file_path = write_to_file file_name, content

@@ -74,11 +74,8 @@ class ComposerParser < CommonParser
     dependency = init_projectdependency( key, product )
     dependency.scope = scope
     parse_requested_version( value, dependency, product )
-    if product.nil?
-      dep_in_ext_repo = dependency_in_repositories?( dependency, data )
-      project.unknown_number += 1 if !dep_in_ext_repo
-    end
-    project.out_number += 1 if ProjectdependencyService.outdated?( dependency )
+    project.unknown_number += 1 if dependency.unknown?
+    project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
     project.projectdependencies.push dependency
   end
 
@@ -101,6 +98,7 @@ class ComposerParser < CommonParser
       update_requested_with_current(dependency, product)
       return
     end
+
     version = version.strip
     version = version.gsub('"', '')
     version = version.gsub("'", '')
@@ -117,6 +115,10 @@ class ComposerParser < CommonParser
     end
 
     if product.nil?
+
+      # TODO search for product in repositories defined in composer.json!
+      # rep url, version as branch, composer.json
+
       dependency.version_requested = version
       return nil
     end
@@ -245,6 +247,28 @@ class ComposerParser < CommonParser
       dependency.comperator = "="
     end
 
+  end
+
+
+  def parse_repositories data
+    repos = data['repositories']
+    return false if (repos.nil? || repos.empty?)
+
+    repos.each do |repo|
+      repo_type = repo['type']
+      repo_url  = repo['url']
+
+      if repo_name.eql?(dependency.name)
+        dependency.ext_link = repo_link
+        dependency.version_current = repo_version
+        return true
+      end
+    end
+    return false
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    false
   end
 
 

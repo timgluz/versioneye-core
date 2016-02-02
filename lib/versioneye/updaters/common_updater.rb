@@ -79,8 +79,8 @@ class CommonUpdater < Versioneye::Service
       ProjectParseService.parser_for file_name
     end
 
-    def parse_content parser, content, file_name
-      ProjectParseService.parse_content parser, content, file_name
+    def parse_content parser, content, file_name, token = nil
+      ProjectParseService.parse_content parser, content, file_name, token
     end
 
 
