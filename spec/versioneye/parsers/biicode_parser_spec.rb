@@ -7,6 +7,12 @@ describe BiicodeParser do
 
   describe "parse" do
 
+    def fetch_by_name(dependencies, name)
+      dependencies.each do |dep|
+        return dep if dep.name.eql? name
+      end
+    end
+
     it "parse from https the file correctly" do
       parser = BiicodeParser.new
       project = parser.parse( test_case_url )
@@ -29,7 +35,7 @@ describe BiicodeParser do
       project.should_not be_nil
       project.dependencies.size.should eql(4)
 
-      dep_1 = project.dependencies.first
+      dep_1 = fetch_by_name project.dependencies, "lasote/lasote/openssl/v1.0.2"
       dep_1.name.should eql("lasote/lasote/openssl/v1.0.2")
       dep_1.version_requested.should eql('0')
       dep_1.version_current.should eql("1")
@@ -37,21 +43,21 @@ describe BiicodeParser do
       dep_1.comperator.should eql("=")
       dep_1.outdated.should be_truthy
 
-      dep_2 = project.dependencies[1]
+      dep_2 = fetch_by_name project.dependencies, "fenix/fenix/poco/v1.6.0"
       dep_2.name.should eql("fenix/fenix/poco/v1.6.0")
       dep_2.version_requested.should eql("1")
       dep_2.version_current.should eql("1")
       dep_2.comperator.should eql("=")
       dep_2.outdated.should be_falsey
 
-      dep_3 = project.dependencies[2]
+      dep_3 = fetch_by_name project.dependencies, "nat/nat/nat/master"
       dep_3.name.should eql("nat/nat/nat/master")
       dep_3.version_requested.should eql("0")
       dep_3.version_current.should be_nil
       dep_3.comperator.should eql("=")
       dep_3.unknown?.should be_truthy
 
-      dep_4 = project.dependencies[3]
+      dep_4 = fetch_by_name project.dependencies, "lasote/lasote/libevent/master"
       dep_4.name.should eql("lasote/lasote/libevent/master")
       dep_4.version_requested.should eql("2")
       dep_4.version_current.should eql('2')

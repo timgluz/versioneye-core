@@ -4,6 +4,12 @@ describe MetadataParser do
 
   describe "parse" do
 
+    def fetch_by_name(dependencies, name)
+      dependencies.each do |dep|
+        return dep if dep.name.eql? name
+      end
+    end
+
     it "parse from https the file correctly" do
       parser = MetadataParser.new
       project = parser.parse("https://s3.amazonaws.com/veye_test_env/metadata.rb")
@@ -43,40 +49,40 @@ describe MetadataParser do
       expect( project.version ).to eq('0.1.12')
       project.dependencies.size.should eql(7)
 
-      dep_1 = project.dependencies.first
+      dep_1 = fetch_by_name(project.dependencies, "hybris_maven")
       dep_1.name.should eql("hybris_maven")
       dep_1.version_requested.should eql("0.2.0")
       dep_1.comperator.should eql("=")
       expect( dep_1.language ).to eql(Product::A_LANGUAGE_CHEF)
 
-      dep_2 = project.dependencies[1]
+      dep_2 = fetch_by_name(project.dependencies, "hybris_jdk")
       dep_2.name.should eql("hybris_jdk")
       dep_2.version_requested.should eql("0.2.1")
       dep_2.version_current.should eql("0.2.1")
       dep_2.comperator.should eql("=")
 
-      dep_3 = project.dependencies[2]
+      dep_3 = fetch_by_name(project.dependencies, "hybris_firefox")
       dep_3.name.should eql("hybris_firefox")
       dep_3.version_requested.should eql("0.8.0")
       dep_3.version_current.should eql("0.8.0")
       dep_3.version_label.should eql("0.8.0")
       dep_3.comperator.should eql("=")
 
-      dep_4 = project.dependencies[3]
+      dep_4 = fetch_by_name(project.dependencies, "hybris_dash")
       dep_4.name.should eql("hybris_dash")
       dep_4.version_requested.should eql("0.3.6")
       dep_4.version_current.should eql("0.3.6")
       dep_4.version_label.should eql("0.3.6")
       dep_4.comperator.should eql("=")
 
-      dep_5 = project.dependencies[4]
+      dep_5 = fetch_by_name(project.dependencies, "rpi_base")
       dep_5.name.should eql("rpi_base")
       dep_5.version_requested.should eql("0.3.6")
       dep_5.version_current.should eql("0.3.6")
       dep_5.version_label.should eql("0.3.6")
       dep_5.comperator.should eql("=")
 
-      dep_6 = project.dependencies[5]
+      dep_6 = fetch_by_name(project.dependencies, "rpi_users")
       dep_6.name.should eql("rpi_users")
       dep_6.version_requested.should eql("0.5.0")
       dep_6.version_current.should eql("0.5.0")
@@ -85,7 +91,7 @@ describe MetadataParser do
       dep_6.release.should_not be_nil
       dep_6.release.should be_truthy
 
-      dep_7 = project.dependencies[6]
+      dep_7 = fetch_by_name(project.dependencies, "rpi_jenkins")
       dep_7.name.should eql("rpi_jenkins")
       dep_7.version_requested.should eql("0.2.24")
       dep_7.version_current.should eql("0.2.24")
