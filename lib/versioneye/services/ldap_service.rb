@@ -12,15 +12,24 @@ class LdapService < Versioneye::Service
     auth_method = "simple" if auth_method.to_s.empty?
 
     username = GlobalSetting.get env, 'ldap_username_pattern'
+    username = Settings.instance.ldap_username_pattern if username.to_s.empty?
     username = username.gsub("LOGIN", login)
 
     filter = GlobalSetting.get env, 'ldap_filter'
+    filter = Settings.instance.ldap_filter if filter.to_s.empty?
     filter = filter.gsub("LOGIN", login)
 
     ldap_base = GlobalSetting.get env, 'ldap_base'
+    ldap_base = Settings.instance.ldap_base if ldap_base.to_s.empty?
 
-    ldap_args = {:host => GlobalSetting.get(env, 'ldap_host'),
-                 :port => GlobalSetting.get(env, 'ldap_port'),
+    ldap_host = GlobalSetting.get(env, 'ldap_host')
+    ldap_host = Settings.instance.ldap_host
+
+    ldap_port = GlobalSetting.get(env, 'ldap_port')
+    ldap_port = Settings.instance.ldap_port
+
+    ldap_args = {:host => ldap_host,
+                 :port => ldap_port,
                  :base => ldap_base,
                  :auth => {:username => username,
                            :password => password,
