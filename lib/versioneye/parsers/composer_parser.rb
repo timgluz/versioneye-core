@@ -16,8 +16,14 @@ class ComposerParser < CommonParser
   end
 
   def parse_content( data )
-    return nil if data.to_s.empty?
-    return nil if data.to_s.strip.eql?('Not Found')
+    if data.to_s.empty?
+      log.error "data is empty!"
+      return nil
+    end
+    if data.to_s.strip.eql?('Not Found')
+      log.error "data = Not Found"
+      return nil
+    end
 
     json_content = JSON.parse( data )
     project = init_project
