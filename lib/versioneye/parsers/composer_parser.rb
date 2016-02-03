@@ -264,7 +264,14 @@ class ComposerParser < CommonParser
       next if !repo_type.eql?('vcs')
 
       repo = repo_url.gsub('https://github.com/', '')
-      file = Github.fetch_project_file_from_branch repo, "composer.json", branch, self.token
+      file = fetch_file_from_branch( repo, "composer.json", branch, self.token )
+      if file.nil? && !branch.to_s.eql?('master')
+        file = fetch_file_from_branch( repo, "composer.json", 'master', self.token )
+      end
+      if file.nil?
+        log.error "fetch_ext_link: Could not fetch file from #{repo}"
+        next
+      end
       file_txt = GitHubService.pure_text_from file
       json_content = JSON.parse( file_txt )
       if json_content['name'].to_s.eql?(name)
@@ -274,6 +281,15 @@ class ComposerParser < CommonParser
     return nil
   rescue => e
     p e.message
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    nil
+  end
+
+
+  def fetch_file_from_branch repo, file, branch, token
+    Github.fetch_project_file_from_branch repo, file, branch, token
+  rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
     nil
