@@ -20,7 +20,7 @@ class GemfilelockParser < GemfileParser
     nil
   end
 
-  def parse_content(content)
+  def parse_content(content, token = nil)
     return nil if content.to_s.empty?
     return nil if content.to_s.strip.eql?('Not Found')
 

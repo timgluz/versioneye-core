@@ -24,11 +24,16 @@ class GithubUpdater < CommonUpdater
 
   def fetch_token_for project
     user = user_for project
-    user.github_token
+    return user.github_token if user
+    nil
+  rescue => e
+    log.error "ERROR occured in fetch_token_for #{project.to_s} - #{e.message}"
+    log.error e.backtrace.join("\n")
+    nil
   end
 
 
-  def fetch_project_file project, token
+  def fetch_project_file project, token = nil
     filename = project.filename
     filename = 'pom.xml' if filename.eql? 'pom.json'
     Github.fetch_project_file_from_branch project.scm_fullname, filename, project.scm_branch, token

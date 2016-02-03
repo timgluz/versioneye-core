@@ -3,7 +3,7 @@ require 'versioneye/parsers/common_parser'
 class ScmChangelogParser < CommonParser
 
 
-  def parse content
+  def parse content, token = nil
     return nil if content.to_s.empty?
     return nil if content.to_s.strip.eql?('Not Found')
 

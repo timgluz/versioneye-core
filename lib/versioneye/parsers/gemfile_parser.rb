@@ -35,7 +35,7 @@ class GemfileParser < CommonParser
   end
 
 
-  def parse_content( gemfile )
+  def parse_content( gemfile, token = nil )
     return nil if gemfile.to_s.strip.empty?
     return nil if gemfile.to_s.strip.eql?('Not Found')
 

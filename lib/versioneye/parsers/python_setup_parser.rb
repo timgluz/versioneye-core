@@ -8,7 +8,7 @@ class PythonSetupParser < RequirementsParser
   end
 
 
-  def parse_content(doc)
+  def parse_content(doc, token = nil)
     return nil if doc.to_s.empty?
     return nil if doc.to_s.strip.eql?('Not Found')
 

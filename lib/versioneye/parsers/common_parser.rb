@@ -19,7 +19,7 @@ class CommonParser
     raise NotImplementedError, 'Implement me in subclass!'
   end
 
-  def parse_content(content)
+  def parse_content(content, token = nil)
     raise NotImplementedError, 'Implement me in subclass!'
   end
 =end

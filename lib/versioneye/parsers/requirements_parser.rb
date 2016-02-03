@@ -18,7 +18,7 @@ class RequirementsParser < CommonParser
   end
 
 
-  def parse_content( txt )
+  def parse_content( txt, token = nil )
     return nil if txt.to_s.empty?
     return nil if txt.to_s.strip.eql?('Not Found')
 
@@ -41,7 +41,7 @@ class RequirementsParser < CommonParser
   def parse_line( line, project )
     return false if line.to_s.strip.empty?
 
-    sp = line.split("#") # Remove comments 
+    sp = line.split("#") # Remove comments
     return false if sp.nil? || sp.empty?
 
     line = sp.first

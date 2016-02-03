@@ -18,7 +18,7 @@ class LeinParser < CommonParser
     nil
   end
 
-  def parse_content(content)
+  def parse_content(content, token = nil)
     return nil if content.to_s.empty?
     return nil if content.to_s.strip.eql?('Not Found')
 
@@ -29,8 +29,8 @@ class LeinParser < CommonParser
 
     deps = {:unknown_number => 0, :out_number => 0, :projectdependencies => []}
     if dep_items && !dep_items.empty?
-      dep_items.each do |item| 
-        self.build_dependencies item.children, deps 
+      dep_items.each do |item|
+        self.build_dependencies item.children, deps
       end
     end
 
@@ -66,11 +66,11 @@ class LeinParser < CommonParser
     unknowns, out_number = 0, 0
     matches.each do |item|
       next if item.text.to_s.strip.empty? # If dependency element is empty
-      
-      _, group_id, name, version = item.text.scan(/((\S+)\/)?(\S+)\s+\"(\S+)\"/)[0]
-      next if name.to_s.strip.empty? 
 
-      group_id = name if group_id.to_s.empty? 
+      _, group_id, name, version = item.text.scan(/((\S+)\/)?(\S+)\s+\"(\S+)\"/)[0]
+      next if name.to_s.strip.empty?
+
+      group_id = name if group_id.to_s.empty?
       scope, _ = item.text.scan(/:scope\s+\"(\S+)\"/)[0]
       dependency = Projectdependency.new({
         :scope => scope,
@@ -90,11 +90,11 @@ class LeinParser < CommonParser
       else
         deps[:unknown_number] += 1
       end
-      
+
       if ProjectdependencyService.outdated?( dependency )
         deps[:out_number] += 1
       end
-      
+
       deps[:projectdependencies] << dependency
     end
   end

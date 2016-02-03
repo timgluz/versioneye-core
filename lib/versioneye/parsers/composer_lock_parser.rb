@@ -9,7 +9,7 @@ class ComposerLockParser < ComposerParser
     parse_content( response.body )
   end
 
-  def parse_content( data )
+  def parse_content( data, token = nil )
     return nil if data.to_s.empty?
     return nil if data.to_s.strip.eql?('Not Found')
 

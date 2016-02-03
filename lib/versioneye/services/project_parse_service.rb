@@ -19,9 +19,7 @@ class ProjectParseService < Versioneye::Service
   def self.parse_content parser, content, file_name, token = nil
     return nil if parser.nil? || content.to_s.empty?
 
-    if parser.respond_to? "parse_content" && token.nil?
-      return parser.parse_content content
-    elsif parser.respond_to? "parse_content" && token
+    if parser.respond_to? "parse_content"
       return parser.parse_content content, token
     end
 
