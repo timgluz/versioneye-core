@@ -9,7 +9,7 @@ class ComposerParser < CommonParser
   # https://igor.io/2013/02/07/composer-stability-flags.html
   #
   def parse url
-    self.data = self.fetch_data url
+    data = self.fetch_data url
     parse_content( data )
   rescue => e
     log.error e.message
