@@ -2,7 +2,7 @@ require 'versioneye/parsers/common_parser'
 
 class ComposerParser < CommonParser
 
-  attr_accessor :data, :token
+  attr_accessor :composer_json, :token
 
   # Parser for composer.json files from composer, packagist.org. PHP
   # http://getcomposer.org/doc/01-basic-usage.md
@@ -28,8 +28,8 @@ class ComposerParser < CommonParser
     end
 
     self.token = token
-    self.data = data
     json_content = JSON.parse( data )
+    self.composer_json = json_content
     project = init_project
 
     dependencies = json_content['require']
@@ -39,7 +39,7 @@ class ComposerParser < CommonParser
 
     dependencies = json_content['require-dev']
     if dependencies && !dependencies.empty?
-      parse_dependencies dependencies, project, json_content, Dependency::A_SCOPE_DEVELOPMENT 
+      parse_dependencies dependencies, project, json_content, Dependency::A_SCOPE_DEVELOPMENT
     end
 
     dependencies = json_content['require-test']
@@ -120,7 +120,7 @@ class ComposerParser < CommonParser
 
     if product.nil?
       ext_link = fetch_ext_link dependency.name, version
-      if !ext_link.to_s.empty? 
+      if !ext_link.to_s.empty?
         dependency.ext_link = ext_link
       end
       dependency.version_requested = version
@@ -255,7 +255,7 @@ class ComposerParser < CommonParser
 
 
   def fetch_ext_link name, branch
-    repos = self.data['repositories']
+    repos = self.composer_json['repositories']
     return nil if (repos.nil? || repos.empty?)
 
     repos.each do |repo|
@@ -273,9 +273,10 @@ class ComposerParser < CommonParser
     end
     return nil
   rescue => e
+    p e.message
     log.error e.message
     log.error e.backtrace.join("\n")
-    false
+    nil
   end
 
 
@@ -319,18 +320,18 @@ class ComposerParser < CommonParser
 
     def fetch_product_for key
       return nil if key.to_s.empty?
-      
+
       if key.to_s.match(/\Anpm-asset\//)
         new_key = key.gsub("npm-asset/", "")
         return Product.fetch_product( Product::A_LANGUAGE_NODEJS, new_key )
-      
+
       elsif key.to_s.match(/\Abower-asset\//)
         new_key = key.gsub("bower-asset/", "")
         return Product.fetch_bower( new_key )
-      
+
       else
         return Product.fetch_product( Product::A_LANGUAGE_PHP, key )
-      
+
       end
     end
 
