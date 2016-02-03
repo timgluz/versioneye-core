@@ -51,6 +51,8 @@ class ParserStrategy
           return BerksfileParser.new
         elsif url.match(/metadata\.rb/)
           return MetadataParser.new
+        else
+          return MetadataParser.new
         end
 
       when Project::A_TYPE_COMPOSER
