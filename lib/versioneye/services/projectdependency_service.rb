@@ -137,7 +137,8 @@ class ProjectdependencyService < Versioneye::Service
     if ( projectdependency.prod_key.nil? && projectdependency.version_current.nil? ) ||
        ( projectdependency.version_requested.eql?( 'GIT' ) || projectdependency.version_requested.eql?('PATH') ) ||
        ( projectdependency.muted == true ) ||
-       ( projectdependency.version_requested.eql?( projectdependency.version_current) )
+       ( projectdependency.version_requested.eql?( projectdependency.version_current) ) ||
+       ( !projectdependency.ext_link.to_s.empty? )
       return update_outdated( projectdependency, false )
     end
 
@@ -166,6 +167,12 @@ class ProjectdependencyService < Versioneye::Service
   def self.update_version_current( projectdependency )
     if projectdependency.prod_key.nil?
       update_prod_key projectdependency
+    end
+
+    if !projectdependency.ext_link.to_s.empty?
+      p "projectdependency.ext_link: -#{projectdependency.ext_link}-"
+      projectdependency.version_current = projectdependency.version_requested
+      return false
     end
 
     product = projectdependency.product

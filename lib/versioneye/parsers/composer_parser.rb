@@ -2,12 +2,14 @@ require 'versioneye/parsers/common_parser'
 
 class ComposerParser < CommonParser
 
+  attr_accessor :data, :token
+
   # Parser for composer.json files from composer, packagist.org. PHP
   # http://getcomposer.org/doc/01-basic-usage.md
   # https://igor.io/2013/02/07/composer-stability-flags.html
   #
   def parse url
-    data = self.fetch_data url
+    self.data = self.fetch_data url
     parse_content( data )
   rescue => e
     log.error e.message
@@ -25,17 +27,19 @@ class ComposerParser < CommonParser
       return nil
     end
 
+    self.token = token
+    self.data = data
     json_content = JSON.parse( data )
     project = init_project
 
     dependencies = json_content['require']
     if dependencies && !dependencies.empty?
-      parse_dependencies dependencies, project, json_content
+      parse_dependencies dependencies, project, json_content, Dependency::A_SCOPE_COMPILE
     end
 
     dependencies = json_content['require-dev']
     if dependencies && !dependencies.empty?
-      parse_dependencies dependencies, project, json_content, Dependency::A_SCOPE_DEVELOPMENT
+      parse_dependencies dependencies, project, json_content, Dependency::A_SCOPE_DEVELOPMENT 
     end
 
     dependencies = json_content['require-test']
@@ -69,11 +73,11 @@ class ComposerParser < CommonParser
   end
 
 
-  def process_dependency key, value, project, data, scope = Dependency::A_SCOPE_COMPILE
-    product    = fetch_product_for key
-    dependency = init_projectdependency( key, product )
+  def process_dependency prod_key, version, project, data, scope = Dependency::A_SCOPE_COMPILE
+    product    = fetch_product_for prod_key
+    dependency = init_projectdependency( prod_key, product )
     dependency.scope = scope
-    parse_requested_version( value, dependency, product )
+    parse_requested_version( version, dependency, product )
     project.unknown_number += 1 if dependency.unknown?
     project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
     project.projectdependencies.push dependency
@@ -109,16 +113,16 @@ class ComposerParser < CommonParser
     dependency.stability = VersionTagRecognizer.stability_tag_for version
     VersionTagRecognizer.remove_minimum_stability version
 
-    if version.empty? && !product.nil?
+    if !product.nil? && version.empty?
       update_requested_with_current(dependency, product)
       return
     end
 
     if product.nil?
-
-      # TODO search for product in repositories defined in composer.json!
-      # rep url, version as branch, composer.json
-
+      ext_link = fetch_ext_link dependency.name, version
+      if !ext_link.to_s.empty? 
+        dependency.ext_link = ext_link
+      end
       dependency.version_requested = version
       return nil
     end
@@ -250,21 +254,24 @@ class ComposerParser < CommonParser
   end
 
 
-  def parse_repositories data
-    repos = data['repositories']
-    return false if (repos.nil? || repos.empty?)
+  def fetch_ext_link name, branch
+    repos = self.data['repositories']
+    return nil if (repos.nil? || repos.empty?)
 
     repos.each do |repo|
       repo_type = repo['type']
       repo_url  = repo['url']
+      next if !repo_type.eql?('vcs')
 
-      if repo_name.eql?(dependency.name)
-        dependency.ext_link = repo_link
-        dependency.version_current = repo_version
-        return true
+      repo = repo_url.gsub('https://github.com/', '')
+      file = Github.fetch_project_file_from_branch repo, "composer.json", branch, self.token
+      file_txt = GitHubService.pure_text_from file
+      json_content = JSON.parse( file_txt )
+      if json_content['name'].to_s.eql?(name)
+        return "#{repo_url}/tree/#{branch}".gsub("//", "/")
       end
     end
-    return false
+    return nil
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
@@ -312,14 +319,18 @@ class ComposerParser < CommonParser
 
     def fetch_product_for key
       return nil if key.to_s.empty?
+      
       if key.to_s.match(/\Anpm-asset\//)
         new_key = key.gsub("npm-asset/", "")
         return Product.fetch_product( Product::A_LANGUAGE_NODEJS, new_key )
+      
       elsif key.to_s.match(/\Abower-asset\//)
         new_key = key.gsub("bower-asset/", "")
         return Product.fetch_bower( new_key )
+      
       else
         return Product.fetch_product( Product::A_LANGUAGE_PHP, key )
+      
       end
     end
 
