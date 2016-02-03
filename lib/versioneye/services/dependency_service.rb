@@ -103,9 +103,17 @@ class DependencyService < Versioneye::Service
 
     dependency.set_prod_type_if_nil
     parser   = ParserStrategy.parser_for( dependency.prod_type, '' )
+    if parser.nil?
+      log.error "No parser found for #{dependency.prod_type}"
+      return nil
+    end
     proj_dep = Projectdependency.new
     parser.parse_requested_version( dependency.version, proj_dep, product )
     dependency.parsed_version = proj_dep.version_requested
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    return nil
   end
 
 
