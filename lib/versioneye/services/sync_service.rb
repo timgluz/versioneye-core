@@ -148,7 +148,7 @@ class SyncService < Versioneye::Service
 
     return nil if json[:versions].nil?
 
-    product_preload = language.to_s.eql?('Bower') ? Product.fetch_bower(prod_key) : Product.fetch_product(language, prod_key) 
+    product_preload = language.to_s.eql?('Bower') ? Product.fetch_bower(prod_key) : Product.fetch_product(language, prod_key)
 
     json[:versions].each do |ver|
       new_version = product_preload.nil? || product_preload.version_by_number(ver[:version]).nil?
