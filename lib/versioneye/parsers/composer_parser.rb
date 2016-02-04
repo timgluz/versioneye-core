@@ -255,6 +255,8 @@ class ComposerParser < CommonParser
 
 
   def fetch_ext_link name, branch
+    return nil if self.composer_json.nil?
+    
     repos = self.composer_json['repositories']
     return nil if (repos.nil? || repos.empty?)
 
@@ -281,7 +283,6 @@ class ComposerParser < CommonParser
     end
     return nil
   rescue => e
-    p e.message
     log.error e.message
     log.error e.backtrace.join("\n")
     nil
