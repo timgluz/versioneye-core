@@ -256,7 +256,7 @@ class ComposerParser < CommonParser
 
   def fetch_ext_link name, branch
     return nil if self.composer_json.nil?
-    
+
     repos = self.composer_json['repositories']
     return nil if (repos.nil? || repos.empty?)
 

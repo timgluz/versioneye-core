@@ -2,6 +2,53 @@ require 'spec_helper'
 
 describe OrganisationService do
 
+  describe "transfer" do
+
+    it "transfers a project to the orga" do
+      user = UserFactory.create_new
+      user.fullname = 'HansTanz'
+      expect( user.save ).to be_truthy
+
+      project = ProjectFactory.create_new user
+      expect( project.save ).to be_truthy
+
+      orga = OrganisationService.create_new user, "myorga"
+      expect( orga ).to_not be_nil
+
+      expect( OrganisationService.transfer project, orga ).to be_truthy
+      expect( project.organisation ).to_not be_nil
+      expect( project.license_whitelist_id ).to be_nil
+      expect( project.component_whitelist_id ).to be_nil
+    end
+
+    it "transfers a project to the orga" do
+      user = UserFactory.create_new
+      user.fullname = 'HansTanz'
+      expect( user.save ).to be_truthy
+
+      project = ProjectFactory.create_new user
+      expect( project.save ).to be_truthy
+
+      orga = OrganisationService.create_new user, "myorga"
+      expect( orga ).to_not be_nil
+
+      cwl = ComponentWhitelist.new({:name => 'cwl', :default => true})
+      cwl.organisation = orga
+      expect( cwl.save ).to be_truthy
+
+      lwl = LicenseWhitelist.new({:name => 'lwl', :default => true})
+      lwl.organisation = orga
+      expect( lwl.save ).to be_truthy
+
+      expect( OrganisationService.transfer project, orga ).to be_truthy
+      expect( project.organisation ).to_not be_nil
+      expect( project.license_whitelist_id ).to_not be_nil
+      expect( project.component_whitelist_id ).to_not be_nil
+    end
+
+  end
+
+
   describe "create_new" do
 
     it "creates a new organisation" do
@@ -15,7 +62,7 @@ describe OrganisationService do
       expect( orga ).to_not be_nil
       expect( orga.name ).to eq('myorga')
       expect( orga.teams.count ).to eq(1)
-      expect( orga.teams.first.name ).to eq(Team::A_OWNERS)
+      expect( orga.teams.first.name ).to eq( Team::A_OWNERS )
       expect( orga.teams.first.members.count ).to eq(1)
       expect( orga.teams.first.members.first.user.fullname ).to eq('HansTanz')
       expect( orga.teams.first.members.first.user.ids ).to eq(user.ids)

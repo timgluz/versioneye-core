@@ -57,6 +57,22 @@ class OrganisationService < Versioneye::Service
   end
 
 
+  # Attach a project to the organisation
+  def self.transfer project, organisation
+    return false if organisation.nil? || project.nil?
+
+    project.organisation = organisation
+    project.teams = [organisation.owner_team]
+    project.license_whitelist_id = organisation.default_lwl_id
+    project.component_whitelist_id = organisation.default_cwl_id
+    result = project.save
+    if result && !project.license_whitelist_id.nil? && !project.component_whitelist_id.nil?
+      ProjectUpdateService.update_async project
+    end
+    return result
+  end
+
+
   # Returns all organisations there the given user
   # is member in. If `only_owners` is true, only the
   # organisations are returned there the given user

@@ -2,6 +2,59 @@ require 'spec_helper'
 
 describe Organisation do
 
+
+  describe "to_param" do
+    it 'returns the name' do
+      orga = Organisation.new({:name => 'Orga'})
+      expect( orga.to_param ).to eq('Orga')
+    end
+  end
+
+
+  describe "default_lwl_id" do
+    it 'returns nil because lwl list is empty' do
+      orga = Organisation.new({:name => 'Orga'})
+      expect( orga.default_lwl_id ).to be_nil
+    end
+    it 'returns nil because there is no default lwl' do
+      orga = Organisation.new({:name => 'Orga'})
+      lwl = LicenseWhitelist.new({:name => 'lwl'})
+      lwl.organisation = orga
+      expect( lwl.save ).to be_truthy
+      expect( orga.default_lwl_id ).to be_nil
+    end
+    it 'returns the default lwl' do
+      orga = Organisation.new({:name => 'Orga'})
+      lwl = LicenseWhitelist.new({:name => 'lwl', :default => true})
+      lwl.organisation = orga
+      expect( lwl.save ).to be_truthy
+      expect( orga.default_lwl_id ).to eq(lwl.ids)
+    end
+  end
+
+
+  describe "default_cwl_id" do
+    it 'returns nil because lwl list is empty' do
+      orga = Organisation.new({:name => 'Orga'})
+      expect( orga.default_cwl_id ).to be_nil
+    end
+    it 'returns nil because there is no default cwl' do
+      orga = Organisation.new({:name => 'Orga'})
+      cwl = ComponentWhitelist.new({:name => 'cwl'})
+      cwl.organisation = orga
+      expect( cwl.save ).to be_truthy
+      expect( orga.default_cwl_id ).to be_nil
+    end
+    it 'returns the default cwl' do
+      orga = Organisation.new({:name => 'Orga'})
+      cwl  = ComponentWhitelist.new({:name => 'cwl', :default => true})
+      cwl.organisation = orga
+      expect( cwl.save ).to be_truthy
+      expect( orga.default_cwl_id ).to eq(cwl.ids)
+    end
+  end
+
+
   describe "teams" do
     it 'owns a team' do
       orga = Organisation.new({:name => 'Orga'})

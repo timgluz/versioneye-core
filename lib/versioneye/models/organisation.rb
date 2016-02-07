@@ -26,6 +26,24 @@ class Organisation < Versioneye::Model
     name
   end
 
+  def default_lwl_id
+    return nil if license_whitelists.nil? || license_whitelists.empty?
+
+    license_whitelists.each do |lwl|
+      return lwl.ids if lwl.default == true
+    end
+    nil
+  end
+
+  def default_cwl_id
+    return nil if component_whitelists.nil? || component_whitelists.empty?
+
+    component_whitelists.each do |cwl|
+      return cwl.ids if cwl.default == true
+    end
+    nil
+  end
+
   def to_param
     name
   end
