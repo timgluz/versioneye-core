@@ -6,7 +6,7 @@ gem 'dalli'              , '~> 2.7.0'
 gem 'kgio'               , '~> 2.10.0'   # 20% performance boost for dalli
 gem 'oauth'              , '~> 0.4.7'
 gem 'aws-sdk'            , '~> 2.2.0'
-gem 'stripe'             , '~> 1.34.0'
+gem 'stripe'             , '~> 1.35.1'
 gem 'tire'               , '~> 0.6.2'
 gem 'octokit'            , '~> 4.2.0'
 gem 'semverly'           , '~> 1.0.0'
@@ -24,7 +24,7 @@ gem 'etcd'               , '~> 0.3.0'
 gem 'mongoid'            , '~> 5.1.0'
 gem 'will_paginate_mongoid', '2.0.1'
 
-gem 'net-ldap', '~> 0.13.0'
+gem 'net-ldap', '~> 0.14.0'
 
 group :development do
   gem 'jeweler', '~> 2.0.1'
@@ -32,7 +32,7 @@ end
 
 group :test do
   gem 'rack-test'       , '0.6.3'
-  gem 'fakes3'          , '0.2.3'
+  gem 'fakes3'          , '0.2.4'
   gem 'simplecov'       , '~> 0.11.1'
   gem 'rspec'           , '~> 3.4.0'
   gem 'database_cleaner', '~> 1.5.1'
