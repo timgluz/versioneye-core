@@ -66,7 +66,7 @@ class OrganisationService < Versioneye::Service
     project.license_whitelist_id = organisation.default_lwl_id
     project.component_whitelist_id = organisation.default_cwl_id
     result = project.save
-    if result && !project.license_whitelist_id.nil? && !project.component_whitelist_id.nil?
+    if result == true && ( !project.license_whitelist_id.nil? || !project.component_whitelist_id.nil? )
       ProjectUpdateService.update_async project
     end
     return result
