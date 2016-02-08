@@ -126,7 +126,6 @@ describe UserService do
       project             = Project.new
       project.user        = user
       project.name        = "test"
-      project.project_key = "test"
       project.save
       UserService.active_users.count.should eql(1)
       Project.delete_all
@@ -149,7 +148,6 @@ describe UserService do
       project             = Project.new
       project.user        = she
       project.name        = "test"
-      project.project_key = "test"
       expect( project.save ).to be_truthy
       expect( Versioncomment.new(user_id: he.id, product_key: "1", version: "1", comment: "1").save ).to be_truthy
       expect( UserService.active_users.count ).to eql(2)

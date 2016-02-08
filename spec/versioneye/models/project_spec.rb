@@ -216,35 +216,6 @@ describe Project do
 
   end
 
-  describe "make_project_key" do
-    before(:each) do
-      @test_user = UserFactory.create_new 1001
-      @test_user.nil?.should be_falsey
-      @test_project = ProjectFactory.create_new @test_user
-    end
-
-    it "project factory generated project_key passes validation" do
-      @test_project.errors.full_messages.empty?.should be_truthy
-    end
-
-    it "if generates unique project_key if there already exsists similar projects" do
-      new_project = ProjectFactory.create_new @test_user
-      new_project.valid?.should be_truthy
-      new_project.project_key.should =~ /(\d+)\z/
-      new_project.remove
-    end
-
-    it "if generates unique project_key only once" do
-      new_project = ProjectFactory.create_new @test_user
-      new_project.valid?.should be_truthy
-      new_project.project_key.should =~ /(\d+)\z/
-      project_key = new_project.project_key
-      new_project.make_project_key!
-      new_project.project_key.should eql(project_key)
-      new_project.remove
-    end
-  end
-
   describe "is_collaborator?" do
     before(:each) do
       @test_user = UserFactory.create_new 10021

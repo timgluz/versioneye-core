@@ -14,7 +14,6 @@ describe ProjectBatchUpdateService do
       parser  = PodfileParser.new
       project = parser.parse_file './spec/fixtures/files/pod_file/example1/Podfile'
       project.name = 'Podfile'
-      project.make_project_key!
       project.user_id = user.ids
       project.period = Project::A_PERIOD_DAILY
       project.sum_own!
@@ -38,7 +37,6 @@ describe ProjectBatchUpdateService do
       parser  = PodfileParser.new
       project = parser.parse_file './spec/fixtures/files/pod_file/example1/Podfile'
       project.name = 'Podfile'
-      project.make_project_key!
       project.user_id = user.ids
       project.period = Project::A_PERIOD_DAILY
       project.sum_own!
@@ -64,7 +62,6 @@ describe ProjectBatchUpdateService do
       parser  = PodfileParser.new
       project = parser.parse_file './spec/fixtures/files/pod_file/example1/Podfile'
       project.name = 'Podfile'
-      project.make_project_key!
       project.user_id = user.ids
       project.license_whitelist_id = lwl.ids
       project.period = Project::A_PERIOD_DAILY
@@ -90,7 +87,6 @@ describe ProjectBatchUpdateService do
       parser  = PodfileParser.new
       project = parser.parse_file './spec/fixtures/files/pod_file/example1/Podfile'
       project.name = 'Podfile'
-      project.make_project_key!
       project.user_id = user.ids
       project.period = Project::A_PERIOD_DAILY
       project.save
@@ -101,7 +97,6 @@ describe ProjectBatchUpdateService do
       parser = GemfileParser.new
       project_2 = parser.parse_content content
       project_2.name = 'Gemfile'
-      project_2.make_project_key!
       project_2.user_id = user.ids
       project_2.period = Project::A_PERIOD_DAILY
       project_2.save
@@ -133,7 +128,6 @@ describe ProjectBatchUpdateService do
       parser  = PodfileParser.new
       project = parser.parse_file './spec/fixtures/files/pod_file/example1/Podfile'
       project.name = 'Podfile'
-      project.make_project_key!
       project.user_id = owner.ids
       project.period = Project::A_PERIOD_DAILY
       project.sum_own!

@@ -320,7 +320,6 @@ describe ProjectService do
       Product.count.should == 3
       Project.count.should == 1
       Projectdependency.count.should == 3
-      Project.first.project_key.should_not be_nil
     end
 
   end
