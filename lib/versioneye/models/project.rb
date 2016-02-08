@@ -41,7 +41,6 @@ class Project < Versioneye::Model
 
   field :project_type  , type: String,  :default => A_TYPE_MAVEN2
   field :language      , type: String
-  field :project_key   , type: String
   field :period        , type: String,  :default => A_PERIOD_DAILY
   field :notify_after_api_update, type: Boolean, :default => false
   field :email         , type: String
@@ -78,14 +77,12 @@ class Project < Versioneye::Model
   field :parsing_errors , type: Array, :default => []
 
   validates :name       , presence: true
-  validates :project_key, presence: true
 
   belongs_to :user
   belongs_to :organisation
   has_many   :projectdependencies
   has_and_belongs_to_many :teams
 
-  index({project_key: 1, project_type: 1}, { name: "key_type_index",  background: true})
   index({user_id: 1, private_project: 1},  { name: "user_id_private_index", background: true})
   index({user_id: 1}, { name: "user_id_index", background: true})
   index({name: 1},    { name: "name_index",    background: true})
@@ -281,34 +278,6 @@ class Project < Versioneye::Model
       mute_messages[key] = dep.mute_message
     end
     {:keys => prod_keys, :messages => mute_messages}
-  end
-
-  def make_project_key!
-    if self.project_key.to_s.empty?
-      self.project_key = make_project_key
-    end
-  end
-
-  def make_project_key
-    return Project.create_random_value() if self.user.nil?
-
-    project_nr = 1
-    project_key_text = "#{self.project_type}_#{self.name}".downcase
-    project_key_text.gsub!(/[\s|\W|\_]+/, "_")
-    if project_key_text.to_s.empty?
-      project_key_text = Project.create_random_value()
-    end
-
-    similar_projects = Project.by_user(self.user).where(
-                        project_key: Regexp.new("#{project_key_text}"),
-                        project_type: self.project_type
-                      )
-    project_nr += similar_projects.count unless similar_projects.nil?
-    "#{project_key_text}_#{project_nr}"
-  rescue => e
-    log.error e.message
-    log.error e.backtrace.join("\n")
-    Project.create_random_value
   end
 
   def update_from new_project

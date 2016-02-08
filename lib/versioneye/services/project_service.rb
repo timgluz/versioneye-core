@@ -143,7 +143,6 @@ class ProjectService < Versioneye::Service
     default_cwl_id = ComponentWhitelistService.fetch_default_id project.user
     project.license_whitelist_id = default_lwl_id
     project.component_whitelist_id = default_cwl_id
-    project.make_project_key!
     if project.save
       project.save_dependencies
       update_license_numbers!( project )
