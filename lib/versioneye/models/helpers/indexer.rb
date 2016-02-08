@@ -3,7 +3,6 @@ class Indexer
 
   def self.create_indexes
     ::Mongoid.models.each do |model|
-      index_keys = model.collection.indexes.map{ |doc| doc["name"] }
       next if model.embedded?
 
       create_index model
@@ -16,8 +15,7 @@ class Indexer
 
   def self.create_index model
     p "creating index for #{model}"
-    result = model.create_indexes
-    p " - #{result}"
+    p model.create_indexes
   rescue => e
     p e.message
     p e.backtrace.join("\n")
@@ -29,8 +27,7 @@ class Indexer
       next if model.embedded?
 
       p "drop indexes for #{model}"
-      result = model.remove_indexes
-      p " - #{result}"
+      p model.remove_indexes
     end.compact
   rescue => e
     p e.message
