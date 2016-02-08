@@ -4,7 +4,6 @@ class Indexer
   def self.create_indexes
     ::Mongoid.models.each do |model|
       index_keys = model.collection.indexes.map{ |doc| doc["name"] }
-      next if index_keys.empty?
       next if model.embedded?
 
       create_index model
