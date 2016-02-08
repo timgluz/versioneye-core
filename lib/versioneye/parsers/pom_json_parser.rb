@@ -40,10 +40,12 @@ class PomJsonParser < PomParser
       project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
       project.projectdependencies.push(dependency)
     end
-    project.dep_number = project.dependencies.size
-    project.name        = pom_json['name']
-    project.group_id    = pom_json['group_id']
-    project.artifact_id = pom_json['artifact_id']
+    project.dep_number   = project.dependencies.size
+    project.name         = pom_json['name']
+    project.group_id     = pom_json['group_id']
+    project.artifact_id  = pom_json['artifact_id']
+    project.project_type = pom_json['prod_type'] if !pom_json['prod_type'].to_s.empty?
+    project.language     = pom_json['language']  if !pom_json['language'].to_s.empty?
     project
   end
 
