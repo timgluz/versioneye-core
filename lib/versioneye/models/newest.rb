@@ -16,7 +16,7 @@ class Newest < Versioneye::Model
 
   scope :by_language, ->(lang){where(language: lang)}
 
-  index({language: 1, prod_key: 1, version: 1}, { name: "lang_prod_vers_index",   background: true, unique: true })
+  index({language: 1, prod_key: 1, version: 1}, { name: "lang_prod_vers_index",   background: true, unique: true, drop_dups: true, })
   index({updated_at: -1},                       { name: "updated_at_index",       background: true})
   index({updated_at: -1, language: -1},         { name: "updated_language_index", background: true})
   index({created_at: -1, language: -1},         { name: "created_language_index", background: true})

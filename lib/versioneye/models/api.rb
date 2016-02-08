@@ -12,7 +12,7 @@ class Api < Versioneye::Model
   field :update_di          , type: Boolean, default: false # Update Docker Images
 
 
-  index({ api_key: 1 }, { name: "api_key_index", unique: true, background: true })
+  index({ api_key: 1 }, { name: "api_key_index", unique: true, drop_dups: true, background: true })
 
   validates :user_id, presence: true
   validates :api_key, presence: true,

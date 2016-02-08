@@ -51,6 +51,6 @@ class Badge < Versioneye::Model
   # nil or flat
   field :badge_style, type: String
 
-  index({ key: 1 }, { name: "key_index", background: true, unique: true })
+  index({ key: 1 }, { name: "key_index", background: true, unique: true, drop_dups: true })
 
 end

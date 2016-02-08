@@ -5,7 +5,7 @@ class Pom < Versioneye::Model
 
   field :url    , type: String
 
-  index({ url: 1 }, { name: "url_index", unique: true, background: true })
+  index({ url: 1 }, { name: "url_index", unique: true, background: true, drop_dups: true })
 
   validates :url, presence: true
 

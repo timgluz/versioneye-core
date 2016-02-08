@@ -8,7 +8,7 @@ class SpdxLicense < Versioneye::Model
   field :osi_approved, type: Boolean
 
   index({ fullname: 1 }  , { name: "fullname_index"  , background: true })
-  index({ identifier: 1 }, { name: "identifier_index", background: true, unique: true })
+  index({ identifier: 1 }, { name: "identifier_index", background: true, unique: true, drop_dups: true })
 
 
   def to_s

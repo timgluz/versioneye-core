@@ -12,7 +12,7 @@ class Notification < Versioneye::Model
   belongs_to :user
   belongs_to :product
 
-  index({product_id: 1, user_id: 1, version_id: 1}, { name: "prod_user_vers_index", background: true, unique: true })
+  index({product_id: 1, user_id: 1, version_id: 1}, { name: "prod_user_vers_index", background: true, unique: true, drop_dups: true })
   index({user_id: 1}, { name: "user_index", background: true})
   index({user_id: 1, sent_email: 1}, { name: "user_unsent_index", background: true})
 
