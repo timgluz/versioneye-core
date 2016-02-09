@@ -1,13 +1,14 @@
 class MvnIndexWorkerProducer < Producer
 
+
   def initialize msg
     connection = get_connection
     connection.start
 
     channel = connection.create_channel
-    queue   = channel.queue("maven_index_worker", :durable => true)
+    queue   = channel.queue("maven_index_worker", :durable => false)
 
-    queue.publish(msg, :persistent => true)
+    queue.publish(msg, :persistent => false)
 
     log_msg = " [x] Sent #{msg}"
     puts log_msg
@@ -18,5 +19,6 @@ class MvnIndexWorkerProducer < Producer
     log.error e.message
     log.error e.backtrace.join("\n")
   end
+
 
 end
