@@ -6,7 +6,7 @@ gem 'dalli'              , '~> 2.7.0'
 gem 'kgio'               , '~> 2.10.0'   # 20% performance boost for dalli
 gem 'oauth'              , '~> 0.4.7'
 gem 'aws-sdk'            , '~> 2.2.0'
-gem 'stripe'             , '~> 1.35.1'
+gem 'stripe'             , '~> 1.36.0'
 gem 'tire'               , '~> 0.6.2'
 gem 'octokit'            , '~> 4.2.0'
 gem 'semverly'           , '~> 1.0.0'
