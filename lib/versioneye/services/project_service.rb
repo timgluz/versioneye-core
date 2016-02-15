@@ -47,7 +47,7 @@ class ProjectService < Versioneye::Service
       if filter[:organisation] && !filter[:organisation].to_s.strip.empty?
         organisation = Organisation.find filter[:organisation].to_s
       end
-      if organisation && OrganisationService.member?( organisation, user )
+      if organisation && ( OrganisationService.member?( organisation, user ) || user.admin == true )
         filter_options[:organisation_id] = filter[:organisation].to_s
       else
         filter_options[:user_id] = user.ids
