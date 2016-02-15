@@ -15,6 +15,29 @@ class OrganisationService < Versioneye::Service
   end
 
 
+  def self.delete orga
+    return false if orga.nil?
+
+    orga.projects.each do |project|
+      ProjectService.destroy project
+    end
+
+    orga.teams.each do |team|
+      TeamService.delete team
+    end
+
+    orga.license_whitelists.each do |lwl|
+      lwl.delete
+    end
+
+    orga.component_whitelists.each do |cwl|
+      cwl.delete
+    end
+
+    orga.delete
+  end
+
+
   def self.owner? orga, user
     return false if orga.nil? || user.nil?
 
