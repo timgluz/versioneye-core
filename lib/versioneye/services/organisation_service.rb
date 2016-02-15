@@ -101,6 +101,8 @@ class OrganisationService < Versioneye::Service
   # organisations are returned there the given user
   # is in the owner team.
   def self.index user, only_owners = false
+    return Organisation.all if user.admin == true
+
     tms = TeamMember.where(:user_id => user.ids)
     return [] if tms.empty?
 
