@@ -2,7 +2,10 @@ machine:
   services:
     - docker
 
-dependencies:
+# dependencies:
+#   override:
+
+test:
   override:
     - docker pull reiz/mongodb:3.2.0-1
     - docker pull reiz/elasticsearch:0.9.1-1
@@ -13,9 +16,6 @@ dependencies:
     - docker run --name elasticsearch -d reiz/elasticsearch:0.9.1-1
     - docker run --name rabbitmq      -d reiz/rabbitmq:3.4.2
     - docker build -t versioneye/ruby-base:1.9.2 .
-
-test:
-  override:
     - docker run --link mongodb:db --link elasticsearch:es --link memcached:mc --link rabbitmq:rm versioneye/ruby-base:1.9.2 /app/scripts/runntests.sh
 
 # deployment:
