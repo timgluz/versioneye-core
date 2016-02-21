@@ -2,6 +2,10 @@ machine:
   services:
     - docker
 
+database:
+  override:
+    - cp config/mongoid.yml.ci config/mongoid.yml
+
 dependencies:
   override:
     - docker pull reiz/mongodb:3.2.0-1
