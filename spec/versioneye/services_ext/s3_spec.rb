@@ -20,7 +20,9 @@ describe S3 do
     it 'stores the file, gets the url and deletes the file' do
       region = 'eu-west-1'
 
-      creds = Aws::Credentials.new(ENV['AWS_ACCESS_KEY_ID'], ENV['AWS_SECRET_ACCESS_KEY'])
+      aws_id  = Settings.instance.aws_access_key_id
+      aws_key = Settings.instance.aws_secret_access_key
+      creds   = Aws::Credentials.new( aws_id, aws_key )
       Aws.config[:credentials] = creds
 
       gemfile = "spec/fixtures/files/Gemfile"
