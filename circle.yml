@@ -2,10 +2,6 @@ machine:
   services:
     - docker
 
-database:
-  override:
-    - cp config/mongoid.yml.ci config/mongoid.yml
-
 dependencies:
   override:
     - docker pull reiz/mongodb:3.2.0-1
@@ -17,12 +13,14 @@ dependencies:
     - docker run --name elasticsearch -d reiz/elasticsearch:0.9.1-1
     - docker run --name rabbitmq      -d reiz/rabbitmq:3.4.2
 
+database:
+  override:
+    - cp config/mongoid.yml.ci config/mongoid.yml
+
 test:
   override:
     - docker build -t versioneye/ruby-base:1.9.2 .
-    - docker images
-    - docker ps -a
-    - docker run --env RAILS_ENV=test --link mongodb:db --link elasticsearch:es --link memcached:mc --link rabbitmq:rm versioneye/ruby-base:1.9.2 /app/scripts/runntests.sh
+    - docker run --env RAILS_ENV=test --link mongodb:db --link elasticsearch:es --link memcached:mc --link rabbitmq:rm versioneye/ruby-base:1.9.2 rspec
 
 # deployment:
 #   hub:
