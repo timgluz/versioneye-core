@@ -12,7 +12,7 @@ app:
 
 
 mongodb:
-  image: reiz/mongodb:2.6.6_2
+  image: reiz/mongodb:3.2.0
   ports:
    - "27017:27017"
    - "28017:28017"
