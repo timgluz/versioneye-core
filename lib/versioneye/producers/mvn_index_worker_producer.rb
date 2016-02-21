@@ -1,5 +1,6 @@
 class MvnIndexWorkerProducer < Producer
 
+
   def initialize msg
     connection = get_connection
     connection.start
@@ -18,5 +19,6 @@ class MvnIndexWorkerProducer < Producer
     log.error e.message
     log.error e.backtrace.join("\n")
   end
+
 
 end

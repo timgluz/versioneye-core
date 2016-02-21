@@ -49,6 +49,36 @@ describe OrganisationService do
   end
 
 
+  describe "delete" do 
+    it "deletes an orga" do 
+      user = UserFactory.create_new
+      user.fullname = 'HansTanz'
+      expect( user.save ).to be_truthy
+
+      project = ProjectFactory.create_new user
+      expect( project.save ).to be_truthy
+
+      orga = OrganisationService.create_new user, "myorga"
+      expect( orga ).to_not be_nil
+
+      cwl = ComponentWhitelist.new({:name => 'cwl', :default => true})
+      cwl.organisation = orga
+      expect( cwl.save ).to be_truthy
+
+      lwl = LicenseWhitelist.new({:name => 'lwl', :default => true})
+      lwl.organisation = orga
+      expect( lwl.save ).to be_truthy
+
+      expect( OrganisationService.transfer project, orga ).to be_truthy
+      expect( OrganisationService.delete orga ).to be_truthy
+      expect( Project.count ).to eq(0)
+      expect( LicenseWhitelist.count ).to eq(0)
+      expect( ComponentWhitelist.count ).to eq(0)
+      expect( Team.count ).to eq(0)
+    end
+  end
+
+
   describe "create_new" do
 
     it "creates a new organisation" do
