@@ -20,7 +20,7 @@ describe S3 do
     it 'stores the file, gets the url and deletes the file' do
       region = 'eu-west-1'
 
-      aws_id  = 'test_failure' # Settings.instance.aws_access_key_id
+      aws_id  = Settings.instance.aws_access_key_id
       aws_key = Settings.instance.aws_secret_access_key
       creds   = Aws::Credentials.new( aws_id, aws_key )
       Aws.config[:credentials] = creds
