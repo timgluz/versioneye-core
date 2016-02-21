@@ -1,0 +1,26 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - docker pull reiz/mongodb:3.2.0
+    - docker pull reiz/elasticsearch:0.9.1
+    - docker pull reiz/memcached:1.4.14
+    - docker pull reiz/rabbitmq:3.4.2
+    - docker run --name mongodb       -p 27017:27017 -p 28017:28017 -d reiz/mongodb:3.2.0-1
+    - docker run --name memcached     -p 11211:11211 -d reiz/memcached:1.4.14
+    - docker run --name elasticsearch -p 9200:9200 -d reiz/elasticsearch:0.9.1-1
+    - docker run --name rabbitmq      -p 5672:5672 -d reiz/rabbitmq:3.4.2
+    - docker build -t versioneye/ruby-base:1.9.2 .
+
+test:
+  override:
+    - docker run --link mongodb:db --link elasticsearch:es --link memcached:mc --link rabbitmq:rm versioneye/ruby-base:1.9.2 /app/scripts/runntests.sh
+
+# deployment:
+#   hub:
+#     branch: master
+#     commands:
+#       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+#       - docker push circleci/elasticsearch
