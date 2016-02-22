@@ -25,17 +25,18 @@ class ProjectService < Versioneye::Service
   def self.corresponding_file filename
     return nil if filename.to_s.empty?
     trimmed_name = filename.split('?')[0]
-    return 'Gemfile.lock'   if (/Gemfile\z/ =~ trimmed_name) == 0
+    return 'Gemfile.lock'   if (/Gemfile\z/       =~ trimmed_name) == 0
     return 'composer.lock'  if (/composer.json\z/ =~ trimmed_name) == 0
-    return 'Podfile.lock'   if (/Podfile\z/ =~ trimmed_name) == 0
-    return 'Berksfile.lock' if (/metadata.rb\z/ =~ trimmed_name) == 0
-    return 'Berksfile.lock' if (/Berksfile\z/ =~ trimmed_name) == 0
+    return 'Podfile.lock'   if (/Podfile\z/       =~ trimmed_name) == 0
+    return 'Berksfile.lock' if (/metadata.rb\z/   =~ trimmed_name) == 0
+    return 'Berksfile.lock' if (/Berksfile\z/     =~ trimmed_name) == 0
     return nil
   end
 
 
   def self.index( user, filter = {}, sort = nil)
     filter_options            = {:parent_id => nil}
+    filter_options[:team_ids] = filter[:team] if !filter[:team].to_s.eql?('all') && !filter[:team].to_s.empty?
     filter_options[:language] = filter[:language]  if filter[:language] && !filter[:language].to_s.eql?('ALL')
     filter_options[:name]     = /#{filter[:name]}/i if filter[:name] && !filter[:name].to_s.strip.empty?
     if filter[:scope].to_s == 'all_public'
