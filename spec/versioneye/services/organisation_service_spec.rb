@@ -93,6 +93,12 @@ describe OrganisationService do
       orga = OrganisationService.create_new user, "myorga"
       expect( orga ).to_not be_nil
 
+      team = Team.new(:name => 'frontend', :organisation => orga.ids)
+      expect( team.save ).to be_truthy
+
+      team2 = Team.new(:name => 'backend', :organisation => orga.ids)
+      expect( team2.save ).to be_truthy
+
       TeamService.add "frontend", orga.ids, user.username, user
       TeamService.add "backend" , orga.ids, user1.username, user
 
