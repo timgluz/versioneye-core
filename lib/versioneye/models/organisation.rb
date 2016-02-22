@@ -55,6 +55,16 @@ class Organisation < Versioneye::Model
     nil
   end
 
+  def teams_by user
+    ts = []
+    teams.each do |team|
+      team.members.each do |member|
+        ts << team if member.user.ids.eql?(user.ids)
+      end
+    end
+    ts
+  end
+
   def team_by name
     teams.each do |team|
       return team if team.name.eql?(name)

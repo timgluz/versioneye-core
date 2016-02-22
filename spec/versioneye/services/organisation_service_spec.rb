@@ -49,8 +49,8 @@ describe OrganisationService do
   end
 
 
-  describe "delete" do 
-    it "deletes an orga" do 
+  describe "delete" do
+    it "deletes an orga" do
       user = UserFactory.create_new
       user.fullname = 'HansTanz'
       expect( user.save ).to be_truthy
@@ -76,6 +76,36 @@ describe OrganisationService do
       expect( ComponentWhitelist.count ).to eq(0)
       expect( Team.count ).to eq(0)
     end
+  end
+
+
+  describe "team_by" do
+
+    it "finds the teams which belong to the given user" do
+      user = UserFactory.create_new
+      user.fullname = 'HansTanz'
+      expect( user.save ).to be_truthy
+
+      user1 = UserFactory.create_new 2
+      user1.fullname = 'Han Solo'
+      expect( user1.save ).to be_truthy
+
+      orga = OrganisationService.create_new user, "myorga"
+      expect( orga ).to_not be_nil
+
+      TeamService.add "frontend", orga.ids, user.username, user
+      TeamService.add "backend" , orga.ids, user1.username, user
+
+      orga = Organisation.first
+      expect( orga ).to_not be_nil
+      expect( orga.name ).to eq('myorga')
+      expect( orga.teams.count ).to eq(3)
+
+      teams = orga.teams_by user
+      expect( teams.count ).to eq(2)
+      expect( teams[1].name ).to eq('frontend')
+    end
+
   end
 
 
