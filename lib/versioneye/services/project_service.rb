@@ -462,7 +462,7 @@ class ProjectService < Versioneye::Service
         next if dep_hash.include? key
 
         product = dep.product
-        product.version = dep.version_requested
+        product.version = dep.version_requested if !product.nil?
         dep_hash[key] = dep
         project.dep_number_sum       += 1
         project.out_number_sum       += 1 if dep.outdated
