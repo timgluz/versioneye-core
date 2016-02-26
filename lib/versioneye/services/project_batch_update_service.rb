@@ -97,7 +97,7 @@ class ProjectBatchUpdateService < Versioneye::Service
       projects = []
       orgas = OrganisationService.index user
       orgas.each do |orga|
-        orga.projects.parents.each do |project|
+        orga.projects.by_period( period ).parents.each do |project|
 
           projects << project if project.is_collaborator?( user )
         end
