@@ -17,6 +17,57 @@ describe User do
     end
   end
 
+  describe "api" do
+    it "returns nil because no api key" do
+      expect( github_user.api ).to be_nil
+    end
+    it "returns the api" do
+      api = Api.find_or_initialize_by(user_id: github_user.ids)
+      api.generate_api_key!
+      expect( api.save ).to be_truthy
+      expect( github_user.api ).to_not be_nil
+      expect( github_user.api.api_key ).to eq( api.api_key )
+    end
+  end
+
+  describe "find_by_stash_slug" do
+    it "returns nil because slag param is empyt" do
+      expect( User.find_by_stash_slug(nil) ).to be_nil
+    end
+    it "returns nil because slag param is empyt" do
+      expect( User.find_by_stash_slug('') ).to be_nil
+    end
+    it "returns the user for the slag" do
+      bitbucket_user.stash_slug = 'my_slug'
+      expect( bitbucket_user.save ).to be_truthy
+      slug_user = User.find_by_stash_slug('my_slug')
+      expect( slug_user ).to_not be_nil
+      expect( slug_user.stash_slug ).to eq('my_slug')
+    end
+  end
+
+  describe "stash_account_connected?" do
+    it "returns false because slag param is empyt" do
+      expect( bitbucket_user.stash_account_connected? ).to be_falsey
+    end
+    it "returns false because stash token is empty" do
+      bitbucket_user.stash_slug = 'my_slug'
+      expect( bitbucket_user.save ).to be_truthy
+      expect( bitbucket_user.stash_account_connected? ).to be_falsey
+    end
+    it "returns false because stash slug is empty" do
+      bitbucket_user.stash_token = 'token'
+      expect( bitbucket_user.save ).to be_truthy
+      expect( bitbucket_user.stash_account_connected? ).to be_falsey
+    end
+    it "returns true because stash slug & token not is empty" do
+      bitbucket_user.stash_token = 'token'
+      bitbucket_user.stash_slug = 'my_slug'
+      expect( bitbucket_user.save ).to be_truthy
+      expect( bitbucket_user.stash_account_connected? ).to be_truthy
+    end
+  end
+
   describe "replacements_for_username" do
     it "replaces @ characters with empty" do
       github_user.username = "hans@tanz"
@@ -54,6 +105,136 @@ describe User do
       user.bitbucket_login.should eq("supi@ha.de")
       user.bitbucket_token.should eq("token")
       user.bitbucket_secret.should eq("secret")
+    end
+    it "update from empty bitbucket_json" do
+      bitbucket_user = {}
+
+      user = User.new
+      user.update_from_bitbucket_json bitbucket_user, "token", "secret"
+      user.username.should_not be_empty
+      user.fullname.should eq(user.username)
+      user.bitbucket_id.should be_nil
+      user.bitbucket_login.should be_nil
+      user.bitbucket_token.should eq("token")
+      user.bitbucket_secret.should eq("secret")
+    end
+  end
+
+  describe "update_from_github_json" do
+    it "updates from github_json" do
+      github_json = {}
+      github_json[:id] = "123456789"
+      github_json[:login] = "super_bomb"
+      github_json[:name] = "super bomb"
+
+      user = User.new
+      expect( user.password ).to be_nil
+      expect( user.username ).to be_nil
+      expect( user.fullname ).to be_nil
+      expect( user.github_id ).to be_nil
+      expect( user.github_login ).to be_nil
+      expect( user.github_token ).to be_nil
+
+      user.update_from_github_json github_json, "token"
+
+      expect( user.password ).to_not be_empty
+      expect( user.username ).to eq(github_json[:login])
+      expect( user.fullname ).to eq(github_json[:name])
+      expect( user.github_id ).to eq(github_json[:id])
+      expect( user.github_login ).to eq(github_json[:login])
+      expect( user.github_token ).to eq('token')
+    end
+    it "updates from github_json without name" do
+      github_json = {}
+      github_json[:id] = "123456789"
+      github_json[:login] = "super_bomb"
+
+      user = User.new
+      expect( user.password ).to be_nil
+      expect( user.username ).to be_nil
+      expect( user.fullname ).to be_nil
+      expect( user.github_id ).to be_nil
+      expect( user.github_login ).to be_nil
+      expect( user.github_token ).to be_nil
+
+      user.update_from_github_json github_json, "token"
+
+      expect( user.password ).to_not be_empty
+      expect( user.username ).to eq(github_json[:login])
+      expect( user.fullname ).to eq(github_json[:login])
+      expect( user.github_id ).to eq(github_json[:id])
+      expect( user.github_login ).to eq(github_json[:login])
+      expect( user.github_token ).to eq('token')
+    end
+    it "updates from github_json without login" do
+      github_json = {}
+      github_json[:id] = "123456789"
+
+      user = User.new
+      expect( user.password ).to be_nil
+      expect( user.username ).to be_nil
+      expect( user.fullname ).to be_nil
+      expect( user.github_id ).to be_nil
+      expect( user.github_login ).to be_nil
+      expect( user.github_token ).to be_nil
+
+      user.update_from_github_json github_json, "token"
+
+      expect( user.password ).to_not be_empty
+      expect( user.username ).to_not be_empty
+      expect( user.fullname ).to eq(user.username)
+      expect( user.github_id ).to eq(github_json[:id])
+      expect( user.github_login ).to be_nil
+      expect( user.github_token ).to eq('token')
+    end
+  end
+
+  describe "update_from_stash_json" do
+    it "update_from_stash_json" do
+      stash_json = {}
+      stash_json[:slug] = "123456789"
+      stash_json[:name] = "super_bomb"
+      stash_json[:emailAddress] = "super@bomb.me"
+
+      user = User.new
+      expect( user.password ).to be_nil
+      expect( user.username ).to be_nil
+      expect( user.fullname ).to be_nil
+      expect( user.email ).to be_nil
+      expect( user.stash_token ).to be_nil
+      expect( user.stash_secret ).to be_nil
+      expect( user.stash_slug ).to be_nil
+
+      user.update_from_stash_json stash_json, "token", "secret"
+
+      expect( user.username ).to eq(stash_json[:slug])
+      expect( user.fullname ).to eq(stash_json[:name])
+      expect( user.stash_slug ).to eq(stash_json[:slug])
+      expect( user.email ).to eq(stash_json[:emailAddress])
+      expect( user.stash_token ).to eq('token')
+      expect( user.stash_secret ).to eq('secret')
+    end
+    it "update from empty stash_json" do
+      stash_json = {}
+      stash_json[:emailAddress] = "super@bomb.me"
+
+      user = User.new
+      expect( user.password ).to be_nil
+      expect( user.username ).to be_nil
+      expect( user.fullname ).to be_nil
+      expect( user.email ).to be_nil
+      expect( user.stash_token ).to be_nil
+      expect( user.stash_secret ).to be_nil
+      expect( user.stash_slug ).to be_nil
+
+      user.update_from_stash_json stash_json, "token", "secret"
+
+      expect( user.username ).to_not be_empty
+      expect( user.fullname ).to eq(user.username)
+      expect( user.stash_slug ).to be_nil
+      expect( user.email ).to eq(stash_json[:emailAddress])
+      expect( user.stash_token ).to eq('token')
+      expect( user.stash_secret ).to eq('secret')
     end
   end
 
