@@ -19,6 +19,10 @@ class GitReposImportWorker < Worker
 
         import_all_repos body
 
+        msg = " [x] GitReposImportWorker job done for #{body}"
+        log.info msg
+        p msg
+
         channel.ack(delivery_info.delivery_tag)
       end
     rescue => e
@@ -38,7 +42,7 @@ class GitReposImportWorker < Worker
       user_id = msg.split(":::").last
       user = User.find user_id
 
-      log_msg = "going to import repos for #{user.username} from provider #{provider}"
+      log_msg = "   [x] GitReposImportWorker going to import repos for #{user.username} from provider #{provider}"
       log.info log_msg
       p log_msg
 
@@ -60,17 +64,13 @@ class GitReposImportWorker < Worker
 
       user_task_key = "#{user[:username]}-stash"
 
-      log_msg = "Fetch Repositories for #{user_task_key} from Stash and cache them in DB."
+      log_msg = "   [x] GitReposImportWorker fetch Repositories for #{user_task_key} from Stash and cache them in DB."
       log.info log_msg
       p log_msg
 
       cache.set( user_task_key, StashService::A_TASK_RUNNING, StashService::A_TASK_TTL )
       StashService.cache_user_all_repos( user )
       cache.set( user_task_key, StashService::A_TASK_DONE, StashService::A_TASK_TTL )
-
-      log_msg = "Job done for #{user_task_key}"
-      log.info log_msg
-      p log_msg
     rescue => e
       log.error e.message
       log.error e.backtrace.join("\n")
@@ -81,11 +81,13 @@ class GitReposImportWorker < Worker
       return nil if user.nil?
 
       user_task_key = "#{user[:username]}-#{user[:github_id]}"
-      log.info "Fetch Repositories for #{user_task_key} from GitHub and cache them in DB."
 
-      orga_names = Github.orga_names( user.github_token )
+      log_msg = "   [x] GitReposImportWorker fetch Repositories for #{user_task_key} from GitHub and cache them in DB."
+      log.info log_msg
+      p log_msg
 
       cache.set( user_task_key, GitHubService::A_TASK_RUNNING, GitHubService::A_TASK_TTL )
+      orga_names = Github.orga_names( user.github_token )
       GitHubService.cache_user_all_repos(user, orga_names)
       cache.set( user_task_key, GitHubService::A_TASK_DONE, GitHubService::A_TASK_TTL )
     rescue => e
@@ -98,12 +100,14 @@ class GitReposImportWorker < Worker
       return nil if user.nil?
 
       user_task_key = "#{user[:username]}-bitbucket"
-      log.info "Fetch Repositories for #{user_task_key} from Bitbucket and cache them in DB."
+
+      log_msg = "   [x] GitReposImportWorker fetch Repositories for #{user_task_key} from Bitbucket and cache them in DB."
+      log.info log_msg
+      p log_msg
 
       cache.set( user_task_key, BitbucketService::A_TASK_RUNNING, BitbucketService::A_TASK_TTL )
       BitbucketService.cache_user_all_repos( user )
       cache.set( user_task_key, BitbucketService::A_TASK_DONE, BitbucketService::A_TASK_TTL )
-      log.info "Job done for #{user_task_key}"
     rescue => e
       log.error e.message
       log.error e.backtrace.join("\n")
