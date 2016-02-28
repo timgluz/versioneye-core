@@ -3,9 +3,9 @@ require 'spec_helper'
 describe DependencyBadgeWorker do
 
 
-  describe 'import_from_bitbucket_async' do
+  describe 'DependencyBadgeProducer' do
 
-    it 'imports from bitbucket async' do
+    it 'updates the badge for a new dependency' do
 
       rails = Product.new({:prod_type => Project::A_TYPE_RUBYGEMS,
         :language => Product::A_LANGUAGE_RUBY, :prod_key => 'rails',
