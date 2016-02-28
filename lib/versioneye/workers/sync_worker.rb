@@ -7,16 +7,15 @@ class SyncWorker < Worker
     channel = connection.create_channel
     queue   = channel.queue("sync_db", :durable => true)
 
-    log_msg = " [*] Waiting for messages in #{queue.name}. To exit press CTRL+C"
-    puts log_msg
-    log.info log_msg
+    multi_log " [*] Waiting for messages in #{queue.name}. To exit press CTRL+C"
 
     begin
       queue.subscribe(:manual_ack => true, :block => true) do |delivery_info, properties, message|
-        puts " [x] SyncWorker Received #{message}"
+        multi_log " [x] SyncWorker Received #{message}"
 
         process_work message
 
+        multi_log " [x] SyncWorker Job done for #{message}"
         channel.ack(delivery_info.delivery_tag)
       end
     rescue => e
