@@ -52,17 +52,19 @@ class GitRepoImportWorker < Worker
     end
 
 
-    def update_stash_repo user, repo_id
-      repo = StashRepo.find repo_id
+    def update_github_repo user, repo_id
+      repo = GithubRepo.find repo_id
       time = Benchmark.measure do
-        StashService.update_branches(user, repo)
-        StashService.update_project_files(user, repo)
+        repo = Github.update_branches      repo, user.github_token
+        repo = Github.update_project_files repo, user.github_token
         repo.user_id = user.id
+        repo.user_login = user.github_login
         repo.save
       end
-      name = repo[:fullname]
+      name = repo[:full_name]
+      name = repo[:fullname] if name.to_s.empty?
 
-      multi_log "   [x] GitRepoImportWorker: Reading Stash / `#{name}` took: #{time}".gsub("\n", "")
+      multi_log "   [x] GitRepoImportWorker: Reading GitHub / `#{name}` took: #{time}".gsub("\n", "")
     rescue => e
       log.error e.message
       log.error e.backtrace.join("\n")
@@ -87,19 +89,17 @@ class GitRepoImportWorker < Worker
     end
 
 
-    def update_github_repo user, repo_id
-      repo = GithubRepo.find repo_id
+    def update_stash_repo user, repo_id
+      repo = StashRepo.find repo_id
       time = Benchmark.measure do
-        repo = Github.update_branches      repo, user.github_token
-        repo = Github.update_project_files repo, user.github_token
+        StashService.update_branches(user, repo)
+        StashService.update_project_files(user, repo)
         repo.user_id = user.id
-        repo.user_login = user.github_login
         repo.save
       end
-      name = repo[:full_name]
-      name = repo[:fullname] if name.to_s.empty?
+      name = repo[:fullname]
 
-      multi_log "   [x] GitRepoImportWorker: Reading GitHub / `#{name}` took: #{time}".gsub("\n", "")
+      multi_log "   [x] GitRepoImportWorker: Reading Stash / `#{name}` took: #{time}".gsub("\n", "")
     rescue => e
       log.error e.message
       log.error e.backtrace.join("\n")
