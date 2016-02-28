@@ -2,8 +2,7 @@ require 'spec_helper'
 
 describe DependencyBadgeWorker do
 
-
-  describe 'DependencyBadgeProducer' do
+  describe 'work' do
 
     it 'updates the badge for a new dependency' do
 
