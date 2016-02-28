@@ -1,0 +1,220 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://bitbucket.org/api/2.0/repositories/veye1test
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Chrome28 (contact@versioneye.com) (OAuth gem v0.5.0)
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      Authorization:
+      - OAuth oauth_consumer_key="HgSkE62pTT3HmxFGAm", oauth_nonce="mOja2JXSiFXT1XvCJFzL48cYqbCw1wKlOzSzdPWO5Y",
+        oauth_signature="TFQt95jrxa7%2B0kox6K27rnyVK3Y%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1456670914", oauth_token="S4T6L8AXgha5NE7Kj", oauth_version="1.0"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.6.2
+      Vary:
+      - Accept-Encoding
+      - Authorization, Cookie
+      Content-Type:
+      - application/json; charset=utf-8
+      X-Oauth-Scopes:
+      - wiki, project, account, repository:admin, repository, project:write, issue:write,
+        pullrequest:write, team, webhook, pullrequest, snippet, snippet:write, repository:write,
+        team:write, account:write, issue, email
+      Strict-Transport-Security:
+      - max-age=31536000
+      Date:
+      - Sun, 28 Feb 2016 14:48:35 GMT
+      X-Served-By:
+      - app-109
+      Transfer-Encoding:
+      - chunked
+      X-Static-Version:
+      - 4b2f3e529f0c
+      Etag:
+      - '"c178af13ba4aa9f5174ea89d0a54d30e"'
+      X-Content-Type-Options:
+      - nosniff
+      X-Render-Time:
+      - '0.0380160808563'
+      X-Accepted-Oauth-Scopes:
+      - repository
+      Connection:
+      - keep-alive
+      X-Version:
+      - 4b2f3e529f0c
+      X-Request-Count:
+      - '394'
+      X-Frame-Options:
+      - SAMEORIGIN
+    body:
+      encoding: ASCII-8BIT
+      string: '{"pagelen": 10, "values": [{"scm": "git", "website": "", "has_wiki":
+        false, "name": "composer", "links": {"watchers": {"href": "https://bitbucket.org/!api/2.0/repositories/veye1test/composer/watchers"},
+        "hooks": {"href": "https://bitbucket.org/!api/2.0/repositories/veye1test/composer/hooks"},
+        "clone": [{"href": "https://veye1test@bitbucket.org/veye1test/composer.git",
+        "name": "https"}, {"href": "ssh://git@bitbucket.org/veye1test/composer.git",
+        "name": "ssh"}], "self": {"href": "https://bitbucket.org/!api/2.0/repositories/veye1test/composer"},
+        "html": {"href": "https://bitbucket.org/veye1test/composer"}, "avatar": {"href":
+        "https://bitbucket.org/veye1test/composer/avatar/32/"}, "commits": {"href":
+        "https://bitbucket.org/!api/2.0/repositories/veye1test/composer/commits"},
+        "forks": {"href": "https://bitbucket.org/!api/2.0/repositories/veye1test/composer/forks"},
+        "downloads": {"href": "https://bitbucket.org/!api/2.0/repositories/veye1test/composer/downloads"},
+        "pullrequests": {"href": "https://bitbucket.org/!api/2.0/repositories/veye1test/composer/pullrequests"}},
+        "fork_policy": "allow_forks", "uuid": "{965635cc-999c-4759-aca6-fbf0be57ef97}",
+        "language": "php", "created_on": "2016-02-28T14:27:23.103481+00:00", "full_name":
+        "veye1test/composer", "has_issues": false, "owner": {"username": "veye1test",
+        "display_name": "veye1test", "type": "user", "uuid": "{f5482563-4ba9-42bf-b321-493511efc055}",
+        "links": {"self": {"href": "https://bitbucket.org/!api/2.0/users/veye1test"},
+        "html": {"href": "https://bitbucket.org/veye1test/"}, "avatar": {"href": "https://bitbucket.org/account/veye1test/avatar/32/"}}},
+        "updated_on": "2016-02-28T14:30:42.373969+00:00", "size": 58750, "type": "repository",
+        "is_private": false, "description": ""}], "page": 1, "size": 1}'
+    http_version: 
+  recorded_at: Sun, 28 Feb 2016 14:48:35 GMT
+- request:
+    method: get
+    uri: https://bitbucket.org/api/1.0/user/privileges
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Chrome28 (contact@versioneye.com) (OAuth gem v0.5.0)
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      Authorization:
+      - OAuth oauth_consumer_key="HgSkE62pTT3HmxFGAm", oauth_nonce="ZA08PT6hAsM3BHEricDHZWtJv5uJerl0F5HaUHzzjY",
+        oauth_signature="jnV12Sq18KU%2Bf6RvYvlJAMUHtDI%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1456670915", oauth_token="S4T6L8AXgha5NE7Kj", oauth_version="1.0"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.6.2
+      Vary:
+      - Authorization, Cookie
+      Content-Type:
+      - application/json; charset=utf-8
+      X-Oauth-Scopes:
+      - wiki, project, account, repository:admin, repository, project:write, issue:write,
+        pullrequest:write, team, webhook, pullrequest, snippet, snippet:write, repository:write,
+        team:write, account:write, issue, email
+      Strict-Transport-Security:
+      - max-age=31536000
+      Date:
+      - Sun, 28 Feb 2016 14:48:36 GMT
+      X-Served-By:
+      - app-113
+      X-Static-Version:
+      - 4b2f3e529f0c
+      Etag:
+      - '"a6e0c24c3bbc6b5a00497cb4d74e8c41"'
+      X-Content-Type-Options:
+      - nosniff
+      X-Render-Time:
+      - '0.0266008377075'
+      X-Accepted-Oauth-Scopes:
+      - account
+      Connection:
+      - keep-alive
+      X-Version:
+      - 4b2f3e529f0c
+      X-Request-Count:
+      - '350'
+      X-Frame-Options:
+      - SAMEORIGIN
+      Content-Length:
+      - '13'
+    body:
+      encoding: UTF-8
+      string: '{"teams": {}}'
+    http_version: 
+  recorded_at: Sun, 28 Feb 2016 14:48:35 GMT
+- request:
+    method: get
+    uri: https://bitbucket.org/api/1.0/user/repositories
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Chrome28 (contact@versioneye.com) (OAuth gem v0.5.0)
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      Authorization:
+      - OAuth oauth_consumer_key="HgSkE62pTT3HmxFGAm", oauth_nonce="993UHd2uwjnIU6bFPtfcrJQz9kPm9qXOR4PCwHYgE",
+        oauth_signature="8S1o%2FsbuvyqJbenZhaopwjLwyAo%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1456670915", oauth_token="S4T6L8AXgha5NE7Kj", oauth_version="1.0"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.6.2
+      Vary:
+      - Authorization, Cookie
+      Content-Type:
+      - application/json; charset=utf-8
+      X-Oauth-Scopes:
+      - wiki, project, account, repository:admin, repository, project:write, issue:write,
+        pullrequest:write, team, webhook, pullrequest, snippet, snippet:write, repository:write,
+        team:write, account:write, issue, email
+      Strict-Transport-Security:
+      - max-age=31536000
+      Date:
+      - Sun, 28 Feb 2016 14:48:36 GMT
+      X-Served-By:
+      - app-110
+      X-Static-Version:
+      - 4b2f3e529f0c
+      Etag:
+      - '"345b423b1aeb7b202e1c9a74e8785987"'
+      X-Content-Type-Options:
+      - nosniff
+      X-Render-Time:
+      - '0.0621688365936'
+      X-Accepted-Oauth-Scopes:
+      - repository
+      Connection:
+      - keep-alive
+      X-Version:
+      - 4b2f3e529f0c
+      X-Request-Count:
+      - '5'
+      X-Frame-Options:
+      - SAMEORIGIN
+      Content-Length:
+      - '715'
+    body:
+      encoding: UTF-8
+      string: '[{"scm": "git", "has_wiki": false, "last_updated": "2016-02-28T15:30:42.373",
+        "no_forks": false, "created_on": "2016-02-28T15:27:23.103", "owner": "veye1test",
+        "logo": "https://bitbucket.org/veye1test/composer/avatar/32/?ts=1456669842",
+        "email_mailinglist": "", "is_mq": false, "size": 58750, "read_only": false,
+        "fork_of": null, "mq_of": null, "state": "available", "utc_created_on": "2016-02-28
+        14:27:23+00:00", "website": "", "description": "", "has_issues": false, "is_fork":
+        false, "slug": "composer", "is_private": false, "name": "composer", "language":
+        "php", "utc_last_updated": "2016-02-28 14:30:42+00:00", "no_public_forks":
+        false, "creator": null, "resource_uri": "/1.0/repositories/veye1test/composer"}]'
+    http_version: 
+  recorded_at: Sun, 28 Feb 2016 14:48:36 GMT
+recorded_with: VCR 3.0.1

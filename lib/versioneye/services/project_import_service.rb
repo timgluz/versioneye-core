@@ -128,12 +128,16 @@ class ProjectImportService < Versioneye::Service
 
   def self.import_child_from_bitbucket user, repo_name, lock_file, branch, project
     child = import_from_bitbucket user, repo_name, lock_file, branch, false
-    child.parent_id = project.id.to_s
-    child.save
-    ProjectService.update_sums( project )
-    child
+    if child && child.is_a?(Project)
+      child.parent_id = project.id.to_s
+      child.save
+      ProjectService.update_sums( project )
+    end
+    return child
   rescue => e
     log.error e.message
+    log.error e.backtrace.join("\n")
+    nil
   end
 
   def self.import_from_bitbucket(user, repo_name, filename, branch = "master", check_permission = true, repo = nil)
@@ -207,6 +211,7 @@ class ProjectImportService < Versioneye::Service
     child.save
   rescue => e
     log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
   def self.import_from_stash(user, repo_name, filename, branch = "master")

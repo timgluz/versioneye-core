@@ -73,13 +73,17 @@ class BitbucketService < Versioneye::Service
 
 
   def self.cache_user_all_repos(user)
-    puts "Going to cache users repositories."
+    return nil if user.nil?
+
+    log.info "Going to cache user repositories for #{user.username}"
 
     cache_repos( user, user[:bitbucket_id] )
 
     user_orgs = Bitbucket.user_orgs(user)
-    user_orgs.each do |org|
-      self.cache_repos( user, org )
+    if !user_orgs.nil? && !user_orgs.empty?
+      user_orgs.each do |org|
+        self.cache_repos( user, org )
+      end
     end
 
     # Import missing invited repos

@@ -66,7 +66,7 @@ class GitRepoFileImportWorker < Worker
         project = ProjectImportService.import_child_from_bitbucket user, repo_name, filename, branch, parent
       end
 
-      if project
+      if project && project.is_a?(Project)
         cache.set( message, "done_#{project.id.to_s}", A_TASK_TTL )
       end
     rescue => e
