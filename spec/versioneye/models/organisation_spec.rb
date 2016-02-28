@@ -11,6 +11,14 @@ describe Organisation do
   end
 
 
+  describe "to_s" do
+    it 'returns the name' do
+      orga = Organisation.new({:name => 'Orga'})
+      expect( orga.to_s ).to eq('Orga')
+    end
+  end
+
+
   describe "default_lwl_id" do
     it 'returns nil because lwl list is empty' do
       orga = Organisation.new({:name => 'Orga'})
@@ -119,6 +127,33 @@ describe Organisation do
 
       orga = Organisation.first
       expect( orga.projects.count ).to eq(1)
+    end
+  end
+
+
+  describe "unknown_license_deps" do
+    it "returns the unknown license_deps" do
+      user = UserFactory.create_new
+      project = ProjectFactory.create_new user
+      expect( project.save ).to be_truthy
+
+      orga = Organisation.new({:name => 'Orga'})
+      expect( orga.save ).to be_truthy
+
+      project.organisation = orga
+      expect( project.save ).to be_truthy
+
+      product = ProductFactory.create_new 1
+      expect( product.save ).to be_truthy
+
+      dep = ProjectdependencyFactory.create_new project, product
+      expect( dep.save ).to be_truthy
+
+      deps = orga.unknown_license_deps
+      expect( deps ).to_not be_nil
+      expect( deps ).to_not be_empty
+      expect( deps.count ).to eq(1)
+      expect( deps.first ).to eq('Java:versioneye/test_maven_1:')
     end
   end
 
