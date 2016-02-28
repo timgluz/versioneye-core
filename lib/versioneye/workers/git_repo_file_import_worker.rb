@@ -20,7 +20,7 @@ class GitRepoFileImportWorker < Worker
         multi_log " [x] GitRepoFileImportWorker received #{body}"
         import body
         channel.ack(delivery_info.delivery_tag)
-        multi_log " - job done for #{body}"
+        multi_log " [x] GitRepoFileImportWorker job done for #{body}"
       end
     rescue => e
       log.error "ERROR in GitRepoFileImportWorker: #{e.message}"
@@ -42,10 +42,12 @@ class GitRepoFileImportWorker < Worker
       filename  = sps[3]
       branch    = sps[4]
       parent_id = sps[5]
+      multi_log "   [x] GitRepoFileImportWorker import for provider: #{provider}, username: #{username}, repo_name: #{repo_name}, filename: #{filename}, branch: #{branch}"
 
       user = User.find_by_username username
       if user.nil?
         cache.set( message, "error_User `#{username}` not found!", A_TASK_TTL )
+        multi_log "   [x] GitRepoFileImportWorker username #{username} not found! Cancel this Job!"
         return
       end
 

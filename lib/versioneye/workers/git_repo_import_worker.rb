@@ -62,7 +62,7 @@ class GitRepoImportWorker < Worker
       end
       name = repo[:fullname]
 
-      multi_log "GitRepoImportWorker: Reading Stash / `#{name}` took: #{time}"
+      multi_log "   [x] GitRepoImportWorker: Reading Stash / `#{name}` took: #{time}".gsub("\n", "")
     rescue => e
       log.error e.message
       log.error e.backtrace.join("\n")
@@ -80,7 +80,7 @@ class GitRepoImportWorker < Worker
       name = repo[:full_name]
       name = repo[:fullname] if name.to_s.empty?
 
-      multi_log "GitRepoImportWorker: Reading `#{name}` took: #{time}"
+      multi_log "   [x] GitRepoImportWorker: Reading `#{name}` took: #{time}".gsub("\n", "")
     rescue => e
       log.error e.message
       log.error e.backtrace.join("\n")
@@ -99,7 +99,7 @@ class GitRepoImportWorker < Worker
       name = repo[:full_name]
       name = repo[:fullname] if name.to_s.empty?
 
-      multi_log "GitRepoImportWorker: Reading GitHub / `#{name}` took: #{time}"
+      multi_log "   [x] GitRepoImportWorker: Reading GitHub / `#{name}` took: #{time}".gsub("\n", "")
     rescue => e
       log.error e.message
       log.error e.backtrace.join("\n")
