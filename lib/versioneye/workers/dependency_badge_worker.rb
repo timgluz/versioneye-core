@@ -3,7 +3,7 @@ require 'dalli'
 
 class DependencyBadgeWorker < Worker
 
-  A_TTL = 86400 # 24 hours 
+  A_TTL = 86400 # 24 hours
 
   def work
     connection = get_connection
@@ -43,7 +43,7 @@ class DependencyBadgeWorker < Worker
     def calculate_badge message
       if message.to_s.match(/ref\z/)
         BadgeRefService.update message
-      else 
+      else
         BadgeService.update message
       end
     rescue => e
