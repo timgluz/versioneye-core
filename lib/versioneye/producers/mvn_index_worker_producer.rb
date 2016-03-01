@@ -1,6 +1,6 @@
 class MvnIndexWorkerProducer < Producer
 
-
+  # "central::http://repo.maven.apache.org/maven2::g:a:pom:v::published_date"
   def initialize msg
     connection = get_connection
     connection.start
