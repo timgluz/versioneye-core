@@ -67,6 +67,27 @@ class ProjectService < Versioneye::Service
   end
 
 
+  def self.all_projects( user )
+    projects = {}
+    projects[user.fullname] = user.projects.parents.where(:organisation_id => nil)
+    orgas = OrganisationService.index( user )
+    return projects if orgas.to_a.empty?
+
+    orgas.each do |orga|
+      teams = orga.teams_by user
+      next if teams.to_a.empty?
+
+      teams.each do |team|
+        projs = orga.projects.parents.where(:team_ids => team.ids)
+        next if projs.to_a.empty?
+
+        projects["#{orga.name}/#{team.name}"] = projs
+      end
+    end
+    projects
+  end
+
+
   def self.find id
     Project.find_by_id( id )
   rescue => e

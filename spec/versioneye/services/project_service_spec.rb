@@ -99,6 +99,77 @@ describe ProjectService do
     end
   end
 
+
+  describe "all_projects" do
+    it 'returns all projects for the user' do
+      user = UserFactory.create_new
+
+      orga1 = Organisation.new(:name => 'orga1')
+      expect( orga1.save ).to be_truthy
+
+      orga2 = Organisation.new(:name => 'orga2')
+      expect( orga2.save ).to be_truthy
+
+      orga3 = Organisation.new(:name => 'orga3')
+      expect( orga3.save ).to be_truthy
+
+      orga1_team1 = Team.new(:name => 'team1', :organisation_id => orga1.ids)
+      expect( orga1_team1.save ).to be_truthy
+      expect( orga1_team1.add_member(user) ).to be_truthy
+      expect( OrganisationService.index( user ).count ).to eq(1)
+
+      orga1_project = ProjectFactory.create_new user
+      orga1_project.user_id = nil
+      orga1_project.organisation_id = orga1.ids
+      orga1_project.team_ids = [orga1_team1.ids]
+      expect( orga1_project.save ).to be_truthy
+
+      expect( ProjectService.all_projects(user).keys.count ).to eq(2)
+      expect( ProjectService.all_projects(user).keys[0] ).to eq(user.fullname)
+      expect( ProjectService.all_projects(user).keys[1] ).to eq("#{orga1.name}/#{orga1_team1.name}")
+
+      orga1_team2 = Team.new(:name => 'team2', :organisation_id => orga1.ids)
+      expect( orga1_team2.save ).to be_truthy
+      expect( orga1_team2.add_member(user) ).to be_truthy
+
+      orga1_project2 = ProjectFactory.create_new user
+      orga1_project2.user_id = nil
+      orga1_project2.organisation_id = orga1.ids
+      orga1_project2.team_ids = [orga1_team2.ids]
+      expect( orga1_project2.save ).to be_truthy
+
+      expect( ProjectService.all_projects(user).keys.count ).to eq(3)
+      expect( ProjectService.all_projects(user).keys[0] ).to eq(user.fullname)
+      expect( ProjectService.all_projects(user).keys[2] ).to eq("#{orga1.name}/#{orga1_team2.name}")
+
+      orga1_team3 = Team.new(:name => 'team3', :organisation_id => orga1.ids)
+      expect( orga1_team3.save ).to be_truthy
+
+      orga1_project3 = ProjectFactory.create_new user
+      orga1_project3.user_id = nil
+      orga1_project3.organisation_id = orga1.ids
+      orga1_project3.team_ids = [orga1_team2.ids]
+      expect( orga1_project3.save ).to be_truthy
+
+      # still 3, because user is not part of the new team!
+      expect( ProjectService.all_projects(user).keys.count ).to eq(3)
+
+      orga2_team1 = Team.new(:name => 'team1', :organisation_id => orga2.ids)
+      expect( orga2_team1.save ).to be_truthy
+      expect( orga2_team1.add_member(user) ).to be_truthy
+
+      orga2_project1 = ProjectFactory.create_new user
+      orga2_project1.user_id = nil
+      orga2_project1.organisation_id = orga2.ids
+      orga2_project1.team_ids = [orga2_team1.ids]
+      expect( orga2_project1.save ).to be_truthy
+
+      expect( ProjectService.all_projects(user).keys.count ).to eq(4)
+      expect( ProjectService.all_projects(user).keys[3] ).to eq("#{orga2.name}/#{orga2_team1.name}")
+    end
+  end
+
+
   describe "corresponding_file" do
     it "returns nil for pom.xml" do
       described_class.corresponding_file('pom.xml').should be_nil
