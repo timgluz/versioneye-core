@@ -21,10 +21,3 @@ test:
   override:
     - docker build -t versioneye/ruby-base:1.9.2 .
     - docker run --env RAILS_ENV=test --link mongodb:db --link elasticsearch:es --link memcached:mc --link rabbitmq:rm -v $CIRCLE_TEST_REPORTS:$CIRCLE_TEST_REPORTS versioneye/ruby-base:1.9.2 rspec -r rspec_junit_formatter --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml
-
-# deployment:
-#   hub:
-#     branch: master
-#     commands:
-#       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-#       - docker push circleci/elasticsearch
