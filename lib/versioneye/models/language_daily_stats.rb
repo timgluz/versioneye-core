@@ -34,9 +34,6 @@ class LanguageDailyStats < Versioneye::Model
     ndays += skip
     ndays.times do |n|
       next if n < skip
-      log_msg = "Counting language_daily_stats: #{n + 1} / #{ndays}"
-      log.debug( log_msg )
-      p log_msg
       self.update_day_stats(n)
     end
   rescue => e
@@ -134,7 +131,6 @@ class LanguageDailyStats < Versioneye::Model
 
       language_key = LanguageDailyStats.language_to_sym(lang)
       n_artifacts  = LanguageDailyStats.count_artifacts( lang, that_day )
-      p "#{n_artifacts} for #{language_key}"
       self.inc_total_artifact(language_key, n_artifacts)
     end
   rescue => e
