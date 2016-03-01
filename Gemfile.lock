@@ -43,7 +43,7 @@ GEM
       aws-sdk-core (= 2.2.20)
     bson (4.0.3)
     builder (3.2.2)
-    bunny (2.2.2)
+    bunny (2.3.0)
       amq-protocol (>= 2.0.1)
     capybara (2.6.2)
       addressable
@@ -249,7 +249,7 @@ DEPENDENCIES
   actionmailer (~> 4.2.5.1)
   aws-sdk (~> 2.2.0)
   bundler (~> 1.11.0)
-  bunny (~> 2.2.0)
+  bunny (~> 2.3.0)
   capybara (~> 2.6.2)
   capybara-firebug (~> 2.1.0)
   cocoapods-core (~> 0.39.0)
