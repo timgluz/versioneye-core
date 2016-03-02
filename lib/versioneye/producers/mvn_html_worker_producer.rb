@@ -1,6 +1,6 @@
 class MvnHtmlWorkerProducer < Producer
 
-  
+  # "central::http://repo.maven.apache.org/maven2/com/versioneye/versioneye-maven-plugin/3.9.0/versioneye-maven-plugin-3.9.0.pom"
   def initialize msg
     connection = get_connection
     connection.start
