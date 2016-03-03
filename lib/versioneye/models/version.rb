@@ -12,6 +12,7 @@ class Version < Versioneye::Model
   field :released_at    , type: DateTime, default: DateTime.now
   field :released_string, type: String
   field :sv_ids         , type: Array, default: []  # SecurityVulnerability IDs
+  field :tested_runtimes, type: String
 
   embedded_in :product
 
