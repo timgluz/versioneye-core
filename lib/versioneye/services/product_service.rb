@@ -80,9 +80,27 @@ class ProductService < Versioneye::Service
       yield products
 
       co = i * page
-      log_msg = "all_products_paged iteration: #{i} - products processed: #{co}"
-      p log_msg
-      log.info log_msg
+      log.info "all_products_paged iteration: #{i} - products processed: #{co}"
+    end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+  end
+
+
+  def self.all_products_by_lang_paged(language)
+    count = Product.where(:language => language).count()
+    page = 100
+    iterations = count / page
+    iterations += 1
+    (0..iterations).each do |i|
+      skip = i * page
+      products = Product.where(:language => language).all().skip(skip).limit(page)
+
+      yield products
+
+      co = i * page
+      log.info "all_products_paged iteration: #{i} - products processed: #{co}"
     end
   rescue => e
     log.error e.message

@@ -171,7 +171,7 @@ describe ProductService do
   end
 
 
-  describe '' do
+  describe 'update_meta_data_global' do
 
     let(:prod_1) { ProductFactory.create_new(34) }
     let(:prod_2) { ProductFactory.create_new(35) }
@@ -200,6 +200,55 @@ describe ProductService do
 
       Product.where(:followers => 1).count.should == 2
       Product.where(:used_by_count => 1).count.should == 1
+    end
+
+  end
+
+
+  describe 'all_products_paged' do
+
+    let(:prod_1) { ProductFactory.create_new(34) }
+    let(:prod_2) { ProductFactory.create_new(35) }
+    let(:prod_3) { ProductFactory.create_new(36) }
+
+    it 'iterates through all_products_paged' do
+      expect( prod_1.save ).to be_truthy
+      expect( prod_2.save ).to be_truthy
+      expect( prod_3.save ).to be_truthy
+      expect( Product.count ).to eq(3)
+
+      n = 0
+      ProductService.all_products_paged do |products|
+        n = products.count
+      end
+      expect( n ).to eq(3)
+    end
+
+  end
+
+
+  describe 'all_products_by_lang_paged' do
+
+    let(:prod_1) { ProductFactory.create_new(34) }
+    let(:prod_2) { ProductFactory.create_new(35) }
+    let(:prod_3) { ProductFactory.create_new(36) }
+
+    it 'iterates through all_products_paged' do
+      prod_1.save
+      prod_2.save
+      prod_3.language = 'Ruby'
+      prod_3.save
+
+      n = 0
+      ProductService.all_products_by_lang_paged('Ruby') do |products|
+        n = products.count
+      end
+      expect( n ).to eq(1)
+
+      ProductService.all_products_by_lang_paged('Java') do |products|
+        n = products.count
+      end
+      expect( n ).to eq(2)
     end
 
   end
