@@ -10,9 +10,6 @@ describe SyncWorker do
       env = Settings.instance.environment
       GlobalSetting.set env, 'api_key', 'b71fb2'
 
-      product_1 = ProductFactory.create_for_gemfile 'log4r', '0.0.0'
-      expect( product_1.save ).to be_truthy
-
       product_2 = ProductFactory.create_for_gemfile 'vcr', '0.0.0'
       expect( product_2.save ).to be_truthy
       expect( product_2.versions.count ).to eq(1)
@@ -21,28 +18,26 @@ describe SyncWorker do
         worker1 = Thread.new{ SyncWorker.new.work }
 
         SyncProducer.new('all_products')
-        sleep 30
-
+        p "sleep 7"
+        sleep 7
+        p "wake up & exit worker."
         worker1.exit
       end
       product_2.reload
-      expect( product_2.versions.count ).to eq(62)
-
-      product_1.reload
-      expect( product_2.versions.count > 1 ).to be_truthy
+      expect( product_2.versions.count ).to eq(5)
     end
 
     it 'syncs a project' do
       env = Settings.instance.environment
-      GlobalSetting.set env, 'api_key', 'b71fb2'
+      GlobalSetting.set env, 'api_key', '3958165e66dag2'
 
       user = UserFactory.create_new
       project = ProjectFactory.create_new user
       expect(project.save).to be_truthy
 
-      pdep1 = Projectdependency.new({:language => 'Ruby', :name => 'vcr', :project_id => project.ids})
+      pdep1 = Projectdependency.new({:language => 'Ruby', :name => 'phcnotifi', :project_id => project.ids})
       expect( pdep1.save ).to be_truthy
-      pdep2 = Projectdependency.new({:language => 'Ruby', :name => 'log4r', :project_id => project.ids})
+      pdep2 = Projectdependency.new({:language => 'Ruby', :name => 'ronn', :project_id => project.ids})
       expect( pdep2.save ).to be_truthy
 
       expect( project.projectdependencies.count ).to eq(2)
@@ -52,8 +47,10 @@ describe SyncWorker do
         worker1 = Thread.new{ SyncWorker.new.work }
 
         SyncProducer.new("project::#{project.ids}")
-        sleep 30
 
+        p "sleep 7"
+        sleep 7
+        p "wake up & exit worker."
         worker1.exit
       end
 
