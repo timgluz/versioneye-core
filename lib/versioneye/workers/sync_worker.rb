@@ -32,10 +32,17 @@ class SyncWorker < Worker
     if message.match(/\Aproject\:\:/)
       project_id = message.split("::")[1]
       project = Project.find project_id
+      if project.nil?
+        log.error "   [x] SyncWorker: No project found for #{project_id}"
+        return nil
+      end
       SyncService.sync_project project
     elsif message.match(/\Aall_products/)
       SyncService.sync_all_products
     end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
 end

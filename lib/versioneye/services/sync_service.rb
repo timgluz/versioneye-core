@@ -20,6 +20,9 @@ class SyncService < Versioneye::Service
       sync_products products, skip_known_versions
     end
     log.info "STOP sync ALL products"
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
 
