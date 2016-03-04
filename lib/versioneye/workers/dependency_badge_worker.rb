@@ -9,10 +9,10 @@ class DependencyBadgeWorker < Worker
     connection = get_connection
     connection.start
     channel = connection.create_channel
+    channel.prefetch(1)
     queue   = channel.queue("dependency_badge", :durable => true)
 
-    multi_log " [*] Waiting for messages in #{queue.name}. To exit press CTRL+C"
-
+    multi_log " [*] DependencyBadgeWorker waiting for messages in #{queue.name}. To exit press CTRL+C"
     begin
       queue.subscribe(:manual_ack => true, :block => true) do |delivery_info, properties, body|
         multi_log " [x] DependencyBadgeWorker received #{body}"

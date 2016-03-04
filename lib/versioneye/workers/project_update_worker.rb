@@ -7,9 +7,10 @@ class ProjectUpdateWorker < Worker
     connection = get_connection
     connection.start
     channel = connection.create_channel
+    channel.prefetch(1)
     queue   = channel.queue("project_update", :durable => true)
 
-    multi_log " [*] Waiting for messages in #{queue.name}. To exit press CTRL+C"
+    multi_log " [*] ProjectUpdateWorker waiting for messages in #{queue.name}. To exit press CTRL+C"
 
     begin
       queue.subscribe(:manual_ack => true, :block => true) do |delivery_info, properties, body|
@@ -61,6 +62,11 @@ class ProjectUpdateWorker < Worker
     send_email = false
     send_email = true if pps[1].eql?('true')
     project = Project.find project_id
+    if project.nil?
+      log.error " [x] ProjectUpdateWorker no project found for #{project_id}"
+      return nil
+    end
+
     log.info " - ProjectUpdateService.update #{project_id}"
     ProjectUpdateService.update project, send_email
 

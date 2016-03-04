@@ -9,6 +9,7 @@ class GitRepoImportWorker < Worker
     connection = get_connection
     connection.start
     channel = connection.create_channel
+    channel.prefetch(1)
     queue   = channel.queue("git_repo_import", :durable => true)
 
     multi_log " [*] GitRepoImportWorker waiting for messages in #{queue.name}. To exit press CTRL+C"
