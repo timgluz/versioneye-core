@@ -13,7 +13,7 @@ class CommonWorker < Worker
         multi_log " [x] CommonWorker received #{message}"
         process_work message
         channel.ack(delivery_info.delivery_tag)
-        multi_log " [x] CommonWorker job done for #{message}"
+        multi_log " [x] CommonWorker job done #{message}"
       end
     rescue => e
       log.error e.message

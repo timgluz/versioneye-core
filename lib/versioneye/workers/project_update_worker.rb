@@ -16,7 +16,7 @@ class ProjectUpdateWorker < Worker
         multi_log " [x] ProjectUpdateWorker received #{body}"
         process body
         channel.ack(delivery_info.delivery_tag)
-        multi_log " [x] ProjectUpdateWorker job done for #{body}"
+        multi_log " [x] ProjectUpdateWorker job done #{body}"
       end
     rescue => e
       log.error e.message

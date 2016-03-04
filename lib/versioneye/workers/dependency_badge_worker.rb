@@ -18,7 +18,7 @@ class DependencyBadgeWorker < Worker
         multi_log " [x] DependencyBadgeWorker received #{body}"
         calculate_badge body
         channel.ack(delivery_info.delivery_tag)
-        multi_log " [x] DependencyBadgeWorker job done for #{body}"
+        multi_log " [x] DependencyBadgeWorker job done #{body}"
       end
     rescue => e
       log.error e.message

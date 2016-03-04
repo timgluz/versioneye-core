@@ -14,7 +14,7 @@ class UpdateIndexWorker < Worker
         multi_log " [x] UpdateIndexWorker received #{body}"
         update_index body
         channel.ack(delivery_info.delivery_tag)
-        multi_log " [x] UpdateIndexWorker job done for #{body}"
+        multi_log " [x] UpdateIndexWorker job done #{body}"
       end
     rescue => e
       log.error e.message

@@ -19,7 +19,7 @@ class GitRepoImportWorker < Worker
         handle body
         cache.set( body, GitHubService::A_TASK_DONE, A_TASK_TTL )
         channel.ack(delivery_info.delivery_tag)
-        multi_log " [x] GitRepoImportWorker job done for #{body}"
+        multi_log " [x] GitRepoImportWorker job done #{body}"
       end
     rescue => e
       log.error "ERROR in GitRepoImportWorker: #{e.message}"

@@ -31,7 +31,7 @@ class SyncWorker < Worker
       project_id = message.split("::")[1]
       project = Project.find project_id
       if project.nil?
-        log.error "   [x] SyncWorker: No project found for #{project_id}"
+        log.error "   [x] SyncWorker: No project found #{project_id}"
         return nil
       end
       SyncService.sync_project project

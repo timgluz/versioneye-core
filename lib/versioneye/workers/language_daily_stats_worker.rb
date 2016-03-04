@@ -14,7 +14,7 @@ class LanguageDailyStatsWorker < Worker
         multi_log " [x] LanguageDailyStatsWorker received #{body}"
         update_counts
         channel.ack(delivery_info.delivery_tag)
-        multi_log " [x] LanguageDailyStatsWorker job done for #{body}"
+        multi_log " [x] LanguageDailyStatsWorker job done #{body}"
       end
     rescue => e
       log.error e.message

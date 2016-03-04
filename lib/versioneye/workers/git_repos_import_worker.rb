@@ -14,7 +14,7 @@ class GitReposImportWorker < Worker
         multi_log " [x] GitReposImportWorker received #{body}"
         import_all_repos body
         channel.ack(delivery_info.delivery_tag)
-        multi_log " [x] GitReposImportWorker job done for #{body}"
+        multi_log " [x] GitReposImportWorker job done #{body}"
       end
     rescue => e
       log.error e.message

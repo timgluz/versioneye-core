@@ -13,7 +13,7 @@ class SendNotificationEmailsWorker < Worker
         multi_log " [x] SendNotificationEmailsWorker received #{body}"
         send_notification_emails body
         channel.ack(delivery_info.delivery_tag)
-        multi_log " [x] SendNotificationEmailsWorker job done for #{body}"
+        multi_log " [x] SendNotificationEmailsWorker job done #{body}"
       end
     rescue => e
       log.error e.message

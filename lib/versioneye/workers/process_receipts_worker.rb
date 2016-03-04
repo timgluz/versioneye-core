@@ -13,7 +13,7 @@ class ProcessReceiptsWorker < Worker
         multi_log " [x] ProcessReceiptsWorker received #{body}"
         process_receipts
         channel.ack(delivery_info.delivery_tag)
-        multi_log " [x] ProcessReceiptsWorker job done for #{body}"
+        multi_log " [x] ProcessReceiptsWorker job done #{body}"
       end
     rescue => e
       log.error e.message
