@@ -15,10 +15,11 @@ class GitRepoImportWorker < Worker
 
     begin
       queue.subscribe(:manual_ack => true, :block => true) do |delivery_info, properties, body|
-        multi_log " [x] GitRepoImportWorker Received #{body}"
+        multi_log " [x] GitRepoImportWorker received #{body}"
         handle body
         cache.set( body, GitHubService::A_TASK_DONE, A_TASK_TTL )
         channel.ack(delivery_info.delivery_tag)
+        multi_log " [x] GitRepoImportWorker job done for #{body}"
       end
     rescue => e
       log.error "ERROR in GitRepoImportWorker: #{e.message}"

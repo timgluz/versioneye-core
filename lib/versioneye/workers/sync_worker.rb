@@ -11,12 +11,10 @@ class SyncWorker < Worker
 
     begin
       queue.subscribe(:manual_ack => true, :block => true) do |delivery_info, properties, message|
-        multi_log " [x] SyncWorker Received #{message}"
-
+        multi_log " [x] SyncWorker received #{delivery_info.routing_key}:#{message}"
         process_work message
-
-        multi_log " [x] SyncWorker Job done for #{message}"
         channel.ack(delivery_info.delivery_tag)
+        multi_log " [x] SyncWorker job done for #{delivery_info.routing_key}:#{message}"
       end
     rescue => e
       log.error e.message

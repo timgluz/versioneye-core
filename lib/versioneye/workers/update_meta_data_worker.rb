@@ -6,19 +6,14 @@ class UpdateMetaDataWorker < Worker
     channel = connection.create_channel
     queue   = channel.queue("update_meta_data", :durable => true)
 
-    log_msg = " [*] Waiting for messages in #{queue.name}. To exit press CTRL+C"
-    puts log_msg
-    log.info log_msg
+    multi_log " [*] Waiting for messages in #{queue.name}. To exit press CTRL+C"
 
     begin
       queue.subscribe(:manual_ack => true, :block => true) do |delivery_info, properties, body|
-        msg = " [x] Received #{body}"
-        puts msg
-        log.info msg
-
+        multi_log " [x] UpdateMetaDataWorker received #{body}"
         update_meta_data body
-
         channel.ack(delivery_info.delivery_tag)
+        multi_log " [x] UpdateMetaDataWorker job done #{body}"
       end
     rescue => e
       log.error e.message

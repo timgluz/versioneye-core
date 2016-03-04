@@ -9,23 +9,14 @@ class ProjectUpdateWorker < Worker
     channel = connection.create_channel
     queue   = channel.queue("project_update", :durable => true)
 
-    log_msg = " [*] Waiting for messages in #{queue.name}. To exit press CTRL+C"
-    puts log_msg
-    log.info log_msg
+    multi_log " [*] Waiting for messages in #{queue.name}. To exit press CTRL+C"
 
     begin
       queue.subscribe(:manual_ack => true, :block => true) do |delivery_info, properties, body|
-        msg = " [x] Received #{body}"
-        puts msg
-        log.info msg
-
+        multi_log " [x] ProjectUpdateWorker received #{body}"
         process body
-
-        msg = " - job done for #{body}"
-        puts msg
-        log.info msg
-
         channel.ack(delivery_info.delivery_tag)
+        multi_log " [x] ProjectUpdateWorker job done for #{body}"
       end
     rescue => e
       log.error e.message

@@ -11,9 +11,7 @@ class GitRepoFileImportWorker < Worker
     channel = connection.create_channel
     queue   = channel.queue("git_repo_file_import", :durable => true)
 
-    log_msg = " [*] GitRepoFileImportWorker waiting for messages in #{queue.name}. To exit press CTRL+C"
-    puts log_msg
-    log.info log_msg
+    multi_log " [*] GitRepoFileImportWorker waiting for messages in #{queue.name}. To exit press CTRL+C"
 
     begin
       queue.subscribe(:manual_ack => true, :block => true) do |delivery_info, properties, body|

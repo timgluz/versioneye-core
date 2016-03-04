@@ -60,8 +60,11 @@ class NewestService < Versioneye::Service
   def self.update_nils
     Dependency.where(:current_version => nil, :dep_prod_key.ne => nil, :known => true).each do |dep|
       DependencyService.outdated?( dep )
-      multi_log "update #{dep.language}:#{dep.dep_prod_key}"
+      multi_log "NewestService.update_nils #{dep.language}:#{dep.dep_prod_key}"
     end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
 
@@ -78,13 +81,13 @@ class NewestService < Versioneye::Service
     return nil if product.nil?
 
     multi_log "---"
-    multi_log "update_meta_data for #{product.language}:#{product.prod_key}"
+    multi_log "ProductService.update_meta_data for #{product.language}:#{product.prod_key}"
     ProductService.update_meta_data product, false
 
-    multi_log "update_dependencies for #{product.language}:#{product.prod_key}"
+    multi_log "NewestService.update_dependencies for #{product.language}:#{product.prod_key}"
     update_dependencies product, newest.version
 
-    multi_log "update_projectdependencies for #{product.language}:#{product.prod_key}"
+    multi_log "NewestService.update_projectdependencies for #{product.language}:#{product.prod_key}"
     update_projectdependencies product, newest.version
 
     newest.processed = true

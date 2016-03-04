@@ -7,19 +7,14 @@ class LanguageDailyStatsWorker < Worker
     channel = connection.create_channel
     queue   = channel.queue("language_daily_stats", :durable => true)
 
-    log_msg = " [*] Waiting for messages in #{queue.name}. To exit press CTRL+C"
-    puts log_msg
-    log.info log_msg
+    multi_log " [*] Waiting for messages in #{queue.name}. To exit press CTRL+C"
 
     begin
       queue.subscribe(:manual_ack => true, :block => true) do |delivery_info, properties, body|
-        msg = " [x] Received #{body}"
-        puts msg
-        log.info msg
-
+        multi_log " [x] LanguageDailyStatsWorker received #{body}"
         update_counts
-
         channel.ack(delivery_info.delivery_tag)
+        multi_log " [x] LanguageDailyStatsWorker job done for #{body}"
       end
     rescue => e
       log.error e.message

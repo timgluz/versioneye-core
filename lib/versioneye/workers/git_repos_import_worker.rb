@@ -11,15 +11,10 @@ class GitReposImportWorker < Worker
 
     begin
       queue.subscribe(:manual_ack => true, :block => true) do |delivery_info, properties, body|
-        msg = " [x] GitReposImportWorker Received #{body}"
-        puts msg
-        log.info msg
-
+        multi_log " [x] GitReposImportWorker received #{body}"
         import_all_repos body
-
-        multi_log " [x] GitReposImportWorker job done for #{body}"
-
         channel.ack(delivery_info.delivery_tag)
+        multi_log " [x] GitReposImportWorker job done for #{body}"
       end
     rescue => e
       log.error e.message

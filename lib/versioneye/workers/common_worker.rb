@@ -7,17 +7,13 @@ class CommonWorker < Worker
     channel = connection.create_channel
     queue   = channel.queue("common_purpose", :durable => true)
 
-    log_msg = " [*] Waiting for messages in #{queue.name}. To exit press CTRL+C"
-    puts log_msg
-    log.info log_msg
-
+    multi_log " [*] Waiting for messages in #{queue.name}. To exit press CTRL+C"
     begin
       queue.subscribe(:manual_ack => true, :block => true) do |delivery_info, properties, message|
-        puts " [x] Received #{message}"
-
+        multi_log " [x] CommonWorker received #{message}"
         process_work message
-
         channel.ack(delivery_info.delivery_tag)
+        multi_log " [x] CommonWorker job done for #{message}"
       end
     rescue => e
       log.error e.message
