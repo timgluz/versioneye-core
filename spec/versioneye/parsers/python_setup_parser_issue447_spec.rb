@@ -9,7 +9,7 @@ COMMENT
 
 describe PythonSetupParser do
   context 'parse' do
-  
+
     let(:testfile_url){"https://s3.amazonaws.com/veye_test_env/python_1/setup.py"}
     let(:parser){PythonSetupParser.new}
     let(:product1){ProductFactory.create_for_pip "requests", "1.2.3"}
