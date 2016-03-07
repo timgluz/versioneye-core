@@ -124,6 +124,7 @@ describe ProjectBatchUpdateService do
       team    = Team.new( :name => 'name', :organisation_id => orga.ids )
       expect( team.save ).to be_truthy
       expect( team.add_member(user) ).to be_truthy
+      expect( team.add_member(owner) ).to be_truthy
 
       parser  = PodfileParser.new
       project = parser.parse_file './spec/fixtures/files/pod_file/example1/Podfile'
