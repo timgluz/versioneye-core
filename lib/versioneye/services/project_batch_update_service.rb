@@ -89,7 +89,7 @@ class ProjectBatchUpdateService < Versioneye::Service
     def self.fetch_affected_projects user, period
       return [] if user.projects.nil? || user.projects.empty?
 
-      user.projects.by_period( period ).parents.any_of({:out_number_sum.gt => 0},{:licenses_red_sum.gt => 0})
+      user.projects.by_period( period ).parents.where(:organisation_id => nil).any_of({:out_number_sum.gt => 0},{:licenses_red_sum.gt => 0})
     end
 
 
