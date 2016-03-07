@@ -41,7 +41,7 @@ GEM
       jmespath (~> 1.0)
     aws-sdk-resources (2.2.24)
       aws-sdk-core (= 2.2.24)
-    bson (4.0.3)
+    bson (4.0.4)
     builder (3.2.2)
     bunny (2.3.0)
       amq-protocol (>= 2.0.1)
