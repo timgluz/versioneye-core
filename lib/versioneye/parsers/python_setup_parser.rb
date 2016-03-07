@@ -17,6 +17,10 @@ class PythonSetupParser < RequirementsParser
     requirements.to_a.each do |requirement|
       parse_line requirement, project
     end
+    requirements = parse_requirements( doc, 'requirements' )
+    requirements.to_a.each do |requirement|
+      parse_line requirement, project
+    end
     project.dep_number = project.dependencies.size
     project
   end
@@ -67,10 +71,10 @@ class PythonSetupParser < RequirementsParser
   end
 
 
-  def parse_requirements(doc)
+  def parse_requirements(doc, dep_variable = 'install_requires')
     return nil if doc.nil? or doc.empty?
 
-    req_text = slice_content doc, 'install_requires', '[', ']', false
+    req_text = slice_content doc, dep_variable, '[', ']', false
     return nil if req_text.nil?
 
     req_text.split(/\'|\"/).keep_if {|item| item.strip.length > 1}
@@ -92,7 +96,6 @@ class PythonSetupParser < RequirementsParser
 
     start_pos = doc.index start_matcher, content_pos
     end_pos   = doc.index end_matcher  , content_pos
-
     return nil if start_pos.to_s.empty? || end_pos.to_s.empty?
 
     block_length = (end_pos - start_pos) + 1
