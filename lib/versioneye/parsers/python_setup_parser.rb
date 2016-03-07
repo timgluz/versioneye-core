@@ -12,10 +12,9 @@ class PythonSetupParser < RequirementsParser
     return nil if doc.to_s.empty?
     return nil if doc.to_s.strip.eql?('Not Found')
 
-    requirements = parse_requirements( doc )
-    # extras       = parse_extras( doc )
     project      = Project.new({:project_type => Project::A_TYPE_PIP, :language => Product::A_LANGUAGE_PYTHON })
-    requirements.each do |requirement|
+    requirements = parse_requirements( doc )
+    requirements.to_a.each do |requirement|
       parse_line requirement, project
     end
     project.dep_number = project.dependencies.size
@@ -70,7 +69,10 @@ class PythonSetupParser < RequirementsParser
 
   def parse_requirements(doc)
     return nil if doc.nil? or doc.empty?
+
     req_text = slice_content doc, 'install_requires', '[', ']', false
+    return nil if req_text.nil?
+
     req_text.split(/\'|\"/).keep_if {|item| item.strip.length > 1}
   end
 
@@ -89,7 +91,9 @@ class PythonSetupParser < RequirementsParser
     return nil if content_pos.nil?
 
     start_pos = doc.index start_matcher, content_pos
-    end_pos   =  doc.index end_matcher, content_pos
+    end_pos   = doc.index end_matcher  , content_pos
+
+    return nil if start_pos.to_s.empty? || end_pos.to_s.empty?
 
     block_length = (end_pos - start_pos) + 1
     if include_matchers
