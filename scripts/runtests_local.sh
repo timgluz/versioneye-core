@@ -16,7 +16,7 @@ echo "Going to run all specs"
 export RAILS_ENV="test"
 echo "Rails mode: $RAILS_ENV"
 
-rspec spec/versioneye/parsers/python_setup_parser_issue196_spec.rb
+rspec
 
 export RAILS_ENV="development"
 echo "Rails mode: $RAILS_ENV"
