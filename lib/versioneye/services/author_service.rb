@@ -75,6 +75,8 @@ class AuthorService < Versioneye::Service
 
 
   def self.find_or_create_author_by dev
+    return nil if dev_to_ignore?( dev )
+
     if dev.name.to_s.empty?
       author = Author.where( :email => dev.email ).first
       author = Author.where( :emails => dev.email ).first if author.nil?
@@ -87,6 +89,11 @@ class AuthorService < Versioneye::Service
       log.info "New Author #{name_id}"
     end
     author
+  end
+
+
+  def self.dev_to_ignore? dev
+    dev && dev.name.to_s.eql?('Matej Kieres')
   end
 
 
