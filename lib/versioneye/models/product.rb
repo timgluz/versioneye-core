@@ -411,6 +411,16 @@ class Product < Versioneye::Model
     links_2 = http_version_links
     links_1 << links_2
     links_1.flatten!
+    uniq_names = {}
+    response = {}
+    links_1.each do |link|
+      if (!uniq_names.keys.include?(link.name) ||
+          (uniq_names.keys.include?(link.name) && uniq_names[link.name].utc < link.updated_at.utc ) )
+        uniq_names[link.name] = link.updated_at
+        response[link.name] = link
+      end
+    end
+    response.values
   end
 
   def archives

@@ -761,6 +761,32 @@ describe Product do
   end
 
 
+  describe 'http_version_links_combined' do
+    it 'returns the right number of links' do
+      link = Versionlink.new({language: product.language, prod_key: product.prod_key})
+      link.link = "http://link1.de"
+      link.name = "Docu"
+      link.save
+
+      sleep 1
+
+      link2 = Versionlink.new({language: product.language, prod_key: product.prod_key})
+      link2.link = "http://link2.de"
+      link2.name = "Docu"
+      link2.save
+      link2.reload
+
+      product.version = "1.1"
+      expect( product.http_version_links_combined.size ).to eq(1)
+      expect( product.http_version_links_combined.first.updated_at ).to_not eq(link.updated_at)
+      expect( product.http_version_links_combined.first.updated_at ).to eq(link2.updated_at)
+
+      link.remove
+      link2.remove
+    end
+  end
+
+
   describe "handling product licenses" do
     it "returns licence of product, that is added by crawler" do
       product1 = ProductFactory.create_for_gemfile("bee", "1.4.0")
