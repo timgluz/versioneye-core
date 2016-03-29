@@ -45,6 +45,7 @@ module Versioneye
     require 'versioneye/services/lwl_service'
     require 'versioneye/services/lwl_pdf_service'
     require 'versioneye/services/lwl_csv_service'
+    require 'versioneye/services/sec_pdf_service'
     require 'versioneye/services/sync_service'
     require 'versioneye/services/transfer_service'
     require 'versioneye/services/enterprise_service'
