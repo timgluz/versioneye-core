@@ -85,7 +85,7 @@ class SecPdfService
 
       if flatten && project.children && !project.children.empty?
         project.children.each do |child|
-          fill_dto_with child.dependencies, dto, uniq_array, project.license_whitelist
+          fill_dto_with child.dependencies, dto, uniq_array
         end
       end
 
@@ -99,7 +99,7 @@ class SecPdfService
     def self.fill_dto_with dependencies, dto, uniq_array
       dependencies.each do |dep|
         if dep.sv_ids && !dep.sv_ids.empty?
-          line_per_sv( dep, dto, uniq_array, license_whitelist )
+          line_per_sv( dep, dto, uniq_array )
         else
           ok_line( dep, dto, uniq_array )
         end
