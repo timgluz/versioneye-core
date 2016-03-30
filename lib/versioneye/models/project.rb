@@ -39,10 +39,11 @@ class Project < Versioneye::Model
   field :group_id   , type: String # Maven specific
   field :artifact_id, type: String # Maven specific
 
-  field :project_type  , type: String,  :default => A_TYPE_MAVEN2
   field :language      , type: String
+  field :project_type  , type: String,  :default => A_TYPE_MAVEN2
   field :period        , type: String,  :default => A_PERIOD_DAILY
   field :notify_after_api_update, type: Boolean, :default => false
+
   field :email         , type: String
   field :url           , type: String
   field :source        , type: String,  :default => A_SOURCE_UPLOAD
@@ -96,7 +97,9 @@ class Project < Versioneye::Model
   scope :parents   , -> { where(parent_id: nil ) }
   scope :by_github , ->(reponame){ where(source: A_SOURCE_GITHUB, scm_fullname: reponame) }
 
-  attr_accessor :lwl_pdf_list, :has_kids
+  attr_accessor :lwl_pdf_list # list of dtos for the License Whitelist PDF
+  attr_accessor :sec_pdf_list # list of dtos for the Security PDF
+  attr_accessor :has_kids
 
   before_save :perpare_name_for_search
 
