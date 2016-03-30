@@ -119,20 +119,13 @@ class SecPdfService
 
 
     def self.line_per_sv dep, dto, uniq_array
-      lines = []
-      dep.sv_ids.each do |sv_id|
-        line = build_line(dep)
-        line[:status] = 'vulnerable'
-        line[:sv_id] = sv_id
-        lines << line
-      end
-
-      lines.each do |line|
-        uvalue = create_uniq_identifier(line)
-        next if uniq_array.include?(uvalue)
-
-        uniq_array << uvalue
+      line = build_line(dep)
+      line[:status] = 'vulnerable'
+      line[:sv_ids] = dep.sv_ids
+      uvalue = create_uniq_identifier(line)
+      if !uniq_array.include?(uvalue)
         dto[:vulnerable] << line
+        uniq_array << uvalue
       end
     end
 

@@ -158,7 +158,21 @@
         <% end %>
       <% end %>
 
-
+      <% if !project.sec_pdf_list[:vulnerable].to_a.empty? %>
+        <% project.sec_pdf_list[:vulnerable].each do |dep| %>
+          <h3>(<%= dep[:language] %>) <%= dep[:component] %> : <%= dep[:version] %></h3>
+          <% dep[:sv_ids].each do |sv_id| %>
+            <% sv = SecurityVulnerability.find sv_id %>
+            <% if sv %>
+              <div><%= sv.summary %></div>
+              <% sv.links.values.each do |link| %>
+                <div><%= link %></div>
+              <% end %>
+              <hr/>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
 
     </div>
   </body>
