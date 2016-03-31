@@ -45,6 +45,8 @@ class CommonWorker < Worker
       ScmMetaDataService.update_all_users
     elsif message.eql?("update_distinct_languages")
       LanguageService.update_distinct_languages
+    elsif message.eql?("remove_temp_projects")
+      ProjectService.remove_temp_projects
     end
 
     log.info "Job done for #{message}"

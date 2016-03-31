@@ -179,6 +179,11 @@ class ProjectService < Versioneye::Service
   end
 
 
+  def self.remove_temp_projects
+    Project.where(:temp => true).delete_all
+  end
+
+
   def self.ensure_unique_ga project
     return true if Settings.instance.projects_unique_ga == false
     return true if project.group_id.to_s.empty? && project.artifact_id.to_s.empty?

@@ -185,6 +185,20 @@ describe ProjectService do
     end
   end
 
+  describe "remove_temp_projects" do
+    it 'removes all temp projects' do
+      user = UserFactory.create_new
+      project = ProjectFactory.create_new user
+      project.save
+      project2 = ProjectFactory.create_new user
+      project2.temp = true
+      project2.save
+      expect( Project.count ).to eq(2)
+      ProjectService.remove_temp_projects
+      expect( Project.count ).to eq(1)
+    end
+  end
+
   describe "type_by_filename" do
     it "returns RubyGems. OK" do
       url1 = "http://localhost:4567/veye_dev_projects/i5lSWS951IxJjU1rurMg_Gemfile?AWSAccessKeyId=123&Expires=1360525084&Signature=HRPsn%2Bai%2BoSjm8zqwZFRtzxJvvE%3D"
