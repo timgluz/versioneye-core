@@ -58,18 +58,18 @@ class ProjectService < Versioneye::Service
 
     case sort
     when 'out_dated'
-      Project.where( filter_options ).desc(:out_number_sum).asc(:name_downcase)
+      Project.where( filter_options ).any_of({ :temp => false }, { :temp => nil } ).desc(:out_number_sum).asc(:name_downcase)
     when 'license_violations'
-      Project.where( filter_options ).desc(:licenses_red_sum).asc(:name_downcase)
+      Project.where( filter_options ).any_of({ :temp => false }, { :temp => nil } ).desc(:licenses_red_sum).asc(:name_downcase)
     else
-      Project.where( filter_options ).asc(:name_downcase).desc(:licenses_red_sum)
+      Project.where( filter_options ).any_of({ :temp => false }, { :temp => nil } ).asc(:name_downcase).desc(:licenses_red_sum)
     end
   end
 
 
   def self.all_projects( user )
     projects = {}
-    projects[user.fullname] = user.projects.parents.where(:organisation_id => nil)
+    projects[user.fullname] = user.projects.parents.where(:organisation_id => nil).any_of({ :temp => false }, { :temp => nil } )
     orgas = OrganisationService.index( user )
     return projects if orgas.to_a.empty?
 
@@ -78,7 +78,7 @@ class ProjectService < Versioneye::Service
       next if teams.to_a.empty?
 
       teams.each do |team|
-        projs = orga.projects.parents.where(:team_ids => team.ids)
+        projs = orga.projects.parents.where(:team_ids => team.ids).any_of({ :temp => false }, { :temp => nil } )
         next if projs.to_a.empty?
 
         projects["#{orga.name}/#{team.name}"] = projs
