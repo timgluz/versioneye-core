@@ -38,7 +38,7 @@ group :test do
   gem 'rspec_junit_formatter', '0.2.3'
   gem 'database_cleaner', '~> 1.5.1'
   gem 'factory_girl'    , '~> 4.7.0'
-  gem 'capybara'        , '~> 2.6.2'
+  gem 'capybara'        , '~> 2.7.0'
   gem 'capybara-firebug', '~> 2.1.0'
   gem 'vcr'             , '~> 3.0.0',  :require => false
   gem 'webmock'         , '~> 1.24.0', :require => false
