@@ -51,6 +51,44 @@ describe Product do
   end
 
 
+  describe "security_vulnerabilities" do
+    it 'returns the sec. vuln.' do
+      product = ProductFactory.create_for_maven 'junit', 'junit', '1.0.0'
+      product.add_version('1.0.1')
+      product.add_version('1.1.1')
+      product.add_version('1.2.0')
+      product.add_version('2.0.0')
+      product.add_version('2.1.0')
+      product.add_version('3.0.0')
+      expect( product.save ).to be_truthy
+      sv = SecurityVulnerability.new
+      sv.language = product.language
+      sv.prod_key = product.prod_key
+      sv.save
+
+      version_obj = product.version_by_number '2.1.0'
+      version_obj.sv_ids = [sv.ids]
+      version_obj.save
+
+      version_obj = product.version_by_number '3.0.0'
+      version_obj.sv_ids = [sv.ids]
+      version_obj.save
+
+      product.save
+      product.reload
+
+      product.version = '2.1.0'
+      expect( product.security_vulnerabilities.first.ids ).to eql(sv.ids)
+
+      product.version = '3.0.0'
+      expect( product.security_vulnerabilities.first.ids ).to eql(sv.ids)
+
+      product.version = '1.2.0'
+      expect( product.security_vulnerabilities ).to be_nil
+    end
+  end
+
+
   describe "add_tag" do
     it 'adds the tag' do
       prod = Product.new({:group_id => "org", :artifact_id => "apache"})

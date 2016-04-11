@@ -13,6 +13,9 @@ class Version < Versioneye::Model
   field :released_string, type: String
   field :sv_ids         , type: Array, default: []  # SecurityVulnerability IDs
   field :tested_runtimes, type: String
+  field :sha1           , type: String
+  field :sha256         , type: String
+  field :md5            , type: String
 
   embedded_in :product
 
