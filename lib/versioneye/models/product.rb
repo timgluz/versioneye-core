@@ -16,6 +16,9 @@ class Product < Versioneye::Model
   field :prod_type    , type: String # Identifies the package manager
   field :language     , type: String
   field :version      , type: String, default: '0.0.0+NA' # latest stable version
+  field :sha1         , type: String
+  field :sha256       , type: String
+  field :md5          , type: String
   field :tags         , type: Array  # Array of keywords
 
   field :group_id   , type: String # Maven specific - GroupID lower case
