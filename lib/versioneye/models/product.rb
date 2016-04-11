@@ -295,6 +295,13 @@ class Product < Versioneye::Model
 
   ########## ELSE #############
 
+  def security_vulnerabilities
+    version_obj = version_by_number( self.version )
+    return nil if version_obj.nil?
+
+    version_obj.security_vulnerabilities
+  end
+
   def update_in_my_products array_of_product_ids
     self.in_my_products = array_of_product_ids.include?(_id.to_s)
   end
