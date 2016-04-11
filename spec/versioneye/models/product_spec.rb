@@ -84,7 +84,7 @@ describe Product do
       expect( product.security_vulnerabilities.first.ids ).to eql(sv.ids)
 
       product.version = '1.2.0'
-      expect( product.security_vulnerabilities ).to be_empty
+      expect( product.security_vulnerabilities ).to be_nil
     end
   end
 
