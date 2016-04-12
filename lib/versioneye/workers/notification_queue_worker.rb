@@ -1,8 +1,11 @@
+# TODO maybe rename this
 class NotificationQueueWorker < Worker
+
 
   def get_connection
     Bunny.new("amqp://rabbitmq-rw5ix14w.cloudapp.net:5672")
   end
+
 
   def work
     connection = get_connection
@@ -32,7 +35,8 @@ class NotificationQueueWorker < Worker
     json = JSON.parse(body)
     json = json.deep_symbolize_keys
     log_message json
-    
+    impactedFiles = json[:impactedFiles]
+    WatcherService.process impactedFiles, json[:correlationId]
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
@@ -40,6 +44,7 @@ class NotificationQueueWorker < Worker
 
 
   private
+
 
     def log_message json
       p json[:correlationId]
@@ -51,5 +56,6 @@ class NotificationQueueWorker < Worker
         p "---"
       end
     end
+
 
 end

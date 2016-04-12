@@ -3,11 +3,21 @@ class Notification < Versioneye::Model
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  A_CLASSI_NIL = nil
+  A_CLASSI_XRAY = 'XRAY'
+
   field :version_id    , type: String
   field :read          , type: Boolean, default: false
   field :sent_email    , type: Boolean, default: false
   field :email_disabled, type: Boolean, default: false
   field :classification, type: String # nil for follow. Oterwise project.
+
+  field :impacted_files, type: Hash # XRay specific
+
+  field :noti_type, type: String, default: 'email' # [email, webhook]
+  field :email, type: String
+  field :webhook, type: String
+  field :webhook_token, type: String
 
   belongs_to :user
   belongs_to :product
@@ -16,16 +26,15 @@ class Notification < Versioneye::Model
   index({user_id: 1}, { name: "user_index", background: true})
   index({user_id: 1, sent_email: 1}, { name: "user_unsent_index", background: true})
 
-  validates_presence_of :user_id   , :message => 'User is mandatory!'
-  validates_presence_of :product_id, :message => 'Product is mandatory!'
-
-  scope :all_not_sent, ->{where(sent_email: false)}
-  scope :by_user     , ->(user){where(user_id: user.id)}
-  scope :by_user_id  , ->(user_id){where(user_id: user_id).desc(:created_at).limit(30)}
+  scope :no_classification, ->{where(classification: nil)}
+  scope :all_not_sent     , ->{where(sent_email: false)}
+  scope :by_user          , ->(user){where(user_id: user.id)}
+  scope :by_user_id       , ->(user_id){where(user_id: user_id).desc(:created_at).limit(30)}
 
 
   def self.unsent_user_notifications( user )
-    by_user( user ).all_not_sent
+    by_user( user ).where(sent_email: false, classification: nil)
   end
+
 
 end
