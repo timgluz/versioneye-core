@@ -128,6 +128,7 @@ module Versioneye
     require 'versioneye/producers/sync_producer.rb'
     require 'versioneye/producers/mvn_html_worker_producer.rb'
     require 'versioneye/producers/mvn_index_worker_producer.rb'
+    require 'versioneye/producers/notification_queue_producer.rb'
 
     require 'versioneye/workers/worker.rb'
     require 'versioneye/workers/dependency_badge_worker.rb'
@@ -142,6 +143,7 @@ module Versioneye
     require 'versioneye/workers/process_receipts_worker.rb'
     require 'versioneye/workers/common_worker.rb'
     require 'versioneye/workers/sync_worker.rb'
+    require 'versioneye/workers/notification_queue_worker.rb'
 
     require 'versioneye/importers/sap_team_user_importer.rb'
 
