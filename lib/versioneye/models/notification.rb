@@ -15,6 +15,7 @@ class Notification < Versioneye::Model
   field :impacted_files, type: Hash # XRay specific
 
   field :noti_type, type: String, default: 'email' # [email, webhook]
+  field :event_type, type: String # [security, license, version]
   field :email, type: String
   field :webhook, type: String
   field :webhook_token, type: String
