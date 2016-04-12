@@ -27,23 +27,29 @@ class NotificationQueueWorker < Worker
     end
   end
 
-  # TODO filter down the impacted files by a watcher.constraints list.
-  #
+
   def process body
     json = JSON.parse(body)
     json = json.deep_symbolize_keys
-    p json[:correlationId]
-    p json[:impactedFiles].count
-    json[:impactedFiles].each do |files|
-      p files[:name]
-      p files[:path]
-      p files[:sha256]
-      p "---"
-    end
+    log_message json
+    
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
   end
 
+
+  private
+
+    def log_message json
+      p json[:correlationId]
+      p json[:impactedFiles].count
+      json[:impactedFiles].each do |files|
+        p files[:name]
+        p files[:path]
+        p files[:sha256]
+        p "---"
+      end
+    end
 
 end
