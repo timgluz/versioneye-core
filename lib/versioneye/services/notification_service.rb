@@ -75,6 +75,7 @@ class NotificationService < Versioneye::Service
     end
   end
 
+
   def self.disable_notifications user
     log.info " ---- Disable notifications for #{user.username}"
     notifications = Notification.by_user(user).all_not_sent
@@ -84,6 +85,7 @@ class NotificationService < Versioneye::Service
       notification.save
     end
   end
+
 
   def self.uniq_products notifications
     hashi = Hash.new
@@ -109,6 +111,7 @@ class NotificationService < Versioneye::Service
     result
   end
 
+
   def self.mark_as_sent notifications
     notifications.each do |notification|
       notification.sent_email = true
@@ -116,5 +119,6 @@ class NotificationService < Versioneye::Service
       notification.save
     end
   end
+
 
 end
