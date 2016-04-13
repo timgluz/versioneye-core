@@ -145,7 +145,7 @@ module Versioneye
     require 'versioneye/workers/process_receipts_worker.rb'
     require 'versioneye/workers/common_worker.rb'
     require 'versioneye/workers/sync_worker.rb'
-    require 'versioneye/workers/notification_queue_worker.rb'
+    require 'versioneye/workers/xray_notification_queue_worker.rb'
 
     require 'versioneye/importers/sap_team_user_importer.rb'
 
