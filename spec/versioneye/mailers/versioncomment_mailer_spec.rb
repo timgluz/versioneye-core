@@ -33,4 +33,3 @@ describe VersioncommentMailer do
   end
 
 end
-
