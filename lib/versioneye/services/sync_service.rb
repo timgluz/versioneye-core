@@ -109,6 +109,8 @@ class SyncService < Versioneye::Service
     json[:results].each do |svjson|
       update_svobject( product, svjson )
     end
+    # TODO Get blog sha for component
+    # TODO Send it to X-Ray.
     log.info "synced security infos for #{language}:#{prod_key}"
   end
 
