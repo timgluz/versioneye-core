@@ -109,20 +109,16 @@ class SyncService < Versioneye::Service
     json[:results].each do |svjson|
       update_svobject( product, svjson )
     end
-    # TODO Get blog sha for component
-    # TODO Send it to X-Ray.
     log.info "synced security infos for #{language}:#{prod_key}"
   end
 
 
   def self.update_svobject product, svjson
-    sv = SecurityVulnerability.find_or_create_by(
-      {
-       :language => svjson[:language],
-       :prod_key => svjson[:prod_key],
-       :name_id => svjson[:name_id]
-      }
-    )
+    sv = SecurityVulnerability.where( :language => svjson[:language], :prod_key => svjson[:prod_key], :name_id => svjson[:name_id] ).first
+    if sv.nil? # then it is a new security vulnerability
+      sv = SecurityVulnerability.new( :language => svjson[:language], :prod_key => svjson[:prod_key], :name_id => svjson[:name_id] )
+      XrayService.handle_new_sv svjson
+    end
     sv.update_from svjson
     reset_svids product, sv
   end

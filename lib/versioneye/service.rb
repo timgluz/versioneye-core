@@ -51,6 +51,7 @@ module Versioneye
     require 'versioneye/services/enterprise_service'
     require 'versioneye/services/scm_meta_data_service'
     require 'versioneye/services/watcher_service'
+    require 'versioneye/services/xray_service'
     require 'versioneye/services/xray_component_mapper_service'
 
     require 'versioneye/services_ext/bitbucket'

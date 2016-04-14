@@ -33,4 +33,11 @@ class HttpService < Versioneye::Service
     nil
   end
 
+
+  def self.post_json url, json_hash
+    uri = URI.parse( url )
+    Net::HTTP.post_form(uri, json_hash)
+  end
+
+
 end
