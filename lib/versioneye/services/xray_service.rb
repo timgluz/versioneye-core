@@ -1,7 +1,7 @@
 class XrayService < Versioneye::Service
 
   # Handle new security vulnerability
-  # svjson has to be the values 
+  # svjson has to be the values
   #
   # - [language, prod_key, name_id, affected_versions]
   #
@@ -18,7 +18,7 @@ class XrayService < Versioneye::Service
     end
     svjson[:affected_versions].each do |version|
       p "process #{version}"
-      comp_id = XrayComponentMapperService.get_component_id product, version
+      comp_id = XrayComponentMapperService.get_component_id product, version.to_s.strip
       hash    = XrayComponentMapperService.get_hash comp_id
       next if hash.nil?
 
@@ -32,7 +32,7 @@ class XrayService < Versioneye::Service
 
   def self.triggerDeepScan product, version, sv_name_id, blob_hash
     xst = XrayScanTrigger.new({:language => product.language,
-      :prod_key => product.prod_key, :version => version,
+      :prod_key => product.prod_key, :version => version.to_s.strip,
       :sv_name_id => sv_name_id, :hash => blob_hash })
     xst.save
     url = 'http://xrayintegration:8000/api/v1/excludedFeed'
