@@ -28,7 +28,7 @@ class XrayService < Versioneye::Service
       hash    = XrayComponentMapperService.get_hash comp_id
       next if hash.nil?
 
-      triggerDeepScan product, version, svjson[:name_id], hash
+      triggerDeepScan product, version, svjson[:name_id], hash["Blobs"].first
     end
   rescue => e
     log.error e.message
