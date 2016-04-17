@@ -6,6 +6,11 @@ class XrayService < Versioneye::Service
   # - [language, prod_key, name_id, affected_versions]
   #
   def self.handle_new_sv svjson
+    env = Settings.instance.environment
+    return nil if env.to_s.eql?("production")
+    # Return nil on production. This method should
+    # only be called on enterprise and test environments.
+
     language = svjson[:language]
     prod_key = svjson[:prod_key]
     product = Product.new({:language => language, :prod_key => prod_key})
