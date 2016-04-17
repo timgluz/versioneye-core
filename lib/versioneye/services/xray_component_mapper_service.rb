@@ -4,7 +4,9 @@ class XrayComponentMapperService < Versioneye::Service
   def self.get_hash component_id, base_url = "http://xrayintegration:8000/api/v1/componentMapper"
     component_id = component_id.gsub('//', '/')
     url = "#{base_url}/#{component_id}"
-    JSON.parse CommonParser.new.fetch_response_body( url )
+    response_body = CommonParser.new.fetch_response_body( url )
+    log.info "url #{url} returns response_body: #{response_body}"
+    JSON.parse response_body
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
