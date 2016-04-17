@@ -50,6 +50,7 @@ module Versioneye
     require 'versioneye/services/transfer_service'
     require 'versioneye/services/enterprise_service'
     require 'versioneye/services/scm_meta_data_service'
+    require 'versioneye/services/security_service'
     require 'versioneye/services/watcher_service'
     require 'versioneye/services/xray_service'
     require 'versioneye/services/xray_component_mapper_service'
