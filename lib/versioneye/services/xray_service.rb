@@ -22,7 +22,8 @@ class XrayService < Versioneye::Service
       product.prod_type = Project::A_TYPE_MAVEN2
     end
     svjson[:affected_versions].each do |version|
-      p "process #{version}"
+      p " XrayService.handle_new_sv for #{language}:#{prod_key}:#{version.to_s}"
+      log.info " XrayService.handle_new_sv for #{language}:#{prod_key}:#{version.to_s}"
       comp_id = XrayComponentMapperService.get_component_id product, version.to_s.strip
       hash    = XrayComponentMapperService.get_hash comp_id
       next if hash.nil?
