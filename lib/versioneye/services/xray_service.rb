@@ -41,7 +41,7 @@ class XrayService < Versioneye::Service
       :prod_key => product.prod_key, :version => version.to_s.strip,
       :sv_name_id => sv_name_id, :hash => blob_hash })
     xst.save
-    url = 'http://xrayintegration:8000/api/v1/excludedFeed'
+    url = 'http://server-xray:8000/api/v1/excludedFeed'
     json_hash = {"correlationId" => xst.ids, "vulnerableBlobs" => [blob_hash]}
     HttpService.post_json url, json_hash
   end
