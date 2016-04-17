@@ -6,8 +6,7 @@ class XrayComponentMapperService < Versioneye::Service
     url = "#{base_url}/#{component_id}"
     response_body = CommonParser.new.fetch_response_body( url )
     log.info "url #{url} returns response_body: #{response_body}"
-    json = JSON.parse response_body
-    json[:Blobs].first
+    JSON.parse response_body
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
