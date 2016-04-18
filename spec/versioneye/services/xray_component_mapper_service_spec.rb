@@ -37,7 +37,7 @@ describe XrayComponentMapperService do
     it 'returns the hash value' do
       product = Product.new :group_id => 'commons-beanutils', :artifact_id => 'commons-beanutils', :prod_type => Project::A_TYPE_MAVEN2
       comp_id = described_class.get_component_id( product, '1.9.1' )
-      hash    = described_class.get_hash( comp_id )
+      hash    = described_class.get_hash( comp_id, 'http://xrayintegration:8000/api/v1/componentMapper' )
       expect( hash ).to_not be_nil
       expect( hash['Blobs'][0] ).to eql('3ff09a693a5c11cf7727f354901329f5128f078292bdf1bfd6d19a605e902bb6')
     end

@@ -22,8 +22,7 @@ class XrayService < Versioneye::Service
       product.prod_type = Project::A_TYPE_MAVEN2
     end
     svjson[:affected_versions].each do |version|
-      p " XrayService.handle_new_sv for #{language}:#{prod_key}:#{version.to_s}"
-      log.info " XrayService.handle_new_sv for #{language}:#{prod_key}:#{version.to_s}"
+      multi_log " XrayService.handle_new_sv for #{language}:#{prod_key}:#{version.to_s}"
       comp_id = XrayComponentMapperService.get_component_id product, version.to_s.strip
       hash    = XrayComponentMapperService.get_hash comp_id
       next if hash.nil?
@@ -41,9 +40,15 @@ class XrayService < Versioneye::Service
       :prod_key => product.prod_key, :version => version.to_s.strip,
       :sv_name_id => sv_name_id, :hash => blob_hash })
     xst.save
-    url = 'http://server-xray:8000/api/v1/excludedFeed'
+    url = 'http://server-xray:8000/api/v1/impact'
     json_hash = {"correlationId" => xst.ids, "vulnerableBlobs" => [blob_hash]}
     HttpService.post_json url, json_hash
+  end
+
+
+  def self.multi_log msg
+    p msg
+    log.info msg
   end
 
 

@@ -3,29 +3,37 @@ class Notification < Versioneye::Model
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  A_CLASSI_NIL = nil
-  A_CLASSI_XRAY = 'XRAY'
+  A_CLASSI_NIL     = nil
+  A_CLASSI_XRAY    = 'XRAY'
+  A_CLASSI_PROJECT = 'PROJECT'
+
+  A_NOTI_TYPE_EMAIL   = 'email'
+  A_NOTI_TYPE_WEBHOOK = 'webhook'
+
+  A_EVENT_TYPE_SECURITY = 'security'
+  A_EVENT_TYPE_LICENSE  = 'license'
+  A_EVENT_TYPE_VERSION  = 'version'
+
+  belongs_to :user
+  belongs_to :product
 
   field :version_id    , type: String
   field :read          , type: Boolean, default: false
   field :sent_email    , type: Boolean, default: false
   field :email_disabled, type: Boolean, default: false
-  field :classification, type: String # nil for follow. Oterwise project.
+  field :classification, type: String,  default: A_CLASSI_NIL
   field :sv_name_id    , type: String # Security Vulnerability Name ID
 
   field :impacted_files, type: Hash # XRay specific
 
-  field :noti_type,  type: String, default: 'email' # [email, webhook]
-  field :event_type, type: String # [security, license, version]
+  field :noti_type,  type: String, default: A_NOTI_TYPE_EMAIL
+  field :event_type, type: String, default: A_EVENT_TYPE_VERSION
 
-  field :email, type: String
-  field :name,  type: String
+  field :email, type: String # email recipient
+  field :name,  type: String # name of the email recipient
 
   field :webhook,       type: String
   field :webhook_token, type: String
-
-  belongs_to :user
-  belongs_to :product
 
   index({product_id: 1, user_id: 1, version_id: 1}, { name: "prod_user_vers_index", background: true, unique: true, drop_dups: true })
   index({user_id: 1}, { name: "user_index", background: true})
@@ -38,7 +46,7 @@ class Notification < Versioneye::Model
 
 
   def self.unsent_user_notifications( user )
-    by_user( user ).where(sent_email: false, classification: nil)
+    by_user( user ).where(sent_email: false, classification: A_CLASSI_NIL)
   end
 
 
