@@ -7,6 +7,6 @@ class XrayScanTrigger < Versioneye::Model
   field :prod_key  , type: String
   field :version   , type: String
   field :sv_name_id, type: String # Uniq. identifier
-  field :hash      , type: String
+  field :hash      , type: String # sha256
 
 end
