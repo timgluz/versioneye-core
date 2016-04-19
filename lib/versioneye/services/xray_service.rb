@@ -25,7 +25,10 @@ class XrayService < Versioneye::Service
       multi_log " XrayService.handle_new_sv for #{language}:#{prod_key}:#{version.to_s}"
       comp_id = XrayComponentMapperService.get_component_id product, version.to_s.strip
       hash    = XrayComponentMapperService.get_hash comp_id
-      next if hash.nil?
+      if hash.nil?
+        multi_log "Continue to next version because hash for #{comp_id} is nil!"
+        next
+      end
 
       triggerDeepScan product, version, svjson[:name_id], hash["Blobs"].first
     end
@@ -42,6 +45,7 @@ class XrayService < Versioneye::Service
     xst.save
     url = 'http://server-xray:8000/api/v1/impact'
     json_hash = {"correlationId" => xst.ids, "vulnerableBlobs" => [blob_hash]}
+    multi_log "trigger impact scan for blob hash #{blob_hash}"
     HttpService.post_json url, json_hash
   end
 
