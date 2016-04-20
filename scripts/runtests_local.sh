@@ -16,9 +16,12 @@ echo "Going to run all specs"
 export RAILS_ENV="test"
 echo "Rails mode: $RAILS_ENV"
 
+
 rspec
-# rspec # spec/versioneye/mailers/xray_mailer_spec.rb
 # rspec spec/versioneye/services/watcher_service_spec.rb spec/versioneye/mailers/xray_mailer_spec.rb
+# rspec spec/versioneye/models/notification_spec.rb
+# rspec spec/versioneye/mailers/xray_mailer_spec.rb
+
 
 export RAILS_ENV="development"
 echo "Rails mode: $RAILS_ENV"
