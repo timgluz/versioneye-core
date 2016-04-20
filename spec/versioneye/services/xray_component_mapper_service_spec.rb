@@ -24,6 +24,22 @@ describe XrayComponentMapperService do
       product = Product.new :group_id => 'commons-beanutils', :artifact_id => 'commons-beanutils', :prod_type => Project::A_TYPE_MAVEN2
       expect( described_class.get_component_id product, '1.9.1' ).to eq('gav://commons-beanutils:commons-beanutils:1.9.1')
     end
+    it 'return the component_id for rubygems' do
+      product = Product.new :language => 'Ruby', :prod_type => Project::A_TYPE_RUBYGEMS, :prod_key => 'rails', :version => '4.5.2'
+      expect( described_class.get_component_id product, '4.5.2' ).to eq('gem://rails:4.5.2')
+    end
+    it 'return the component_id for composer' do
+      product = Product.new :language => 'PHP', :prod_type => Project::A_TYPE_COMPOSER, :prod_key => 'phpunit/phpunit', :version => '4.5.2'
+      expect( described_class.get_component_id product, '4.5.2' ).to eq('com://phpunit:phpunit:4.5.2')
+    end
+    it 'return the component_id for npm' do
+      product = Product.new :language => 'Node.JS', :prod_type => Project::A_TYPE_NPM, :prod_key => 'mocha', :version => '4.5.2'
+      expect( described_class.get_component_id product, '4.5.2' ).to eq('npm://mocha:4.5.2')
+    end
+    it 'return the component_id for pip' do
+      product = Product.new :language => 'Python', :prod_type => Project::A_TYPE_PIP, :prod_key => 'Django', :version => '4.5.2'
+      expect( described_class.get_component_id product, '4.5.2' ).to eq('pip://Django:4.5.2')
+    end
     it 'return nil because prod_type is not set' do
       product = Product.new :group_id => 'commons-beanutils', :artifact_id => 'commons-beanutils'
       expect( described_class.get_component_id product, '1.9.1' ).to be_nil
