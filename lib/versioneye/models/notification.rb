@@ -23,6 +23,7 @@ class Notification < Versioneye::Model
   field :email_disabled, type: Boolean, default: false
   field :classification, type: String,  default: A_CLASSI_NIL
   field :sv_name_id    , type: String # Security Vulnerability Name ID
+  field :watcher_id    , type: String # ID of the watch object which fired this notification
 
   field :impacted_files, type: Hash # XRay specific
 
