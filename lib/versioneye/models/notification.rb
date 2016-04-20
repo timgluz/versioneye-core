@@ -40,6 +40,7 @@ class Notification < Versioneye::Model
   index({user_id: 1, sent_email: 1}, { name: "user_unsent_index", background: true})
 
   scope :no_classification, ->{where(classification: nil)}
+  scope :xray             , ->{where(classification: A_CLASSI_XRAY)}
   scope :all_not_sent     , ->{where(sent_email: false)}
   scope :by_user          , ->(user){where(user_id: user.id)}
   scope :by_user_id       , ->(user_id){where(user_id: user_id).desc(:created_at).limit(30)}
