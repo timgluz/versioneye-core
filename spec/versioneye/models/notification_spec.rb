@@ -24,4 +24,17 @@ describe Notification do
 
   end
 
+
+  describe "watcher" do
+    it 'will return the right watcher' do
+      watcher = Watcher.new({ :name => "test", :user => @user })
+      expect( watcher.save ).to be_truthy
+      notifcation = NotificationFactory.create_new @user
+      notifcation.watcher_id = watcher.ids
+      expect( notifcation.save ).to be_truthy
+      expect( notifcation.watcher ).to_not be_nil
+      expect( notifcation.watcher.ids ).to eq( watcher.ids )
+    end
+  end
+
 end

@@ -52,4 +52,10 @@ class Notification < Versioneye::Model
   end
 
 
+  def watcher
+    returnn nil if self.watcher_id.to_s.empty?
+    Watcher.find self.watcher_id
+  end
+
+
 end
