@@ -3,6 +3,7 @@ module Versioneye
 
     require 'versioneye/log'
 
+    require 'versioneye/models/artifactory_connection'
     require 'versioneye/models/mail_track'
     require 'versioneye/models/badge'
     require 'versioneye/models/docker_image'
