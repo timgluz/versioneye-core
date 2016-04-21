@@ -34,11 +34,14 @@ class HttpService < Versioneye::Service
   end
 
 
-  def self.post_json url, json_hash
+  def self.post_json url, json_hash, user = nil, pass = nil
     uri  = URI.parse url
     path = uri.path
 
     req = Net::HTTP::Post.new(path, initheader = {'Content-Type' =>'application/json'})
+    if user && pass
+      req.basic_auth user, pass
+    end
     req.body = json_hash.to_json
     Net::HTTP.new(uri.host, uri.port).start {|http| http.request(req) }
   rescue => e
