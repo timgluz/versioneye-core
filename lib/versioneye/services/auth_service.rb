@@ -5,7 +5,11 @@ class AuthService < Versioneye::Service
     user = User.authenticate(login, password)
     return user if user
 
-    return nil if !Settings.instance.ldap_active.to_s.eql?('true')
+    if !defined?(Settings.instance.ldap_active) ||
+       Settings.instance.ldap_active.nil? ||
+       !Settings.instance.ldap_active.to_s.eql?('true')
+      return nil
+    end
 
     entity = LdapService.auth_by login, password, ldap
     return nil if entity.nil? || entity.to_s.empty?
