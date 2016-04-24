@@ -51,4 +51,19 @@ class HttpService < Versioneye::Service
   end
 
 
+  def self.delete url, user = nil, pass = nil
+    uri  = URI( url )
+    http = Net::HTTP.new(uri.host, uri.port)
+    req  = Net::HTTP::Delete.new(uri.path)
+    if user && pass
+      req.basic_auth user, pass
+    end
+    http.request(req)
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    nil
+  end
+
+
 end
