@@ -55,6 +55,13 @@ class Projectdependency < Versioneye::Model
   end
 
 
+  def licenses_string
+    return 'UNKNOWN' if license_caches.nil? || license_caches.to_a.empty?
+
+    license_caches.map { |lc| "%#{lc.name}" }.join(", ")
+  end
+
+
   def language_esc lang = nil
     lang = self.language if lang.nil?
     return nil if lang.to_s.empty?
