@@ -44,6 +44,7 @@ class PomJsonParser < PomParser
     project.name         = pom_json['name']
     project.group_id     = pom_json['group_id']
     project.artifact_id  = pom_json['artifact_id']
+    project.version      = pom_json['version']
     project.project_type = pom_json['prod_type'] if !pom_json['prod_type'].to_s.empty?
     project.language     = pom_json['language']  if !pom_json['language'].to_s.empty?
     project
