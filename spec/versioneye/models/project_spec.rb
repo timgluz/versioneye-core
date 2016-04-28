@@ -528,6 +528,54 @@ describe Project do
 
   end
 
+  describe 'find_by_ga' do
+
+    it 'finds project by group_id and artifact_id' do
+
+      user = UserFactory.create_new 1077
+
+      # Cretate a project but don't persist it!
+      project = ProjectFactory.create_new user, nil, false
+      project.group_id = 'org.testng'
+      project.artifact_id = 'testng'
+      expect( project.save ).to be_truthy
+
+      proj = Project.find_by_ga 'o.t', 'testng'
+      expect( proj ).to be_nil
+
+      proj = Project.find_by_ga 'org.testng', 'testng'
+      expect( proj ).to_not be_nil
+      expect( proj.group_id ).to eq('org.testng')
+      expect( proj.artifact_id ).to eq('testng')
+    end
+
+  end
+
+  describe 'find_by_gav' do
+
+    it 'finds project by group_id and artifact_id and version' do
+
+      user = UserFactory.create_new 1079
+
+      # Cretate a project but don't persist it!
+      project = ProjectFactory.create_new user, nil, false
+      project.group_id = 'org.testng'
+      project.artifact_id = 'testng'
+      project.version = '1.0.0'
+      expect( project.save ).to be_truthy
+
+      proj = Project.find_by_gav 'o.t', 'testng', '0.0'
+      expect( proj ).to be_nil
+
+      proj = Project.find_by_gav 'org.testng', 'testng', '1.0.0'
+      expect( proj ).to_not be_nil
+      expect( proj.group_id ).to eq('org.testng')
+      expect( proj.artifact_id ).to eq('testng')
+      expect( proj.version ).to eq('1.0.0')
+    end
+
+  end
+
   describe 'remove_dependencies' do
 
     it 'removes the dependencies' do

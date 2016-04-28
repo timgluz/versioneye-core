@@ -116,6 +116,7 @@ class ProjectService < Versioneye::Service
     Hash[map.sort_by {|dep| -dep.last[:dependencies].count}]
   end
 
+
   def self.summary_single project, map = {}
     name = project.filename
     name = project.name if name.to_s.empty?
@@ -194,6 +195,19 @@ class ProjectService < Versioneye::Service
     return true if project.nil?
 
     err_msg = "A project with same GroupId and ArtifactId exist already. Project ID: #{project.id.to_s}"
+    log.error err_msg
+    raise err_msg
+  end
+
+
+  def self.ensure_unique_gav project
+    return true if Settings.instance.projects_unique_gav == false
+    return true if project.group_id.to_s.empty? && project.artifact_id.to_s.empty? && project.version.to_s.empty?
+
+    project = Project.find_by_gav( project.group_id, project.artifact_id, project.version )
+    return true if project.nil?
+
+    err_msg = "A project with same GroupId, ArtifactId and Version exist already. Project ID: #{project.id.to_s}"
     log.error err_msg
     raise err_msg
   end

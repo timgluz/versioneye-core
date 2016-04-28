@@ -500,6 +500,35 @@ describe ProjectService do
   end
 
 
+  describe 'ensure_unique_gav' do
+    it 'returns true because its turned off' do
+      Settings.instance.projects_unique_gav = false
+      ProjectService.ensure_unique_gav(nil).should be_truthy
+    end
+    it 'returns true because there is no other project in db!' do
+      Settings.instance.projects_unique_gav = true
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user, nil, false
+      project.group_id = "org.junit"
+      project.artifact_id = 'junit'
+      project.version = '1.0'
+      expect( ProjectService.ensure_unique_gav(project) ).to be_truthy
+      Settings.instance.projects_unique_gav = false
+    end
+    it 'returns true because there is no other project in db!' do
+      Settings.instance.projects_unique_gav = true
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user, nil, false
+      project.group_id = "org.junit"
+      project.artifact_id = 'junit'
+      project.version = '1.0'
+      expect( project.save ).to be_truthy
+      expect { ProjectService.ensure_unique_gav(project) }.to raise_exception
+      Settings.instance.projects_unique_gav = false
+    end
+  end
+
+
   describe 'ensure_unique_scm' do
     it 'returns true because its turned off' do
       Settings.instance.projects_unique_scm = false

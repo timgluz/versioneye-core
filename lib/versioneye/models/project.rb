@@ -175,6 +175,10 @@ class Project < Versioneye::Model
     Project.where(:group_id => group_id, :artifact_id => artifact_id).first
   end
 
+  def self.find_by_gav( group_id, artifact_id, version )
+    Project.where(:group_id => group_id, :artifact_id => artifact_id, :version => version ).first
+  end
+
   def filename
     self.s3_filename.to_s.gsub(/\A\S+\_/, "")
   end
