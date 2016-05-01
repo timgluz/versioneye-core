@@ -1,4 +1,6 @@
 
+[![Circle CI](https://circleci.com/gh/versioneye/versioneye-core.svg?style=svg&circle-token=5c34745e510d847ca9439c834b5562bfe3e4b960)](https://circleci.com/gh/versioneye/versioneye-core)
+
 # versioneye-core
 
 This project contains the core elements of VersionEye.
