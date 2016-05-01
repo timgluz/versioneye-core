@@ -50,8 +50,8 @@ describe ReceiptService do
       receipt.user = user
       receipt.type = Receipt::A_TYPE_CORPORATE
       html = described_class.compile_html_invoice receipt, true
-      html.match("4,86 EUR").should_not be_nil
-      html.match("1,14 EUR").should_not be_nil
+      html.match("5,04 EUR").should_not be_nil
+      html.match("0,96 EUR").should_not be_nil
       html.match("6,00 EUR").should_not be_nil
       html.match('Reverse Charge -').should be_nil
       html.match('Non EU customers - Not taxable in Germany.').should be_nil
@@ -61,21 +61,21 @@ describe ReceiptService do
       receipt = ReceiptFactory.create_new
       receipt.user = user
       html = described_class.compile_html_invoice receipt, true
-      html.match("4,86 EUR").should_not be_nil
-      html.match("1,14 EUR").should_not be_nil
+      html.match("5,04 EUR").should_not be_nil
+      html.match("0,96 EUR").should_not be_nil
       html.match("6,00 EUR").should_not be_nil
       html.match('Reverse Charge -').should be_nil
       html.match('Non EU customers - Not taxable in Germany.').should be_nil
     end
     it 'compiles for Franch corporate dude' do
-      user = UserFactory.create_new
-      receipt = ReceiptFactory.create_new
+      user         = UserFactory.create_new
+      receipt      = ReceiptFactory.create_new
       receipt.user = user
       receipt.type = Receipt::A_TYPE_CORPORATE
       receipt.country = 'FR'
       html = described_class.compile_html_invoice receipt, true
-      html.match("4,86 EUR").should be_nil
-      html.match("1,14 EUR").should be_nil
+      html.match("5,04 EUR").should be_nil
+      html.match("0,96 EUR").should be_nil
       html.match("6,00 EUR").should_not be_nil
       html.match('Reverse Charge -').should_not be_nil
       html.match('Non EU customers - Not taxable in Germany.').should be_nil
@@ -88,8 +88,8 @@ describe ReceiptService do
       receipt.country = 'FR'
       html = described_class.compile_html_invoice receipt, true
       p html
-      html.match("4,86 EUR").should_not be_nil
-      html.match("1,14 EUR").should_not be_nil
+      html.match("5,04 EUR").should_not be_nil
+      html.match("0,96 EUR").should_not be_nil
       html.match("6,00 EUR").should_not be_nil
       html.match('Reverse Charge -').should be_nil
       html.match('Non EU customers - Not taxable in Germany.').should be_nil
@@ -101,8 +101,8 @@ describe ReceiptService do
       receipt.type = Receipt::A_TYPE_CORPORATE
       receipt.country = 'US'
       html = described_class.compile_html_invoice receipt, true
-      html.match("4,86 EUR").should be_nil
-      html.match("1,14 EUR").should be_nil
+      html.match("5,04 EUR").should be_nil
+      html.match("0,96 EUR").should be_nil
       html.match("6,00 EUR").should_not be_nil
       html.match('Reverse Charge -').should be_nil
       html.match('Non EU customers - Not taxable in Germany.').should_not be_nil
@@ -114,8 +114,8 @@ describe ReceiptService do
       receipt.type = Receipt::A_TYPE_INDIVIDUAL
       receipt.country = 'US'
       html = described_class.compile_html_invoice receipt, true
-      html.match("4,86 EUR").should be_nil
-      html.match("1,14 EUR").should be_nil
+      html.match("5,04 EUR").should be_nil
+      html.match("0,96 EUR").should be_nil
       html.match("6,00 EUR").should_not be_nil
       html.match('Reverse Charge -').should be_nil
       html.match('Non EU customers - Not taxable in Germany.').should_not be_nil
