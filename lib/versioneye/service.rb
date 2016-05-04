@@ -50,7 +50,6 @@ module Versioneye
     require 'versioneye/services/transfer_service'
     require 'versioneye/services/enterprise_service'
     require 'versioneye/services/scm_meta_data_service'
-    require 'versioneye/services/watcher_service'
 
     require 'versioneye/services_ext/bitbucket'
     require 'versioneye/services_ext/stash'
@@ -74,7 +73,6 @@ module Versioneye
     require 'versioneye/mailers/versioncomment_mailer'
     require 'versioneye/mailers/versioncommentreply_mailer'
     require 'versioneye/mailers/team_mailer'
-    require 'versioneye/mailers/xray_mailer'
 
     require 'versioneye/parsers/berksfile_parser'
     require 'versioneye/parsers/berksfilelock_parser'
@@ -145,7 +143,6 @@ module Versioneye
     require 'versioneye/workers/process_receipts_worker.rb'
     require 'versioneye/workers/common_worker.rb'
     require 'versioneye/workers/sync_worker.rb'
-    require 'versioneye/workers/xray_notification_queue_worker.rb'
 
     require 'versioneye/importers/sap_team_user_importer.rb'
 
