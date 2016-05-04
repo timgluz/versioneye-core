@@ -137,7 +137,7 @@ GEM
       mongo (~> 2.1)
       origin (~> 2.2)
       tzinfo (>= 0.3.37)
-    multi_json (1.11.3)
+    multi_json (1.12.0)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     nap (1.1.0)
@@ -230,7 +230,7 @@ GEM
       unf_ext
     unf_ext (0.0.7.2)
     vcr (3.0.1)
-    webmock (2.0.0)
+    webmock (2.0.1)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
@@ -249,7 +249,7 @@ PLATFORMS
 DEPENDENCIES
   actionmailer (~> 4.2.5.2)
   aws-sdk (~> 2.2.0)
-  bundler (~> 1.11.0)
+  bundler (~> 1.12.0)
   bunny (~> 2.3.0)
   capybara (~> 2.7.0)
   capybara-firebug (~> 2.1.0)
@@ -285,4 +285,4 @@ DEPENDENCIES
   wkhtmltopdf-binary (~> 0.9.9.1)
 
 BUNDLED WITH
-   1.11.2
+   1.12.1
