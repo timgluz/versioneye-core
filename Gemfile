@@ -5,7 +5,7 @@ gem 'naturalsorter'      , '~> 3.0.13'
 gem 'dalli'              , '~> 2.7.0'
 gem 'kgio'               , '~> 2.10.0'   # 20% performance boost for dalli
 gem 'oauth'              , '~> 0.5.0'
-gem 'aws-sdk'            , '~> 2.2.0'
+gem 'aws-sdk'            , '~> 2.3.0'
 gem 'stripe'             , '~> 1.41.0'
 gem 'tire'               , '~> 0.6.2'
 gem 'octokit'            , '~> 4.3.0'
