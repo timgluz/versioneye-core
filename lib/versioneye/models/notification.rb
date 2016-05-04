@@ -4,15 +4,12 @@ class Notification < Versioneye::Model
   include Mongoid::Timestamps
 
   A_CLASSI_NIL = nil
-  A_CLASSI_XRAY = 'XRAY'
 
   field :version_id    , type: String
   field :read          , type: Boolean, default: false
   field :sent_email    , type: Boolean, default: false
   field :email_disabled, type: Boolean, default: false
   field :classification, type: String # nil for follow. Oterwise project.
-
-  field :impacted_files, type: Hash # XRay specific
 
   field :noti_type,  type: String, default: 'email' # [email, webhook]
   field :event_type, type: String # [security, license, version]
