@@ -228,10 +228,12 @@ class VersionService < Versioneye::Service
   end
 
 
-  # Returns a sub range from a version range string for example:
-  # >=1.0, <1.2
-  # 2.0.X, 2.1.X
-  # ~> 2.0.0
+  # Returns an Array sub range from a version constraint string.
+  # Examples for version_string:
+  #   >=1.0, <1.2
+  #   2.0.X, 2.1.X
+  #   ~> 2.0.0
+  #   <=2.7.1
   def self.from_ranges( versions, version_string )
     version_splitted = version_string.split(",")
     prod = Product.new
