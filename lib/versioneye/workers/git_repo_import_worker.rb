@@ -8,6 +8,7 @@ class GitRepoImportWorker < Worker
   def work
     connection = get_connection
     connection.start
+
     channel = connection.create_channel
     channel.prefetch(1)
     queue   = channel.queue("git_repo_import", :durable => true)
