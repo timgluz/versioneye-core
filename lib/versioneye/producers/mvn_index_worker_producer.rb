@@ -1,14 +1,15 @@
 class MvnIndexWorkerProducer < Producer
 
   # "central::http://repo.maven.apache.org/maven2::g:a:pom:v::published_date"
+  # "central::http://repo.maven.apache.org/maven2::com.versioneye:versioneye-maven-plugin:pom:3.9.2::"
   def initialize msg
     connection = get_connection
     connection.start
 
     channel = connection.create_channel
-    queue   = channel.queue("maven_index_worker", :durable => false)
+    queue   = channel.queue("maven_index_worker", :durable => true)
 
-    queue.publish(msg, :persistent => false)
+    queue.publish(msg, :persistent => true)
 
     log_msg = " [x] Sent #{msg}"
     puts log_msg

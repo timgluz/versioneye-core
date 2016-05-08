@@ -6,9 +6,9 @@ class MvnHtmlWorkerProducer < Producer
     connection.start
 
     channel = connection.create_channel
-    queue   = channel.queue("html_worker", :durable => false)
+    queue   = channel.queue("html_worker", :durable => true)
 
-    queue.publish(msg, :persistent => false)
+    queue.publish(msg, :persistent => true)
 
     log_msg = " [x] Sent #{msg}"
     puts log_msg
