@@ -67,20 +67,6 @@ class S3 < Versioneye::Service
   end
 
 
-  def self.upload_fileupload file_up, region = 'eu-west-1'
-    orig_filename = file_up['datafile'].original_filename
-    fname         = self.sanitize_filename(orig_filename)
-    random        = Project.create_random_value
-    filename      = "#{random}_#{fname}"
-    self.store_in_project_bucket filename, file_up['datafile'].read, region
-    filename
-  rescue => e
-    log.error "Exception in S3.upload_fileupload(file_up) #{e.message}"
-    log.error e.backtrace.join "\n"
-    nil
-  end
-
-
   def self.store_in_project_bucket filename, bin, region = 'eu-west-1'
     self.store Settings.instance.s3_projects_bucket, filename, bin, region
   end
@@ -96,7 +82,7 @@ class S3 < Versioneye::Service
     obj.put(body: bin)
     obj.etag
   rescue => e
-    log.error "Error in store_in_project_bucket: #{e.message}"
+    log.error "Error in store: #{e.message}"
     log.error e.backtrace.join "\n"
   end
 
