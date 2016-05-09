@@ -75,3 +75,4 @@ webrate.log
 versioneye.sublime-project
 versioneye.sublime-workspace
 rspec.xml
+scripts/set_vars_for_dev_reiz.sh
