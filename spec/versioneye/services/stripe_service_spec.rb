@@ -49,12 +49,6 @@ describe StripeService do
       cust.should be_nil
     end
 
-    it 'fetches an legacy customer' do
-      customer_id = "cus_46xjeG6vago0z0"
-      cust = described_class.fetch_customer customer_id, Settings.instance.stripe_legacy_secret_key
-      cust.should_not be_nil
-    end
-
   end
 
   describe 'update_customer' do
