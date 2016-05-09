@@ -11,8 +11,8 @@ describe S3 do
 
       filename = 'actionmailer:3~2~7:runtime.png'
       url = S3.infographic_url_for filename
-      url.to_s.should_not be_empty
-      url.to_s.should eq("https://s3-eu-west-1.amazonaws.com/veye_test_infographics/actionmailer%3A3~2~7%3Aruntime.png")
+      expect( url.to_s ).to_not be_empty
+      expect( url.to_s ).to eq("https://s3-eu-west-1.amazonaws.com/veye_test_infographics/actionmailer%3A3~2~7%3Aruntime.png")
     end
   end
 
@@ -30,8 +30,8 @@ describe S3 do
       file = {'datafile' => file_attachment}
 
       filename = S3.upload_fileupload file
-      filename.should_not be_nil
-      filename.match(/_Gemfile\z/).should_not be_nil
+      expect( filename ).to_not be_nil
+      expect( filename.match(/_Gemfile\z/) ).to_not be_nil
 
       s3 = Aws::S3::Resource.new(:region => 'eu-west-1')
       bucket = s3.bucket( Settings.instance.s3_projects_bucket )
@@ -39,12 +39,12 @@ describe S3 do
       bucket.objects.each do |obj|
         found = true if obj.key.eql?(filename)
       end
-      found.should be_truthy
+      expect (found ).to be_truthy
 
       url = S3.url_for filename
-      url.should_not be_nil
-      url.match(region).should_not be_nil
-      url.match(filename).should_not be_nil
+      expect( url ).to_not be_nil
+      expect( url.match(region)   ).to_not be_nil
+      expect( url.match(filename) ).to_not be_nil
 
       resp = S3.delete filename
       s3 = Aws::S3::Resource.new(:region => 'eu-west-1')
@@ -53,7 +53,7 @@ describe S3 do
       bucket.objects.each do |obj|
         found = true if obj.key.eql?(filename)
       end
-      found.should be_falsey
+      expect( found ).to be_falsey
     end
   end
 
