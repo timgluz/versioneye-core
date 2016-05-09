@@ -19,13 +19,13 @@ describe BitbucketUpdater do
       project.scm_fullname = 'reiz/test_gemi'
       project.scm_branch = 'master'
       expect( project.save ).to be_truthy
-      id = project.ids 
+      id = project.ids
 
       described_class.new.update project
-      project = Project.find id 
+      project = Project.find id
       project.should_not be_nil
       expect( project.parsing_errors.count ).to eq(0)
-      expect(project.dependencies).to_not be_empty 
+      expect(project.dependencies).to_not be_empty
     end
 
   end
