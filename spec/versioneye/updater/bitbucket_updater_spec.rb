@@ -9,11 +9,12 @@ describe BitbucketUpdater do
       project = ProjectFactory.default user
 
       new_project = described_class.new.update project
-      new_project.should be_nil
+      expect( new_project ).to be_nil
     end
 
     it 'returns the updated project' do
       user = UserFactory.create_new
+      user.save
       project = ProjectFactory.default user
       project.s3_filename = 'Gemfile'
       project.scm_fullname = 'reiz/test_gemi'
@@ -23,7 +24,7 @@ describe BitbucketUpdater do
 
       described_class.new.update project
       project = Project.find id
-      project.should_not be_nil
+      expect( project ).to_not be_nil
       expect( project.parsing_errors.count ).to eq(0)
       expect(project.dependencies).to_not be_empty
     end
@@ -40,7 +41,7 @@ describe BitbucketUpdater do
       project.scm_branch = 'master'
 
       pf = described_class.new.fetch_project_file project
-      pf.should_not be_nil
+      expect( pf ).to_not be_nil
       pf.match("source 'http://rubygems.org'")
     end
 
