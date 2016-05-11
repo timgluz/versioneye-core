@@ -182,9 +182,8 @@ describe Organisation do
       prod_1  = ProductFactory.create_for_maven 'org.testng', 'testng', '1.0.0'
       expect( prod_1.save ).to be_truthy
       prod_2  = ProductFactory.create_for_maven 'org.junit', 'junit', '2.0.0'
+      prod_2.add_version '1.9.9'
       expect( prod_2.save ).to be_truthy
-      prod_3  = ProductFactory.create_for_maven 'org.spring', 'spring-core', '3.0.0'
-      expect( prod_3.save ).to be_truthy
 
       dep_1 = ProjectdependencyFactory.create_new project, prod_1, true
       dep_1.version_requested = prod_1.version
@@ -194,16 +193,17 @@ describe Organisation do
       dep_2.version_requested = prod_2.version
       expect( dep_2.save ).to be_truthy
 
-      dep_3 = ProjectdependencyFactory.create_new child, prod_3, true
-      dep_3.version_requested = prod_3.version
+      dep_3 = ProjectdependencyFactory.create_new child, prod_2, true
+      dep_3.version_requested = '1.9.9'
       expect( dep_3.save ).to be_truthy
 
       comps = orga.component_list
 
       expect( comps ).to_not be_nil
-      expect( comps.count ).to eq(3)
-      expect( comps.keys.first ).to eq('Java:org.testng/testng:1.0.0')
-      expect( comps.keys[1] ).to eq('Java:org.junit/junit:2.0.0')
+      expect( comps.count ).to eq(2)
+      expect( comps['Java:org.testng/testng']['1.0.0'] ).to_not be_nil
+      expect( comps['Java:org.junit/junit']['2.0.0'] ).to_not be_nil
+      expect( comps['Java:org.junit/junit']['1.9.9'] ).to_not be_nil
     end
 
   end
