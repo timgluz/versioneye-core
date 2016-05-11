@@ -157,4 +157,55 @@ describe Organisation do
     end
   end
 
+
+  describe "component_list" do
+
+    it "returns the correct component_list" do
+      user = UserFactory.create_new
+      expect( user.save ).to be_truthy
+
+      orga = OrganisationService.create_new user, "myorga"
+      expect( orga ).to_not be_nil
+
+      project = ProjectFactory.create_new user
+      project.organisation = orga
+      expect( project.save ).to be_truthy
+      expect( orga.projects.count ).to eq(1)
+
+      child = ProjectFactory.create_new user
+      child.organisation = orga
+      child.parent_id = project.ids
+      expect( child.save ).to be_truthy
+      expect( project.children.count ).to eq(1)
+      expect( orga.projects.count ).to eq(2)
+
+      prod_1  = ProductFactory.create_for_maven 'org.testng', 'testng', '1.0.0'
+      expect( prod_1.save ).to be_truthy
+      prod_2  = ProductFactory.create_for_maven 'org.junit', 'junit', '2.0.0'
+      expect( prod_2.save ).to be_truthy
+      prod_3  = ProductFactory.create_for_maven 'org.spring', 'spring-core', '3.0.0'
+      expect( prod_3.save ).to be_truthy
+
+      dep_1 = ProjectdependencyFactory.create_new project, prod_1, true
+      dep_1.version_requested = prod_1.version
+      expect( dep_1.save ).to be_truthy
+
+      dep_2 = ProjectdependencyFactory.create_new project, prod_2, true
+      dep_2.version_requested = prod_2.version
+      expect( dep_2.save ).to be_truthy
+
+      dep_3 = ProjectdependencyFactory.create_new child, prod_3, true
+      dep_3.version_requested = prod_3.version
+      expect( dep_3.save ).to be_truthy
+
+      comps = orga.component_list
+
+      expect( comps ).to_not be_nil
+      expect( comps.count ).to eq(3)
+      expect( comps.keys.first ).to eq('Java:org.testng/testng:1.0.0')
+      expect( comps.keys[1] ).to eq('Java:org.junit/junit:2.0.0')
+    end
+
+  end
+
 end

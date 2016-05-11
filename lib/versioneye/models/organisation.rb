@@ -89,4 +89,34 @@ class Organisation < Versioneye::Model
     deps
   end
 
+
+  def component_list
+    return nil if projects.to_a.empty?
+
+    comps = {}
+    projects.each do |project|
+      collect_components project, comps
+      next if project.children.count == 0
+
+      project.children.each do |child|
+        collect_components child, comps
+      end
+    end
+
+    comps
+  end
+
+
+  private
+
+
+    def collect_components project, comps
+      project.dependencies.each do |dep|
+        key = "#{dep.language}:#{dep.prod_key}:#{dep.version_requested}"
+        comps[key] = [] if !comps.keys.include?( key )
+        val = "#{project.language}:#{project.name}:#{project.ids}"
+        comps[key] << val if !comps[key].include?( val )
+      end
+    end
+
 end
