@@ -44,11 +44,17 @@ class Bitbucket < Versioneye::Service
   end
 
 
-  def self.user_orgs(user)
+  def self.user_orgs( user )
     path = "#{A_API_V1_PATH}/user/privileges"
     data = get_json(path, user[:bitbucket_token], user[:bitbucket_secret])
     return if data.to_a.empty?
     data[:teams].keys
+  end
+
+
+  def self.user_emails( user )
+    path = "#{A_API_V1_PATH}/users/#{user.bitbucket_login}/emails"
+    get_json(path, user[:bitbucket_token], user[:bitbucket_secret])
   end
 
 
