@@ -112,7 +112,7 @@ class Organisation < Versioneye::Model
 
     def collect_components project, comps
       project.dependencies.each do |dep|
-        key = "#{dep.language}:#{dep.prod_key}:#{dep.version_requested}"
+        key = "#{dep.language}:#{dep.possible_prod_key}:#{dep.version_requested}"
         comps[key] = [] if !comps.keys.include?( key )
         val = "#{project.language}:#{project.name}:#{project.ids}"
         comps[key] << val if !comps[key].include?( val )
