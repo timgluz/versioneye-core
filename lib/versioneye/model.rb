@@ -33,7 +33,6 @@ module Versioneye
     require 'versioneye/models/license_whitelist'
     require 'versioneye/models/license_element'
     require 'versioneye/models/license_cach'
-    require 'versioneye/models/lottery'
     require 'versioneye/models/maven_repository'
     require 'versioneye/models/newest'
     require 'versioneye/models/notification'
