@@ -34,6 +34,11 @@ describe UpdateStrategy do
       updater.instance_of?(BitbucketUpdater).should be_truthy
     end
 
+    it 'returns the Stash Updater' do
+      updater = UpdateStrategy.updater_for Project::A_SOURCE_STASH
+      updater.instance_of?(StashUpdater).should be_truthy
+    end
+
   end
 
 end
