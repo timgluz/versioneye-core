@@ -75,6 +75,8 @@
     "bitbucket_token": "env_BITBUCKET_TOKEN",
     "bitbucket_password": "env_BITBUCKET_PASSWORD",
     "bitbucket_username": "env_BITBUCKET_USERNAME",
+    "bitbucket_user_token": "env_BITBUCKET_USER_TOKEN",
+    "bitbucket_user_secret": "env_BITBUCKET_USER_SECRET",
     "cocoapods_spec_git": "https://github.com/CocoaPods/Specs.git",
     "cocoapods_spec_url": "https://github.com/CocoaPods/Specs",
     "cocoapods_spec": "/home/versioneye/cocoapods/cocoapods-specs",

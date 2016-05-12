@@ -2,94 +2,73 @@
 http_interactions:
 - request:
     method: get
-    uri: https://bitbucket.org/api/1.0/repositories/versioneye_test/fantom_hydra/raw/master/Gemfile
+    uri: https://bitbucket.org/api/1.0/repositories/veye_test/fantom_hydra/raw/master/Gemfile
     body:
       encoding: US-ASCII
       string: ''
     headers:
       User-Agent:
-      - Chrome28 (contact@versioneye.com) (OAuth gem v0.4.7)
+      - Chrome28 (contact@versioneye.com) (OAuth gem v0.5.1)
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
-      - ! '*/*'
+      - "*/*"
       Authorization:
-      - OAuth oauth_consumer_key="HgSkE62pTT3HmxFGAm", oauth_nonce="kSOOskcoRc8Hj9hM0pNs0v37yV9xhixoWq8LUJ1N4RA",
-        oauth_signature="3%2BZcn9FmwmdV1PwEVc51%2FkVZ6zQ%3D", oauth_signature_method="HMAC-SHA1",
-        oauth_timestamp="1395917443", oauth_token="YsR6vM5qxmfZtkYt9G", oauth_version="1.0"
+      - OAuth oauth_consumer_key="u8eurPjtLP7h2SnyEm", oauth_nonce="EekvPwTZpaacyqTtoiVwScOuoV7W3LfZT3Iu6JjcY8",
+        oauth_signature="zDR%2BdkOTtzgJgUhojn6VrfbRgtU%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1463060853", oauth_token="4z7JqQxS3NWAZgvYYN", oauth_version="1.0"
   response:
     status:
       code: 200
       message: OK
     headers:
       Server:
-      - nginx/1.5.10
-      Date:
-      - Thu, 27 Mar 2014 10:50:43 GMT
-      Content-Type:
-      - text/plain; charset=utf-8
-      Content-Length:
-      - '1990'
-      Connection:
-      - keep-alive
-      X-Served-By:
-      - app07
-      X-Render-Time:
-      - '0.110751867294'
-      Content-Language:
-      - en
-      Etag:
-      - ! '"d70b2a04f7ad0bb886b8fba6d4f8023a"'
+      - nginx/1.6.2
+      Vary:
+      - Authorization, Cookie
       Cache-Control:
       - max-age=0
-      X-Request-Count:
-      - '48'
-      Expires:
-      - Thu, 27 Mar 2014 10:50:43 GMT
-      Vary:
-      - Authorization, Accept-Language, Cookie
-      Last-Modified:
-      - Thu, 27 Mar 2014 10:50:43 GMT
-      X-Frame-Options:
-      - SAMEORIGIN
-      X-Version:
-      - e64e68496a0e
-      X-Static-Version:
-      - 46aa35d4efcd
-      Set-Cookie:
-      - bb_session=iqnqintw28cw1pl55vup7mj3mjtw7lf6; expires=Thu, 10-Apr-2014 10:50:43
-        GMT; httponly; Max-Age=1209600; Path=/; secure
+      Content-Type:
+      - text/plain; charset=utf-8
+      X-Oauth-Scopes:
+      - wiki, project, account, repository:admin, repository, project:write, issue:write,
+        pullrequest:write, team, webhook, pullrequest, snippet, snippet:write, repository:write,
+        team:write, account:write, issue, email
       Strict-Transport-Security:
       - max-age=31536000
+      Date:
+      - Thu, 12 May 2016 13:47:34 GMT
+      X-Served-By:
+      - app-110
+      Expires:
+      - Thu, 12 May 2016 13:47:34 GMT
+      Etag:
+      - '"1495b13167762c5acf77bc045ba2105e"'
+      X-Static-Version:
+      - a46a4511f80f
       X-Content-Type-Options:
       - nosniff
+      X-Accepted-Oauth-Scopes:
+      - repository
+      X-Render-Time:
+      - '0.0444760322571'
+      Connection:
+      - keep-alive
+      X-Request-Count:
+      - '20'
+      X-Frame-Options:
+      - SAMEORIGIN
+      Last-Modified:
+      - Thu, 12 May 2016 13:47:34 GMT
+      X-Version:
+      - a46a4511f80f
+      Content-Length:
+      - '38'
     body:
-      encoding: US-ASCII
-      string: ! "source 'http://rubygems.org'\nruby \"1.9.3\"\n\ngem 'rails'             ,
-        '3.2.13'\ngem 'jquery-rails'      , '2.2.1'\ngem 'execjs'            , '1.4.0'\ngem
-        'will_paginate'     , '3.0.5'\ngem 'gravatar_image_tag', '1.1.3'\ngem 'bson_ext'
-        \         , '1.7.0'\ngem 'mongo'             , '1.7.0'\ngem 'mongoid'           ,
-        '2.5.0'\ngem 'naturalsorter'     , '2.0.6'\ngem 'postmark-rails'    , '0.5.2'\ngem
-        'httparty'          , '0.11.0'\ngem 'persistent_httparty'\ngem 'oauth'             ,
-        '0.4.7'\ngem 'twitter_oauth'     , '0.4.94'\ngem 'aws-s3'            , '0.6.3',
-        :require => 'aws/s3'\ngem 'nokogiri'          , '1.6.0'\ngem 'stripe'            ,
-        '1.8.8'\ngem 'unicorn'           , '4.6.3'\ngem 'tire'              , '0.6.1'\ngem
-        'json'              , '1.8.1'\ngem 'dalli'             , '2.6.4'   # memcache
-        library\ngem 'kgio'              , '2.8.1'   # 20% performance boost for dalli\ngem
-        'grape'             , '0.5.0'\ngem 'grape-entity'      , '0.2.0'\ngem 'grape-swagger'
-        \    , :path => \"vendor/gems\" # , :github => \"timgluz/grape-swagger\",
-        :branch => \"master\"\ngem 'htmlentities'      , '4.3.1'\ngem 'capistrano'
-        \       , '2.15.5'\ngem 'whenever'          , '0.8.4'\ngem 'bourbon'           ,
-        '3.1.8'\ngem 'ruby_regex'        , '0.1.0'\n\ngroup :development do\n  gem
-        'psych'\n  gem 'irbtools'\n  gem 'terminal-notifier'\n  gem 'fakes3'\n  gem
-        'debugger'\nend\n\ngroup :assets do\n  gem 'therubyracer'  , '0.12.0'\n  gem
-        'sass'          , :require => 'sass'\n  gem 'sass-rails'    , \"3.2.6\"\n
-        \ gem 'coffee-rails'  , \"3.2.2\"\n  gem 'uglifier'\n  gem 'yui-compressor',
-        '0.9.6'\nend\n\ngroup :test do\n  gem 'turn'              , :require => false\n
-        \ gem 'rspec'             , '2.14.1'\n  gem \"rspec-rails\"       , \"~> 2.0\"\n
-        \ gem 'rspec-mocks'       , '2.14.4'\n  gem 'capybara'          , '2.1.0'\n
-        \ gem 'capybara-firebug'  , '~> 1.3'\n  gem 'selenium-webdriver', '2.35.0'\n
-        \ gem 'fakeweb'           , '1.3.0'\n  gem 'debugger'\n  gem 'database_cleaner'
-        \ , '1.2.0'\n  gem 'factory_girl'      , '~> 4.0'\n  gem 'factory_girl_rails',
-        '~> 4.0'\nend\n"
+      encoding: UTF-8
+      string: |
+        source 'https://rubygems.org'
+        gemspec
     http_version: 
-  recorded_at: Thu, 27 Mar 2014 10:50:43 GMT
-recorded_with: VCR 2.8.0
+  recorded_at: Thu, 12 May 2016 13:47:34 GMT
+recorded_with: VCR 3.0.1
