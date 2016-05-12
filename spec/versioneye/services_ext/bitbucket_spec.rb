@@ -47,38 +47,35 @@ describe Bitbucket do
     token    = user_with_token[:bitbucket_token]
     secret   = user_with_token[:bitbucket_secret]
 
-    username.should_not be_nil
-    token.should_not be_nil
-    secret.should_not be_nil
+    expect( username ).to_not be_nil
+    expect( token    ).to_not be_nil
+    expect( secret   ).to_not be_nil
     repo_name = "#{username}/fantom_hydra"
 
     VCR.use_cassette('bitbucket_project_file_from_branch', allow_playback_repeats: true) do
       file = Bitbucket.fetch_project_file_from_branch(repo_name, "master", "Gemfile", token, secret)
-      file.should_not be_nil
-      file.is_a?(String).should be_truthy
+      expect( file               ).to_not be_nil
+      expect( file.is_a?(String) ).to be_truthy
     end
   end
 
 
-  # context "as authorized user " do
+  context "as authorized user " do
 
-  #   it "returns proper user info" do
-  #     #connect account
-  #     user_with_token.save
-  #     # user_with_token = connect_bitbucket(user_with_token)
-  #     # user_with_token.reload
+    it "returns proper user info" do
+      user_with_token.save
 
-  #     user_with_token[:bitbucket_token].should_not be_nil
-  #     user_with_token[:bitbucket_secret].should_not be_nil
+      expect( user_with_token[:bitbucket_token] ).to_not be_nil
+      expect( user_with_token[:bitbucket_secret]).to_not be_nil
 
-  #     VCR.use_cassette('bitbucket_user', allow_playback_repeats: true) do
-  #       user_info = Bitbucket.user(user_with_token[:bitbucket_token],
-  #                                  user_with_token[:bitbucket_secret])
-  #       user_info.should_not be_nil
-  #       user_info.is_a?(Hash).should be_truthy
-  #       user_info[:username].should eql(user_with_token[:bitbucket_login])
-  #     end
-  #   end
+      VCR.use_cassette('bitbucket_user', allow_playback_repeats: true) do
+        user_info = Bitbucket.user(user_with_token[:bitbucket_token],
+                                   user_with_token[:bitbucket_secret])
+        expect( user_info             ).to_not be_nil
+        expect( user_info.is_a?(Hash) ).to be_truthy
+        expect( user_info[:username]  ).to eql(user_with_token[:bitbucket_login])
+      end
+    end
 
 
   #   it "returns user information from API2" do
@@ -239,5 +236,5 @@ describe Bitbucket do
   #     end
   #   end
 
-  # end
+  end
 end
