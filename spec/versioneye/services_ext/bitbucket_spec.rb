@@ -218,7 +218,7 @@ describe Bitbucket do
         files = Bitbucket.project_files_from_branch(repo_name, "master", token, secret)
         expect( files               ).to_not be_nil
         expect( files.is_a?(Array)  ).to be_truthy
-        expect( files.size          ).to eql(2)
+        expect( files.size          ).to eql(3)
         expect( files.first[:path]  ).to eql('Gemfile')
         expect( files.second[:path] ).to eql('bower.json')
       end
