@@ -28,29 +28,6 @@ class UserMailer < SuperMailer
   end
 
 
-  def collaboration_invitation(collaborator)
-    @caller  = collaborator.caller
-    @owner   = collaborator.owner
-    @project = collaborator.project
-    m = mail( :to => collaborator[:invitation_email], :subject => 'Invitation to project collabration' ) do |format|
-      format.html{ render layout: 'email_html_layout' }
-    end
-    set_from( m )
-  end
-
-
-  def new_collaboration( collaborator )
-    @caller        = collaborator.caller
-    @project       = collaborator.project
-    @callee        = collaborator.user
-    @collaboration = collaborator
-    m = mail( :to => @callee[:email], :subject => "#{@caller[:fullname]} added you as collaborator" ) do |format|
-      format.html{ render layout: 'email_html_layout' }
-    end
-    set_from( m )
-  end
-
-
   def invited_user_author( user, authors )
     @user    = user
     @authors = authors
