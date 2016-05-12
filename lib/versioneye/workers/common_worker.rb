@@ -35,8 +35,6 @@ class CommonWorker < Worker
       UserService.update_languages
     elsif message.eql?("update_statistic_data")
       StatisticService.update_all
-    elsif message.eql?("send_verification_reminders")
-      User.send_verification_reminders
     elsif message.eql?("send_security_notifications")
       SecurityNotificationService.process
     elsif message.eql?("process_receipts")

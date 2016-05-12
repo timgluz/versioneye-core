@@ -130,32 +130,6 @@ class User < Versioneye::Model
     User.log.error e.backtrace.join("\n")
   end
 
-  def self.send_verification_reminders
-    users = User.where( :verification.ne => nil )
-    users.each do |user|
-      next if user.email_inactive
-      user.send_verification_reminder
-    end
-  end
-
-  def send_verification_reminder
-    if self.verification && self.deleted_user != true
-      UserMailer.verification_email_reminder(self, self.verification, self.email).deliver_now
-    end
-  rescue => e
-    User.log.error e.message
-    User.log.error e.backtrace.join("\n")
-  end
-
-  def send_suggestions
-    return nil if deleted_user || email_inactive
-    UserMailer.suggest_packages_email(self).deliver_now
-  rescue => e
-    User.log.error e.message
-    User.log.error e.backtrace.join("\n")
-    nil
-  end
-
   def create_username
     name = fullname.strip
     if name.include?(" ")

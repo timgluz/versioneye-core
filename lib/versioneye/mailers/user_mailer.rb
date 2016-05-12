@@ -28,17 +28,6 @@ class UserMailer < SuperMailer
   end
 
 
-  def verification_email_reminder(user, verification, email)
-    @user  = user
-    source = fetch_source( user )
-    @verificationlink = "#{Settings.instance.server_url}/users/activate/#{source}/#{verification}"
-    m = mail( :to => email, :subject => 'Verification Reminder' ) do |format|
-      format.html{ render layout: 'email_html_layout' }
-    end
-    set_from( m )
-  end
-
-
   def collaboration_invitation(collaborator)
     @caller  = collaborator.caller
     @owner   = collaborator.owner
@@ -76,25 +65,6 @@ class UserMailer < SuperMailer
     @user = user
     @url  = "#{Settings.instance.server_url}/updatepassword/#{@user.verification}"
     m = mail(:to => @user.email, :subject => 'Password Reset') do |format|
-      format.html{ render layout: 'email_html_layout' }
-    end
-    set_from( m )
-  end
-
-
-  def new_ticket(user, ticket)
-    @fullname = user[:fullname]
-    @ticket   = ticket
-    m = mail(:to => user[:email], :subject => "VersionEye's lottery confirmation") do |format|
-      format.html{ render layout: 'email_html_layout' }
-    end
-    set_from( m )
-  end
-
-
-  def suggest_packages_email( user )
-    @fullname = user[:fullname]
-    m = mail(:to => user[:email], :subject => "Follow popular software packages on VersionEye") do |format|
       format.html{ render layout: 'email_html_layout' }
     end
     set_from( m )
