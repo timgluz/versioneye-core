@@ -2,75 +2,87 @@
 http_interactions:
 - request:
     method: get
-    uri: https://bitbucket.org/api/2.0/repositories/versioneye_test/fantom_hydra
+    uri: https://bitbucket.org/api/2.0/repositories/veye_test/fantom_hydra
     body:
       encoding: US-ASCII
       string: ''
     headers:
       User-Agent:
-      - Chrome28 (info@versioneye.com) (OAuth gem v0.4.7)
+      - Chrome28 (contact@versioneye.com) (OAuth gem v0.5.1)
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
       - "*/*"
       Authorization:
-      - OAuth oauth_consumer_key="HgSkE62pTT3HmxFGAm", oauth_nonce="lEID8RXTFv0avuQZOOtWHgJTQWkv2e23L4ckJytw0",
-        oauth_signature="MJhc%2B9ldpR6ztGt%2FCgA94%2Fa%2Bo8M%3D", oauth_signature_method="HMAC-SHA1",
-        oauth_timestamp="1387985934", oauth_token="YsR6vM5qxmfZtkYt9G", oauth_version="1.0"
+      - OAuth oauth_consumer_key="u8eurPjtLP7h2SnyEm", oauth_nonce="tfRAQRsXO4i5sbAe4OqjUF2DT7SmLdTZSl2yWBbHdY",
+        oauth_signature="LS%2Fi96d3qG5crixvelr%2BpgGSZVI%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1463061608", oauth_token="4z7JqQxS3NWAZgvYYN", oauth_version="1.0"
   response:
     status:
       code: 200
       message: OK
     headers:
       Server:
-      - nginx/1.5.3
-      Date:
-      - Wed, 25 Dec 2013 15:38:55 GMT
+      - nginx/1.6.2
+      Vary:
+      - Accept-Encoding
+      - Authorization, Cookie
       Content-Type:
       - application/json; charset=utf-8
+      X-Oauth-Scopes:
+      - wiki, project, account, repository:admin, repository, project:write, issue:write,
+        pullrequest:write, team, webhook, pullrequest, snippet, snippet:write, repository:write,
+        team:write, account:write, issue, email
+      Strict-Transport-Security:
+      - max-age=31536000
+      Date:
+      - Thu, 12 May 2016 14:00:10 GMT
+      X-Served-By:
+      - app-110
       Transfer-Encoding:
       - chunked
+      Etag:
+      - '"b0ad8d78dc45970d631601481a1072a9"'
+      X-Static-Version:
+      - a46a4511f80f
+      X-Content-Type-Options:
+      - nosniff
+      X-Accepted-Oauth-Scopes:
+      - repository
+      X-Render-Time:
+      - '0.271788835526'
       Connection:
       - keep-alive
       X-Request-Count:
-      - '268'
-      X-Served-By:
-      - app07
-      X-Render-Time:
-      - '0.0451688766479'
-      Content-Language:
-      - en
-      X-Static-Version:
-      - c4f05e63beb6
-      Vary:
-      - Authorization, Accept-Language, Cookie
+      - '58'
       X-Version:
-      - b2ac13e3a153
+      - a46a4511f80f
       X-Frame-Options:
       - SAMEORIGIN
-      Strict-Transport-Security:
-      - max-age=31536000
-      X-Content-Type-Options:
-      - nosniff
     body:
-      encoding: UTF-8
-      string: "{\"scm\": \"git\", \"has_wiki\": false, \"description\": \"Test project
-        for BitbucketSP\", \"links\": {\"watchers\": {\"href\": \"https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra/watchers\"},
-        \"commits\": {\"href\": \"https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra/commits\"},
-        \"self\": {\"href\": \"https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra\"},
-        \"html\": {\"href\": \"https://bitbucket.org/versioneye_test/fantom_hydra\"},
-        \"avatar\": {\"href\": \"https://d3oaxc4q5k2d6q.cloudfront.net/m/c4f05e63beb6/img/language-avatars/default_16.png\"},
-        \"forks\": {\"href\": \"https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra/forks\"},
-        \"clone\": [{\"href\": \"https://versioneye_test@bitbucket.org/versioneye_test/fantom_hydra.git\",
-        \"name\": \"https\"}, {\"href\": \"ssh://git@bitbucket.org/versioneye_test/fantom_hydra.git\",
-        \"name\": \"ssh\"}], \"pullrequests\": {\"href\": \"https://bitbucket.org/!api/2.0/repositories/versioneye_test/fantom_hydra/pullrequests\"}},
-        \"fork_policy\": \"allow_forks\", \"language\": \"\", \"created_on\": \"2013-12-25T13:57:03.873043+00:00\",
-        \"full_name\": \"versioneye_test/fantom_hydra\", \"has_issues\": false, \"owner\":
-        {\"username\": \"versioneye_test\", \"display_name\": \"Version Eye\", \"links\":
-        {\"self\": {\"href\": \"https://bitbucket.org/!api/2.0/users/versioneye_test\"},
-        \"avatar\": {\"href\": \"https://secure.gravatar.com/avatar/ef4bc1256a1b06c7de9da2515680ceee?d=https%3A%2F%2Fd3oaxc4q5k2d6q.cloudfront.net%2Fm%2Fc4f05e63beb6%2Fimg%2Fdefault_avatar%2F32%2Fuser_blue.png&s=32\"}}},
-        \"updated_on\": \"2013-12-25T13:58:03.794584+00:00\", \"size\": 619780, \"is_private\":
-        false, \"name\": \"fantom_hydra\"}"
+      encoding: ASCII-8BIT
+      string: '{"scm": "git", "website": "", "has_wiki": false, "name": "fantom_hydra",
+        "links": {"watchers": {"href": "https://bitbucket.org/!api/2.0/repositories/veye_test/fantom_hydra/watchers"},
+        "branches": {"href": "https://bitbucket.org/!api/2.0/repositories/veye_test/fantom_hydra/refs/branches"},
+        "tags": {"href": "https://bitbucket.org/!api/2.0/repositories/veye_test/fantom_hydra/refs/tags"},
+        "commits": {"href": "https://bitbucket.org/!api/2.0/repositories/veye_test/fantom_hydra/commits"},
+        "clone": [{"href": "https://veye_test@bitbucket.org/veye_test/fantom_hydra.git",
+        "name": "https"}, {"href": "ssh://git@bitbucket.org/veye_test/fantom_hydra.git",
+        "name": "ssh"}], "self": {"href": "https://bitbucket.org/!api/2.0/repositories/veye_test/fantom_hydra"},
+        "html": {"href": "https://bitbucket.org/veye_test/fantom_hydra"}, "avatar":
+        {"href": "https://bitbucket.org/veye_test/fantom_hydra/avatar/32/"}, "hooks":
+        {"href": "https://bitbucket.org/!api/2.0/repositories/veye_test/fantom_hydra/hooks"},
+        "forks": {"href": "https://bitbucket.org/!api/2.0/repositories/veye_test/fantom_hydra/forks"},
+        "downloads": {"href": "https://bitbucket.org/!api/2.0/repositories/veye_test/fantom_hydra/downloads"},
+        "pullrequests": {"href": "https://bitbucket.org/!api/2.0/repositories/veye_test/fantom_hydra/pullrequests"}},
+        "fork_policy": "no_public_forks", "uuid": "{93f0815b-d921-4100-83b5-bb21cd63ea57}",
+        "language": "", "created_on": "2016-05-12T13:35:35.213541+00:00", "full_name":
+        "veye_test/fantom_hydra", "has_issues": false, "owner": {"username": "veye_test",
+        "display_name": "veye_test", "type": "user", "uuid": "{78cda96b-d463-4c9c-a91c-db5a4cc874c4}",
+        "links": {"self": {"href": "https://bitbucket.org/!api/2.0/users/veye_test"},
+        "html": {"href": "https://bitbucket.org/veye_test/"}, "avatar": {"href": "https://bitbucket.org/account/veye_test/avatar/32/"}}},
+        "updated_on": "2016-05-12T13:42:52.262758+00:00", "size": 58466, "type": "repository",
+        "is_private": true, "description": ""}'
     http_version: 
-  recorded_at: Wed, 25 Dec 2013 15:38:55 GMT
-recorded_with: VCR 2.8.0
+  recorded_at: Thu, 12 May 2016 14:00:10 GMT
+recorded_with: VCR 3.0.1

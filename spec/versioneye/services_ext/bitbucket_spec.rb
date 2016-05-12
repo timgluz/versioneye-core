@@ -95,145 +95,134 @@ describe Bitbucket do
       end
     end
 
-  #   it "returns user organizations" do
-  #     user_with_token[:bitbucket_token].should_not be_nil
-  #     user_with_token[:bitbucket_secret].should_not be_nil
+    it "returns user organizations" do
+      user_with_token[:bitbucket_token].should_not be_nil
+      user_with_token[:bitbucket_secret].should_not be_nil
 
-  #     VCR.use_cassette('bitbucket_user_orgs', allow_playback_repeats: true) do
-  #       user_orgs = Bitbucket.user_orgs(user_with_token)
-  #       user_orgs.should_not be_nil
-  #       user_orgs.is_a?(Array).should be_truthy
-  #     end
-  #   end
+      VCR.use_cassette('bitbucket_user_orgs', allow_playback_repeats: true) do
+        user_orgs = Bitbucket.user_orgs(user_with_token)
+        expect( user_orgs              ).to_not be_nil
+        expect( user_orgs.is_a?(Array) ).to be_truthy
+      end
+    end
 
-  #   it "returns user repos" do
+    it "returns user repos" do
+      username = user_with_token[:bitbucket_login]
+      token    = user_with_token[:bitbucket_token]
+      secret   = user_with_token[:bitbucket_secret]
 
-  #     username = user_with_token[:bitbucket_login]
-  #     token = user_with_token[:bitbucket_token]
-  #     secret = user_with_token[:bitbucket_secret]
+      expect( username ).to_not be_nil
+      expect( token    ).to_not be_nil
+      expect( secret   ).to_not be_nil
 
-  #     username.should_not be_nil
-  #     token.should_not be_nil
-  #     secret.should_not be_nil
+      VCR.use_cassette('bitbucket_read_repos', allow_playback_repeats: true) do
+        repos = Bitbucket.read_repos(username, token, secret)
+        expect( repos              ).to_not be_nil
+        expect( repos.is_a?(Array) ).to be_truthy
+        expect( repos.size         ).to eql(1)
+      end
+    end
 
-  #     VCR.use_cassette('bitbucket_read_repos', allow_playback_repeats: true) do
-  #       repos = Bitbucket.read_repos(username, token, secret)
-  #       repos.should_not be_nil
-  #       repos.is_a?(Array).should be_truthy
-  #       repos.size.should eql(2)
-  #     end
-  #   end
+    it "returns information of the repo" do
+      username = user_with_token[:bitbucket_login]
+      token    = user_with_token[:bitbucket_token]
+      secret   = user_with_token[:bitbucket_secret]
 
-  #   it "returns information of the repo" do
+      expect( username ).to_not be_nil
+      expect( token    ).to_not be_nil
+      expect( secret   ).to_not be_nil
 
-  #     username = user_with_token[:bitbucket_login]
-  #     token = user_with_token[:bitbucket_token]
-  #     secret = user_with_token[:bitbucket_secret]
+      VCR.use_cassette('bitbucket_repo_info', allow_playback_repeats: true) do
+        repo = Bitbucket.repo_info("#{username}/fantom_hydra", token, secret)
+        expect( repo             ).to_not be_nil
+        expect( repo.is_a?(Hash) ).to be_truthy
+        expect( repo[:name]      ).to eql("fantom_hydra")
+      end
+    end
 
-  #     username.should_not be_nil
-  #     token.should_not be_nil
-  #     secret.should_not be_nil
+    it "returns branches of the repo" do
+      username = user_with_token[:bitbucket_login]
+      token    = user_with_token[:bitbucket_token]
+      secret   = user_with_token[:bitbucket_secret]
 
-  #     VCR.use_cassette('bitbucket_repo_info', allow_playback_repeats: true) do
-  #       repo = Bitbucket.repo_info("#{username}/fantom_hydra", token, secret)
-  #       repo.should_not be_nil
-  #       repo.is_a?(Hash).should be_truthy
-  #       repo[:name].should eql("fantom_hydra")
-  #     end
-  #   end
+      expect( username ).to_not be_nil
+      expect( token    ).to_not be_nil
+      expect( secret   ).to_not be_nil
 
-  #   it "returns branches of the repo" do
-
-  #     username = user_with_token[:bitbucket_login]
-  #     token = user_with_token[:bitbucket_token]
-  #     secret = user_with_token[:bitbucket_secret]
-
-  #     username.should_not be_nil
-  #     token.should_not be_nil
-  #     secret.should_not be_nil
-  #     repo_name = "#{username}/fantom_hydra"
-
-  #     VCR.use_cassette('bitbucket_repo_branches', allow_playback_repeats: true) do
-  #       branches = Bitbucket.repo_branches(repo_name, token, secret)
-  #       branches.should_not be_nil
-  #       branches.is_a?(Array).should be_truthy
-  #       branches.each do |key|
-  #         p " - key: #{key}"
-  #       end
-  #       branches.size.should eql(3)
-  #       branches.include? "java_branch"
-  #       branches.include? "clojure_branch"
-  #     end
-  #   end
+      repo_name = "#{username}/fantom_hydra"
+      VCR.use_cassette('bitbucket_repo_branches', allow_playback_repeats: true) do
+        branches = Bitbucket.repo_branches(repo_name, token, secret)
+        expect( branches ).to_not be_nil
+        expect( branches.is_a?(Array) ).to be_truthy
+        expect( branches.size ).to eql(3)
+        expect( branches.include? "java_branch"    ).to be_truthy
+        expect( branches.include? "clojure_branch" ).to be_truthy
+      end
+    end
 
 
-  #   it "returns correct hash-map of project files" do
+    it "returns correct hash-map of project files" do
+      username = user_with_token[:bitbucket_login]
+      token    = user_with_token[:bitbucket_token]
+      secret   = user_with_token[:bitbucket_secret]
 
-  #     username = user_with_token[:bitbucket_login]
-  #     token = user_with_token[:bitbucket_token]
-  #     secret = user_with_token[:bitbucket_secret]
+      expect( username ).to_not be_nil
+      expect( token    ).to_not be_nil
+      expect( secret   ).to_not be_nil
 
-  #     username.should_not be_nil
-  #     token.should_not be_nil
-  #     secret.should_not be_nil
-  #     repo_name = "#{username}/fantom_hydra"
+      repo_name = "#{username}/fantom_hydra"
+      VCR.use_cassette('bitbucket_repo_project_files', allow_playback_repeats: false) do
+        files = Bitbucket.repo_project_files(repo_name, token, secret)
+        expect( files             ).to_not be_nil
+        expect( files.is_a?(Hash) ).to be_truthy
+        expect( files.keys.size   ).to eql(3)
+        expect( files.keys.include?("java_branch") ).to be_truthy
+        expect( files['java_branch'].is_a?(Array)  ).to be_truthy
+        expect( files['java_branch'].size          ).to eql(1)
+      end
+    end
 
-  #     VCR.use_cassette('bitbucket_repo_project_files', allow_playback_repeats: false) do
-  #       files = Bitbucket.repo_project_files(repo_name, token, secret)
-  #       files.should_not be_nil
-  #       files.is_a?(Hash).should be_truthy
-  #       files.keys.size.should eql(3)
-  #       files.keys.each do |key|
-  #         p " - key: #{key}"
-  #       end
-  #       files.keys.include?("java_branch").should be_truthy
-  #       files['java_branch'].is_a?(Array).should be_truthy
-  #       files['java_branch'].size.should eql(1)
-  #     end
-  #   end
+    it "returns a filetree of  the repo" do
+      username = user_with_token[:bitbucket_login]
+      token    = user_with_token[:bitbucket_token]
+      secret   = user_with_token[:bitbucket_secret]
 
-  #   it "returns a filetree of  the repo" do
+      expect( username ).to_not be_nil
+      expect( token    ).to_not be_nil
+      expect( secret   ).to_not be_nil
 
-  #     username = user_with_token[:bitbucket_login]
-  #     token = user_with_token[:bitbucket_token]
-  #     secret = user_with_token[:bitbucket_secret]
+      repo_name = "#{username}/fantom_hydra"
+      VCR.use_cassette('bitbucket_repo_branch_tree', allow_playback_repeats: false) do
+        data = Bitbucket.repo_branch_tree(repo_name, "master", token, secret)
+        expect( data                  ).to_not be_nil
+        expect( data.has_key?(:files) ).to be_truthy
 
-  #     username.should_not be_nil
-  #     token.should_not be_nil
-  #     secret.should_not be_nil
-  #     repo_name = "#{username}/fantom_hydra"
+        files = data[:files]
+        expect( files              ).to_not be_nil
+        expect( files.is_a?(Array) ).to be_truthy
+        expect( files.size         ).to eql(3)
+      end
+    end
 
-  #     VCR.use_cassette('bitbucket_repo_branch_tree', allow_playback_repeats: false) do
-  #       data = Bitbucket.repo_branch_tree(repo_name, "master", token, secret)
-  #       data.should_not be_nil
-  #       data.has_key?(:files).should be_truthy
-  #       files = data[:files]
-  #       files.should_not be_nil
-  #       files.is_a?(Array).should be_truthy
-  #       files.size.should eql(4)
-  #     end
-  #   end
+    it "returns existing project files on the branch of the repo" do
+      username = user_with_token[:bitbucket_login]
+      token    = user_with_token[:bitbucket_token]
+      secret   = user_with_token[:bitbucket_secret]
 
-  #   it "returns existing project files on the branch of the repo" do
+      expect( username ).to_not be_nil
+      expect( token    ).to_not be_nil
+      expect( secret   ).to_not be_nil
 
-  #     username = user_with_token[:bitbucket_login]
-  #     token = user_with_token[:bitbucket_token]
-  #     secret = user_with_token[:bitbucket_secret]
-
-  #     username.should_not be_nil
-  #     token.should_not be_nil
-  #     secret.should_not be_nil
-  #     repo_name = "#{username}/fantom_hydra"
-
-  #     VCR.use_cassette('bitbucket_project_files_from_branch', allow_playback_repeats: false) do
-  #       files = Bitbucket.project_files_from_branch(repo_name, "master", token, secret)
-  #       files.should_not be_nil
-  #       files.is_a?(Array).should be_truthy
-  #       files.size.should eql(2)
-  #       files.first[:path].should eql('Gemfile')
-  #       files.second[:path].should eql('bower.json')
-  #     end
-  #   end
+      repo_name = "#{username}/fantom_hydra"
+      VCR.use_cassette('bitbucket_project_files_from_branch', allow_playback_repeats: false) do
+        files = Bitbucket.project_files_from_branch(repo_name, "master", token, secret)
+        expect( files               ).to_not be_nil
+        expect( files.is_a?(Array)  ).to be_truthy
+        expect( files.size          ).to eql(2)
+        expect( files.first[:path]  ).to eql('Gemfile')
+        expect( files.second[:path] ).to eql('bower.json')
+      end
+    end
 
   end
 end

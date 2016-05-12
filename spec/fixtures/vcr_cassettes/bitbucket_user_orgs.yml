@@ -8,55 +8,59 @@ http_interactions:
       string: ''
     headers:
       User-Agent:
-      - Chrome28 (info@versioneye.com) (OAuth gem v0.4.7)
+      - Chrome28 (contact@versioneye.com) (OAuth gem v0.5.1)
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
       - "*/*"
       Authorization:
-      - OAuth oauth_consumer_key="HgSkE62pTT3HmxFGAm", oauth_nonce="tyzzcUrWQQyqqhpoRpHWN8SqhmiNblkJx2BZvdEbcw",
-        oauth_signature="yvvm5yK%2BNRq7NJR9h23tZQRLv2U%3D", oauth_signature_method="HMAC-SHA1",
-        oauth_timestamp="1387985933", oauth_token="YsR6vM5qxmfZtkYt9G", oauth_version="1.0"
+      - OAuth oauth_consumer_key="u8eurPjtLP7h2SnyEm", oauth_nonce="ZkZYm0DIOhjyF88yRzuX07f9WtuELLIrtJfyWXdCATE",
+        oauth_signature="1eOpa5uSE9QkA3kFZlV5mzBocHw%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1463061400", oauth_token="4z7JqQxS3NWAZgvYYN", oauth_version="1.0"
   response:
     status:
       code: 200
       message: OK
     headers:
       Server:
-      - nginx/1.5.3
-      Date:
-      - Wed, 25 Dec 2013 15:38:54 GMT
+      - nginx/1.6.2
+      Vary:
+      - Authorization, Cookie
       Content-Type:
       - application/json; charset=utf-8
-      Content-Length:
-      - '13'
-      Connection:
-      - keep-alive
-      X-Served-By:
-      - app18
-      X-Render-Time:
-      - '0.0254671573639'
-      Content-Language:
-      - en
-      X-Static-Version:
-      - c4f05e63beb6
-      Vary:
-      - Authorization, Accept-Language, Cookie
-      X-Version:
-      - b2ac13e3a153
-      Etag:
-      - "\"a6e0c24c3bbc6b5a00497cb4d74e8c41\""
-      X-Request-Count:
-      - '357'
-      X-Frame-Options:
-      - SAMEORIGIN
+      X-Oauth-Scopes:
+      - wiki, project, account, repository:admin, repository, project:write, issue:write,
+        pullrequest:write, team, webhook, pullrequest, snippet, snippet:write, repository:write,
+        team:write, account:write, issue, email
       Strict-Transport-Security:
       - max-age=31536000
+      Date:
+      - Thu, 12 May 2016 13:56:41 GMT
+      X-Served-By:
+      - app-109
+      X-Static-Version:
+      - a46a4511f80f
+      Etag:
+      - '"a6e0c24c3bbc6b5a00497cb4d74e8c41"'
       X-Content-Type-Options:
       - nosniff
+      X-Render-Time:
+      - '0.0370769500732'
+      X-Accepted-Oauth-Scopes:
+      - account
+      Connection:
+      - keep-alive
+      X-Version:
+      - a46a4511f80f
+      X-Request-Count:
+      - '233'
+      X-Frame-Options:
+      - SAMEORIGIN
+      Content-Length:
+      - '13'
     body:
       encoding: UTF-8
-      string: "{\"teams\": {}}"
+      string: '{"teams": {}}'
     http_version: 
-  recorded_at: Wed, 25 Dec 2013 15:38:54 GMT
-recorded_with: VCR 2.8.0
+  recorded_at: Thu, 12 May 2016 13:56:41 GMT
+recorded_with: VCR 3.0.1

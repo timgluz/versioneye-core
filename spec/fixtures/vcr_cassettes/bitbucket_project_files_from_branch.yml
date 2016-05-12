@@ -2,73 +2,77 @@
 http_interactions:
 - request:
     method: get
-    uri: https://bitbucket.org/api/1.0/repositories/versioneye_test/fantom_hydra/src/master/
+    uri: https://bitbucket.org/api/1.0/repositories/veye_test/fantom_hydra/src/master/
     body:
       encoding: US-ASCII
       string: ''
     headers:
       User-Agent:
-      - Chrome28 (info@versioneye.com) (OAuth gem v0.4.7)
+      - Chrome28 (contact@versioneye.com) (OAuth gem v0.5.1)
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
       - "*/*"
       Authorization:
-      - OAuth oauth_consumer_key="HgSkE62pTT3HmxFGAm", oauth_nonce="Qe2cNVrkckjHByikiK8WI59ecgKIQQRBixalxep0",
-        oauth_signature="5%2BGJdQrxX84cgpzl%2Fa%2BmUVNWiZQ%3D", oauth_signature_method="HMAC-SHA1",
-        oauth_timestamp="1387985939", oauth_token="YsR6vM5qxmfZtkYt9G", oauth_version="1.0"
+      - OAuth oauth_consumer_key="u8eurPjtLP7h2SnyEm", oauth_nonce="XCL9OTO4b5KEmaNOMWlxesKlGA8rXSI1wSnw048I8",
+        oauth_signature="H0b%2B10xG1QyTk94PjkxMEF%2F0VS8%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1463062443", oauth_token="4z7JqQxS3NWAZgvYYN", oauth_version="1.0"
   response:
     status:
       code: 200
       message: OK
     headers:
       Server:
-      - nginx/1.5.3
-      Date:
-      - Wed, 25 Dec 2013 15:38:59 GMT
-      Content-Type:
-      - application/json; charset=utf-8
-      Transfer-Encoding:
-      - chunked
-      Connection:
-      - keep-alive
-      X-Served-By:
-      - app04
-      X-Render-Time:
-      - '0.0717840194702'
-      Content-Language:
-      - en
+      - nginx/1.6.2
+      Vary:
+      - Authorization, Cookie
       Cache-Control:
       - max-age=0
-      X-Request-Count:
-      - '154'
-      Expires:
-      - Wed, 25 Dec 2013 15:38:59 GMT
-      Vary:
-      - Authorization, Accept-Language, Cookie
-      Last-Modified:
-      - Wed, 25 Dec 2013 15:38:59 GMT
-      X-Frame-Options:
-      - SAMEORIGIN
-      X-Version:
-      - b2ac13e3a153
-      X-Static-Version:
-      - c4f05e63beb6
+      Content-Type:
+      - application/json; charset=utf-8
+      X-Oauth-Scopes:
+      - wiki, project, account, repository:admin, repository, project:write, issue:write,
+        pullrequest:write, team, webhook, pullrequest, snippet, snippet:write, repository:write,
+        team:write, account:write, issue, email
       Strict-Transport-Security:
       - max-age=31536000
+      Date:
+      - Thu, 12 May 2016 14:14:05 GMT
+      X-Served-By:
+      - app-111
+      Expires:
+      - Thu, 12 May 2016 14:14:05 GMT
+      Etag:
+      - '"95ae7e69f6dc6678ca8fdd7c7cfa4ae9"'
+      X-Static-Version:
+      - a46a4511f80f
       X-Content-Type-Options:
       - nosniff
+      X-Accepted-Oauth-Scopes:
+      - repository
+      X-Render-Time:
+      - '0.282394886017'
+      Connection:
+      - keep-alive
+      X-Request-Count:
+      - '300'
+      X-Frame-Options:
+      - SAMEORIGIN
+      Last-Modified:
+      - Thu, 12 May 2016 14:14:05 GMT
+      X-Version:
+      - a46a4511f80f
+      Content-Length:
+      - '494'
     body:
       encoding: UTF-8
-      string: "{\"node\": \"20b9c1193a16\", \"path\": \"/\", \"directories\": [],
-        \"files\": [{\"size\": 1990, \"path\": \"Gemfile\", \"timestamp\": \"2013-11-01T14:36:31Z\",
-        \"utctimestamp\": \"2013-11-01 14:36:31+00:00\", \"revision\": \"20b9c1193a16\"},
-        {\"size\": 0, \"path\": \"LICENSE\", \"timestamp\": \"2013-11-01T14:29:08Z\",
-        \"utctimestamp\": \"2013-11-01 14:29:08+00:00\", \"revision\": \"a3ffc834e602\"},
-        {\"size\": 139, \"path\": \"README.md\", \"timestamp\": \"2013-11-01T14:36:31Z\",
-        \"utctimestamp\": \"2013-11-01 14:36:31+00:00\", \"revision\": \"20b9c1193a16\"},
-        {\"size\": 215, \"path\": \"bower.json\", \"timestamp\": \"2013-11-01T14:32:25Z\",
-        \"utctimestamp\": \"2013-11-01 14:32:25+00:00\", \"revision\": \"69f219d5fd26\"}]}"
+      string: '{"node": "c3742950b728", "path": "/", "directories": [], "files": [{"size":
+        38, "path": "Gemfile", "timestamp": "2016-05-12T13:42:36Z", "utctimestamp":
+        "2016-05-12 13:42:36+00:00", "revision": "6ea9ff7944fc"}, {"size": 3, "path":
+        "bower.json", "timestamp": "2016-05-12T14:13:04Z", "utctimestamp": "2016-05-12
+        14:13:04+00:00", "revision": "c3742950b728"}, {"size": 5, "path": "test",
+        "timestamp": "2016-05-12T14:09:32Z", "utctimestamp": "2016-05-12 14:09:32+00:00",
+        "revision": "b075ba497aae"}]}'
     http_version: 
-  recorded_at: Wed, 25 Dec 2013 15:38:59 GMT
-recorded_with: VCR 2.8.0
+  recorded_at: Thu, 12 May 2016 14:14:05 GMT
+recorded_with: VCR 3.0.1
