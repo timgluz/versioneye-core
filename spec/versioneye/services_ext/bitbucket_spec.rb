@@ -78,23 +78,22 @@ describe Bitbucket do
     end
 
 
-  #   it "returns user information from API2" do
+    it "returns user information from API2" do
+      username = user_with_token[:bitbucket_login]
+      token    = user_with_token[:bitbucket_token]
+      secret   = user_with_token[:bitbucket_secret]
 
-  #     username = user_with_token[:bitbucket_login]
-  #     token = user_with_token[:bitbucket_token]
-  #     secret = user_with_token[:bitbucket_secret]
+      expect( username ).to_not be_nil
+      expect( token    ).to_not be_nil
+      expect( secret   ).to_not be_nil
 
-  #     username.should_not be_nil
-  #     token.should_not be_nil
-  #     secret.should_not be_nil
-
-  #     VCR.use_cassette('bitbucket_user_info', allow_playback_repeats: true) do
-  #       user_info = Bitbucket.user_info(username, token, secret)
-  #       user_info.should_not be_nil
-  #       user_info.is_a?(Hash).should be_truthy
-  #       user_info[:username].should eql(username)
-  #     end
-  #   end
+      VCR.use_cassette('bitbucket_user_info', allow_playback_repeats: true) do
+        user_info = Bitbucket.user_info(username, token, secret)
+        expect( user_info             ).to_not be_nil
+        expect( user_info.is_a?(Hash) ).to be_truthy
+        expect( user_info[:username]  ).to eql(username)
+      end
+    end
 
   #   it "returns user organizations" do
   #     user_with_token[:bitbucket_token].should_not be_nil

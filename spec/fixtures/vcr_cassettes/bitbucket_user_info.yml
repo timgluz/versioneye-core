@@ -2,67 +2,73 @@
 http_interactions:
 - request:
     method: get
-    uri: https://bitbucket.org/api/2.0/users/versioneye_test
+    uri: https://bitbucket.org/api/2.0/users/veye_test
     body:
       encoding: US-ASCII
       string: ''
     headers:
       User-Agent:
-      - Chrome28 (info@versioneye.com) (OAuth gem v0.4.7)
+      - Chrome28 (contact@versioneye.com) (OAuth gem v0.5.1)
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
       - "*/*"
       Authorization:
-      - OAuth oauth_consumer_key="HgSkE62pTT3HmxFGAm", oauth_nonce="HAHIeuvXcX39cFae7Paqziyh8le2kULHjsjBZjUfCc",
-        oauth_signature="HRxeBvZyKDm3Ll5ZTJ3lkgD5RjM%3D", oauth_signature_method="HMAC-SHA1",
-        oauth_timestamp="1387985933", oauth_token="YsR6vM5qxmfZtkYt9G", oauth_version="1.0"
+      - OAuth oauth_consumer_key="u8eurPjtLP7h2SnyEm", oauth_nonce="mzsVcWUPl5R2reTFf9IbdCZPdS73XsEpmWoVpk",
+        oauth_signature="1Min9vWjO7Z8OVV2HvKHKxcYKvU%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1463061297", oauth_token="4z7JqQxS3NWAZgvYYN", oauth_version="1.0"
   response:
     status:
       code: 200
       message: OK
     headers:
       Server:
-      - nginx/1.5.3
-      Date:
-      - Wed, 25 Dec 2013 15:38:53 GMT
+      - nginx/1.6.2
+      Vary:
+      - Authorization, Cookie
       Content-Type:
       - application/json; charset=utf-8
-      Transfer-Encoding:
-      - chunked
-      Connection:
-      - keep-alive
-      X-Served-By:
-      - app13
-      X-Render-Time:
-      - '0.0291559696198'
-      Content-Language:
-      - en
-      X-Static-Version:
-      - c4f05e63beb6
-      Vary:
-      - Authorization, Accept-Language, Cookie
-      X-Version:
-      - b2ac13e3a153
-      X-Request-Count:
-      - '23'
-      X-Frame-Options:
-      - SAMEORIGIN
+      X-Oauth-Scopes:
+      - wiki, project, account, repository:admin, repository, project:write, issue:write,
+        pullrequest:write, team, webhook, pullrequest, snippet, snippet:write, repository:write,
+        team:write, account:write, issue, email
       Strict-Transport-Security:
       - max-age=31536000
+      Date:
+      - Thu, 12 May 2016 13:54:58 GMT
+      X-Served-By:
+      - app-109
+      X-Static-Version:
+      - a46a4511f80f
+      Etag:
+      - '"eb8904bef39c6a105df4d127497ebcf6"'
       X-Content-Type-Options:
       - nosniff
+      X-Render-Time:
+      - '0.0261869430542'
+      Connection:
+      - keep-alive
+      X-Version:
+      - a46a4511f80f
+      X-Request-Count:
+      - '305'
+      X-Frame-Options:
+      - SAMEORIGIN
+      Content-Length:
+      - '811'
     body:
       encoding: UTF-8
-      string: "{\"username\": \"versioneye_test\", \"website\": null, \"display_name\":
-        \"Version Eye\", \"links\": {\"self\": {\"href\": \"https://bitbucket.org/!api/2.0/users/versioneye_test\"},
-        \"repositories\": {\"href\": \"https://bitbucket.org/!api/2.0/repositories/versioneye_test\"},
-        \"html\": {\"href\": \"https://bitbucket.org/versioneye_test\"}, \"followers\":
-        {\"href\": \"https://bitbucket.org/!api/2.0/users/versioneye_test/followers\"},
-        \"avatar\": {\"href\": \"https://secure.gravatar.com/avatar/ef4bc1256a1b06c7de9da2515680ceee?d=https%3A%2F%2Fd3oaxc4q5k2d6q.cloudfront.net%2Fm%2Fc4f05e63beb6%2Fimg%2Fdefault_avatar%2F32%2Fuser_blue.png&s=32\"},
-        \"following\": {\"href\": \"https://bitbucket.org/!api/2.0/users/versioneye_test/following\"}},
-        \"created_on\": \"2013-12-23T14:01:40.510589+00:00\", \"location\": null,
-        \"type\": \"user\"}"
+      string: '{"username": "veye_test", "website": null, "display_name": "veye_test",
+        "uuid": "{78cda96b-d463-4c9c-a91c-db5a4cc874c4}", "links": {"hooks": {"href":
+        "https://bitbucket.org/!api/2.0/users/veye_test/hooks"}, "self": {"href":
+        "https://bitbucket.org/!api/2.0/users/veye_test"}, "repositories": {"href":
+        "https://bitbucket.org/!api/2.0/repositories/veye_test"}, "html": {"href":
+        "https://bitbucket.org/veye_test/"}, "followers": {"href": "https://bitbucket.org/!api/2.0/users/veye_test/followers"},
+        "avatar": {"href": "https://bitbucket.org/account/veye_test/avatar/32/"},
+        "following": {"href": "https://bitbucket.org/!api/2.0/users/veye_test/following"},
+        "snippets": {"href": "https://bitbucket.org/!api/2.0/snippets/veye_test"}},
+        "created_on": "2016-05-12T13:34:52.440981+00:00", "location": null, "type":
+        "user"}'
     http_version: 
-  recorded_at: Wed, 25 Dec 2013 15:38:53 GMT
-recorded_with: VCR 2.8.0
+  recorded_at: Thu, 12 May 2016 13:54:58 GMT
+recorded_with: VCR 3.0.1
