@@ -40,6 +40,18 @@ describe Bitbucket do
   # end
 
 
+  it "returns the consumer key" do
+    expect( Bitbucket.consumer_key ).to eq(Settings.instance.bitbucket_token)
+  end
+
+
+  it "user_emails" do
+    emails = Bitbucket.user_emails(user_with_token)
+    expect( emails ).to_not be_nil
+    expect( emails.count ).to eq(1)
+  end
+
+
   it "returns content of the project files" do
     WebMock.allow_net_connect!
 
