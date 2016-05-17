@@ -385,7 +385,7 @@ class User < Versioneye::Model
     self.username = self.username.gsub(".", "")
     self.username = self.username.gsub("-", "")
     self.username = self.username.gsub("@", "")
-    self.username.gsub("_", "")
+    self.username
   end
 
   def fetch_or_create_billing_address
