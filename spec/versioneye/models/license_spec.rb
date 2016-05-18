@@ -370,6 +370,10 @@ describe License do
 
 
     it "should return CDDL+GPLv2 with classpath exception name" do
+      license = License.new({:name => "CDDL + GPL with CPE"})
+      license.name_substitute.should eq("CDDL+GPLv2 with classpath exception")
+    end
+    it "should return CDDL+GPLv2 with classpath exception name" do
       license = License.new({:name => "CDDL  + GPLv2 with classpath exception"})
       license.name_substitute.should eq("CDDL+GPLv2 with classpath exception")
     end
