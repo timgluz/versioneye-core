@@ -36,6 +36,22 @@ to the backend systems.
 
 All Files (80.19% covered at 106.51 hits/line)
 
+## Ruby console
+
+If the backend systems are all up and running you can start the Ruby console like this:
+
+```
+rake console
+```
+
+And initiate VersionEye Core like this:
+
+```
+VersioneyeCore.new
+```
+
+Now you can play with the models and services!
+
 ## License
 
 VersionEye-Core is licensed under the MIT license!
