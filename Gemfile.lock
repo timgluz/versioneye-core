@@ -57,7 +57,7 @@ GEM
       selenium-webdriver
     childprocess (0.5.9)
       ffi (~> 1.0, >= 1.0.11)
-    cocoapods-core (1.0.0)
+    cocoapods-core (0.39.0)
       activesupport (>= 4.0.2)
       fuzzy_match (~> 2.0.4)
       nap (~> 1.0)
@@ -253,7 +253,7 @@ DEPENDENCIES
   bunny (~> 2.3.0)
   capybara (~> 2.7.0)
   capybara-firebug (~> 2.1.0)
-  cocoapods-core (~> 1.0.0)
+  cocoapods-core (~> 0.39.0)
   dalli (~> 2.7.0)
   database_cleaner (~> 1.5.1)
   etcd (~> 0.3.0)
