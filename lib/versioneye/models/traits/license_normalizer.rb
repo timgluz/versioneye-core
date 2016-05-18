@@ -595,6 +595,7 @@ module VersionEye
 
     def lgpl_21_match name
       new_name = name.gsub(/gnu/i, '').strip
+      new_name.match(/\ALGPL\z/i) ||
       new_name.match(/\ALGPL\s*2\.1\z/i) ||
       new_name.match(/\ALGPLv2\.1\z/i) ||
       new_name.match(/\ALesser\s+General\s+Public\s*2\.1\s+only\z/i) ||

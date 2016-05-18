@@ -995,6 +995,10 @@ describe License do
       license.name_substitute.should eq("LGPL-2.1")
     end
     it "should return LGPL 2.1 name" do
+      license = License.new({:name => "lgpl"})
+      license.name_substitute.should eq("LGPL-2.1")
+    end
+    it "should return LGPL 2.1 name" do
       license = License.new({:name => "lgplv2.1"})
       license.name_substitute.should eq("LGPL-2.1")
     end
