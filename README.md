@@ -22,7 +22,7 @@ how to start the backend services for VersionEye.
 
 The tests for this project are running after each `git push` on [CircleCI](https://circleci.com/gh/versioneye/versioneye-core)!
 First of all a Docker image is build for this project and the tests are executed inside of a Docker container.
-For more details take a look to the Dockerfile and the circle.yml file in the root directory!
+For more details take a look to the [Dockerfile](Dockerfile) and the [circle.yml](circle.yml) file in the root directory!
 
 If the Docker containers for the backend systems are running locally, the tests can be executed locally
 with this command:
