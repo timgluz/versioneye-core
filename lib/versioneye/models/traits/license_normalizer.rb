@@ -772,7 +772,7 @@ module VersionEye
       name.match(/\ACDDL\+GPL_1_1\z/i) ||
       name.match(/\ACDDL\s*\+\s*GPL\s+1\.1\z/i) ||
       name.match(/\ACDDL\s+1.1\s+\/\s+GPL\s+2\s+dual\z/i) ||
-      name.match(/\ACDDL + GPL\s*with\s*CPE\z/i) ||
+      name.match(/\ACDDL \+ GPL\s*with\s*CPE\z/i) ||
       name.match(/\ACDDL\/GPLv2\+CE\z/i) ||
       name.match(/\ACDDL\s*\+\s*GPL2\s*w\/\s*CPE\s*\z/i) ||
       name.match(/\ACDDL\s*1\.1\s+and\s+GPL\s+2\z/i)
