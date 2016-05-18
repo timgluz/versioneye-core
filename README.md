@@ -13,6 +13,11 @@ This project is used as a dependency in all other Ruby projects of [VersionEye](
 This project is setup and managed with [jeweler](https://www.versioneye.com/ruby/jeweler).
 A great Ruby project to manage a Ruby Gem project.
 
+## Start the backend services for VersionEye
+
+Read [here](https://github.com/versioneye/ops_contrib#start-backend-services-for-versioneye)
+how to start the backend services for VersionEye.
+
 ## Tests
 
 The tests for this project are running after each `git push` on [CircleCI](https://circleci.com/gh/versioneye/versioneye-core)!
