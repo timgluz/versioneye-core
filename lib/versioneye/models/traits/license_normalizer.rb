@@ -351,8 +351,7 @@ module VersionEye
       name.match(/\AEclipse\s*Distribution\s*vs*1\z/i) ||
       name.match(/\AEclipse\s*Distribution\s*1\z/i) ||
       name.match(/\AEclipse\s*Distribution\s*\(New\s*BSD\s*\)\z/i) ||
-      name.match(/\AEclipse\s*Distribution\s*License\s*-\s*v\s*1\.0\z/i) ||
-      name.match(/\AEclipse\s*Distribution\s*License\s*v\s*1\.0\z/i) ||
+      name.match(/\AEclipse\s*Distribution\s*v\s*1\z/i) ||
       name.match(/\AEclipse\s*Distribution\s*v\.\s*1\z/i)
     end
 
