@@ -15,8 +15,25 @@ A great Ruby project to manage a Ruby Gem project.
 
 ## Start the backend services for VersionEye
 
-Read [here](https://github.com/versioneye/ops_contrib#start-backend-services-for-versioneye)
-how to start the backend services for VersionEye.
+This project contains a [docker-compose.yml](docker-compose.yml) file which describes the backend systems
+of VersionEye. You can start the backend systems like this:
+
+```
+docker-compose up -d
+```
+
+That will start:
+
+ - MongoDB
+ - RabbitMQ
+ - ElasticSearch
+ - Memcached
+
+You can shut them down with:
+
+```
+docker-compose down
+```
 
 ## Tests
 
