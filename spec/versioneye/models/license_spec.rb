@@ -1384,6 +1384,18 @@ describe License do
       license = License.new({:name => "Eclipse Distribution License (New BSD License)"})
       license.name_substitute.should eq("EDL-1.0")
     end
+    it "should return eclipse distributed license name" do
+      license = License.new({:name => "Eclipse Distribution License - v 1.0"})
+      license.name_substitute.should eq("EDL-1.0")
+    end
+    it "should return eclipse distributed license name" do
+      license = License.new({:name => "Eclipse Distribution License - v1.0"})
+      license.name_substitute.should eq("EDL-1.0")
+    end
+    it "should return eclipse distributed license name" do
+      license = License.new({:name => "Eclipse Distribution License v1.0"})
+      license.name_substitute.should eq("EDL-1.0")
+    end
 
 
     it "should return ClArtistic license name" do
