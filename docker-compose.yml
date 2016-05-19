@@ -1,0 +1,30 @@
+# $COMPOSE_PROJECT_NAME sets the prefix for all VMs. Should be set to make the names unique
+# If you want to scale a particular container, comment out the "container_name" property!
+
+# Primary DB. The single source of truth!
+mongodb:
+  image: versioneye/mongodb:3.2.6
+  container_name: mongodb
+  restart: always
+  volumes:
+   - /mnt/mongodb:/data
+
+# AMQ Message Server
+rabbitmq:
+  image: reiz/rabbitmq:3.4.2
+  container_name: rabbitmq
+  restart: always
+
+# Cache
+memcached:
+  image: reiz/memcached:1.4.14
+  container_name: memcached
+  restart: always
+
+# Fuzzy search
+elasticsearch:
+  image: reiz/elasticsearch:0.9.1-1
+  container_name: elasticsearch
+  restart: always
+  volumes:
+   - /mnt/elasticsearch:/data
