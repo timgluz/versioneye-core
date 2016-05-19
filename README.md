@@ -39,6 +39,35 @@ Shutting down the backend systems works like this:
 docker-compose down
 ```
 
+## Configuration
+
+All important configuration values are read from environment variable. Before you start
+VersioneyeCore.new you should adjust the values in [scripts/set_vars_for_dev.sh](scripts/set_vars_for_dev.sh)
+and load them like this: 
+
+```
+source ./scripts/set_vars_for_dev.sh
+```
+
+The most important env. variables are the ones for the backend systems, which point to MongoDB, ElasticSearch,
+RabbitMQ and Memcached.
+
+## Ruby console
+
+If the backend systems are all up and running you can start the Ruby console like this:
+
+```
+rake console
+```
+
+And initiate VersionEye Core like this:
+
+```
+VersioneyeCore.new
+```
+
+Now you can play with the models and services!
+
 ## Tests
 
 The tests for this project are running after each `git push` on [CircleCI](https://circleci.com/gh/versioneye/versioneye-core)!
@@ -56,22 +85,6 @@ For that the ENV variables in the `runtests_local.sh` script need to be adjusted
 to the backend systems.
 
 All Files (80.19% covered at 106.51 hits/line)
-
-## Ruby console
-
-If the backend systems are all up and running you can start the Ruby console like this:
-
-```
-rake console
-```
-
-And initiate VersionEye Core like this:
-
-```
-VersioneyeCore.new
-```
-
-Now you can play with the models and services!
 
 ## License
 
