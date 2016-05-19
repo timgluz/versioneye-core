@@ -54,7 +54,7 @@ RabbitMQ and Memcached.
 
 ## Ruby console
 
-If the backend systems are all up and running and the environment variables are set correctly 
+If the backend systems are all up and running and the environment variables are set correctly
 you can start the Ruby console like this:
 
 ```
@@ -82,8 +82,7 @@ with this command:
 ./scripts/runtests_local.sh
 ```
 
-For that the ENV variables in the `runtests_local.sh` script need to be adjusted that way, that they point
-to the backend systems.
+Make sure that you followed the steps in the configuration section, before you run the tests!
 
 All Files (80.19% covered at 106.51 hits/line)
 
