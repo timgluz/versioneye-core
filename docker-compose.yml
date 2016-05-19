@@ -8,8 +8,8 @@ mongodb:
   restart: always
   ports:
    - "27017:27017"
-  volumes:
-   - /mnt/mongodb:/data
+  # volumes:
+  #  - /mnt/mongodb:/data
 
 # AMQ Message Server
 rabbitmq:
@@ -34,5 +34,5 @@ elasticsearch:
   restart: always
   ports:
    - "9200:9200"
-  volumes:
-   - /mnt/elasticsearch:/data
+  # volumes:
+  #  - /mnt/elasticsearch:/data

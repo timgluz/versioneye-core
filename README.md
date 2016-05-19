@@ -29,9 +29,9 @@ That will start:
  - ElasticSearch
  - Memcached
 
-For persistence you should adjust the mount volumes in [docker-compose.yml](docker-compose.yml).
-If you are not interested in persisting the data on your host you can remove the volumes completely
-from the file.
+For persistence you should comment in and adjust the mount volumes in [docker-compose.yml](docker-compose.yml)
+for MongoDB and ElasticSearch. If you are not interested in persisting the data on your host you can 
+let it untouched.
 
 Shutting down the backend systems works like this:
 
