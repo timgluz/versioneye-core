@@ -1,5 +1,3 @@
-# $COMPOSE_PROJECT_NAME sets the prefix for all VMs. Should be set to make the names unique
-# If you want to scale a particular container, comment out the "container_name" property!
 
 # Primary DB. The single source of truth!
 mongodb:
