@@ -43,7 +43,7 @@ docker-compose down
 
 All important configuration values are read from environment variable. Before you start
 VersioneyeCore.new you should adjust the values in [scripts/set_vars_for_dev.sh](scripts/set_vars_for_dev.sh)
-and load them like this: 
+and load them like this:
 
 ```
 source ./scripts/set_vars_for_dev.sh
@@ -54,7 +54,8 @@ RabbitMQ and Memcached.
 
 ## Ruby console
 
-If the backend systems are all up and running you can start the Ruby console like this:
+If the backend systems are all up and running and the environment variables are set correctly 
+you can start the Ruby console like this:
 
 ```
 rake console
