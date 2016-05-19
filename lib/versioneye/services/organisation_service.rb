@@ -109,6 +109,10 @@ class OrganisationService < Versioneye::Service
     organisations = []
     orga_ids = []
     tms.each do |tm|
+      if tm.team.nil?
+        tm.delete
+        next
+      end
       next if only_owners == true && !tm.team.name.eql?(Team::A_OWNERS)
 
       orga = tm.team.organisation
