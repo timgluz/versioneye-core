@@ -17,8 +17,8 @@ A great Ruby project to manage a Ruby Gem project.
 
 ## Start the backend services for VersionEye
 
-This project contains a [docker-compose.yml](docker-compose.yml) file which describes the backend systems
-of VersionEye. You can start the backend systems like this:
+This project contains a [docker-compose.yml](docker-compose.yml) file which describes the backend services
+of VersionEye. You can start the backend services like this:
 
 ```
 docker-compose up -d
@@ -35,7 +35,7 @@ For persistence you should comment in and adjust the mount volumes in [docker-co
 for MongoDB and ElasticSearch. If you are not interested in persisting the data on your host you can
 let it untouched.
 
-Shutting down the backend systems works like this:
+Shutting down the backend services works like this:
 
 ```
 docker-compose down
@@ -51,12 +51,12 @@ and load them like this:
 source ./scripts/set_vars_for_dev.sh
 ```
 
-The most important env. variables are the ones for the backend systems, which point to MongoDB, ElasticSearch,
+The most important env. variables are the ones for the backend services, which point to MongoDB, ElasticSearch,
 RabbitMQ and Memcached.
 
 ## Install dependencies
 
-If the backend systems are all up and running and the environment variables are set correctly
+If the backend services are all up and running and the environment variables are set correctly
 you can install the dependencies with `bundler`. If `bundler` is not installed on your machine
 run this command:
 
@@ -92,7 +92,7 @@ The tests for this project are running after each `git push` on [CircleCI](https
 First of all a Docker image is build for this project and the tests are executed inside of a Docker container.
 For more details take a look to the [Dockerfile](Dockerfile) and the [circle.yml](circle.yml) file in the root directory!
 
-If the Docker containers for the backend systems are running locally, the tests can be executed locally
+If the Docker containers for the backend services are running locally, the tests can be executed locally
 with this command:
 
 ```
