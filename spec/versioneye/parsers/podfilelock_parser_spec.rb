@@ -22,9 +22,9 @@ describe PodfilelockParser do
   # parse and check for the right language and project type
   def parse_and_check filepath
     project = parser.parse_file filepath
-    project.should be_truthy
-    project.language.should eq Product::A_LANGUAGE_OBJECTIVEC
-    project.project_type.should eq Project::A_TYPE_COCOAPODS
+    expect( project ).to be_truthy
+    expect( project.language ).to eq Product::A_LANGUAGE_OBJECTIVEC
+    expect( project.project_type ).to eq Project::A_TYPE_COCOAPODS
     project
   end
 
@@ -39,10 +39,10 @@ describe PodfilelockParser do
   # test the versions and if the requested version is outdated
   def test_dependency dep, version_latest, version_requested, outdated
     # puts "dependency #{dep.name} version #{dep.version_current}"
-    dep.should be_truthy
-    dep.version_current.should eq(version_latest)
-    dep.version_requested.should eq(version_requested)
-    dep.outdated.should eq(outdated)
+    expect( dep ).to be_truthy
+    expect( dep.version_current ).to eq(version_latest)
+    expect( dep.version_requested ).to eq(version_requested)
+    expect( dep.outdated ).to eq(outdated)
   end
 
 
@@ -62,12 +62,12 @@ describe PodfilelockParser do
       project = parser.parse( lockfile_url )
       deps = project.dependencies
 
-      deps.size.should eq(6)
+      expect( deps.size ).to eq(6)
 
       deps.each do |dep|
-        %w{
+        expect( %w{
           Facebook-iOS-SDK JSONKit NSData+Base64
-          ShareKit xmlrpc SSKeychain}.should be_member(dep.name)
+          ShareKit xmlrpc SSKeychain} ).to be_member(dep.name)
       end
     end
 
@@ -126,7 +126,7 @@ describe PodfilelockParser do
       project = parse_and_check 'spec/fixtures/files/podfilelock/example2/Podfile.lock'
 
       # compare
-      project.should be_truthy
+      expect( project ).to be_truthy
 
       dep = get_dependency(project, "JRSwizzle")
       test_dependency(dep, "1.0",  "1.0", false)

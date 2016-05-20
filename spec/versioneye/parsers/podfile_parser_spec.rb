@@ -8,9 +8,9 @@ describe PodfileParser do
 
     it 'parses remote urls' do
       project = PodfileParser.new.parse 'https://raw.githubusercontent.com/CocoaPods/Core/master/spec/fixtures/Podfile'
-      project.should_not be_nil
-      project.language.should eq Product::A_LANGUAGE_OBJECTIVEC
-      project.project_type.should eq Project::A_TYPE_COCOAPODS
+      expect( project ).to_not be_nil
+      expect( project.language ).to eq Product::A_LANGUAGE_OBJECTIVEC
+      expect( project.project_type ).to eq Project::A_TYPE_COCOAPODS
     end
 
     it "should drop subspecs and just use the main spec" do
@@ -21,13 +21,13 @@ describe PodfileParser do
 
       podfile = 'https://raw.githubusercontent.com/DenisDbv/OpenAuth/8d654f25d540ec865a8faeace40a810b7bdc9ff2/Podfile'
       project = PodfileParser.new.parse( podfile )
-      project.should_not be_nil
+      expect( project ).to_not be_nil
 
       deps = project.dependencies
 
-      deps.size.should eq(2)
+      expect( deps.size ).to eq(2)
       deps.each do |dep|
-        %w{ShareKit xmlrpc}.should be_member(dep.name)
+        expect( %w{ShareKit xmlrpc} ).to be_member(dep.name)
       end
     end
 
@@ -64,16 +64,16 @@ describe PodfileParser do
 
     def parse_and_check podfile_path
       project = parser.parse_file podfile_path
-      project.should be_truthy
-      project.language.should eq Product::A_LANGUAGE_OBJECTIVEC
-      project.project_type.should eq Project::A_TYPE_COCOAPODS
+      expect( project ).to be_truthy
+      expect( project.language ).to eq Product::A_LANGUAGE_OBJECTIVEC
+      expect( project.project_type ).to eq Project::A_TYPE_COCOAPODS
       project
     end
 
     def test_dependency dep, version_current, version_requested, outdated
-      dep.version_current.should eq(version_current)
-      dep.version_requested.should eq(version_requested)
-      dep.outdated.should eq(outdated)
+      expect( dep.version_current ).to eq(version_current)
+      expect( dep.version_requested ).to eq(version_requested)
+      expect( dep.outdated ).to eq(outdated)
     end
 
     def cocoa_product(product_name, latest_version, *other_versions)
@@ -89,34 +89,34 @@ describe PodfileParser do
     it "should read a simple podfile and return project, dependencies" do
       create_pods
       project = parse_and_check './spec/fixtures/files/pod_file/example1/Podfile'
-      project.dependencies.count.should eq 6
+      expect( project.dependencies.count ).to eq 6
 
       dep_ssl_tool_kit = get_dependency(project, "SSToolkit")
-      dep_ssl_tool_kit.version_current.should eq "2.3.4"
-      dep_ssl_tool_kit.version_requested.should eq "2.3.4"
-      dep_ssl_tool_kit.outdated.should be_falsey
+      expect( dep_ssl_tool_kit.version_current ).to eq "2.3.4"
+      expect( dep_ssl_tool_kit.version_requested ).to eq "2.3.4"
+      expect( dep_ssl_tool_kit.outdated ).to be_falsey
 
       dep_afnetworking = get_dependency(project, "AFNetworking")
-      dep_afnetworking.version_current.should eq "0.2.1"
-      dep_afnetworking.version_requested.should eq "0.2.1"
-      dep_afnetworking.outdated.should be_falsey
+      expect( dep_afnetworking.version_current ).to eq "0.2.1"
+      expect( dep_afnetworking.version_requested ).to eq "0.2.1"
+      expect( dep_afnetworking.outdated ).to be_falsey
 
       dep_lumberjack = get_dependency(project, "CocoaLumberjack")
-      dep_lumberjack.version_current.should eq "1.2.3"
-      dep_lumberjack.version_requested.should eq "1.2.3"
-      dep_lumberjack.outdated.should be_falsey
+      expect( dep_lumberjack.version_current ).to eq "1.2.3"
+      expect( dep_lumberjack.version_requested ).to eq "1.2.3"
+      expect( dep_lumberjack.outdated ).to be_falsey
 
       dep_jsonkit = get_dependency(project, "JSONKit")
-      dep_jsonkit.version_current.should eq "1.2.0"
-      dep_jsonkit.version_requested.should eq "1.1.0"
-      dep_jsonkit.outdated.should be_truthy
+      expect( dep_jsonkit.version_current ).to eq "1.2.0"
+      expect( dep_jsonkit.version_requested ).to eq "1.1.0"
+      expect( dep_jsonkit.outdated ).to be_truthy
 
       dep_jsonkit = get_dependency(project, "Objection")
-      dep_jsonkit.version_current.should eq "1.0.0"
-      dep_jsonkit.version_requested.should eq "1.0.0"
-      dep_jsonkit.version_label.should eq ">= 0"
-      dep_jsonkit.comperator.should eq ">="
-      dep_jsonkit.outdated.should be_falsey
+      expect( dep_jsonkit.version_current ).to eq "1.0.0"
+      expect( dep_jsonkit.version_requested ).to eq "1.0.0"
+      expect( dep_jsonkit.version_label ).to eq ">= 0"
+      expect( dep_jsonkit.comperator ).to eq ">="
+      expect( dep_jsonkit.outdated ).to be_falsey
     end
 
     it "should parse a podfile with target definitions" do
@@ -134,7 +134,7 @@ describe PodfileParser do
       project = parse_and_check "./spec/fixtures/files/pod_file/target_example1/Podfile"
 
       # test
-      project.dependencies.count.should eq 7
+      expect( project.dependencies.count ).to eq 7
 
       dep = get_dependency(project,  'TestFlightSDK')
       test_dependency(dep, '2.0.2', '2.0.2', false)
@@ -171,7 +171,7 @@ describe PodfileParser do
       cocoa_product("MASPreferences",        "1.0")
 
       project = parse_and_check "./spec/fixtures/files/pod_file/target_example2/Podfile"
-      project.dependencies.count.should eq 8
+      expect( project.dependencies.count ).to eq 8
 
       dep = get_dependency(project, "SSKeychain")
       test_dependency(dep, "1.2.1", "0.1.4", true)
@@ -210,7 +210,7 @@ describe PodfileParser do
       project = parse_and_check './spec/fixtures/files/pod_file/target_example_3/Podfile'
 
       # check
-      project.dependencies.count.should eq 3 # TODO check why this isn't 2
+      expect( project.dependencies.count ).to eq 3 # TODO check why this isn't 2
 
       dep = get_dependency(project, 'Kiwi')
       test_dependency(dep, '2.2.3', '2.2.3', false)
