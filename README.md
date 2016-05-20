@@ -54,7 +54,7 @@ source ./scripts/set_vars_for_dev.sh
 The most important env. variables are the ones for the backend systems, which point to MongoDB, ElasticSearch,
 RabbitMQ and Memcached.
 
-## Ruby console
+## Install dependencies
 
 If the backend systems are all up and running and the environment variables are set correctly
 you can install the dependencies with `bundler`. If `bundler` is not installed on your machine
@@ -70,7 +70,9 @@ Then you can install the dependencies like this:
 bundle install
 ```
 
-And start the Ruby console like this:
+## Ruby console
+
+If the dependencies are installed correctly you can start the Ruby console like this:
 
 ```
 rake console
@@ -100,6 +102,10 @@ with this command:
 Make sure that you followed the steps in the configuration section, before you run the tests!
 
 All Files (80.19% covered at 106.51 hits/line)
+
+## Support
+
+For commercial support send a message to `support@versioneye.com`.
 
 ## License
 
