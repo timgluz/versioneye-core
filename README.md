@@ -57,7 +57,20 @@ RabbitMQ and Memcached.
 ## Ruby console
 
 If the backend systems are all up and running and the environment variables are set correctly
-you can start the Ruby console like this:
+you can install the dependencies with `bundler`. If `bundler` is not installed on your machine
+run this command:
+
+```
+gem install bundler
+```
+
+Then you can install the dependencies like this:
+
+```
+bundle install
+```
+
+And start the Ruby console like this:
 
 ```
 rake console
