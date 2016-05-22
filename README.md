@@ -58,7 +58,7 @@ RabbitMQ and Memcached.
 
 If the backend services are all up and running and the environment variables are set correctly
 you can install the dependencies with `bundler`. If `bundler` is not installed on your machine
-run this command:
+run this command to install it:
 
 ```
 gem install bundler
