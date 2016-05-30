@@ -216,6 +216,9 @@ describe ProjectService do
       described_class.type_by_filename("app/Gemfile/new.html").should be_nil
       described_class.type_by_filename("app/Gemfile.lock/new").should be_nil
     end
+    it "returns nil for wrong CMakeLists.txt. OK" do
+      described_class.type_by_filename("CMakeLists.txt").should be_nil
+    end
 
     it "returns Composer. OK" do
       url1 = "http://localhost:4567/veye_dev_projects/i5lSWS951IxJjU1rurMg_composer.json?AWSAccessKeyId=123&Expires=1360525084&Signature=HRPsn%2Bai%2BoSjm8zqwZFRtzxJvvE%3D"
