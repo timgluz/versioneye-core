@@ -90,6 +90,7 @@ class ProjectImportService < Versioneye::Service
       name: repo_name,
       project_type: project_file[:type],
       user_id: user.id.to_s,
+      # organisation_id: TODO,
       source: Project::A_SOURCE_GITHUB,
       private_project: private_project,
       scm_fullname: repo_name,
@@ -101,6 +102,7 @@ class ProjectImportService < Versioneye::Service
     })
 
     ProjectService.store( project )
+    # TODO auto merge if same SCM & branch
   end
 
 
