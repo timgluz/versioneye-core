@@ -305,7 +305,11 @@ class ProjectService < Versioneye::Service
     project.children.each do |child_project|
       destroy_single child_project.id
     end
+    parent = project.parent
     destroy_single project.id
+    if parent
+      update_sums parent
+    end
   end
 
 
