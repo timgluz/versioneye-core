@@ -307,9 +307,7 @@ class ProjectService < Versioneye::Service
     end
     parent = project.parent
     destroy_single project.id
-    if parent
-      update_sums parent
-    end
+    update_sums parent
   end
 
 

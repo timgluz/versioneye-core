@@ -113,7 +113,8 @@ class Project < Versioneye::Model
   end
 
   def parent
-    Project.find parent_id
+    return Project.find(parent_id) if parent_id
+    return nil
   end
 
   def children
