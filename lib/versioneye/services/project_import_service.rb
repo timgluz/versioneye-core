@@ -101,8 +101,10 @@ class ProjectImportService < Versioneye::Service
       public: Settings.instance.default_project_public
     })
 
-    ProjectService.store( project )
+    project = ProjectService.store( project )
     # TODO auto merge if same SCM & branch
+    ProjectService.update_sums( project )
+    project
   end
 
 
@@ -188,7 +190,10 @@ class ProjectImportService < Versioneye::Service
       public: Settings.instance.default_project_public
     })
 
-    ProjectService.store( project )
+    project = ProjectService.store( project )
+    # TODO auto merge if same SCM & branch
+    ProjectService.update_sums( project )
+    project
   end
 
 
@@ -251,7 +256,10 @@ class ProjectImportService < Versioneye::Service
       public: Settings.instance.default_project_public
     })
 
-    ProjectService.store( project )
+    project = ProjectService.store( project )
+    # TODO auto merge if same SCM & branch
+    ProjectService.update_sums( project )
+    project
   end
 
 
