@@ -23,4 +23,27 @@ describe Repository do
 
   end
 
+  describe 'name_for' do
+
+    it 'returns Bintray JCenter' do
+      expect( Repository.name_for("http://jcenter.bintray.com/") ).to eq('Bintray JCenter')
+    end
+    it 'returns Apache' do
+      expect( Repository.name_for("http://repo.maven.apache.org/maven2") ).to eq('Apache')
+    end
+    it 'returns Clojars' do
+      expect( Repository.name_for("http://clojars.org/repo/") ).to eq('Clojars')
+    end
+    it 'returns RubyGems' do
+      expect( Repository.name_for("https://rubygems.org/") ).to eq('RubyGems')
+    end
+    it 'returns the src because there is no mapping' do
+      expect( Repository.name_for("https://not_mapped.org/") ).to eq('https://not_mapped.org/')
+    end
+    it 'returns nil because empty string' do
+      expect( Repository.name_for(" ") ).to be_nil
+    end
+
+  end
+
 end
