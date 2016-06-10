@@ -298,6 +298,7 @@ class Project < Versioneye::Model
     self.description    = new_project.description
     self.license        = new_project.license
     self.url            = new_project.url
+    self.version        = new_project.version
     if new_project.s3_filename
       self.s3_filename  = new_project.s3_filename
     end
