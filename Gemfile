@@ -17,7 +17,7 @@ gem 'nokogiri'           , '~> 1.6.8'
 gem 'cocoapods-core'     , '~> 0.39.0'
 gem 'actionmailer'       , '~> 4.2.6'
 gem 'pdfkit'             , '~> 0.8.0'
-gem 'bunny'              , '~> 2.3.0'
+gem 'bunny'              , '~> 2.4.0'
 gem 'wkhtmltopdf-binary' , '~> 0.9.9.1'
 gem 'etcd'               , '~> 0.3.0'
 
