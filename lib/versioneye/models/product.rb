@@ -160,6 +160,10 @@ class Product < Versioneye::Model
     if product.nil?
       product = Product.where( group_id: group, artifact_id: artifact ).first
     end
+    if product.nil?
+      product = Product.where( group_id: group, artifact_id: /\A#{artifact}\z/i ).first
+    end
+
     product
   end
 
