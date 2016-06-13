@@ -107,6 +107,18 @@ class Organisation < Versioneye::Model
   end
 
 
+  def unique_languages
+    return [] if projects.nil? || projects.empty?
+
+    languages = []
+    projects.each do |project|
+      languages << project.language if !languages.include?( project.language )
+    end
+
+    languages
+  end
+
+
   private
 
 
