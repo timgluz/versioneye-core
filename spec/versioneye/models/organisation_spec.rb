@@ -112,6 +112,39 @@ describe Organisation do
   end
 
 
+  describe "unique_versions" do
+    it 'returns the uniq. languages' do
+      user = UserFactory.create_new
+      project = ProjectFactory.create_new user
+      project.language = 'Java'
+      project.version = '1.0.0'
+      expect( project.save ).to be_truthy
+
+      orga = Organisation.new({:name => 'Orga'})
+      expect( orga.save ).to be_truthy
+
+      project.organisation = orga
+      expect( project.save ).to be_truthy
+
+      team = Team.new({:name => 'owners', :organisation_id => orga })
+      expect( team.save ).to be_truthy
+
+      expect( orga.unique_versions ).to_not be_empty
+      expect( orga.unique_versions.count ).to eq(1)
+      expect( orga.unique_versions.first ).to eq('1.0.0')
+    end
+    it 'returns an empty array because there are no projects' do
+      orga = Organisation.new({:name => 'Orga'})
+      expect( orga.save ).to be_truthy
+
+      team = Team.new({:name => 'owners', :organisation_id => orga })
+      expect( team.save ).to be_truthy
+
+      expect( orga.unique_versions ).to be_empty
+    end
+  end
+
+
   describe "owner_team" do
     it 'returns the owner team' do
       orga = Organisation.new({:name => 'Orga'})

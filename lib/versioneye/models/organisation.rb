@@ -111,11 +111,24 @@ class Organisation < Versioneye::Model
     return [] if projects.nil? || projects.empty?
 
     languages = []
-    projects.each do |project|
+    projects.parents.each do |project|
       languages << project.language if !languages.include?( project.language )
     end
 
     languages
+  end
+
+
+  def unique_versions
+    return [] if projects.nil? || projects.empty?
+
+    versions = []
+    projects.parents.each do |project|
+      next if project.version.to_s.empty?
+      versions << project.version if !versions.include?( project.version )
+    end
+
+    versions
   end
 
 
