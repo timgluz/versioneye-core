@@ -37,7 +37,7 @@ class ProjectService < Versioneye::Service
 
   def self.index( user, filter = {}, sort = nil)
     filter_options            = {:parent_id => nil}
-    filter_options[:team_ids] = filter[:team]       if !filter[:team]    && filter[:team].to_s.casecmp('ALL') != 0
+    filter_options[:team_ids] = filter[:team]       if filter[:team]     && filter[:team].to_s.casecmp('ALL') != 0
     filter_options[:language] = filter[:language]   if filter[:language] && filter[:language].to_s.casecmp('ALL') != 0
     filter_options[:version]  = filter[:version]    if filter[:version]  && filter[:version].to_s.casecmp('ALL') != 0
     filter_options[:name]     = /#{filter[:name]}/i if filter[:name]     && !filter[:name].to_s.strip.empty?
