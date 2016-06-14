@@ -6,6 +6,7 @@ class UploadUpdater < CommonUpdater
     out_number = 0
     dep_number = 0
     project.dependencies.each do |dep|
+      dep.outdated = nil
       outdated = ProjectdependencyService.outdated?( dep )
       out_number += 1 if outdated
       dep_number += 1
