@@ -28,7 +28,10 @@ class PodfileParser < CommonParser
 
   def parse url
     return nil if url.to_s.empty?
+
     pod_file = Pod::Podfile.from_url( url )
+    return nil if pod_file.nil?
+
     create_project pod_file, url
   rescue => e
     log.error "Cant'parse #{url}"

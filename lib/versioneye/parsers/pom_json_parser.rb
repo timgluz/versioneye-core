@@ -8,6 +8,9 @@ class PomJsonParser < PomParser
     return nil if url.nil? || url.empty?
 
     response = self.fetch_response( url )
+    return nil if response.nil?
+    return nil if response.code != 200
+
     parse_content response.body
   rescue => e
     log.error e.message

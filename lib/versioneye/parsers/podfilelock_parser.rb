@@ -25,8 +25,10 @@ class PodfilelockParser < CommonParser
 
   def parse url
     return nil unless url
+
     @url = url
     @lockfile = Pod::Lockfile.from_url url # from_url is monkey patched. You find it in cocoapods_package_manager.rb
+    return nil @lockfile.nil?
 
     create_project
   end

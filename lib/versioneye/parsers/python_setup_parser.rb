@@ -4,6 +4,9 @@ class PythonSetupParser < RequirementsParser
 
   def parse( url )
     response = fetch_response( url )
+    return nil if response.nil?
+    return nil if response.code != 200
+
     parse_content( response.body )
   end
 
