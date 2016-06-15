@@ -28,6 +28,7 @@ class Author < Versioneye::Model
   validates_uniqueness_of :name_id, :message => 'exist already.'
 
   index({ name_id: 1 }, { name: "nameid_index", background: true, unique: true, drop_dups: true })
+  index({ products_count: 1 }, { name: "products_count_index", background: true })
 
 
   def to_s
