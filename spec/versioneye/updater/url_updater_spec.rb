@@ -27,7 +27,7 @@ describe UrlUpdater do
       expect( project.parsing_errors.count ).to eq(0)
 
       described_class.new.update project
-      project.reload 
+      project.reload
       expect( project.parsing_errors.count ).to eq(1)
     end
 
