@@ -18,6 +18,7 @@ class ApiCall < Versioneye::Model
   index({ created_at: 1, ip: 1 }, { name: "created_at_id_key_index", background: false })
   index({ api_key: 1 }, { name: "api_key_index", background: true })
   index({ user_id: 1 }, { name: "user_id_index", background: true })
+  index({ ip: 1 }, { name: "ip_index", background: true })
 
   validates :fullpath, presence: true
 
