@@ -54,7 +54,6 @@ module Versioneye
     require 'versioneye/services_ext/bitbucket'
     require 'versioneye/services_ext/stash'
     require 'versioneye/services_ext/es_product'
-    require 'versioneye/services_ext/es_user'
     require 'versioneye/services_ext/github'
     require 'versioneye/services_ext/mongo_product'
     require 'versioneye/services_ext/octokit_api'
