@@ -266,9 +266,9 @@ describe Organisation do
 
       expect( comps ).to_not be_nil
       expect( comps.count ).to eq(2)
-      expect( comps['Java:org.testng/testng']['1.0.0'] ).to_not be_nil
-      expect( comps['Java:org.junit/junit']['2.0.0'] ).to_not be_nil
-      expect( comps['Java:org.junit/junit']['1.9.9'] ).to_not be_nil
+      expect( comps['Java:org.testng/testng:1.0.0']['1.0.0'] ).to_not be_nil
+      expect( comps['Java:org.junit/junit:2.0.0']['2.0.0'] ).to_not be_nil
+      expect( comps['Java:org.junit/junit:2.0.0']['1.9.9'] ).to_not be_nil
     end
 
   end
