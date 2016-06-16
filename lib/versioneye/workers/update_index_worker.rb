@@ -27,7 +27,6 @@ class UpdateIndexWorker < Worker
 
   def update_index msg
     EsProduct.index_newest if msg.eql?("product")
-    EsUser.reindex_all if msg.eql?("user")
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")

@@ -2,7 +2,7 @@ class UserService < Versioneye::Service
 
 
   def self.search(term)
-    EsUser.search( term )
+    User.where(:fullname.ne => 'Deleted').any_of({:username => /#{term}/i}, {:email => /#{term}/i})
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")

@@ -75,6 +75,7 @@ class User < Versioneye::Model
   index({ github_id: 1 },    { name: "github_id_index",    background: true })
   index({ bitbucket_id: 1 }, { name: "bitbucket_id_index", background: true })
   index({ verification: 1 }, { name: "verification_index", background: true })
+  # index({ username: "text", email: "text"}, {weights: {username: 10, email: 5}, name: "TextIndex"})
 
   validates_presence_of :username          , :message => 'is mandatory!'
   validates_presence_of :fullname          , :message => 'is mandatory!'
