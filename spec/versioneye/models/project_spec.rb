@@ -646,6 +646,41 @@ describe Project do
 
   end
 
+  describe "mute_security!" do
+    it 'mutes and unmutes a security issue' do
+      user = UserFactory.create_new
+      project = ProjectFactory.create_new user
+      product_1 = ProductFactory.create_for_npm 'request', '1.0.0'
+      expect( product_1.save ).to be_truthy
+
+      dep1 = ProjectdependencyFactory.create_new project, product_1
+      dep1.version_current   = '1.0.0'
+      dep1.version_requested = '1.0.0'
+      expect( dep1.save ).to be_truthy
+
+      sv = SecurityVulnerability.new({ :language => product_1.language, :prod_key => product_1.prod_key, :name_id => "bad stuff" })
+      expect( sv.save ).to be_truthy
+
+      version = product_1.versions.first
+      version.sv_ids.push sv.ids
+      version.save
+      product_1.save
+      expect( product_1.versions.first.sv_ids ).to_not be_empty
+
+      ProjectdependencyService.update_security project
+      expect( project.sv_count ).to eq(1)
+
+      project.mute_security! sv.ids, 'not important for us'
+      expect( project.sv_count ).to eq(0)
+      expect( project.muted_svs.keys.count ).to eq(1)
+      expect( project.muted_svs[sv.ids] ).to eq('not important for us')
+
+      project.unmute_security! sv.ids
+      expect( project.sv_count ).to eq(1)
+      expect( project.muted_svs.keys.count ).to eq(0)
+    end
+  end
+
   describe "auditlogs" do
     it 'reads the audtilogs for the current project' do
       expect( Auditlog.count ).to eq(0)

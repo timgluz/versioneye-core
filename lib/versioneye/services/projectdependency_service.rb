@@ -34,6 +34,8 @@ class ProjectdependencyService < Versioneye::Service
       product = dep.find_or_init_product
       update_security_for project, dep, product
     end
+    project.sv_count = project.sv_count - project.muted_svs.keys.count
+    project.save
   rescue => e
     log.error e.message
     log.error e.backtrace.join "\n"
@@ -72,6 +74,8 @@ class ProjectdependencyService < Versioneye::Service
       update_security_for project, dep, product, false
       dep.save
     end
+    project.sv_count = project.sv_count - project.muted_svs.keys.count
+    project.save
     pcount2 = Projectdependency.where(:project_id => project.id).count
     if pcount2 > pcount1 && pcount2 > project.projectdependencies.count
       project.reload

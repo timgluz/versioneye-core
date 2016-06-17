@@ -77,6 +77,7 @@ class Project < Versioneye::Model
   field :component_whitelist_id, type: String
 
   field :parsing_errors , type: Array, :default => []
+  field :muted_svs      , type: Hash,  :default => {} # muted security vulnerabilities
 
   validates :name       , presence: true
 
@@ -162,6 +163,21 @@ class Project < Versioneye::Model
     deps = muted_dependencies
     return 0 if deps.nil?
     deps.count
+  end
+
+  def mute_security! sv_id, message
+    return nil if muted_svs.keys.include?( sv_id )
+
+    muted_svs[sv_id] = message
+    self.sv_count = self.sv_count - 1
+    self.sv_count = 0 if self.sv_count < 0
+    self.save
+  end
+
+  def unmute_security! sv_id
+    muted_svs.delete(sv_id)
+    self.sv_count = self.sv_count + 1
+    self.save
   end
 
   def self.find_by_id( id )
@@ -302,6 +318,7 @@ class Project < Versioneye::Model
     if new_project.s3_filename
       self.s3_filename  = new_project.s3_filename
     end
+    self.muted_svs  = new_project.muted_svs
     self.updated_at = Time.now
 
     self.overwrite_dependencies( new_project.projectdependencies )
