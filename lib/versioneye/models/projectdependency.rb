@@ -30,7 +30,7 @@ class Projectdependency < Versioneye::Model
   field :muted              , type: Boolean , :default => false
   field :mute_message       , type: String
 
-  field :sv_ids           , type: Array, default: []  # SecurityVulnerability IDs
+  field :sv_ids           , type: Array, default: []  # Array of SecurityVulnerability IDs
 
   field :lwl_violation    , type: String # [nil, partial, yes]
 

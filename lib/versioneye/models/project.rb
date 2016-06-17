@@ -311,6 +311,7 @@ class Project < Versioneye::Model
 
   def overwrite_dependencies( new_dependencies )
     return nil if new_dependencies.nil? || new_dependencies.empty?
+
     muted_deps    = muted_prod_keys
     muted_keys    = muted_deps[:keys]
     mute_messages = muted_deps[:messages]
