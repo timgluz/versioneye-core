@@ -192,7 +192,7 @@ class Project < Versioneye::Model
     true
   end
 
-  def visible_for_user?(user)
+  def visible_for_user? user
     return false if user.nil?
     return true  if self[:public]
     return true  if user.admin
@@ -201,7 +201,7 @@ class Project < Versioneye::Model
     return false
   end
 
-  def is_collaborator?( user )
+  def is_collaborator? user
     return false if user.nil?
     return true if self.user_id.to_s.eql?(user.ids)
     return true if organisation && OrganisationService.owner?( organisation, user ) == true
@@ -217,7 +217,7 @@ class Project < Versioneye::Model
     false
   end
 
-  def is_orga_member?(user)
+  def is_orga_member? user
     if organisation
       return OrganisationService.member?( organisation, user )
     end
