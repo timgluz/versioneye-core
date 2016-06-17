@@ -339,13 +339,6 @@ class Project < Versioneye::Model
     return user.email
   end
 
-  def self.create_random_value
-    chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-    value = ""
-    20.times { value << chars[rand(chars.size)] }
-    value
-  end
-
   def sum_own!
     self.dep_number_sum       = self.dep_number
     self.out_number_sum       = self.out_number

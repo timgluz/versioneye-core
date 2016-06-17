@@ -483,14 +483,6 @@ describe Project do
 
   end
 
-  describe 'create_random_value' do
-    it 'returns a random value with the length of 20' do
-      rd = Project.create_random_value
-      rd.should_not be_nil
-      rd.length.should eq(20)
-    end
-  end
-
   describe 'save_dependencies' do
 
     it 'stores the dependencies' do
