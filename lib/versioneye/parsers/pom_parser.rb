@@ -122,6 +122,45 @@ class PomParser < CommonParser
       dependency.version_requested = newest.to_s
       dependency.version_label = version
 
+    elsif version.match(/\A\[.*\]\z/) # ==
+      dependency.version_label = String.new(version)
+      version.gsub!(/\A\[/, "")
+      version.gsub!(/\]\z/, "")
+      dependency.version_requested = version
+      dependency.comperator = "=="
+
+    elsif version.match(/\A\(\,.*\]\z/) # smaller or equal
+      dependency.version_label = String.new(version)
+      version.gsub!(/\A\(\,/, "")
+      version.gsub!(/\]\z/, "")
+      smaller_or_equal = VersionService.smaller_than_or_equal( product.versions, version )
+      dependency.version_requested = smaller_or_equal.version
+      dependency.comperator = "<="
+
+    elsif version.match(/\A\(\,.*\)\z/) # smaller
+      dependency.version_label = String.new(version)
+      version.gsub!(/\A\(\,/, "")
+      version.gsub!(/\)\z/, "")
+      smaller = VersionService.smaller_than( product.versions, version )
+      dependency.version_requested = smaller.version
+      dependency.comperator = "<"
+
+    elsif version.match(/\A\[.*\,\)\z/) # bigger or equal
+      dependency.version_label = String.new(version)
+      version.gsub!(/\A\[/, "")
+      version.gsub!(/\,\)\z/, "")
+      greater_than_or_equal = VersionService.greater_than_or_equal( product.versions, version )
+      dependency.version_requested = greater_than_or_equal.version
+      dependency.comperator = ">="
+
+    elsif version.match(/\A\(.*\,\)\z/) # bigger
+      dependency.version_label = String.new(version)
+      version.gsub!(/\A\(/, "")
+      version.gsub!(/\,\)\z/, "")
+      greater_than = VersionService.greater_than( product.versions, version )
+      dependency.version_requested = greater_than.version
+      dependency.comperator = ">"
+
     else
       dependency.version_requested = version
       dependency.version_label = version
