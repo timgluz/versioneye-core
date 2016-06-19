@@ -56,6 +56,31 @@ describe PomParser do
       product_10.add_version "3.0.0-SNAPSHOT"
       product_10.save
 
+      product_11 = ProductFactory.create_for_maven("com.versioneye", "versioneye-core-j-1", "1.0.0")
+      product_11.save
+      product_11.add_version "0.9.0"
+      product_11.save
+
+      product_12 = ProductFactory.create_for_maven("com.versioneye", "versioneye-core-j-2", "1.0.0")
+      product_12.save
+      product_12.add_version "0.9.0"
+      product_12.save
+
+      product_13 = ProductFactory.create_for_maven("com.versioneye", "versioneye-core-j-3", "1.0.0")
+      product_13.save
+      product_13.add_version "0.9.0"
+      product_13.save
+
+      product_14 = ProductFactory.create_for_maven("com.versioneye", "versioneye-core-j-4", "1.0.0")
+      product_14.save
+      product_14.add_version "1.1.0"
+      product_14.save
+
+      product_15 = ProductFactory.create_for_maven("com.versioneye", "versioneye-core-j-5", "[1.0.0]")
+      product_15.save
+      product_15.add_version "1.1.0"
+      product_15.save
+
       parser = PomParser.new
       project = parser.parse("https://s3.amazonaws.com/veye_test_env/pom.xml")
       project.should_not be_nil
@@ -127,14 +152,59 @@ describe PomParser do
       dependency_09.scope.should eql("test")
       dependency_09.outdated.should eql(false)
 
-      dependency_09 = fetch_by_name project.dependencies, 'assertj-core'
-      dependency_09.name.should eql("assertj-core")
-      dependency_09.version_label.should eql('LATEST')
-      dependency_09.version_requested.should eql("3.0.0-SNAPSHOT")
-      dependency_09.version_current.should eql("2.0.0")
-      dependency_09.comperator.should eql("=")
-      dependency_09.outdated.should eql(false)
-      dependency_09.scope.should eql("test")
+      dependency_10 = fetch_by_name project.dependencies, 'assertj-core'
+      dependency_10.name.should eql("assertj-core")
+      dependency_10.version_label.should eql('LATEST')
+      dependency_10.version_requested.should eql("3.0.0-SNAPSHOT")
+      dependency_10.version_current.should eql("2.0.0")
+      dependency_10.comperator.should eql("=")
+      dependency_10.outdated.should eql(false)
+      dependency_10.scope.should eql("test")
+
+      dependency_11 = fetch_by_name project.dependencies, 'versioneye-core-j-1'
+      dependency_11.name.should eql("versioneye-core-j-1")
+      dependency_11.version_label.should eql('(,1.0.0]')
+      dependency_11.version_requested.should eql("1.0.0")
+      dependency_11.version_current.should eql("1.0.0")
+      dependency_11.comperator.should eql("<=")
+      dependency_11.outdated.should eql(false)
+      dependency_11.scope.should eql("compile")
+
+      dependency_12 = fetch_by_name project.dependencies, 'versioneye-core-j-2'
+      dependency_12.name.should eql("versioneye-core-j-2")
+      dependency_12.version_label.should eql('(,1.0.0)')
+      dependency_12.version_requested.should eql("0.9.0")
+      dependency_12.version_current.should eql("1.0.0")
+      dependency_12.comperator.should eql("<")
+      dependency_12.outdated.should eql(true)
+      dependency_12.scope.should eql("compile")
+
+      dependency_14 = fetch_by_name project.dependencies, 'versioneye-core-j-3'
+      dependency_14.name.should eql("versioneye-core-j-3")
+      dependency_14.version_label.should eql('[1.0.0,)')
+      dependency_14.version_requested.should eql("1.0.0")
+      dependency_14.version_current.should eql("1.0.0")
+      dependency_14.comperator.should eql(">=")
+      dependency_14.outdated.should eql(false)
+      dependency_14.scope.should eql("compile")
+
+      dependency_15 = fetch_by_name project.dependencies, 'versioneye-core-j-4'
+      dependency_15.name.should eql("versioneye-core-j-4")
+      dependency_15.version_label.should eql('(1.0.0,)')
+      dependency_15.version_requested.should eql("1.1.0")
+      dependency_15.version_current.should eql("1.1.0")
+      dependency_15.comperator.should eql(">")
+      dependency_15.outdated.should eql(false)
+      dependency_15.scope.should eql("compile")
+
+      dependency_16 = fetch_by_name project.dependencies, 'versioneye-core-j-5'
+      dependency_16.name.should eql("versioneye-core-j-5")
+      dependency_16.version_label.should eql('[1.0.0]')
+      dependency_16.version_requested.should eql("1.0.0")
+      dependency_16.version_current.should eql("1.1.0")
+      dependency_16.comperator.should eql("==")
+      dependency_16.outdated.should eql(true)
+      dependency_16.scope.should eql("compile")
     end
 
   end
