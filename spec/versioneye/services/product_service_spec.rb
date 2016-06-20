@@ -97,6 +97,16 @@ describe ProductService do
       product.version.should eql("1.2-dev")
     end
 
+    it "returns value of dist_tags_latest" do
+      product.versions = Array.new
+      product.versions.push( Version.new( { :version => "1.0"     } ) )
+      product.versions.push( Version.new( { :version => "1.1"     } ) )
+      product.versions.push( Version.new( { :version => "1.2-dev" } ) )
+      product.dist_tags_latest = "1.0"
+      ProductService.update_version_data( product )
+      product.version.should eql("1.0")
+    end
+
   end
 
   describe 'update_average_release_time' do
