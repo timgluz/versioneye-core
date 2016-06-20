@@ -489,8 +489,7 @@ module VersionEye
     end
 
     def gpl_20_or_later_match name
-      new_name = name.gsub(/gnu/i, "").strip
-
+      new_name = name.gsub(/\(gnu\)/i, "").gsub(/gnu/i, "").strip
       new_name = name.gsub(/gnu/i, '').strip
       new_name.match(/\AGPL2\+\z/i) ||
       new_name.match(/\AGPLv2\+\z/i) ||
@@ -505,7 +504,9 @@ module VersionEye
       new_name.match(/\AGeneral\s+Public\s+2\s+or\s+greater\z/i) ||
       new_name.match(/\AGeneral\s+Public\s+2\+\s+\(GPL\s+2\+\)\z/i) ||
       new_name.match(/\AGeneral\s+Public\s+\(GPL\s+2\+\)\z/i) ||
-      new_name.match(/\AGeneral\s+Public\s+2\+\z/i)
+      new_name.match(/\AGeneral\s+Public\s+2\+\z/i) ||
+      new_name.match(/\AGeneral\s+Public\s+\(GPL\)\s+2\s+or\s+any\s+later\s*\z/i) ||
+      new_name.match(/\AGeneral\s+Public\s+2\s+or\s+any\s+later\s*\z/i)
     end
 
     def gpl_20_match_w_cpe name

@@ -130,7 +130,7 @@ describe ProjectdependencyService do
 
   describe "update_security" do
 
-    it 'updates the dependencies with the securiyt infos' do
+    it 'updates the dependencies with the security infos' do
       expect( Projectdependency.count ).to eq(0)
       dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.version_current   = @product.version
@@ -164,6 +164,46 @@ describe ProjectdependencyService do
       expect( @project.sv_count).to eq(1)
       dep = Projectdependency.first
       expect( dep.sv_ids.count ).to eq(1)
+    end
+
+    it 'updates the dependencies with the security infos and muted svs' do
+      expect( Projectdependency.count ).to eq(0)
+      dep = ProjectdependencyFactory.create_new(@project, @product)
+      dep.version_current   = @product.version
+      dep.version_requested = @product.version
+      expect( dep.save ).to be_truthy
+      expect( Projectdependency.count ).to eq(1)
+      expect( @project.dependencies.count ).to eq(1)
+
+      sv = SecurityVulnerability.new({:language => @product.language, :prod_key => @product.prod_key, :summary => 'test', :name_id => "cv2"})
+      sv.affected_versions << @product.version
+      expect( sv.save ).to be_truthy
+
+      sv2 = SecurityVulnerability.new({:language => @product.language, :prod_key => @product.prod_key, :summary => 'test2', :name_id => "cv1"})
+      sv2.affected_versions << @product.version
+      expect( sv2.save ).to be_truthy
+
+      version = @product.version_by_number @product.version
+      version.sv_ids << sv.ids
+      version.sv_ids << sv2.ids
+      expect( version.save).to be_truthy
+      expect( @project.sv_count).to eq(0)
+
+      ProjectdependencyService.update_security @project
+
+      expect( @project.sv_count).to eq(2)
+      dep = Projectdependency.first
+      expect( dep.sv_ids).to_not be_empty
+      expect( dep.sv_ids.count ).to eq(2)
+
+      @project.mute_security! sv2.ids, 'not important'
+      expect( @project.sv_count ).to eq(1)
+
+      # After the 2nd checking the sv_count still should be 1.
+      # Testing that the count gets resettet before checking.
+      ProjectdependencyService.update_security @project
+      @project.reload
+      expect( @project.sv_count).to eq(1)
     end
 
   end

@@ -77,6 +77,7 @@ class Project < Versioneye::Model
   field :component_whitelist_id, type: String
 
   field :parsing_errors , type: Array, :default => []
+  field :muted_svs      , type: Hash,  :default => {} # muted security vulnerabilities
 
   validates :name       , presence: true
 
@@ -164,6 +165,21 @@ class Project < Versioneye::Model
     deps.count
   end
 
+  def mute_security! sv_id, message
+    return nil if muted_svs.keys.include?( sv_id )
+
+    muted_svs[sv_id] = message
+    self.sv_count = self.sv_count - 1
+    self.sv_count = 0 if self.sv_count < 0
+    self.save
+  end
+
+  def unmute_security! sv_id
+    muted_svs.delete(sv_id)
+    self.sv_count = self.sv_count + 1
+    self.save
+  end
+
   def self.find_by_id( id )
     Project.find( id )
   rescue => e
@@ -192,7 +208,7 @@ class Project < Versioneye::Model
     true
   end
 
-  def visible_for_user?(user)
+  def visible_for_user? user
     return false if user.nil?
     return true  if self[:public]
     return true  if user.admin
@@ -201,7 +217,7 @@ class Project < Versioneye::Model
     return false
   end
 
-  def is_collaborator?( user )
+  def is_collaborator? user
     return false if user.nil?
     return true if self.user_id.to_s.eql?(user.ids)
     return true if organisation && OrganisationService.owner?( organisation, user ) == true
@@ -217,7 +233,7 @@ class Project < Versioneye::Model
     false
   end
 
-  def is_orga_member?(user)
+  def is_orga_member? user
     if organisation
       return OrganisationService.member?( organisation, user )
     end
@@ -302,6 +318,7 @@ class Project < Versioneye::Model
     if new_project.s3_filename
       self.s3_filename  = new_project.s3_filename
     end
+    self.muted_svs  = new_project.muted_svs
     self.updated_at = Time.now
 
     self.overwrite_dependencies( new_project.projectdependencies )
@@ -337,13 +354,6 @@ class Project < Versioneye::Model
     return user_email.email if user_email && user_email.verified?
 
     return user.email
-  end
-
-  def self.create_random_value
-    chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-    value = ""
-    20.times { value << chars[rand(chars.size)] }
-    value
   end
 
   def sum_own!

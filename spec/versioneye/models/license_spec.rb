@@ -791,6 +791,10 @@ describe License do
       license.name_substitute.should eq("GPL-2.0+")
     end
     it "should return GPL 2.0+ name" do
+      license = License.new({:name => "GNU General Public License (GPL) version 2, or any later version"})
+      license.name_substitute.should eq("GPL-2.0+")
+    end
+    it "should return GPL 2.0+ name" do
       license = License.new({:name => "General Public License 2 or later"})
       license.name_substitute.should eq("GPL-2.0+")
     end

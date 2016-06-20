@@ -147,10 +147,13 @@ class ProductService < Versioneye::Service
     versions = product.versions
     return nil if versions.nil? || versions.empty?
 
-    newest_stable_version = VersionService.newest_version( versions )
-    return nil if newest_stable_version.to_s.eql?( product.version)
+    if product.dist_tags_latest
+      product.version = product.dist_tags_latest
+    else
+      newest_stable_version = VersionService.newest_version( versions )
+      product.version = newest_stable_version.to_s
+    end
 
-    product.version = newest_stable_version.to_s
     product.save if persist
   rescue => e
     log.error e.message
