@@ -114,7 +114,7 @@ class Project < Versioneye::Model
   end
 
   def parent
-    return Project.find(parent_id) if parent_id
+    return Project.find( parent_id ) if parent_id
     return nil
   end
 
@@ -229,6 +229,9 @@ class Project < Versioneye::Model
         end
       end
     end
+
+    parent_project = parent
+    return true if parent_project && parent_project.is_collaborator?( user )
 
     false
   end

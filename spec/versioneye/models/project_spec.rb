@@ -243,6 +243,27 @@ describe Project do
       expect(@test_project.is_collaborator?(col_user)).to be_truthy
       expect(@test_project.is_collaborator?(non_col_user)).to be_falsey
     end
+    it "returns true because of parent_project" do
+      col_user     = UserFactory.create_new 10022
+      non_col_user = UserFactory.create_new 10023
+
+      parent_project = ProjectFactory.create_new @test_user
+      @test_project.parent_id = parent_project.ids
+      @test_project.save
+
+      orga = Organisation.new({:name => 'name'})
+      orga.save
+      team = Team.new(:name => 'test', :organisation_id => orga.ids)
+      expect( team.save ).to be_truthy
+      expect( team.add_member(col_user) ).to be_truthy
+      expect( team.members.count ).to eq(1)
+
+      parent_project.teams.push team
+      expect(parent_project.teams.count).to eq(1)
+      expect(@test_project.teams.count).to eq(0)
+
+      expect(@test_project.is_collaborator?(col_user)).to be_truthy
+    end
   end
 
   describe "visible_for_user?" do
