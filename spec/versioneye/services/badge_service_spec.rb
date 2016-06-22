@@ -67,7 +67,7 @@ describe BadgeService do
       BadgeService.cache.delete key
 
       badge = BadgeService.badge_for( key )
-      badge.svg.should eq(Badge::A_NONE_SVG)
+      badge.svg.should eq(Badge::A_NONE_SVG_FLAT)
       badge.status.should eq('none')
       BadgeService.cache.get(key).should_not be_nil
     end
@@ -90,7 +90,7 @@ describe BadgeService do
       BadgeService.cache.delete key
 
       badge = BadgeService.badge_for( key )
-      badge.svg.should eq(Badge::A_UPTODATE_SVG)
+      badge.svg.should eq(Badge::A_UPTODATE_SVG_FLAT)
       badge.status.should eq('up_to_date')
       BadgeService.cache.get(key).should_not be_nil
       Badge.count.should eq(1)

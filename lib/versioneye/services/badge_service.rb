@@ -116,17 +116,21 @@ class BadgeService < Versioneye::Service
 
 
   def self.fetch_svg badge
-    return Badge::A_UPTODATE_SVG_FLAT if badge.status.eql?(Badge::A_UP_TO_DATE) && (badge.badge_style.to_s.eql?('flat') || badge.badge_style.to_s.eql?('flat-square'))
-    return Badge::A_UPTODATE_SVG      if badge.status.eql?(Badge::A_UP_TO_DATE)
+    return Badge::A_UPTODATE_SVG_PLASTIC     if badge.status.eql?(Badge::A_UP_TO_DATE) && badge.badge_style.to_s.eql?('plastic')
+    return Badge::A_UPTODATE_SVG_FLAT_SQUARE if badge.status.eql?(Badge::A_UP_TO_DATE) && badge.badge_style.to_s.eql?('flat-square')
+    return Badge::A_UPTODATE_SVG_FLAT        if badge.status.eql?(Badge::A_UP_TO_DATE)
 
-    return Badge::A_OUTOFDATE_SVG_FLAT if badge.status.eql?(Badge::A_OUT_OF_DATE) && (badge.badge_style.to_s.eql?('flat') || badge.badge_style.to_s.eql?('flat-square'))
-    return Badge::A_OUTOFDATE_SVG      if badge.status.eql?(Badge::A_OUT_OF_DATE)
+    return Badge::A_OUTOFDATE_SVG_PLASTIC     if badge.status.eql?(Badge::A_OUT_OF_DATE) && badge.badge_style.to_s.eql?('plastic')
+    return Badge::A_OUTOFDATE_SVG_FLAT_SQUARE if badge.status.eql?(Badge::A_OUT_OF_DATE) && badge.badge_style.to_s.eql?('flat-square')
+    return Badge::A_OUTOFDATE_SVG_FLAT        if badge.status.eql?(Badge::A_OUT_OF_DATE)
 
-    return Badge::A_UPDATE_SVG_FLAT if badge.status.eql?(Badge::A_UPDATE) && (badge.badge_style.to_s.eql?('flat') || badge.badge_style.to_s.eql?('flat-square'))
-    return Badge::A_UPDATE_SVG      if badge.status.eql?(Badge::A_UPDATE)
+    return Badge::A_UPDATE_SVG_PLASTIC     if badge.status.eql?(Badge::A_UPDATE) && badge.badge_style.to_s.eql?('plastic')
+    return Badge::A_UPDATE_SVG_FLAT_SQUARE if badge.status.eql?(Badge::A_UPDATE) && badge.badge_style.to_s.eql?('flat-square')
+    return Badge::A_UPDATE_SVG_FLAT        if badge.status.eql?(Badge::A_UPDATE)
 
-    return Badge::A_NONE_SVG_FLAT if badge.status.eql?(Badge::A_NONE) && (badge.badge_style.to_s.eql?('flat') || badge.badge_style.to_s.eql?('flat-square'))
-    return Badge::A_NONE_SVG      if badge.status.eql?(Badge::A_NONE)
+    return Badge::A_NONE_SVG_PLASTIC     if badge.status.eql?(Badge::A_NONE) && badge.badge_style.to_s.eql?('plastic')
+    return Badge::A_NONE_SVG_FLAT_SQUARE if badge.status.eql?(Badge::A_NONE) && badge.badge_style.to_s.eql?('flat-square')
+    return Badge::A_NONE_SVG_FLAT        if badge.status.eql?(Badge::A_NONE)
 
     return Badge::A_UNKNOWN_SVG   if badge.status.eql?(Badge::A_UNKNOWN)
   end
