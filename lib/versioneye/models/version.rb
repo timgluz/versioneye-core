@@ -64,4 +64,8 @@ class Version < Versioneye::Model
     SecurityVulnerability.where(:_id.in => sv_ids)
   end
 
+  def licenses
+    License.where(:language => product.language, :prod_key => product.prod_key, :version => self.version)
+  end
+
 end
