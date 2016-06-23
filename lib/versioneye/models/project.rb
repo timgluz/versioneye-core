@@ -285,6 +285,10 @@ class Project < Versioneye::Model
     self.projectdependencies.find_all {|dep| dep.prod_key }
   end
 
+  def unknown_dependencies
+    self.projectdependencies.find_all {|dep| dep.prod_key.nil? }
+  end
+
   def remove_dependencies
     Projectdependency.where(:project_id => self.ids).each do |dep|
       dep.delete

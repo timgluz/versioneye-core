@@ -34,7 +34,8 @@ class SyncService < Versioneye::Service
 
 
   def self.sync_project project
-    sync_projectdependencies project.dependencies
+    sync_projectdependencies project.unknown_dependencies
+    sync_projectdependencies project.known_dependencies
   end
 
 
