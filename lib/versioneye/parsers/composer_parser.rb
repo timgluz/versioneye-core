@@ -110,8 +110,13 @@ class ComposerParser < CommonParser
 
     dependency.version_label = String.new(version)
 
-    dependency.stability = VersionTagRecognizer.stability_tag_for version
-    VersionTagRecognizer.remove_minimum_stability version
+    # Ignore cases like => "dev-master | ^1.0"
+    if version.match(/.+\|.+/).nil?
+      dependency.stability = VersionTagRecognizer.stability_tag_for version
+      VersionTagRecognizer.remove_minimum_stability version
+    else
+      dependency.stability = VersionTagRecognizer::A_STABILITY_STABLE
+    end
 
     if !product.nil? && version.empty?
       update_requested_with_current(dependency, product)

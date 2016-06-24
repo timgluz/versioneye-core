@@ -174,7 +174,6 @@ class ProjectdependencyService < Versioneye::Service
     end
 
     if !projectdependency.ext_link.to_s.empty?
-      p "projectdependency.ext_link: -#{projectdependency.ext_link}-"
       projectdependency.version_current = projectdependency.version_requested
       return false
     end
