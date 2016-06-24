@@ -5,7 +5,6 @@ class Api < Versioneye::Model
 
   field :user_id            , type: String
   field :api_key            , type: String
-  field :calls              , type: Integer, default: 0
   field :enterprise_projects, type: Integer, default: 1
   field :rate_limit         , type: Integer, default: 50
   field :active             , type: Boolean, default: true
@@ -42,6 +41,10 @@ class Api < Versioneye::Model
 
   def user
     User.find user_id
+  end
+
+  def calls_count
+    ApiCall.where(:api_key => self.api_key).count
   end
 
 end
