@@ -55,7 +55,19 @@ class BowerParser < PackageParser
 
 
   def parse_line( package_name, version_label, project, scope = Dependency::A_SCOPE_COMPILE )
-    product    = Product.fetch_bower package_name
+
+    alt_name = nil
+    if version_label.match(/.+\#.+/)
+      sps = version_label.split("#")
+      version_label = sps[1]
+      alt_name = sps[0]
+    end
+
+    product = Product.fetch_bower package_name
+    if product.nil? && !alt_name.nil?
+      product = Product.fetch_bower alt_name
+    end
+
     dependency = init_dependency( product, package_name )
     dependency.scope = scope
     parse_requested_version( version_label, dependency, product )

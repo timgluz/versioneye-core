@@ -67,6 +67,14 @@ describe BowerParser do
                                  language: Product::A_LANGUAGE_JAVASCRIPT
                                 )}
 
+  let(:prod10){FactoryGirl.create(:product_with_versions,
+                                 prod_key: "Chart.js",
+                                 name: "Chart.js",
+                                 version: "1.0.0",
+                                 prod_type: Project::A_TYPE_BOWER,
+                                 language: Product::A_LANGUAGE_JAVASCRIPT
+                                )}
+
 
   context "parsing project file from url" do
 
@@ -114,8 +122,10 @@ describe BowerParser do
       prod9.versions << FactoryGirl.build(:product_version, version: "1.2")
       prod9.versions << FactoryGirl.build(:product_version, version: "2.0")
 
+      prod10.versions << FactoryGirl.build(:product_version, version: "1.0.0")
+
       prod1.save; prod2.save; prod3.save; prod4.save; prod5.save;
-      prod6.save; prod7.save; prod8.save; prod9.save
+      prod6.save; prod7.save; prod8.save; prod9.save; prod10.save;
     end
 
     after :each do
@@ -127,7 +137,7 @@ describe BowerParser do
       project = parser.parse(test_case_url)
 
       project.should_not be_nil
-      project.dependencies.size.should eql(9)
+      project.dependencies.size.should eql(10)
 
       dep1 = project.dependencies[0]
       dep1.name.should eql(prod1[:name])
@@ -186,11 +196,18 @@ describe BowerParser do
       dep8.outdated.should be_truthy
 
       dep9 = project.dependencies[8]
-      dep9.name.should eql(prod9[:name])
-      dep9.version_requested.should eql("2.0")
-      dep9.version_current.should eql("2.0")
-      dep9.comperator.should eql("||")
+      dep9.name.should eql('chart-js')
+      dep9.version_requested.should eql("1.0.0")
+      dep9.version_current.should eql("1.0.0")
+      dep9.comperator.should eql("~")
       dep9.outdated.should be_falsey
+
+      dep10 = project.dependencies[9]
+      dep10.name.should eql(prod9[:name])
+      dep10.version_requested.should eql("2.0")
+      dep10.version_current.should eql("2.0")
+      dep10.comperator.should eql("||")
+      dep10.outdated.should be_falsey
 
     end
   end
