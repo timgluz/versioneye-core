@@ -310,6 +310,7 @@ class ProjectService < Versioneye::Service
     parent = project.parent
     destroy_single project.id
     update_sums parent
+    return true
   end
 
 
