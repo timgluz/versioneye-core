@@ -89,8 +89,12 @@ class ProjectUpdateService < Versioneye::Service
     def self.reset_badge id
       cache.delete( id )
       cache.delete( "#{id}__flat" )
+      cache.delete( "#{id}__flat-square" )
+      cache.delete( "#{id}__plastic" )
       Badge.where( :key => id.to_s ).delete
       Badge.where( :key => "#{id}__flat" ).delete
+      Badge.where( :key => "#{id}__flat-square" ).delete
+      Badge.where( :key => "#{id}__plastic" ).delete
     end
 
 
