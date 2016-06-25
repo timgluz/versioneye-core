@@ -40,8 +40,8 @@ class GitRepoFileImportWorker < Worker
       repo_name = sps[2]
       filename  = sps[3]
       branch    = sps[4]
-      parent_id = sps[5]
-      multi_log "   [x] GitRepoFileImportWorker import for provider: #{provider}, username: #{username}, repo_name: #{repo_name}, filename: #{filename}, branch: #{branch}"
+      orga_id   = sps[5]
+      multi_log "   [x] GitRepoFileImportWorker import for provider: #{provider}, username: #{username}, repo_name: #{repo_name}, filename: #{filename}, branch: #{branch}, orga: #{orga_id}"
 
       user = User.find_by_username username
       if user.nil?
@@ -52,17 +52,11 @@ class GitRepoFileImportWorker < Worker
 
       project = nil
       if provider.eql?("stash")
-        project = ProjectImportService.import_from_stash user, repo_name, filename, branch
+        project = ProjectImportService.import_from_stash user, repo_name, filename, branch, orga_id
       elsif provider.eql?("github")
-        project = ProjectImportService.import_from_github user, repo_name, filename, branch
-      elsif provider.eql?("github_child")
-        parent = Project.find parent_id
-        project = ProjectImportService.import_child_from_github user, repo_name, filename, branch, parent
+        project = ProjectImportService.import_from_github user, repo_name, filename, branch, orga_id
       elsif provider.eql?("bitbucket")
-        project = ProjectImportService.import_from_bitbucket user, repo_name, filename, branch
-      elsif provider.eql?("bitbucket_child")
-        parent = Project.find parent_id
-        project = ProjectImportService.import_child_from_bitbucket user, repo_name, filename, branch, parent
+        project = ProjectImportService.import_from_bitbucket user, repo_name, filename, branch, orga_id
       end
 
       if project && project.is_a?(Project)

@@ -47,31 +47,6 @@ describe ProjectImportService do
     end
   end
 
-  describe 'import_from_github_multi' do
-    it 'imports Gemfile and Gemfile.lock from github' do
-      VCR.use_cassette('import_from_github_multi', allow_playback_repeats: true) do
-        worker = Thread.new{ GitRepoFileImportWorker.new.work }
-        project = ProjectImportService.import_from_github_multi github_user, 'versioneye/docker_web_ui', 'Gemfile', 'master'
-        project.should_not be_nil
-        project.dependencies.should_not be_empty
-        project.name.should eq('versioneye/docker_web_ui')
-        project.source.should eq(Project::A_SOURCE_GITHUB)
-        sleep 3
-        project.children.count.should eq(1)
-        worker.exit
-      end
-    end
-    it 'imports a pom.xml from github ' do
-      VCR.use_cassette('import_from_github_multi_pom', allow_playback_repeats: true) do
-        project = ProjectImportService.import_from_github_multi github_user, 'versioneye/versioneye_maven_plugin', 'pom.xml', 'master'
-        project.should_not be_nil
-        project.dependencies.should_not be_empty
-        project.name.should eq('versioneye/versioneye_maven_plugin')
-        project.source.should eq(Project::A_SOURCE_GITHUB)
-        project.children.count.should eq(0)
-      end
-    end
-  end
 
   describe 'import_from_github_async' do
     it 'imports from github async' do
@@ -116,37 +91,6 @@ describe ProjectImportService do
     end
   end
 
-  describe 'import_from_bitbucket_multi' do
-    it 'imports Gemfile and Gemfile.lock from bitbucket' do
-      bitbucket_repo = BitbucketRepo.new({:fullname => 'reiz/test_gemi', :user => user_with_token, :private => false})
-      bitbucket_repo.save
-
-      VCR.use_cassette('bitbucket_file_import_multi', allow_playback_repeats: true) do
-        worker = Thread.new{ GitRepoFileImportWorker.new.work }
-        project = ProjectImportService.import_from_bitbucket_multi user_with_token, 'reiz/test_gemi', 'Gemfile', 'master'
-        project.should_not be_nil
-        project.dependencies.should_not be_empty
-        project.name.should eq('reiz/test_gemi')
-        project.source.should eq(Project::A_SOURCE_BITBUCKET)
-        sleep 10
-        project.children.count.should eq(1)
-        worker.exit
-      end
-    end
-    it 'imports pom.xml from bitbucket' do
-      bitbucket_repo = BitbucketRepo.new({:fullname => 'reiz/test_gemi', :user => user_with_token, :private => false})
-      bitbucket_repo.save
-
-      VCR.use_cassette('bitbucket_file_import_multi_pom', allow_playback_repeats: true) do
-        project = ProjectImportService.import_from_bitbucket_multi user_with_token, 'reiz/test_gemi', 'pom.xml', 'master'
-        project.should_not be_nil
-        project.dependencies.should_not be_empty
-        project.name.should eq('reiz/test_gemi')
-        project.source.should eq(Project::A_SOURCE_BITBUCKET)
-        project.children.count.should eq(0)
-      end
-    end
-  end
 
   describe 'import_from_bitbucket_async' do
     it 'imports from bitbucket async' do

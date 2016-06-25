@@ -23,7 +23,7 @@ class ProjectImportService < Versioneye::Service
       path = pf['path']
       if pfs.include?( path )
         p "import - #{user.username} - #{repo.fullname} - #{path} - #{branch}"
-        import_from_github_multi user, repo.fullname, pf['path'], branch
+        import_from_github user, repo.fullname, pf['path'], branch
       end
     end
   rescue => e
@@ -32,44 +32,14 @@ class ProjectImportService < Versioneye::Service
   end
 
 
-  def self.import_from_github_async user, repo_name, filename, branch = 'master'
-    key = "github:::#{user.username}:::#{repo_name}:::#{filename}:::#{branch}"
+  def self.import_from_github_async user, repo_name, filename, branch = 'master', orga_id = ''
+    key = "github:::#{user.username}:::#{repo_name}:::#{filename}:::#{branch}:::#{orga_id}"
     task_status( key ){ GitRepoFileImportProducer.new( key ) }
   end
 
-  def self.import_from_github_multi user, repo_name, filename, branch = 'master'
+  def self.import_from_github user, repo_name, filename, branch = 'master', orga_id = ''
     private_project = Github.private_repo? user.github_token, repo_name
     check_permission_for_github_repo user, repo_name, private_project
-
-    project = import_from_github user, repo_name, filename, branch, false, private_project
-
-    lock_file = ProjectService.corresponding_file filename
-    if lock_file
-      key = "github_child:::#{user.username}:::#{repo_name}:::#{lock_file}:::#{branch}:::#{project.id}"
-      GitRepoFileImportProducer.new( key )
-    end
-
-    ProjectService.update_sums( project )
-    project
-  end
-
-  def self.import_child_from_github user, repo_name, lock_file, branch, project
-    child = import_from_github user, repo_name, lock_file, branch, false
-    child.parent_id = project.id.to_s
-    child.save
-    ProjectService.update_sums( child.parent )
-    child
-  rescue => e
-    log.error e.message
-  end
-
-  def self.import_from_github user, repo_name, filename, branch = 'master', check_permission = true, private_project = nil
-    if private_project.nil?
-      private_project = Github.private_repo? user.github_token, repo_name
-    end
-    if check_permission
-      check_permission_for_github_repo user, repo_name, private_project
-    end
 
     project_file = Github.fetch_project_file_from_branch(repo_name, filename, branch, user[:github_token] )
     if project_file.nil?
@@ -86,11 +56,13 @@ class ProjectImportService < Versioneye::Service
       raise "The project file could not be parsed. Maybe it's not valid?"
     end
 
+    organisation_id = nil
+    organisation_id = orga_id if !orga_id.to_s.empty?
     project.update_attributes({
       name: repo_name,
       project_type: project_file[:type],
       user_id: user.id.to_s,
-      # organisation_id: TODO,
+      organisation_id: organisation_id,
       source: Project::A_SOURCE_GITHUB,
       private_project: private_project,
       scm_fullname: repo_name,
@@ -108,51 +80,17 @@ class ProjectImportService < Versioneye::Service
   end
 
 
-  def self.import_from_bitbucket_async user, repo_name, filename, branch = 'master'
-    key = "bitbucket:::#{user.username}:::#{repo_name}:::#{filename}:::#{branch}"
+  def self.import_from_bitbucket_async user, repo_name, filename, branch = 'master', orga_id = ''
+    key = "bitbucket:::#{user.username}:::#{repo_name}:::#{filename}:::#{branch}:::#{orga_id}"
     task_status( key ){ GitRepoFileImportProducer.new( key ) }
   end
 
-  def self.import_from_bitbucket_multi user, repo_name, filename, branch = 'master'
+
+  def self.import_from_bitbucket(user, repo_name, filename, branch = "master", orga_id = '')
     repo = BitbucketRepo.by_user(user).by_fullname(repo_name).shift
     private_project = repo[:private]
+
     check_permission_for_bitbucket_repo user, private_project
-
-    project = import_from_bitbucket user, repo_name, filename, branch, false, repo
-
-    lock_file = ProjectService.corresponding_file filename
-    if lock_file
-      key = "bitbucket_child:::#{user.username}:::#{repo_name}:::#{lock_file}:::#{branch}:::#{project.id}"
-      GitRepoFileImportProducer.new( key )
-    end
-
-    ProjectService.update_sums( project )
-    project
-  end
-
-  def self.import_child_from_bitbucket user, repo_name, lock_file, branch, project
-    child = import_from_bitbucket user, repo_name, lock_file, branch, false
-    if child && child.is_a?(Project)
-      child.parent_id = project.id.to_s
-      child.save
-      ProjectService.update_sums( project )
-    end
-    return child
-  rescue => e
-    log.error e.message
-    log.error e.backtrace.join("\n")
-    nil
-  end
-
-  def self.import_from_bitbucket(user, repo_name, filename, branch = "master", check_permission = true, repo = nil)
-    if repo.nil?
-      repo = BitbucketRepo.by_user(user).by_fullname(repo_name).shift
-    end
-    private_project = repo[:private]
-
-    if check_permission
-      check_permission_for_bitbucket_repo user, private_project
-    end
 
     project_file = Bitbucket.fetch_project_file_from_branch(
       repo_name, branch, filename,
@@ -175,10 +113,13 @@ class ProjectImportService < Versioneye::Service
 
     revision = BitbucketRepo.revision_for user, repo_name, branch, filename
 
+    organisation_id = nil
+    organisation_id = orga_id if !orga_id.to_s.empty?
     project.update_attributes({
       name: repo_name,
       project_type: project_type,
       user_id: user.id.to_s,
+      organisation_id: organisation_id,
       source: Project::A_SOURCE_BITBUCKET,
       scm_fullname: repo_name,
       scm_branch: branch,
@@ -197,31 +138,12 @@ class ProjectImportService < Versioneye::Service
   end
 
 
-  def self.import_from_stash_async user, repo_name, filename, branch = 'master'
-    key = "stash:::#{user.username}:::#{repo_name}:::#{filename}:::#{branch}"
+  def self.import_from_stash_async user, repo_name, filename, branch = 'master', orga_id = ''
+    key = "stash:::#{user.username}:::#{repo_name}:::#{filename}:::#{branch}:::#{orga_id}"
     task_status( key ){ GitRepoFileImportProducer.new( key ) }
   end
 
-  def self.import_from_stash_multi user, repo_name, filename, branch = 'master'
-    project = import_from_stash user, repo_name, filename, branch
-    lock_file = ProjectService.corresponding_file filename
-    if lock_file
-      import_child_from_stash user, repo_name, lock_file, branch, project
-    end
-    ProjectService.update_sums( project )
-    project
-  end
-
-  def self.import_child_from_stash user, repo_name, lock_file, branch, project
-    child = import_from_stash user, repo_name, lock_file, branch
-    child.parent_id = project.id.to_s
-    child.save
-  rescue => e
-    log.error e.message
-    log.error e.backtrace.join("\n")
-  end
-
-  def self.import_from_stash(user, repo_name, filename, branch = "master")
+  def self.import_from_stash(user, repo_name, filename, branch = "master", orga_id = '')
     repo = StashRepo.by_user(user).by_fullname(repo_name).shift
     private_project = !repo[:public_repo]
     unless allowed_to_add_project?(user, private_project)
@@ -242,10 +164,13 @@ class ProjectImportService < Versioneye::Service
       raise "The project file could not be parsed. Maybe it's not valid?"
     end
 
+    organisation_id = nil
+    organisation_id = orga_id if !orga_id.to_s.empty?
     project.update_attributes({
       name: repo_name,
       project_type: project_type,
       user_id: user.id.to_s,
+      organisation_id: organisation_id,
       source: Project::A_SOURCE_STASH,
       scm_fullname: repo_name,
       scm_branch: branch,
