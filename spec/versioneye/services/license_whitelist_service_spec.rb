@@ -85,32 +85,6 @@ describe LicenseWhitelistService do
 
   end
 
-  describe 'fetch_default_id' do
-
-    it 'returns nil because there is no default' do
-      orga = Organisation.new :name => "orga"
-      resp = LicenseWhitelistService.create orga, 'SuperList'
-      resp.should be_truthy
-
-      LicenseWhitelist.count.should eq(1)
-      LicenseWhitelistService.fetch_default_id(orga).should be_nil
-    end
-
-    it 'returns the default_id' do
-      orga = Organisation.new :name => "orga"
-      resp = LicenseWhitelistService.create orga, 'SuperList'
-      resp.should be_truthy
-      resp = LicenseWhitelistService.create orga, 'MyList'
-      resp.should be_truthy
-
-      LicenseWhitelistService.default orga, 'MyList'
-      lwl = LicenseWhitelist.fetch_by orga, 'MyList'
-
-      LicenseWhitelistService.fetch_default_id(orga).should eq(lwl.id.to_s)
-    end
-
-  end
-
   describe 'remove' do
 
     it 'remove license from list for a user' do

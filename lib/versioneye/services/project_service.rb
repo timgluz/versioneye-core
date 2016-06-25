@@ -166,10 +166,11 @@ class ProjectService < Versioneye::Service
     ensure_unique_ga( project )
     ensure_unique_scm( project )
 
-    default_lwl_id = LicenseWhitelistService.fetch_default_id project.user
-    default_cwl_id = ComponentWhitelistService.fetch_default_id project.user
-    project.license_whitelist_id = default_lwl_id
-    project.component_whitelist_id = default_cwl_id
+    organisation = project.organisation
+    if organisation
+      project.license_whitelist_id   = organisation.default_lwl_id
+      project.component_whitelist_id = organisation.default_cwl_id
+    end
     if project.save
       project.save_dependencies
       update_license_numbers!( project )
