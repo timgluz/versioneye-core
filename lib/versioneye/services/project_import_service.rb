@@ -188,7 +188,7 @@ class ProjectImportService < Versioneye::Service
   end
 
 
-  def self.import_from_url( url, project_name, user )
+  def self.import_from_url( url, project_name, user, orga_id = nil)
     project = build_from_url( url )
     return nil if project.nil?
 
@@ -202,7 +202,8 @@ class ProjectImportService < Versioneye::Service
       s3_filename: project_name,
       url: url,
       period: Settings.instance.default_project_period,
-      public: Settings.instance.default_project_public
+      public: Settings.instance.default_project_public,
+      organisation_id: orga_id
     })
 
     project = ProjectService.store( project )
@@ -212,7 +213,7 @@ class ProjectImportService < Versioneye::Service
 
 
   # This is currently used by the VersionEye API project and the file upload in the Web UI.
-  def self.import_from_upload file, user = nil, api_created = false
+  def self.import_from_upload file, user = nil, api_created = false, orga_id = nil
     project_name = file['datafile'].original_filename
     project = ProjectParseService.project_from file
     if project.nil?
@@ -229,6 +230,7 @@ class ProjectImportService < Versioneye::Service
     project.user        = user
     project.period      = Settings.instance.default_project_period
     project.public      = Settings.instance.default_project_public
+    project.organisation_id = orga_id
 
     project = ProjectService.store( project )
     ProjectService.update_sums( project )
