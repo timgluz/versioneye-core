@@ -158,7 +158,6 @@ class Github < Versioneye::Service
     if branch_docs
       branches = []
       branch_docs.each do |branch|
-        next if branch[:name].to_s.eql?('gh-pages')
         branches << branch[:name]
       end
 
@@ -342,7 +341,6 @@ class Github < Versioneye::Service
     project_files = {}
     branches.each do |branch|
       branch_name  = branch[:name]
-      next if branch_name.to_s.eql?('gh-pages')
 
       branch_key   = encode_db_key(branch_name)
       branch_sha   = branch[:commit][:sha]
