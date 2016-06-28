@@ -1,38 +1,34 @@
 <div>
   <div style="max-width: 500px; margin-left: auto; margin-right: auto;">
-  Hey <%= @user.fullname %>,
+    Hey <%= @user.fullname %>,
 
-  <p style="padding-bottom: 0px;">
-    Here are the latest news from <a href="https://www.versioneye.com">VersionEye</a>.
-  </p>
+    <p style="padding-bottom: 0px;">
+      VersionEye is now open source, licensed under MIT!
+    </p>
 
-  <h3>PHP Runtime Compatibility</h3>
-  <p>
-    Now VersionEye shows which PHP package is compatible to which PHP runtime.
-    The runtime compatibility matrix is filled with information from Travis-CI &amp; GitHub
-    by the <a href="http://php-eye.com/">PHP-Eye</a> project from <a href="https://twitter.com/h4cc">Julius Beckmann</a>. VersionEye shows on every PHP page 2 badges with the supported runtimes and the
-    not supported runtimes. Beside that the information is included in the notification emails.
-    Read more  about this new feature on the <a href="http://blog.versioneye.com/2016/03/03/php-runtime-compatability/">VersionEye blog</a>.
-  </p>
+    <p>
+      I talked with many people about open sourcing VersionEye. Some of them recommended to do it and others not. Like everything in live it has pros and cons. But in the end, I decided to open source it to provide more transparency because many of our users care a lot about privacy and transparency.
+    </p>
 
-  <h3>Using VersionEye through the CloudRail API</h3>
-  <p>
-    <a href="http://cloudrail.com/">CloudRail</a> makes it easier for you to integrate services via an API into your application, by providing an universal API. So just one API to learn and a single SDK to integrate and maintain. The <a href="https://www.versioneye.com/api/">VersionEye API</a> is now available through CloudRail as well. Read more  about this new integration on the <a href="http://blog.versioneye.com/2016/03/04/using-versioneye-through-the-cloudrail-api/">VersionEye blog</a>.
-  </p>
+    <p>
+      As more and more big companies are rebuilding their entire infrastructure with open source components like Linux, Archiva, CoreOS, Docker, Kubernetes and GitLab, as less they want to have proprietary black box software. Now VersionEye is open source under MIT license and everybody can use the software for free, just like CoreOS, Docker and GitLab!
+    </p>
 
-  <h3>Security PDF</h3>
-  <p>
-    Now VersionEye has a Security PDF which shows the security status of all project dependencies. That makes
-    it very easy to build up an archive and to report to management. Read more  about this new feature on the <a href="http://blog.versioneye.com/2016/03/30/security-pdf/">VersionEye blog</a>.
-  </p>
+    <p>
+      Read the full story on our blog: <a href=""></a>
+    </p>
 
-  <p>
-    Your feedback is highly appreciated. Simply reply to this email if you want to give feedback.
-  </p>
-  <br/>
-  Best Regards, <br/>
-  Robert @ VersionEye <br/>
-  <a href="<%= Settings.instance.server_url %>?utm_medium=email&amp;utm_source=newsletter"><%= Settings.instance.server_url %></a>
-  <br/>
+    <p>
+      Your feedback is highly appreciated.<br/>
+      Simply reply to this email if you want to give feedback.
+    </p>
+
+    <p>
+      Best Regards, <br/>
+      Robert @ VersionEye <br/>
+      <a href="<%= Settings.instance.server_url %>?utm_medium=email&amp;utm_source=newsletter"><%= Settings.instance.server_url %></a>
+      <br/>
+    </p>
+
   </div>
 </div>
