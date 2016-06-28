@@ -292,7 +292,7 @@ class ProjectImportService < Versioneye::Service
     end
 
 
-    def sefl.fetch_possible_parent project
+    def self.fetch_possible_parent project
       if project.organisation_id
         return Project.where(:organisation_id => project.organisation_id, :scm_fullname => project.scm_fullname, :scm_branch => project.scm_branch, :parent_id => nil).first
       end
