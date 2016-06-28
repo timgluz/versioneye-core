@@ -294,9 +294,9 @@ class ProjectImportService < Versioneye::Service
 
     def sefl.fetch_possible_parent project
       if project.organisation_id
-        return Project.where(:organisation_id => project.organisation_id, :scm_fullname = project.scm_fullname, :scm_branch => project.scm_branch, :parent_id => nil).first
+        return Project.where(:organisation_id => project.organisation_id, :scm_fullname => project.scm_fullname, :scm_branch => project.scm_branch, :parent_id => nil).first
       end
-      Project.where(:user_id => project.user_id, :scm_fullname = project.scm_fullname, :scm_branch => project.scm_branch, :parent_id => nil).first
+      Project.where(:user_id => project.user_id, :scm_fullname => project.scm_fullname, :scm_branch => project.scm_branch, :parent_id => nil).first
     end
 
 
