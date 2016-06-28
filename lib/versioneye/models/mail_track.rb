@@ -6,6 +6,7 @@ class MailTrack < Versioneye::Model
   A_TEMPLATE_NEW_VERSION  = 'new_version_email'
   A_TEMPLATE_PROJECT_NOTI = 'projectnotifications_email'
   A_TEMPLATE_PROJECT_SV   = 'projects_security_email'
+  A_TEMPLATE_NEWSLETTER   = 'newsletter'
 
   field :user_id    , type: String
   field :template   , type: String
