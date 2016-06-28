@@ -53,6 +53,7 @@ class Project < Versioneye::Model
   field :scm_branch    , type: String, default: "master"
   field :scm_revision  , type: String
 
+  field :trans_dep_number, type: Integer, :default => 0
   field :dep_number      , type: Integer, :default => 0
   field :out_number      , type: Integer, :default => 0
   field :unknown_number  , type: Integer, :default => 0
