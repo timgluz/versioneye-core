@@ -391,6 +391,19 @@ class Project < Versioneye::Model
     Auditlog.where(:domain_id => self.ids).desc(:created_at)
   end
 
+  def dependencies_hash
+    hash = Hash.new
+    self.dependencies.each do |dep|
+      element = CircleElement.new
+      element.init_arrays
+      element.dep_prod_key = dep.prod_key
+      element.version      = dep.version_requested
+      element.level        = 0
+      hash[dep.prod_key] = element
+    end
+    hash
+  end
+
   private
 
     def dep_key dep
