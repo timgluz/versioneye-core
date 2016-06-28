@@ -22,14 +22,17 @@ class CircleElement < Versioneye::Model
 
   attr_accessor :connections, :dependencies
 
+
   def self.fetch_circle(language, prod_key, version, scope)
     CircleElement.where(language: language, prod_key: prod_key, prod_version: version, prod_scope: scope)
   end
+
 
   def init_arrays
     self.connections  = Array.new
     self.dependencies = Array.new
   end
+
 
   def self.store_circle(circle, lang, prod_key, version, scope)
     circle.each do |key, element|
@@ -57,6 +60,7 @@ class CircleElement < Versioneye::Model
     response[0..end_pos]
   end
 
+
   def dependencies_as_string
     response = ""
     return response if dependencies.nil? or dependencies.empty?
@@ -67,6 +71,7 @@ class CircleElement < Versioneye::Model
     response[0..end_pos]
   end
 
+
   def as_json(options = {})
     {
       :text        => self.text,
@@ -74,5 +79,6 @@ class CircleElement < Versioneye::Model
       :connections => self.connections
     }
   end
+
 
 end
