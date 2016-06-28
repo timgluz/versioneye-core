@@ -4,7 +4,7 @@ class NewsletterService < Versioneye::Service
   def self.send_newsletter_features
     count = 0
     UserService.all_users_paged do |users|
-      broadcast_to users, count
+      count = broadcast_to users, count
     end
     count
   end
