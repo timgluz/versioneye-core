@@ -74,7 +74,7 @@ class ProjectImportService < Versioneye::Service
     })
 
     project = ProjectService.store( project )
-    # TODO auto merge if same SCM & branch
+    merge_into_parent project, user
     ProjectService.update_sums( project )
     project
   end
@@ -132,7 +132,7 @@ class ProjectImportService < Versioneye::Service
     })
 
     project = ProjectService.store( project )
-    # TODO auto merge if same SCM & branch
+    merge_into_parent project, user
     ProjectService.update_sums( project )
     project
   end
@@ -182,7 +182,7 @@ class ProjectImportService < Versioneye::Service
     })
 
     project = ProjectService.store( project )
-    # TODO auto merge if same SCM & branch
+    merge_into_parent project, user
     ProjectService.update_sums( project )
     project
   end
@@ -284,6 +284,20 @@ class ProjectImportService < Versioneye::Service
 
 
   private
+
+
+    def self.merge_into_parent project, user
+      parent = fetch_possible_parent project
+      ProjectService.merge(parent.ids, project.ids, user.ids) if parent
+    end
+
+
+    def sefl.fetch_possible_parent project
+      if project.organisation_id
+        return Project.where(:organisation_id => project.organisation_id, :scm_fullname = project.scm_fullname, :scm_branch => project.scm_branch, :parent_id => nil).first
+      end
+      Project.where(:user_id => project.user_id, :scm_fullname = project.scm_fullname, :scm_branch => project.scm_branch, :parent_id => nil).first
+    end
 
 
     # Allowed to add Enterprise project?
