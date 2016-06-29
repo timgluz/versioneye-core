@@ -51,10 +51,11 @@ class RequirementsParser < CommonParser
     return false if line.to_s.strip.empty?
 
     return false if line.match(/\A\-e /)
+    return false if line.match(/\A\-r /i)
 
     comparator  = extract_comparator line
     requirement = line.split(comparator)
-    package = requirement[0]
+    package     = requirement[0]
 
     return false if package.nil? || package.strip.empty?
     return false if package.match(/\Ahttp:\/\//)
