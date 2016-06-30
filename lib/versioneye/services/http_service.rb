@@ -22,11 +22,18 @@ class HttpService < Versioneye::Service
     http.read_timeout = timeout # in seconds
     if uri.port == 443
       http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE # Only for AXA!
     end
-    path  = uri.path
-    query = uri.query
-    http.get("#{path}?#{query}")
+    path  = uri.path.to_s
+    path  = '/' if path.to_s.empty?
+    query = uri.query.to_s
+
+    req = nil
+    if query.to_s.empty?
+      req = Net::HTTP::Get.new("#{path}", {'User-Agent' => 'https://www.VersionEye.com - https://twitter.com/VersionEye'})
+    else
+      req = Net::HTTP::Get.new("#{path}?#{query}", {'User-Agent' => 'https://www.VersionEye.com - https://twitter.com/VersionEye'})
+    end
+    http.request(req)
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
