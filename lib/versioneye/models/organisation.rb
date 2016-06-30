@@ -142,7 +142,7 @@ class Organisation < Versioneye::Model
 
         comps[ckey][dep.version_requested] = [] if comps[ckey][dep.version_requested].nil?
 
-        val = "#{project.language}:#{project.name}:#{project.ids}:#{dep.licenses_string}"
+        val = "#{project.language}:#{project.name}:#{project.ids}:#{dep.licenses_string}:#{project.version}"
         comps[ckey][dep.version_requested] << val if !comps[ckey][dep.version_requested].include?( val )
       end
     end
