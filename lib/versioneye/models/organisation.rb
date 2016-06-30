@@ -90,11 +90,14 @@ class Organisation < Versioneye::Model
   end
 
 
-  def component_list
+  def component_list team = nil, language = nil
     return nil if projects.to_a.empty?
 
     comps = {}
     projects.each do |project|
+      next if !team.to_s.empty? && !team.to_s.eql?('ALL') && !project.teams.empty? && !project.teams.first.ids.eql?( team )
+      next if !language.to_s.empty? && !language.to_s.eql?('ALL') && !project.language.to_s.downcase.eql?( language.to_s.downcase )
+
       collect_components project, comps
       next if project.children.count == 0
 
