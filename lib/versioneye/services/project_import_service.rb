@@ -243,7 +243,7 @@ class ProjectImportService < Versioneye::Service
       private_project = Github.private_repo? user.github_token, repo_name
     end
     if allowed_to_add_project?(user, private_project) == false
-      raise "The selected project file is in a private repository. Please upgrade your plan to monitor the selected project."
+      raise "You reached the limit of your current subscription. Please upgrade your plan to monitor more files in private repositories."
     end
     true
   end
@@ -251,7 +251,7 @@ class ProjectImportService < Versioneye::Service
 
   def self.check_permission_for_bitbucket_repo user, private_project
     if allowed_to_add_project?(user, private_project) == false
-      raise "The selected project file is in a private repository. Please upgrade your plan to monitor the selected project."
+      raise "You reached the limit of your current subscription. Please upgrade your plan to monitor more files in private repositories."
     end
     true
   end
