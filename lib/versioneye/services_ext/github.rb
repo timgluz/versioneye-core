@@ -20,7 +20,7 @@ require 'persistent_httparty'
 class Github < Versioneye::Service
 
   A_WORKERS_COUNT = 4
-  A_USER_AGENT = 'Chrome/28(www.versioneye.com, contact@versioneye.com)'
+  A_USER_AGENT = 'Chrome/28(www.versioneye.com, support@versioneye.com)'
   A_DEFAULT_HEADERS = {
     'Accept' => 'application/vnd.github.v3+json',
     'User-Agent' => A_USER_AGENT,
