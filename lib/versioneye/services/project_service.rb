@@ -486,7 +486,7 @@ class ProjectService < Versioneye::Service
     cache.delete( "#{project_id}__flat" )
     cache.delete( "#{project_id}__flat-square" )
     cache.delete( "#{project_id}__plastic" )
-    Badge.where( :key => id.to_s ).delete
+    Badge.where( :key => project_id ).delete
     Badge.where( :key => "#{project_id}__flat" ).delete
     Badge.where( :key => "#{project_id}__flat-square" ).delete
     Badge.where( :key => "#{project_id}__plastic" ).delete
