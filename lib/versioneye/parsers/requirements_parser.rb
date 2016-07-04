@@ -55,7 +55,7 @@ class RequirementsParser < CommonParser
 
     comparator  = extract_comparator line
     requirement = line.split(comparator)
-    package     = requirement[0].to_s.strip
+    package     = get_package_name requirement
 
     return false if package.nil? || package.strip.empty?
     return false if package.match(/\Ahttp:\/\//)
@@ -224,6 +224,15 @@ class RequirementsParser < CommonParser
     dependency.scope = Dependency::A_SCOPE_COMPILE
     dependency.language = Product::A_LANGUAGE_PYTHON
     dependency
+  end
+
+
+  def get_package_name requirement
+    package = requirement[0].to_s.strip
+    if package.match(/.+\[(.+)]/i) # for example: prospector[with_pyroma,with_vulture]
+      package = package.gsub(/\[.+\]/, "") # replace the brackets
+    end
+    package
   end
 
 
