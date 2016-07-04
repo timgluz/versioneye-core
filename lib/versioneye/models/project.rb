@@ -326,7 +326,6 @@ class Project < Versioneye::Model
     if new_project.s3_filename
       self.s3_filename  = new_project.s3_filename
     end
-    self.muted_svs  = new_project.muted_svs
     self.updated_at = Time.now
 
     self.overwrite_dependencies( new_project.projectdependencies )
