@@ -460,6 +460,7 @@ class ProjectService < Versioneye::Service
 
     if project.children.empty?
       project.sum_own!
+      reset_badge project
       return nil
     end
 
