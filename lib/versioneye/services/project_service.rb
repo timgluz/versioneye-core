@@ -365,6 +365,7 @@ class ProjectService < Versioneye::Service
 
   def self.insecure?( project )
     return true if insecure_single?( project )
+
     project.children.each do |child_project|
       return true if insecure_single?( child_project )
     end
@@ -375,10 +376,7 @@ class ProjectService < Versioneye::Service
   def self.insecure_single?( project )
     return false if project.language.eql?(Product::A_LANGUAGE_PHP) && !project.filename.eql?('composer.lock')
 
-    project.projectdependencies.each do |dep|
-      return true if !dep.sv_ids.to_a.empty?
-    end
-    return false
+    project.sv_count > 0
   end
 
 
@@ -473,6 +471,7 @@ class ProjectService < Versioneye::Service
     end
     update_numbers_for project, project, dep_hash
     project.save
+    reset_badge project
     project
   end
 
