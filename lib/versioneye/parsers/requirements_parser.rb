@@ -71,6 +71,9 @@ class RequirementsParser < CommonParser
     end
 
     product = Product.fetch_product Product::A_LANGUAGE_PYTHON, package
+    if product.nil? && package.match(/-/)
+      product = Product.fetch_product Product::A_LANGUAGE_PYTHON, package.gsub("-", "_")
+    end
     if product
       dependency.prod_key = product.prod_key
     else
