@@ -61,10 +61,12 @@ class GemfileParser < CommonParser
     end
     line          = line.delete("\n")
     line          = line.delete("\t")
+    line          = line.gsub(/require:.+\[.+\]/i, "")
+    line          = line.gsub(/:require.+\[.+\]/i, "")
     line_elements = fetch_line_elements( line )
     gem_name      = fetch_gem_name( line_elements )
 
-    return nil if gem_name.nil?
+    return nil if gem_name.to_s.empty?
 
     version    = fetch_version( line_elements )
     product    = fetch_product_for gem_name
@@ -207,7 +209,7 @@ class GemfileParser < CommonParser
     line_elements.each_with_index do |element, index|
       next if index == 0
       element = element.strip
-      if element.match(/^require:/) or element.match(/\A:require/)
+      if element.match(/^require:/) || element.match(/\A:require/) || element.match(/\Arequire/)
         next
       elsif element.match(/\A:group/) or element.match(/^group:/)
         next
