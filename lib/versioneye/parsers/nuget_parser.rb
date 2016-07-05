@@ -214,7 +214,8 @@ class NugetParser < CommonParser
       language: Product::A_LANGUAGE_CSHARP,
       url: url,
       name: doc.xpath('//package/metadata/id').text,
-      description: doc.xpath('//package/metadata/description').text
+      description: doc.xpath('//package/metadata/description').text,
+      license: doc.xpath('//package/metadata/licenseUrl').text
     })
     #project.save #should parse save new project?
     project
