@@ -43,16 +43,24 @@ class NugetParser < CommonParser
   end
 
   def parse(url)
-    #TODO: if parse.json then use smt else
     response_body = fetch_response_body(url)
     if response_body.nil?
       log.error "Failed to fetch Nuget file from #{url}"
       return nil
     end
 
-    doc = fetch_xml(response_body)
-    project = init_project(url, doc)
-    parse_dependencies(project, doc)
+    deps = []
+    if url =~ /project\.json$/i or url =~ /project\.json\.lock$/i
+      doc = from_json(response_body)
+      project = init_project_from_json(url, doc)
+      deps = parse_json_dependencies(doc)
+    else
+      doc = fetch_xml(response_body)
+      project = init_project(url, doc)
+      deps = parse_dependencies(doc)
+    end
+    
+    parse_dependency_versions(project, deps) #attaches parsed dependencies to project
     project
   end
 
@@ -141,8 +149,22 @@ class NugetParser < CommonParser
 
     {label: version}.merge version_data
   end
+  
+  def parse_json_dependencies(doc)
+    deps = []
+    doc[:dependencies].each_pair do |prod_name, version_label|
+      deps << Projectdependency.new({
+        language: Product::A_LANGUAGE_CSHARP,
+        name: prod_name.to_s,
+        prod_key: prod_name.to_s,
+        version_label: version_label,
+        version_requested: version_label
+      })
+    end
+    deps 
+  end
 
-  def parse_dependencies(project, doc)
+  def parse_dependencies(doc)
     deps = []
     deps_node = doc.xpath('//package/metadata/dependencies')
     #Nuget 2.0
@@ -152,8 +174,9 @@ class NugetParser < CommonParser
     #Nuget 1.0
     deps_node.xpath('dependency').each {|node| deps << parse_dependency(node)}
 
-    parse_dependency_versions(project, deps)
+    deps
   end
+
 
   def parse_group_dependencies(group, target)
     deps = []
@@ -168,7 +191,7 @@ class NugetParser < CommonParser
     prod_name = node.attr("id").to_s.strip
     version_label = node.attr("version").to_s.strip
 
-    dep = Projectdependency.new({
+    Projectdependency.new({
       language: Product::A_LANGUAGE_CSHARP,
       name: prod_name,
       prod_key: prod_name,
@@ -177,8 +200,6 @@ class NugetParser < CommonParser
       target: target,
       scope: scope
     })
-
-    dep
   end
 
   def parse_dependency_versions(project, deps)
@@ -219,5 +240,16 @@ class NugetParser < CommonParser
     })
     #project.save #should parse save new project?
     project
+  end
+
+  def init_project_from_json(url, doc)
+    project_name = url.to_s.split(/\//).last
+
+    Project.new({
+      project_type: Project::A_TYPE_NUGET,
+      language: Product::A_LANGUAGE_CSHARP,
+      url: url,
+      name: project_name
+    })
   end
 end
