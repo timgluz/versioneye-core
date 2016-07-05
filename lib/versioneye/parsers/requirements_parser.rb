@@ -229,7 +229,7 @@ class RequirementsParser < CommonParser
 
   def get_package_name requirement
     package = requirement[0].to_s.strip
-    if package.match(/.+\[(.+)]/i) # for example: prospector[with_pyroma,with_vulture]
+    if package.match(/.+\[(.+)\]/i) # for example: prospector[with_pyroma,with_vulture]
       package = package.gsub(/\[.+\]/, "") # replace the brackets
     end
     package
