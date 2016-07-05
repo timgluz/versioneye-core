@@ -91,7 +91,7 @@ class Organisation < Versioneye::Model
 
 
   def component_list team = nil, language = nil
-    return nil if projects.to_a.empty?
+    return {} if projects.to_a.empty?
 
     comps = {}
     projects.each do |project|
