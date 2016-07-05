@@ -44,4 +44,12 @@ class Team < Versioneye::Model
     false
   end
 
+  def is_member? user
+    return false if user.nil?
+    self.members.each do |member|
+      return true if member.user.ids.eql?(user.ids)
+    end
+    false
+  end
+
 end

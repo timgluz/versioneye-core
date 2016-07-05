@@ -58,4 +58,35 @@ describe Team do
     end
   end
 
+  describe "is_member?" do
+    it "is_member" do
+      user = UserFactory.create_new
+      orga = Organisation.new({:name => 'Orga'})
+      expect( orga.save ).to be_truthy
+      team = Team.new({:name => 'owner', :organisation_id => orga.ids })
+      expect(team.save).to be_truthy
+      expect(team.add_member(user)).to be_truthy
+      expect(Team.first.members.count).to eq(1)
+      expect(team.is_member?(user)).to be_truthy
+    end
+    it "is not a member" do
+      user = UserFactory.create_new
+      orga = Organisation.new({:name => 'Orga'})
+      expect( orga.save ).to be_truthy
+      team = Team.new({:name => 'owner', :organisation_id => orga.ids })
+      expect(team.save).to be_truthy
+      expect(team.add_member(user)).to be_truthy
+      expect(team.is_member?(nil)).to be_falsey
+    end
+    it "is not a member" do
+      user = UserFactory.create_new
+      orga = Organisation.new({:name => 'Orga'})
+      expect( orga.save ).to be_truthy
+      team = Team.new({:name => 'owner', :organisation_id => orga.ids })
+      expect(team.save).to be_truthy
+      expect(team.add_member(user)).to be_truthy
+      expect(team.is_member?( UserFactory.create_new )).to be_falsey
+    end
+  end
+
 end
