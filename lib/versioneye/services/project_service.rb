@@ -5,6 +5,9 @@ class ProjectService < Versioneye::Service
     return nil if filename.to_s.empty?
     return nil if filename.to_s.match(/\/node_modules\//) # Skip workirectory of NPM.
     return nil if filename.to_s.casecmp('CMakeLists.txt') == 0
+    return nil if filename.to_s.casecmp('robots.txt') == 0
+    return nil if filename.to_s.match(/\/robots.txt\z/i)
+    return nil if filename.to_s.match(/\/LICENSE.txt\z/i)
 
     trimmed_name = filename.split('?')[0]
     return Project::A_TYPE_RUBYGEMS  if (!(/Gemfile\z/ =~ trimmed_name).nil?)        or (!(/Gemfile.lock\z/  =~ trimmed_name).nil?)
