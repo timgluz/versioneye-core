@@ -71,7 +71,8 @@ class Github < Versioneye::Service
     n = 0
     return n if user_info[:github_token].nil?
 
-    user_info = get_json("#{Settings.instance.github_api_url}/user", user_info[:github_token])
+    github_api_url = Settings.instance.github_api_url.gsub(/\/\z/, "")
+    user_info = get_json("#{github_api_url}/user", user_info[:github_token])
     if user_info
       n = user_info[:public_repos].to_i + user_info[:total_private_repos].to_i
     end
@@ -79,26 +80,31 @@ class Github < Versioneye::Service
   end
 
   def self.user_repos user, url = nil, page = 1, per_page = 30
-    url = "#{Settings.instance.github_api_url}/user/repos?page=#{page}&per_page=#{per_page}&access_token=#{user.github_token}".gsub("//", "/") if url.nil?
+    github_api_url = Settings.instance.github_api_url.gsub(/\/\z/, "")
+    url = "#{github_api_url}/user/repos?page=#{page}&per_page=#{per_page}&access_token=#{user.github_token}" if url.nil?
     persist_repos(user, url, page, per_page)
   end
 
   def self.user_orga_repos user, orga_name, url = nil, page = 1, per_page = 30
-    url = "#{Settings.instance.github_api_url}/orgs/#{orga_name}/repos?access_token=#{user.github_token}&page=#{page}&per_page=#{per_page}".gsub("//", "/") if url.nil?
+    github_api_url = Settings.instance.github_api_url.gsub(/\/\z/, "")
+    url = "#{github_api_url}/orgs/#{orga_name}/repos?access_token=#{user.github_token}&page=#{page}&per_page=#{per_page}" if url.nil?
     persist_repos(user, url, page, per_page)
   end
 
   def self.repo_info(repo_fullname, token, raw = false, updated_since = nil)
-    get_json("#{Settings.instance.github_api_url}/repos/#{repo_fullname}", token, raw, updated_since)
+    github_api_url = Settings.instance.github_api_url.gsub(/\/\z/, "")
+    get_json("#{github_api_url}/repos/#{repo_fullname}", token, raw, updated_since)
   end
 
   def self.repo_tags(repository, token)
-    get_json("#{Settings.instance.github_api_url}/repos/#{repository}/tags", token)
+    github_api_url = Settings.instance.github_api_url.gsub(/\/\z/, "")
+    get_json("#{github_api_url}/repos/#{repository}/tags", token)
   end
 
   def self.repo_tags_all(repository, token)
     tags = []
-    url = "#{Settings.instance.github_api_url}/repos/#{repository}/tags".gsub("//", "/")
+    github_api_url = Settings.instance.github_api_url.gsub(/\/\z/, "")
+    url = "#{github_api_url}/repos/#{repository}/tags"
     begin
       request_headers = build_request_headers token
       response = get(url, headers: request_headers)
@@ -215,7 +221,8 @@ class Github < Versioneye::Service
 
   def self.repo_branches repo_name, token
     branches = []
-    url = "#{Settings.instance.github_api_url}/repos/#{repo_name}/branches".gsub("//", "/")
+    github_api_url = Settings.instance.github_api_url.gsub(/\/\z/, "")
+    url = "#{github_api_url}/repos/#{repo_name}/branches"
     begin
       request_headers = build_request_headers token
       response = get(url, headers: request_headers)
@@ -233,7 +240,8 @@ class Github < Versioneye::Service
   end
 
   def self.repo_branch_info repo_name, branch = "master", token = nil
-    url = "#{Settings.instance.github_api_url}/repos/#{repo_name}/branches/#{branch}".gsub("//", "/")
+    github_api_url = Settings.instance.github_api_url.gsub(/\/\z/, "")
+    url = "#{github_api_url}/repos/#{repo_name}/branches/#{branch}"
     get_json(url, token)
   end
 
@@ -266,7 +274,8 @@ class Github < Versioneye::Service
 
   # TODO: add tests
   def self.project_file_info(git_project, filename, sha, token)
-    url   = "#{Settings.instance.github_api_url}/repos/#{git_project}/git/trees/#{sha}?recursive=1".gsub("//", "/")
+    github_api_url = Settings.instance.github_api_url.gsub(/\/\z/, "")
+    url   = "#{github_api_url}/repos/#{git_project}/git/trees/#{sha}?recursive=1"
     tree = get_json(url, token)
     if tree.nil? || !tree.has_key?(:tree)
       log.error "No file tree for #{url}"
@@ -290,7 +299,8 @@ class Github < Versioneye::Service
 
   def self.repo_branch_tree(repo_name, token, branch_sha, recursive = false)
     rec_val = recursive ? 1 : 0
-    url = "#{Settings.instance.github_api_url}/repos/#{repo_name}/git/trees/#{branch_sha}?access_token=#{token}&recursive=#{rec_val}".gsub("//", "/")
+    github_api_url = Settings.instance.github_api_url.gsub(/\/\z/, "")
+    url = "#{github_api_url}/repos/#{repo_name}/git/trees/#{branch_sha}?access_token=#{token}&recursive=#{rec_val}"
     response = get(url, headers: A_DEFAULT_HEADERS )
     if response.code != 200
       msg = "Can't fetch repo tree for `#{repo_name}` from #{url}: #{response.code} #{response.body}"
@@ -366,7 +376,8 @@ class Github < Versioneye::Service
   end
 
   def self.orga_names( github_token )
-    url = "#{Settings.instance.github_api_url}/user/orgs?access_token=#{github_token}".gsub("//", "/")
+    github_api_url = Settings.instance.github_api_url.gsub(/\/\z/, "")
+    url = "#{github_api_url}/user/orgs?access_token=#{github_token}"
     response = get(url, :headers => A_DEFAULT_HEADERS )
     organisations = catch_github_exception JSON.parse(response.body, symbolize_names: true )
     names = Array.new
@@ -381,7 +392,8 @@ class Github < Versioneye::Service
   end
 
   def self.private_repo?( github_token, name )
-    url = "#{Settings.instance.github_api_url}/repos/#{name}?access_token=#{github_token}".gsub("//", "/")
+    github_api_url = Settings.instance.github_api_url.gsub(/\/\z/, "")
+    url = "#{github_api_url}/repos/#{name}?access_token=#{github_token}"
     response = get(url, :headers => A_DEFAULT_HEADERS )
     repo = catch_github_exception JSON.parse(response.body)
     return repo['private'] unless repo.nil? and !repo.is_a?(Hash)
@@ -393,7 +405,8 @@ class Github < Versioneye::Service
   end
 
   def self.repo_sha(repository, token)
-    url = "#{Settings.instance.github_api_url}/repos/#{repository}/git/refs/heads".gsub("//", "/")
+    github_api_url = Settings.instance.github_api_url.gsub(/\/\z/, "")
+    url = "#{github_api_url}/repos/#{repository}/git/refs/heads"
     heads = get_json(url, token)
 
     heads.to_a.each do |head|
