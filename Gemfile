@@ -1,5 +1,7 @@
 source "http://rubygems.org"
 
+gemspec
+
 gem 'bundler'            , '~> 1.12.5'
 gem 'naturalsorter'      , '~> 3.0.14'
 gem 'dalli'              , '~> 2.7.0'

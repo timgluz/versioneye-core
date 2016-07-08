@@ -530,7 +530,7 @@ Gem::Specification.new do |s|
   ]
   s.homepage = "http://github.com/versioneye/versioneye-core"
   s.licenses = ["MIT"]
-  s.rubygems_version = "2.5.1"
+  s.rubygems_version = "2.4.5"
   s.summary = "Models & Services for VersionEye"
 
   if s.respond_to? :specification_version then
@@ -540,7 +540,6 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<bundler>, ["~> 1.12.5"])
       s.add_runtime_dependency(%q<naturalsorter>, ["~> 3.0.14"])
       s.add_runtime_dependency(%q<dalli>, ["~> 2.7.0"])
-      s.add_runtime_dependency(%q<kgio>, ["~> 2.10.0"])
       s.add_runtime_dependency(%q<oauth>, ["~> 0.5.0"])
       s.add_runtime_dependency(%q<aws-sdk>, ["~> 2.3.0"])
       s.add_runtime_dependency(%q<stripe>, ["~> 1.44.0"])
@@ -564,7 +563,6 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<bundler>, ["~> 1.12.5"])
       s.add_dependency(%q<naturalsorter>, ["~> 3.0.14"])
       s.add_dependency(%q<dalli>, ["~> 2.7.0"])
-      s.add_dependency(%q<kgio>, ["~> 2.10.0"])
       s.add_dependency(%q<oauth>, ["~> 0.5.0"])
       s.add_dependency(%q<aws-sdk>, ["~> 2.3.0"])
       s.add_dependency(%q<stripe>, ["~> 1.44.0"])
@@ -589,7 +587,6 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<bundler>, ["~> 1.12.5"])
     s.add_dependency(%q<naturalsorter>, ["~> 3.0.14"])
     s.add_dependency(%q<dalli>, ["~> 2.7.0"])
-    s.add_dependency(%q<kgio>, ["~> 2.10.0"])
     s.add_dependency(%q<oauth>, ["~> 0.5.0"])
     s.add_dependency(%q<aws-sdk>, ["~> 2.3.0"])
     s.add_dependency(%q<stripe>, ["~> 1.44.0"])
