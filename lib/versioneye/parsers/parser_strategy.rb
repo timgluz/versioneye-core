@@ -68,6 +68,13 @@ class ParserStrategy
       when Project::A_TYPE_BIICODE
         return BiicodeParser.new
 
+      when Project::A_TYPE_NUGET
+        if url.match(/project\.json$/i)
+          return NugetJsonParser.new
+        else
+          return NugetParser.new
+        end
+
       else
         nil
 
