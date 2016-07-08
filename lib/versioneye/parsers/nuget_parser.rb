@@ -80,18 +80,6 @@ class NugetParser < CommonParser
     version_label.to_s.gsub(/\s*/, "").strip
   end
 
-
-  def parse_requested_version( version_label, dependency, product )
-    version_label = cleanup_version( version_label )
-    version_data  = parse_version_data( version_label, product )
-
-    dependency.version_label     = version_data[:label]
-    dependency.version_requested = version_data[:version]
-    dependency.comperator        = version_data[:comperator]
-    dependency
-  end
-
-
   def parse_version_data(version_label, product)
     version = cleanup_version(version_label)
 
