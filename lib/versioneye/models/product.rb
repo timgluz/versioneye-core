@@ -19,6 +19,7 @@ class Product < Versioneye::Model
   field :dist_tags_latest, type: String
   field :sha1         , type: String
   field :sha256       , type: String
+  field :sha512       , type: String
   field :md5          , type: String
   field :tags         , type: Array  # Array of keywords
 
