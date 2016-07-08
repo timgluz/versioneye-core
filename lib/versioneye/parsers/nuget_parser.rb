@@ -1,84 +1,95 @@
 require 'versioneye/parsers/common_parser'
 
-#TODO: add Project.json parser with detection to separate from NodeJS
 class NugetParser < CommonParser
+
   attr_reader :rules
 
   def initialize
-    #ATOMIC RULES
-    numeric = '\\d+'
-    ident = "[\\w-]" #identificator aka textual value
-    prerelease_info = "\\-(?<prerelease>#{ident}[\\.#{ident}]*)" #matches release info: -alpha.1
-    build_info = "\\+(?<build>#{ident}[\\.#{ident}]*)" #matches build info
-    version = "(?<version>(#{numeric})(\\.(#{numeric})(\\.(#{numeric}))?)?)"
-    semver = "#{version}(#{prerelease_info})?(#{build_info})?"
+    # ATOMIC RULES
+    numeric         = '\\d+'
+    ident           = "[\\w-]" # identificator aka textual value
+    prerelease_info = "\\-(?<prerelease>#{ident}[\\.#{ident}]*)" # matches release info: -alpha.1
+    build_info      = "\\+(?<build>#{ident}[\\.#{ident}]*)"      # matches build info
+    version         = "(?<version>(#{numeric})(\\.(#{numeric})(\\.(#{numeric}))?)?)"
+    semver          = "#{version}(#{prerelease_info})?(#{build_info})?"
 
-    empty_string  = "^\\s*$"                      # ""        | current
-    less_equal    = "^\\(,#{semver}\\]$"          # (,1.0]    | x <= 1.0
-    less_than     = "^\\(,#{semver}\\)$"          # (,1.0)    | x < 1.0
-    exact_match   = "^\\[#{semver},{0,1}\\]$"     # [1.0]     | x == 1.0
-    greater_than  = "^\\(#{semver},\\)$"          # (1.0,)    | 1.0 < x
+    empty_string    = "^\\s*$"                    # ""        | current
+    less_equal      = "^\\(,#{semver}\\]$"        # (,1.0]    | x <= 1.0
+    less_than       = "^\\(,#{semver}\\)$"        # (,1.0)    | x < 1.0
+    exact_match     = "^\\[#{semver},{0,1}\\]$"   # [1.0]     | x == 1.0
+    greater_than    = "^\\(#{semver},\\)$"        # (1.0,)    | 1.0 < x
     greater_eq_than = "^#{semver}$"               # 1.0       | 1.0 <= x
 
     gt_range_lt   = "^\\((?<start>#{semver}),(?<end>#{semver})\\)$" # (1.0,2.0) | 1.0 < x < 2.0
     gte_range_lt  = "^\\[(?<start>#{semver}),(?<end>#{semver})\\)$" # [1.0,2.0) | 1.0 <= x < 2.0
-    gt_range_lte  = "^\\((?<start>#{semver}),(?<end>#{semver})\\]$" # (1.0,2.0] | 1.0 < x <= 2.0 
+    gt_range_lte  = "^\\((?<start>#{semver}),(?<end>#{semver})\\]$" # (1.0,2.0] | 1.0 < x <= 2.0
     gte_range_lte = "^\\[(?<start>#{semver}),(?<end>#{semver})\\]$" # [1.0,2.0] | 1.0 <= x <= 2.0
 
-    #NB! before trying to match rules, be sure that string has no spaces/tabs 
+    # NB! before trying to match rules, be sure that string has no spaces/tabs
     @rules = {
-      version:       Regexp.new(version, Regexp::EXTENDED),
-      semver:        Regexp.new(semver, Regexp::EXTENDED),
-      empty:         Regexp.new(empty_string, Regexp::EXTENDED),
-      less_than:     Regexp.new(less_than, Regexp::EXTENDED),
-      less_equal:    Regexp.new(less_equal, Regexp::EXTENDED), 
-      exact:         Regexp.new(exact_match, Regexp::EXTENDED),
-      greater_than:  Regexp.new(greater_than, Regexp::EXTENDED),
+      version:         Regexp.new(version,         Regexp::EXTENDED),
+      semver:          Regexp.new(semver,          Regexp::EXTENDED),
+      empty:           Regexp.new(empty_string,    Regexp::EXTENDED),
+      less_than:       Regexp.new(less_than,       Regexp::EXTENDED),
+      less_equal:      Regexp.new(less_equal,      Regexp::EXTENDED),
+      exact:           Regexp.new(exact_match,     Regexp::EXTENDED),
+      greater_than:    Regexp.new(greater_than,    Regexp::EXTENDED),
       greater_eq_than: Regexp.new(greater_eq_than, Regexp::EXTENDED),
-      gt_range_lt:   Regexp.new(gt_range_lt, Regexp::EXTENDED),
-      gte_range_lt:  Regexp.new(gte_range_lt, Regexp::EXTENDED),
-      gt_range_lte:  Regexp.new(gt_range_lte, Regexp::EXTENDED),
-      gte_range_lte: Regexp.new(gte_range_lte, Regexp::EXTENDED)
+      gt_range_lt:     Regexp.new(gt_range_lt,     Regexp::EXTENDED),
+      gte_range_lt:    Regexp.new(gte_range_lt,    Regexp::EXTENDED),
+      gt_range_lte:    Regexp.new(gt_range_lte,    Regexp::EXTENDED),
+      gte_range_lte:   Regexp.new(gte_range_lte,   Regexp::EXTENDED)
     }
   end
 
-  def parse(url)
+
+  def parse( url )
     response_body = fetch_response_body(url)
     if response_body.nil?
       log.error "Failed to fetch Nuget file from #{url}"
       return nil
     end
 
+    parse_content( response_body, url )
+  end
+
+
+  def parse_content( response_body, url )
     deps = []
     if url =~ /project\.json$/i or url =~ /project\.json\.lock$/i
-      doc = from_json(response_body)
-      project = init_project_from_json(url, doc)
-      deps = parse_json_dependencies(doc)
+      doc = from_json( response_body )
+      project = init_project_from_json( url, doc )
+      deps = parse_json_dependencies( doc )
     else
-      doc = fetch_xml(response_body)
-      project = init_project(url, doc)
-      deps = parse_dependencies(doc)
+      doc = fetch_xml( response_body )
+      project = init_project( url, doc )
+      deps = parse_dependencies( doc )
     end
-    
+
     parse_dependency_versions(project, deps) #attaches parsed dependencies to project
     project
+  rescue => e
+    log.error "ERROR in parse_content(#{response_body}) -> #{e.message}"
+    log.error e.backtrace.join("\n")
+    nil
   end
+
 
   def cleanup_version(version_label)
     version_label.to_s.gsub(/\s*/, "").strip
   end
 
-  def parse_requested_version(version_label, dependency, product)
-    version_label = cleanup_version(version_label)
-    version_data = parse_version_data(version_label, product)
 
-    dependency.update_attributes({
-      version_label: version_data[:label],
-      version_requested: version_data[:version],
-      comperator: version_data[:comperator]
-    })
+  def parse_requested_version( version_label, dependency, product )
+    version_label = cleanup_version( version_label )
+    version_data  = parse_version_data( version_label, product )
+
+    dependency.version_label     = version_data[:label]
+    dependency.version_requested = version_data[:version]
+    dependency.comperator        = version_data[:comperator]
     dependency
   end
+
 
   def parse_version_data(version_label, product)
     version = cleanup_version(version_label)
@@ -149,7 +160,8 @@ class NugetParser < CommonParser
 
     {label: version}.merge version_data
   end
-  
+
+
   def parse_json_dependencies(doc)
     deps = []
     doc[:dependencies].each_pair do |prod_name, version_label|
@@ -161,8 +173,9 @@ class NugetParser < CommonParser
         version_requested: version_label
       })
     end
-    deps 
+    deps
   end
+
 
   def parse_dependencies(doc)
     deps = []
@@ -187,6 +200,7 @@ class NugetParser < CommonParser
     deps
   end
 
+
   def parse_dependency(node, target = nil, scope = nil)
     prod_name = node.attr("id").to_s.strip
     version_label = node.attr("version").to_s.strip
@@ -202,11 +216,13 @@ class NugetParser < CommonParser
     })
   end
 
+
   def parse_dependency_versions(project, deps)
     parsed_deps = []
     deps.each {|dep| parsed_deps << parse_dependency_version(project, dep)}
     parsed_deps
   end
+
 
   def parse_dependency_version(project, dependency)
     product = Product.fetch_product(dependency[:language], dependency[:prod_key])
@@ -229,6 +245,7 @@ class NugetParser < CommonParser
     project
   end
 
+
   def init_project(url, doc)
     project = Project.new({
       project_type: Project::A_TYPE_NUGET,
@@ -242,6 +259,7 @@ class NugetParser < CommonParser
     project
   end
 
+
   def init_project_from_json(url, doc)
     project_name = url.to_s.split(/\//).last
 
@@ -252,4 +270,5 @@ class NugetParser < CommonParser
       name: project_name
     })
   end
+
 end
