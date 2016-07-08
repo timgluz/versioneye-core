@@ -8,7 +8,7 @@ class Version < Versioneye::Model
   field :downloads      , type: Integer
   field :pom            , type: String # maven specific
   field :tag            , type: String # biicode specific - git tag string
-  field :status         , type: String # biicode specific - [STABLE, DEV]
+  field :status         , type: String # Userd in biitcode & Nuget - [STABLE, DEV, PRERELEASE]
   field :released_at    , type: DateTime, default: DateTime.now
   field :released_string, type: String
   field :sv_ids         , type: Array, default: []  # SecurityVulnerability IDs
