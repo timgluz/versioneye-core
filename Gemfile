@@ -3,6 +3,9 @@ source "http://rubygems.org"
 gem 'bundler'            , '~> 1.12.5'
 gem 'naturalsorter'      , '~> 3.0.14'
 gem 'dalli'              , '~> 2.7.0'
+platforms :ruby do
+  gem 'kgio'             , '~> 2.10.0'   # 20% performance boost for dalli
+end
 gem 'oauth'              , '~> 0.5.0'
 gem 'aws-sdk'            , '~> 2.3.0'
 gem 'stripe'             , '~> 1.44.0'
@@ -26,10 +29,6 @@ gem 'net-ldap', '~> 0.14.0'
 
 group :development do
   gem 'jeweler', '~> 2.1.1'
-end
-
-group :production do
-  gem 'kgio', '~> 2.10.0'   # 20% performance boost for dalli
 end
 
 group :test do

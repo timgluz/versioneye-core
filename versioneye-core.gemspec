@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib"]
   s.authors = ["reiz"]
-  s.date = "2016-07-07"
+  s.date = "2016-07-08"
   s.description = "This project contains the Models and Services for VersionEye"
   s.email = "robert.reiz.81@gmail.com"
   s.extra_rdoc_files = [
@@ -524,7 +524,7 @@ Gem::Specification.new do |s|
     "versioneye-core.gemspec"
   ]
   s.homepage = "http://github.com/versioneye/versioneye-core"
-  s.licenses = ["private"]
+  s.licenses = ["MIT"]
   s.rubygems_version = "2.5.1"
   s.summary = "Models & Services for VersionEye"
 
