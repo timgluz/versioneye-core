@@ -35,6 +35,7 @@ class Dependency < Versioneye::Model
   field :artifact_id , type: String   # Maven specific
   field :version     , type: String   # version of the dependency. This is the unfiltered version string. It is not parsed yet.
   field :scope       , type: String
+  field :targetFramework, type: String # .NET & Nuget specific
 
   # known or unknown dependency.
   # If there is no product for dep_prod_key in our db then it's unknown
