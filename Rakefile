@@ -16,7 +16,7 @@ Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://guides.rubygems.org/specification-reference/ for more options
   gem.name = "versioneye-core"
   gem.homepage = "http://github.com/versioneye/versioneye-core"
-  gem.license = "private"
+  gem.license = "MIT"
   gem.summary = %Q{Models & Services for VersionEye}
   gem.description = %Q{This project contains the Models and Services for VersionEye}
   gem.email = "robert.reiz.81@gmail.com"
