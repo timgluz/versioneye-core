@@ -1,3 +1,4 @@
+$LOAD_PATH.push File.expand_path('../lib', __FILE__)
 require 'versioneye/version'
 
 Gem::Specification.new do |s|
