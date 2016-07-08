@@ -1,5 +1,6 @@
 require 'versioneye/log'
 require 'nokogiri'
+require 'json'
 
 class CommonParser
 
@@ -11,6 +12,16 @@ class CommonParser
     raise NotImplementedError, 'Implement me in subclass!'
   end
 
+  def from_json(json_doc)
+    doc = nil
+    begin
+      doc = JSON.parse(json_doc, {symbolize_names: true})
+    rescue
+      log.error "Failed to parse #{json_doc}"
+    end
+
+    doc
+  end
 =begin
 
   One of this bothe methods needs to be implemented in each subclass.
