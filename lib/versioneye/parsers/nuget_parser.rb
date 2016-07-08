@@ -57,16 +57,16 @@ class NugetParser < CommonParser
   def parse_content( response_body, url )
     deps = []
     if url =~ /project\.json$/i or url =~ /project\.json\.lock$/i
-      doc = from_json( response_body )
+      doc     = from_json( response_body )
       project = init_project_from_json( url, doc )
-      deps = parse_json_dependencies( doc )
+      deps    = parse_json_dependencies( doc )
     else
-      doc = fetch_xml( response_body )
+      doc     = fetch_xml( response_body )
       project = init_project( url, doc )
-      deps = parse_dependencies( doc )
+      deps    = parse_dependencies( doc )
     end
 
-    parse_dependency_versions(project, deps) #attaches parsed dependencies to project
+    parse_dependency_versions(project, deps) # attaches parsed dependencies to project
     project
   rescue => e
     log.error "ERROR in parse_content(#{response_body}) -> #{e.message}"
@@ -180,11 +180,11 @@ class NugetParser < CommonParser
   def parse_dependencies(doc)
     deps = []
     deps_node = doc.xpath('//package/metadata/dependencies')
-    #Nuget 2.0
+    # Nuget 2.0
     deps_node.xpath('group').each do |group|
       deps.concat parse_group_dependencies(group, group.attr('targetFramework'))
     end
-    #Nuget 1.0
+    # Nuget 1.0
     deps_node.xpath('dependency').each {|node| deps << parse_dependency(node)}
 
     deps
@@ -219,17 +219,17 @@ class NugetParser < CommonParser
 
   def parse_dependency_versions(project, deps)
     parsed_deps = []
-    deps.each {|dep| parsed_deps << parse_dependency_version(project, dep)}
+    deps.each { |dep| parsed_deps << parse_dependency_version( project, dep ) }
     parsed_deps
   end
 
 
-  def parse_dependency_version(project, dependency)
+  def parse_dependency_version( project, dependency )
     product = Product.fetch_product(dependency[:language], dependency[:prod_key])
     version_label = dependency[:version_label]
 
     if version_label.nil? || version_label.empty?
-      update_requested_with_current(dependency, product)
+      update_requested_with_current( dependency, product )
       return
     end
 
