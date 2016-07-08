@@ -54,6 +54,7 @@ class NugetParser < CommonParser
   end
 
 
+  #SPLIT INTO 2 parsers
   def parse_content( response_body, url )
     deps = []
     if url =~ /project\.json$/i or url =~ /project\.json\.lock$/i
@@ -218,9 +219,9 @@ class NugetParser < CommonParser
 
 
   def parse_dependency_versions(project, deps)
-    parsed_deps = []
-    deps.each { |dep| parsed_deps << parse_dependency_version( project, dep ) }
-    parsed_deps
+    return if deps.nil?
+
+    deps.each {|dep| parse_dependency_version( project, dep )}
   end
 
 
