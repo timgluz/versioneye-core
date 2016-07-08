@@ -15,6 +15,7 @@ class Version < Versioneye::Model
   field :tested_runtimes, type: String
   field :sha1           , type: String
   field :sha256         , type: String
+  field :sha512         , type: String
   field :md5            , type: String
   field :prefer_global  , type: Boolean, default: false
 
