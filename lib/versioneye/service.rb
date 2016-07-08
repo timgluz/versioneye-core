@@ -96,6 +96,7 @@ module Versioneye
     require 'versioneye/parsers/requirements_parser'
     require 'versioneye/parsers/scm_changelog_parser'
     require 'versioneye/parsers/nuget_parser'
+    require 'versioneye/parsers/paket_parser'
 
     require 'versioneye/updaters/update_strategy'
     require 'versioneye/updaters/common_updater'
