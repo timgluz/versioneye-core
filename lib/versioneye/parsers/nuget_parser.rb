@@ -42,7 +42,6 @@ class NugetParser < CommonParser
     }
   end
 
-
   def parse( url )
     response_body = fetch_response_body(url)
     if response_body.nil?
@@ -53,19 +52,12 @@ class NugetParser < CommonParser
     parse_content( response_body, url )
   end
 
-
-  #SPLIT INTO 2 parsers
   def parse_content( response_body, url )
     deps = []
-    if url =~ /project\.json$/i or url =~ /project\.json\.lock$/i
-      doc     = from_json( response_body )
-      project = init_project_from_json( url, doc )
-      deps    = parse_json_dependencies( doc )
-    else
-      doc     = fetch_xml( response_body )
-      project = init_project( url, doc )
-      deps    = parse_dependencies( doc )
-    end
+    
+    doc     = fetch_xml( response_body )
+    project = init_project( url, doc )
+    deps    = parse_dependencies( doc )
 
     parse_dependency_versions(project, deps) # attaches parsed dependencies to project
     project
@@ -150,22 +142,6 @@ class NugetParser < CommonParser
     {label: version}.merge version_data
   end
 
-
-  def parse_json_dependencies(doc)
-    deps = []
-    doc[:dependencies].each_pair do |prod_name, version_label|
-      deps << Projectdependency.new({
-        language: Product::A_LANGUAGE_CSHARP,
-        name: prod_name.to_s,
-        prod_key: prod_name.to_s,
-        version_label: version_label,
-        version_requested: version_label
-      })
-    end
-    deps
-  end
-
-
   def parse_dependencies(doc)
     deps = []
     deps_node = doc.xpath('//package/metadata/dependencies')
@@ -248,16 +224,5 @@ class NugetParser < CommonParser
     project
   end
 
-
-  def init_project_from_json(url, doc)
-    project_name = url.to_s.split(/\//).last
-
-    Project.new({
-      project_type: Project::A_TYPE_NUGET,
-      language: Product::A_LANGUAGE_CSHARP,
-      url: url,
-      name: project_name
-    })
-  end
 
 end
