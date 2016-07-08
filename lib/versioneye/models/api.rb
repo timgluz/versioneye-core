@@ -18,24 +18,27 @@ class Api < Versioneye::Model
                       length: {minimum: 20, maximum: 20},
                       uniqueness: true
 
-  def self.by_user(user)
+  def self.by_user( user )
     Api.where(user_id: user[:_id].to_s).first
   end
 
-  def self.create_new(user)
+  def self.create_new( user )
     new_api = Api.new(user_id: user[:_id].to_s)
     new_api.generate_api_key!
+    if user && user.plan
+      new_api.rate_limit = user.plan.api_rate_limit
+    end
     new_api.save
     new_api
   end
 
-  def self.generate_api_key(length = 20)
+  def self.generate_api_key( length = 20 )
     length = (length / 2.0).round
     length = 1 if length < 1
     SecureRandom.hex(length)
   end
 
-  def generate_api_key!(length =  20)
+  def generate_api_key!( length =  20 )
     self.api_key = Api.generate_api_key(length)
   end
 

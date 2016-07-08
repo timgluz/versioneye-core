@@ -12,6 +12,20 @@ describe Api do
       expect( api.api_key ).to_not be_nil
     end
 
+    it "creates a new api instance with higher rate limit" do
+      Plan.create_defaults
+      medium_plan = Plan.medium
+      user = UserFactory.create_new
+      user.plan = medium_plan
+      expect( user.save ).to be_truthy
+      api = Api.create_new(user)
+      expect( api ).to_not be_nil
+      expect( api.user_id ).to eq(user.id.to_s)
+      expect( api.api_key ).to_not be_nil
+      expect( api.rate_limit ).to eq(medium_plan.api_rate_limit)
+      expect( api.rate_limit ).to_not eq(50)
+    end
+
   end
 
   describe "generate_api_key" do

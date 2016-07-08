@@ -18,8 +18,8 @@ describe User do
   end
 
   describe "api" do
-    it "returns nil because no api key" do
-      expect( github_user.api ).to be_nil
+    it "returns an api key" do
+      expect( github_user.api ).to_not be_nil
     end
     it "returns the api" do
       api = Api.find_or_initialize_by(user_id: github_user.ids)

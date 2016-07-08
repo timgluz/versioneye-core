@@ -285,7 +285,9 @@ class User < Versioneye::Model
   end
 
   def api
-    Api.by_user self
+    api = Api.where( user_id: self.ids ).first
+    api = Api.create_new( self ) if api.nil?
+    api
   end
 
   def self.username_valid?(username)
