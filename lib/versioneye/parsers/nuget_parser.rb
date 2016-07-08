@@ -234,7 +234,7 @@ class NugetParser < CommonParser
     end
 
     if product
-      dependency[:version] = product[:version]
+      dependency[:version_current] = product[:version]
     else
       dependency.comperator = "="
       project.unknown_number += 1
