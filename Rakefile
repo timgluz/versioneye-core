@@ -27,8 +27,9 @@ end
 task :default => :test
 
 require 'rdoc/task'
+require 'versioneye/version'
 Rake::RDocTask.new do |rdoc|
-  version = File.exist?('VERSION') ? File.read('VERSION') : ""
+  version = Versioneye::VERSION
 
   rdoc.rdoc_dir = 'rdoc'
   rdoc.title = "versioneye-core #{version}"
