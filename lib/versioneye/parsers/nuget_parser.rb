@@ -54,7 +54,7 @@ class NugetParser < CommonParser
 
   def parse_content( response_body, url )
     deps = []
-    
+
     doc     = fetch_xml( response_body )
     project = init_project( url, doc )
     deps    = parse_dependencies( doc )
