@@ -291,12 +291,18 @@ class Product < Versioneye::Model
     return A_LANGUAGE_TYPESCRIPT   if language.match(/\ATypeScript/i)
     return A_LANGUAGE_LIVESCRIPT   if language.match(/\ALiveScript/i)
     return A_LANGUAGE_HTML         if language.match(/\Ahtml/i)
+    return A_LANGUAGE_CSHARP       if language.match(/\Acsharp/i)
     return language.capitalize
   end
 
   def language_esc lang = nil
     lang = self.language if lang.nil?
     Product.encode_language lang
+  end
+
+  def language_label
+    return 'C#' if self.language.to_s.eql?( A_LANGUAGE_CSHARP )
+    return self.language
   end
 
   ########## ELSE #############
