@@ -4,7 +4,7 @@ source "http://rubygems.org"
 gemspec
 
 # 20% performance boost for dalli
-gem 'kgio'               , '~> 2.10.0', platforms: :ruby
+gem 'kgio', '~> 2.10.0', platforms: :ruby
 
 group :test do
   gem 'rack-test'       , '0.6.3'
