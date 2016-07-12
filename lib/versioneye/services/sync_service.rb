@@ -65,11 +65,17 @@ class SyncService < Versioneye::Service
   end
 
 
-  def self.sync_projectdependency dependency
+  def self.sync_projectdependency dependency, quicky = true
     prod_key = dependency.possible_prod_key
     language = dependency.language
 
-    sync_product language, prod_key, false
+    if quicky
+      sync_version  language, prod_key
+      sync_version  language, prod_key, dependency.version_requested
+      sync_security language, prod_key
+    else
+      sync_product language, prod_key, false
+    end
 
     product = Product.fetch_product( dependency.language, prod_key )
     return nil if product.nil?
@@ -85,11 +91,17 @@ class SyncService < Versioneye::Service
   end
 
 
-  def self.sync_projectdependency_bower dependency, lang_prod_keys = []
+  def self.sync_projectdependency_bower dependency, quicky = true
     key      = dependency.name
     language = 'Bower'
 
-    sync_product language, key, false
+    if quicky
+      sync_version  language, key
+      sync_version  language, key, dependency.version_requested
+      sync_security language, key
+    else
+      sync_product language, key, false
+    end
 
     product = Product.fetch_bower(key)
     return nil if product.nil?
@@ -131,8 +143,7 @@ class SyncService < Versioneye::Service
     json[:results].each do |svjson|
       update_svobject( product, svjson )
     end
-    # TODO Get blog sha for component
-    # TODO Send it to X-Ray.
+
     log.info "synced security infos for #{language}:#{prod_key}"
   end
 
