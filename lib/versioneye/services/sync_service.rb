@@ -36,8 +36,16 @@ class SyncService < Versioneye::Service
   def self.sync_project project
     sync_status = SyncStatus.find_or_create_by( :object_type => 'Project', :object_id => project.ids )
     sync_status.update_attribute(:status, 'running')
+
     sync_projectdependencies project.unknown_dependencies, false
     sync_projectdependencies project.known_dependencies, true
+
+    log.info "sync lock true ... start reparse project"
+    project.update_attribute(:sync_lock, true)
+    ProjectUpdateService.update project, false
+    project.update_attribute(:sync_lock, false)
+    log.info "sync lock false ... sync done for project #{project.ids}"
+
     sync_status.update_attribute(:status, 'done')
   end
 
@@ -45,6 +53,7 @@ class SyncService < Versioneye::Service
   def self.sync_project_async project
     env = Settings.instance.environment
     return nil if !env.to_s.eql?("enterprise")
+    return nil if project.sync_lock == true
 
     project_id = project.id.to_s
     SyncProducer.new "project::#{project_id}"
@@ -57,14 +66,26 @@ class SyncService < Versioneye::Service
       lang_key = "#{dependency.language}::#{dependency.possible_prod_key}"
       next if lang_prod_keys.include?( lang_key )
 
+      update_sync_info dependency
+
       if dependency.project.project_type.to_s.eql?(Project::A_TYPE_BOWER)
         sync_projectdependency_bower dependency, quicky
       else
         sync_projectdependency dependency, quicky
       end
+
       lang_prod_keys << lang_key
     end
     log.info "-- sync done for projectdependencies --"
+  end
+
+
+  def self.update_sync_info dependency
+    sync_status = SyncStatus.find_or_create_by( :object_type => 'Project', :object_id => dependency.project.ids )
+    sync_status.update_attribute(:info, dependency.name)
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
 

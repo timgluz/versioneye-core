@@ -81,6 +81,8 @@ class Project < Versioneye::Model
   field :parsing_errors , type: Array, :default => []
   field :muted_svs      , type: Hash,  :default => {} # muted security vulnerabilities
 
+  field :sync_lock, type: Boolean, :default => false
+
   validates :name       , presence: true
 
   belongs_to :user

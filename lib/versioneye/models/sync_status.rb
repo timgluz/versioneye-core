@@ -6,6 +6,7 @@ class SyncStatus < Versioneye::Model
   field :object_type        , type: String
   field :object_id          , type: String
   field :status             , type: String
+  field :info               , type: String
 
   index({ object_type: 1, object_id: 1 }, { name: "obj_type_id_index", unique: true, drop_dups: true, background: true })
 
