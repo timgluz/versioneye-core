@@ -57,7 +57,7 @@ class SyncService < Versioneye::Service
       if dependency.project.project_type.to_s.eql?(Project::A_TYPE_BOWER)
         sync_projectdependency_bower dependency
       else
-        sync_projectdependency dependency, lang_prod_keys
+        sync_projectdependency dependency
       end
       lang_prod_keys << lang_key
     end
@@ -208,7 +208,7 @@ class SyncService < Versioneye::Service
   end
 
 
-  def self.sync_version language, prod_key, version
+  def self.sync_version language, prod_key, version = nil
     json = ProductClient.show language, prod_key, version
     return nil if json.nil?
 
