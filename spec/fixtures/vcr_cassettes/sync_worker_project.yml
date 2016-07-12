@@ -43,6 +43,55 @@ http_interactions:
   recorded_at: Thu, 03 Mar 2016 10:53:35 GMT
 - request:
     method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/phcnotifi?api_key=3958165e66dag2
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.6 (Ubuntu)
+      Date:
+      - Thu, 03 Mar 2016 11:00:33 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1746'
+      Connection:
+      - keep-alive
+      Etag:
+      - W/"9ac3f53bf69b02ba1577cefb7b4453ed"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 6a25bfff-f048-4caa-82c1-150ccaac149a
+      X-Runtime:
+      - '0.105707'
+    body:
+      encoding: UTF-8
+      string: '{"name":"phcnotifi","language":"ruby","prod_key":"phcnotifi","version":"0.2.5","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"GPL-3.0","description":"(Under
+        Development) PHC-Notifi with bootstrap styled norifications/form validations
+        for your ruby on rails app.","updated_at":"2016-03-03T10:47:45.803Z","released_at":"2016-03-03T00:00:00.000+00:00","dependencies":[{"name":"bootstrap-sass","dep_prod_key":"bootstrap-sass","version":"\u003e=
+        3.3.6, ~\u003e 3.3","parsed_version":"3.3.6","group_id":null,"artifact_id":null,"scope":"runtime"},{"name":"figaro","dep_prod_key":"figaro","version":"\u003e=
+        1.1.1, ~\u003e 1.1","parsed_version":"1.1.1","group_id":null,"artifact_id":null,"scope":"runtime"},{"name":"font-awesome-rails","dep_prod_key":"font-awesome-rails","version":"~\u003e
+        4.5","parsed_version":"4.5.0.1","group_id":null,"artifact_id":null,"scope":"runtime"},{"name":"jquery-rails","dep_prod_key":"jquery-rails","version":"\u003e=
+        4.0.5, ~\u003e 4.0","parsed_version":"4.1.0","group_id":null,"artifact_id":null,"scope":"runtime"},{"name":"rails","dep_prod_key":"rails","version":"\u003e=
+        4.2.5.2, ~\u003e 4.2","parsed_version":"4.2.5.2","group_id":null,"artifact_id":null,"scope":"runtime"},{"name":"sass-rails","dep_prod_key":"sass-rails","version":"\u003e=
+        5.0.4, ~\u003e 5.0","parsed_version":"5.0.4","group_id":null,"artifact_id":null,"scope":"runtime"}],"licenses":[{"name":"GPL-3.0","url":null}],"links":[{"name":"Documentation","link":"http://www.rubydoc.info/gems/phcnotifi/0.2.5"},{"name":"Homepage","link":"http://www.phcnetworks.net"},{"name":"Project","link":"https://rubygems.org/gems/phcnotifi"}],"archives":[{"name":"phcnotifi-0.2.5.gem","link":"https://rubygems.org/gems/phcnotifi-0.2.5.gem"}]}'
+    http_version:
+  recorded_at: Thu, 03 Mar 2016 10:53:35 GMT
+- request:
+    method: get
     uri: https://www.versioneye.com/api/v2/products/Ruby/phcnotifi?api_key=3958165e66dag2&prod_version=0.2.5
     body:
       encoding: US-ASCII
@@ -420,6 +469,53 @@ http_interactions:
 - request:
     method: get
     uri: https://www.versioneye.com/api/v2/products/Ruby/ronn?api_key=3958165e66dag2&prod_version=0.7.3
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.6 (Ubuntu)
+      Date:
+      - Thu, 03 Mar 2016 11:00:36 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1165'
+      Connection:
+      - keep-alive
+      Etag:
+      - W/"781db846d8fff0914f846ddc85967673"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - eff14684-838f-409b-ba2d-7ef174b1302c
+      X-Runtime:
+      - '0.095715'
+    body:
+      encoding: UTF-8
+      string: '{"name":"ronn","language":"ruby","prod_key":"ronn","version":"0.7.3","prod_type":"RubyGem","group_id":null,"artifact_id":null,"license_info":"unknown","description":"Builds
+        manuals","updated_at":"2016-03-03T07:31:28.285Z","released_at":"2010-06-24T05:00:00.000+00:00","dependencies":[{"name":"hpricot","dep_prod_key":"hpricot","version":"\u003e=
+        0.8.2","parsed_version":"0.8.6","group_id":null,"artifact_id":null,"scope":"runtime"},{"name":"mustache","dep_prod_key":"mustache","version":"\u003e=
+        0.7.0","parsed_version":"1.0.2","group_id":null,"artifact_id":null,"scope":"runtime"},{"name":"rdiscount","dep_prod_key":"rdiscount","version":"\u003e=
+        1.5.8","parsed_version":"2.1.8","group_id":null,"artifact_id":null,"scope":"runtime"}],"licenses":[],"links":[{"name":"Bug
+        Tracker","link":"http://github.com/rtomayko/ronn/issues"},{"name":"Homepage","link":"http://rtomayko.github.com/ronn"},{"name":"Project","link":"http://rubygems.org/gems/ronn"},{"name":"RubyGem
+        Page","link":"https://rubygems.org/gems/ronn"},{"name":"Source Code","link":"http://github.com/rtomayko/ronn"}],"archives":[{"name":"ronn-0.7.3.gem","link":"http://rubygems.org/gems/ronn-0.7.3.gem"}]}'
+    http_version:
+  recorded_at: Thu, 03 Mar 2016 10:53:38 GMT
+- request:
+    method: get
+    uri: https://www.versioneye.com/api/v2/products/Ruby/ronn?api_key=3958165e66dag2
     body:
       encoding: US-ASCII
       string: ''
