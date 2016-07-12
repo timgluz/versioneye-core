@@ -34,8 +34,11 @@ class SyncService < Versioneye::Service
 
 
   def self.sync_project project
+    sync_status = SyncStatus.find_or_create_by( :object_type => 'Project', :object_id => project.ids )
+    sync_status.update_attribute(:status, 'running')
     sync_projectdependencies project.unknown_dependencies, false
     sync_projectdependencies project.known_dependencies, true
+    sync_status.update_attribute(:status, 'done')
   end
 
 
