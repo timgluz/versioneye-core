@@ -51,29 +51,50 @@ class SyncService < Versioneye::Service
   def self.sync_projectdependencies dependencies
     lang_prod_keys = []
     dependencies.each do |dependency|
-      sync_projectdependency dependency, lang_prod_keys
+      lang_key = "#{dependency.language}::#{dependency.possible_prod_key}"
+      next if lang_prod_keys.include?( lang_key )
+
+      if dependency.project.project_type.to_s.eql?(Project::A_TYPE_BOWER)
+        sync_projectdependency_bower dependency
+      else
+        sync_projectdependency dependency, lang_prod_keys
+      end
+      lang_prod_keys << lang_key
     end
     log.info "-- sync done for projectdependencies --"
   end
 
 
-  def self.sync_projectdependency dependency, lang_prod_keys = []
+  def self.sync_projectdependency dependency
     prod_key = dependency.possible_prod_key
-    lang_key = "#{dependency.language}::#{prod_key}"
-    return nil if lang_prod_keys.include?(lang_key)
+    language = dependency.language
 
-    lang_prod_keys << lang_key
+    sync_product language, prod_key, false
 
-    is_bower_project = dependency.project && dependency.project.project_type.to_s.eql?(Project::A_TYPE_BOWER)
-    key      = is_bower_project ? dependency.name : prod_key
-    language = is_bower_project ? 'Bower' : dependency.language
-
-    sync_product language, key, false
-
-    product = is_bower_project ? Product.fetch_bower(key) : Product.fetch_product(dependency.language, prod_key)
+    product = Product.fetch_product( dependency.language, prod_key )
     return nil if product.nil?
 
     dependency.prod_key = prod_key
+    ProjectdependencyService.update_outdated!( dependency )
+    log.info dependency.to_s
+    true
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    nil
+  end
+
+
+  def self.sync_projectdependency_bower dependency, lang_prod_keys = []
+    key      = dependency.name
+    language = 'Bower'
+
+    sync_product language, key, false
+
+    product = Product.fetch_bower(key)
+    return nil if product.nil?
+
+    dependency.prod_key = dependency.possible_prod_key
     ProjectdependencyService.update_outdated!( dependency )
     log.info dependency.to_s
     true
