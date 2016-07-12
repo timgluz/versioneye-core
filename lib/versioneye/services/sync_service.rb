@@ -34,8 +34,8 @@ class SyncService < Versioneye::Service
 
 
   def self.sync_project project
-    sync_projectdependencies project.unknown_dependencies
-    sync_projectdependencies project.known_dependencies
+    sync_projectdependencies project.unknown_dependencies, false
+    sync_projectdependencies project.known_dependencies, true
   end
 
 
@@ -48,16 +48,16 @@ class SyncService < Versioneye::Service
   end
 
 
-  def self.sync_projectdependencies dependencies
+  def self.sync_projectdependencies dependencies, quicky = false
     lang_prod_keys = []
     dependencies.each do |dependency|
       lang_key = "#{dependency.language}::#{dependency.possible_prod_key}"
       next if lang_prod_keys.include?( lang_key )
 
       if dependency.project.project_type.to_s.eql?(Project::A_TYPE_BOWER)
-        sync_projectdependency_bower dependency
+        sync_projectdependency_bower dependency, quicky
       else
-        sync_projectdependency dependency
+        sync_projectdependency dependency, quicky
       end
       lang_prod_keys << lang_key
     end
