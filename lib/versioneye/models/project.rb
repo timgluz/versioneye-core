@@ -61,6 +61,7 @@ class Project < Versioneye::Model
   field :licenses_red    , type: Integer, :default => 0
   field :licenses_unknown, type: Integer, :default => 0
   field :sv_count        , type: Integer, :default => 0
+  field :child_count     , type: Integer, :default => 0
 
   # These are the numbers summed up from all children
   field :dep_number_sum      , type: Integer, :default => 0
