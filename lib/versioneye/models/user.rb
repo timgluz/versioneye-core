@@ -268,10 +268,11 @@ class User < Versioneye::Model
   end
 
   def self.authenticate_with_apikey(token)
-    user_api = Api.where(api_key: token).shift
-    return nil if user_api.nil?
+    api = Api.where(api_key: token).shift
+    return nil if api.nil?
+    return nil if api.user_id.nil?
 
-    user = User.find_by_id(user_api.user_id)
+    user = User.find_by_id( api.user_id )
     return nil if user.nil?
 
     user
