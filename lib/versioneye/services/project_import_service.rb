@@ -213,6 +213,7 @@ class ProjectImportService < Versioneye::Service
 
 
   # This is currently used by the VersionEye API project and the file upload in the Web UI.
+  # Check allowed_to_add_project? with current plan.
   def self.import_from_upload file, user = nil, api_created = false, orga_id = nil
     project_name = file['datafile'].original_filename
     project = ProjectParseService.project_from file
