@@ -1,8 +1,8 @@
 class ProjectImportService < Versioneye::Service
 
   A_ENV_ENTERPRISE = "enterprise"
-  A_TASK_RUNNING = 'running'
-  A_TASK_TTL     = 60 # 60 seconds = 1 minute
+  A_TASK_RUNNING   = 'running'
+  A_TASK_TTL       = 60 # 60 seconds = 1 minute
 
 
   def self.import_all_github user, pfs = ['Gemfile', 'package.json', 'pom.xml', 'bower.json', 'Podfile', 'build.gradle']
