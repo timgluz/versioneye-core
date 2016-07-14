@@ -38,6 +38,7 @@ class Receipt < Versioneye::Model
   embeds_many :receipt_lines
 
   belongs_to :user
+  belongs_to :organisation
   belongs_to :plan
 
   validates_presence_of :type   , :message => 'is mandatory!'

@@ -47,9 +47,6 @@ class User < Versioneye::Model
   field :stripe_token      , type: String
   field :stripe_customer_id, type: String
 
-  field :stripe_legacy_token      , type: String
-  field :stripe_legacy_customer_id, type: String
-
   field :languages, type: String
 
   # Contains the <language::prod_key> downcased pairs for the packages which user is maintainer for.
