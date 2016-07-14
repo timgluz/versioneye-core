@@ -54,10 +54,14 @@ class Api < Versioneye::Model
 
   def user
     User.find user_id
+  rescue => e
+    nil
   end
 
   def organisation
     Organisation.find organisation_id
+  rescue => e
+    nil
   end
 
   def calls_count
