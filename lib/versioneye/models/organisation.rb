@@ -89,10 +89,8 @@ class Organisation < Versioneye::Model
   end
 
   def team_by name
-    teams.each do |team|
-      return team if team.name.eql?(name)
-    end
-    nil
+    return nil if name.to_s.empty?
+    teams.where(:name => name).first
   end
 
   def unknown_license_deps
