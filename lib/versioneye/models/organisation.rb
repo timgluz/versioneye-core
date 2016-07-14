@@ -63,6 +63,14 @@ class Organisation < Versioneye::Model
     name
   end
 
+  def team_projects team_id
+    projects.parents.where(:team_ids => team_id, :temp => false)
+  end
+
+  def parent_projects
+    projects.parents.where(:temp => false)
+  end
+
   def owner_team
     teams.each do |team|
       return team if team.name.eql?(Team::A_OWNERS)
