@@ -120,10 +120,10 @@ class UserService < Versioneye::Service
 
       yield users
 
-      co = i * page
-      log_msg = "all_users_paged iteration: #{i} - users processed: #{co}"
-      p log_msg
-      log.info log_msg
+      # co = i * page
+      # log_msg = "all_users_paged iteration: #{i} - users processed: #{co}"
+      # p log_msg
+      # log.info log_msg
     end
   rescue => e
     log.error e.message
