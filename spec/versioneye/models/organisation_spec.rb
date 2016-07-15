@@ -196,6 +196,18 @@ describe Organisation do
   end
 
 
+  describe "api" do
+    it 'returns a new api' do
+      orga = Organisation.new({:name => 'Orga'})
+      expect( orga.save ).to be_truthy
+
+      api = orga.api
+      expect( api ).to_not be_nil
+      expect( orga.api.api_key ).to eq(api.api_key)
+    end
+  end
+
+
   describe "parent_projects" do
     it 'returns the parent projects' do
       user = UserFactory.create_new
