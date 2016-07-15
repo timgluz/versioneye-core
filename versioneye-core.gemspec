@@ -34,5 +34,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'etcd', '~> 0.3.0'
   s.add_runtime_dependency 'mongoid', '~> 5.1.0'
   s.add_runtime_dependency 'will_paginate_mongoid', '= 2.0.1'
-  s.add_runtime_dependency 'net-ldap', '~> 0.14.0'
+  s.add_runtime_dependency 'net-ldap', '~> 0.15.0'
 end
