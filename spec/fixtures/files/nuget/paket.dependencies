@@ -1,0 +1,28 @@
+source https://nuget.org/api/v2
+
+// NuGet packages
+nuget DotNetZip >= 1.9
+nuget SourceLink.Fake
+
+// Files from GitHub repositories
+github forki/Fs FsUnit.fs
+github fsharp/fsfoundation:gh-pages img/logo/fsharp.svg
+github forki/FsUnit:7623fc13439f0e60bd05c1ed3b5f6dcb937fe468 FsUnit.fs
+
+// Git deps
+git https://github.com/fsprojects/Paket.git
+git http://github.com/forki/AskMe.git 97ee5ae7074bdb414a3e5dd7d2f2d752547d0542
+git https://github.com/fsprojects/Paket2.git >= 1.0 // at least 1.0
+
+// Gist files
+gist Thorium/1972349 timestamp.fs
+
+// HTTP resources
+http http://www.fssnip.net/1n decrypt.fs
+
+group Test
+
+    source https://nuget.org/api/v2
+
+    nuget NUnit.Runners
+    nuget NUnit ~> 2.6.3

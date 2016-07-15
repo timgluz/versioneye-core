@@ -84,6 +84,7 @@ class CommonParser
     else
       dependency.version_requested = 'UNKNOWN'
     end
+    #dependency.version_current = dependency.version_requested #TODO: should it update current version too?
     dependency
   end
 

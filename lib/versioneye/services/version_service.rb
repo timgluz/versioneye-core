@@ -203,11 +203,11 @@ class VersionService < Versioneye::Service
     return get_newest_or_value(newest, value)
   end
 
-  #nuget allows to specify version by combining greater_than and smaller_than 
+  #nuget allows to specify version by combining greater_than and smaller_than
   def self.intersect_versions(versions1, versions2, range = true)
     all_versions = versions1.concat versions2
     common_version_labels = Set.new(versions1.map(&:version)) & Set.new(versions2.map(&:version))
-    common_versions = all_versions.keep_if do |ver| 
+    common_versions = all_versions.keep_if do |ver|
       result = false
       if common_version_labels.include? ver[:version]
         common_version_labels.delete ver[:versions]
@@ -215,7 +215,7 @@ class VersionService < Versioneye::Service
       end
       result
     end
-   
+
     return newest_version(common_versions) unless range #return only the latest version
     common_versions
   end
