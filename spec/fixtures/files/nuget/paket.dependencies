@@ -1,7 +1,6 @@
 source https://nuget.org/api/v2
 
 // NuGet packages
-nuget NUnit ~> 2.6.3
 nuget DotNetZip >= 1.9
 nuget SourceLink.Fake
 
@@ -26,4 +25,4 @@ group Test
     source https://nuget.org/api/v2
 
     nuget NUnit.Runners
-    nuget NUnit
+    nuget NUnit ~> 2.6.3

@@ -40,7 +40,7 @@ class PaketParser < CommonParser
   def init_project(url)
     Project.new({
       project_type: Project::A_TYPE_NUGET,
-      language: Project::A_LANGUAGE_CSHARP,
+      language: Product::A_LANGUAGE_CSHARP,
       name: "Paket Project",
       url: url
     })
@@ -135,23 +135,23 @@ class PaketParser < CommonParser
     project
   end
 
-  #TODO: finish
   def save_dependency(project, dep)
-    product = nil
+    product = Product.find_by(
+      language: Product::A_LANGUAGE_CSHARP,
+      prod_key: dep[:prod_key]
+    )
 
     version_label = dep[:version]
-    if version_label.to_s.empty?
+    if version_label.to_s.empty? and product
       dep[:version] = product.version
     end
-
-    dep_db = init_dependency(dep)
-
-    #TODO: finish
-    #parse_requested_version(version_label, dep_db, product)
+  
+    dep_db = init_dependency(dep) #TODO: should i moved to parse_line?
+    parse_requested_version(version_label, dep_db, product)
     
     project.out_number += 1 if dep_db.outdated?
     project.unknown_number += 1 if product.nil?
-    project.projectdependencies.push dep_db
+    project.projectdependencies << dep_db
 
     project
   end
@@ -167,17 +167,65 @@ class PaketParser < CommonParser
                 when /dev/i
                   Dependency::A_SCOPE_DEVELOPMENT
                 else
-                  dep[:group]
+                  nil
                 end
 
-    dep_db = ProjectDependency.new(
+    dep_db = Projectdependency.new(
       language: Product::A_LANGUAGE_CSHARP,
       name: dep[:prod_key],
       prod_key: dep[:prod_key],
-      version_label: dep[:version],
-      target: nil, #TODO: extract it from file
-      scope: dep_scope
+      scope: dep_scope,
+      version_label: dep[:version].to_s,
+      version_requested: dep[:version].to_s,
+      comperator: dep[:comperator]
+      #target: dep[:target], #TODO: fetch it from line or behind version
+      #source: dep[:source]  #TODO: marks where packet is hosted: nuget/github/gist/http
     )
+
+    dep_db
   end
 
+  def ignore_source?(dep_source)
+    ['git', 'gist', 'http'].include? dep_source.to_s.downcase
+  end
+
+  def parse_requested_version(version_label, dependency, product)
+    return dependency if product.nil?
+    return dependency if ignore_source?(dependency[:source]) #TODO: HOW TO HANDLE WITH GIT/GIST
+
+    if version_label.to_s.empty? 
+      return self.update_requested_with_current(dependency, product)
+    end
+
+    case dependency[:comperator]
+    when '*'
+      self.update_requested_with_current(dependency, product)
+    when '=', '=='
+      dependency[:comperator] = '=' #unify comperators to '='
+      return dependency
+    when '>'
+      newest_version = VersionService.greater_than(product.versions, version_label)
+      dependency.version_requested = newest_version.to_s
+    when '>='
+      newest_version = VersionService.greater_than_or_equal(product.versions, version_label)
+      dependency.version_requested = newest_version.to_s
+    when '<'
+      newest_version = VersionService.smaller_than(product.versions, version_label)
+      dependency.version_requested = newest_version.to_s
+    when '<='
+      newest_version = VersionService.smaller_than_or_equal(product.versions, version_label)
+      dependency.version_requested = newest_version.to_s
+    when '~>'
+      starter         = VersionService.version_approximately_greater_than_starter(version_label)
+      versions        = VersionService.versions_start_with(product.versions, starter)
+      highest_version = VersionService.newest_version_from(versions)
+      if highest_version
+        dependency.version_requested = highest_version.to_s
+      end
+    end
+
+    #TODO: how to handle http, git, gist
+    
+    dependency
+  end
 end
