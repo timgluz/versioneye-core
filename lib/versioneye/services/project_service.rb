@@ -41,7 +41,7 @@ class ProjectService < Versioneye::Service
 
 
   def self.index( user, filter = {}, sort = nil)
-    filter_options            = {:parent_id => nil}
+    filter_options            = {:parent_id => nil, :temp => false}
     filter_options[:team_ids] = filter[:team]       if filter[:team]     && filter[:team].to_s.casecmp('ALL') != 0
     filter_options[:language] = filter[:language]   if filter[:language] && filter[:language].to_s.casecmp('ALL') != 0
     filter_options[:version]  = filter[:version]    if filter[:version]  && filter[:version].to_s.casecmp('ALL') != 0
@@ -67,11 +67,11 @@ class ProjectService < Versioneye::Service
 
     case sort
     when 'out_dated'
-      Project.where( filter_options ).any_of({ :temp => false }, { :temp => nil } ).desc(:out_number_sum).asc(:name_downcase)
+      Project.where( filter_options ).desc(:out_number_sum).asc(:name_downcase)
     when 'license_violations'
-      Project.where( filter_options ).any_of({ :temp => false }, { :temp => nil } ).desc(:licenses_red_sum).asc(:name_downcase)
+      Project.where( filter_options ).desc(:licenses_red_sum).asc(:name_downcase)
     else
-      Project.where( filter_options ).any_of({ :temp => false }, { :temp => nil } ).asc(:name_downcase).desc(:licenses_red_sum)
+      Project.where( filter_options ).asc(:name_downcase).desc(:licenses_red_sum)
     end
   end
 

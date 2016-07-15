@@ -66,7 +66,7 @@ class ProjectUpdateService < Versioneye::Service
   end
 
 
-  def self.update_from_upload project, file, user = nil, api_created = false
+  def self.update_from_upload project, file, api_created = false
     return nil if project.nil?
 
     new_project = ProjectParseService.project_from file
