@@ -29,7 +29,7 @@ class PaketParser < CommonParser
       return nil
     end
 
-    body = self.fetch.response_body(url)
+    body = self.fetch_response_body(url)
     project = init_project(url)
     deps = parse_content(body)
     save_project_dependencies(project, deps)

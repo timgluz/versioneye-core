@@ -219,6 +219,8 @@ class GemfileParser < CommonParser
         next
       elsif element.match(/\A:platforms/) or element.match(/^platforms:/)
         next
+      elsif element.match(/\A:platform/) or element.match(/^platform:/)
+        next
       elsif element.match(/\A:engine/) or element.match(/^engine:/)
         next
       elsif element.match(/\A:engine_version/) or element.match(/^engine_version:/)

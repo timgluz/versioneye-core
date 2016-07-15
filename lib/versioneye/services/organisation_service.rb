@@ -15,6 +15,21 @@ class OrganisationService < Versioneye::Service
   end
 
 
+  def self.create_new_for user
+    orga_name = "#{user.username}_orga".downcase
+    orga_name = orga_name.gsub("@", "").gsub(" ", "_").gsub(".", "")
+    if !Organisation.where(:name => orga_name).first.nil?
+      random = create_random_value
+      orga_name = "#{orga_name}_#{random}"
+    end
+    create_new user, orga_name
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    nil
+  end
+
+
   def self.delete orga
     return false if orga.nil?
 
@@ -134,6 +149,17 @@ class OrganisationService < Versioneye::Service
     end
     orgas
   end
+
+
+  private
+
+
+    def self.create_random_value
+      chars = 'abcdefghijklmnopqrstuvwxyz0123456789'
+      value = ""
+      5.times { value << chars[rand(chars.size)] }
+      value
+    end
 
 
 end

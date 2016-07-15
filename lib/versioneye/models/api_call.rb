@@ -9,6 +9,7 @@ class ApiCall < Versioneye::Model
 
   field :api_key    , type: String
   field :user_id    , type: String
+  field :organisation_id, type: String
   field :project_id , type: String
   field :operation  , type: String
   field :fullpath   , type: String
@@ -32,6 +33,10 @@ class ApiCall < Versioneye::Model
 
   def project
     Project.find project_id
+  end
+
+  def organisation
+    Organisation.find organisation_id
   end
 
 end

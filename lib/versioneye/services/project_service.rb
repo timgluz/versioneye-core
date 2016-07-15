@@ -5,6 +5,11 @@ class ProjectService < Versioneye::Service
     return nil if filename.to_s.empty?
     return nil if filename.to_s.match(/\/node_modules\//) # Skip workirectory of NPM.
     return nil if filename.to_s.casecmp('CMakeLists.txt') == 0
+    return nil if filename.to_s.casecmp('robots.txt') == 0
+    return nil if filename.to_s.match(/robots.txt\z/i)
+    return nil if filename.to_s.match(/LICENSE.txt\z/i)
+    return nil if filename.to_s.match(/README.txt\z/i)
+    return nil if filename.to_s.match(/content.txt\z/i)
 
     trimmed_name = filename.split('?')[0]
     return Project::A_TYPE_RUBYGEMS  if (!(/Gemfile\z/ =~ trimmed_name).nil?)        or (!(/Gemfile.lock\z/  =~ trimmed_name).nil?)
@@ -36,7 +41,7 @@ class ProjectService < Versioneye::Service
 
 
   def self.index( user, filter = {}, sort = nil)
-    filter_options            = {:parent_id => nil}
+    filter_options            = {:parent_id => nil, :temp => false}
     filter_options[:team_ids] = filter[:team]       if filter[:team]     && filter[:team].to_s.casecmp('ALL') != 0
     filter_options[:language] = filter[:language]   if filter[:language] && filter[:language].to_s.casecmp('ALL') != 0
     filter_options[:version]  = filter[:version]    if filter[:version]  && filter[:version].to_s.casecmp('ALL') != 0
@@ -62,11 +67,11 @@ class ProjectService < Versioneye::Service
 
     case sort
     when 'out_dated'
-      Project.where( filter_options ).any_of({ :temp => false }, { :temp => nil } ).desc(:out_number_sum).asc(:name_downcase)
+      Project.where( filter_options ).desc(:out_number_sum).asc(:name_downcase)
     when 'license_violations'
-      Project.where( filter_options ).any_of({ :temp => false }, { :temp => nil } ).desc(:licenses_red_sum).asc(:name_downcase)
+      Project.where( filter_options ).desc(:licenses_red_sum).asc(:name_downcase)
     else
-      Project.where( filter_options ).any_of({ :temp => false }, { :temp => nil } ).asc(:name_downcase).desc(:licenses_red_sum)
+      Project.where( filter_options ).asc(:name_downcase).desc(:licenses_red_sum)
     end
   end
 
@@ -458,7 +463,8 @@ class ProjectService < Versioneye::Service
   def self.update_sums( project )
     return if project.nil?
 
-    if project.children.empty?
+    children = project.children
+    if children.empty?
       project.sum_own!
       reset_badge project
       return nil
@@ -466,11 +472,12 @@ class ProjectService < Versioneye::Service
 
     dep_hash = {}
     project.sum_reset!
-    project.children.each do |child_project|
+    children.each do |child_project|
       update_numbers_for project, child_project, dep_hash
       child_project.sum_own!
     end
     update_numbers_for project, project, dep_hash
+    project.child_count = children.count
     project.save
     reset_badge project
     project

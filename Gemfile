@@ -1,33 +1,10 @@
 source "http://rubygems.org"
 
-gem 'bundler'            , '~> 1.12.5'
-gem 'naturalsorter'      , '~> 3.0.14'
-gem 'dalli'              , '~> 2.7.0'
-gem 'kgio'               , '~> 2.10.0'   # 20% performance boost for dalli
-gem 'oauth'              , '~> 0.5.0'
-gem 'aws-sdk'            , '~> 2.3.0'
-gem 'stripe'             , '~> 1.44.0'
-gem 'tire'               , '~> 0.6.2'
-gem 'octokit'            , '~> 4.3.0'
-gem 'semverly'           , '~> 1.0.0'
-gem 'httparty'           , '~> 0.13.1'
-gem 'persistent_httparty', '~> 0.1.0'
-gem 'nokogiri'           , '~> 1.6.8'
-gem 'cocoapods-core'     , '~> 0.39.0'
-gem 'actionmailer'       , '~> 4.2.6'
-gem 'pdfkit'             , '~> 0.8.0'
-gem 'bunny'              , '~> 2.4.0'
-gem 'wkhtmltopdf-binary' , '~> 0.9.9.1'
-gem 'etcd'               , '~> 0.3.0'
+# Specify your gem's dependencies in versioneye-core.gemspec
+gemspec
 
-gem 'mongoid'            , '~> 5.1.0'
-gem 'will_paginate_mongoid', '2.0.1'
-
-gem 'net-ldap', '~> 0.14.0'
-
-group :development do
-  gem 'jeweler', '~> 2.1.1'
-end
+# 20% performance boost for dalli
+gem 'kgio', '~> 2.10.0', platforms: :ruby
 
 group :test do
   gem 'rack-test'       , '0.6.3'

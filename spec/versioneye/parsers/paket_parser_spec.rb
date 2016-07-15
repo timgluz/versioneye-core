@@ -303,6 +303,7 @@ describe PaketParser do
   end
 
   let(:test_file_url){
+    'https://s3.amazonaws.com/veye_test_env/nuget/paket.dependencies'
   }
 
   let(:prod3){
@@ -393,8 +394,6 @@ describe PaketParser do
     it "parses correctly a file from url" do
       #TODO: somehow FactoryGirl doesnt save products
       [prod3, prod4, prod5, prod6, prod7, prod8].each {|prod| prod.save}
-      test_file_url = 'spec/fixtures/files/nuget/paket.dependencies'
-
       the_project = parser.parse(test_file_url)
 
       expect(the_project[:name]).to eq('Paket Project')

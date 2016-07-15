@@ -34,46 +34,103 @@ class SyncService < Versioneye::Service
 
 
   def self.sync_project project
-    sync_projectdependencies project.unknown_dependencies
-    sync_projectdependencies project.known_dependencies
+    sync_status = SyncStatus.find_or_create_by( :object_type => 'Project', :object_id => project.ids )
+    sync_status.update_attribute(:status, 'running')
+
+    sync_projectdependencies project.unknown_dependencies, false
+    sync_projectdependencies project.known_dependencies, true
+
+    log.info "sync lock true ... start reparse project"
+    project.update_attribute(:sync_lock, true)
+    ProjectUpdateService.update project, false
+    project.update_attribute(:sync_lock, false)
+    log.info "sync lock false ... sync done for project #{project.ids}"
+
+    sync_status.update_attribute(:status, 'done')
   end
 
 
   def self.sync_project_async project
     env = Settings.instance.environment
     return nil if !env.to_s.eql?("enterprise")
+    return nil if project.sync_lock == true
 
     project_id = project.id.to_s
     SyncProducer.new "project::#{project_id}"
   end
 
 
-  def self.sync_projectdependencies dependencies
+  def self.sync_projectdependencies dependencies, quicky = false
     lang_prod_keys = []
     dependencies.each do |dependency|
-      sync_projectdependency dependency, lang_prod_keys
+      lang_key = "#{dependency.language}::#{dependency.possible_prod_key}"
+      next if lang_prod_keys.include?( lang_key )
+
+      update_sync_info dependency
+
+      if dependency.project.project_type.to_s.eql?(Project::A_TYPE_BOWER)
+        sync_projectdependency_bower dependency, quicky
+      else
+        sync_projectdependency dependency, quicky
+      end
+
+      lang_prod_keys << lang_key
     end
     log.info "-- sync done for projectdependencies --"
   end
 
 
-  def self.sync_projectdependency dependency, lang_prod_keys = []
+  def self.update_sync_info dependency
+    sync_status = SyncStatus.find_or_create_by( :object_type => 'Project', :object_id => dependency.project.ids )
+    sync_status.update_attribute(:info, dependency.name)
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+  end
+
+
+  def self.sync_projectdependency dependency, quicky = true
     prod_key = dependency.possible_prod_key
-    lang_key = "#{dependency.language}::#{prod_key}"
-    return nil if lang_prod_keys.include?(lang_key)
+    language = dependency.language
 
-    lang_prod_keys << lang_key
+    if quicky
+      sync_version  language, prod_key
+      sync_version  language, prod_key, dependency.version_requested
+      sync_security language, prod_key
+    else
+      sync_product language, prod_key, false
+    end
 
-    is_bower_project = dependency.project && dependency.project.project_type.to_s.eql?(Project::A_TYPE_BOWER)
-    key      = is_bower_project ? dependency.name : prod_key
-    language = is_bower_project ? 'Bower' : dependency.language
-
-    sync_product language, key, false
-
-    product = is_bower_project ? Product.fetch_bower(key) : Product.fetch_product(dependency.language, prod_key)
+    product = Product.fetch_product( dependency.language, prod_key )
     return nil if product.nil?
 
     dependency.prod_key = prod_key
+    ProjectdependencyService.update_outdated!( dependency )
+    log.info dependency.to_s
+    true
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    nil
+  end
+
+
+  def self.sync_projectdependency_bower dependency, quicky = true
+    key      = dependency.name
+    language = 'Bower'
+
+    if quicky
+      sync_version  language, key
+      sync_version  language, key, dependency.version_requested
+      sync_security language, key
+    else
+      sync_product language, key, false
+    end
+
+    product = Product.fetch_bower(key)
+    return nil if product.nil?
+
+    dependency.prod_key = dependency.possible_prod_key
     ProjectdependencyService.update_outdated!( dependency )
     log.info dependency.to_s
     true
@@ -110,8 +167,7 @@ class SyncService < Versioneye::Service
     json[:results].each do |svjson|
       update_svobject( product, svjson )
     end
-    # TODO Get blog sha for component
-    # TODO Send it to X-Ray.
+
     log.info "synced security infos for #{language}:#{prod_key}"
   end
 
@@ -176,7 +232,7 @@ class SyncService < Versioneye::Service
   end
 
 
-  def self.sync_version language, prod_key, version
+  def self.sync_version language, prod_key, version = nil
     json = ProductClient.show language, prod_key, version
     return nil if json.nil?
 

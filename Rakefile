@@ -11,20 +11,6 @@ rescue Bundler::BundlerError => e
 end
 require 'rake'
 
-require 'jeweler'
-Jeweler::Tasks.new do |gem|
-  # gem is a Gem::Specification... see http://guides.rubygems.org/specification-reference/ for more options
-  gem.name = "versioneye-core"
-  gem.homepage = "http://github.com/versioneye/versioneye-core"
-  gem.license = "private"
-  gem.summary = %Q{Models & Services for VersionEye}
-  gem.description = %Q{This project contains the Models and Services for VersionEye}
-  gem.email = "robert.reiz.81@gmail.com"
-  gem.authors = ["reiz"]
-  # dependencies defined in Gemfile
-end
-# Jeweler::RubygemsDotOrgTasks.new
-
 require 'rake/testtask'
 Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'spec'
@@ -41,8 +27,9 @@ end
 task :default => :test
 
 require 'rdoc/task'
+require 'versioneye/version'
 Rake::RDocTask.new do |rdoc|
-  version = File.exist?('VERSION') ? File.read('VERSION') : ""
+  version = Versioneye::VERSION
 
   rdoc.rdoc_dir = 'rdoc'
   rdoc.title = "versioneye-core #{version}"
@@ -60,4 +47,9 @@ namespace :versioneye do
     GitRepoFileImportWorker.new.work
   end
 
+end
+
+desc "Open an irb session preloaded with this library"
+task :console do
+  sh "irb -rubygems -I lib -r versioneye-core.rb"
 end

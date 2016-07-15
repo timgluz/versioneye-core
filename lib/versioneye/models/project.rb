@@ -61,6 +61,7 @@ class Project < Versioneye::Model
   field :licenses_red    , type: Integer, :default => 0
   field :licenses_unknown, type: Integer, :default => 0
   field :sv_count        , type: Integer, :default => 0
+  field :child_count     , type: Integer, :default => 0
 
   # These are the numbers summed up from all children
   field :dep_number_sum      , type: Integer, :default => 0
@@ -80,6 +81,8 @@ class Project < Versioneye::Model
 
   field :parsing_errors , type: Array, :default => []
   field :muted_svs      , type: Hash,  :default => {} # muted security vulnerabilities
+
+  field :sync_lock, type: Boolean, :default => false
 
   validates :name       , presence: true
 

@@ -21,7 +21,7 @@ describe ProjectUpdateService do
       project.save.should be_truthy
       Project.count.should == 1
 
-      project = described_class.update_from_upload project, file, user
+      project = described_class.update_from_upload project, file
 
       expect( described_class.update_async project ).to eql('running')
       expect( described_class.update_async project ).to eql('running')
@@ -122,7 +122,7 @@ describe ProjectUpdateService do
       project.save.should be_truthy
       Project.count.should == 1
 
-      project = described_class.update_from_upload project, file, user
+      project = described_class.update_from_upload project, file
       project.should_not be_nil
       project.dependencies.count.should > 0
       Project.count.should == 1
@@ -152,7 +152,7 @@ describe ProjectUpdateService do
       project.save.should be_truthy
       Project.count.should == 2
 
-      project = described_class.update_from_upload project, file, user
+      project = described_class.update_from_upload project, file
       project.should_not be_nil
       project.reload
       project.dependencies.size.should > 0

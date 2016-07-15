@@ -67,6 +67,7 @@ module Versioneye
     require 'versioneye/models/global_setting'
     require 'versioneye/models/np_domain'
     require 'versioneye/models/reference'
+    require 'versioneye/models/sync_status'
     require 'versioneye/models/helpers/indexer'
 
     def ids

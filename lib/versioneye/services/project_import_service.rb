@@ -1,8 +1,8 @@
 class ProjectImportService < Versioneye::Service
 
   A_ENV_ENTERPRISE = "enterprise"
-  A_TASK_RUNNING = 'running'
-  A_TASK_TTL     = 60 # 60 seconds = 1 minute
+  A_TASK_RUNNING   = 'running'
+  A_TASK_TTL       = 60 # 60 seconds = 1 minute
 
 
   def self.import_all_github user, pfs = ['Gemfile', 'package.json', 'pom.xml', 'bower.json', 'Podfile', 'build.gradle']
@@ -213,6 +213,7 @@ class ProjectImportService < Versioneye::Service
 
 
   # This is currently used by the VersionEye API project and the file upload in the Web UI.
+  # Check allowed_to_add_project? with current plan.
   def self.import_from_upload file, user = nil, api_created = false, orga_id = nil
     project_name = file['datafile'].original_filename
     project = ProjectParseService.project_from file
