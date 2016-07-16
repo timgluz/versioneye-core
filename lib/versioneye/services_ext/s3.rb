@@ -17,6 +17,10 @@ class S3 < Versioneye::Service
                         key: obj_key,
                         expires_in: expire
                         ).to_s
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join "\n"
+    nil
   end
 
 
