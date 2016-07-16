@@ -1,0 +1,16 @@
+<p>
+  Hey <%= @billing_address.name %>,
+</p>
+<p>
+  You just updated your subscription to the plan "<%= @orga.plan.name %>".<br/>
+  You can find your payment history in the settings area:<br/>
+  <a href="<%= Settings.instance.server_url %>/organisations/<%= @orga.name %>/payment_history?utm_medium=email&amp;utm_source=update_subscription" ><%= Settings.instance.server_url %>/organisations/<%= @orga.name %>/payment_history</a><br/><br/>
+  And you can change your subscription here: <br/>
+  <a href="<%= Settings.instance.server_url %>/organisations/<%= @orga.name %>/plan?utm_medium=email&amp;utm_source=update_subscription" ><%= Settings.instance.server_url %>/organisations/<%= @orga.name %>/plan</a><br/>
+</p>
+<p>
+As usual, your feedback is highly appreciated.
+</p>
+<br/>
+Your VersionEye Team<br/>
+<a href="<%= Settings.instance.server_url %>?utm_medium=email&amp;utm_source=update_subscription"><%= Settings.instance.server_url %></a>

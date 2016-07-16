@@ -41,6 +41,13 @@ class Organisation < Versioneye::Model
     api
   end
 
+  def fetch_or_create_billing_address
+    if self.billing_address.nil?
+      self.billing_address = BillingAddress.new
+    end
+    self.billing_address
+  end
+
   def default_lwl_id
     return nil if license_whitelists.nil? || license_whitelists.empty?
 

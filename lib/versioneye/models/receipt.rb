@@ -75,6 +75,10 @@ class Receipt < Versioneye::Model
     Receipt.where(:user_id => id).desc(:invoice_date)
   end
 
+  def self.by_orga id
+    Receipt.where(:organisation_id => id).desc(:invoice_date)
+  end
+
   def pre_process
     return false if company_mandatory? && company.to_s.empty?
     return false if taxid_mandatory? && taxid.to_s.empty?

@@ -389,6 +389,7 @@ class User < Versioneye::Model
     self.username
   end
 
+  # TODO obsolete - remove it - was moved to organisation.
   def fetch_or_create_billing_address
     if self.billing_address.nil?
       self.billing_address = BillingAddress.new
