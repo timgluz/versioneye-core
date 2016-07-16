@@ -13,6 +13,7 @@ describe BillingAddress do
       params[:city] = 'HansCity'
       params[:country] = 'DE'
       params[:taxid] = 'HansVat'
+      params[:email] = 'ema@ame.de'
 
       ba = described_class.new
       ba.name.should be_nil

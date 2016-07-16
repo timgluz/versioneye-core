@@ -16,7 +16,7 @@ describe ReceiptMailer do
 
       user = receipt.user
 
-      email.to.should eq( [user.email] )
+      email.to.should eq( [receipt.email] )
       email.encoded.should include( "Hello #{user.fullname}" )
       email.encoded.should include( "This is a receipt for your monthly subscription at VersionEye" )
       email.encoded.should include( "Handelsregister" )

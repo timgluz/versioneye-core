@@ -2,7 +2,7 @@ class ReceiptMailer < SuperMailer
 
 
   def receipt_email( receipt, pdf )
-    @user = receipt.user
+    @receipt = receipt
     email = fetch_email receipt
     attachments[receipt.filename] = pdf
 

@@ -34,6 +34,10 @@ class StripeService < Versioneye::Service
 
 
   def self.create_or_update_customer stripe_customer_id, stripe_token, plan_name_id, email
+    return nil if stripe_customer_id.to_s.empty?
+    return nil if stripe_token.to_s.empty?
+    return nil if plan_name_id.to_s.empty?
+
     if stripe_customer_id
       return self.update_customer stripe_customer_id, stripe_token, plan_name_id
     end
