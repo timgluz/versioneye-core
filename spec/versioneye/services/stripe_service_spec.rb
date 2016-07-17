@@ -85,11 +85,10 @@ describe StripeService do
 
     it 'creates a new customer' do
       user = UserFactory.create_new 1
-      user.stripe_customer_id.should be_nil
+      expect( user.stripe_customer_id ).to be_nil
       token = StripeFactory.token
-      token_id = token[:id]
       small = Plan.small.name_id
-      customer = described_class.create_or_update_customer user.stripe_customer_id, token_id, small, user.email
+      customer = described_class.create_or_update_customer user.stripe_customer_id, token[:id], small, user.email
       customer.should_not be_nil
       customer.id.should_not be_nil
     end
