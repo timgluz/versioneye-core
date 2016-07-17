@@ -209,6 +209,10 @@ class Project < Versioneye::Model
     Project.where( user_id: user_id, private_project: true ).count
   end
 
+  def self.private_project_count_by_orga orga_id
+    Project.where( organisation_id: orga_id, private_project: true ).count
+  end
+
   def show_dependency_badge?
     true
   end

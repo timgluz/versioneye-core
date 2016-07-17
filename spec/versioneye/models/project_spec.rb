@@ -174,6 +174,57 @@ describe Project do
   end
 
 
+  describe "private_project_count_by_orga" do
+    it 'returns 0' do
+      expect( Project.private_project_count_by_orga(nil) ).to eq(0)
+    end
+    it 'returns 0 because user has only public projects' do
+      orga = Organisation.new({:name => 'test_orga'})
+      user = UserFactory.create_new
+      new_project = ProjectFactory.create_new user
+      new_project.private_project = false
+      new_project.organisation_id = orga.ids
+      new_project.save
+      expect( Project.private_project_count_by_orga( orga.ids )).to eq(0)
+    end
+    it 'returns 1 because user has only 1 private project' do
+      orga = Organisation.new({:name => 'test_orga'})
+      user = UserFactory.create_new
+      new_project = ProjectFactory.create_new user
+      new_project.private_project = true
+      new_project.organisation_id = orga.ids
+      new_project.save
+      expect( Project.private_project_count_by_orga( orga.ids )).to eq(1)
+    end
+    it 'returns 1. User has 1 private and 1 public project' do
+      orga = Organisation.new({:name => 'test_orga'})
+      user = UserFactory.create_new
+      new_project = ProjectFactory.create_new user
+      new_project.private_project = false
+      new_project.organisation_id = orga.ids
+      new_project.save
+      new_project2 = ProjectFactory.create_new user
+      new_project2.private_project = true
+      new_project2.organisation_id = orga.ids
+      new_project2.save
+      expect( Project.private_project_count_by_orga( orga.ids )).to eq(1)
+    end
+    it 'returns 2. User has 2 private' do
+      orga = Organisation.new({:name => 'test_orga'})
+      user = UserFactory.create_new
+      new_project = ProjectFactory.create_new user
+      new_project.private_project = true
+      new_project.organisation_id = orga.ids
+      new_project.save
+      new_project2 = ProjectFactory.create_new user
+      new_project2.private_project = true
+      new_project2.organisation_id = orga.ids
+      new_project2.save
+      expect( Project.private_project_count_by_orga( orga.ids )).to eq(2)
+    end
+  end
+
+
   describe "email_for" do
 
     it "returns user default email" do

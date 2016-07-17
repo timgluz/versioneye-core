@@ -10,6 +10,50 @@ describe ProjectImportService do
       :bitbucket_login => Settings.instance.bitbucket_username)}
 
 
+  describe 'allowed_to_add?' do
+    it 'allows to add' do
+      Plan.create_defaults
+      user = UserFactory.create_new 1
+      plan = Plan.free_plan
+      user.plan = plan
+      expect( user.save ).to be_truthy
+      expect( described_class.allowed_to_add?(user, nil, true) ).to be_truthy
+    end
+    it 'does not allow to add for user' do
+      Plan.create_defaults
+      user = UserFactory.create_new 1
+      user.plan = Plan.free_plan
+      expect( user.save ).to be_truthy
+
+      project = ProjectFactory.create_new user
+      project.private_project = true
+      expect( project.save ).to be_truthy
+      expect( described_class.allowed_to_add?(user, nil, true) ).to be_falsey
+    end
+    it 'allows to add for orga' do
+      Plan.create_defaults
+      user = UserFactory.create_new 1
+      orga = Organisation.new :name => 'test_org'
+      orga.plan = Plan.free_plan
+      expect( orga.save ).to be_truthy
+      expect( described_class.allowed_to_add?(nil, orga, true) ).to be_truthy
+    end
+    it 'does not allow to add for orga' do
+      Plan.create_defaults
+      user = UserFactory.create_new 1
+      orga = Organisation.new :name => 'test_org'
+      orga.plan = Plan.free_plan
+      expect( orga.save ).to be_truthy
+
+      project = ProjectFactory.create_new user
+      project.organisation_id = orga.ids
+      project.private_project = true
+      expect( project.save ).to be_truthy
+      expect( described_class.allowed_to_add?(nil, orga, true) ).to be_falsey
+    end
+  end
+
+
   describe 'import_from_github' do
     it 'imports from github' do
       VCR.use_cassette('import_from_github', allow_playback_repeats: true) do
