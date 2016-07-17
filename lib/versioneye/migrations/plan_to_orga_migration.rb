@@ -2,7 +2,8 @@ class PlanToOrgaMigration < Versioneye::Service
 
   def self.migrate
     Plan.current_plans.each do |plan|
-      next if plan.name.eql?(Plan::A_PLAN_FREE)
+      next if plan.name_id.eql?(Plan::A_PLAN_FREE)
+      next if plan.name.eql?("Free")
 
       plan.users.each do |user|
         next if user.deleted_user
