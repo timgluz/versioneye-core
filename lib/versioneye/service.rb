@@ -114,6 +114,7 @@ module Versioneye
 
     require 'versioneye/migrations/product_migration'
     require 'versioneye/migrations/project_orga_migration'
+    require 'versioneye/migrations/plan_to_orga_migration'
 
     require 'versioneye/producers/producer.rb'
     require 'versioneye/producers/html_worker_producer.rb'
