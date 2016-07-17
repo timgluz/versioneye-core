@@ -3,7 +3,7 @@ source "http://rubygems.org"
 # Specify your gem's dependencies in versioneye-core.gemspec
 gemspec
 
-# 20% performance boost for dalli
+# 20% performance boost for dalli. Doesn't work on Windows.
 gem 'kgio', '~> 2.10.0', platforms: :ruby
 
 group :test do
