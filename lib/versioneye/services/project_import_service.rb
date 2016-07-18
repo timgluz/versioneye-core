@@ -60,7 +60,6 @@ class ProjectImportService < Versioneye::Service
       name: repo_name,
       project_type: project_file[:type],
       user_id: user.id.to_s,
-      team_ids: team_ids,
       source: Project::A_SOURCE_GITHUB,
       private_project: private_project,
       scm_fullname: repo_name,
