@@ -190,7 +190,7 @@ describe ProjectImportService do
   describe "allowed_to_add_project?" do
 
     it "allows because its a public project" do
-      described_class.allowed_to_add_project?(nil, false).should be_truthy
+      described_class.allowed_to_add_project?(nil, nil, false).should be_truthy
     end
 
     it "allows because each user has 1 private project for free" do
