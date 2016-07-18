@@ -56,13 +56,12 @@ class ProjectImportService < Versioneye::Service
       raise "The project file could not be parsed. Maybe it's not valid?"
     end
 
-    organisation_id = nil
-    organisation_id = orga_id if !orga_id.to_s.empty?
     project.update_attributes({
       name: repo_name,
       project_type: project_file[:type],
       user_id: user.id.to_s,
       organisation_id: organisation_id,
+      team_ids: team_ids,
       source: Project::A_SOURCE_GITHUB,
       private_project: private_project,
       scm_fullname: repo_name,
@@ -72,6 +71,12 @@ class ProjectImportService < Versioneye::Service
       period: Settings.instance.default_project_period,
       public: Settings.instance.default_project_public
     })
+
+    organisation = find_orga( orga_id )
+    if organisation
+      project.organisation_id = organisation.ids
+      project.team_ids = [organisation.owner_team.ids]
+    end
 
     project = ProjectService.store( project )
     parent  = merge_into_parent project, user
@@ -114,13 +119,10 @@ class ProjectImportService < Versioneye::Service
 
     revision = BitbucketRepo.revision_for user, repo_name, branch, filename
 
-    organisation_id = nil
-    organisation_id = orga_id if !orga_id.to_s.empty?
     project.update_attributes({
       name: repo_name,
       project_type: project_type,
       user_id: user.id.to_s,
-      organisation_id: organisation_id,
       source: Project::A_SOURCE_BITBUCKET,
       scm_fullname: repo_name,
       scm_branch: branch,
@@ -131,6 +133,12 @@ class ProjectImportService < Versioneye::Service
       period: Settings.instance.default_project_period,
       public: Settings.instance.default_project_public
     })
+
+    organisation = find_orga( orga_id )
+    if organisation
+      project.organisation_id = organisation.ids
+      project.team_ids = [organisation.owner_team.ids]
+    end
 
     project = ProjectService.store( project )
     parent  = merge_into_parent project, user
@@ -165,13 +173,10 @@ class ProjectImportService < Versioneye::Service
       raise "The project file could not be parsed. Maybe it's not valid?"
     end
 
-    organisation_id = nil
-    organisation_id = orga_id if !orga_id.to_s.empty?
     project.update_attributes({
       name: repo_name,
       project_type: project_type,
       user_id: user.id.to_s,
-      organisation_id: organisation_id,
       source: Project::A_SOURCE_STASH,
       scm_fullname: repo_name,
       scm_branch: branch,
@@ -181,6 +186,12 @@ class ProjectImportService < Versioneye::Service
       period: Settings.instance.default_project_period,
       public: Settings.instance.default_project_public
     })
+
+    organisation = find_orga( orga_id )
+    if organisation
+      project.organisation_id = organisation.ids
+      project.team_ids = [organisation.owner_team.ids]
+    end
 
     project = ProjectService.store( project )
     parent  = merge_into_parent project, user
