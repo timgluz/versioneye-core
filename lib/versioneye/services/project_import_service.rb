@@ -263,7 +263,7 @@ class ProjectImportService < Versioneye::Service
 
 
   def self.check_permission_for_bitbucket_repo user, orga_id, private_project
-    if allowed_to_add_project?(user, private_project) == false
+    if allowed_to_add_project?(user, orga_id, private_project) == false
       raise "You reached the limit of your current subscription. Please upgrade your plan to monitor more files in private repositories."
     end
     true
