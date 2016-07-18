@@ -60,7 +60,6 @@ class ProjectImportService < Versioneye::Service
       name: repo_name,
       project_type: project_file[:type],
       user_id: user.id.to_s,
-      organisation_id: organisation_id,
       team_ids: team_ids,
       source: Project::A_SOURCE_GITHUB,
       private_project: private_project,
@@ -214,9 +213,14 @@ class ProjectImportService < Versioneye::Service
       s3_filename: project_name,
       url: url,
       period: Settings.instance.default_project_period,
-      public: Settings.instance.default_project_public,
-      organisation_id: orga_id
+      public: Settings.instance.default_project_public
     })
+
+    organisation = find_orga( orga_id )
+    if organisation
+      project.organisation_id = organisation.ids
+      project.team_ids = [organisation.owner_team.ids]
+    end
 
     project = ProjectService.store( project )
     ProjectService.update_sums( project )
