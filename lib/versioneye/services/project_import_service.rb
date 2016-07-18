@@ -74,8 +74,9 @@ class ProjectImportService < Versioneye::Service
     })
 
     project = ProjectService.store( project )
-    merge_into_parent project, user
-    ProjectService.update_sums( project )
+    parent  = merge_into_parent project, user
+    ProjectService.update_sums( parent )
+    # TODO Create WebHook!
     project
   end
 
@@ -132,8 +133,8 @@ class ProjectImportService < Versioneye::Service
     })
 
     project = ProjectService.store( project )
-    merge_into_parent project, user
-    ProjectService.update_sums( project )
+    parent  = merge_into_parent project, user
+    ProjectService.update_sums( parent )
     project
   end
 
@@ -182,8 +183,8 @@ class ProjectImportService < Versioneye::Service
     })
 
     project = ProjectService.store( project )
-    merge_into_parent project, user
-    ProjectService.update_sums( project )
+    parent  = merge_into_parent project, user
+    ProjectService.update_sums( parent )
     project
   end
 
@@ -291,6 +292,8 @@ class ProjectImportService < Versioneye::Service
 
     private_project_count = 0
     if orga
+      orga_max_count = 1
+      orga_max_count = orga.plan.private_projects if orga.plan
       private_project_count = Project.private_project_count_by_orga( orga.ids )
       return false if private_project_count >= orga.plan.private_projects
       return true
@@ -320,7 +323,11 @@ class ProjectImportService < Versioneye::Service
 
     def self.merge_into_parent project, user
       parent = fetch_possible_parent project
-      ProjectService.merge(parent.ids, project.ids, user.ids) if parent
+      if parent
+        ProjectService.merge( parent.ids, project.ids, user.ids )
+        return parent
+      end
+      project
     end
 
 

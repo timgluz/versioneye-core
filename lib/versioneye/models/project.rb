@@ -206,11 +206,11 @@ class Project < Versioneye::Model
   end
 
   def self.private_project_count_by_user user_id
-    Project.where( user_id: user_id, private_project: true ).count
+    Project.where( user_id: user_id, private_project: true, :parent_id => nil ).count
   end
 
   def self.private_project_count_by_orga orga_id
-    Project.where( organisation_id: orga_id, private_project: true ).count
+    Project.where( organisation_id: orga_id, private_project: true, :parent_id => nil ).count
   end
 
   def show_dependency_badge?
