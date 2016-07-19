@@ -56,7 +56,7 @@ class CommonParser
     url = self.do_replacements_for_github url
     HttpService.fetch_response url
   rescue => e
-    log.error e.message
+    log.error "#{e.message} for #{url}"
     log.error e.backtrace.join("\n")
     nil
   end
@@ -65,7 +65,7 @@ class CommonParser
     response = self.fetch_response( url )
     response.body
   rescue => e
-    log.error e.message
+    log.error "#{e.message} for #{url}"
     log.error e.backtrace.join("\n")
     nil
   end
