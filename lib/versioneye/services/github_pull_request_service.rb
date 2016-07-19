@@ -7,7 +7,7 @@ class GithubPullRequestService < Versioneye::Service
     last_commit = nil
     projects = Project.where(:scm_fullname => repo_name, :temp => false)
 
-    pr = create_pullrequest( repo_name, branch, pr_nr, projects )
+    pr = create_pullrequest( repo_name, branch, pr_nr, projects, commits_url )
     if pr.nil?
       log.error "ERROR in GithubPullRequestService. Could not create pullrequest! #{repo_name}:#{branch}:#{pr_nr}:#{commits_url}"
       return nil
@@ -73,7 +73,7 @@ class GithubPullRequestService < Versioneye::Service
   end
 
 
-  def self.create_pullrequest repo_name, branch, pr_nr, projects
+  def self.create_pullrequest repo_name, branch, pr_nr, projects, commits_url
     projects.each do |project|
       token       = GithubUpdater.new.fetch_token_for project
       last_commit = fetch_last_commit(commits_url, token)
