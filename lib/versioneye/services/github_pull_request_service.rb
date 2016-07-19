@@ -59,7 +59,7 @@ class GithubPullRequestService < Versioneye::Service
   def self.create_sec_issue filename, dep, pullrequest
     message = "#{dep.sv_ids.count} security vulnerability."
     message = "#{dep.sv_ids.count} security vulnerabilities." if dep.sv_ids.count > 1
-     if dep.sv_ids.count > 1
+
     issue = PrIssue.new({
       :file => filename,
       :language => dep.language,
