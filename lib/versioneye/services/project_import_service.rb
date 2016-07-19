@@ -79,7 +79,6 @@ class ProjectImportService < Versioneye::Service
     project = ProjectService.store( project )
     parent  = merge_into_parent project, user
     ProjectService.update_sums( parent )
-    # TODO Create WebHook!
     project
   end
 
