@@ -18,6 +18,7 @@ class ProjectImportService < Versioneye::Service
     end
   end
 
+
   def self.import_all_github_from user, repo, branch, pfs
     repo.project_files[branch].each do |pf|
       path = pf['path']
@@ -47,11 +48,7 @@ class ProjectImportService < Versioneye::Service
       raise " Didn't find any project file of a supported package manager."
     end
 
-    file_txt  = GitHubService.pure_text_from project_file
-    file_name = GitHubService.filename_from project_file
-    parser    = ProjectParseService.parser_for file_name
-    project   = ProjectParseService.parse_content parser, file_txt, file_name
-
+    project = create_project_from project_file, user.github_token
     if project.nil?
       raise "The project file could not be parsed. Maybe it's not valid?"
     end
@@ -80,6 +77,14 @@ class ProjectImportService < Versioneye::Service
     parent  = merge_into_parent project, user
     ProjectService.update_sums( parent )
     project
+  end
+
+
+  def self.create_project_from project_file, token = nil
+    file_txt  = GitHubService.pure_text_from project_file
+    file_name = GitHubService.filename_from project_file
+    parser    = ProjectParseService.parser_for file_name
+    ProjectParseService.parse_content parser, file_txt, file_names, token
   end
 
 
