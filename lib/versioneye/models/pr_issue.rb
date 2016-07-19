@@ -1,4 +1,4 @@
-class Pr_Issue < Versioneye::Model
+class PrIssue < Versioneye::Model
 
   include Mongoid::Document
   include Mongoid::Timestamps

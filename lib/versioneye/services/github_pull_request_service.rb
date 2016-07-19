@@ -58,13 +58,13 @@ class GithubPullRequestService < Versioneye::Service
 
 
   def self.create_sec_issue filename, dep, pullrequest
-    issue = Pr_Issue.new({
+    issue = PrIssue.new({
       :file => filename,
       :language => dep.language,
       :prod_key => dep.prod_key,
       :version_label => dep.version_label,
       :version_requested => dep.version_requested,
-      :issue_type => Pr_Issue::A_ISSUE_SECURITY })
+      :issue_type => PrIssue::A_ISSUE_SECURITY })
     issue.pullrequest = pullrequest
     issue.save
   rescue => e
