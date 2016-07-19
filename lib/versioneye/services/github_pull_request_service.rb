@@ -17,8 +17,10 @@ class GithubPullRequestService < Versioneye::Service
 
     project_file = Github.fetch_project_file_from_branch(repo_name, filename, branch, token, sha )
     new_project  = ProjectImportService.create_project_from project_file, token
+    new_project.name = project.name
     ProjectdependencyService.update_security new_project
     log.info " #{commits_url} - sv_count: #{new_project.sv_count} - project.id is #{new_project.ids}"
+
     new_project.temp = true
     new_project.save
 
