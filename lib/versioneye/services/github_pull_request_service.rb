@@ -46,7 +46,6 @@ class GithubPullRequestService < Versioneye::Service
       end
     end
 
-    log.info " #{commits_url} - sv_count: #{new_project.sv_count} - project.id is #{new_project.ids}"
     new_project.temp_lock = false # allow to delete
     new_project.save
     true
@@ -58,15 +57,22 @@ class GithubPullRequestService < Versioneye::Service
 
 
   def self.create_sec_issue filename, dep, pullrequest
+    message = "#{dep.sv_ids.count} security vulnerability."
+    message = "#{dep.sv_ids.count} security vulnerabilities." if dep.sv_ids.count > 1
+     if dep.sv_ids.count > 1
     issue = PrIssue.new({
       :file => filename,
       :language => dep.language,
       :prod_key => dep.prod_key,
       :version_label => dep.version_label,
       :version_requested => dep.version_requested,
+      :message => message,
       :issue_type => PrIssue::A_ISSUE_SECURITY })
     issue.pullrequest = pullrequest
-    issue.save
+    if issue.save
+      pullrequest.security_count += 1
+      pullrequest.save
+    end
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")

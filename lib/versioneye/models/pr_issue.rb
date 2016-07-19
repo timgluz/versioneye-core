@@ -17,6 +17,7 @@ class PrIssue < Versioneye::Model
   field :version_label    , type: String # pull request number
   field :version_requested, type: String
   field :issue_type       , type: String
+  field :message          , type: Stirng
 
   belongs_to :pullrequest
 
