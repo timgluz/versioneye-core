@@ -1,4 +1,4 @@
-class GithubPullRequestService
+class GithubPullRequestService < Versioneye::Service
 
   # commits_url + branch + number
   # project + token
