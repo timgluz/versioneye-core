@@ -2,7 +2,7 @@ class GithubPullRequestService < Versioneye::Service
 
 
   def self.process repo_name, branch, commits_url, pr_nr
-    log.info "process #{project_id}, #{commits_url}"
+    log.info "process #{repo_name}, #{branch}, #{commits_url}, #{pr_nr}"
 
     last_commit = nil
     projects = Project.where(:scm_fullname => repo_name, :temp => false)

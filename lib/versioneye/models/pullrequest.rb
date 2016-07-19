@@ -20,4 +20,6 @@ class Pullrequest < Versioneye::Model
   validates_presence_of :scm_provider   , :message => 'is mandatory!'
   validates_presence_of :scm_fullname   , :message => 'is mandatory!'
 
+  has_many :pr_issues
+
 end
