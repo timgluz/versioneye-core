@@ -72,6 +72,7 @@ class Project < Versioneye::Model
   field :sv_count_sum        , type: Integer, :default => 0
 
   field :temp           , type: Boolean, :default => false  # temporary project. if true it doesn't show up in the UI and will be removed by a background job.
+  field :temp_lock      , type: Boolean, :default => false  # temporary locked for deletion.
   field :public         , type: Boolean, :default => false  # visible for everybody
   field :private_project, type: Boolean, :default => false  # private project from GitHub/Bitbucket
   field :parent_id      , type: String,  :default => nil    # id of the parent project.

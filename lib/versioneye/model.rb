@@ -3,6 +3,8 @@ module Versioneye
 
     require 'versioneye/log'
 
+    require 'versioneye/models/pullrequest'
+    require 'versioneye/models/pr_issue'
     require 'versioneye/models/mail_track'
     require 'versioneye/models/badge'
     require 'versioneye/models/docker_image'
