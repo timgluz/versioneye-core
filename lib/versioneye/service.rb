@@ -15,6 +15,7 @@ module Versioneye
     require 'versioneye/services/circle_element_service'
     require 'versioneye/services/dependency_service'
     require 'versioneye/services/git_hub_service'
+    require 'versioneye/services/github_pull_request_service'
     require 'versioneye/services/http_service'
     require 'versioneye/services/notification_service'
     require 'versioneye/services/newsletter_service'
