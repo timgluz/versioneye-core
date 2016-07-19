@@ -84,7 +84,7 @@ class ProjectImportService < Versioneye::Service
     file_txt  = GitHubService.pure_text_from project_file
     file_name = GitHubService.filename_from project_file
     parser    = ProjectParseService.parser_for file_name
-    ProjectParseService.parse_content parser, file_txt, file_names, token
+    ProjectParseService.parse_content parser, file_txt, file_name, token
   end
 
 
