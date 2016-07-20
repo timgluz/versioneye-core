@@ -8,8 +8,8 @@ class PrIssue < Versioneye::Model
   A_STATUS_SUCCESS = 'SUCCESS'
   A_STATUS_ERROR   = 'ERROR'
 
-  A_ISSUE_SECURITY = 'SUCCESS'
-  A_ISSUE_LICENSE_UNKNOWN = 'ERROR'
+  A_ISSUE_SECURITY        = 'SECURITY'
+  A_ISSUE_LICENSE_UNKNOWN = 'LICENSE_UNKNOWN'
 
   field :file             , type: String
   field :language         , type: String
