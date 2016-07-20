@@ -50,7 +50,7 @@ class Stash < Versioneye::Service
   def self.projects_all( token, secret )
     projects = []
     start = 0
-    limit = 25
+    limit = 30
     response = {}
     response[:isLastPage] = false
     while response[:isLastPage] == false
