@@ -23,7 +23,7 @@ class Pullrequest < Versioneye::Model
   has_many :pr_issues
 
   def description
-    if security_count == 0 && unknown_license_count == 0 
+    if security_count == 0 && unknown_license_count == 0
       return "All software dependencies are fine. You are awesome!"
     elsif security_count > 0 && unknown_license_count == 0
       return "Some dependencies have security issues."
