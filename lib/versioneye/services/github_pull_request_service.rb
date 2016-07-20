@@ -71,6 +71,7 @@ class GithubPullRequestService < Versioneye::Service
     issue.pullrequest = pullrequest
     if issue.save
       pullrequest.security_count += 1
+      pullrequest.status = Pullrequest::A_STATUS_ERROR
       pullrequest.save
     end
   rescue => e

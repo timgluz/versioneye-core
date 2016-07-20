@@ -5,9 +5,6 @@ class PrIssue < Versioneye::Model
 
   A_SCM_GITHUB     = 'github'
 
-  A_STATUS_SUCCESS = 'SUCCESS'
-  A_STATUS_ERROR   = 'ERROR'
-
   A_ISSUE_SECURITY        = 'SECURITY'
   A_ISSUE_LICENSE_UNKNOWN = 'LICENSE_UNKNOWN'
 

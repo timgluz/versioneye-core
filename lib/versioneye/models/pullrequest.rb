@@ -5,15 +5,15 @@ class Pullrequest < Versioneye::Model
 
   A_SCM_GITHUB     = 'github'
   A_STATUS_SUCCESS = 'SUCCESS'
-  A_ERROR_SUCCESS  = 'ERROR'
+  A_STATUS_ERROR   = 'ERROR'
 
-  field :scm_provider , type: String, :default => A_SCM_GITHUB
-  field :scm_fullname , type: String
-  field :scm_branch   , type: String
-  field :pr_number    , type: String # pull request number
-  field :commit_sha   , type: String
-  field :tree_sha     , type: String
-  field :status       , type: String
+  field :scm_provider  , type: String, :default => A_SCM_GITHUB
+  field :scm_fullname  , type: String
+  field :scm_branch    , type: String
+  field :pr_number     , type: String # pull request number
+  field :commit_sha    , type: String
+  field :tree_sha      , type: String
+  field :status        , type: String, :default => A_STATUS_SUCCESS
   field :security_count, type: Integer, :default => 0
   field :unknown_license_count, type: Integer, :default => 0
 
