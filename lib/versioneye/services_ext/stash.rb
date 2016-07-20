@@ -55,7 +55,7 @@ class Stash < Versioneye::Service
     response[:isLastPage] = false
     while response[:isLastPage] == false
       response = Stash.projects(token, secret, start, limit)
-      next if response.nil?
+      break if response.nil?
 
       projects << response[:values]
       start += per_page
