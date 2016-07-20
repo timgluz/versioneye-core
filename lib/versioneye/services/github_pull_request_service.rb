@@ -49,7 +49,7 @@ class GithubPullRequestService < Versioneye::Service
 
 
   def self.finish_status pr, token
-    status = {:state => "pending", :description => pr.description, :context => "VersionEye"}
+    status = {:state => pr.status, :description => pr.description, :context => "VersionEye"}
     Github.update_status pr.scm_fullname, pr.commit_sha, token, status
   end
 
