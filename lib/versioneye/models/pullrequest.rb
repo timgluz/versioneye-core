@@ -4,8 +4,8 @@ class Pullrequest < Versioneye::Model
   include Mongoid::Timestamps
 
   A_SCM_GITHUB     = 'github'
-  A_STATUS_SUCCESS = 'SUCCESS'
-  A_STATUS_ERROR   = 'ERROR'
+  A_STATUS_SUCCESS = 'success'
+  A_STATUS_ERROR   = 'error'
 
   field :scm_provider  , type: String, :default => A_SCM_GITHUB
   field :scm_fullname  , type: String
@@ -21,5 +21,17 @@ class Pullrequest < Versioneye::Model
   validates_presence_of :scm_fullname   , :message => 'is mandatory!'
 
   has_many :pr_issues
+
+  def description
+    if security_count == 0 && unknown_license_count == 0 
+      return "All software dependencies are fine. You are awesome!"
+    elsif security_count > 0 && unknown_license_count == 0
+      return "Some dependencies have security issues."
+    elsif security_count == 0 && unknown_license_count > 0
+      return "Some dependencies have no license."
+    elsif security_count > 0 && unknown_license_count > 0
+      return "There are all kind of security and license issues!"
+    end
+  end
 
 end

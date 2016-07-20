@@ -13,20 +13,44 @@ class GithubPullRequestService < Versioneye::Service
       return nil
     end
 
+    valid_token = nil
+    status_pending_send = false
     filenames = []
     projects.each do |project|
-      token    = GithubUpdater.new.fetch_token_for project
+      token = GithubUpdater.new.fetch_token_for project
+      status_pending_send = set_status_pending status_pending_send, repo_name, pr, token
+
       filename = project.s3_filename
       next if filenames.include?(filename)
 
       success = process_file( repo_name, filename, branch, token, pr )
-      filenames << filename if success
+      if success
+        filenames << filename
+        valid_token = token
+      end
     end
+    finish_status repo_name, pr, valid_token
     true
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
     false
+  end
+
+
+  def self.set_status_pending status_updated, repo_name, pr, token
+    return if status_updated == true
+
+    status = {:state: pr.status, :description: "checking dependencies for security & licenses", :context: "VersionEye"}
+    response = Github.update_status repo_name, pr.commit_sha, token, status
+    return false if response.nil?
+    return true
+  end
+
+
+  def self.finish_status repo_name, pr, token
+    status = {:state: "pending", :description: pr.description, :context: "VersionEye"}
+    Github.update_status repo_name, pr.commit_sha, token, status
   end
 
 

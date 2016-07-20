@@ -435,8 +435,14 @@ class Github < Versioneye::Service
   def self.create_webhook repo, token
     github_api_url = get_github_api_url
     url = "#{github_api_url}/repos/#{repo}/hooks"
-    request_headers = build_request_headers token
-    response = post(url, headers: request_headers)
+    # TODO finish it
+  end
+
+
+  def self.update_status repo, sha, token, body_hash
+    github_api_url = get_github_api_url
+    url = "#{github_api_url}/repos/#{repo}/statuses/#{sha}"
+    post_json url, body_hash, token
   end
 
 
@@ -449,6 +455,20 @@ class Github < Versioneye::Service
     catch_github_exception( content )
   rescue => e
     log.error "ERROR in get_json( #{url} )"
+    log.error e.backtrace.join("\n")
+    nil
+  end
+
+
+  def self.post_json( url, body_hash, token, raw = false, updated_at = nil )
+    request_headers = build_request_headers token, updated_at
+    response = post(url, body: body.to_json, headers: request_headers)
+    return response if raw
+
+    content = JSON.parse(response.body, symbolize_names: true)
+    catch_github_exception( content )
+  rescue => e
+    log.error "ERROR in post_json( #{url} )"
     log.error e.backtrace.join("\n")
     nil
   end
