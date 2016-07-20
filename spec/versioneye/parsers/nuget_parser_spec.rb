@@ -159,9 +159,9 @@ describe NugetParser do
       version_data = parser.parse_version_data(nil, product3)
 
       expect( version_data ).not_to be_nil
-      expect( version_data[:label] ).to eq("")
+      expect( version_data[:label] ).to eq("*")
       expect( version_data[:version] ).to eq("2.1")
-      expect( version_data[:comperator] ).to eq(">=")
+      expect( version_data[:comperator] ).to eq('=')
     end
 
     it "returns exact version when version label is [1.6]" do
@@ -282,6 +282,127 @@ describe NugetParser do
       expect( dep4.version_requested).to eq(product2[:version])
       expect( dep4.target).to eq("portable-net45+sl5+netcore45+wp8")
     end
+  end
 
+  let(:product4){
+    FactoryGirl.create(
+      :product,
+      prod_type: Project::A_TYPE_NUGET,
+      language: Product::A_LANGUAGE_CSHARP,
+      version: "2.0",
+    )
+  }
+
+  let(:depx){
+    FactoryGirl.create(
+      :projectdependency,
+      language: Product::A_LANGUAGE_CSHARP,
+      version_requested: '',
+      comperator: '?'
+    )
+  }
+
+
+  context "parse_requested_version" do
+    before :each do
+      product4.versions << FactoryGirl.build(:product_version, version: '0.9')
+      product4.versions << FactoryGirl.build(:product_version, version: '1.0')
+      product4.versions << FactoryGirl.build(:product_version, version: '1.3')
+      product4.versions << FactoryGirl.build(:product_version, version: '1.5')
+      product4.versions << FactoryGirl.build(:product_version, version: '2.0')
+
+      product4.save
+    end
+
+
+    it "uses the latest product version when version_label is nil" do
+      res = parser.parse_requested_version(nil, depx, product4)
+
+      expect(res).not_to be_nil
+      expect(res[:version_requested]).to eq(product4[:version])
+      expect(res[:version_label]).to eq('*')
+      expect(res[:comperator]).to eq('=')
+    end
+
+    it "returns the latest version which is smaller than 1.5" do
+      res = parser.parse_requested_version('(,1.5)', depx, product4)
+
+      expect(res).not_to be_nil
+      expect(res[:version_requested]).to eq('1.3')
+      expect(res[:version_label]).to eq('(,1.5)')
+      expect(res[:comperator]).to eq('<')
+    end
+
+    it "returns the latest version which is smaller or equal than 1.5" do
+      res = parser.parse_requested_version('(,1.5]', depx, product4)
+
+      expect(res).not_to be_nil
+      expect(res[:version_requested]).to eq('1.5')
+      expect(res[:version_label]).to eq('(,1.5]')
+      expect(res[:comperator]).to eq('<=')
+    end
+
+    it "returns the exact match" do
+      res = parser.parse_requested_version('[1.5]', depx, product4)
+
+      expect(res).not_to be_nil
+      expect(res[:version_requested]).to eq('1.5')
+      expect(res[:version_label]).to eq('[1.5]')
+      expect(res[:comperator]).to eq('=')
+    end
+
+    it "returns the latest version which is bigger than 1.3" do
+      res = parser.parse_requested_version('(1.3,)', depx, product4)
+
+      expect(res).not_to be_nil
+      expect(res[:version_requested]).to eq('2.0')
+      expect(res[:version_label]).to eq('(1.3,)')
+      expect(res[:comperator]).to eq('>')
+    end
+
+    it "returns the latest version which is bigger or equal than 2.0" do
+      res = parser.parse_requested_version('1.5', depx, product4)
+
+      expect(res).not_to be_nil
+      expect(res[:version_requested]).to eq('2.0')
+      expect(res[:version_label]).to eq('1.5')
+      expect(res[:comperator]).to eq('>=')
+    end
+
+    it "returns latest version in between range 1.0 < x < 1.5" do
+      res = parser.parse_requested_version('(1.0,1.5)', depx, product4)
+
+      expect(res).not_to be_nil
+      expect(res[:version_requested]).to eq('1.3')
+      expect(res[:version_label]).to eq('(1.0,1.5)')
+      expect(res[:comperator]).to eq('>x<')
+    end
+
+    it "returns the latest version between range 1.5 <= x < 2.0" do
+      res = parser.parse_requested_version('[1.5,2.0)', depx, product4)
+
+      expect(res).not_to be_nil
+      expect(res[:version_requested]).to eq('1.5')
+      expect(res[:version_label]).to eq('[1.5,2.0)')
+      expect(res[:comperator]).to eq('>=x<')
+    end
+
+    it "returns the latest version between range 1.0 < x <= 1.5" do
+      res = parser.parse_requested_version('(1.0,1.5]', depx, product4)
+
+      expect(res).not_to be_nil
+      expect(res[:version_requested]).to eq('1.5')
+      expect(res[:version_label]).to eq('(1.0,1.5]')
+      expect(res[:comperator]).to eq('>x<=')
+    end
+
+    it "returns the latest version between range 1.0 <= x <= 2.0" do
+      res = parser.parse_requested_version('[1.0,2.0]', depx, product4)
+
+      expect(res).not_to be_nil
+      expect(res[:version_requested]).to eq('2.0')
+      expect(res[:version_label]).to eq('[1.0,2.0]')
+      expect(res[:comperator]).to eq('>=x<=')
+    end
   end
 end

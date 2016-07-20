@@ -13,12 +13,13 @@ class NugetParser < CommonParser
     version         = "(?<version>(#{numeric})(\\.(#{numeric})(\\.(#{numeric}))?)?)"
     semver          = "#{version}(#{prerelease_info})?(#{build_info})?"
 
+    #version range doc: https://docs.nuget.org/create/versioning#Specifying-Version-Ranges-in-.nuspec-Files
     empty_string    = "^\\s*$"                    # ""        | current
     less_equal      = "^\\(,#{semver}\\]$"        # (,1.0]    | x <= 1.0
     less_than       = "^\\(,#{semver}\\)$"        # (,1.0)    | x < 1.0
     exact_match     = "^\\[#{semver},{0,1}\\]$"   # [1.0]     | x == 1.0
     greater_than    = "^\\(#{semver},\\)$"        # (1.0,)    | 1.0 < x
-    greater_eq_than = "^#{semver}$"               # 1.0       | 1.0 <= x
+    greater_eq_than = "^#{semver}$"               # 1.0       | 1.0 <= x, quite weird
 
     gt_range_lt   = "^\\((?<start>#{semver}),(?<end>#{semver})\\)$" # (1.0,2.0) | 1.0 < x < 2.0
     gte_range_lt  = "^\\[(?<start>#{semver}),(?<end>#{semver})\\)$" # [1.0,2.0) | 1.0 <= x < 2.0
@@ -71,7 +72,7 @@ class NugetParser < CommonParser
   def parse_requested_version(version_label, dependency, product)
     return dependency if product.nil?
 
-    latest_version = parse_version_data(version_label, dependency, product)
+    latest_version = parse_version_data(version_label, product)
     return dependency if latest_version.nil?
 
     dependency[:version_label] = latest_version[:label]
@@ -100,7 +101,7 @@ class NugetParser < CommonParser
 
     if version.empty?
       newest = VersionService.newest_version(product.versions)
-      version_data = { version: newest.version, comperator: '>=' }
+      version_data = { version: newest.version, label: '*', comperator: '=' }
     elsif ( m = rules[:exact].match(version) )
       res = VersionService.from_ranges(product.versions, m[:version])
       version_data = { version: res.last.version, comperator: '=' }
@@ -149,7 +150,7 @@ class NugetParser < CommonParser
       latest = VersionService.intersect_versions(gt_versions, lt_versions, false)
       version_data = { version: latest.version, comperator: '>=x<=' }
     else
-      log.error "NugetParser.parse_version_data | version `#{versions}` has wrong format"
+      log.error "NugetParser.parse_version_data | version `#{version}` has wrong format"
       version_data = { version: "0.0.0-NA", comperator: '!='}
     end
 
