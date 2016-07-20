@@ -462,7 +462,7 @@ class Github < Versioneye::Service
 
   def self.post_json( url, body_hash, token, raw = false, updated_at = nil )
     request_headers = build_request_headers token, updated_at
-    response = post(url, body: body.to_json, headers: request_headers)
+    response = post(url, body: body_hash.to_json, headers: request_headers)
     return response if raw
 
     content = JSON.parse(response.body, symbolize_names: true)
