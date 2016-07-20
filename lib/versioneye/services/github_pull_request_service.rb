@@ -18,7 +18,7 @@ class GithubPullRequestService < Versioneye::Service
     filenames = []
     projects.each do |project|
       token = GithubUpdater.new.fetch_token_for project
-      status_pending_send = set_status_pending status_pending_send, repo_name, pr, token
+      status_pending_send = set_status_pending status_pending_send, pr, token
 
       filename = project.s3_filename
       next if filenames.include?(filename)
@@ -29,7 +29,7 @@ class GithubPullRequestService < Versioneye::Service
         valid_token = token
       end
     end
-    finish_status repo_name, pr, valid_token
+    finish_status pr, valid_token
     true
   rescue => e
     log.error e.message
@@ -38,19 +38,19 @@ class GithubPullRequestService < Versioneye::Service
   end
 
 
-  def self.set_status_pending status_updated, repo_name, pr, token
+  def self.set_status_pending status_updated, pr, token
     return if status_updated == true
 
-    status = {:state: pr.status, :description: "checking dependencies for security & licenses", :context: "VersionEye"}
-    response = Github.update_status repo_name, pr.commit_sha, token, status
+    status = {:state => pr.status, :description => "checking dependencies for security & licenses", :context => "VersionEye"}
+    response = Github.update_status pr.scm_fullname, pr.commit_sha, token, status
     return false if response.nil?
     return true
   end
 
 
-  def self.finish_status repo_name, pr, token
-    status = {:state: "pending", :description: pr.description, :context: "VersionEye"}
-    Github.update_status repo_name, pr.commit_sha, token, status
+  def self.finish_status pr, token
+    status = {:state => "pending", :description => pr.description, :context => "VersionEye"}
+    Github.update_status pr.scm_fullname, pr.commit_sha, token, status
   end
 
 
