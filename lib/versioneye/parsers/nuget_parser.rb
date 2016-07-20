@@ -67,11 +67,25 @@ class NugetParser < CommonParser
     nil
   end
 
+  # parses raw version label and updates dependency.version_requested with latest matching version
+  def parse_requested_version(version_label, dependency, product)
+    return dependency if product.nil?
+
+    latest_version = parse_version_data(version_label, dependency, product)
+    return dependency if latest_version.nil?
+
+    dependency[:version_label] = latest_version[:label]
+    dependency[:version_requested] = latest_version[:version]
+    dependency[:comperator] = latest_version[:comperator]
+
+    dependency
+  end
 
   def cleanup_version(version_label)
     version_label.to_s.gsub(/\s*/, "").strip
   end
 
+  # parses raw version label and matches its comperator range with Product versions
   def parse_version_data(version_label, product)
     version = cleanup_version(version_label)
 
@@ -188,7 +202,6 @@ class NugetParser < CommonParser
     deps.each {|dep| parse_dependency_version( project, dep )}
   end
 
-
   def parse_dependency_version( project, dependency )
     product = Product.fetch_product(dependency[:language], dependency[:prod_key])
     version_label = dependency[:version_label]
@@ -199,7 +212,7 @@ class NugetParser < CommonParser
     end
 
     if product
-      dependency[:version_current] = product[:version]
+      parse_requested_version(version_label, dependency, product)
     else
       dependency.comperator = "="
       project.unknown_number += 1
