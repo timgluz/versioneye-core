@@ -225,8 +225,10 @@ class ProjectService < Versioneye::Service
     return true if Settings.instance.projects_unique_scm == false
     return true if project.scm_fullname.to_s.empty?
 
-    project = Project.where(:source => project.source, :scm_fullname => project.scm_fullname, :scm_branch => project.scm_branch, :s3_filename => project.s3_filename).first
-    return true if project.nil?
+    db_project = Project.where(:source => project.source, :scm_fullname => project.scm_fullname, :scm_branch => project.scm_branch, :s3_filename => project.s3_filename).first
+    return true if db_project.nil?
+
+    destroy project # Delete new created proejct to prevent duplicates in the database!
 
     err_msg = "The project file is already monitored by VersionEye. Project ID: #{project.id.to_s}"
     log.error err_msg
