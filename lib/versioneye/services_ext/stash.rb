@@ -47,16 +47,19 @@ class Stash < Versioneye::Service
   end
 
 
-  def self.projects_all( token, secret, limit = 30 )
+  def self.projects_all( token, secret, per_page = 30 )
     projects = []
     start = 0
+    limit = per_page
     response = {}
     response[:isLastPage] = false
     while response[:isLastPage] == false
-      response = self.projects(token, secret, start, limit)
+      response = Stash.projects(token, secret, start, limit)
+      next if response.nil?
+
       projects << response[:values]
-      start += limit
-      limit += limit
+      start += per_page
+      limit += per_page
     end
     projects.flatten
   end
@@ -118,12 +121,12 @@ class Stash < Versioneye::Service
   def self.get_json(path, token, secret, raw = false, params = {}, headers = {})
     url = "#{Settings.instance.stash_base_url}#{path}"
     oauth = init_oauth_client
-    token = OAuth::AccessToken.new(oauth, token, secret)
-    oauth_params = {consumer: oauth, token: token, request_uri: url}
+    oauth_token = OAuth::AccessToken.new(oauth, token, secret)
+    oauth_params = {consumer: oauth, token: oauth_token, request_uri: url}
     request_headers = A_DEFAULT_HEADERS
     request_headers.merge! headers
 
-    response = token.get(path, request_headers)
+    response = oauth_token.get(path, request_headers)
     if raw == true
       return response.body
     end
@@ -134,10 +137,12 @@ class Stash < Versioneye::Service
       log.error "Got status: #{response.code} #{response.message} body: #{response.body}"
       log.error e.message
       log.error e.backtrace.join("\n")
+      nil
     end
   rescue => e
     log.error "Fuck up in get_json - #{e.message}"
     log.error e.backtrace.join("\n")
+    nil
   end
 
 
