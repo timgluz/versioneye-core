@@ -13,12 +13,13 @@ class NugetParser < CommonParser
     version         = "(?<version>(#{numeric})(\\.(#{numeric})(\\.(#{numeric}))?)?)"
     semver          = "#{version}(#{prerelease_info})?(#{build_info})?"
 
+    #version range doc: https://docs.nuget.org/create/versioning#Specifying-Version-Ranges-in-.nuspec-Files
     empty_string    = "^\\s*$"                    # ""        | current
     less_equal      = "^\\(,#{semver}\\]$"        # (,1.0]    | x <= 1.0
     less_than       = "^\\(,#{semver}\\)$"        # (,1.0)    | x < 1.0
     exact_match     = "^\\[#{semver},{0,1}\\]$"   # [1.0]     | x == 1.0
     greater_than    = "^\\(#{semver},\\)$"        # (1.0,)    | 1.0 < x
-    greater_eq_than = "^#{semver}$"               # 1.0       | 1.0 <= x
+    greater_eq_than = "^#{semver}$"               # 1.0       | 1.0 <= x, quite weird
 
     gt_range_lt   = "^\\((?<start>#{semver}),(?<end>#{semver})\\)$" # (1.0,2.0) | 1.0 < x < 2.0
     gte_range_lt  = "^\\[(?<start>#{semver}),(?<end>#{semver})\\)$" # [1.0,2.0) | 1.0 <= x < 2.0
@@ -67,11 +68,25 @@ class NugetParser < CommonParser
     nil
   end
 
+  # parses raw version label and updates dependency.version_requested with latest matching version
+  def parse_requested_version(version_label, dependency, product)
+    return dependency if product.nil?
+
+    latest_version = parse_version_data(version_label, product)
+    return dependency if latest_version.nil?
+
+    dependency[:version_label] = latest_version[:label]
+    dependency[:version_requested] = latest_version[:version]
+    dependency[:comperator] = latest_version[:comperator]
+
+    dependency
+  end
 
   def cleanup_version(version_label)
     version_label.to_s.gsub(/\s*/, "").strip
   end
 
+  # parses raw version label and matches its comperator range with Product versions
   def parse_version_data(version_label, product)
     version = cleanup_version(version_label)
 
@@ -86,7 +101,7 @@ class NugetParser < CommonParser
 
     if version.empty?
       newest = VersionService.newest_version(product.versions)
-      version_data = { version: newest.version, comperator: '>=' }
+      version_data = { version: newest.version, label: '*', comperator: '=' }
     elsif ( m = rules[:exact].match(version) )
       res = VersionService.from_ranges(product.versions, m[:version])
       version_data = { version: res.last.version, comperator: '=' }
@@ -135,7 +150,7 @@ class NugetParser < CommonParser
       latest = VersionService.intersect_versions(gt_versions, lt_versions, false)
       version_data = { version: latest.version, comperator: '>=x<=' }
     else
-      log.error "NugetParser.parse_version_data | version `#{versions}` has wrong format"
+      log.error "NugetParser.parse_version_data | version `#{version}` has wrong format"
       version_data = { version: "0.0.0-NA", comperator: '!='}
     end
 
@@ -188,18 +203,18 @@ class NugetParser < CommonParser
     deps.each {|dep| parse_dependency_version( project, dep )}
   end
 
-
+  #parses raw version string of project dependencies and updates project details
   def parse_dependency_version( project, dependency )
     product = Product.fetch_product(dependency[:language], dependency[:prod_key])
     version_label = dependency[:version_label]
 
     if version_label.nil? || version_label.empty?
       update_requested_with_current( dependency, product )
-      return
+      return project
     end
 
     if product
-      dependency[:version_current] = product[:version]
+      parse_requested_version(version_label, dependency, product)
     else
       dependency.comperator = "="
       project.unknown_number += 1
@@ -210,7 +225,6 @@ class NugetParser < CommonParser
     project
   end
 
-
   def init_project(url, doc)
     project = Project.new({
       project_type: Project::A_TYPE_NUGET,
@@ -220,9 +234,7 @@ class NugetParser < CommonParser
       description: doc.xpath('//package/metadata/description').text,
       license: doc.xpath('//package/metadata/licenseUrl').text
     })
-    #project.save #should parse save new project?
+    
     project
   end
-
-
 end
