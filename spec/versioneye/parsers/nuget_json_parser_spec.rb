@@ -72,39 +72,39 @@ describe NugetJsonParser do
   context "parse" do
     it "fetches file properly" do
       project = parser.parse(test_file_url)
-      project.should_not be_nil
+      expect( project ).not_to be_nil
     end
 
     it "parses project json file correctly" do
       project = parser.parse(test_file_url)
-      project.should_not be_nil
+      expect( project ).not_to be_nil
 
-      project.projectdependencies.size.should eq(6)
+      expect( project.projectdependencies.size ).to eq(6)
       deps = project.projectdependencies
       
-      deps[0].name.should eq(product4[:name])
-      deps[0].version_requested.should eq(product4[:version])
-      deps[0].comperator.should eq("=")
+      expect( deps[0].name ).to eq(product4[:name])
+      expect( deps[0].version_requested ).to eq(product4[:version])
+      expect( deps[0].comperator ).to eq("=")
 
-      deps[1].name.should eq(product5[:name])
-      deps[1].version_requested.should eq(product5[:version])
-      deps[1].comperator.should eq("=")
+      expect( deps[1].name ).to eq(product5[:name])
+      expect( deps[1].version_requested ).to eq(product5[:version])
+      expect( deps[1].comperator ).to eq("=")
 
-      deps[2].name.should eq(product6[:name])
-      deps[2].version_requested.should eq(product6[:version])
-      deps[2].comperator.should eq("=")
+      expect( deps[2].name ).to eq(product6[:name])
+      expect( deps[2].version_requested ).to eq(product6[:version])
+      expect( deps[2].comperator ).to eq("=")
 
-      deps[3].name.should eq(product7[:name])
-      deps[3].version_requested.should eq(product7[:version])
-      deps[3].comperator.should eq("=")
+      expect( deps[3].name ).to eq(product7[:name])
+      expect( deps[3].version_requested ).to eq(product7[:version])
+      expect( deps[3].comperator ).to eq("=")
 
-      deps[4].name.should eq(product8[:name])
-      deps[4].version_requested.should eq(product8[:version])
-      deps[4].comperator.should eq("=")
+      expect( deps[4].name ).to eq(product8[:name])
+      expect( deps[4].version_requested ).to eq(product8[:version])
+      expect( deps[4].comperator ).to eq("=")
 
-      deps[5].name.should eq(product9[:name])
-      deps[5].version_requested.should eq(product9[:version])
-      deps[5].comperator.should eq("=")
+      expect( deps[5].name ).to eq(product9[:name])
+      expect( deps[5].version_requested ).to eq(product9[:version])
+      expect( deps[5].comperator ).to eq("=")
 
     end
   end
