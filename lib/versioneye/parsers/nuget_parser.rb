@@ -203,13 +203,14 @@ class NugetParser < CommonParser
     deps.each {|dep| parse_dependency_version( project, dep )}
   end
 
+  #parses raw version string of project dependencies and updates project details
   def parse_dependency_version( project, dependency )
     product = Product.fetch_product(dependency[:language], dependency[:prod_key])
     version_label = dependency[:version_label]
 
     if version_label.nil? || version_label.empty?
       update_requested_with_current( dependency, product )
-      return
+      return project
     end
 
     if product
@@ -224,7 +225,6 @@ class NugetParser < CommonParser
     project
   end
 
-
   def init_project(url, doc)
     project = Project.new({
       project_type: Project::A_TYPE_NUGET,
@@ -234,9 +234,7 @@ class NugetParser < CommonParser
       description: doc.xpath('//package/metadata/description').text,
       license: doc.xpath('//package/metadata/licenseUrl').text
     })
-    #project.save #should parse save new project?
+    
     project
   end
-
-
 end
