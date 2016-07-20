@@ -47,7 +47,7 @@ class Stash < Versioneye::Service
   end
 
 
-  def self.projects_all( token, secret, per_page = 30 )
+  def self.projects_all( token, secret, per_page = 100 )
     projects = []
     start = 0
     limit = per_page
