@@ -454,7 +454,7 @@ class Github < Versioneye::Service
     content = JSON.parse(response.body, symbolize_names: true)
     catch_github_exception( content )
   rescue => e
-    log.error "ERROR in get_json( #{url} )"
+    log.error "ERROR in get_json( #{url} ) error message: #{e.message}"
     log.error e.backtrace.join("\n")
     nil
   end
@@ -468,7 +468,7 @@ class Github < Versioneye::Service
     content = JSON.parse(response.body, symbolize_names: true)
     catch_github_exception( content )
   rescue => e
-    log.error "ERROR in post_json( #{url} )"
+    log.error "ERROR in post_json( #{url} ) error message: #{e.message}"
     log.error e.backtrace.join("\n")
     nil
   end
