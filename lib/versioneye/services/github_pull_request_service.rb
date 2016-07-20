@@ -4,32 +4,26 @@ class GithubPullRequestService < Versioneye::Service
   def self.process repo_name, branch, commits_url, pr_nr
     log.info "process #{repo_name}, #{branch}, #{commits_url}, #{pr_nr}"
 
-    last_commit = nil
     projects = Project.where(:scm_fullname => repo_name, :temp => false)
-
-    pr = create_pullrequest( repo_name, branch, pr_nr, projects, commits_url )
-    if pr.nil?
+    pullrequest = create_pullrequest( repo_name, branch, pr_nr, projects, commits_url )
+    if pullrequest.nil?
       log.error "ERROR in GithubPullRequestService. Could not create pullrequest! #{repo_name}:#{branch}:#{pr_nr}:#{commits_url}"
       return nil
     end
 
-    valid_token = nil
-    status_pending_send = false
+    set_status_pending pullrequest
+    pullrequest.status = Pullrequest::A_STATUS_SUCCESS
+    pullrequest.save
     filenames = []
     projects.each do |project|
       token = GithubUpdater.new.fetch_token_for project
-      status_pending_send = set_status_pending status_pending_send, pr, token
-
       filename = project.s3_filename
       next if filenames.include?(filename)
 
-      success = process_file( repo_name, filename, branch, token, pr )
-      if success
-        filenames << filename
-        valid_token = token
-      end
+      success = process_file( repo_name, filename, branch, token, pullrequest )
+      filenames << filename if success
     end
-    finish_status pr, valid_token
+    finish_status pullrequest
     true
   rescue => e
     log.error e.message
@@ -38,19 +32,15 @@ class GithubPullRequestService < Versioneye::Service
   end
 
 
-  def self.set_status_pending status_updated, pr, token
-    return if status_updated == true
-
+  def self.set_status_pending pr
     status = {:state => pr.status, :description => "checking dependencies for security & licenses", :context => "VersionEye"}
-    response = Github.update_status pr.scm_fullname, pr.commit_sha, token, status
-    return false if response.nil?
-    return true
+    Github.update_status pr.scm_fullname, pr.commit_sha, pr.token, status
   end
 
 
-  def self.finish_status pr, token
+  def self.finish_status pr
     status = {:state => pr.status, :description => pr.description, :context => "VersionEye"}
-    Github.update_status pr.scm_fullname, pr.commit_sha, token, status
+    Github.update_status pr.scm_fullname, pr.commit_sha, pr.token, status
   end
 
 
@@ -112,15 +102,16 @@ class GithubPullRequestService < Versioneye::Service
 
       commit_sha  = last_commit[:sha]
       tree_sha    = last_commit[:commit][:tree][:sha]
-      pr = Pullrequest.new({
+      pullrequest = Pullrequest.new({
         :scm_provider => Pullrequest::A_SCM_GITHUB,
         :scm_fullname => repo_name,
         :scm_branch => branch,
         :pr_number => pr_nr,
         :commit_sha => commit_sha,
-        :tree_sha => tree_sha})
-      pr.save
-      return pr
+        :tree_sha => tree_sha,
+        :token => token })
+      pullrequest.save
+      return pullrequest
     end
     nil
   end
