@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'naturalsorter', '~> 3.0.14'
   s.add_runtime_dependency 'dalli', '~> 2.7.0'
   s.add_runtime_dependency 'oauth', '~> 0.5.0'
-  s.add_runtime_dependency 'aws-sdk', '~> 2.3.0'
+  s.add_runtime_dependency 'aws-sdk', '~> 2.4.0'
   s.add_runtime_dependency 'stripe', '~> 1.48.0'
   s.add_runtime_dependency 'tire', '~> 0.6.2'
   s.add_runtime_dependency 'octokit', '~> 4.3.0'
