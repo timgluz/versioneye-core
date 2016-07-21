@@ -56,7 +56,6 @@ class GithubPullRequestService < Versioneye::Service
     ProjectdependencyService.update_licenses_security new_project
 
     new_project.dependencies.each do |dep|
-      log.info "#{dep.prod_key} - #{dep.version_requested} - #{dep.licenses_string} - #{dep.license_caches.to_a.count}"
       if !dep.sv_ids.empty? || dep.license_caches.to_a.empty?
         create_sec_issue filename, dep, pr
       end
@@ -76,10 +75,13 @@ class GithubPullRequestService < Versioneye::Service
     message = "#{dep.sv_ids.count} security vulnerability."
     message = "#{dep.sv_ids.count} security vulnerabilities." if dep.sv_ids.count > 1
 
+    prod_key = dep.prod_key
+    prod_key = dep.name if prod_key.to_s.empty?
+
     issue = PrIssue.new({
       :file => filename,
       :language => dep.language,
-      :prod_key => dep.prod_key,
+      :prod_key => prod_key,
       :version_label => dep.version_label,
       :version_requested => dep.version_requested,
       :version_current => dep.version_current,
