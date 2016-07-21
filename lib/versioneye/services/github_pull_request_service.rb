@@ -39,7 +39,8 @@ class GithubPullRequestService < Versioneye::Service
 
 
   def self.finish_status pr
-    status = {:state => pr.status, :description => pr.description, :context => "VersionEye"}
+    target_url = "#{Settings.instance.server_url}/pullrequest/#{pr.ids}"
+    status = {:state => pr.status, :description => pr.description, :context => "VersionEye", :target_url => target_url}
     Github.update_status pr.scm_fullname, pr.commit_sha, pr.token, status
   end
 
