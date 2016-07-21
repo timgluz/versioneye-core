@@ -432,10 +432,10 @@ class Github < Versioneye::Service
   end
 
 
-  def self.create_webhook repo, token
+  def self.create_webhook repo, token, body_hash
     github_api_url = get_github_api_url
     url = "#{github_api_url}/repos/#{repo}/hooks"
-    # TODO finish it
+    post_json url, body_hash, token
   end
 
 

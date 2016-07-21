@@ -67,16 +67,36 @@ class ProjectImportService < Versioneye::Service
       public: Settings.instance.default_project_public
     })
 
+    api_key = user.api.api_key
     organisation = find_orga( orga_id )
     if organisation
       project.organisation_id = organisation.ids
       project.team_ids = [organisation.owner_team.ids]
+      api_key = organisation.api.api_key
     end
 
     project = ProjectService.store( project )
     parent  = merge_into_parent project, user
     ProjectService.update_sums( parent )
+
+    create_github_webhook repo_name, project.ids, api_key, user.github_token
+
     project
+  end
+
+
+  def self.create_github_webhook repo_name, project_id, api_key, token
+    body_hash = { :name => "versioneye", :active => true, :events => ["push", "pull_request"], :config => {
+        :url => "https://www.versioneye.com/api/v2/github/hook",
+        :content_type => "json",
+        :api_key => api_key,
+        :project_id => project_id
+      }
+    }
+    Github.create_webhook repo_name, token, body_hash
+  rescue => e
+    log.error "ERROR in create_github_webhook() error message: #{e.message}"
+    log.error e.backtrace.join("\n")
   end
 
 
