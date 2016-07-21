@@ -11,20 +11,16 @@ class PrIssue < Versioneye::Model
   field :file             , type: String
   field :language         , type: String
   field :prod_key         , type: String
+  field :name             , type: String
   field :version_label    , type: String # pull request number
   field :version_requested, type: String
   field :version_current  , type: String
   field :license          , type: String
   field :issue_type       , type: String
-  field :message          , type: String
 
   field :security_count , type: Integer, :default => 0
   field :unknown_license, type: Boolean, :default => false
 
   belongs_to :pullrequest
-
-  validates_presence_of :file    , :message => 'is mandatory!'
-  validates_presence_of :language, :message => 'is mandatory!'
-  validates_presence_of :prod_key, :message => 'is mandatory!'
 
 end

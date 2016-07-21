@@ -72,26 +72,20 @@ class GithubPullRequestService < Versioneye::Service
 
 
   def self.create_sec_issue filename, dep, pullrequest
-    message = "#{dep.sv_ids.count} security vulnerability."
-    message = "#{dep.sv_ids.count} security vulnerabilities." if dep.sv_ids.count > 1
-
-    prod_key = dep.prod_key
-    prod_key = dep.name if prod_key.to_s.empty?
-
     issue = PrIssue.new({
       :file => filename,
       :language => dep.language,
-      :prod_key => prod_key,
+      :prod_key => dep.prod_key,
+      :name => dep.name,
       :version_label => dep.version_label,
       :version_requested => dep.version_requested,
       :version_current => dep.version_current,
       :license => dep.licenses_string,
-      :security_count =>  dep.sv_ids.count,
-      :message => message
+      :security_count =>  dep.sv_ids.count
       })
     issue.pullrequest = pullrequest
     if issue.save
-      pullrequest.security_count += 1 if issue.security_count > 0
+      pullrequest.security_count        += 1 if issue.security_count > 0
       pullrequest.unknown_license_count += 1 if issue.license.eql?('UNKNOWN')
       pullrequest.status = Pullrequest::A_STATUS_ERROR
       pullrequest.save
