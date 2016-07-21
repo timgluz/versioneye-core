@@ -121,6 +121,7 @@ class GithubPullRequestService < Versioneye::Service
   end
 
 
+  # TODO implement paging!
   def self.fetch_last_commit commits_url, token
     commits = Github.get_json commits_url, token
     commits.last
