@@ -56,7 +56,7 @@ class GithubPullRequestService < Versioneye::Service
     ProjectdependencyService.update_licenses_security new_project
 
     new_project.dependencies.each do |dep|
-      log.info "#{dep.prod_key} - #{dep.version_requested} - #{dep.licenses_string} - #{dep.dep.license_caches.count}"
+      log.info "#{dep.prod_key} - #{dep.version_requested} - #{dep.licenses_string} - #{dep.license_caches.to_a.count}"
       if !dep.sv_ids.empty? || dep.license_caches.to_a.empty?
         create_sec_issue filename, dep, pr
       end
