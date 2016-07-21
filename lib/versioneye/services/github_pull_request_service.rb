@@ -80,6 +80,9 @@ class GithubPullRequestService < Versioneye::Service
       :prod_key => dep.prod_key,
       :version_label => dep.version_label,
       :version_requested => dep.version_requested,
+      :version_current => dep.version_current,
+      :license => dep.licenses_string,
+      :security_count =>  dep.sv_ids.count,
       :message => message,
       :issue_type => PrIssue::A_ISSUE_SECURITY })
     issue.pullrequest = pullrequest

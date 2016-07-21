@@ -13,8 +13,12 @@ class PrIssue < Versioneye::Model
   field :prod_key         , type: String
   field :version_label    , type: String # pull request number
   field :version_requested, type: String
+  field :version_current  , type: String
+  field :license          , type: String
   field :issue_type       , type: String
   field :message          , type: String
+
+  field :security_count, type: Integer, :default => 0
 
   belongs_to :pullrequest
 
