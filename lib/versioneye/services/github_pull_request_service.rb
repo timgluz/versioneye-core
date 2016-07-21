@@ -76,7 +76,6 @@ class GithubPullRequestService < Versioneye::Service
     message = "#{dep.sv_ids.count} security vulnerabilities." if dep.sv_ids.count > 1
 
     issue = PrIssue.new({
-      :commits_url => commits_url,
       :file => filename,
       :language => dep.language,
       :prod_key => dep.prod_key,
@@ -108,6 +107,7 @@ class GithubPullRequestService < Versioneye::Service
       commit_sha  = last_commit[:sha]
       tree_sha    = last_commit[:commit][:tree][:sha]
       pullrequest = Pullrequest.new({
+        :commits_url => commits_url,
         :scm_provider => Pullrequest::A_SCM_GITHUB,
         :scm_fullname => repo_name,
         :scm_branch => branch,
@@ -123,7 +123,7 @@ class GithubPullRequestService < Versioneye::Service
 
 
   def self.fetch_last_commit commits_url, token
-    commits = Github.get_json "#{commits_url}?page=1&per_page=200", token
+    commits = Github.get_json "#{commits_url}?page=1&per_page=500", token
     commits.last
   rescue => e
     nil
