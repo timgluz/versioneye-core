@@ -82,14 +82,14 @@ class Stash < Versioneye::Service
   end
 
 
-  def self.project_repos( projectKey, token, secret )
-    path = "#{A_API_V1_PATH}/projects/#{projectKey}/repos"
+  def self.project_repos( projectKey, token, secret, start = 0, limit = 1000 )
+    path = "#{A_API_V1_PATH}/projects/#{projectKey}/repos?start=#{start}&limit=#{limit}"
     get_json(path, token, secret)
   end
 
 
-  def self.branches( projectKey, repo, token, secret )
-    path = "#{A_API_V1_PATH}/projects/#{projectKey}/repos/#{repo}/branches"
+  def self.branches( projectKey, repo, token, secret, start = 0, limit = 1000  )
+    path = "#{A_API_V1_PATH}/projects/#{projectKey}/repos/#{repo}/branches?start=#{start}&limit=#{limit}"
     get_json(path, token, secret)
   end
 
