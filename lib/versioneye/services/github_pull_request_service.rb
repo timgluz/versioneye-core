@@ -76,6 +76,7 @@ class GithubPullRequestService < Versioneye::Service
     message = "#{dep.sv_ids.count} security vulnerabilities." if dep.sv_ids.count > 1
 
     issue = PrIssue.new({
+      :commits_url => commits_url,
       :file => filename,
       :language => dep.language,
       :prod_key => dep.prod_key,
@@ -121,9 +122,8 @@ class GithubPullRequestService < Versioneye::Service
   end
 
 
-  # TODO implement paging!
   def self.fetch_last_commit commits_url, token
-    commits = Github.get_json commits_url, token
+    commits = Github.get_json "#{commits_url}?page=1&per_page=200", token
     commits.last
   rescue => e
     nil

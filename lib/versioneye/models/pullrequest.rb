@@ -8,6 +8,7 @@ class Pullrequest < Versioneye::Model
   A_STATUS_SUCCESS = 'success'
   A_STATUS_ERROR   = 'error'
 
+  field :commits_url   , type: String
   field :scm_provider  , type: String, :default => A_SCM_GITHUB
   field :scm_fullname  , type: String
   field :scm_branch    , type: String
