@@ -56,6 +56,7 @@ class GithubPullRequestService < Versioneye::Service
     ProjectdependencyService.update_licenses_security new_project
 
     new_project.dependencies.each do |dep|
+      log.info "#{dep.prod_key} - #{dep.version_requested} - #{dep.licenses_string} - #{dep.dep.license_caches.count}"
       if !dep.sv_ids.empty? || dep.license_caches.to_a.empty?
         create_sec_issue filename, dep, pr
       end
@@ -84,8 +85,8 @@ class GithubPullRequestService < Versioneye::Service
       :version_current => dep.version_current,
       :license => dep.licenses_string,
       :security_count =>  dep.sv_ids.count,
-      :message => message,
-      :issue_type => PrIssue::A_ISSUE_SECURITY })
+      :message => message
+      })
     issue.pullrequest = pullrequest
     if issue.save
       pullrequest.security_count += 1 if issue.security_count > 0
