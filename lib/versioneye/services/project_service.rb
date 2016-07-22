@@ -213,7 +213,7 @@ class ProjectService < Versioneye::Service
     return true if project.group_id.to_s.empty? && project.artifact_id.to_s.empty? && project.version.to_s.empty?
 
     db_projects = Project.where(:group_id => project.group_id, :artifact_id => project.artifact_id, :version => project.version )
-    return true if db_projects.nil? || db_projects.empty
+    return true if db_projects.nil? || db_projects.empty?
 
     db_project = db_projects.first
     return true if db_project.ids.eql?( project.ids ) && db_projects.count == 1
