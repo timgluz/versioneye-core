@@ -333,7 +333,7 @@ class ProjectImportService < Versioneye::Service
       orga_max_count = 1
       orga_max_count = orga.plan.private_projects if orga.plan
       private_project_count = Project.private_project_count_by_orga( orga.ids )
-      return false if private_project_count >= orga.plan.private_projects
+      return false if private_project_count >= orga_max_count
       return true
     end
 
