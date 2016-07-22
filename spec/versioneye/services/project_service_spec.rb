@@ -561,7 +561,7 @@ describe ProjectService do
       project.scm_branch = 'master'
       project.s3_filename = 'pom.xml'
       project.save
-      expect { ProjectService.ensure_unique_scm(project) }.to be_truthy
+      expect( ProjectService.ensure_unique_scm(project) ).to be_truthy
       Settings.instance.projects_unique_scm = false
     end
     it 'throws an exception because there is already a project with same data' do
