@@ -230,9 +230,8 @@ class ProjectService < Versioneye::Service
 
     destroy project # Delete new created proejct to prevent duplicates in the database!
 
-    err_msg = "The project file is already monitored by VersionEye. Project ID: #{project.id.to_s}"
-    log.error err_msg
-    raise err_msg
+    log.error "The project file is already monitored by VersionEye. Project ID: #{db_project.id.to_s}. scm_fullname: #{db_project.scm_fullname}, scm_branch: #{db_project.scm_branch}, filename: #{db_project.s3_filename}"
+    raise     "The project file is already monitored by VersionEye. Project ID: #{db_project.id.to_s}."
   end
 
 
