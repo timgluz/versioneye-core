@@ -212,12 +212,16 @@ class ProjectService < Versioneye::Service
     return true if Settings.instance.projects_unique_gav == false
     return true if project.group_id.to_s.empty? && project.artifact_id.to_s.empty? && project.version.to_s.empty?
 
-    project = Project.find_by_gav( project.group_id, project.artifact_id, project.version )
-    return true if project.nil?
+    db_projects = Project.where(:group_id => project.group_id, :artifact_id => project.artifact_id, :version => project.version )
+    return true if db_projects.nil? || db_projects.empty
 
-    err_msg = "A project with same GroupId, ArtifactId and Version exist already. Project ID: #{project.id.to_s}"
-    log.error err_msg
-    raise err_msg
+    db_project = db_projects.first
+    return true if db_project.ids.eql?( project.ids ) && db_projects.count == 1
+
+    destroy project
+
+    log.error "A project with same GroupId, ArtifactId and Version exist already. Project ID: #{project.id.to_s}. GroupId: #{db_project.group_id}, ArtifactId: #{db_project.artifact_id}, Version: #{db_project.version}"
+    raise "A project with same GroupId, ArtifactId and Version exist already. Project ID: #{project.id.to_s}."
   end
 
 
@@ -229,7 +233,7 @@ class ProjectService < Versioneye::Service
     return true if db_projects.nil? || db_projects.empty?
 
     db_project = db_projects.first
-    return true if db_project.ids.eql?( project.ids )
+    return true if db_project.ids.eql?( project.ids ) && db_projects.count == 1
 
     destroy project # Delete new created proejct to prevent duplicates in the database!
 
