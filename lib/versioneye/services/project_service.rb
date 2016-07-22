@@ -225,8 +225,11 @@ class ProjectService < Versioneye::Service
     return true if Settings.instance.projects_unique_scm == false
     return true if project.scm_fullname.to_s.empty?
 
-    db_project = Project.where(:source => project.source, :scm_fullname => project.scm_fullname, :scm_branch => project.scm_branch, :s3_filename => project.s3_filename).first
-    return true if db_project.nil?
+    db_projects = Project.where(:source => project.source, :scm_fullname => project.scm_fullname, :scm_branch => project.scm_branch, :s3_filename => project.s3_filename)
+    return true if db_projects.nil? || db_projects.empty?
+
+    db_project = db_projects.first
+    return true if db_project.ids.eql?( project.ids )
 
     destroy project # Delete new created proejct to prevent duplicates in the database!
 
