@@ -220,8 +220,8 @@ class ProjectService < Versioneye::Service
 
     destroy project
 
-    log.error "A project with same GroupId, ArtifactId and Version exist already. Project ID: #{project.id.to_s}. GroupId: #{db_project.group_id}, ArtifactId: #{db_project.artifact_id}, Version: #{db_project.version}"
-    raise "A project with same GroupId, ArtifactId and Version exist already. Project ID: #{project.id.to_s}."
+    log.error "A project with same GroupId, ArtifactId and Version exist already. Project ID: #{db_project.id.to_s}. GroupId: #{db_project.group_id}, ArtifactId: #{db_project.artifact_id}, Version: #{db_project.version}"
+    raise "A project with same GroupId, ArtifactId and Version exist already. Project ID: #{db_project.id.to_s}."
   end
 
 
