@@ -67,18 +67,14 @@ class ProjectImportService < Versioneye::Service
       public: Settings.instance.default_project_public
     })
 
-    api_key = user.api.api_key
-    organisation = find_orga( orga_id )
-    if organisation
-      project.organisation_id = organisation.ids
-      project.team_ids = [organisation.owner_team.ids]
-      api_key = organisation.api.api_key
-    end
+    organisation = update_project_with_orga project, orga_id
 
     project = ProjectService.store( project )
     parent  = merge_into_parent project, user
     ProjectService.update_sums( parent )
 
+    api_key = user.api.api_key
+    api_key = organisation.api.api_key if organisation
     create_github_webhook repo_name, project.ids, api_key, user.github_token
 
     project
@@ -156,11 +152,7 @@ class ProjectImportService < Versioneye::Service
       public: Settings.instance.default_project_public
     })
 
-    organisation = find_orga( orga_id )
-    if organisation
-      project.organisation_id = organisation.ids
-      project.team_ids = [organisation.owner_team.ids]
-    end
+    update_project_with_orga project, orga_id
 
     project = ProjectService.store( project )
     parent  = merge_into_parent project, user
@@ -209,11 +201,7 @@ class ProjectImportService < Versioneye::Service
       public: Settings.instance.default_project_public
     })
 
-    organisation = find_orga( orga_id )
-    if organisation
-      project.organisation_id = organisation.ids
-      project.team_ids = [organisation.owner_team.ids]
-    end
+    update_project_with_orga project, orga_id
 
     project = ProjectService.store( project )
     parent  = merge_into_parent project, user
@@ -239,11 +227,7 @@ class ProjectImportService < Versioneye::Service
       public: Settings.instance.default_project_public
     })
 
-    organisation = find_orga( orga_id )
-    if organisation
-      project.organisation_id = organisation.ids
-      project.team_ids = [organisation.owner_team.ids]
-    end
+    update_project_with_orga project, orga_id
 
     project = ProjectService.store( project )
     ProjectService.update_sums( project )
@@ -344,6 +328,18 @@ class ProjectImportService < Versioneye::Service
     end
     return false if private_project_count >= max
     return true
+  end
+
+
+  def self.update_project_with_orga project, orga_id
+    organisation = find_orga( orga_id )
+    if organisation
+      project.organisation_id        = organisation.ids
+      project.team_ids               = [organisation.owner_team.ids]
+      project.license_whitelist_id   = organisation.default_lwl_id
+      project.component_whitelist_id = organisation.default_cwl_id
+    end
+    organisation
   end
 
 
