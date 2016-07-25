@@ -404,5 +404,14 @@ describe NugetParser do
       expect(res[:version_label]).to eq('[1.0,2.0]')
       expect(res[:comperator]).to eq('>=x<=')
     end
+
+    it "returns the version label from the file, when product has no matching versions" do
+      res = parser.parse_requested_version('24.12.0', depx, product4)
+
+      expect(res).not_to be_nil
+      expect(res[:version_requested]).to eq('24.12.0')
+      expect(res[:version_label]).to eq('24.12.0')
+      expect(res[:comperator]).to eq('>=')
+    end
   end
 end
