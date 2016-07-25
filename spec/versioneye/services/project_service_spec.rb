@@ -288,6 +288,14 @@ describe ProjectService do
       described_class.type_by_filename("project.clj").should eql(Project::A_TYPE_LEIN)
       described_class.type_by_filename("app/project.clj").should eql(Project::A_TYPE_LEIN)
     end
+
+    it "returns Nuget" do
+      url1 = "/project.json"
+      described_class.type_by_filename(url1).should eql(Project::A_TYPE_NUGET)
+      described_class.type_by_filename("packet.dependencies").should eql(Project::A_TYPE_NUGET)
+      described_class.type_by_filename("/something.nuspec").should eql(Project::A_TYPE_NUGET)
+    end
+
     it "returns nil for wrong Lein file" do
       described_class.type_by_filename("project.clja").should be_nil
       described_class.type_by_filename("app/project.clj/new").should be_nil

@@ -10,6 +10,7 @@ class ProjectService < Versioneye::Service
     return nil if filename.to_s.match(/LICENSE.txt\z/i)
     return nil if filename.to_s.match(/README.txt\z/i)
     return nil if filename.to_s.match(/content.txt\z/i)
+    return nil if filename.to_s.match(/curl.txt\z/i)
 
     trimmed_name = filename.split('?')[0]
     return Project::A_TYPE_RUBYGEMS  if (!(/Gemfile\z/ =~ trimmed_name).nil?)        or (!(/Gemfile.lock\z/  =~ trimmed_name).nil?)
@@ -24,6 +25,7 @@ class ProjectService < Versioneye::Service
     return Project::A_TYPE_BIICODE   if (!(/biicode.conf\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_COCOAPODS if (!(/Podfile\z/ =~ trimmed_name).nil?)  or (!(/.podfile\z/ =~ trimmed_name).nil?) or (!(/Podfile.lock\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_CHEF      if (!(/Berksfile.lock\z/ =~ trimmed_name).nil?)  or (!(/Berksfile\z/ =~ trimmed_name).nil?) or (!(/metadata.rb\z/ =~ trimmed_name).nil?)
+    return Project::A_TYPE_NUGET     if (!(/project\.json\z/ =~ trimmed_name).nil?) or (!(/.*\.nuspec\z/ =~ trimmed_name).nil?)
     return nil
   end
 

@@ -15,7 +15,7 @@ class NugetJsonParser < NugetParser
     doc     = from_json( response_body )
     project = init_project( url, doc )
     deps    = parse_dependencies( doc )
-    
+
     parse_dependency_versions(project, deps) # attaches parsed dependencies to project
     project
   rescue => e
