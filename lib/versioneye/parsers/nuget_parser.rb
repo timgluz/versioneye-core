@@ -61,6 +61,7 @@ class NugetParser < CommonParser
     deps    = parse_dependencies( doc )
 
     parse_dependency_versions(project, deps) # attaches parsed dependencies to project
+    project.dep_number = project.dependencies.size
     project
   rescue => e
     log.error "ERROR in parse_content(#{response_body}) -> #{e.message}"
@@ -89,7 +90,7 @@ class NugetParser < CommonParser
   # parses raw version label and matches its comperator range with Product versions
   def parse_version_data(version_label, product)
     version = cleanup_version(version_label)
-    
+
     version_data = {
       version: version,
       label: version,
@@ -118,7 +119,7 @@ class NugetParser < CommonParser
     elsif ( m = rules[:less_equal].match(version) )
       res = VersionService.smaller_than_or_equal(product.versions, m[:version], true)
       version_data[:version]    =  res.last.version unless res.to_a.empty?
-      version_data[:comperator] = '<=' 
+      version_data[:comperator] = '<='
 
     elsif ( m = rules[:greater_than].match(version) )
       res = VersionService.greater_than(product.versions, m[:version], true)
@@ -157,7 +158,7 @@ class NugetParser < CommonParser
       lt_versions = VersionService.smaller_than_or_equal(product.versions, end_version, true)
       latest = VersionService.intersect_versions(gt_versions, lt_versions, false)
       version_data[:version]    = latest.version if latest
-      version_data[:comperator] = '>x<=' 
+      version_data[:comperator] = '>x<='
 
     elsif ( m = rules[:gte_range_lte].match(version) )
       start_version = m[:start]
@@ -254,7 +255,7 @@ class NugetParser < CommonParser
       description: doc.xpath('//package/metadata/description').text,
       license: doc.xpath('//package/metadata/licenseUrl').text
     })
-    
+
     project
   end
 end
