@@ -61,7 +61,7 @@ class NugetParser < CommonParser
     deps    = parse_dependencies( doc )
 
     parse_dependency_versions(project, deps) # attaches parsed dependencies to project
-    project.dep_number = project.dependencies.size
+    project.dep_number = project.projectdependencies.size
     project
   rescue => e
     log.error "ERROR in parse_content(#{response_body}) -> #{e.message}"
