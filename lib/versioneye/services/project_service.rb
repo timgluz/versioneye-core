@@ -11,6 +11,8 @@ class ProjectService < Versioneye::Service
     return nil if filename.to_s.match(/README.txt\z/i)
     return nil if filename.to_s.match(/content.txt\z/i)
     return nil if filename.to_s.match(/curl.txt\z/i)
+    return nil if filename.to_s.match(/comment.txt\z/i)
+    return nil if filename.to_s.match(/new_file.txt\z/i)
 
     trimmed_name = filename.split('?')[0]
     return Project::A_TYPE_RUBYGEMS  if (!(/Gemfile\z/ =~ trimmed_name).nil?)        or (!(/Gemfile.lock\z/  =~ trimmed_name).nil?)
