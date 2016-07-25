@@ -241,8 +241,9 @@ class NugetParser < CommonParser
       project.unknown_number += 1
     end
 
-    project.out_number += 1 if dependency.outdated?
     project.projectdependencies.push(dependency)
+    project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
+    project.unknown_number += 1 if product.nil?
     project
   end
 
