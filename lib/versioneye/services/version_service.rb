@@ -206,7 +206,7 @@ class VersionService < Versioneye::Service
   #nuget allows to specify version by combining greater_than and smaller_than
   def self.intersect_versions(versions1, versions2, range = true)
     all_versions = versions1.concat versions2
-    common_version_labels = Set.new(versions1.map(&:version)) & Set.new(versions2.map(&:version))
+    common_version_labels = Set.new(versions1.to_a.map(&:version)) & Set.new(versions2.to_a.map(&:version))
     common_versions = all_versions.keep_if do |ver|
       result = false
       if common_version_labels.include? ver[:version]

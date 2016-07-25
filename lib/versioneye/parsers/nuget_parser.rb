@@ -89,34 +89,47 @@ class NugetParser < CommonParser
   # parses raw version label and matches its comperator range with Product versions
   def parse_version_data(version_label, product)
     version = cleanup_version(version_label)
+    
+    version_data = {
+      version: version,
+      label: version,
+      comperator: '='
+    }
 
     if product.nil?
       log.warn "parse_version_data | product is nil"
-      return {
-        version: version,
-        label: version,
-        comperator: '='
-      }
+      return version_data
     end
 
     if version.empty?
       newest = VersionService.newest_version(product.versions)
-      version_data = { version: newest.version, label: '*', comperator: '=' }
+      version_data[:version] = newest.version if newest
+      version_data[:label] = '*'
     elsif ( m = rules[:exact].match(version) )
       res = VersionService.from_ranges(product.versions, m[:version])
-      version_data = { version: res.last.version, comperator: '=' }
+      version_data[:version] = res.last.version unless res.to_a.empty?
+      version_data[:comperator] = '='
+
     elsif ( m = rules[:less_than].match(version) )
       res = VersionService.smaller_than(product.versions, m[:version], true)
-      version_data = { version: res.last.version, comperator: '<' }
+      version_data[:version]    = res.last.version unless res.to_a.empty?
+      version_data[:comperator] = '<'
+
     elsif ( m = rules[:less_equal].match(version) )
       res = VersionService.smaller_than_or_equal(product.versions, m[:version], true)
-      version_data = { version: res.last.version, comperator: '<=' }
+      version_data[:version]    =  res.last.version unless res.to_a.empty?
+      version_data[:comperator] = '<=' 
+
     elsif ( m = rules[:greater_than].match(version) )
       res = VersionService.greater_than(product.versions, m[:version], true)
-      version_data = { version: res.last.version, comperator: '>' }
+      version_data[:version]    = res.last.version unless res.to_a.empty?
+      version_data[:comperator] = '>'
+
     elsif ( m = rules[:greater_eq_than].match(version) )
       res = VersionService.greater_than_or_equal(product.versions, m[:version], true)
-      version_data = { version: res.last.version, comperator: '>=' }
+      version_data[:version]    = res.last.version unless res.to_a.empty?
+      version_data[:comperator] = '>='
+
     elsif ( m = rules[:gt_range_lt].match(version) )
       start_version = m[:start]
       end_version = m[:end]
@@ -124,8 +137,9 @@ class NugetParser < CommonParser
       #1st find all the greatest versions, then smallest; then find biggest of intersection
       gt_versions = VersionService.greater_than(product.versions, start_version, true)
       lt_versions = VersionService.smaller_than(product.versions, end_version, true)
-      res = VersionService.intersect_versions(gt_versions, lt_versions, false)
-      version_data = { version: res.version, comperator: '>x<' }
+      latest = VersionService.intersect_versions(gt_versions, lt_versions, false)
+      version_data[:version]    = latest.version if latest
+      version_data[:comperator] = '>x<'
 
     elsif ( m = rules[:gte_range_lt].match(version) )
       start_version = m[:start]
@@ -133,7 +147,8 @@ class NugetParser < CommonParser
       gt_versions = VersionService.greater_than_or_equal(product.versions, start_version, true)
       lt_versions = VersionService.smaller_than(product.versions, end_version, true)
       latest = VersionService.intersect_versions(gt_versions, lt_versions, false)
-      version_data = { version: latest.version, comperator: '>=x<' }
+      version_data[:version]    = latest.version if latest
+      version_data[:comperator] = '>=x<'
 
     elsif ( m = rules[:gt_range_lte].match(version) )
       start_version = m[:start]
@@ -141,20 +156,24 @@ class NugetParser < CommonParser
       gt_versions = VersionService.greater_than(product.versions, start_version, true)
       lt_versions = VersionService.smaller_than_or_equal(product.versions, end_version, true)
       latest = VersionService.intersect_versions(gt_versions, lt_versions, false)
-      version_data = { version: latest.version, comperator: '>x<=' }
+      version_data[:version]    = latest.version if latest
+      version_data[:comperator] = '>x<=' 
+
     elsif ( m = rules[:gte_range_lte].match(version) )
       start_version = m[:start]
       end_version = m[:end]
       gt_versions = VersionService.greater_than_or_equal(product.versions, start_version, true)
       lt_versions = VersionService.smaller_than_or_equal(product.versions, end_version, true)
       latest = VersionService.intersect_versions(gt_versions, lt_versions, false)
-      version_data = { version: latest.version, comperator: '>=x<=' }
+      version_data[:version]    = latest.version if latest
+      version_data[:comperator] = '>=x<='
     else
       log.error "NugetParser.parse_version_data | version `#{version}` has wrong format"
-      version_data = { version: "0.0.0-NA", comperator: '!='}
+      version_data[:version] = "0.0.0-NA"
+      version_data[:comperator] = '!='
     end
 
-    {label: version}.merge version_data
+    version_data
   end
 
   def parse_dependencies(doc)

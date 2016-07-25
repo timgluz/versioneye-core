@@ -107,6 +107,31 @@ describe NugetJsonParser do
       expect( deps[5].comperator ).to eq("=")
 
     end
+
+    it "parses project even when some product has no matching versions" do
+      product4.versions.delete_all
+      product5.versions.delete_all
+
+      project = parser.parse(test_file_url)
+      expect( project ).not_to be_nil
+
+      expect( project.projectdependencies.size ).to eq(6)
+      deps = project.projectdependencies
+ 
+      expect( deps[0].name ).to eq(product4[:name])
+      expect( deps[0].version_requested ).to eq(product4[:version])
+      expect( deps[0].comperator ).to eq(">=")
+
+      expect( deps[1].name ).to eq(product5[:name])
+      expect( deps[1].version_requested ).to eq(product5[:version])
+      expect( deps[1].comperator ).to eq(">=")
+
+      expect( deps[2].name ).to eq(product6[:name])
+      expect( deps[2].version_requested ).to eq(product6[:version])
+      expect( deps[2].comperator ).to eq("=")
+
+      
+    end
   end
 
 end
