@@ -60,7 +60,9 @@ class StatisticService < Versioneye::Service
     data = []
     A_STAT_LANGUAGES.each do |lang|
       count = Product.where(language: lang).count
-      data << [lang, count]
+      lang_label = lang
+      lang_label = "C#" if lang.to_s.eql?(Product::A_LANGUAGE_CSHARP)
+      data << [lang_label, count]
     end
     data
   end
@@ -81,7 +83,9 @@ class StatisticService < Versioneye::Service
       A_STAT_LANGUAGES.each do |lang|
         ncount = Product.where(language: lang, created_at: {'$lt' => curr_date}).count
         encoded_lang = Product.encode_language(lang).to_s
-        stats.merge!({encoded_lang => ncount})
+        lang_label = encoded_lang
+        lang_label = "C#" if lang.to_s.eql?(Product::A_LANGUAGE_CSHARP)
+        stats.merge!({lang_label => ncount})
       end
 
       results << stats
