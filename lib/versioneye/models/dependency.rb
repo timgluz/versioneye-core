@@ -125,6 +125,8 @@ class Dependency < Versioneye::Model
       return A_SCOPE_COMPILE
     elsif language.eql?( Product::A_LANGUAGE_NODEJS)
       return A_SCOPE_COMPILE
+    elsif language.eql?( Product::A_LANGUAGE_CSHARP)
+      return A_SCOPE_COMPILE
     elsif language.eql?( Product::A_LANGUAGE_PHP ) || language.eql?( Product::A_LANGUAGE_JAVASCRIPT )
       return A_SCOPE_REQUIRE
     end
