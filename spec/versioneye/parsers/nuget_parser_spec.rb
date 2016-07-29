@@ -59,6 +59,16 @@ describe NugetParser do
       expect( "1.0-alpha.1.2+build.2".match(semver) ).not_to be_nil
     end
 
+    it "matches patched_patch semvers" do
+      semver = parser.rules[:semver]
+      
+      expect( semver.match '2.0.30506.0' ).not_to be_nil
+      expect( semver.match '1.6.6.0' ).not_to be_nil
+      expect( semver.match '0.18.3.1' ).not_to be_nil
+      expect( semver.match '0.18.3.1.2.3' ).not_to be_nil
+
+    end
+
     it "matches less than rule" do
       less_than = parser.rules[:less_than]
 

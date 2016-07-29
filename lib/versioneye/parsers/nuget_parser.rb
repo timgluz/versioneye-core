@@ -10,7 +10,9 @@ class NugetParser < CommonParser
     ident           = "[\\w-]" # identificator aka textual value
     prerelease_info = "\\-(?<prerelease>#{ident}[\\.#{ident}]*)" # matches release info: -alpha.1
     build_info      = "\\+(?<build>#{ident}[\\.#{ident}]*)"      # matches build info
-    version         = "(?<version>(#{numeric})(\\.(#{numeric})(\\.(#{numeric}))?)?)"
+    #version         = "(?<version>(#{numeric})(\\.(#{numeric})(\\.(#{numeric}))?)?)" #old major.minor.patch 
+    version         = "(?<version>(#{numeric})(\\.(#{numeric})(\\.(#{numeric}))*)?)" #matches more than m.m.p
+  
     semver          = "#{version}(#{prerelease_info})?(#{build_info})?"
 
     #version range doc: https://docs.nuget.org/create/versioning#Specifying-Version-Ranges-in-.nuspec-Files
@@ -171,7 +173,7 @@ class NugetParser < CommonParser
       version_data[:version]    = latest.version if latest
       version_data[:comperator] = '>=x<='
     else
-      log.error "NugetParser.parse_version_data | version `#{version}` has wrong format"
+      log.error "NugetParser.parse_version_data | version `#{version}` doesnt match with any parser rules"
       version_data[:version] = "0.0.0-NA"
       version_data[:comperator] = '!='
     end
