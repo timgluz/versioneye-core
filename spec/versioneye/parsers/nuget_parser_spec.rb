@@ -212,7 +212,7 @@ describe NugetParser do
 
     it "returns correct version for requested version 1.6" do
       version_data = parser.parse_version_data("1.6", product3)
-      
+    
       expect( version_data).not_to be_nil
       expect( version_data[:label] ).to eq("1.6")
       expect( version_data[:version] ).to eq("2.1")
@@ -422,6 +422,35 @@ describe NugetParser do
       expect(res[:version_requested]).to eq('24.12.0')
       expect(res[:version_label]).to eq('24.12.0')
       expect(res[:comperator]).to eq('>=')
+    end
+
+    it "doesnt mark outdated if latest product is not stable and version_label is fixed on latest stable" do
+      product4.version = '2.0' # it's latest stable version
+      product4.versions << FactoryGirl.build( :product_version, version: '2.1-alpha')
+
+      #none of those example should return alpha version
+      res = parser.parse_requested_version('2.0', depx, product4)
+      expect(res).not_to be_nil
+      expect(res[:version_requested]).to eq('2.0')
+      expect(res[:version_label]).to eq('2.0')
+      expect(res[:comperator]).to eq('>=')
+
+      res = parser.parse_requested_version('(1.9,)', depx, product4)
+      expect(res).not_to be_nil
+      expect(res[:version_requested]).to eq('2.0')
+      expect(res[:version_label]).to eq('(1.9,)')
+      expect(res[:comperator]).to eq('>')
+      
+    
+      res = parser.parse_requested_version('(,2.2)', depx, product4)
+      expect(res).not_to be_nil
+      expect(res[:version_requested]).to eq('2.0')
+      expect(res[:comperator]).to eq('<')
+
+      res = parser.parse_requested_version('(,2.2]', depx, product4)
+      expect(res).not_to be_nil
+      expect(res[:version_requested]).to eq('2.0')
+      expect(res[:comperator]).to eq('<=')
     end
   end
 end
