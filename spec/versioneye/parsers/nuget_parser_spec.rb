@@ -110,6 +110,15 @@ describe NugetParser do
       expect( greater_than.match("1.2.0") ).not_to be_nil
     end
 
+    it "matches rule of greater_eq_than2" do
+      greater_than = parser.rules[:greater_eq_than2]
+
+      expect( greater_than.match("[1,)") ).not_to be_nil
+      expect( greater_than.match("[1.0,)") ).not_to be_nil
+      expect( greater_than.match("[1.2.0,)") ).not_to be_nil
+     
+    end
+
     it "matches range 1.0 < x < 2.0" do
       range = parser.rules[:gt_range_lt]
       

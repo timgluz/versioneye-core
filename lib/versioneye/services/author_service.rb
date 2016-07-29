@@ -11,7 +11,7 @@ class AuthorService < Versioneye::Service
   def self.dev_to_author dev
     product = dev.product
     if product.nil?
-      log.error "ERROR - developer #{dev.ids} without product!"
+      log.error "ERROR - developer #{dev.ids} #{dev.name} without product for #{dev.language}/#{dev.prod_key}!"
       return nil
     end
 
