@@ -20,6 +20,7 @@ class NugetParser < CommonParser
     exact_match     = "^\\[#{semver},{0,1}\\]$"   # [1.0]     | x == 1.0
     greater_than    = "^\\(#{semver},\\)$"        # (1.0,)    | 1.0 < x
     greater_eq_than = "^#{semver}$"               # 1.0       | 1.0 <= x, quite weird
+    greater_eq_than2 = "^\\[#{semver},\\)$"       # [1.0,)    | 1.0 <= x, unofficial
 
     gt_range_lt   = "^\\((?<start>#{semver}),(?<end>#{semver})\\)$" # (1.0,2.0) | 1.0 < x < 2.0
     gte_range_lt  = "^\\[(?<start>#{semver}),(?<end>#{semver})\\)$" # [1.0,2.0) | 1.0 <= x < 2.0
@@ -36,6 +37,7 @@ class NugetParser < CommonParser
       exact:           Regexp.new(exact_match,     Regexp::EXTENDED),
       greater_than:    Regexp.new(greater_than,    Regexp::EXTENDED),
       greater_eq_than: Regexp.new(greater_eq_than, Regexp::EXTENDED),
+      greater_eq_than2: Regexp.new(greater_eq_than2, Regexp::EXTENDED),
       gt_range_lt:     Regexp.new(gt_range_lt,     Regexp::EXTENDED),
       gte_range_lt:    Regexp.new(gte_range_lt,    Regexp::EXTENDED),
       gt_range_lte:    Regexp.new(gt_range_lte,    Regexp::EXTENDED),
@@ -126,7 +128,7 @@ class NugetParser < CommonParser
       version_data[:version]    = res.last.version unless res.to_a.empty?
       version_data[:comperator] = '>'
 
-    elsif ( m = rules[:greater_eq_than].match(version) )
+    elsif ( m = rules[:greater_eq_than].match(version) or m = rules[:greater_eq_than2].match(version))
       res = VersionService.greater_than_or_equal(product.versions, m[:version], true)
       version_data[:version]    = res.last.version unless res.to_a.empty?
       version_data[:comperator] = '>='
