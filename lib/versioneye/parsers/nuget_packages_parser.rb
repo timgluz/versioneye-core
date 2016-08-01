@@ -47,8 +47,17 @@ class NugetPackagesParser < NugetParser
 
   def process_dependency(pkg_node)
     prod_name = pkg_node.attr('id').to_s.strip
-    version_label = pkg_node.attr('version').to_s.strip
+    version_requested = pkg_node.attr('version').to_s.strip
+    allowed_range = pkg_node.attr('allowedVersions').to_s.strip
     target = pkg_node.attr('targetFramework').to_s.strip
+
+    #by default packages.config fixes automatically version as x >= VERSION, 
+    # but allowedVersions allows humans defines acceptable versionRange as in a nuspec;
+    version_label = if allowed_range.empty?
+                      version_requested
+                    else
+                      allowed_range
+                    end
 
     Projectdependency.new({
       language: Product::A_LANGUAGE_CSHARP,
