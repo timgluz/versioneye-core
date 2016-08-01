@@ -104,6 +104,13 @@ describe NugetPackagesParser do
 
   context "onwerk's failed project" do
     it "parses their packages.config correctly" do
+      product3.versions << FactoryGirl.build(:product_version, version: '1.3.4')
+      product3.versions << FactoryGirl.build(:product_version, version: '1.4.0')
+
+      product7.versions << FactoryGirl.build(:product_version, version: '0.18.2')
+      product7.versions << FactoryGirl.build(:product_version, version: '0.18.3.1')
+      
+      
       project = parser.parse_content(onwerk_file, "ftp://spec_test")
       expect(project).not_to be_nil
       expect(project.projectdependencies.size).to eq(5)
@@ -111,6 +118,7 @@ describe NugetPackagesParser do
       deps = project.projectdependencies
 
       expect( deps[0].name ).to eq(product3[:name])
+      expect( deps[0].version_label ).to eq('[1.3.4]')
       expect( deps[0].version_requested ).to eq(product3[:version])
       expect( deps[0].comperator).to eq('=')
 
@@ -128,7 +136,7 @@ describe NugetPackagesParser do
 
       expect( deps[4].name ).to eq(product7[:name])
       expect( deps[4].version_requested ).to eq(product7[:version])
-      expect( deps[4].comperator).to eq('=')
+      expect( deps[4].comperator).to eq('>=')
 
     end
   end

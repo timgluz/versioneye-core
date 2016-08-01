@@ -120,6 +120,7 @@ class NugetParser < CommonParser
       newest = VersionService.newest_version(product.versions)
       version_data[:version] = newest.version if newest
       version_data[:label] = '*'
+
     elsif ( m = rules[:exact].match(version) )
       res = VersionService.from_ranges(product.versions, m[:version])
       latest_version = VersionService.newest_version res
@@ -190,6 +191,10 @@ class NugetParser < CommonParser
     end
 
     version_data
+  rescue Exception => e
+    log.error "NugetParser.parse_version_data: Failed to find match for version label #{version} for #{product.prod_id}"
+    log.error e.backtrace.inspect
+    return nil
   end
 
   def parse_dependencies(doc)
