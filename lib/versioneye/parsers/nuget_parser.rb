@@ -77,6 +77,16 @@ class NugetParser < CommonParser
   def parse_requested_version(version_label, dependency, product)
     return dependency if product.nil?
 
+    version_label = cleanup_version version_label
+    
+    # Ignore cases like => "dev-master | ^1.0"
+    if version_label.match(/.+\|.+/).nil?
+      dependency[:stability] = VersionTagRecognizer.stability_tag_for version_label
+      VersionTagRecognizer.remove_minimum_stability version_label
+    else
+      dependency[:stability] = VersionTagRecognizer::A_STABILITY_STABLE
+    end
+
     latest_version = parse_version_data(version_label, product)
     return dependency if latest_version.nil?
 
@@ -112,27 +122,28 @@ class NugetParser < CommonParser
       version_data[:label] = '*'
     elsif ( m = rules[:exact].match(version) )
       res = VersionService.from_ranges(product.versions, m[:version])
-      version_data[:version] = res.last.version unless res.to_a.empty?
+      latest_version = VersionService.newest_version res
+      version_data[:version] = latest_version[:version] if latest_version
       version_data[:comperator] = '='
 
     elsif ( m = rules[:less_than].match(version) )
-      res = VersionService.smaller_than(product.versions, m[:version], true)
-      version_data[:version]    = res.last.version unless res.to_a.empty?
+      latest_version = VersionService.smaller_than(product.versions, m[:version])
+      version_data[:version]    = latest_version[:version] if latest_version
       version_data[:comperator] = '<'
 
     elsif ( m = rules[:less_equal].match(version) )
-      res = VersionService.smaller_than_or_equal(product.versions, m[:version], true)
-      version_data[:version]    =  res.last.version unless res.to_a.empty?
+      latest_version = VersionService.smaller_than_or_equal(product.versions, m[:version])
+      version_data[:version]    =  latest_version[:version] if latest_version
       version_data[:comperator] = '<='
 
     elsif ( m = rules[:greater_than].match(version) )
-      res = VersionService.greater_than(product.versions, m[:version], true)
-      version_data[:version]    = res.last.version unless res.to_a.empty?
+      latest_version = VersionService.greater_than(product.versions, m[:version])
+      version_data[:version]    = latest_version[:version] if latest_version
       version_data[:comperator] = '>'
 
     elsif ( m = rules[:greater_eq_than].match(version) or m = rules[:greater_eq_than2].match(version))
-      res = VersionService.greater_than_or_equal(product.versions, m[:version], true)
-      version_data[:version]    = res.last.version unless res.to_a.empty?
+      latest_version = VersionService.greater_than_or_equal(product.versions, m[:version])
+      version_data[:version] = latest_version[:version] if latest_version
       version_data[:comperator] = '>='
 
     elsif ( m = rules[:gt_range_lt].match(version) )
@@ -209,7 +220,7 @@ class NugetParser < CommonParser
     prod_name = node.attr("id").to_s.strip
     version_label = node.attr("version").to_s.strip
 
-    Projectdependency.new({
+    dep = Projectdependency.new({
       language: Product::A_LANGUAGE_CSHARP,
       name: prod_name,
       prod_key: prod_name,
@@ -218,6 +229,8 @@ class NugetParser < CommonParser
       target: target,
       scope: scope
     })
+    
+    dep
   end
 
 
