@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/versioneye/versioneye-core.svg?style=svg)](https://circleci.com/gh/versioneye/versioneye-core) [![Dependency Status](https://www.versioneye.com/user/projects/54ae88a42eea784acc000002/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54ae88a42eea784acc000002)
+[![CircleCI](https://circleci.com/gh/versioneye/versioneye-core.svg?style=svg)](https://circleci.com/gh/versioneye/versioneye-core) 
 
 # versioneye-core
 
