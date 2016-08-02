@@ -3,7 +3,7 @@ module VersionEye
 
     def to_indexed_json # For ElasticSearch
       {
-        :_id                => self._id,
+        :_id                => self.ids,
         :_type              => 'product',
         :name               => self.name,
         :description        => self.description.to_s,
