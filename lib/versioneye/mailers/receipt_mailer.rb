@@ -18,6 +18,7 @@ class ReceiptMailer < SuperMailer
 
     def fetch_email receipt
       return receipt.email if !receipt.email.to_s.empty?
+      return receipt.organisation.billing_address.email if receipt.organisation && receipt.organisation.billing_address
       return receipt.user.email
     end
 
