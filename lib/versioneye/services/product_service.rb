@@ -7,7 +7,7 @@ class ProductService < Versioneye::Service
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
-    MongoProduct.find_by(q, '', group_id, languages, 300).paginate(:page => page_count)
+    MongoProduct.find_by(q, '', group_id, languages, 300)
   end
 
 
