@@ -64,12 +64,8 @@ class ReceiptService < Versioneye::Service
 
 
   def self.handle_invoice orga, invoice
-    return nil if invoice[:paid].to_s.casecmp('true')   != 0 # return if paid   = false
-    return nil if invoice[:closed].to_s.casecmp('true') != 0 # return if closed = false
-
-    # Early exit if receipt exist already in db
     receipt = Receipt.where(:invoice_id => invoice[:id]).shift
-    return nil if !receipt.nil?
+    return receipt if receipt # Early exit if receipt exist already in db
 
     receipt = new_receipt orga, invoice
 
