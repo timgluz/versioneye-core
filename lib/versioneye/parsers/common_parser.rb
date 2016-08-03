@@ -13,14 +13,11 @@ class CommonParser
   end
 
   def from_json(json_doc)
-    doc = nil
-    begin
-      doc = JSON.parse(json_doc, {symbolize_names: true})
-    rescue
-      log.error "Failed to parse #{json_doc}"
-    end
-
-    doc
+    JSON.parse(json_doc, {symbolize_names: true})
+  rescue => e
+    log.error "from_json: failed to parse #{json_doc}"
+    log.error e.backtrace.join('\n')
+    return nil
   end
 =begin
 

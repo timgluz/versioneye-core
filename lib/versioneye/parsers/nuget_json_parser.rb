@@ -13,13 +13,18 @@ class NugetJsonParser < NugetParser
 
   def parse_content(response_body, url)
     doc     = from_json( response_body )
+    if doc.nil?
+      log.error "Failed to parse JSON document at #{url}, \n content #{response_body}"
+      return nil
+    end
+
     project = init_project( url, doc )
     deps    = parse_dependencies( doc )
 
     parse_dependency_versions(project, deps) # attaches parsed dependencies to project
     project.dep_number = project.projectdependencies.size
     project
-  rescue => e
+  rescue Exception => e
     log.error "ERROR in parse_content(#{response_body}) -> #{e.message}"
     log.error e.backtrace.join("\n")
     nil
@@ -38,6 +43,7 @@ class NugetJsonParser < NugetParser
 
   def parse_dependencies(doc)
     deps = []
+
     doc[:dependencies].each_pair do |prod_name, version_label|
       deps << Projectdependency.new({
         language: Product::A_LANGUAGE_CSHARP,
