@@ -55,6 +55,4 @@ class NugetJsonParser < NugetParser
     end
     deps
   end
-
-
 end

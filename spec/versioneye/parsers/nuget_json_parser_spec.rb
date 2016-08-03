@@ -144,6 +144,11 @@ describe NugetJsonParser do
       )
     }
 
+		it "fails to parse IGORs doc without clean up" do
+			expect { JSON.parse(igor_project_file) }.to raise_error(JSON::ParserError)
+			expect { JSON.parse(parser.clean_spaces(igor_project_file)) }.not_to raise_error(JSON::ParserError)
+		end
+
     it "parses project that a client failed to analyze" do
       project = parser.parse_content igor_project_file, "ftp://spec/dir/"
       expect( project ).not_to be nil
