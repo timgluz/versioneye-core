@@ -129,8 +129,35 @@ describe NugetJsonParser do
       expect( deps[2].name ).to eq(product6[:name])
       expect( deps[2].version_requested ).to eq(product6[:version])
       expect( deps[2].comperator ).to eq("=")
-
       
+    end
+
+    let(:igor_project_file){ File.read "spec/fixtures/files/nuget/igor_project.json"  }
+    let(:product10){
+      FactoryGirl.create(
+        :product_with_versions,
+        prod_key: "NETStandard.Library",
+        name: "NETStandard.Library",
+        prod_type: Project::A_TYPE_NUGET,
+        language: Product::A_LANGUAGE_CSHARP,
+        version: "1.6.0"
+      )
+    }
+
+		it "fails to parse IGORs doc without clean up" do
+			expect { JSON.parse(igor_project_file) }.to raise_error(JSON::ParserError)
+			expect { JSON.parse(parser.clean_spaces(igor_project_file)) }.not_to raise_error(JSON::ParserError)
+		end
+
+    it "parses project that a client failed to analyze" do
+      project = parser.parse_content igor_project_file, "ftp://spec/dir/"
+      expect( project ).not_to be nil
+      expect( project.projectdependencies.size ).to eq(1)
+
+      deps = project.projectdependencies
+      expect( deps[0].name ).to eq(product10[:name])
+      expect( deps[0].version_requested ).to eq(product10[:version])
+      expect( deps[0].comperator ).to eq('=')
     end
   end
 
