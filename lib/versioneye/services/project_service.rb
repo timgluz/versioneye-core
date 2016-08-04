@@ -17,7 +17,7 @@ class ProjectService < Versioneye::Service
     trimmed_name = filename.split('?')[0]
     return Project::A_TYPE_RUBYGEMS  if (!(/Gemfile\z/ =~ trimmed_name).nil?)        or (!(/Gemfile.lock\z/  =~ trimmed_name).nil?)
     return Project::A_TYPE_COMPOSER  if (!(/composer.json\z/ =~ trimmed_name).nil?)  or (!(/composer.lock\z/ =~ trimmed_name).nil?)
-    return Project::A_TYPE_PIP       if (!(/requirements.txt\z/ =~ trimmed_name).nil?)  or (!(/setup.py\z/ =~ trimmed_name).nil?) or (!(/pip.log\z/ =~ trimmed_name).nil?)
+    return Project::A_TYPE_PIP       if (!(/requirements.txt\z/ =~ trimmed_name).nil?) or (!(/requirements\/.+\.txt/i =~ trimmed_name).nil?) or (!(/setup.py\z/ =~ trimmed_name).nil?) or (!(/pip.log\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_NPM       if (!(/package.json\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_GRADLE    if (!(/.gradle\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_SBT       if (!(/.sbt\z/ =~ trimmed_name).nil?)
