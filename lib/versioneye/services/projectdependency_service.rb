@@ -47,7 +47,7 @@ class ProjectdependencyService < Versioneye::Service
     return nil if version.nil?
     return nil if version.sv_ids.to_a.empty?
 
-    titles = []
+    nsps = []
     version.sv_ids.each do |sv_id|
       sv = SecurityVulnerability.find sv_id
       if sv.nil?
@@ -55,9 +55,9 @@ class ProjectdependencyService < Versioneye::Service
         version.save
         next
       end
-      if !dep.sv_ids.include?(sv_id) && !titles.include?( sv.summary )
+      if !dep.sv_ids.include?(sv_id) && !nsps.include?( sv.nsp )
         dep.sv_ids << sv_id
-        titles << sv.summary
+        nsps       << sv.nsp if !sv.nsp.to_s.empty?
       end
       dep.save if save_dep
     end
