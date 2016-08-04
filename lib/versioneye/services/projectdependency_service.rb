@@ -57,7 +57,7 @@ class ProjectdependencyService < Versioneye::Service
       end
       if !dep.sv_ids.include?(sv_id) && !titles.include?( sv.summary )
         dep.sv_ids << sv_id
-        titles = sv.summary
+        titles << sv.summary
       end
       dep.save if save_dep
     end
