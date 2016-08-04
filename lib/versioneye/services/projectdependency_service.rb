@@ -47,6 +47,7 @@ class ProjectdependencyService < Versioneye::Service
     return nil if version.nil?
     return nil if version.sv_ids.to_a.empty?
 
+    dep.sv_ids = []
     nsps = []
     version.sv_ids.each do |sv_id|
       sv = SecurityVulnerability.find sv_id
