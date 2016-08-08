@@ -83,7 +83,7 @@ class ProjectImportService < Versioneye::Service
 
   def self.create_github_webhook repo_name, project_id, api_key, token
     body_hash = { :name => "versioneye", :active => true, :events => ["push", "pull_request"], :config => {
-        :url => "https://www.versioneye.com/api/v2/github/hook",
+        :url => "#{Settings.instance.server_url}/api/v2/github/hook",
         :content_type => "json",
         :api_key => api_key,
         :project_id => project_id
