@@ -45,7 +45,7 @@ class TransferService < Versioneye::Service
     s3.list_objects(bucket: bucket_name).each do |response|
       response.contents.each do |content|
         obj_key = content.key
-        download s3, bucket_name, obj_key
+        download directory, s3, bucket_name, obj_key
       end
     end
   end
