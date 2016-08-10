@@ -10,7 +10,7 @@ class HtmlWorkerProducer < Producer
 
     queue.publish(msg, :persistent => true)
 
-    log_msg = " [x] Sent messag: '#{msg}' to queue: #{queue.name}"
+    log_msg = " [x] HtmlWorkerProducer sent messag: '#{msg}' to queue: #{queue.name}"
     puts log_msg
     log.info log_msg
 
