@@ -40,9 +40,7 @@ class ProjectImportService < Versioneye::Service
 
   def self.import_from_github user, repo_name, filename, branch = 'master', orga_id = ''
     private_project = Github.private_repo? user.github_token, repo_name
-    log.info "private_project: #{private_project} for #{repo_name} / #{filename} / #{branch} / #{orga_id}"
     check_permission_for_github_repo user, orga_id, repo_name, private_project
-    log.info "private_project: #{private_project} for #{repo_name} / #{filename} / #{branch} / #{orga_id}"
 
     project_file = Github.fetch_project_file_from_branch(repo_name, filename, branch, user[:github_token] )
     if project_file.nil?
