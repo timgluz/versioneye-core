@@ -78,6 +78,9 @@ class ParserStrategy
           return NugetParser.new
         end
 
+      when Project::A_TYPE_GODEP
+        return GodepParser.new
+
       else
         nil
 

@@ -90,6 +90,11 @@ describe ParserStrategy do
       parser.is_a?(NugetParser).should be_truthy
     end
 
+    it "returns GodepParser" do
+      parser = ParserStrategy.parser_for(Project::A_TYPE_GODEP, 'Godeps.json')
+      parser.is_a?(GodepParser).should be_truthy
+    end
+
     it "returns nil" do
       parser = ParserStrategy.parser_for( "HujBuy", "lein" )
       parser.should be_nil
