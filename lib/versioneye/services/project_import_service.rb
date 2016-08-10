@@ -67,7 +67,7 @@ class ProjectImportService < Versioneye::Service
       public: Settings.instance.default_project_public
     })
 
-    organisation = update_project_with_orga project, orga_id
+    organisation = update_project_with_orga project, orga_id, user
 
     project = ProjectService.store( project )
     parent  = merge_into_parent project, user
@@ -152,7 +152,7 @@ class ProjectImportService < Versioneye::Service
       public: Settings.instance.default_project_public
     })
 
-    update_project_with_orga project, orga_id
+    update_project_with_orga project, orga_id, user
 
     project = ProjectService.store( project )
     parent  = merge_into_parent project, user
@@ -201,7 +201,7 @@ class ProjectImportService < Versioneye::Service
       public: Settings.instance.default_project_public
     })
 
-    update_project_with_orga project, orga_id
+    update_project_with_orga project, orga_id, user
 
     project = ProjectService.store( project )
     parent  = merge_into_parent project, user
@@ -227,7 +227,7 @@ class ProjectImportService < Versioneye::Service
       public: Settings.instance.default_project_public
     })
 
-    update_project_with_orga project, orga_id
+    update_project_with_orga project, orga_id, user
 
     project = ProjectService.store( project )
     ProjectService.update_sums( project )
@@ -331,8 +331,11 @@ class ProjectImportService < Versioneye::Service
   end
 
 
-  def self.update_project_with_orga project, orga_id
+  def self.update_project_with_orga project, orga_id, user = nil
     organisation = find_orga( orga_id )
+    if organisation.nil? && user
+      organisation = OrganisationService.index(user, true).first
+    end
     if organisation
       project.organisation_id        = organisation.ids
       project.team_ids               = [organisation.owner_team.ids]
