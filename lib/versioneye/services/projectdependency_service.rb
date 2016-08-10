@@ -171,7 +171,7 @@ class ProjectdependencyService < Versioneye::Service
       projectdependency.version_current,
       req_version
     ]).last
-    outdated = !newest_version.eql?( projectdependency.version_requested)
+    outdated = !newest_version.eql?( req_version )
 
     update_outdated( projectdependency, outdated )
     projectdependency.outdated
@@ -179,12 +179,12 @@ class ProjectdependencyService < Versioneye::Service
 
   def self.godep_to_semver(proj_dep)
     req_version = proj_dep.version_requested
-    translated_version = '0.0.0' #used when couldnt find version by SHA or TAG
+    translated_version = '0.0.0+NA' #used when couldnt find version by SHA or TAG
     
     the_prod = proj_dep.product
     if the_prod.nil?
       log.warn "check_godep: dependency #{proj_dep[:prod_key]} has no product attached"
-      return translated_version
+      return translated_version #it doesnt mark unknown dependencies as outdated -> we have no enough info
     end
 
     if sha?(req_version)
