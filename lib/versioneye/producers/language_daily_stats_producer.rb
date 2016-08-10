@@ -9,7 +9,7 @@ class LanguageDailyStatsProducer < Producer
 
     queue.publish(msg, :persistent => true)
 
-    log_msg = " [x] Sent #{msg}"
+    log_msg = " [x] LanguageDailyStatsProducer sent #{msg}"
     puts log_msg
     log.info log_msg
 

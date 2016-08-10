@@ -67,8 +67,8 @@ class BitbucketRepo < Versioneye::Model
     fullname = repo[:full_name]
     fullname = repo[:fullname] if fullname.to_s.empty?
 
-    repo = BitbucketRepo.find_or_create_by(:user_id => user.id.to_s, :fullname => fullname)
-    repo.update_attributes!({
+    brepo = BitbucketRepo.find_or_create_by(:user_id => user.id.to_s, :fullname => fullname)
+    brepo.update_attributes!({
       user_login: user[:bitbucket_id],
       name: repo[:name],
       scm: repo[:scm],
@@ -86,7 +86,7 @@ class BitbucketRepo < Versioneye::Model
       # project_files: project_files,
     })
 
-    repo
+    brepo
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
