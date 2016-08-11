@@ -51,12 +51,10 @@ class NugetPackagesParser < NugetParser
     allowed_range = pkg_node.attr('allowedVersions').to_s.strip
     target = pkg_node.attr('targetFramework').to_s.strip
 
-    #by default packages.config fixes automatically version as x >= VERSION, 
-    # but allowedVersions allows humans defines acceptable versionRange as in a nuspec;
     version_label = if allowed_range.empty?
-                      version_requested
+                      '[' + version_requested.to_s + ']' #nuget install pulls only fixed versions; and [x] matches with Nuget comperator;
                     else
-                      allowed_range
+                      allowed_range #it's already using Nuget version ranges
                     end
 
     Projectdependency.new({
@@ -64,7 +62,7 @@ class NugetPackagesParser < NugetParser
       name: prod_name,
       prod_key: prod_name,
       version_label: version_label,
-      version_requested: version_label,
+      version_requested: version_requested, #will be updated by parse_requested_version
       target: target
     })
   end
