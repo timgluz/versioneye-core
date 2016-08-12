@@ -11,6 +11,8 @@ class ApiCall < Versioneye::Model
   field :user_id    , type: String
   field :organisation_id, type: String
   field :project_id , type: String
+  field :language   , type: String
+  field :prod_key   , type: String
   field :operation  , type: String
   field :fullpath   , type: String
   field :http_method, type: String

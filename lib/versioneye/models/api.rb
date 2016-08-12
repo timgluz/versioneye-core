@@ -8,6 +8,7 @@ class Api < Versioneye::Model
   field :api_key            , type: String
   field :enterprise_projects, type: Integer, default: 1
   field :rate_limit         , type: Integer, default: 50
+  field :comp_limit         , type: Integer, default: 50 # Component limit
   field :active             , type: Boolean, default: true
   field :update_di          , type: Boolean, default: false # Update Docker Images
 
