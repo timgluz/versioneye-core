@@ -41,11 +41,11 @@ describe NugetPackagesParser do
       deps = project.projectdependencies
       
       expect( deps[0].name ).to eq(product1[:name])
-      expect( deps[0].version_requested ).to eq(product1[:version])
+      expect( deps[0].version_requested ).to eq( product1[:version] )
       expect( deps[0].comperator).to eq('=')
 
       expect( deps[1].name ).to eq(product2[:name])
-      expect( deps[1].version_requested ).to eq(product2[:version])
+      expect( deps[1].version_requested ).to eq( product2[:version] )
       expect( deps[1].comperator).to eq('=')
     end
   end
@@ -136,7 +136,7 @@ describe NugetPackagesParser do
 
       expect( deps[4].name ).to eq(product7[:name])
       expect( deps[4].version_requested ).to eq(product7[:version])
-      expect( deps[4].comperator).to eq('>=')
+      expect( deps[4].comperator).to eq('=')
 
     end
   end
