@@ -49,7 +49,6 @@ describe GradleParser do
       dependency_02.version_current.should eql('23.4.0')
       dependency_02.version_label.should eql('23.4.0')
       dependency_02.comperator.should eql("=")
-      dependency_02.scope.should eql(Dependency::A_SCOPE_COMPILE)
     end
 
   end
