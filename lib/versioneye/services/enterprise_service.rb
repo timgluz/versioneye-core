@@ -20,6 +20,8 @@ class EnterpriseService < Versioneye::Service
 
     env = Settings.instance.environment
     GlobalSetting.set env, 'E_PROJECTS', response["enterprise_projects"]
+    GlobalSetting.set env, 'E_RATE_LIMIT', response["rate_limit"]
+    GlobalSetting.set env, 'E_COMP_LIMIT', response["comp_limit"]
     GlobalSetting.set env, 'API_KEY', api_key
     GlobalSetting.set env, 'ACTIVATION_DATE', Time.now.strftime("%Y-%m-%d")
 
