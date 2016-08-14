@@ -34,8 +34,10 @@ class VersioneyeCore
     ssl_verify = GlobalSetting.get( env, 'ssl_verify' )
     if ssl_verify.to_s.eql?('false')
       Octokit.connection_options[:ssl] = { :verify => false }
+      HTTParty::Basement.default_options.update(verify: false)
     else
       Octokit.connection_options[:ssl] = { :verify => true }
+      HTTParty::Basement.default_options.update(verify: true)
     end
   rescue => e
     log.error e.message
