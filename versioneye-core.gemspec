@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'persistent_httparty', '~> 0.1.0'
   s.add_runtime_dependency 'nokogiri', '~> 1.6.8'
   s.add_runtime_dependency 'cocoapods-core', '~> 0.39.0'
-  s.add_runtime_dependency 'actionmailer', '~> 4.2.6'
+  s.add_runtime_dependency 'actionmailer', '~> 4.2.7'
   s.add_runtime_dependency 'pdfkit', '~> 0.8.0'
   s.add_runtime_dependency 'bunny', '~> 2.5.0'
   s.add_runtime_dependency 'wkhtmltopdf-binary', '~> 0.9.9.1'
