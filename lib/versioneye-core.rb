@@ -11,6 +11,7 @@ require 'versioneye/service'
 
 class VersioneyeCore
 
+
   def initialize
     puts "start initialize versioneye-core"
     init_etcd
@@ -23,7 +24,22 @@ class VersioneyeCore
     init_stripe
     init_s3
     init_values
+    set_ssl_options
     puts "end initialize versioneye-core"
+  end
+
+
+  def set_ssl_options
+    env        = Settings.instance.environment
+    ssl_verify = GlobalSetting.get( env, 'ssl_verify' )
+    if ssl_verify.to_s.eql?('false')
+      Octokit.connection_options[:ssl] = { :verify => false }
+    else
+      Octokit.connection_options[:ssl] = { :verify => true }
+    end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
 
