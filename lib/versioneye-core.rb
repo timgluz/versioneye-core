@@ -22,8 +22,35 @@ class VersioneyeCore
     init_email
     init_stripe
     init_s3
+    init_values
     puts "end initialize versioneye-core"
   end
+
+
+  def init_values
+    user_count = User.count
+    return nil if user_count.to_i > 0
+
+    puts "START to create default admin"
+    AdminService.create_default_admin
+
+    puts "START to create default plans"
+    Plan.create_defaults
+
+    puts "START to create ES Product index"
+    EsProduct.reset
+
+    puts "START to fill MavenRepository"
+    MavenRepository.fill_it
+
+    puts "START to import spdx licenses"
+    LicenseService.import_from "/app/data/spdx_license.csv"
+    puts "---"
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+  end
+
 
   def init_mongodb
     puts " - initialize MongoDB for #{Settings.instance.environment}. DB_PORT_27017_TCP_ADDR: #{ENV['DB_PORT_27017_TCP_ADDR']}:#{ENV['DB_PORT_27017_TCP_PORT']}."
