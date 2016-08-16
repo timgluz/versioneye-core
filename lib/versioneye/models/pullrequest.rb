@@ -19,7 +19,7 @@ class Pullrequest < Versioneye::Model
   field :security_count, type: Integer, :default => 0
   field :unknown_license_count, type: Integer, :default => 0
   field :token         , type: String
-
+  field :organisation_ids, type: Array, :default => []
 
   validates_presence_of :scm_provider   , :message => 'is mandatory!'
   validates_presence_of :scm_fullname   , :message => 'is mandatory!'
