@@ -22,6 +22,7 @@ class GithubPullRequestService < Versioneye::Service
 
       if project.organisation && !pullrequest.organisation_ids.include?( project.organisation.ids )
         pullrequest.organisation_ids << project.organisation.ids
+        pullrequest.save
       end
 
       success = process_file( repo_name, filename, branch, token, pullrequest )
