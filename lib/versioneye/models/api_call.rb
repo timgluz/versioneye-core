@@ -18,7 +18,8 @@ class ApiCall < Versioneye::Model
   field :http_method, type: String
   field :ip         , type: String
 
-  index({ created_at: 1, ip: 1 }, { name: "created_at_id_key_index", background: false })
+  index({ created_at: 1, ip: 1 }, { name: "created_at_id_key_index", background: true })
+  index({ created_at: 1, api_key: 1 }, { name: "created_at_api_key_index", background: true })
   index({ api_key: 1 }, { name: "api_key_index", background: true })
   index({ user_id: 1 }, { name: "user_id_index", background: true })
   index({ ip: 1 }, { name: "ip_index", background: true })
