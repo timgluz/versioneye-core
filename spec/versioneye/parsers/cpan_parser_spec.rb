@@ -85,73 +85,287 @@ describe CpanParser do
       expect(the_rule.match('on test =>    sub {')[1]).to eq('test')
     end
   end
+  
+  let(:test_file){ File.read('spec/fixtures/files/cpan/cpanfile') }
+  let(:product1){
+    FactoryGirl.create(
+      :product_with_versions,
+      prod_key: 'Plack',
+      name: 'Plack',
+      prod_type: Project::A_TYPE_CPAN,
+      language: Product::A_LANGUAGE_PERL,
+      version: '1.0'
+    )
+  }
+
+  let(:product2){
+    FactoryGirl.create(
+      :product_with_versions,
+      prod_key: 'JSON',
+      name: 'JSON',
+      prod_type: Project::A_TYPE_CPAN,
+      language: Product::A_LANGUAGE_PERL,
+      version: '2.5'
+    )
+  }
+
+  let(:product3){
+    FactoryGirl.create(
+      :product_with_versions,
+      prod_key: 'JSON::XS',
+      name: 'JSON::XS',
+      prod_type: Project::A_TYPE_CPAN,
+      language: Product::A_LANGUAGE_PERL,
+      version: '2.0'
+    )
+  }
+  let(:product4){
+    FactoryGirl.create(
+      :product_with_versions,
+      prod_key: 'Test::More',
+      name: 'Test::More',
+      prod_type: Project::A_TYPE_CPAN,
+      language: Product::A_LANGUAGE_PERL,
+      version: '1.12'
+    )
+  }
+  let(:product5){
+    FactoryGirl.create(
+      :product_with_versions,
+      prod_key: 'Test::TCP',
+      name: 'Test::TCP',
+      prod_type: Project::A_TYPE_CPAN,
+      language: Product::A_LANGUAGE_PERL,
+      version: '1.12'
+    )
+  }
+  let(:product6){
+    FactoryGirl.create(
+      :product_with_versions,
+      prod_key: 'Devel::NYTProf',
+      name: 'Devel::NYTProf',
+      prod_type: Project::A_TYPE_CPAN,
+      language: Product::A_LANGUAGE_PERL,
+      version: '1.0'
+    )
+  }
+
+  let(:depx){
+    FactoryGirl.create(
+      :projectdependency,
+      language: Product::A_LANGUAGE_PERL,
+      version_label: '',
+      version_requested: '',
+      comperator: '?'
+    )
+  }
+
+  context "parse_requested_version" do
+    before do
+      product1.versions << FactoryGirl.build(:product_version, version: '0.8')
+      product1.versions << FactoryGirl.build(:product_version, version: '0.9')
+      product1.versions << FactoryGirl.build(:product_version, version: '1.0')
+      product1.save
+    end
+
+    after do
+      Product.delete_all
+    end
+    
+    it "returns the product version if version_label is empty" do
+      dep = parser.parse_requested_version('', depx, product1)
+      expect(dep).not_to be_nil
+      expect(dep[:version_requested]).to eq('1.0')
+      expect(dep[:version_label]).to eq('>= 0')
+      expect(dep[:comperator]).to eq('>=')
+    end
+
+    it "returns the product version if version_label == 0" do
+      dep = parser.parse_requested_version('0', depx, product1)
+      expect(dep).not_to be_nil
+      expect(dep[:version_requested]).to eq('1.0')
+      expect(dep[:version_label]).to eq('>= 0')
+      expect(dep[:comperator]).to eq('>=')
+    end
+
+    it "returns greater version thats newer than 0.8" do
+      depx[:version_label] = '0.8'
+      dep = parser.parse_requested_version(depx[:version_label], depx, product1)
+
+      expect(dep).not_to be_nil
+      expect(dep[:version_requested]).to eq('1.0')
+      expect(dep[:version_label]).to eq(depx[:version_label])
+      expect(dep[:comperator]).to eq('>=')
+    end
+
+    it "returns exact match" do
+      depx[:version_label] = '== 0.9'
+      dep = parser.parse_requested_version(depx[:version_label], depx, product1)
+
+      expect(dep).not_to be_nil
+      expect(dep[:version_requested]).to eq('0.9')
+      expect(dep[:version_label]).to eq(depx[:version_label])
+      expect(dep[:comperator]).to eq('==')
+    end
+
+    it "returns correct less than version" do
+      depx[:version_label] = '< 0.9'
+      dep = parser.parse_requested_version(depx[:version_label], depx, product1)
+
+      expect(dep).not_to be_nil
+      expect(dep[:version_requested]).to eq('0.8')
+      expect(dep[:version_label]).to eq(depx[:version_label])
+      expect(dep[:comperator]).to eq('<')
+    end
+
+    it "returns correct less or equal version" do
+      depx[:version_label] = '<= 0.9'
+      dep = parser.parse_requested_version(depx[:version_label], depx, product1)
+
+      expect(dep).not_to be_nil
+      expect(dep[:version_requested]).to eq('0.9')
+      expect(dep[:version_label]).to eq(depx[:version_label])
+      expect(dep[:comperator]).to eq('<=')
+    end
+
+    it "returns correct greater than version " do
+      depx[:version_label] = '> 0.9'
+      dep = parser.parse_requested_version(depx[:version_label], depx, product1)
+
+      expect(dep).not_to be_nil
+      expect(dep[:version_requested]).to eq('1.0')
+      expect(dep[:version_label]).to eq(depx[:version_label])
+      expect(dep[:comperator]).to eq('>')
+    end
+
+    it "returns correct greater or equal than version" do
+      depx[:version_label] = '>= 0.9'
+      dep = parser.parse_requested_version(depx[:version_label], depx, product1)
+
+      expect(dep).not_to be_nil
+      expect(dep[:version_requested]).to eq('1.0')
+      expect(dep[:version_label]).to eq(depx[:version_label])
+      expect(dep[:comperator]).to eq('>=')
+    end
+
+    it "returns exludes correct version " do
+      depx[:version_label] = '!= 1.0'
+      dep = parser.parse_requested_version(depx[:version_label], depx, product1)
+
+      expect(dep).not_to be_nil
+      expect(dep[:version_requested]).to eq('0.9')
+      expect(dep[:version_label]).to eq(depx[:version_label])
+      expect(dep[:comperator]).to eq('!=')
+    end
+
+    it "returns correct result for combined exluding ranges" do
+      depx[:version_label] = '!= 0.8, != 1.0'
+      dep = parser.parse_requested_version(depx[:version_label], depx, product1)
+
+      expect(dep).not_to be_nil
+      expect(dep[:version_requested]).to eq('0.9')
+      expect(dep[:version_label]).to eq(depx[:version_label])
+      expect(dep[:comperator]).to eq('!=,!=')
+    end
+
+    it "returns correct result from combined range selectors" do
+      depx[:version_label] = '> 0.8, < 1.0'
+      dep = parser.parse_requested_version(depx[:version_label], depx, product1)
+
+      expect(dep).not_to be_nil
+      expect(dep[:version_requested]).to eq('0.9')
+      expect(dep[:version_label]).to eq(depx[:version_label])
+      expect(dep[:comperator]).to eq('>,<')
+    end
+  end
 
   context "parse_content" do
-    let(:test_file){ File.read('spec/fixtures/files/cpan/cpanfile') }
-    let(:product1){
-      FactoryGirl.create(
-        :product_with_versions,
-        prod_key: 'Plack',
-        name: 'Plack',
-        prod_type: Project::A_TYPE_CPAN,
-        language: Product::A_LANGUAGE_PERL,
-        version: '1.0'
-      )
-    }
+    before do
+      product1[:version] = '1.0'
+      product1.versions << FactoryGirl.build(:product_version, version: '0.9')
+      product1.versions << FactoryGirl.build(:product_version, version: '1.0')
+      product1.save
 
-    let(:product2){
-      FactoryGirl.create(
-        :product_with_versions,
-        prod_key: 'JSON',
-        name: 'JSON',
-        prod_type: Project::A_TYPE_CPAN,
-        language: Product::A_LANGUAGE_PERL,
-        version: '2.5'
-      )
-    }
+      product2[:version] = '3.0'
+      product2.versions << FactoryGirl.build(:product_version, version: '2.0')
+      product2.versions << FactoryGirl.build(:product_version, version: '2.50')
+      product2.versions << FactoryGirl.build(:product_version, version: '2.80')
+      product2.versions << FactoryGirl.build(:product_version, version: '3.0')
+      product2.save
 
-    let(:product3){
-      FactoryGirl.create(
-        :product_with_versions,
-        prod_key: 'JSON::XS',
-        name: 'JSON::XS',
-        prod_type: Project::A_TYPE_CPAN,
-        language: Product::A_LANGUAGE_PERL,
-        version: '2.0'
-      )
-    }
-    let(:product4){
-      FactoryGirl.create(
-        :product_with_versions,
-        prod_key: 'Test::More',
-        name: 'Test::More',
-        prod_type: Project::A_TYPE_CPAN,
-        language: Product::A_LANGUAGE_PERL,
-        version: '1.12'
-      )
-    }
-    let(:product5){
-      FactoryGirl.create(
-        :product_with_versions,
-        prod_key: 'Test::TCP',
-        name: 'Test::TCP',
-        prod_type: Project::A_TYPE_CPAN,
-        language: Product::A_LANGUAGE_PERL,
-        version: '1.12'
-      )
-    }
-    let(:product6){
-      FactoryGirl.create(
-        :product_with_versions,
-        prod_key: 'Devel::NYTProf',
-        name: 'Devel::NYTProf',
-        prod_type: Project::A_TYPE_CPAN,
-        language: Product::A_LANGUAGE_PERL,
-        version: '1.0'
-      )
-    }
+      product3[:version] = '2.5'
+      product3.versions << FactoryGirl.build(:product_version, version: '1.9')
+      product3.versions << FactoryGirl.build(:product_version, version: '2.0')
+      product3.versions << FactoryGirl.build(:product_version, version: '2.5')
+
+      product4[:version] = '2.0'
+      product4.versions << FactoryGirl.build(:product_version, version: '0.9')
+      product4.versions << FactoryGirl.build(:product_version, version: '1.5')
+      product4.versions << FactoryGirl.build(:product_version, version: '1.8')
+      product4.versions << FactoryGirl.build(:product_version, version: '2.0')
+
+      product5[:version] = '1.30'
+      product5.versions << FactoryGirl.build(:product_version, version: '1.10')
+      product5.versions << FactoryGirl.build(:product_version, version: '1.20')
+      product5.versions << FactoryGirl.build(:product_version, version: '1.30')
+
+      product6[:version] = '0.5'
+      product6.versions << FactoryGirl.build(:product_version, version: '0.5')
+      product6.save
+
+    end
 
     it "extracts correct products and version labels" do
+      proj = parser.parse_content(test_file, "ftp://spec")
+      expect( proj ).not_to be_nil
+      expect( proj.out_number).to eq(2)
+      expect( proj.unknown_number).to eq(1)
+      expect( proj.dependencies.size ).to eq(7)
+    
+
+      deps = proj.dependencies
+      expect(deps[0].prod_key).to eq(product1[:prod_key]) 
+      expect(deps[0].version_requested).to eq('1.0') 
+      expect(deps[0].version_label).to eq('1.0')
+      expect(deps[0].comperator).to eq('>=')
+      expect(deps[0].outdated).to be_falsey
+
+      expect(deps[1].prod_key).to eq(product2[:prod_key]) 
+      expect(deps[1].version_requested).to eq('2.50') 
+      expect(deps[1].version_label).to eq('>= 2.00, < 2.80')
+      expect(deps[1].comperator).to eq('>=,<')
+      expect(deps[1].outdated).to be_truthy
+
+      expect(deps[2].prod_key).to eq(product3[:prod_key]) 
+      expect(deps[2].version_requested).to eq('2.5') 
+      expect(deps[2].version_label).to eq('2.0')
+      expect(deps[2].comperator).to eq('>=')
+      expect(deps[2].outdated).to be_falsey
+
+      expect(deps[3].prod_key).to eq(product4[:prod_key]) 
+      expect(deps[3].version_requested).to eq('1.8') 
+      expect(deps[3].version_label).to eq('>= 0.96, < 2.0')
+      expect(deps[3].comperator).to eq('>=,<')
+      expect(deps[3].outdated).to be_truthy
+
+      expect(deps[4].prod_key).to eq(product5[:prod_key]) 
+      expect(deps[4].version_requested).to eq('1.30') 
+      expect(deps[4].version_label).to eq('1.12')
+      expect(deps[4].comperator).to eq('>=')
+      expect(deps[4].outdated).to be_falsey
+
+      expect(deps[5].prod_key).to eq(product6[:prod_key]) 
+      expect(deps[5].version_requested).to eq('0.5') 
+      expect(deps[5].version_label).to eq('>= 0')
+      expect(deps[5].comperator).to eq('>=')
+      expect(deps[5].outdated).to be_falsey
+
+      expect(deps[6].prod_key).to eq('DBD::SQLite') 
+      expect(deps[6].version_requested).to eq('') 
+      expect(deps[6].version_label).to eq('')
+      expect(deps[6].comperator).to eq('?')
+      expect(deps[6].outdated).to be_falsey
+
 
     end
   end
