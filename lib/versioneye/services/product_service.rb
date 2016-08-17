@@ -118,7 +118,7 @@ class ProductService < Versioneye::Service
 
   def self.update_products products
     products.each do |product|
-      self.update_meta_data product
+      self.update_meta_data product, false
     end
   rescue => e
     log.error e.message
