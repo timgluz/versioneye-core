@@ -1,6 +1,6 @@
 requires 'Plack', '1.0'; # 1.0 or newer
 requires 'JSON', '>= 2.00, < 2.80';
-
+# requires 'Modern::Perl', '1.20120521'; #it should ignore that line
 recommends 'JSON::XS', '2.0';
 conflicts 'JSON', '< 1.0';
 

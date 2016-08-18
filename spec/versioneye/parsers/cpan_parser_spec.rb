@@ -84,9 +84,21 @@ describe CpanParser do
       expect(the_rule.match('on configure=>sub { ')[1]).to eq('configure')
       expect(the_rule.match('on test =>    sub {')[1]).to eq('test')
     end
+
+    it "detects scoped requirement scope" do
+      the_rule = parser.rules[:scoped_requires]
+
+      expect(the_rule.match('test_requires "Test::More";')[:scope]).to eq('test')
+      expect(the_rule.match('test_requires "Net::Ping", "2.41";')[:scope]).to eq('test')
+      expect(the_rule.match('build_requires "Test::More";')[:scope]).to eq('build')
+      expect(the_rule.match('configure_requires "Test::More";')[:scope]).to eq('configure')
+      expect(the_rule.match('author_requires "Test::More";')[:scope]).to eq('author')
+    end
   end
   
   let(:test_file){ File.read('spec/fixtures/files/cpan/cpanfile') }
+  let(:test_file2){ File.read('spec/fixtures/files/cpan/cpanfile2') }
+ 
   let(:product1){
     FactoryGirl.create(
       :product_with_versions,
@@ -329,44 +341,107 @@ describe CpanParser do
       expect(deps[0].version_label).to eq('1.0')
       expect(deps[0].comperator).to eq('>=')
       expect(deps[0].outdated).to be_falsey
+      expect(deps[0].scope).to eq(Dependency::A_SCOPE_RUNTIME)
 
       expect(deps[1].prod_key).to eq(product2[:prod_key]) 
       expect(deps[1].version_requested).to eq('2.50') 
       expect(deps[1].version_label).to eq('>= 2.00, < 2.80')
       expect(deps[1].comperator).to eq('>=,<')
       expect(deps[1].outdated).to be_truthy
+      expect(deps[1].scope).to eq(Dependency::A_SCOPE_RUNTIME)
 
       expect(deps[2].prod_key).to eq(product3[:prod_key]) 
       expect(deps[2].version_requested).to eq('2.5') 
       expect(deps[2].version_label).to eq('2.0')
       expect(deps[2].comperator).to eq('>=')
       expect(deps[2].outdated).to be_falsey
+      expect(deps[2].scope).to eq(Dependency::A_SCOPE_RUNTIME)
 
       expect(deps[3].prod_key).to eq(product4[:prod_key]) 
       expect(deps[3].version_requested).to eq('1.8') 
       expect(deps[3].version_label).to eq('>= 0.96, < 2.0')
       expect(deps[3].comperator).to eq('>=,<')
       expect(deps[3].outdated).to be_truthy
+      expect(deps[3].scope).to eq(Dependency::A_SCOPE_TEST)
 
       expect(deps[4].prod_key).to eq(product5[:prod_key]) 
       expect(deps[4].version_requested).to eq('1.30') 
       expect(deps[4].version_label).to eq('1.12')
       expect(deps[4].comperator).to eq('>=')
       expect(deps[4].outdated).to be_falsey
+      expect(deps[4].scope).to eq(Dependency::A_SCOPE_TEST)
 
       expect(deps[5].prod_key).to eq(product6[:prod_key]) 
       expect(deps[5].version_requested).to eq('0.5') 
       expect(deps[5].version_label).to eq('>= 0')
       expect(deps[5].comperator).to eq('>=')
       expect(deps[5].outdated).to be_falsey
+      expect(deps[5].scope).to eq(Dependency::A_SCOPE_DEVELOPMENT)
 
       expect(deps[6].prod_key).to eq('DBD::SQLite') 
       expect(deps[6].version_requested).to eq('') 
       expect(deps[6].version_label).to eq('')
       expect(deps[6].comperator).to eq('?')
       expect(deps[6].outdated).to be_falsey
+      expect(deps[6].scope).to eq(Dependency::A_SCOPE_RUNTIME)
+    end
 
+    it "parses correctly test file with scoped requires" do
+      proj = parser.parse_content(test_file2, "ftp://scoped-requires-spec")
+      expect(proj).not_to be_nil
+      expect( proj.out_number).to eq(2)
+      expect( proj.unknown_number).to eq(1)
+      expect( proj.dependencies.size ).to eq(7)
+    
+      deps = proj.dependencies
+      expect(deps[0].prod_key).to eq(product1[:prod_key]) 
+      expect(deps[0].version_requested).to eq('1.0') 
+      expect(deps[0].version_label).to eq('1.0')
+      expect(deps[0].comperator).to eq('>=')
+      expect(deps[0].outdated).to be_falsey
+      expect(deps[0].scope).to eq(Dependency::A_SCOPE_RUNTIME)
 
+      expect(deps[1].prod_key).to eq(product2[:prod_key]) 
+      expect(deps[1].version_requested).to eq('2.50') 
+      expect(deps[1].version_label).to eq('>= 2.00, < 2.80')
+      expect(deps[1].comperator).to eq('>=,<')
+      expect(deps[1].outdated).to be_truthy
+      expect(deps[1].scope).to eq(Dependency::A_SCOPE_RUNTIME)
+
+      expect(deps[2].prod_key).to eq(product3[:prod_key]) 
+      expect(deps[2].version_requested).to eq('2.5') 
+      expect(deps[2].version_label).to eq('2.0')
+      expect(deps[2].comperator).to eq('>=')
+      expect(deps[2].outdated).to be_falsey
+      expect(deps[2].scope).to eq(Dependency::A_SCOPE_RUNTIME)
+
+      expect(deps[3].prod_key).to eq(product4[:prod_key]) 
+      expect(deps[3].version_requested).to eq('1.8') 
+      expect(deps[3].version_label).to eq('>= 0.96, < 2.0')
+      expect(deps[3].comperator).to eq('>=,<')
+      expect(deps[3].outdated).to be_truthy
+      expect(deps[3].scope).to eq(Dependency::A_SCOPE_TEST)
+
+      expect(deps[4].prod_key).to eq(product5[:prod_key]) 
+      expect(deps[4].version_requested).to eq('1.30') 
+      expect(deps[4].version_label).to eq('1.12')
+      expect(deps[4].comperator).to eq('>=')
+      expect(deps[4].outdated).to be_falsey
+      expect(deps[4].scope).to eq(Dependency::A_SCOPE_TEST)
+
+      expect(deps[5].prod_key).to eq(product6[:prod_key]) 
+      expect(deps[5].version_requested).to eq('0.5') 
+      expect(deps[5].version_label).to eq('>= 0')
+      expect(deps[5].comperator).to eq('>=')
+      expect(deps[5].outdated).to be_falsey
+      expect(deps[5].scope).to eq(Dependency::A_SCOPE_DEVELOPMENT)
+
+      expect(deps[6].prod_key).to eq('DBD::SQLite') 
+      expect(deps[6].version_requested).to eq('') 
+      expect(deps[6].version_label).to eq('')
+      expect(deps[6].comperator).to eq('?')
+      expect(deps[6].outdated).to be_falsey
+      expect(deps[6].scope).to eq(Dependency::A_SCOPE_CONFIGURE)
     end
   end
 end

@@ -17,6 +17,8 @@ class Dependency < Versioneye::Model
   A_SCOPE_DEVELOPMENT = 'development' # NPM, Bower
   A_SCOPE_BUNDLED     = 'bundled'     # NPM
   A_SCOPE_OPTIONAL    = 'optional'    # NPM
+  A_SCOPE_BUILD       = 'build'       # CPAN
+  A_SCOPE_CONFIGURE   = 'configure'   # CPAN
 
   # Podspecs of CocoaPods doesn't have scopes/targets
   # But Podfiles can have targets

@@ -13,22 +13,25 @@ class CpanParser < CommonParser
     one_or_many_ranges  = "(?<ranges>#{version_range_rule}(\\s*,\\s*#{version_range_rule})*)"
     package_key_rule    = "(?<package>[\\w|\\:|\\-|\\_]+)"
     dependency_rule     = "(?<dep>#{package_key_rule}\\s*,\\s*#{one_or_many_ranges};)"
-    require_keywords    = "\\A(requires|recommends|suggests)"
-    plain_dependency    = "#{require_keywords}\\s+#{package_key_rule}\\s*;"
-    scope_keywords      = "configure|build|test|develop|runtime"
+    require_keywords    = "(requires|recommends|suggests)"
+    plain_dependency    = "\\s*#{require_keywords}\\s+#{package_key_rule}\\s*;"
+    scope_keywords      = "configure|build|test|develop|runtime|author"
+    scoped_requires     = "\\s*(?<scope>#{scope_keywords})_#{require_keywords}"
     block_start_rule    = "\\Aon\\s+(?<scope>#{scope_keywords})\\s*=>\\s*sub\\s*{"
     block_end_rule      = "\\A\\}\\;"
     @comperators        = Set.new(['<', '<=', '>', '>=', '==', '!='])
     @rules = {
       empty:      Regexp.new(empty_string_rule, Regexp::EXTENDED ),
+      comment:    Regexp.new("\\A\\#\\s*", Regexp::EXTENDED),
       version:    Regexp.new( version_rule , Regexp::EXTENDED | Regexp::IGNORECASE ),
       comperator: Regexp.new( comperator_rule, Regexp::EXTENDED ),
       range:      Regexp.new( version_range_rule, Regexp::EXTENDED ),
       ranges:     Regexp.new( one_or_many_ranges, Regexp::EXTENDED ),
       package:    Regexp.new( package_key_rule, Regexp::EXTENDED ),
-      dependency: Regexp.new( dependency_rule, Regexp::EXTENDED ),
+      dependency: Regexp.new( dependency_rule, Regexp::EXTENDED ),        #dependency with name and version range
       plain_dependency: Regexp.new( plain_dependency, Regexp::EXTENDED ), #when only package name;
-      requires:   Regexp.new( require_keywords, Regexp::EXTENDED ),
+      requires:   Regexp.new( "#{require_keywords}\\s+", Regexp::EXTENDED ),
+      scoped_requires: Regexp.new( scoped_requires, Regexp::EXTENDED ),    #test_requires X, 1.1
       block_start: Regexp.new( block_start_rule, Regexp::EXTENDED | Regexp::IGNORECASE ),
       block_end:  Regexp.new( block_end_rule, Regexp::EXTENDED | Regexp::IGNORECASE )
     }
@@ -180,7 +183,7 @@ class CpanParser < CommonParser
   def parse_dependencies(cpan_doc)
     lines = cpan_doc.split(/\n+/)
     deps = []
-    current_scope = 'runtime'
+    current_scope = Dependency::A_SCOPE_RUNTIME
     lines.each do |line|
       new_scope, parsed_dep = parse_line(current_scope, line)
       current_scope = new_scope if current_scope != new_scope
@@ -197,20 +200,43 @@ class CpanParser < CommonParser
     if line.empty?
       return [current_scope, nil]
     end
+    
+    if ( m = @rules[:comment].match(line) )
+      #ignore lines which are commented out
+      [current_scope, nil]
 
-    if ( m = @rules[:block_start].match(line) )
-      [m[1].to_s.strip, nil]
+    elsif ( m = @rules[:block_start].match(line) )
+      the_scope = match_scope_label( m[1].to_s.strip )
+      [the_scope, nil]
+
     elsif (m = @rules[:block_end].match(line) )
-      ['runtime', nil]
+      [Dependency::A_SCOPE_RUNTIME, nil]
+
+    elsif (m = @rules[:scoped_requires].match(line))
+      the_scope = match_scope_label( m[:scope].to_s.strip )
+      dep = extract_dependency( the_scope, line)
+      [current_scope, dep]
 
     elsif ( m = @rules[:requires].match(line) )
       dep = extract_dependency( current_scope, line )
       [current_scope, dep]
+
     else
       [current_scope, nil]
     end
   end
 
+  #matches CPAN scope names with names defined in Dependency module
+  def match_scope_label(scope)
+    case scope.downcase
+    when 'author'
+      Dependency::A_SCOPE_DEVELOPMENT
+    when 'develop'
+      Dependency::A_SCOPE_DEVELOPMENT
+    else
+      scope.to_s.downcase
+    end
+  end
   #extract dependency details from requirement line
   def extract_dependency(current_scope, line)
     if ( m = @rules[:dependency].match(line) )
