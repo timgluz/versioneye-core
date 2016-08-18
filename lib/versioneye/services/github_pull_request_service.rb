@@ -20,6 +20,11 @@ class GithubPullRequestService < Versioneye::Service
       filename = project.s3_filename
       next if filenames.include?(filename)
 
+      if project.organisation && !pullrequest.organisation_ids.include?( project.organisation.ids )
+        pullrequest.organisation_ids << project.organisation.ids
+        pullrequest.save
+      end
+
       success = process_file( repo_name, filename, branch, token, pullrequest )
       filenames << filename if success
     end

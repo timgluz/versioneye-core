@@ -3,7 +3,9 @@ class SyncService < Versioneye::Service
 
   def self.log
     if !defined?(@@dynLog) || @@dynLog.nil?
-      @@dynLog = Versioneye::DynLog.new("log/sync.log", 10).log
+      environment = ENV['RAILS_ENV']
+      environment = 'development' if environment.to_s.empty?
+      @@dynLog = Versioneye::DynLog.new("log/#{environment}_sync.log", 10).log
     end
     @@dynLog
   end

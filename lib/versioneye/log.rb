@@ -12,7 +12,7 @@ module Versioneye
 
       environment = ENV['RAILS_ENV']
       environment = 'development' if environment.to_s.empty?
-      filename = "log/tasks_#{environment}.log"
+      filename = "log/#{environment}_tasks.log"
 
       @logger = ActiveSupport::Logger.new(filename, 10, 10485760) # 10485760 = 10 MB
       @logger.formatter = Versioneye::Formatter.new
@@ -33,7 +33,7 @@ module Versioneye
       if filename.to_s.empty?
         environment = ENV['RAILS_ENV']
         environment = 'development' if environment.to_s.empty?
-        filename = "log/#{environment}.log"
+        filename = "log/#{environment}_tasks.log"
       end
       @logger = ActiveSupport::Logger.new(filename, count, size)
       @logger.formatter = Versioneye::Formatter.new

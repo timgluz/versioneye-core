@@ -29,6 +29,7 @@ class Author < Versioneye::Model
 
   index({ name_id: 1 }, { name: "nameid_index", background: true, unique: true, drop_dups: true })
   index({ products_count: 1 }, { name: "products_count_index", background: true })
+  index({ languages: 1 }, { name: "languages_index", background: true })
 
 
   def to_s

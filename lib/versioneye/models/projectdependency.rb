@@ -41,6 +41,7 @@ class Projectdependency < Versioneye::Model
 
 
   index({project_id: 1}, { name: "project_index", background: true})
+  index({language: 1, prod_key: 1}, { name: "lang_prod_key_index", background: true})
 
 
   def to_s
