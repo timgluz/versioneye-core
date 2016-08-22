@@ -100,6 +100,7 @@ module Versioneye
     require 'versioneye/parsers/paket_parser'
     require 'versioneye/parsers/nuget_json_parser'
     require 'versioneye/parsers/nuget_packages_parser'
+    require 'versioneye/parsers/cpan_parser'
 
     require 'versioneye/updaters/update_strategy'
     require 'versioneye/updaters/common_updater'
