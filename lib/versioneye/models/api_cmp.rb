@@ -3,6 +3,8 @@ class ApiCmp < Versioneye::Model
   include Mongoid::Document
   include Mongoid::Timestamps
 
+# Bucket of components per API Key.
+
   field :api_key    , type: String
   field :language   , type: String
   field :prod_key   , type: String
