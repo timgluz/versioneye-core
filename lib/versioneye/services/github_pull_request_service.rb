@@ -92,7 +92,7 @@ class GithubPullRequestService < Versioneye::Service
       :version_requested => dep.version_requested,
       :version_current => dep.version_current,
       :license => dep.licenses_string,
-      :security_count =>  dep.sv_ids.count
+      :security_count =>  dep.sv_ids.count,
       :lwl_violation => dep.lwl_violation
       })
     issue.pullrequest = pullrequest
