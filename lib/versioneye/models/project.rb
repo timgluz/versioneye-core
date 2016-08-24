@@ -129,6 +129,10 @@ class Project < Versioneye::Model
     Project.where(:parent_id => self.id.to_s)
   end
 
+  def child_ids
+    Project.where(:parent_id => self.id.to_s).map(&:ids)
+  end
+
   def scopes
     return [] if self.projectdependencies.nil? || self.projectdependencies.empty?
     scopes = []
