@@ -6,6 +6,9 @@ gemspec
 # 20% performance boost for dalli. Doesn't work on Windows.
 gem 'kgio', '~> 2.10.0', platforms: :ruby
 
+#Parsers for gemspec files
+gem 'gemnasium-parser', '0.1.9'
+
 group :test do
   gem 'rack-test'       , '0.6.3'
   gem 'fakes3'          , '0.2.4'
