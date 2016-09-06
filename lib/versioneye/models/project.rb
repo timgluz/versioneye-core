@@ -18,6 +18,7 @@ class Project < Versioneye::Model
   A_TYPE_BIICODE   = 'Biicode'
   A_TYPE_CHEF      = 'Chef'
   A_TYPE_NUGET     = 'Nuget'
+  A_TYPE_GODEP     = 'Godep'
   A_TYPE_CPAN      = 'Cpan'
 
   A_SOURCE_UPLOAD    = 'upload'
