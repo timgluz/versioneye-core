@@ -139,6 +139,13 @@ class ProjectdependencyService < Versioneye::Service
     update_outdated!( projectdependency )
   end
 
+  def self.sha?(txt)
+    ( txt.to_s.strip.match(/\w{40}/i) != nil )
+  end
+
+  def self.semver?(txt)
+    not SemVer.parse(txt).nil?
+  end
 
   def self.update_outdated!( projectdependency )
     update_version_current( projectdependency )
@@ -151,12 +158,57 @@ class ProjectdependencyService < Versioneye::Service
       return update_outdated( projectdependency, false )
     end
 
-    newest_version = Naturalsorter::Sorter.sort_version([projectdependency.version_current, projectdependency.version_requested]).last
-    outdated = !newest_version.eql?( projectdependency.version_requested)
+    outdated = false
+
+    #handle GO-DEP versions differently
+    if projectdependency[:language] == Product::A_LANGUAGE_GO
+      req_version = godep_to_semver(projectdependency)
+    else
+      req_version = projectdependency.version_requested
+    end
+    
+    newest_version = Naturalsorter::Sorter.sort_version([
+      projectdependency.version_current,
+      req_version
+    ]).last
+    outdated = !newest_version.eql?( req_version )
+
     update_outdated( projectdependency, outdated )
     projectdependency.outdated
   end
 
+  def self.godep_to_semver(proj_dep)
+    req_version = proj_dep.version_requested
+    translated_version = '0.0.0+NA' #used when couldnt find version by SHA or TAG
+    
+    the_prod = proj_dep.product
+    if the_prod.nil?
+      log.warn "check_godep: dependency #{proj_dep[:prod_key]} has no product attached"
+      return translated_version #it doesnt mark unknown dependencies as outdated -> we have no enough info
+    end
+
+    if sha?(req_version)
+      version_db = the_prod.versions.find_by(sha1: req_version)
+      if version_db
+        translated_version = version_db[:version]
+      else
+        log.warn "check_godep: found no version by sha `#{req_version}` for #{proj_dep[:prod_key]}"
+      end
+
+    elsif semver?(req_version)
+      #NB: SemVer.parse doesnt work as it always adds minor as 0, but tags may not have 0 at the end
+      translated_version = req_version.to_s.gsub(/\Av/i, '')
+    else
+      version_db = the_prod.versions.find_by(tag: req_version)
+      if version_db
+        translated_version = version_db[:version]
+      else
+        log.warn "check_godep: found no version by tag `#{req_version}` for #{proj_dep[:prod_key]}"
+      end
+    end
+
+    translated_version
+  end
 
   def self.update_outdated( projectdependency, out_value )
     projectdependency.outdated = out_value

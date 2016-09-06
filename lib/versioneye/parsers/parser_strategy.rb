@@ -79,6 +79,10 @@ class ParserStrategy
         else
           return NugetParser.new
         end
+
+      when Project::A_TYPE_GODEP
+        return GodepParser.new
+
       when Project::A_TYPE_CPAN
         return CpanParser.new
       else
