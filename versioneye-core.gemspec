@@ -35,4 +35,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'mongoid', '~> 5.1.0'
   s.add_runtime_dependency 'will_paginate_mongoid', '= 2.0.1'
   s.add_runtime_dependency 'net-ldap', '~> 0.15.0'
+  s.add_runtime_dependency 'gemnasium-parser', '~> 0.1.9'
 end
