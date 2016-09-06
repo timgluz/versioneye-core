@@ -52,6 +52,7 @@ class GemspecParser < GemfileParser
         log.warn "check_dependencies: found no #{Product::A_LANGUAGE_RUBY} by prod_key #{dep[:prod_key]}"
         project.unknown_number += 1
       else
+        dep[:prod_key] = product[:prod_key]
         dep[:version_current] = product[:version]
       end
 
@@ -73,7 +74,6 @@ class GemspecParser < GemfileParser
 
     Projectdependency.new({
       name: prod_name,
-      prod_key: prod_name,
       language: Product::A_LANGUAGE_RUBY,
       version_label: version_label,
       scope: scope
