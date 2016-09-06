@@ -25,8 +25,10 @@ class BillingAddress < Versioneye::Model
   validates_presence_of :zip    , :message => 'is mandatory!'
   validates_presence_of :city   , :message => 'is mandatory!'
   validates_presence_of :country, :message => 'is mandatory!'
+  validates_presence_of :email  , :message => 'is mandatory!'
 
   belongs_to :user
+  belongs_to :organisation
 
   index({ user_id: 1 }, { name: "user_id_index", background: true })
 

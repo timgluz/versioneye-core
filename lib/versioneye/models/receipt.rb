@@ -38,6 +38,7 @@ class Receipt < Versioneye::Model
   embeds_many :receipt_lines
 
   belongs_to :user
+  belongs_to :organisation
   belongs_to :plan
 
   validates_presence_of :type   , :message => 'is mandatory!'
@@ -72,6 +73,10 @@ class Receipt < Versioneye::Model
 
   def self.by_user id
     Receipt.where(:user_id => id).desc(:invoice_date)
+  end
+
+  def self.by_orga id
+    Receipt.where(:organisation_id => id).desc(:invoice_date)
   end
 
   def pre_process

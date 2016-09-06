@@ -4,6 +4,7 @@ class Api < Versioneye::Model
   include Mongoid::Timestamps
 
   field :user_id            , type: String
+  field :organisation_id    , type: String
   field :api_key            , type: String
   field :enterprise_projects, type: Integer, default: 1
   field :rate_limit         , type: Integer, default: 50
@@ -13,7 +14,6 @@ class Api < Versioneye::Model
 
   index({ api_key: 1 }, { name: "api_key_index", unique: true, drop_dups: true, background: true })
 
-  validates :user_id, presence: true
   validates :api_key, presence: true,
                       length: {minimum: 20, maximum: 20},
                       uniqueness: true
@@ -23,10 +23,20 @@ class Api < Versioneye::Model
   end
 
   def self.create_new( user )
-    new_api = Api.new(user_id: user[:_id].to_s)
+    new_api = Api.new(user_id: user.ids)
     new_api.generate_api_key!
     if user && user.plan
       new_api.rate_limit = user.plan.api_rate_limit
+    end
+    new_api.save
+    new_api
+  end
+
+  def self.create_new_for_orga( organisation )
+    new_api = Api.new( organisation_id: organisation.ids )
+    new_api.generate_api_key!
+    if organisation && organisation.plan
+      new_api.rate_limit = organisation.plan.api_rate_limit
     end
     new_api.save
     new_api
@@ -44,6 +54,14 @@ class Api < Versioneye::Model
 
   def user
     User.find user_id
+  rescue => e
+    nil
+  end
+
+  def organisation
+    Organisation.find organisation_id
+  rescue => e
+    nil
   end
 
   def calls_count

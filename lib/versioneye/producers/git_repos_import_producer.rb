@@ -10,7 +10,7 @@ class GitReposImportProducer < Producer
 
     queue.publish(msg, :persistent => true)
 
-    log_msg = " [x] Sent messag: '#{msg}' to queue: #{queue.name}"
+    log_msg = " [x] GitReposImportProducer sent messag: '#{msg}' to queue: #{queue.name}"
     puts log_msg
     log.info log_msg
 

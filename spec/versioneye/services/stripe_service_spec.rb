@@ -69,7 +69,7 @@ describe StripeService do
       new_token = StripeFactory.token
       token_id = new_token[:id]
       business_plan = Plan.medium
-      cust = described_class.update_customer user, token_id, business_plan.name_id
+      cust = described_class.update_customer user.stripe_customer_id, token_id, business_plan.name_id
       cust.should_not be_nil
       cust[:subscription][:plan][:id].should eq(business_plan.name_id)
     end
@@ -79,17 +79,16 @@ describe StripeService do
   describe 'create_or_update_customer' do
 
     it 'returns nil because of an error' do
-      customer = described_class.create_or_update_customer nil, nil, nil
+      customer = described_class.create_or_update_customer nil, nil, nil, nil
       customer.should be_nil
     end
 
     it 'creates a new customer' do
       user = UserFactory.create_new 1
-      user.stripe_customer_id.should be_nil
+      expect( user.stripe_customer_id ).to be_nil
       token = StripeFactory.token
-      token_id = token[:id]
       small = Plan.small.name_id
-      customer = described_class.create_or_update_customer user, token_id, small
+      customer = described_class.create_or_update_customer user.stripe_customer_id, token[:id], small, user.email
       customer.should_not be_nil
       customer.id.should_not be_nil
     end
@@ -107,7 +106,7 @@ describe StripeService do
       token = StripeFactory.token
       token_id = token[:id]
       business_plan = Plan.medium.name_id
-      customer = described_class.create_or_update_customer user, token_id, business_plan
+      customer = described_class.create_or_update_customer user.stripe_customer_id, token_id, business_plan, user.email
       customer.should_not be_nil
       customer.id.should_not be_nil
     end

@@ -1,0 +1,26 @@
+{
+	"ImportPath": "github.com/OpenBazaar/openbazaar-go",
+	"GoVersion": "go1.6",
+	"GodepVersion": "v62",
+	"Deps": [
+		{
+			"ImportPath": "github.com/OpenBazaar/go-blockstackclient",
+			"Rev": "0754dfcca172cfc4c07a61c123b23e5127d26760"
+		},
+    {
+			"ImportPath": "github.com/btcsuite/btcd/blockchain",
+			"Comment": "BTCD_0_12_0_BETA-88-g0d7f526",
+			"Rev": "0d7f52660096c5a22f2cb95c102e0693f773a593"
+		},
+    {
+      "ImportPath": "github.com/btcsuite/seelog",
+      "Comment": "v2.1-84-g313961b",
+      "Rev": "313961b101eb55f65ae0f03ddd4e322731763b6c"
+    },
+    {
+			"ImportPath": "github.com/fatih/color",
+			"Comment": "v0.2.0",
+			"Rev": "87d4004f2ab62d0d255e0a38f1680aa534549fe3"
+		}
+  ]
+}

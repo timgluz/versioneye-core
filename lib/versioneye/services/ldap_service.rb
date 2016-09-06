@@ -4,7 +4,7 @@ class LdapService < Versioneye::Service
   require 'net/ldap'
 
 
-  def self.auth_by login, password, ldap = Net::LDAP.new
+  def self.auth_by login, password, ldap = nil
     Settings.instance.reload_from_db GlobalSetting.new
 
     env = Settings.instance.environment
@@ -23,19 +23,20 @@ class LdapService < Versioneye::Service
     ldap_base = Settings.instance.ldap_base if ldap_base.to_s.empty?
 
     ldap_host = GlobalSetting.get(env, 'ldap_host')
-    ldap_host = Settings.instance.ldap_host
+    ldap_host = Settings.instance.ldap_host if ldap_host.to_s.empty?
 
     ldap_port = GlobalSetting.get(env, 'ldap_port')
-    ldap_port = Settings.instance.ldap_port
+    ldap_port = Settings.instance.ldap_port if ldap_port.to_s.empty?
 
-    ldap_args = {:host => ldap_host,
-                 :port => ldap_port,
-                 :base => ldap_base,
-                 :auth => {:username => username,
-                           :password => password,
-                           :method => auth_method.to_sym } }
-
-    ldap = Net::LDAP.new( ldap_args ) if ldap.nil?
+    if ldap.nil?
+      ldap_args = {:host => ldap_host,
+                   :port => ldap_port,
+                   :base => ldap_base,
+                   :auth => {:username => username,
+                             :password => password,
+                             :method => auth_method.to_sym } }
+      ldap = Net::LDAP.new( ldap_args )
+    end
 
     encryption = Settings.instance.ldap_encryption.to_s
     if !encryption.empty? && !encryption.strip.downcase.eql?('none')
@@ -50,6 +51,7 @@ class LdapService < Versioneye::Service
     "Code: #{result.code}. Message: #{result.message} #{result.error_message}"
   rescue => e
     log.error e.message
+    log.error e.backtrace.join("\n")
     e.message
   end
 

@@ -22,12 +22,25 @@ describe ReceiptService do
       email      = 'hans@wur.st'
       customer   = StripeService.create_customer token_id, small_plan.name_id, email
 
-      user                    = UserFactory.create_new 1
-      user.plan               = Plan.small
-      user.billing_address    = BillingAddressFactory.create_new
-      user.stripe_customer_id = customer.id
-      user.stripe_token       = token_id
-      user.save
+      expect( Plan.all.count > 0 ).to be_truthy
+
+      orga                    = Organisation.new({:name => 'test_name'})
+      orga.plan               = Plan.small
+      orga.stripe_customer_id = customer.id
+      orga.stripe_token       = token_id
+      expect( orga.save ). to be_truthy
+
+      ba = orga.fetch_or_create_billing_address
+      ba.name = "hans"
+      ba.street = "juliu"
+      ba.zip = '68199'
+      ba.city = 'MA'
+      ba.country = "DE"
+      ba.email = "ha@jo.do"
+      ba.save
+      expect( ba.save ).to be_truthy
+      orga.billing_address = ba
+      expect( orga.save ). to be_truthy
 
       expect( Receipt.count ).to eq( 0 )
       described_class.process_receipts
@@ -45,9 +58,9 @@ describe ReceiptService do
 
   describe 'compile_html_invoice' do
     it 'compiles for German dude' do
-      user = UserFactory.create_new
+      orga = Organisation.new({:name => 'test_name'})
       receipt = ReceiptFactory.create_new
-      receipt.user = user
+      receipt.organisation = orga
       receipt.type = Receipt::A_TYPE_CORPORATE
       html = described_class.compile_html_invoice receipt, true
       html.match("5,04 EUR").should_not be_nil
@@ -57,9 +70,9 @@ describe ReceiptService do
       html.match('Non EU customers - Not taxable in Germany.').should be_nil
     end
     it 'compiles for German corp dude' do
-      user = UserFactory.create_new
+      orga = Organisation.new({:name => 'test_name'})
       receipt = ReceiptFactory.create_new
-      receipt.user = user
+      receipt.organisation = orga
       html = described_class.compile_html_invoice receipt, true
       html.match("5,04 EUR").should_not be_nil
       html.match("0,96 EUR").should_not be_nil
@@ -68,9 +81,9 @@ describe ReceiptService do
       html.match('Non EU customers - Not taxable in Germany.').should be_nil
     end
     it 'compiles for Franch corporate dude' do
-      user         = UserFactory.create_new
+      orga = Organisation.new({:name => 'test_name'})
       receipt      = ReceiptFactory.create_new
-      receipt.user = user
+      receipt.organisation = orga
       receipt.type = Receipt::A_TYPE_CORPORATE
       receipt.country = 'FR'
       html = described_class.compile_html_invoice receipt, true
@@ -81,9 +94,9 @@ describe ReceiptService do
       html.match('Non EU customers - Not taxable in Germany.').should be_nil
     end
     it 'compiles for Franch individual dude' do
-      user = UserFactory.create_new
+      orga = Organisation.new({:name => 'test_name'})
       receipt = ReceiptFactory.create_new
-      receipt.user = user
+      receipt.organisation = orga
       receipt.type = Receipt::A_TYPE_INDIVIDUAL
       receipt.country = 'FR'
       html = described_class.compile_html_invoice receipt, true
@@ -95,9 +108,9 @@ describe ReceiptService do
       html.match('Non EU customers - Not taxable in Germany.').should be_nil
     end
     it 'compiles for US corporate dude' do
-      user = UserFactory.create_new
+      orga = Organisation.new({:name => 'test_name'})
       receipt = ReceiptFactory.create_new
-      receipt.user = user
+      receipt.organisation = orga
       receipt.type = Receipt::A_TYPE_CORPORATE
       receipt.country = 'US'
       html = described_class.compile_html_invoice receipt, true
@@ -108,9 +121,9 @@ describe ReceiptService do
       html.match('Non EU customers - Not taxable in Germany.').should_not be_nil
     end
     it 'compiles for US individual dude' do
-      user = UserFactory.create_new
+      orga = Organisation.new({:name => 'test_name'})
       receipt = ReceiptFactory.create_new
-      receipt.user = user
+      receipt.organisation = orga
       receipt.type = Receipt::A_TYPE_INDIVIDUAL
       receipt.country = 'US'
       html = described_class.compile_html_invoice receipt, true
@@ -127,7 +140,7 @@ describe ReceiptService do
       described_class.next_receipt_nr.should == 1001
     end
     it 'returns 1002' do
-      user = UserFactory.create_new
+      orga = Organisation.new({:name => 'test_name'})
       nr = described_class.next_receipt_nr
       ba = BillingAddressFactory.create_new
       invoice = StripeInvoiceFactory.create_new

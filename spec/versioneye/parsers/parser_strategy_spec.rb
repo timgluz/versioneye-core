@@ -75,6 +75,26 @@ describe ParserStrategy do
       parser.is_a?( LeinParser ).should be_truthy
     end
 
+    it "returns NugetJSONParser" do
+      parser = ParserStrategy.parser_for( Project::A_TYPE_NUGET, "http://s3.aws.com/project.json")
+      parser.is_a?(NugetJsonParser).should be_truthy
+    end
+
+    it "returns NugetPackagesParser" do
+      parser = ParserStrategy.parser_for(Project::A_TYPE_NUGET, "http://s3.aws.com/packages.config")
+      parser.is_a?(NugetPackagesParser).should be_truthy
+    end
+
+    it "returns NugetParser" do
+      parser = ParserStrategy.parser_for(Project::A_TYPE_NUGET, "http://s3.aws.com/project.nuspec")
+      parser.is_a?(NugetParser).should be_truthy
+    end
+
+    it "returns GodepParser" do
+      parser = ParserStrategy.parser_for(Project::A_TYPE_GODEP, 'Godeps.json')
+      parser.is_a?(GodepParser).should be_truthy
+    end
+
     it "returns nil" do
       parser = ParserStrategy.parser_for( "HujBuy", "lein" )
       parser.should be_nil

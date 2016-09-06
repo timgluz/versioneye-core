@@ -24,8 +24,8 @@ class StripeService < Versioneye::Service
   end
 
 
-  def self.update_customer user, stripe_token, plan_name_id
-    customer = self.fetch_customer user.stripe_customer_id
+  def self.update_customer stripe_customer_id, stripe_token, plan_name_id
+    customer = self.fetch_customer stripe_customer_id
     customer.card = stripe_token
     customer.save
     customer.update_subscription( :plan => plan_name_id )
@@ -33,11 +33,14 @@ class StripeService < Versioneye::Service
   end
 
 
-  def self.create_or_update_customer user, stripe_token, plan_name_id
-    if user.stripe_customer_id
-      return self.update_customer user, stripe_token, plan_name_id
+  def self.create_or_update_customer stripe_customer_id, stripe_token, plan_name_id, email
+    return nil if stripe_token.to_s.empty?
+    return nil if plan_name_id.to_s.empty?
+
+    if stripe_customer_id
+      return self.update_customer stripe_customer_id, stripe_token, plan_name_id
     end
-    self.create_customer stripe_token, plan_name_id, user.email
+    self.create_customer stripe_token, plan_name_id, email
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")

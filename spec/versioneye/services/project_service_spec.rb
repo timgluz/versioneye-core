@@ -288,6 +288,12 @@ describe ProjectService do
       described_class.type_by_filename("project.clj").should eql(Project::A_TYPE_LEIN)
       described_class.type_by_filename("app/project.clj").should eql(Project::A_TYPE_LEIN)
     end
+
+    it "returns Nuget" do
+      described_class.type_by_filename("/project.json").should eql(Project::A_TYPE_NUGET)
+      described_class.type_by_filename("/something.nuspec").should eql(Project::A_TYPE_NUGET)
+    end
+
     it "returns nil for wrong Lein file" do
       described_class.type_by_filename("project.clja").should be_nil
       described_class.type_by_filename("app/project.clj/new").should be_nil
@@ -518,7 +524,7 @@ describe ProjectService do
       expect( ProjectService.ensure_unique_gav(project) ).to be_truthy
       Settings.instance.projects_unique_gav = false
     end
-    it 'returns true because there is no other project in db!' do
+    it 'Throws an exception because there is already a similar project in db!' do
       Settings.instance.projects_unique_gav = true
       user    = UserFactory.create_new
       project = ProjectFactory.create_new user, nil, false
@@ -526,7 +532,11 @@ describe ProjectService do
       project.artifact_id = 'junit'
       project.version = '1.0'
       expect( project.save ).to be_truthy
-      expect { ProjectService.ensure_unique_gav(project) }.to raise_exception
+      new_project = ProjectFactory.create_new user, nil, false
+      new_project.group_id = "org.junit"
+      new_project.artifact_id = 'junit'
+      new_project.version = '1.0'
+      expect { ProjectService.ensure_unique_gav(new_project) }.to raise_exception
       Settings.instance.projects_unique_gav = false
     end
   end
@@ -557,7 +567,24 @@ describe ProjectService do
       project.scm_branch = 'master'
       project.s3_filename = 'pom.xml'
       project.save
-      expect { ProjectService.ensure_unique_scm(project) }.to raise_exception
+      expect( ProjectService.ensure_unique_scm(project) ).to be_truthy
+      Settings.instance.projects_unique_scm = false
+    end
+    it 'throws an exception because there is already a project with same data' do
+      Settings.instance.projects_unique_scm = true
+      user    = UserFactory.create_new
+      project = ProjectFactory.create_new user, nil, false
+      project.source = "github"
+      project.scm_fullname = 'reiz/boom'
+      project.scm_branch = 'master'
+      project.s3_filename = 'pom.xml'
+      project.save
+      new_project = ProjectFactory.create_new user, nil, false
+      new_project.source = "github"
+      new_project.scm_fullname = 'reiz/boom'
+      new_project.scm_branch = 'master'
+      new_project.s3_filename = 'pom.xml'
+      expect { ProjectService.ensure_unique_scm(new_project) }.to raise_exception
       Settings.instance.projects_unique_scm = false
     end
   end

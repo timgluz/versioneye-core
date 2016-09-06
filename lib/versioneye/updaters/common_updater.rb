@@ -45,6 +45,7 @@ class CommonUpdater < Versioneye::Service
 
   def user_for project
     return project.user if project.user
+
     if project.teams && !project.teams.empty?
       return project.teams.first.members.first.user
     end

@@ -15,6 +15,7 @@ module Versioneye
     require 'versioneye/services/circle_element_service'
     require 'versioneye/services/dependency_service'
     require 'versioneye/services/git_hub_service'
+    require 'versioneye/services/github_pull_request_service'
     require 'versioneye/services/http_service'
     require 'versioneye/services/notification_service'
     require 'versioneye/services/newsletter_service'
@@ -96,7 +97,10 @@ module Versioneye
     require 'versioneye/parsers/requirements_parser'
     require 'versioneye/parsers/scm_changelog_parser'
     require 'versioneye/parsers/nuget_parser'
+    require 'versioneye/parsers/paket_parser'
     require 'versioneye/parsers/nuget_json_parser'
+    require 'versioneye/parsers/nuget_packages_parser'
+    require 'versioneye/parsers/godep_parser'
 
     require 'versioneye/updaters/update_strategy'
     require 'versioneye/updaters/common_updater'
@@ -112,6 +116,8 @@ module Versioneye
     require 'versioneye/remote_api/me_client'
 
     require 'versioneye/migrations/product_migration'
+    require 'versioneye/migrations/project_orga_migration'
+    require 'versioneye/migrations/plan_to_orga_migration'
 
     require 'versioneye/producers/producer.rb'
     require 'versioneye/producers/html_worker_producer.rb'

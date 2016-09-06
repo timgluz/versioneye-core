@@ -99,7 +99,7 @@ class Projectdependency < Versioneye::Model
       return product if product
     end
 
-    Product.fetch_product( self.language, self.prod_key.to_s.downcase )
+    Product.fetch_product( self.language, self.prod_key.to_s )
   end
 
 

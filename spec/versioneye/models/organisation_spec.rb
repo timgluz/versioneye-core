@@ -196,6 +196,82 @@ describe Organisation do
   end
 
 
+  describe "api" do
+    it 'returns a new api' do
+      orga = Organisation.new({:name => 'Orga'})
+      expect( orga.save ).to be_truthy
+
+      api = orga.api
+      expect( api ).to_not be_nil
+      expect( orga.api.api_key ).to eq(api.api_key)
+    end
+  end
+
+
+  describe "parent_projects" do
+    it 'returns the parent projects' do
+      user = UserFactory.create_new
+      project = ProjectFactory.create_new user
+      expect( project.save ).to be_truthy
+
+      project2 = ProjectFactory.create_new user
+      project2.parent_id = project.ids
+      expect( project2.save ).to be_truthy
+
+      orga = Organisation.new({:name => 'Orga'})
+      expect( orga.save ).to be_truthy
+
+      project.organisation = orga
+      expect( project.save ).to be_truthy
+
+      project2.organisation = orga
+      expect( project2.save ).to be_truthy
+
+      orga = Organisation.first
+      expect( orga.parent_projects.count ).to eq(1)
+      expect( orga.projects.count ).to eq(2)
+    end
+  end
+
+
+  describe "team_projects" do
+    it 'returns the team projects' do
+      user = UserFactory.create_new
+      project = ProjectFactory.create_new user
+      expect( project.save ).to be_truthy
+
+      project2 = ProjectFactory.create_new user
+      expect( project2.save ).to be_truthy
+
+      orga = Organisation.new({:name => 'Orga'})
+      expect( orga.save ).to be_truthy
+
+      owners = Team.new({:name => 'owners', :organisation_id => orga.ids })
+      owners.organisation = orga
+      expect( owners.save ).to be_truthy
+
+      dev_team = Team.new({:name => 'dev_team', :organisation_id => orga.ids })
+      dev_team.organisation = orga
+      expect( dev_team.save ).to be_truthy
+
+      project.organisation = orga
+      expect( project.save ).to be_truthy
+
+      project2.organisation = orga
+      project2.team_ids = [dev_team.ids]
+      expect( project2.save ).to be_truthy
+
+      orga = Organisation.first
+      expect( orga.projects.count ).to eq(2)
+      expect( orga.team_projects(dev_team.ids).count ).to eq(1)
+
+      project.team_ids = [dev_team.ids]
+      expect( project.save ).to be_truthy
+      expect( orga.team_projects(dev_team.ids).count ).to eq(2)
+    end
+  end
+
+
   describe "unknown_license_deps" do
     it "returns the unknown license_deps" do
       user = UserFactory.create_new

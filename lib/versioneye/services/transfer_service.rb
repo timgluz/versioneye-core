@@ -39,13 +39,13 @@ class TransferService < Versioneye::Service
   end
 
 
-  def self.download_receipts
+  def self.download_receipts directory = '/Users/reiz/stripe'
     bucket_name = 'veye-prod-receipt'
     s3 = Aws::S3::Client.new
     s3.list_objects(bucket: bucket_name).each do |response|
       response.contents.each do |content|
         obj_key = content.key
-        download s3, bucket_name, obj_key
+        download directory, s3, bucket_name, obj_key
       end
     end
   end
@@ -54,8 +54,8 @@ class TransferService < Versioneye::Service
   private
 
 
-    def self.download s3, bucket_name, obj_key
-      filename = "/Users/reiz/stripe/#{obj_key}"
+    def self.download directory, s3, bucket_name, obj_key
+      filename = "#{directory}/#{obj_key}"
       File.open(filename, 'wb') do |file|
         reap = s3.get_object({ bucket: bucket_name, key: obj_key }, target: file)
       end

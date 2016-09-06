@@ -10,7 +10,7 @@ class GithubUpdater < CommonUpdater
       return nil
     end
 
-    new_project = parse project_file, token
+    new_project = ProjectImportService.create_project_from project_file, token
     update_old_with_new project, new_project, send_email
   rescue => e
     log.error "ERROR occured by parsing project from GitHub API - #{e.message}"
@@ -34,14 +34,6 @@ class GithubUpdater < CommonUpdater
     filename = project.filename
     filename = 'pom.xml' if filename.eql? 'pom.json'
     Github.fetch_project_file_from_branch project.scm_fullname, filename, project.scm_branch, token
-  end
-
-
-  def parse project_file, token = nil
-    content   = GitHubService.pure_text_from project_file
-    file_name = GitHubService.filename_from project_file
-    parser    = ProjectParseService.parser_for file_name
-    ProjectParseService.parse_content parser, content, file_name, token
   end
 
 

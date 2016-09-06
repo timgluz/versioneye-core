@@ -13,6 +13,7 @@ describe BillingAddress do
       params[:city] = 'HansCity'
       params[:country] = 'DE'
       params[:taxid] = 'HansVat'
+      params[:email] = 'ema@ame.de'
 
       ba = described_class.new
       ba.name.should be_nil
@@ -63,6 +64,7 @@ describe BillingAddress do
       params[:city]     = 'HansCity'
       params[:country]  = 'DE'
       params[:company]  = 'HansImGlueck'
+      params[:email]    = 'my@mail.de'
       params[:taxid]    = 'DE87473'
       ba.update_from_params params
       resp = ba.save
@@ -79,6 +81,7 @@ describe BillingAddress do
       params[:city]     = 'HansCity'
       params[:country]  = 'DE'
       params[:company]  = 'HansImGlueck'
+      params[:email]    = 'my@mail.de'
       ba.update_from_params params
       ba.save.should be_falsey
     end
@@ -88,6 +91,7 @@ describe BillingAddress do
       params = Hash.new
       params[:type]     = BillingAddress::A_TYPE_INDIVIDUAL
       params[:name]     = 'Hans'
+      params[:email]    = 'my@mail.de'
       params[:street]   = 'HansStrasse 777'
       params[:zip_code] = '12345'
       params[:city]     = 'HansCity'
@@ -100,6 +104,7 @@ describe BillingAddress do
       ba = described_class.new
       params = Hash.new
       params[:type]     = BillingAddress::A_TYPE_INDIVIDUAL
+      params[:email]    = 'my@mail.de'
       params[:name]     = 'Hans'
       params[:street]   = 'HansStrasse 777'
       params[:zip_code] = '12345'

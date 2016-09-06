@@ -35,6 +35,7 @@ class Dependency < Versioneye::Model
   field :artifact_id , type: String   # Maven specific
   field :version     , type: String   # version of the dependency. This is the unfiltered version string. It is not parsed yet.
   field :scope       , type: String
+  field :targetFramework, type: String # .NET & Nuget specific
 
   # known or unknown dependency.
   # If there is no product for dep_prod_key in our db then it's unknown
@@ -123,6 +124,8 @@ class Dependency < Versioneye::Model
     elsif language.eql?( Product::A_LANGUAGE_JAVA ) || language.eql?( Product::A_LANGUAGE_CLOJURE ) || language.eql?( Product::A_LANGUAGE_BIICODE )
       return A_SCOPE_COMPILE
     elsif language.eql?( Product::A_LANGUAGE_NODEJS)
+      return A_SCOPE_COMPILE
+    elsif language.eql?( Product::A_LANGUAGE_CSHARP)
       return A_SCOPE_COMPILE
     elsif language.eql?( Product::A_LANGUAGE_PHP ) || language.eql?( Product::A_LANGUAGE_JAVASCRIPT )
       return A_SCOPE_REQUIRE

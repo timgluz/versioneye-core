@@ -15,18 +15,37 @@ class Organisation < Versioneye::Model
   # Team members are allowed to add new team members to their own team
   field :matanmtt, type: Boolean, default: false # matanmtt = member allowed to add new members to team
 
-  has_many :projects
-  has_many :teams
-  has_many :license_whitelists
-  has_many :component_whitelists
+  field :stripe_token      , type: String
+  field :stripe_customer_id, type: String
+
+  belongs_to :plan
+  has_one    :billing_address
+  has_many   :projects
+  has_many   :teams
+  has_many   :license_whitelists
+  has_many   :component_whitelists
 
   validates_presence_of   :name, :message => 'is mandatory!'
   validates_uniqueness_of :name, :message => 'exist already.'
 
   index({ name: 1 }, { name: "name_index", background: true, unique: true })
 
+
   def to_s
     name
+  end
+
+  def api
+    api = Api.where( organisation_id: self.ids ).first
+    api = Api.create_new_for_orga( self ) if api.nil?
+    api
+  end
+
+  def fetch_or_create_billing_address
+    if self.billing_address.nil?
+      self.billing_address = BillingAddress.new
+    end
+    self.billing_address
   end
 
   def default_lwl_id
@@ -51,6 +70,14 @@ class Organisation < Versioneye::Model
     name
   end
 
+  def team_projects team_id
+    projects.parents.where(:team_ids => team_id, :temp => false)
+  end
+
+  def parent_projects
+    projects.parents.where(:temp => false)
+  end
+
   def owner_team
     teams.each do |team|
       return team if team.name.eql?(Team::A_OWNERS)
@@ -69,10 +96,8 @@ class Organisation < Versioneye::Model
   end
 
   def team_by name
-    teams.each do |team|
-      return team if team.name.eql?(name)
-    end
-    nil
+    return nil if name.to_s.empty?
+    teams.where(:name => name).first
   end
 
   def unknown_license_deps

@@ -985,7 +985,7 @@ module VersionEye
         map['GPL-3.0'] = {:fullname => 'GNU General Public License v3.0 only', :osi_approved => true}
         map['LGPL-2.1'] = {:fullname => 'GNU Lesser General Public License v2.1 only', :osi_approved => true}
         map['LGPL-3.0'] = {:fullname => 'GNU Lesser General Public License v3.0 only', :osi_approved => true}
-        map['LGPL-2.0'] = {:fullname => 'GNU Library General Public License v2 only', :osi_approved => true}
+        map['LGPL-2.0'] = {:fullname => 'GNU Lesser General Public License v2 only', :osi_approved => true}
         map['gnuplot'] = {:fullname => 'gnuplot License', :osi_approved => false}
         map['gSOAP-1.3b'] = {:fullname => 'gSOAP Public License v1.3b', :osi_approved => false}
         map['HaskellReport'] = {:fullname => 'Haskell Language Report License', :osi_approved => false}
@@ -1153,7 +1153,7 @@ module VersionEye
         map['GPL-3.0-with-GCC-exception']       = {:fullname => 'GNU General Public License v3.0 w/GCC Runtime Library exception', :osi_approved => false}
         map['LGPL-2.1+']                        = {:fullname => 'GNU Lesser General Public License v2.1 or later', :osi_approved => false}
         map['LGPL-3.0+']                        = {:fullname => 'GNU Lesser General Public License v3.0 or later', :osi_approved => false}
-        map['LGPL-2.0+']                        = {:fullname => 'GNU Library General Public License v2 or later', :osi_approved => false}
+        map['LGPL-2.0+']                        = {:fullname => 'GNU Lesser General Public License v2 or later', :osi_approved => false}
         map['StandardML-NJ']                    = {:fullname => 'Standard ML of New Jersey License', :osi_approved => false}
         map['WXwindows']                        = {:fullname => 'wxWindows Library License', :osi_approved => false}
 

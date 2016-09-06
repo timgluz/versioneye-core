@@ -250,18 +250,16 @@ class Github < Versioneye::Service
   end
 
 
-  def self.fetch_project_file_from_branch repo_name, filename, branch = "master", token = nil
-    branch_info = Github.repo_branch_info repo_name, branch, token
-    if branch_info.nil? || branch_info[:commit].nil?
-      log.error "fetch_project_file_from_branch - can't read branch info for [repo_name: #{repo_name}, branch: #{branch}, token: #{token}] - branch_info: #{branch_info}"
-      return nil
+  def self.fetch_project_file_from_branch repo_name, filename, branch = "master", token = nil, sha = nil
+    if sha.to_s.empty?
+      sha = fetch_current_sha(repo_name, branch, token)
     end
 
-    file_info = Github.project_file_info( repo_name, filename, branch_info[:commit][:sha], token)
+    file_info = Github.project_file_info( repo_name, filename, sha, token)
     if file_info.nil? || file_info.empty?
       log.error %Q{
         fetch_project_file_from_branch | can't read info about project's file.
-        repo: #{repo_name} , filename: `#{filename}` , branch_info: #{branch_info}
+        repo: #{repo_name} , filename: `#{filename}` , branch: `#{branch}`, sha: `#{sha}`
       }
       return nil
     end
@@ -273,6 +271,16 @@ class Github < Versioneye::Service
       branch: branch,
       content: file_content[:content]
     })
+  end
+
+
+  def self.fetch_current_sha repo_name, branch, token
+    branch_info = Github.repo_branch_info repo_name, branch, token
+    if branch_info.nil? || branch_info[:commit].nil?
+      log.error "fetch_current_sha(..) - can't read branch info for [repo_name: #{repo_name}, branch: #{branch}, token: #{token}]"
+      return nil
+    end
+    branch_info[:commit][:sha]
   end
 
 
@@ -368,6 +376,7 @@ class Github < Versioneye::Service
     log.error e.backtrace.join("\n")
   end
 
+
   def self.fetch_file( url, token )
     return nil if url.to_s.empty?
 
@@ -378,6 +387,7 @@ class Github < Versioneye::Service
     log.error e.backtrace.join("\n")
     nil
   end
+
 
   def self.orga_names( github_token )
     github_api_url = get_github_api_url
@@ -395,6 +405,7 @@ class Github < Versioneye::Service
     []
   end
 
+
   def self.private_repo?( github_token, name )
     github_api_url = get_github_api_url
     url = "#{github_api_url}/repos/#{name}?access_token=#{github_token}"
@@ -408,6 +419,7 @@ class Github < Versioneye::Service
     return false
   end
 
+
   def self.repo_sha(repository, token)
     github_api_url = get_github_api_url
     url = "#{github_api_url}/repos/#{repository}/git/refs/heads"
@@ -419,6 +431,21 @@ class Github < Versioneye::Service
     nil
   end
 
+
+  def self.create_webhook repo, token, body_hash
+    github_api_url = get_github_api_url
+    url = "#{github_api_url}/repos/#{repo}/hooks"
+    post_json url, body_hash, token
+  end
+
+
+  def self.update_status repo, sha, token, body_hash
+    github_api_url = get_github_api_url
+    url = "#{github_api_url}/repos/#{repo}/statuses/#{sha}"
+    post_json url, body_hash, token
+  end
+
+
   def self.get_json(url, token = nil, raw = false, updated_at = nil)
     request_headers = build_request_headers token, updated_at
     response = get(url, headers: request_headers)
@@ -427,21 +454,37 @@ class Github < Versioneye::Service
     content = JSON.parse(response.body, symbolize_names: true)
     catch_github_exception( content )
   rescue => e
-    log.error "ERROR in get_json( #{url} )"
+    log.error "ERROR in get_json( #{url} ) error message: #{e.message}"
     log.error e.backtrace.join("\n")
     nil
   end
 
+
+  def self.post_json( url, body_hash, token, raw = false, updated_at = nil )
+    request_headers = build_request_headers token, updated_at
+    response = post(url, body: body_hash.to_json, headers: request_headers)
+    return response if raw
+
+    content = JSON.parse(response.body, symbolize_names: true)
+    catch_github_exception( content )
+  rescue => e
+    log.error "ERROR in post_json( #{url} ) error message: #{e.message}"
+    log.error e.backtrace.join("\n")
+    nil
+  end
+
+
   def self.build_request_headers token, updated_at = nil
     request_headers = A_DEFAULT_HEADERS
     if token
-      request_headers["Authorization"] = " token #{token}"
+      request_headers["Authorization"] = "token #{token}"
     end
     if updated_at.is_a?(Date) or updated_at.is_a?(DateTime)
       request_headers["If-Modified-Since"] = updated_at.to_datetime.rfc822
     end
     request_headers
   end
+
 
   def self.encode_db_key(key_val)
     URI.escape(key_val.to_s, /\.|\$/)
@@ -450,6 +493,7 @@ class Github < Versioneye::Service
   def self.decode_db_key(key_val)
     URI.unescape key_val.to_s
   end
+
 
   private
 

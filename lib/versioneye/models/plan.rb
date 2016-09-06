@@ -18,6 +18,7 @@ class Plan < Versioneye::Model
   field :api_rate_limit  , type: Integer, default: 50
 
   has_many :users
+  has_many :organisations
 
   def self.by_name_id name_id
     Plan.where(:name_id => name_id).shift

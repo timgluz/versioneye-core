@@ -601,8 +601,126 @@ describe ProjectdependencyService do
       expect( project2.out_number_sum ).to eq(1)
       expect( ProjectService.outdated?(project2) ).to be_truthy
     end
+  end
+  
+  
+  let(:sha_head){ "3f7947a25d970e1e5f512276c14d5dcf731ccd5e" }
+  let(:sha1){ "99c3df83b51532e3615f851d8c2dbb638f5313bf" }
+  let(:sha2){ "7ed8a133d2804385eba5d3d3704f549a4d210b83" }
+  let(:prod1){
+    FactoryGirl.create(
+      :product_with_versions,
+      prod_key: "Godep1",
+      name: "Godep1",
+      prod_type: Project::A_TYPE_GODEP,
+      language: Product::A_LANGUAGE_GO,
+      version: "2.0"
+    )
+  }
 
+  let(:dep1){
+    FactoryGirl.create(
+      :projectdependency,
+      language: Product::A_LANGUAGE_GO,
+      prod_key: 'Godep1',
+      name: 'Godep1',
+      version_current: prod1[:version],
+      version_requested: sha1,
+      outdated: nil # important: otherwise outdated? shortcuts as last_update_ago is too small
+    )
+  }
+
+  let(:dep_tag){
+    FactoryGirl.create(
+      :projectdependency,
+      language: Product::A_LANGUAGE_GO,
+      prod_key: 'Godep1',
+      name: 'Godep1',
+      version_current: prod1[:version],
+      version_requested: 'rc1',
+      outdated: nil
+    )
+  }
+
+  let(:dep_ver){
+    FactoryGirl.create(
+      :projectdependency,
+      language: Product::A_LANGUAGE_GO,
+      prod_key: 'Godep1',
+      name: 'Godep1',
+      version_current: prod1[:version],
+      version_requested: 'v1.7',
+      outdated: nil
+    )
+  }
+  let(:dep_cur){
+    FactoryGirl.create(
+      :projectdependency,
+      language: Product::A_LANGUAGE_GO,
+      prod_key: 'Godep1',
+      name: 'Godep1',
+      version_current: prod1[:version],
+      version_requested: '2.1',
+      outdated: nil
+    )
+  }
+
+  describe 'godep_to_semver' do
+    it "recognizes sha codes" do
+      expect(ProjectdependencyService.sha?("4b6ea7319e214d98c938f12692336f7ca9348d6b")).to be_truthy
+      expect(ProjectdependencyService.sha?("3ac7bf7a47d159a033b107610db8a1b6575507a4")).to be_truthy
+      expect(ProjectdependencyService.sha?("3a4c")).to be_falsey
+      expect(ProjectdependencyService.sha?("")).to be_falsey
+    end
+
+    it "returns correct semver by its sha code" do
+      prod1.versions << FactoryGirl.build(:product_version, version: '1.5', sha1: sha1)
+      prod1.versions << FactoryGirl.build(:product_version, version: '2.0', sha1: sha_head)
+
+
+      expect(ProjectdependencyService.godep_to_semver(dep1)).to eq('1.5')
+    end
+
+    it "returns an correct semver by it version tag" do
+      prod1.versions << FactoryGirl.build(:product_version, version: '1.6', tag: 'rc1')
+      prod1.versions << FactoryGirl.build(:product_version, version: '2.0', tag: 'rc2')
+
+
+      expect(ProjectdependencyService.godep_to_semver(dep_tag)).to eq('1.6')
+    end
+
+    it "returns an correct semver by its semverable label" do
+      prod1.versions << FactoryGirl.build(:product_version, version: '1.7', tag: 'v1.7')
+      prod1.versions << FactoryGirl.build(:product_version, version: '2.0', tag: 'v2.0')
+
+      expect(ProjectdependencyService.godep_to_semver(dep_ver)).to eq('1.7')
+    end
   end
 
+  describe 'outdated? for godeps packages' do
+    before do
+      prod1.versions << FactoryGirl.build(:product_version, version: '1.5', sha1: sha1)
+      prod1.versions << FactoryGirl.build(:product_version, version: '1.6', tag: 'rc3')
+      prod1.versions << FactoryGirl.build(:product_version, version: '1.7', tag: 'v1.7')
+      prod1.versions << FactoryGirl.build(:product_version, version: '2.0', sha1: sha_head)
+    end
+
+    after do
+      prod1.delete
+    end
+
+    it "returns true for all outdated packages" do
+      expect(ProjectdependencyService.outdated?(dep1)).to be_truthy
+      expect(ProjectdependencyService.outdated?(dep_tag)).to be_truthy
+      expect(ProjectdependencyService.outdated?(dep_ver)).to be_truthy
+    end
+
+    it "returns false when it's matching with current version " do
+      prod1.versions << FactoryGirl.build(:product_version, version: '2.1', tag: 'v2.1')
+
+      expect(ProjectdependencyService.outdated?(dep_cur)).to be_falsey      
+    end
+
+  end
 end
 

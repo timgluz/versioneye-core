@@ -10,6 +10,50 @@ describe ProjectImportService do
       :bitbucket_login => Settings.instance.bitbucket_username)}
 
 
+  describe 'allowed_to_add?' do
+    it 'allows to add' do
+      Plan.create_defaults
+      user = UserFactory.create_new 1
+      plan = Plan.free_plan
+      user.plan = plan
+      expect( user.save ).to be_truthy
+      expect( described_class.allowed_to_add?(user, nil, true) ).to be_truthy
+    end
+    it 'does not allow to add for user' do
+      Plan.create_defaults
+      user = UserFactory.create_new 1
+      user.plan = Plan.free_plan
+      expect( user.save ).to be_truthy
+
+      project = ProjectFactory.create_new user
+      project.private_project = true
+      expect( project.save ).to be_truthy
+      expect( described_class.allowed_to_add?(user, nil, true) ).to be_falsey
+    end
+    it 'allows to add for orga' do
+      Plan.create_defaults
+      user = UserFactory.create_new 1
+      orga = Organisation.new :name => 'test_org'
+      orga.plan = Plan.free_plan
+      expect( orga.save ).to be_truthy
+      expect( described_class.allowed_to_add?(nil, orga, true) ).to be_truthy
+    end
+    it 'does not allow to add for orga' do
+      Plan.create_defaults
+      user = UserFactory.create_new 1
+      orga = Organisation.new :name => 'test_org'
+      orga.plan = Plan.free_plan
+      expect( orga.save ).to be_truthy
+
+      project = ProjectFactory.create_new user
+      project.organisation_id = orga.ids
+      project.private_project = true
+      expect( project.save ).to be_truthy
+      expect( described_class.allowed_to_add?(nil, orga, true) ).to be_falsey
+    end
+  end
+
+
   describe 'import_from_github' do
     it 'imports from github' do
       VCR.use_cassette('import_from_github', allow_playback_repeats: true) do
@@ -146,12 +190,12 @@ describe ProjectImportService do
   describe "allowed_to_add_project?" do
 
     it "allows because its a public project" do
-      described_class.allowed_to_add_project?(nil, false).should be_truthy
+      described_class.allowed_to_add_project?(nil, nil, false).should be_truthy
     end
 
     it "allows because each user has 1 private project for free" do
       Plan.create_defaults
-      described_class.allowed_to_add_project?(github_user, true).should be_truthy
+      described_class.allowed_to_add_project?(github_user, nil, true).should be_truthy
     end
 
     it "allows because user has a plan and no projects" do
@@ -160,7 +204,7 @@ describe ProjectImportService do
       user = github_user
       user.plan = plan
       user.save
-      described_class.allowed_to_add_project?(github_user, true).should be_truthy
+      described_class.allowed_to_add_project?(github_user, nil, true).should be_truthy
     end
 
     it "denies because user has a plan and to many private projects already" do
@@ -170,7 +214,7 @@ describe ProjectImportService do
       user.plan = plan
       user.save
       plan.private_projects.times { ProjectFactory.create_new( user, {:private_project => true} ) }
-      described_class.allowed_to_add_project?(github_user, true).should be_falsey
+      described_class.allowed_to_add_project?(github_user, nil, true).should be_falsey
     end
 
     it "allows because user has a plan and to many private projects already, but 1 additional free project" do
@@ -181,7 +225,7 @@ describe ProjectImportService do
       user.free_private_projects = 1
       user.save
       plan.private_projects.times { ProjectFactory.create_new( user, {:private_project => true} ) }
-      described_class.allowed_to_add_project?(github_user, true).should be_truthy
+      described_class.allowed_to_add_project?(github_user, nil, true).should be_truthy
     end
 
     it "denises because user has a plan and to many private projects already" do
@@ -193,14 +237,14 @@ describe ProjectImportService do
       user.save
       max = plan.private_projects + user.free_private_projects
       max.times { ProjectFactory.create_new( user, {:private_project => true} ) }
-      described_class.allowed_to_add_project?(github_user, true).should be_falsey
+      described_class.allowed_to_add_project?(github_user, nil, true).should be_falsey
     end
 
     it "is not allowed in Enterprise" do
       Settings.instance.instance_variable_set(:@environment, 'enterprise')
       user = github_user
       GlobalSetting.set 'enterprise', 'E_PROJECTS', '0'
-      ProjectImportService.allowed_to_add_project?( user, true ).should be_falsey
+      ProjectImportService.allowed_to_add_project?( user, nil, true ).should be_falsey
       Settings.instance.instance_variable_set(:@environment, 'test')
     end
 
@@ -208,7 +252,7 @@ describe ProjectImportService do
       Settings.instance.instance_variable_set(:@environment, 'enterprise')
       user = github_user
       GlobalSetting.set 'enterprise', 'E_PROJECTS', '1'
-      ProjectImportService.allowed_to_add_project?( user, true ).should be_truthy
+      ProjectImportService.allowed_to_add_project?( user, nil, true ).should be_truthy
       Settings.instance.instance_variable_set(:@environment, 'test')
     end
 

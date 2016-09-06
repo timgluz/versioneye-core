@@ -47,9 +47,6 @@ class User < Versioneye::Model
   field :stripe_token      , type: String
   field :stripe_customer_id, type: String
 
-  field :stripe_legacy_token      , type: String
-  field :stripe_legacy_customer_id, type: String
-
   field :languages, type: String
 
   # Contains the <language::prod_key> downcased pairs for the packages which user is maintainer for.
@@ -271,10 +268,11 @@ class User < Versioneye::Model
   end
 
   def self.authenticate_with_apikey(token)
-    user_api = Api.where(api_key: token).shift
-    return nil if user_api.nil?
+    api = Api.where(api_key: token).shift
+    return nil if api.nil?
+    return nil if api.user_id.nil?
 
-    user = User.find_by_id(user_api.user_id)
+    user = User.find_by_id( api.user_id )
     return nil if user.nil?
 
     user
@@ -391,6 +389,7 @@ class User < Versioneye::Model
     self.username
   end
 
+  # TODO obsolete - remove it - was moved to organisation.
   def fetch_or_create_billing_address
     if self.billing_address.nil?
       self.billing_address = BillingAddress.new

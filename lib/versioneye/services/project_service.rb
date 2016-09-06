@@ -10,11 +10,14 @@ class ProjectService < Versioneye::Service
     return nil if filename.to_s.match(/LICENSE.txt\z/i)
     return nil if filename.to_s.match(/README.txt\z/i)
     return nil if filename.to_s.match(/content.txt\z/i)
+    return nil if filename.to_s.match(/curl.txt\z/i)
+    return nil if filename.to_s.match(/comment.txt\z/i)
+    return nil if filename.to_s.match(/new_file.txt\z/i)
 
     trimmed_name = filename.split('?')[0]
     return Project::A_TYPE_RUBYGEMS  if (!(/Gemfile\z/ =~ trimmed_name).nil?)        or (!(/Gemfile.lock\z/  =~ trimmed_name).nil?)
     return Project::A_TYPE_COMPOSER  if (!(/composer.json\z/ =~ trimmed_name).nil?)  or (!(/composer.lock\z/ =~ trimmed_name).nil?)
-    return Project::A_TYPE_PIP       if (!(/\S*.txt\z/ =~ trimmed_name).nil?)  or (!(/setup.py\z/ =~ trimmed_name).nil?) or (!(/pip.log\z/ =~ trimmed_name).nil?)
+    return Project::A_TYPE_PIP       if (!(/requirements.txt\z/ =~ trimmed_name).nil?) or (!(/requirements\/.+\.txt/i =~ trimmed_name).nil?) or (!(/setup.py\z/ =~ trimmed_name).nil?) or (!(/pip.log\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_NPM       if (!(/package.json\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_GRADLE    if (!(/.gradle\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_SBT       if (!(/.sbt\z/ =~ trimmed_name).nil?)
@@ -24,6 +27,7 @@ class ProjectService < Versioneye::Service
     return Project::A_TYPE_BIICODE   if (!(/biicode.conf\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_COCOAPODS if (!(/Podfile\z/ =~ trimmed_name).nil?)  or (!(/.podfile\z/ =~ trimmed_name).nil?) or (!(/Podfile.lock\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_CHEF      if (!(/Berksfile.lock\z/ =~ trimmed_name).nil?)  or (!(/Berksfile\z/ =~ trimmed_name).nil?) or (!(/metadata.rb\z/ =~ trimmed_name).nil?)
+    return Project::A_TYPE_NUGET     if (!(/project\.json\z/ =~ trimmed_name).nil?) or (!(/.*\.nuspec\z/ =~ trimmed_name).nil?)  or (!(/packages\.config\z/ =~ trimmed_name).nil?)
     return nil
   end
 
@@ -41,7 +45,7 @@ class ProjectService < Versioneye::Service
 
 
   def self.index( user, filter = {}, sort = nil)
-    filter_options            = {:parent_id => nil}
+    filter_options            = {:parent_id => nil, :temp => false}
     filter_options[:team_ids] = filter[:team]       if filter[:team]     && filter[:team].to_s.casecmp('ALL') != 0
     filter_options[:language] = filter[:language]   if filter[:language] && filter[:language].to_s.casecmp('ALL') != 0
     filter_options[:version]  = filter[:version]    if filter[:version]  && filter[:version].to_s.casecmp('ALL') != 0
@@ -67,11 +71,11 @@ class ProjectService < Versioneye::Service
 
     case sort
     when 'out_dated'
-      Project.where( filter_options ).any_of({ :temp => false }, { :temp => nil } ).desc(:out_number_sum).asc(:name_downcase)
+      Project.where( filter_options ).desc(:out_number_sum).asc(:name_downcase)
     when 'license_violations'
-      Project.where( filter_options ).any_of({ :temp => false }, { :temp => nil } ).desc(:licenses_red_sum).asc(:name_downcase)
+      Project.where( filter_options ).desc(:licenses_red_sum).asc(:name_downcase)
     else
-      Project.where( filter_options ).any_of({ :temp => false }, { :temp => nil } ).asc(:name_downcase).desc(:licenses_red_sum)
+      Project.where( filter_options ).asc(:name_downcase).desc(:licenses_red_sum)
     end
   end
 
@@ -171,11 +175,6 @@ class ProjectService < Versioneye::Service
     ensure_unique_ga( project )
     ensure_unique_scm( project )
 
-    organisation = project.organisation
-    if organisation
-      project.license_whitelist_id   = organisation.default_lwl_id
-      project.component_whitelist_id = organisation.default_cwl_id
-    end
     if project.save
       project.save_dependencies
       update_license_numbers!( project )
@@ -191,7 +190,7 @@ class ProjectService < Versioneye::Service
 
 
   def self.remove_temp_projects
-    Project.where(:temp => true).delete_all
+    Project.where(:temp => true, :temp_lock => false).delete_all
   end
 
 
@@ -212,12 +211,16 @@ class ProjectService < Versioneye::Service
     return true if Settings.instance.projects_unique_gav == false
     return true if project.group_id.to_s.empty? && project.artifact_id.to_s.empty? && project.version.to_s.empty?
 
-    project = Project.find_by_gav( project.group_id, project.artifact_id, project.version )
-    return true if project.nil?
+    db_projects = Project.where(:group_id => project.group_id, :artifact_id => project.artifact_id, :version => project.version )
+    return true if db_projects.nil? || db_projects.empty?
 
-    err_msg = "A project with same GroupId, ArtifactId and Version exist already. Project ID: #{project.id.to_s}"
-    log.error err_msg
-    raise err_msg
+    db_project = db_projects.first
+    return true if db_project.ids.eql?( project.ids ) && db_projects.count == 1
+
+    destroy project
+
+    log.error "A project with same GroupId, ArtifactId and Version exist already. Project ID: #{db_project.id.to_s}. GroupId: #{db_project.group_id}, ArtifactId: #{db_project.artifact_id}, Version: #{db_project.version}"
+    raise "A project with same GroupId, ArtifactId and Version exist already. Project ID: #{db_project.id.to_s}."
   end
 
 
@@ -225,17 +228,24 @@ class ProjectService < Versioneye::Service
     return true if Settings.instance.projects_unique_scm == false
     return true if project.scm_fullname.to_s.empty?
 
-    project = Project.where(:source => project.source, :scm_fullname => project.scm_fullname, :scm_branch => project.scm_branch, :s3_filename => project.s3_filename).first
-    return true if project.nil?
+    db_projects = Project.where(:source => project.source, :scm_fullname => project.scm_fullname, :scm_branch => project.scm_branch, :s3_filename => project.s3_filename)
+    return true if db_projects.nil? || db_projects.empty?
 
-    err_msg = "The project file is already monitored by VersionEye. Project ID: #{project.id.to_s}"
-    log.error err_msg
-    raise err_msg
+    db_project = db_projects.first
+    return true if db_project.ids.eql?( project.ids ) && db_projects.count == 1
+
+    destroy project # Delete new created proejct to prevent duplicates in the database!
+
+    log.error "The project file is already monitored by VersionEye. Project ID: #{db_project.id.to_s}. scm_fullname: #{db_project.scm_fullname}, scm_branch: #{db_project.scm_branch}, filename: #{db_project.s3_filename}"
+    raise     "The project file is already monitored by VersionEye. Project ID: #{db_project.id.to_s}."
   end
 
 
   def self.merge_by_ga group_id, artifact_id, subproject_id, user_id
-    parent = Project.by_user_id(user_id).find_by_ga(group_id, artifact_id)
+    user = User.find user_id
+    parent = Project.find_by_ga( group_id, artifact_id )
+    raise "User does not have permission to merge." if !parent.is_collaborator?( user )
+
     resp = merge( parent.id.to_s, subproject_id, user_id )
     update_sums parent
     resp
@@ -463,7 +473,8 @@ class ProjectService < Versioneye::Service
   def self.update_sums( project )
     return if project.nil?
 
-    if project.children.empty?
+    children = project.children
+    if children.empty?
       project.sum_own!
       reset_badge project
       return nil
@@ -471,11 +482,12 @@ class ProjectService < Versioneye::Service
 
     dep_hash = {}
     project.sum_reset!
-    project.children.each do |child_project|
+    children.each do |child_project|
       update_numbers_for project, child_project, dep_hash
       child_project.sum_own!
     end
     update_numbers_for project, project, dep_hash
+    project.child_count = children.count
     project.save
     reset_badge project
     project

@@ -18,6 +18,7 @@ class Project < Versioneye::Model
   A_TYPE_BIICODE   = 'Biicode'
   A_TYPE_CHEF      = 'Chef'
   A_TYPE_NUGET     = 'Nuget'
+  A_TYPE_GODEP     = 'Godep'
 
   A_SOURCE_UPLOAD    = 'upload'
   A_SOURCE_URL       = 'url'
@@ -61,6 +62,7 @@ class Project < Versioneye::Model
   field :licenses_red    , type: Integer, :default => 0
   field :licenses_unknown, type: Integer, :default => 0
   field :sv_count        , type: Integer, :default => 0
+  field :child_count     , type: Integer, :default => 0
 
   # These are the numbers summed up from all children
   field :dep_number_sum      , type: Integer, :default => 0
@@ -71,6 +73,7 @@ class Project < Versioneye::Model
   field :sv_count_sum        , type: Integer, :default => 0
 
   field :temp           , type: Boolean, :default => false  # temporary project. if true it doesn't show up in the UI and will be removed by a background job.
+  field :temp_lock      , type: Boolean, :default => false  # temporary locked for deletion.
   field :public         , type: Boolean, :default => false  # visible for everybody
   field :private_project, type: Boolean, :default => false  # private project from GitHub/Bitbucket
   field :parent_id      , type: String,  :default => nil    # id of the parent project.
@@ -80,6 +83,8 @@ class Project < Versioneye::Model
 
   field :parsing_errors , type: Array, :default => []
   field :muted_svs      , type: Hash,  :default => {} # muted security vulnerabilities
+
+  field :sync_lock, type: Boolean, :default => false
 
   validates :name       , presence: true
 
@@ -203,7 +208,11 @@ class Project < Versioneye::Model
   end
 
   def self.private_project_count_by_user user_id
-    Project.where( user_id: user_id, private_project: true ).count
+    Project.where( user_id: user_id, private_project: true, :parent_id => nil ).count
+  end
+
+  def self.private_project_count_by_orga orga_id
+    Project.where( organisation_id: orga_id, private_project: true, :parent_id => nil ).count
   end
 
   def show_dependency_badge?
@@ -412,7 +421,7 @@ class Project < Versioneye::Model
     end
 
     def perpare_name_for_search
-      self.name_downcase = self.name.downcase
+      self.name_downcase = self.name.to_s.downcase
     end
 
 end
