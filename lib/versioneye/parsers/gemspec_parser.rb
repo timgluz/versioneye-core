@@ -21,11 +21,11 @@ class GemspecParser < GemfileParser
     the_content = the_content.to_s.strip
     return nil if the_content.empty?
     res = Gemnasium::Parser.gemspec(the_content)
-    
+
     project = init_project(url)
     deps = init_dependencies(res.dependencies)
     check_dependencies!(project, deps)
-    
+
     project.dep_number = project.projectdependencies.size
     project
   rescue => e
@@ -45,7 +45,7 @@ class GemspecParser < GemfileParser
 
   #parses version label and check is dependencies outdated or not
   def check_dependencies!(project, deps)
-  
+
     deps.to_a.each do |dep|
       product = Product.find_by(language: Product::A_LANGUAGE_RUBY, prod_key: dep[:prod_key])
       if product.nil?
