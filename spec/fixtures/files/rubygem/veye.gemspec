@@ -29,6 +29,5 @@ spec = Gem::Specification.new do |s|
   s.add_dependency 'rake', '>= 0.8.7'
   s.add_runtime_dependency('gli',           '~> 2.14')
   s.add_development_dependency('minitest',  '~> 5.9')
-
-
+  s.add_dependency('unknown', '> 0')
 end

@@ -51,10 +51,10 @@ class GemspecParser < GemfileParser
       if product.nil?
         log.warn "check_dependencies: found no #{Product::A_LANGUAGE_RUBY} by prod_key #{dep[:prod_key]}"
         project.unknown_number += 1
-        next
+      else
+        dep[:version_current] = product[:version]
       end
 
-      dep[:version_current] = product[:version]
       parse_requested_version(dep[:version_label], dep, product)
       project.out_number += 1 if ProjectdependencyService.outdated?(dep)
       project.projectdependencies << dep

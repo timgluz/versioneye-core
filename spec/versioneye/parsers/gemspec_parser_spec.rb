@@ -64,8 +64,8 @@ describe GemspecParser do
 
       expect(proj[:project_type]).to eq(Project::A_TYPE_RUBYGEMS)
       expect(proj[:language]).to eq(Product::A_LANGUAGE_RUBY)
-      expect(proj.projectdependencies.size).to eq(3)
-      expect(proj.unknown_number).to eq(0)
+      expect(proj.projectdependencies.size).to eq(4)
+      expect(proj.unknown_number).to eq(1)
       expect(proj.out_number).to eq(1)
 
       dep1 = proj.projectdependencies[0]
@@ -91,6 +91,14 @@ describe GemspecParser do
       expect(dep3[:comperator]).to eq('~>')
       expect(dep3[:scope]).to eq(Dependency::A_SCOPE_DEVELOPMENT)
       expect(dep3[:outdated]).to eq(true)
+    
+      dep4 = proj.projectdependencies[3]
+      expect(dep4[:name]).to eq('unknown')
+      expect(dep4[:version_requested]).to eq('> 0')
+      expect(dep4[:version_current]).to eq(nil)
+      expect(dep4[:comperator]).to eq('=')
+      expect(dep4[:scope]).to eq(Dependency::A_SCOPE_RUNTIME)
+      expect(dep4[:outdated]).to be_falsey
     end
 
     it "parses correctly a gemspec fetched from the url" do
