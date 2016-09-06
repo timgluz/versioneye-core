@@ -20,7 +20,12 @@ class GithubPullRequestService < Versioneye::Service
       filename = project.s3_filename
       next if filenames.include?(filename)
 
-      success = process_file( repo_name, filename, branch, token, pullrequest )
+      if project.organisation && !pullrequest.organisation_ids.include?( project.organisation.ids )
+        pullrequest.organisation_ids << project.organisation.ids
+        pullrequest.save
+      end
+
+      success = process_file( repo_name, project, branch, token, pullrequest )
       filenames << filename if success
     end
     finish_status pullrequest
@@ -45,19 +50,25 @@ class GithubPullRequestService < Versioneye::Service
   end
 
 
-  def self.process_file repo_name, filename, branch, token, pr
+  def self.process_file repo_name, project, branch, token, pr
+    filename = project.s3_filename
     tree_sha = pr.tree_sha
     project_file = Github.fetch_project_file_from_branch( repo_name, filename, branch, token, tree_sha )
     new_project  = ProjectImportService.create_project_from project_file, token
     new_project.name = filename
     new_project.temp = true
     new_project.temp_lock = true # prevent from deletion
+    new_project.license_whitelist_id   = project.license_whitelist_id
+    new_project.component_whitelist_id = project.component_whitelist_id
     new_project.save
+
     ProjectdependencyService.update_licenses_security new_project
 
     new_project.dependencies.each do |dep|
-      if !dep.sv_ids.empty? || dep.license_caches.to_a.empty?
-        create_sec_issue filename, dep, pr
+      if (!dep.sv_ids.empty? ||                 # security vulnerability
+           dep.license_caches.to_a.empty? ||    # unknown license
+           dep.lwl_violation.to_s.eql?('true')) # license whitelist violation
+        create_pr_issue filename, dep, pr
       end
     end
 
@@ -71,7 +82,7 @@ class GithubPullRequestService < Versioneye::Service
   end
 
 
-  def self.create_sec_issue filename, dep, pullrequest
+  def self.create_pr_issue filename, dep, pullrequest
     issue = PrIssue.new({
       :file => filename,
       :language => dep.language,
@@ -81,12 +92,14 @@ class GithubPullRequestService < Versioneye::Service
       :version_requested => dep.version_requested,
       :version_current => dep.version_current,
       :license => dep.licenses_string,
-      :security_count =>  dep.sv_ids.count
+      :security_count =>  dep.sv_ids.count,
+      :lwl_violation => dep.lwl_violation
       })
     issue.pullrequest = pullrequest
     if issue.save
       pullrequest.security_count        += 1 if issue.security_count > 0
       pullrequest.unknown_license_count += 1 if issue.license.eql?('UNKNOWN')
+      pullrequest.lwl_violation_count   += 1 if issue.lwl_violation
       pullrequest.status = Pullrequest::A_STATUS_ERROR
       pullrequest.save
     end

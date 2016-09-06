@@ -10,6 +10,11 @@ describe ParserStrategy do
       parser.is_a?( GemfileParser ).should be_truthy
     end
 
+    it "returns GemspecParser" do
+      parser = ParserStrategy.parser_for( Project::A_TYPE_RUBYGEMS, 'veye.gemspec')
+      parser.is_a?( GemspecParser ).should be_truthy
+    end
+
     it "returns GemfilelockParser" do
       parser = ParserStrategy.parser_for( Project::A_TYPE_RUBYGEMS, "Gemfile.lock" )
       parser.is_a?( GemfilelockParser ).should be_truthy
@@ -93,6 +98,11 @@ describe ParserStrategy do
     it "returns GodepParser" do
       parser = ParserStrategy.parser_for(Project::A_TYPE_GODEP, 'Godeps.json')
       parser.is_a?(GodepParser).should be_truthy
+    end
+
+    it "returns CpanParser" do
+      parser = ParserStrategy.parser_for(Project::A_TYPE_CPAN, "cpan")
+      parser.is_a?(CpanParser).should be_truthy
     end
 
     it "returns nil" do

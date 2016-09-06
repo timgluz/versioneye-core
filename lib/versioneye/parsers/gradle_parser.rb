@@ -2,13 +2,17 @@ require 'versioneye/parsers/common_parser'
 
 class GradleParser < CommonParser
 
+  # Matches for example:
+  # supportLibVersion = "23.4.0"
+  A_GLOBAL_VARS_MATCHER_GENERALL = /\s*(\w*)\s*=\s*(\S*)/xi
+
   # Matches definitions like this;
   # project.ext.springVersion = '4.0.7.RELEASE'
   A_GLOBAL_VARS_MATCHER = /^\s*(\S*ext.\S*\s*\=\s*.*)/xi
 
   # Matches definitions like this;
   # def tomcatVersion = '7.0.54'
-  A_GLOBAL_VARS_MATCHER_2 = /^\s*(def\s+\S+\s*=\s*["']\S*["']$)/xi
+  A_GLOBAL_VARS_MATCHER_DEF = /^\s*(def\s+\S+\s*=\s*["']\S*["']$)/xi
 
   A_GLOBAL_VARS_MATCHER_FINAL = /^\s*final\s*(\S+\s*=\s*["']\S*["']$)/xi
 
@@ -141,6 +145,17 @@ class GradleParser < CommonParser
 
   def extract_vars content
     vars = {}
+
+    matches = content.scan(A_GLOBAL_VARS_MATCHER_GENERALL)
+    if matches && !matches.empty?
+      matches.each do |match|
+        name    = match.first
+        version = match.last
+        version = version.gsub("\"", "").gsub("'", "")
+        vars[name] = version
+      end
+    end
+
     matches = content.scan(A_GLOBAL_VARS_MATCHER)
     if matches && !matches.empty?
       matches.each do |match|
@@ -156,7 +171,7 @@ class GradleParser < CommonParser
       end
     end
 
-    matches = content.scan(A_GLOBAL_VARS_MATCHER_2)
+    matches = content.scan(A_GLOBAL_VARS_MATCHER_DEF)
     if matches && !matches.empty?
       matches.each do |match|
         mat = match.first
@@ -169,7 +184,7 @@ class GradleParser < CommonParser
       end
     end
 
-    matches = content.scan(A_GLOBAL_VARS_MATCHER_2)
+    matches = content.scan(A_GLOBAL_VARS_MATCHER_DEF)
     if matches && !matches.empty?
       matches.each do |match|
         mat = match.first

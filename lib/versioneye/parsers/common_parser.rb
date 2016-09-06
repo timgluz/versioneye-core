@@ -42,9 +42,9 @@ class CommonParser
     0x2060,                # WORD JOINER
     0xFEFF,                # ZERO WIDTH NO-BREAK SPACE
   ].flatten.collect{|e| [e].pack 'U*'}
-  
+
   def clean_spaces(txt)
-    txt.gsub!(Regexp.new(ZERO_WIDTH.join("|")), "") 
+    txt.gsub!(Regexp.new(ZERO_WIDTH.join("|")), "")
     txt.gsub!(Regexp.new(SPECIAL_SPACES.join("|") + "|\s"), " ")
     txt
   end

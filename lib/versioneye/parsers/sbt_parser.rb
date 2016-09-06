@@ -2,6 +2,9 @@ require 'versioneye/parsers/common_parser'
 
 class SbtParser < CommonParser
 
+  # Get the scala Version
+  A_SCALA_VERSION_MATCHER = /scalaVersion\s*:=\s*(\S*)/xi
+
   # matches: val akkaVersion = "2.3.11"
   A_VAL_MATCHER = /\s*val\s*(\S+)\s*=\s*\"(\S+)\"/xi
 
@@ -43,7 +46,9 @@ class SbtParser < CommonParser
     content = content.gsub(/\A\/\/.*$/xi, "")                 # remove comments //
     content = content.gsub(/[^[https:][http:]]\/\/.*$/xi, "") # remove comments // without http[s]
 
-    vals = {}
+    vals = {'scalaVersion': ''}
+    fetchScalaVersion content, vals
+
     val_matches = content.scan( A_VAL_MATCHER )
     content     = content.gsub( A_VAL_MATCHER, "")
     vals        = parse_vals(vals, val_matches)
@@ -131,9 +136,12 @@ class SbtParser < CommonParser
 
 
   def process_dep version, dependency, data, vals
-    product = Product.find_by_group_and_artifact(dependency.group_id, dependency.artifact_id)
+    product = fetch_product dependency, vals
 
-    dependency.prod_key = product.prod_key if product
+    if product
+      dependency.prod_key = product.prod_key
+      dependency.artifact_id = product.artifact_id
+    end
 
     parse_requested_version( version, dependency, product, vals )
 
@@ -142,6 +150,20 @@ class SbtParser < CommonParser
 
     data << dependency
     data
+  end
+
+
+  def fetch_product dependency, vals
+    scalaVersion = vals['scalaVersion'].to_s
+    product = Product.find_by_group_and_artifact(dependency.group_id, "#{dependency.artifact_id}_#{scalaVersion}")
+    sv = SemVer.parse scalaVersion
+    if product.nil? && sv
+      product = Product.find_by_group_and_artifact(dependency.group_id, "#{dependency.artifact_id}_#{sv.major}.#{sv.minor}")
+    end
+    if product.nil?
+      product = Product.find_by_group_and_artifact(dependency.group_id, dependency.artifact_id)
+    end
+    product
   end
 
 
@@ -166,6 +188,17 @@ class SbtParser < CommonParser
       dependency.version_label = version
 
     end
+  end
+
+
+  def fetchScalaVersion content, vals
+    version_matches = content.scan( A_SCALA_VERSION_MATCHER )
+    if version_matches && !version_matches.empty?
+      vals['scalaVersion'] = version_matches.first.first.to_s.gsub("\"", "")
+    end
+  rescue => e
+    p e.message
+    ''
   end
 
 

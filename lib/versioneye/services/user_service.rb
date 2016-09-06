@@ -78,6 +78,10 @@ class UserService < Versioneye::Service
       notify_rob( user, why )
       return true
     end
+
+    BitbucketRepo.by_user( user ).delete_all
+    GithubRepo.by_user( user ).delete_all
+
     false
   end
 

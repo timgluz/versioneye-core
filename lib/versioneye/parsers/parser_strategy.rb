@@ -40,6 +40,8 @@ class ParserStrategy
       when Project::A_TYPE_RUBYGEMS
         if url.match(/Gemfile\.lock/)
           return GemfilelockParser.new
+        elsif url.match(/\w\.gemspec\z/i)
+          return GemspecParser.new
         else
           return GemfileParser.new
         end
@@ -81,6 +83,8 @@ class ParserStrategy
       when Project::A_TYPE_GODEP
         return GodepParser.new
 
+      when Project::A_TYPE_CPAN
+        return CpanParser.new
       else
         nil
 

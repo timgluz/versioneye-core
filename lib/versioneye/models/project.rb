@@ -19,6 +19,7 @@ class Project < Versioneye::Model
   A_TYPE_CHEF      = 'Chef'
   A_TYPE_NUGET     = 'Nuget'
   A_TYPE_GODEP     = 'Godep'
+  A_TYPE_CPAN      = 'Cpan'
 
   A_SOURCE_UPLOAD    = 'upload'
   A_SOURCE_URL       = 'url'
@@ -127,6 +128,10 @@ class Project < Versioneye::Model
 
   def children
     Project.where(:parent_id => self.id.to_s)
+  end
+
+  def child_ids
+    Project.where(:parent_id => self.id.to_s).map(&:ids)
   end
 
   def scopes

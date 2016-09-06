@@ -3,35 +3,31 @@
     Hey <%= @user.fullname %>,
 
     <p style="padding-bottom: 0px;">
-      Last time we announced support for the .NET platform and since then we
-      got quiet some feedback and deployed already the first improvements.
       Here are the latest news from VersionEye.
     </p>
 
-    <h3>Integration with Snyk.io Security</h3>
+    <h3>Pull request support for GitHub</h3>
     <p>
-      <a href="https://snyk.io/">Snyk.io</a> is a new StartUp in the security field. Their goal is not just to find new security vulnerabilities, but also to fix them automatically. We work close together with the Snyk team and just finished the first integration between the 2 platforms. Now the Snyk security database is available through VersionEye as well.
-      VersionEye is aggregating 7 security databases now and more are coming soon!
-      Read more about the
-      Snyk integration on our <a href="https://blog.versioneye.com/2016/08/04/integration-with-snyk-io/">blog post</a>.
+      Now you can use VersionEye to test your changes directly in a Pull Request and see the results of those changes in the GitHub Pull Request UI. This way you can even enforce rules that would prevent a Pull Request merge if a dependency is blacklisted or it is flagged with a security vulnerability.<br/><br/>
+      With this new feature the developers are getting instant feedback to their changes. In real time the dependencies are analysed and the developers informed. We think it's important to run this kind of analysis as early in the development process as possible. If your software is already bundled and published to a binary repository it's too late for this kind of analysis because your software might be distributed already to a high number of devices/clients. Run your analysis as early and as often as you can ;-)<br/><br/>
+      Learn more about this cool feature <a href="https://blog.versioneye.com/2016/08/16/pull-request-support-for-github/">here</a><br/><br/>
+      A similar kind of integration will come soon for <a href="https://about.gitlab.com/">GitLab</a> as well.
     </p>
 
-    <h3>VersionEye Kobalt Plugin</h3>
+    <h3>Vagrantfile for VersionEye</h3>
     <p>
-      <a href="https://twitter.com/ethauvin">Erik C. Thauvin</a> wrote a VersionEye Plugin for
-      <a href="http://beust.com/kobalt/home/index.html">Kobalt</a>, a new build tool for
-      <a href="https://kotlinlang.org/">Kotlin</a>, the new JVM language from
-      <a href="https://www.jetbrains.com">JetBrains</a>.
-      Read more about this new VersionEye Plugin
-      <a href="https://github.com/ethauvin/kobalt-versioneye">here</a>.
-    </p>
+      VersionEye is <a href="https://github.com/versioneye/ops_contrib">open source</a> and the
+      Docker images are on <a href="https://hub.docker.com/u/versioneye/">Docker Hub public</a>.
+      The whole VersionEye stack is composed by 8 Docker images. Now we have a
+      <a href="https://github.com/versioneye/ops_contrib/blob/master/Vagrantfile">Vagrantfile</a>
+      which makes it even easier to spin up your own VersionEye instance.
+      Simply clone the <a href="https://github.com/versioneye/ops_contrib">versioneye/ops_contrib</a> repository and run:
 
-    <h3>Integration with JetBrain Upsource</h3>
-    <p>
-      <a href="https://www.jetbrains.com/upsource/">Upsource</a> is a code creview tool from JetBrains.
-      Please up vote
-      <a href="https://youtrack.jetbrains.com/issue/UP-7410">this ticket</a> which is a feature request
-      to integrate the VersionEye API into Upsource.
+      <pre style="background-color: #f7fafb; border: 1px solid #e3edf3; border-radius: 3px; padding: 10px;"><code>vagrant up</code></pre>
+
+      After a couple mintues you can access your own VersionEye instance at http://127.0.0.1:7070.
+      Read more about this
+      <a href="https://blog.versioneye.com/2016/08/18/vagrantfile-for-versioneye/">here</a>.
     </p>
 
     <p>
@@ -48,3 +44,4 @@
 
   </div>
 </div>
+<img src="http://www.google-analytics.com/collect?v=1&amp;tid=<%= Settings.instance.ga_account %>&amp;cid=<%= @user.ids %>&amp;t=event&amp;ec=email&amp;ea=open&amp;el=recipient&amp;cs=newsletter&amp;cm=email&amp;cn=pullrequest_vagrant" />

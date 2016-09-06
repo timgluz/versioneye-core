@@ -20,11 +20,11 @@ describe GithubUpdater do
 
     it 'returns the updated project' do
 
-      user = UserFactory.create_new
+      user    = UserFactory.create_new
       project = ProjectFactory.default user
-      project.s3_filename = 'pom.xml'
+      project.s3_filename  = 'pom.xml'
       project.scm_fullname = 'versioneye/versioneye_maven_plugin'
-      project.scm_branch = 'master'
+      project.scm_branch   = 'master'
 
       WebMock.disable_net_connect!
       VCR.use_cassette('github_updater_pom_xml_1', allow_playback_repeats: true) do

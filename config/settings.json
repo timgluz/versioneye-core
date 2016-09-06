@@ -1,5 +1,6 @@
 {
   "development": {
+    "ga_account": "",
     "nexus_url": "http://nexus.pro",
     "bitbucket_base_url": "https://bitbucket.org",
     "bitbucket_secret": "env_BITBUCKET_SECRET",
@@ -69,6 +70,7 @@
     "ldap_active": "false"
   },
   "test": {
+    "ga_account": "",
     "nexus_url": "http://nexus.pro",
     "bitbucket_base_url": "https://bitbucket.org",
     "bitbucket_secret": "env_BITBUCKET_SECRET",
@@ -143,6 +145,7 @@
     "ldap_active": "false"
   },
   "production": {
+    "ga_account": "",
     "nexus_url": "http://nexus.pro",
     "bitbucket_base_url": "https://bitbucket.org",
     "bitbucket_secret": "env_BITBUCKET_SECRET",
@@ -212,6 +215,7 @@
     "ldap_active": "false"
   },
   "enterprise": {
+    "ga_account": "",
     "projects_unlimited": true,
     "projects_unique_ga": false,
     "projects_unique_gav": false,

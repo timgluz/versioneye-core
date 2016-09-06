@@ -20,6 +20,7 @@ class PrIssue < Versioneye::Model
 
   field :security_count , type: Integer, :default => 0
   field :unknown_license, type: Boolean, :default => false
+  field :lwl_violation  , type: Boolean, :default => false
 
   belongs_to :pullrequest
 

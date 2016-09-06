@@ -16,10 +16,11 @@ class Pullrequest < Versioneye::Model
   field :commit_sha    , type: String
   field :tree_sha      , type: String
   field :status        , type: String, :default => A_STATUS_PENDING
+  field :token         , type: String
   field :security_count, type: Integer, :default => 0
   field :unknown_license_count, type: Integer, :default => 0
-  field :token         , type: String
-
+  field :lwl_violation_count  , type: Integer, :default => 0
+  field :organisation_ids     , type: Array  , :default => []
 
   validates_presence_of :scm_provider   , :message => 'is mandatory!'
   validates_presence_of :scm_fullname   , :message => 'is mandatory!'

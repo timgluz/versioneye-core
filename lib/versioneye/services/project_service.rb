@@ -15,7 +15,7 @@ class ProjectService < Versioneye::Service
     return nil if filename.to_s.match(/new_file.txt\z/i)
 
     trimmed_name = filename.split('?')[0]
-    return Project::A_TYPE_RUBYGEMS  if (!(/Gemfile\z/ =~ trimmed_name).nil?)        or (!(/Gemfile.lock\z/  =~ trimmed_name).nil?)
+    return Project::A_TYPE_RUBYGEMS  if (!(/Gemfile\z/ =~ trimmed_name).nil?)        or (!(/Gemfile.lock\z/  =~ trimmed_name).nil?) or (/\w\.gemspec\z/ =~ trimmed_name)
     return Project::A_TYPE_COMPOSER  if (!(/composer.json\z/ =~ trimmed_name).nil?)  or (!(/composer.lock\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_PIP       if (!(/requirements.txt\z/ =~ trimmed_name).nil?) or (!(/requirements\/.+\.txt/i =~ trimmed_name).nil?) or (!(/setup.py\z/ =~ trimmed_name).nil?) or (!(/pip.log\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_NPM       if (!(/package.json\z/ =~ trimmed_name).nil?)
@@ -28,6 +28,7 @@ class ProjectService < Versioneye::Service
     return Project::A_TYPE_COCOAPODS if (!(/Podfile\z/ =~ trimmed_name).nil?)  or (!(/.podfile\z/ =~ trimmed_name).nil?) or (!(/Podfile.lock\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_CHEF      if (!(/Berksfile.lock\z/ =~ trimmed_name).nil?)  or (!(/Berksfile\z/ =~ trimmed_name).nil?) or (!(/metadata.rb\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_NUGET     if (!(/project\.json\z/ =~ trimmed_name).nil?) or (!(/.*\.nuspec\z/ =~ trimmed_name).nil?)  or (!(/packages\.config\z/ =~ trimmed_name).nil?)
+    return Project::A_TYPE_CPAN      if (/\Acpanfile\z/i =~ trimmed_name) != nil
     return nil
   end
 

@@ -8,7 +8,9 @@ class Worker
 
   def self.log
     if !defined?(@@dynLog) || @@dynLog.nil?
-      @@dynLog = Versioneye::DynLog.new("log/worker.log", 10).log
+      environment = ENV['RAILS_ENV']
+      environment = 'development' if environment.to_s.empty?
+      @@dynLog = Versioneye::DynLog.new("log/#{environment}_worker.log", 10).log
     end
     @@dynLog
   end

@@ -11,6 +11,7 @@ require 'versioneye/service'
 
 class VersioneyeCore
 
+
   def initialize
     puts "start initialize versioneye-core"
     init_etcd
@@ -22,8 +23,52 @@ class VersioneyeCore
     init_email
     init_stripe
     init_s3
+    init_values
+    set_ssl_options
     puts "end initialize versioneye-core"
   end
+
+
+  def set_ssl_options
+    env        = Settings.instance.environment
+    ssl_verify = GlobalSetting.get( env, 'ssl_verify' )
+    if ssl_verify.to_s.eql?('false')
+      Octokit.connection_options[:ssl] = { :verify => false }
+      HTTParty::Basement.default_options.update(verify: false)
+    else
+      Octokit.connection_options[:ssl] = { :verify => true }
+      HTTParty::Basement.default_options.update(verify: true)
+    end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+  end
+
+
+  def init_values
+    user_count = User.count
+    return nil if user_count.to_i > 0
+
+    puts "START to create default admin"
+    AdminService.create_default_admin
+
+    puts "START to create default plans"
+    Plan.create_defaults
+
+    puts "START to create ES Product index"
+    EsProduct.reset
+
+    puts "START to fill MavenRepository"
+    MavenRepository.fill_it
+
+    puts "START to import spdx licenses"
+    LicenseService.import_from "/app/data/spdx_license.csv"
+    puts "---"
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+  end
+
 
   def init_mongodb
     puts " - initialize MongoDB for #{Settings.instance.environment}. DB_PORT_27017_TCP_ADDR: #{ENV['DB_PORT_27017_TCP_ADDR']}:#{ENV['DB_PORT_27017_TCP_PORT']}."

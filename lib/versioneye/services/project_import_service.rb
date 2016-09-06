@@ -48,7 +48,7 @@ class ProjectImportService < Versioneye::Service
       raise " Didn't find any project file of a supported package manager."
     end
 
-    project = create_project_from project_file, user.github_token
+    project = create_project_from project_file, user.github_token, filename
     if project.nil?
       raise "The project file could not be parsed. Maybe it's not valid?"
     end
@@ -82,8 +82,8 @@ class ProjectImportService < Versioneye::Service
 
 
   def self.create_github_webhook repo_name, project_id, api_key, token
-    body_hash = { :name => "versioneye", :active => true, :events => ["push", "pull_request"], :config => {
-        :url => "#{Settings.instance.server_url}/api/v2/github/hook",
+    body_hash = { :name => "web", :active => true, :events => ["push", "pull_request"], :config => {
+        :url => "#{Settings.instance.server_url}/api/v2/github/hook/#{project_id}?api_key=#{api_key}",
         :content_type => "json",
         :api_key => api_key,
         :project_id => project_id
@@ -96,11 +96,12 @@ class ProjectImportService < Versioneye::Service
   end
 
 
-  def self.create_project_from project_file, token = nil
-    file_txt  = GitHubService.pure_text_from project_file
-    file_name = GitHubService.filename_from project_file
-    parser    = ProjectParseService.parser_for file_name
-    ProjectParseService.parse_content parser, file_txt, file_name, token
+  def self.create_project_from project_file, token = nil, filename = nil
+    file_txt = GitHubService.pure_text_from project_file
+    fn_last  = GitHubService.filename_from project_file
+    filename = fn_last if filename.to_s.empty?
+    parser   = ProjectParseService.parser_for filename
+    ProjectParseService.parse_content parser, file_txt, fn_last, token
   end
 
 
