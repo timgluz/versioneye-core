@@ -143,6 +143,16 @@ describe OrganisationService do
       expect{ OrganisationService.create_new(user, "myorga") }.to raise_exception
     end
 
+
+    it "throws an exception because user is not and admin" do
+      user = UserFactory.create_new
+      user.fullname = 'HansTanz'
+      expect( user.save ).to be_truthy
+      Settings.instance.orga_creation_admin_only = true
+      expect{ OrganisationService.create_new(user, "myorga") }.to raise_exception
+      Settings.instance.orga_creation_admin_only = false
+    end
+
   end
 
 

@@ -5,6 +5,9 @@ class OrganisationService < Versioneye::Service
     if !Organisation.where({:name => name.downcase}).empty?
       raise "Organisation with name '#{name}' exists already. Please choose another name."
     end
+    if Settings.instance.orga_creation_admin_only == true && user.admin == false
+      raise "Only admins can create new organisations."
+    end
     orga = Organisation.new({:name => name.downcase})
     orga.save
     team = Team.new(:name => Team::A_OWNERS)
