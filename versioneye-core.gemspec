@@ -14,9 +14,9 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = ['LICENSE.txt', 'README.md']
   s.files            = `git ls-files -z`.split("\0")
 
-  s.add_runtime_dependency 'bundler', '~> 1.12.5'
+  s.add_runtime_dependency 'bundler', '~> 1.13.0'
   s.add_runtime_dependency 'naturalsorter', '~> 3.0.14'
-  s.add_runtime_dependency 'dalli', '~> 2.7.0'
+  s.add_runtime_dependency 'dalli', '~> 2.7.6'
   s.add_runtime_dependency 'oauth', '~> 0.5.0'
   s.add_runtime_dependency 'aws-sdk', '~> 2.5.8'
   s.add_runtime_dependency 'stripe', '~> 1.54.0'
@@ -28,11 +28,11 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'nokogiri', '~> 1.6.8'
   s.add_runtime_dependency 'cocoapods-core', '~> 0.39.0'
   s.add_runtime_dependency 'actionmailer', '~> 4.2.7'
-  s.add_runtime_dependency 'pdfkit', '~> 0.8.0'
-  s.add_runtime_dependency 'bunny', '~> 2.5.0'
+  s.add_runtime_dependency 'pdfkit', '~> 0.8.2'
+  s.add_runtime_dependency 'bunny', '~> 2.5.1'
   s.add_runtime_dependency 'wkhtmltopdf-binary', '~> 0.12.3'
   s.add_runtime_dependency 'etcd', '~> 0.3.0'
-  s.add_runtime_dependency 'mongoid', '~> 5.1.0'
+  s.add_runtime_dependency 'mongoid', '~> 5.1.4'
   s.add_runtime_dependency 'will_paginate_mongoid', '= 2.0.1'
   s.add_runtime_dependency 'net-ldap', '~> 0.15.0'
   s.add_runtime_dependency 'gemnasium-parser', '~> 0.1.9'
