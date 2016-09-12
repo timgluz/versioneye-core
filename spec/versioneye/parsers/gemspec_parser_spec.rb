@@ -14,7 +14,7 @@ describe GemspecParser do
       prod_type: Project::A_TYPE_RUBYGEMS,
       language: Product::A_LANGUAGE_RUBY,
       version: '1.10.1'
-    ) 
+    )
   }
   let(:product2){
     FactoryGirl.create(
@@ -24,7 +24,7 @@ describe GemspecParser do
       prod_type: Project::A_TYPE_RUBYGEMS,
       language: Product::A_LANGUAGE_RUBY,
       version: '2.15'
-    ) 
+    )
   }
   let(:product3){
     FactoryGirl.create(
@@ -34,9 +34,9 @@ describe GemspecParser do
       prod_type: Project::A_TYPE_RUBYGEMS,
       language: Product::A_LANGUAGE_RUBY,
       version: '6.2'
-    ) 
+    )
   }
- 
+
 
   context "parse_content" do
     before do
@@ -91,7 +91,7 @@ describe GemspecParser do
       expect(dep3[:comperator]).to eq('~>')
       expect(dep3[:scope]).to eq(Dependency::A_SCOPE_DEVELOPMENT)
       expect(dep3[:outdated]).to eq(true)
-    
+
       dep4 = proj.projectdependencies[3]
       expect(dep4[:name]).to eq('unknown')
       expect(dep4[:version_requested]).to eq('> 0')

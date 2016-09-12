@@ -1,7 +1,5 @@
 require 'gemnasium/parser'
 
-#require 'versioneye/parsers/gemfile_parser'
-
 class GemspecParser < GemfileParser
 
   def parse(url)
@@ -47,7 +45,7 @@ class GemspecParser < GemfileParser
   def check_dependencies!(project, deps)
 
     deps.to_a.each do |dep|
-      product = Product.find_by(language: Product::A_LANGUAGE_RUBY, prod_key: dep[:prod_key])
+      product = Product.fetch_product(Product::A_LANGUAGE_RUBY, dep[:name])
       if product.nil?
         log.warn "check_dependencies: found no #{Product::A_LANGUAGE_RUBY} by prod_key #{dep[:prod_key]}"
         project.unknown_number += 1
