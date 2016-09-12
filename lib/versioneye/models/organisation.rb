@@ -35,6 +35,10 @@ class Organisation < Versioneye::Model
     name
   end
 
+  def receipts
+    Receipt.where(:organisation_id => orga.id)
+  end
+
   def api
     api = Api.where( organisation_id: self.ids ).first
     api = Api.create_new_for_orga( self ) if api.nil?
