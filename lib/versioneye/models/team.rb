@@ -14,7 +14,7 @@ class Team < Versioneye::Model
   validates_presence_of   :name, :message => 'is mandatory!'
   validates_presence_of   :organisation, :message => 'is mandatory!'
 
-  scope :by_organisation, ->(organisation) { where(organisation_id: organisation.ids) }
+  scope :by_organisation, ->(organisation) { where(organisation_id: organisation.ids).asc(:name) }
 
   def to_s
     name
