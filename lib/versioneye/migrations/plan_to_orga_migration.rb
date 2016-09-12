@@ -30,7 +30,7 @@ class PlanToOrgaMigration < Versioneye::Service
     success = orga.save
     p "plan migration for user #{user.username} to orga #{orga.name} was a #{success}"
     if success
-      user.plan = Plan::A_PLAN_FREE
+      user.plan = Plan.free_plan
       user.save
     end
 
