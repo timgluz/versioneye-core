@@ -10,7 +10,7 @@ class ReceiptService < Versioneye::Service
     count = Organisation.where(:plan_id.ne => nil).count
     return nil if count == 0
 
-    per_page = 10
+    per_page = 30
     skip = 0
     iterations = count / per_page
     iterations += 1
@@ -72,7 +72,7 @@ class ReceiptService < Versioneye::Service
     html    = compile_html_invoice receipt
     pdf     = compile_pdf_invoice html
     upload( receipt, pdf )
-    if receipt.save
+    if receipt.save && receipt.plan && receipt.plan.name_id.to_s.match(/\A04/)
       email receipt, pdf
     else
       log.error "Could not persist receipt for orga '#{orga.id}' and invoice '#{invoice[:id]}' - #{receipt.errors.full_messages}"
