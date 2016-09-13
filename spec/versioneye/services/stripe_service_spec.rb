@@ -61,15 +61,15 @@ describe StripeService do
       customer = described_class.create_customer token_id, small.name_id, email
       customer.should_not be_nil
 
-      user = UserFactory.create_new 1
-      user.stripe_customer_id = customer.id
-      user.stripe_token = token_id
-      user.save.should be_truthy
+      orga = Organisation.new({:name => 'test_orga'})
+      orga.stripe_customer_id = customer.id
+      orga.stripe_token = token_id
+      orga.save.should be_truthy
 
       new_token = StripeFactory.token
       token_id = new_token[:id]
       business_plan = Plan.medium
-      cust = described_class.update_customer user.stripe_customer_id, token_id, business_plan.name_id
+      cust = described_class.update_customer orga.stripe_customer_id, token_id, business_plan.name_id
       cust.should_not be_nil
       cust[:subscription][:plan][:id].should eq(business_plan.name_id)
     end
@@ -84,29 +84,41 @@ describe StripeService do
     end
 
     it 'creates a new customer' do
-      user = UserFactory.create_new 1
-      expect( user.stripe_customer_id ).to be_nil
+      orga = Organisation.new({:name => 'test_orga'})
+      expect( orga.save ).to be_truthy
+      expect( orga.stripe_customer_id ).to be_nil
       token = StripeFactory.token
       small = Plan.small.name_id
-      customer = described_class.create_or_update_customer user.stripe_customer_id, token[:id], small, user.email
+      customer = described_class.create_or_update_customer orga.stripe_customer_id, token[:id], small, orga.email
       customer.should_not be_nil
       customer.id.should_not be_nil
     end
 
     it 'updates an existing customer' do
-      user = UserFactory.create_new 1
+      orga = Organisation.new({:name => 'test_orga'})
+      expect( orga.save ).to be_truthy
+
+      ba = orga.fetch_or_create_billing_address
+      ba.name = 'test'
+      ba.email = 'test@test.de'
+      ba.street = "test"
+      ba.zip = '48123'
+      ba.city = 'Mannheim'
+      ba.country = 'DE'
+      expect( ba.save ).to be_truthy
+
       token = StripeFactory.token
       token_id = token[:id]
       small = Plan.small.name_id
 
-      customer = described_class.create_customer token_id, small, user.email
-      user.stripe_customer_id = customer.id
-      expect( user.save ).to be_truthy
+      customer = described_class.create_customer token_id, small, orga.fetch_or_create_billing_address.email
+      orga.stripe_customer_id = customer.id
+      expect( orga.save ).to be_truthy
 
       token = StripeFactory.token
       token_id = token[:id]
       business_plan = Plan.medium.name_id
-      customer = described_class.create_or_update_customer user.stripe_customer_id, token_id, business_plan, user.email
+      customer = described_class.create_or_update_customer orga.stripe_customer_id, token_id, business_plan, orga.fetch_or_create_billing_address.email
       customer.should_not be_nil
       customer.id.should_not be_nil
     end
