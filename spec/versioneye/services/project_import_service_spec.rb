@@ -11,32 +11,13 @@ describe ProjectImportService do
 
 
   describe 'allowed_to_add?' do
-    it 'allows to add' do
-      Plan.create_defaults
-      user = UserFactory.create_new 1
-      plan = Plan.free_plan
-      user.plan = plan
-      expect( user.save ).to be_truthy
-      expect( described_class.allowed_to_add?(user, nil, true) ).to be_truthy
-    end
-    it 'does not allow to add for user' do
-      Plan.create_defaults
-      user = UserFactory.create_new 1
-      user.plan = Plan.free_plan
-      expect( user.save ).to be_truthy
-
-      project = ProjectFactory.create_new user
-      project.private_project = true
-      expect( project.save ).to be_truthy
-      expect( described_class.allowed_to_add?(user, nil, true) ).to be_falsey
-    end
     it 'allows to add for orga' do
       Plan.create_defaults
       user = UserFactory.create_new 1
       orga = Organisation.new :name => 'test_org'
       orga.plan = Plan.free_plan
       expect( orga.save ).to be_truthy
-      expect( described_class.allowed_to_add?(nil, orga, true) ).to be_truthy
+      expect( described_class.allowed_to_add?(orga, true) ).to be_truthy
     end
     it 'does not allow to add for orga' do
       Plan.create_defaults
@@ -49,7 +30,7 @@ describe ProjectImportService do
       project.organisation_id = orga.ids
       project.private_project = true
       expect( project.save ).to be_truthy
-      expect( described_class.allowed_to_add?(nil, orga, true) ).to be_falsey
+      expect( described_class.allowed_to_add?(orga, true) ).to be_falsey
     end
   end
 
@@ -57,7 +38,9 @@ describe ProjectImportService do
   describe 'import_from_github' do
     it 'imports from github' do
       VCR.use_cassette('import_from_github', allow_playback_repeats: true) do
-        project = ProjectImportService.import_from_github github_user, 'versioneye/versioneye_maven_plugin', 'pom.xml', 'master'
+        orga = OrganisationService.create_new github_user, "test_orga"
+        expect( orga.save ).to be_truthy
+        project = ProjectImportService.import_from_github github_user, 'versioneye/versioneye_maven_plugin', 'pom.xml', 'master', orga.ids
         project.should_not be_nil
         project.dependencies.should_not be_empty
         project.name.should eq('versioneye/versioneye_maven_plugin')
@@ -69,8 +52,10 @@ describe ProjectImportService do
       github_user.github_token = '666666666666777777777777777'
       github_user.free_private_projects = 1
       github_user.save
+      orga = OrganisationService.create_new github_user, "test_orga"
+      expect( orga.save ).to be_truthy
       VCR.use_cassette('import_from_privat_github_allowed', allow_playback_repeats: true) do
-        project = ProjectImportService.import_from_github github_user, 'versioneye/versioneye-core', 'Gemfile', 'master'
+        project = ProjectImportService.import_from_github github_user, 'versioneye/versioneye-core', 'Gemfile', 'master', orga.ids
         project.should_not be_nil
         project.dependencies.should_not be_empty
         project.name.should eq('versioneye/versioneye-core')
@@ -82,12 +67,16 @@ describe ProjectImportService do
       github_user.github_token = '666666666666777777777777777'
       github_user.free_private_projects = 0
       github_user.save
+      orga = Organisation.new({:name => 'test'})
+      expect( orga.save ).to be_truthy
       VCR.use_cassette('import_from_privat_github_not_allowed', allow_playback_repeats: true) do
-        expect { ProjectImportService.import_from_github(github_user, 'versioneye/versioneye-core', 'Gemfile', 'master') }.to raise_error
+        expect { ProjectImportService.import_from_github(github_user, 'versioneye/versioneye-core', 'Gemfile', 'master', orga.ids) }.to raise_error
       end
     end
     it 'does not import from github because file does not exist' do
-      expect { ProjectImportService.import_from_github github_user, 'versioneye/versioneye_maven_plugin', 'pomi.xml', 'master' }.to raise_error
+      orga = Organisation.new({:name => 'test'})
+      expect( orga.save ).to be_truthy
+      expect { ProjectImportService.import_from_github github_user, 'versioneye/versioneye_maven_plugin', 'pomi.xml', 'master', orga.ids }.to raise_error
     end
   end
 
@@ -129,9 +118,11 @@ describe ProjectImportService do
       bitbucket_repo = BitbucketRepo.new({:fullname => 'versioneye_test/fantom_hydra', :user => user_with_token, :private => false})
       bitbucket_repo.save
 
-      project = ProjectImportService.import_from_bitbucket user_with_token, 'versioneye_test/fantom_hydra', 'GemGemify', 'master'
-      project.should_not be_nil
-      project.should match("Didn't find any project")
+      orga = OrganisationService.create_new user_with_token, "test_orga"
+      expect( orga.save ).to be_truthy
+
+      expect{ ProjectImportService.import_from_bitbucket user_with_token, 'versioneye_test/fantom_hydra', 'GemGemify', 'master', orga.ids }.to raise_error
+      
     end
   end
 
@@ -157,7 +148,6 @@ describe ProjectImportService do
 
 
   # TODO Tests for Stash !!
-
 
 
   describe 'import_from_url' do
@@ -190,61 +180,51 @@ describe ProjectImportService do
   describe "allowed_to_add_project?" do
 
     it "allows because its a public project" do
-      described_class.allowed_to_add_project?(nil, nil, false).should be_truthy
+      described_class.allowed_to_add_project?(nil, false).should be_truthy
     end
 
     it "allows because each user has 1 private project for free" do
       Plan.create_defaults
-      described_class.allowed_to_add_project?(github_user, nil, true).should be_truthy
+      orga = Organisation.new({:name => 'test_orga'})
+      orga.save
+      described_class.allowed_to_add_project?(orga, true).should be_truthy
     end
 
-    it "allows because user has a plan and no projects" do
+    it "allows because orga has a plan and no projects" do
       Plan.create_defaults
       plan = Plan.by_name_id( Plan::A_PLAN_SMALL )
-      user = github_user
-      user.plan = plan
-      user.save
-      described_class.allowed_to_add_project?(github_user, nil, true).should be_truthy
+      orga = Organisation.new({:name => 'test_orga'})
+      orga.plan = plan
+      orga.save
+      described_class.allowed_to_add_project?(orga, true).should be_truthy
     end
 
     it "denies because user has a plan and to many private projects already" do
       Plan.create_defaults
       plan = Plan.by_name_id( Plan::A_PLAN_SMALL )
-      user = github_user
-      user.plan = plan
-      user.save
-      plan.private_projects.times { ProjectFactory.create_new( user, {:private_project => true} ) }
-      described_class.allowed_to_add_project?(github_user, nil, true).should be_falsey
-    end
-
-    it "allows because user has a plan and to many private projects already, but 1 additional free project" do
-      Plan.create_defaults
-      plan = Plan.by_name_id( Plan::A_PLAN_SMALL )
-      user = github_user
-      user.plan = plan
-      user.free_private_projects = 1
-      user.save
-      plan.private_projects.times { ProjectFactory.create_new( user, {:private_project => true} ) }
-      described_class.allowed_to_add_project?(github_user, nil, true).should be_truthy
+      orga = Organisation.new({:name => 'test_orga'})
+      orga.plan = plan
+      orga.save
+      plan.private_projects.times { ProjectFactory.create_new( github_user, {:private_project => true}, true, orga ) }
+      described_class.allowed_to_add_project?(orga, true).should be_falsey
     end
 
     it "denises because user has a plan and to many private projects already" do
       Plan.create_defaults
       plan = Plan.by_name_id( Plan::A_PLAN_SMALL )
-      user = github_user
-      user.plan = plan
-      user.free_private_projects = 1
-      user.save
-      max = plan.private_projects + user.free_private_projects
-      max.times { ProjectFactory.create_new( user, {:private_project => true} ) }
-      described_class.allowed_to_add_project?(github_user, nil, true).should be_falsey
+      orga = Organisation.new({:name => 'test_orga'})
+      orga.plan = plan
+      orga.save
+      max = plan.private_projects
+      max.times { ProjectFactory.create_new( github_user, {:private_project => true}, true, orga ) }
+      described_class.allowed_to_add_project?(orga, true).should be_falsey
     end
 
     it "is not allowed in Enterprise" do
       Settings.instance.instance_variable_set(:@environment, 'enterprise')
-      user = github_user
+      orga = Organisation.new({:name => 'test_orga'})
       GlobalSetting.set 'enterprise', 'E_PROJECTS', '0'
-      ProjectImportService.allowed_to_add_project?( user, nil, true ).should be_falsey
+      ProjectImportService.allowed_to_add_project?( nil, true ).should be_falsey
       Settings.instance.instance_variable_set(:@environment, 'test')
     end
 
@@ -252,7 +232,7 @@ describe ProjectImportService do
       Settings.instance.instance_variable_set(:@environment, 'enterprise')
       user = github_user
       GlobalSetting.set 'enterprise', 'E_PROJECTS', '1'
-      ProjectImportService.allowed_to_add_project?( user, nil, true ).should be_truthy
+      ProjectImportService.allowed_to_add_project?( nil, true ).should be_truthy
       Settings.instance.instance_variable_set(:@environment, 'test')
     end
 

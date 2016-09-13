@@ -26,9 +26,7 @@ class Api < Versioneye::Model
   def self.create_new( user )
     new_api = Api.new(user_id: user.ids)
     new_api.generate_api_key!
-    if user && user.plan
-      new_api.rate_limit = user.plan.api_rate_limit
-    end
+    new_api.rate_limit = 50
     new_api.save
     new_api
   end

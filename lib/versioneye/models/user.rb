@@ -44,9 +44,6 @@ class User < Versioneye::Model
   field :stash_token,  type: String
   field :stash_secret, type: String
 
-  field :stripe_token      , type: String
-  field :stripe_customer_id, type: String
-
   field :languages, type: String
 
   # Contains the <language::prod_key> downcased pairs for the packages which user is maintainer for.
@@ -55,9 +52,7 @@ class User < Versioneye::Model
   field :email_send_error, type: String
 
   # *** RELATIONS START ***
-  belongs_to :plan
   has_one    :user_permission
-  has_one    :billing_address
   has_one    :user_notification_setting
   has_many   :projects
   has_many   :github_repos
@@ -91,7 +86,7 @@ class User < Versioneye::Model
   validates_format_of :username, with: /\A[a-zA-Z0-9_]+\z/
   validates_format_of :email   , :with => A_EMAIL_REGEX, :message => 'is not valid.'
 
-  before_validation :downcase_email, :check_password, :check_plan
+  before_validation :downcase_email, :check_password
 
   before_save :check_terms, :check_np_domain
 
@@ -389,15 +384,6 @@ class User < Versioneye::Model
     self.username
   end
 
-  # TODO obsolete - remove it - was moved to organisation.
-  def fetch_or_create_billing_address
-    if self.billing_address.nil?
-      self.billing_address = BillingAddress.new
-      self.billing_address.name = self.fullname
-    end
-    self.billing_address
-  end
-
   def fetch_or_create_permissions
     if self.user_permission.nil?
       self.user_permission = UserPermission.new
@@ -445,11 +431,6 @@ class User < Versioneye::Model
       end
 
       return true
-    end
-
-    def check_plan
-      return nil if !plan.nil?
-      self.plan = Plan.free_plan
     end
 
     def check_password

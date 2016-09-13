@@ -19,7 +19,6 @@ class Plan < Versioneye::Model
   field :api_rate_limit  , type: Integer, default: 50
   field :cmp_rate_limit  , type: Integer, default: 50
 
-  has_many :users
   has_many :organisations
 
   def self.by_name_id name_id

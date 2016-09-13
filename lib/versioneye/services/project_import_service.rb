@@ -115,7 +115,7 @@ class ProjectImportService < Versioneye::Service
     repo = BitbucketRepo.by_user(user).by_fullname(repo_name).shift
     private_project = repo[:private]
 
-    check_permission_for_bitbucket_repo user, orga_id, private_project
+    check_permission_for_bitbucket_repo orga_id, private_project
 
     project_file = Bitbucket.fetch_project_file_from_branch(
       repo_name, branch, filename,
@@ -170,7 +170,7 @@ class ProjectImportService < Versioneye::Service
   def self.import_from_stash(user, repo_name, filename, branch = "master", orga_id = '')
     repo = StashRepo.by_user(user).by_fullname(repo_name).shift
     private_project = !repo[:public_repo]
-    unless allowed_to_add_project?(user, orga_id, private_project)
+    unless allowed_to_add_project?(orga_id, private_project)
       return "Please upgrade your plan to monitor the selected project."
     end
 
@@ -267,27 +267,27 @@ class ProjectImportService < Versioneye::Service
     if private_project.nil?
       private_project = Github.private_repo? user.github_token, repo_name
     end
-    if allowed_to_add_project?(user, orga_id, private_project) == false
+    if allowed_to_add_project?(orga_id, private_project) == false
       raise "You reached the limit of your current subscription. Please upgrade your plan to monitor more files in private repositories."
     end
     true
   end
 
 
-  def self.check_permission_for_bitbucket_repo user, orga_id, private_project
-    if allowed_to_add_project?(user, orga_id, private_project) == false
+  def self.check_permission_for_bitbucket_repo orga_id, private_project
+    if allowed_to_add_project?(orga_id, private_project) == false
       raise "You reached the limit of your current subscription. Please upgrade your plan to monitor more files in private repositories."
     end
     true
   end
 
 
-  def self.allowed_to_add_project?( user, orga_id, private_project )
+  def self.allowed_to_add_project?( orga_id, private_project )
     env  = Settings.instance.environment
     return allowed_to_add_e_project?() if env.eql?( A_ENV_ENTERPRISE )
 
     orga = find_orga orga_id
-    return allowed_to_add?( user, orga, private_project )
+    return allowed_to_add?( orga, private_project )
   end
 
 
@@ -310,24 +310,14 @@ class ProjectImportService < Versioneye::Service
   end
 
 
-  def self.allowed_to_add?( user, orga, private_project )
+  def self.allowed_to_add?( orga, private_project )
     return true if private_project == false || private_project.to_s.empty?
+    return false if orga.nil?
 
-    private_project_count = 0
-    if orga
-      orga_max_count = 1
-      orga_max_count = orga.plan.private_projects if orga.plan
-      private_project_count = Project.private_project_count_by_orga( orga.ids )
-      return false if private_project_count >= orga_max_count
-      return true
-    end
-
-    private_project_count = Project.private_project_count_by_user( user.ids )
-    max = user.free_private_projects
-    if user.plan
-      max += user.plan.private_projects
-    end
-    return false if private_project_count >= max
+    orga_max_count = 1
+    orga_max_count = orga.plan.private_projects if orga.plan
+    private_project_count = Project.private_project_count_by_orga( orga.ids )
+    return false if private_project_count.to_i >= orga_max_count.to_i
     return true
   end
 

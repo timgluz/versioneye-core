@@ -55,7 +55,7 @@ class UserService < Versioneye::Service
         email.delete
       end
     end
-    StripeService.delete user.stripe_customer_id
+
     random              = create_random_value
     user.deleted_user   = true
     user.email          = "#{random}_#{user.email}"

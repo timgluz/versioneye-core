@@ -9,11 +9,11 @@ describe SubscriptionMailer do
       Plan.create_defaults
       plan = Plan.medium
 
-      user = UserFactory.create_new
-      user.plan = plan
-      user.save
+      orga = Organisaiton.new({:name => "test_orga"})
+      orga.plan = plan
+      expect( orga.save ).to be_truthy
 
-      email = described_class.update_subscription( user )
+      email = described_class.update_orga_subscription( orga )
 
       email.to.should eq( [user.email] )
       email.encoded.should include( "You just updated your subscription to the plan \"#{plan.name}\"" )

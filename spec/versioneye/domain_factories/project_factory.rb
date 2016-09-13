@@ -1,6 +1,6 @@
 class ProjectFactory
 
-  def self.create_new(user, extra_fields = nil, save = true)
+  def self.create_new(user, extra_fields = nil, save = true, orga = nil)
     if user.nil? || user.to_s.empty?
       log.error "User was unspecified or empty."
     end
@@ -15,6 +15,10 @@ class ProjectFactory
     end
 
     new_project = Project.new project_data
+
+    if orga
+      new_project.organisation_id = orga.ids
+    end
 
     if save
       unless new_project.save
