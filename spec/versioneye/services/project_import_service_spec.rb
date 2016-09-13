@@ -121,8 +121,9 @@ describe ProjectImportService do
       orga = OrganisationService.create_new user_with_token, "test_orga"
       expect( orga.save ).to be_truthy
 
-      expect{ ProjectImportService.import_from_bitbucket user_with_token, 'versioneye_test/fantom_hydra', 'GemGemify', 'master', orga.ids }.to raise_error
-      
+      project = ProjectImportService.import_from_bitbucket user_with_token, 'versioneye_test/fantom_hydra', 'GemGemify', 'master', orga.ids
+      project.should_not be_nil
+      project.should match("Didn't find any project")
     end
   end
 
