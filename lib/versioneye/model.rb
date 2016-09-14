@@ -48,7 +48,6 @@ module Versioneye
     require 'versioneye/models/product_resource'
     require 'versioneye/models/project'
     require 'versioneye/models/projectdependency'
-    require 'versioneye/models/promo_code'
     require 'versioneye/models/refer'
     require 'versioneye/models/receipt'
     require 'versioneye/models/receipt_line'

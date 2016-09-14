@@ -27,7 +27,6 @@ class User < Versioneye::Model
 
   field :promo_code, type: String
   field :refer_name, type: String
-  field :free_private_projects, type: Integer, default: 0
 
   field :github_id   , type: String
   field :github_login, type: String # Username on github
@@ -88,8 +87,6 @@ class User < Versioneye::Model
 
   before_validation :downcase_email, :check_password
 
-  before_save :check_terms, :check_np_domain
-
   scope :by_verification, ->(code){where(verification: code)}
   # scope :live_users     , where(verification: nil, deleted_user: false)
   scope :follows_equal  , ->(n){where(:product_ids.count.eq(n))}
@@ -98,6 +95,7 @@ class User < Versioneye::Model
 
   attr_accessor :password, :new_username
 
+  before_save :check_terms
 
   def to_param
     username
@@ -436,19 +434,6 @@ class User < Versioneye::Model
     def check_password
       return nil if new_record? == false
       encrypt_password
-    end
-
-    def check_np_domain
-      return true if self.new_record? == false
-
-      esplit = email.split("@")
-      domain = "@#{esplit.last}"
-      npd = NpDomain.where(:domain => domain).shift
-      return true if npd.nil?
-
-      self.free_private_projects = npd.free_projects
-      UserMailer.non_profit_signup(self, npd).deliver_now
-      return true
     end
 
     def downcase_email

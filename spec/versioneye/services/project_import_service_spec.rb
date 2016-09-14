@@ -50,7 +50,6 @@ describe ProjectImportService do
     it 'imports from privat github' do
       github_user.github_id = "652130"
       github_user.github_token = '666666666666777777777777777'
-      github_user.free_private_projects = 1
       github_user.save
       orga = OrganisationService.create_new github_user, "test_orga"
       expect( orga.save ).to be_truthy
@@ -65,7 +64,6 @@ describe ProjectImportService do
     it 'imports not from privat github, because plan to low' do
       github_user.github_id = "652130"
       github_user.github_token = '666666666666777777777777777'
-      github_user.free_private_projects = 0
       github_user.save
       orga = Organisation.new({:name => 'test'})
       expect( orga.save ).to be_truthy
