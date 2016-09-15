@@ -284,7 +284,7 @@ class ProjectImportService < Versioneye::Service
 
   def self.allowed_to_add_project?( orga_id, private_project )
     env  = Settings.instance.environment
-    return allowed_to_add_e_project?() if env.eql?( A_ENV_ENTERPRISE )
+    return true if env.eql?( A_ENV_ENTERPRISE )
 
     orga = find_orga orga_id
     return allowed_to_add?( orga, private_project )
