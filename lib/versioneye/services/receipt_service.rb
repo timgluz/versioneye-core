@@ -38,7 +38,6 @@ class ReceiptService < Versioneye::Service
       next if orga.plan.name_id.eql?('03_trial_0')
       next if orga.plan.name_id.eql?('04_free')
       next if orga.plan.name.match(/Free\Z/i)
-      next if orga.plan.name.match(/Starter\Z/i)
       next if orga.stripe_token.to_s.empty?
       next if orga.stripe_customer_id.to_s.empty?
 
@@ -72,7 +71,7 @@ class ReceiptService < Versioneye::Service
     html    = compile_html_invoice receipt
     pdf     = compile_pdf_invoice html
     upload( receipt, pdf )
-    if receipt.save && receipt.plan && receipt.plan.name_id.to_s.match(/\A04/)
+    if receipt.save && orga.plan && orga.plan.name_id.to_s.match(/\A04/)
       email receipt, pdf
     else
       log.error "Could not persist receipt for orga '#{orga.id}' and invoice '#{invoice[:id]}' - #{receipt.errors.full_messages}"
@@ -91,6 +90,7 @@ class ReceiptService < Versioneye::Service
     receipt.update_from_invoice invoice
     receipt.receipt_nr   = next_receipt_nr
     receipt.organisation = orga
+    receipt.plan         = orga.plan
     receipt
   end
 
