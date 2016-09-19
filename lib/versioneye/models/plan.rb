@@ -3,7 +3,12 @@ class Plan < Versioneye::Model
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  A_PERIOD_MONTHLY = 'monthly'
+  A_PERIOD_YEARLY  = 'yearly'
+
   A_PLAN_FREE     = '04_free'
+
+  # Monthly
   A_PLAN_MICRO    = '04_micro'    # € 7   - 5
   A_PLAN_SMALL    = '04_small'    # € 12  - 10
   A_PLAN_MEDIUM   = '04_medium'   # € 22  - 20
@@ -12,9 +17,19 @@ class Plan < Versioneye::Model
   A_PLAN_XXLARGE  = '04_xxlarge'  # € 250 - 250
   A_PLAN_XXXLARGE = '04_xxxlarge' # € 500 - 500
 
+  # Yearly
+  A_PLAN_MICRO_Y    = '04_micro_y'    # € 84   - 7
+  A_PLAN_SMALL_Y    = '04_small_y'    # € 144  - 12
+  A_PLAN_MEDIUM_Y   = '04_medium_y'   # € 264  - 22
+  A_PLAN_LARGE_Y    = '04_large_y'    # € 600  - 52
+  A_PLAN_XLARGE_Y   = '04_xlarge_y'   # € 1200 - 102
+  A_PLAN_XXLARGE_Y  = '04_xxlarge_y'  # € 3000 - 252
+  A_PLAN_XXXLARGE_Y = '04_xxxlarge_y' # € 6000 - 502
+
   field :name_id         , type: String
   field :name            , type: String
   field :price           , type: String
+  field :period          , type: String, default: A_PERIOD_MONTHLY
   field :private_projects, type: Integer
   field :api_rate_limit  , type: Integer, default: 50
   field :cmp_rate_limit  , type: Integer, default: 50
@@ -103,6 +118,69 @@ class Plan < Versioneye::Model
     enterprise.api_rate_limit   = 5000
     enterprise.cmp_rate_limit   = 5000
     enterprise.save
+
+    micro_y = Plan.find_or_create_by(:name_id => A_PLAN_MICRO_Y)
+    micro_y.name = 'Beginner Y'
+    micro_y.price = '84'
+    micro_y.period = A_PERIOD_YEARLY
+    micro_y.private_projects = 7
+    micro_y.api_rate_limit   = 100
+    micro_y.cmp_rate_limit   = 100
+    micro_y.save
+
+    small_y = Plan.find_or_create_by(:name_id => A_PLAN_SMALL_Y)
+    small_y.name = 'Junior Y'
+    small_y.price = '144'
+    small_y.period = A_PERIOD_YEARLY
+    small_y.private_projects = 12
+    small_y.api_rate_limit   = 150
+    small_y.cmp_rate_limit   = 150
+    small_y.save
+
+    medium_y = Plan.find_or_create_by(:name_id => A_PLAN_MEDIUM_Y)
+    medium_y.name = 'Freelancer Y'
+    medium_y.price = '264'
+    medium_y.period = A_PERIOD_YEARLY
+    medium_y.private_projects = 22
+    medium_y.api_rate_limit   = 300
+    medium_y.cmp_rate_limit   = 300
+    medium_y.save
+
+    large_y = Plan.find_or_create_by(:name_id => A_PLAN_LARGE_Y)
+    large_y.name = 'Advanced Y'
+    large_y.price = '600'
+    large_y.period = A_PERIOD_YEARLY
+    large_y.private_projects = 52
+    large_y.api_rate_limit   = 500
+    large_y.cmp_rate_limit   = 500
+    large_y.save
+
+    xlarge_y = Plan.find_or_create_by(:name_id => A_PLAN_XLARGE_Y)
+    xlarge_y.name = 'Professional Y'
+    xlarge_y.price = '1200'
+    xlarge_y.period = A_PERIOD_YEARLY
+    xlarge_y.private_projects = 102
+    xlarge_y.api_rate_limit   = 1000
+    xlarge_y.cmp_rate_limit   = 1000
+    xlarge_y.save
+
+    agency_y = Plan.find_or_create_by(:name_id => A_PLAN_XXLARGE_Y)
+    agency_y.name = 'Agency Y'
+    agency_y.price = '3000'
+    agency_y.period = A_PERIOD_YEARLY
+    agency_y.private_projects = 252
+    agency_y.api_rate_limit   = 2500
+    agency_y.cmp_rate_limit   = 2500
+    agency_y.save
+
+    enterprise_y = Plan.find_or_create_by(:name_id => A_PLAN_XXXLARGE_Y)
+    enterprise_y.name = 'Enterprise Y'
+    enterprise_y.price = '6000'
+    enterprise_y.period = A_PERIOD_YEARLY
+    enterprise_y.private_projects = 502
+    enterprise_y.api_rate_limit   = 5000
+    enterprise_y.cmp_rate_limit   = 5000
+    enterprise_y.save
   end
 
   def self.current_plans
