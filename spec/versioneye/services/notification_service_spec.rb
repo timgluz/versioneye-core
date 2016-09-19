@@ -76,26 +76,22 @@ describe NotificationService do
       Notification.first.email_disabled.should be_truthy
     end
 
-    it "sends out 2 out of 3 because of uniq prods" do
+    it "sends out 1 out of 2 because of uniq prods" do
+      Notification.delete_all
       uns = UserNotificationSetting.fetch_or_create_notification_setting @user
       uns.notification_emails = true
       uns.save
 
       random_product = ProductFactory.create_new(Random.rand(778811), :gemfile)
-      noti_1 = Notification.new  user_id: @user.id,
-                                    product_id: random_product.id,
-                                    version_id: random_product.version
+      noti_1 = Notification.new  user_id: @user.id, product_id: random_product.id, version_id: random_product.version
       noti_1.save
-      noti_2 = Notification.new  user_id: @user.id,
-                                    product_id: random_product.id,
-                                    version_id: '0.1.2'
+      noti_2 = Notification.new  user_id: @user.id, product_id: random_product.id, version_id: '0.1.2'
       noti_2.save
 
-      Notification.count.should == 3
-      Notification.where(:email_disabled => true).count.should eq(0)
-      count = NotificationService.send_notifications
-      count.should eq(1)
-      Notification.where(:email_disabled => true).count.should eq(0)
+      expect( Notification.count ).to eq(2)
+      expect( Notification.where(:email_disabled => true).count ).to eq(0)
+      expect( NotificationService.send_notifications ).to eq(1)
+      expect( Notification.where(:email_disabled => true).count ).to eq(0)
     end
 
   end

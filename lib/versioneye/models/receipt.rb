@@ -130,7 +130,7 @@ class Receipt < Versioneye::Model
 
   def taxable
     return true if country.to_s.eql?('DE')
-    return true if type.eql?(A_TYPE_INDIVIDUAL) && A_EU.keys.include?(country)
+    # return true if type.eql?(A_TYPE_INDIVIDUAL) && A_EU.keys.include?(country)
     return false
   end
 

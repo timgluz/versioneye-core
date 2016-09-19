@@ -100,9 +100,8 @@ describe ReceiptService do
       receipt.type = Receipt::A_TYPE_INDIVIDUAL
       receipt.country = 'FR'
       html = described_class.compile_html_invoice receipt, true
-      p html
-      html.match("5,04 EUR").should_not be_nil
-      html.match("0,96 EUR").should_not be_nil
+      html.match("5,04 EUR").should be_nil
+      html.match("0,96 EUR").should be_nil
       html.match("6,00 EUR").should_not be_nil
       html.match('Reverse Charge -').should be_nil
       html.match('Non EU customers - Not taxable in Germany.').should be_nil

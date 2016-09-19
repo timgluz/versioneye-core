@@ -219,11 +219,13 @@ describe ProjectImportService do
       described_class.allowed_to_add_project?(orga, true).should be_falsey
     end
 
-    it "is not allowed in Enterprise" do
+    # This is allowed now because business model changed.
+    # Now we charge for the sync of the components.
+    it "is allowed in Enterprise" do
       Settings.instance.instance_variable_set(:@environment, 'enterprise')
       orga = Organisation.new({:name => 'test_orga'})
       GlobalSetting.set 'enterprise', 'E_PROJECTS', '0'
-      ProjectImportService.allowed_to_add_project?( nil, true ).should be_falsey
+      ProjectImportService.allowed_to_add_project?( nil, true ).should be_truthy
       Settings.instance.instance_variable_set(:@environment, 'test')
     end
 

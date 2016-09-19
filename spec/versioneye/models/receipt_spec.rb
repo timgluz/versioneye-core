@@ -197,9 +197,9 @@ describe Receipt do
       receipt = described_class.new({:country => 'DE', :type => Receipt::A_TYPE_CORPORATE})
       receipt.taxable.should be_truthy
     end
-    it 'is true for individual in FR' do
+    it 'is false for individual in FR' do
       receipt = described_class.new({:country => 'FR', :type => Receipt::A_TYPE_INDIVIDUAL})
-      receipt.taxable.should be_truthy
+      receipt.taxable.should be_falsey
     end
     it 'is false for companies in FR' do
       receipt = described_class.new({:country => 'FR', :type => Receipt::A_TYPE_CORPORATE})
