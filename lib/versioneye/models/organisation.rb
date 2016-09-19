@@ -36,7 +36,7 @@ class Organisation < Versioneye::Model
   end
 
   def receipts
-    Receipt.where(:organisation_id => orga.id)
+    Receipt.where(:organisation_id => self.ids)
   end
 
   def api
