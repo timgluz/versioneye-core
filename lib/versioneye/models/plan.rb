@@ -18,13 +18,13 @@ class Plan < Versioneye::Model
   A_PLAN_XXXLARGE = '04_xxxlarge' # € 500 - 500
 
   # Yearly
-  A_PLAN_MICRO_Y    = '04_micro_y'    # € 84   - 7
-  A_PLAN_SMALL_Y    = '04_small_y'    # € 144  - 12
-  A_PLAN_MEDIUM_Y   = '04_medium_y'   # € 264  - 22
-  A_PLAN_LARGE_Y    = '04_large_y'    # € 600  - 52
-  A_PLAN_XLARGE_Y   = '04_xlarge_y'   # € 1200 - 102
-  A_PLAN_XXLARGE_Y  = '04_xxlarge_y'  # € 3000 - 252
-  A_PLAN_XXXLARGE_Y = '04_xxxlarge_y' # € 6000 - 502
+  A_PLAN_MICRO_Y    = '04_micro_y'    # € 84   - 7   - Beginner Y
+  A_PLAN_SMALL_Y    = '04_small_y'    # € 144  - 12  - Junior Y
+  A_PLAN_MEDIUM_Y   = '04_medium_y'   # € 264  - 22  - Freelancer Y
+  A_PLAN_LARGE_Y    = '04_large_y'    # € 600  - 52  - Advanced Y
+  A_PLAN_XLARGE_Y   = '04_xlarge_y'   # € 1200 - 102 - Professional Y
+  A_PLAN_XXLARGE_Y  = '04_xxlarge_y'  # € 3000 - 252 - Agency Y
+  A_PLAN_XXXLARGE_Y = '04_xxxlarge_y' # € 6000 - 502 - Enterprise Y
 
   field :name_id         , type: String
   field :name            , type: String
