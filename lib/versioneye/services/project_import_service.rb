@@ -240,7 +240,7 @@ class ProjectImportService < Versioneye::Service
   # Check allowed_to_add_project? with current plan.
   def self.import_from_upload file, user = nil, api_created = false, orga_id = nil
     if allowed_to_add_project?(orga_id, api_created) == false
-      raise "You reached the limit of your current subscription. Please upgrade your plan to monitor more files in private repositories."
+      raise "You reached the limit of your current subscription. Please upgrade your plan to monitor more projects."
     end
 
     project_name = file['datafile'].original_filename
@@ -272,7 +272,7 @@ class ProjectImportService < Versioneye::Service
       private_project = Github.private_repo? user.github_token, repo_name
     end
     if allowed_to_add_project?(orga_id, private_project) == false
-      raise "You reached the limit of your current subscription. Please upgrade your plan to monitor more files in private repositories."
+      raise "You reached the limit of your current subscription. Please upgrade your plan to monitor more projects."
     end
     true
   end
@@ -280,7 +280,7 @@ class ProjectImportService < Versioneye::Service
 
   def self.check_permission_for_bitbucket_repo orga_id, private_project
     if allowed_to_add_project?(orga_id, private_project) == false
-      raise "You reached the limit of your current subscription. Please upgrade your plan to monitor more files in private repositories."
+      raise "You reached the limit of your current subscription. Please upgrade your plan to monitor more projects."
     end
     true
   end
