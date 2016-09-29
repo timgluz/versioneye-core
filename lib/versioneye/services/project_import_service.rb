@@ -315,13 +315,12 @@ class ProjectImportService < Versioneye::Service
 
 
   def self.allowed_to_add?( orga, private_project )
-    return true if private_project == false || private_project.to_s.empty?
     return false if orga.nil?
 
     orga_max_count = 1
     orga_max_count = orga.plan.private_projects if orga.plan
-    private_project_count = Project.private_project_count_by_orga( orga.ids )
-    return false if private_project_count.to_i >= orga_max_count.to_i
+    project_count  = orga.projects.count
+    return false if project_count.to_i >= orga_max_count.to_i
     return true
   end
 
