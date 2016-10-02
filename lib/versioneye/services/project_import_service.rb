@@ -319,9 +319,13 @@ class ProjectImportService < Versioneye::Service
 
     orga_max_count = 1
     orga_max_count = orga.plan.private_projects if orga.plan
-    project_count  = orga.projects.count
+    project_count  = orga.projects.parents.count
     return false if project_count.to_i >= orga_max_count.to_i
     return true
+  rescue => e
+    log.error "ERROR in allowed_to_add? - #{e.message}"
+    log.error e.backtrace.join("\n")
+    false
   end
 
 
