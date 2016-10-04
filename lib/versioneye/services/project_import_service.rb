@@ -374,19 +374,6 @@ class ProjectImportService < Versioneye::Service
     end
 
 
-    # Allowed to add Enterprise project?
-    def self.allowed_to_add_e_project?
-      env        = Settings.instance.environment
-      e_projects = GlobalSetting.get env, 'e_projects'
-      return false if e_projects.to_s.empty?
-
-      project_count = Project.count
-      return false if project_count.to_i >= e_projects.to_i
-
-      return true
-    end
-
-
     def self.build_from_url(url, project_type = nil)
       project_type = ProjectService.type_by_filename(url) if project_type.nil?
       parser       = ParserStrategy.parser_for( project_type, url )
