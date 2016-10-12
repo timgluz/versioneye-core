@@ -65,14 +65,14 @@ describe ProjectImportService do
       github_user.github_id = "652130"
       github_user.github_token = '666666666666777777777777777'
       github_user.save
-      orga = Organisation.new({:name => 'test'})
+      orga = Organisation.new({:name => 'test', :plan => Plan.free_plan})
       expect( orga.save ).to be_truthy
       VCR.use_cassette('import_from_privat_github_not_allowed', allow_playback_repeats: true) do
         expect { ProjectImportService.import_from_github(github_user, 'versioneye/versioneye-core', 'Gemfile', 'master', orga.ids) }.to raise_error
       end
     end
     it 'does not import from github because file does not exist' do
-      orga = Organisation.new({:name => 'test'})
+      orga = Organisation.new({:name => 'test', :plan => Plan.free_plan})
       expect( orga.save ).to be_truthy
       expect { ProjectImportService.import_from_github github_user, 'versioneye/versioneye_maven_plugin', 'pomi.xml', 'master', orga.ids }.to raise_error
     end
@@ -84,11 +84,13 @@ describe ProjectImportService do
       worker = Thread.new{ GitRepoFileImportWorker.new.work }
       github_user.github_id = 652130
       github_user.save.should be_truthy
+      orga = OrganisationService.create_new_for github_user
+      expect( orga.save ).to be_truthy
       VCR.use_cassette('import_from_github_async', allow_playback_repeats: true) do
         Project.all.count.should eq(0)
         status = ''
         until status.match(/\Adone_/)
-          status = ProjectImportService.import_from_github_async github_user, 'versioneye/versioneye_maven_plugin', 'pom.xml', 'master'
+          status = ProjectImportService.import_from_github_async github_user, 'versioneye/versioneye_maven_plugin', 'pom.xml', 'master', orga.ids
           p "status: #{status}"
           sleep 2
         end
@@ -105,7 +107,9 @@ describe ProjectImportService do
       bitbucket_repo.save
 
       VCR.use_cassette('bitbucket_file_import', allow_playback_repeats: true) do
-        project = ProjectImportService.import_from_bitbucket user_with_token, 'versioneye_test/fantom_hydra', 'Gemfile', 'master'
+        orga = OrganisationService.create_new_for user_with_token
+        expect( orga.save ).to be_truthy
+        project = ProjectImportService.import_from_bitbucket user_with_token, 'versioneye_test/fantom_hydra', 'Gemfile', 'master', orga.ids
         project.should_not be_nil
         project.dependencies.should_not be_empty
         project.name.should eq('versioneye_test/fantom_hydra')
@@ -116,7 +120,7 @@ describe ProjectImportService do
       bitbucket_repo = BitbucketRepo.new({:fullname => 'versioneye_test/fantom_hydra', :user => user_with_token, :private => false})
       bitbucket_repo.save
 
-      orga = OrganisationService.create_new user_with_token, "test_orga"
+      orga = OrganisationService.create_new_for user_with_token
       expect( orga.save ).to be_truthy
 
       project = ProjectImportService.import_from_bitbucket user_with_token, 'versioneye_test/fantom_hydra', 'GemGemify', 'master', orga.ids
@@ -132,10 +136,12 @@ describe ProjectImportService do
       bitbucket_repo.save
       worker = Thread.new{ GitRepoFileImportWorker.new.work }
       VCR.use_cassette('import_from_bitbucket_async', allow_playback_repeats: true) do
+        orga = OrganisationService.create_new_for user_with_token
+        expect( orga.save ).to be_truthy
         Project.all.count.should eq(0)
         status = ''
         until status.match(/\Adone_/)
-          status = ProjectImportService.import_from_bitbucket_async user_with_token, 'reiz/test_gemi', 'pom.xml', 'master'
+          status = ProjectImportService.import_from_bitbucket_async user_with_token, 'reiz/test_gemi', 'pom.xml', 'master', orga.ids
           sleep 2
         end
         Project.all.count.should eq(1)
@@ -151,6 +157,8 @@ describe ProjectImportService do
 
   describe 'import_from_url' do
     it 'creates a project from url' do
+      orga = OrganisationService.create_new_for github_user
+      expect( orga.save ).to be_truthy
       url = 'https://bitbucket.org/reiz/test_gemi/raw/3691cce15b9d77934f21e372923a22465cf8ed7b/Gemfile'
       project = ProjectImportService.import_from_url url, "url_test_project", github_user
       project.should_not be_nil
@@ -167,7 +175,10 @@ describe ProjectImportService do
       file_attachment = Rack::Test::UploadedFile.new(gemfile, "application/octet-stream")
       file = {'datafile' => file_attachment}
 
-      project = ProjectImportService.import_from_upload file, github_user
+      orga = OrganisationService.create_new_for github_user
+      expect( orga.save ).to be_truthy
+
+      project = ProjectImportService.import_from_upload file, github_user, false, orga.ids
       project.should_not be_nil
       project.dependencies.should_not be_empty
       project.name.should eq('Gemfile')
@@ -178,13 +189,21 @@ describe ProjectImportService do
 
   describe "allowed_to_add_project?" do
 
+    it "allows not because orga is nil" do
+      described_class.allowed_to_add_project?(nil, false).should be_falsey
+    end
+
     it "allows because its a public project" do
-      described_class.allowed_to_add_project?(nil, false).should be_truthy
+      orga = OrganisationService.create_new_for github_user
+      expect( orga.save ).to be_truthy
+      described_class.allowed_to_add_project?(orga.ids, false).should be_truthy
     end
 
     it "allows because each user has 1 private project for free" do
       Plan.create_defaults
+      plan = Plan.by_name_id( Plan::A_PLAN_SMALL )
       orga = Organisation.new({:name => 'test_orga'})
+      orga.plan = plan
       orga.save
       described_class.allowed_to_add_project?(orga, true).should be_truthy
     end
@@ -223,7 +242,7 @@ describe ProjectImportService do
     # Now we charge for the sync of the components.
     it "is allowed in Enterprise" do
       Settings.instance.instance_variable_set(:@environment, 'enterprise')
-      orga = Organisation.new({:name => 'test_orga'})
+      orga = Organisation.new({:name => 'test_orga', :plan => Plan.free_plan})
       GlobalSetting.set 'enterprise', 'E_PROJECTS', '0'
       ProjectImportService.allowed_to_add_project?( nil, true ).should be_truthy
       Settings.instance.instance_variable_set(:@environment, 'test')

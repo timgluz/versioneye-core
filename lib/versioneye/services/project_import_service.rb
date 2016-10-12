@@ -317,11 +317,19 @@ class ProjectImportService < Versioneye::Service
   def self.allowed_to_add?( orga, private_project )
     return false if orga.nil?
 
-    orga_max_count = 1
-    orga_max_count = orga.plan.private_projects if orga.plan
-    project_count  = orga.projects.parents.count
-    return false if project_count.to_i >= orga_max_count.to_i
-    return true
+    if private_project
+      max_allowed = 1
+      max_allowed = orga.plan.private_projects if orga.plan
+      project_count = Project.private_project_count_by_orga( orga.ids ) # orga.projects.parents.count
+      return false if project_count.to_i >= max_allowed.to_i
+      return true
+    else # open source projects
+      max_allowed = 1
+      max_allowed = orga.plan.os_projects if orga.plan
+      project_count = Project.public_project_count_by_orga( orga.ids )
+      return false if project_count.to_i >= max_allowed.to_i
+      return true
+    end
   rescue => e
     log.error "ERROR in allowed_to_add? - #{e.message}"
     log.error e.backtrace.join("\n")

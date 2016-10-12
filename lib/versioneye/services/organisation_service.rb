@@ -9,6 +9,7 @@ class OrganisationService < Versioneye::Service
       raise "Only admins can create new organisations."
     end
     orga = Organisation.new({:name => name.downcase})
+    orga.plan = Plan.free_plan
     orga.save
     team = Team.new(:name => Team::A_OWNERS)
     team.add_member user

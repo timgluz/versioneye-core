@@ -220,6 +220,10 @@ class Project < Versioneye::Model
     Project.where( organisation_id: orga_id, private_project: true, :parent_id => nil ).count
   end
 
+  def self.public_project_count_by_orga orga_id
+    Project.where( organisation_id: orga_id, private_project: false, :parent_id => nil ).count
+  end
+
   def show_dependency_badge?
     true
   end

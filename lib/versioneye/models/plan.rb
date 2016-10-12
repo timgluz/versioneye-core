@@ -30,7 +30,8 @@ class Plan < Versioneye::Model
   field :name            , type: String
   field :price           , type: String
   field :period          , type: String, default: A_PERIOD_MONTHLY
-  field :private_projects, type: Integer
+  field :private_projects, type: Integer, default: 1  # losed source projects
+  field :os_projects     , type: Integer, default: 1  # OS = Open Source
   field :api_rate_limit  , type: Integer, default: 50
   field :cmp_rate_limit  , type: Integer, default: 50
 
@@ -45,6 +46,7 @@ class Plan < Versioneye::Model
     trial_0.name_id = A_PLAN_FREE
     trial_0.name = 'Free'
     trial_0.price = '0'
+    trial_0.os_projects = 4
     trial_0.private_projects = 1
     trial_0.api_rate_limit   = 50
     trial_0.cmp_rate_limit   = 50
@@ -55,6 +57,7 @@ class Plan < Versioneye::Model
     free = Plan.find_or_create_by(:name_id => A_PLAN_FREE)
     free.name = 'Free'
     free.price = '0'
+    free.os_projects = 4
     free.private_projects = 1
     free.api_rate_limit   = 50
     free.cmp_rate_limit   = 50
@@ -63,6 +66,7 @@ class Plan < Versioneye::Model
     micro = Plan.find_or_create_by(:name_id => A_PLAN_MICRO)
     micro.name = 'Beginner'
     micro.price = '7'
+    micro.os_projects = 5
     micro.private_projects = 5
     micro.api_rate_limit   = 100
     micro.cmp_rate_limit   = 100
@@ -71,6 +75,7 @@ class Plan < Versioneye::Model
     small = Plan.find_or_create_by(:name_id => A_PLAN_SMALL)
     small.name = 'Junior'
     small.price = '12'
+    small.os_projects = 10
     small.private_projects = 10
     small.api_rate_limit   = 150
     small.cmp_rate_limit   = 150
@@ -79,6 +84,7 @@ class Plan < Versioneye::Model
     medium = Plan.find_or_create_by(:name_id => A_PLAN_MEDIUM)
     medium.name = 'Freelancer'
     medium.price = '22'
+    medium.os_projects = 20
     medium.private_projects = 20
     medium.api_rate_limit   = 300
     medium.cmp_rate_limit   = 300
@@ -88,6 +94,7 @@ class Plan < Versioneye::Model
     large.name_id = A_PLAN_LARGE
     large.name = 'Advanced'
     large.price = '50'
+    large.os_projects = 50
     large.private_projects = 50
     large.api_rate_limit   = 500
     large.cmp_rate_limit   = 500
@@ -96,6 +103,7 @@ class Plan < Versioneye::Model
     xlarge = Plan.find_or_create_by(:name_id => A_PLAN_XLARGE)
     xlarge.name = 'Professional'
     xlarge.price = '100'
+    xlarge.os_projects = 100
     xlarge.private_projects = 100
     xlarge.api_rate_limit   = 1000
     xlarge.cmp_rate_limit   = 1000
@@ -105,6 +113,7 @@ class Plan < Versioneye::Model
     agency.name_id = A_PLAN_XXLARGE
     agency.name = 'Agency'
     agency.price = '250'
+    agency.os_projects = 250
     agency.private_projects = 250
     agency.api_rate_limit   = 2500
     agency.cmp_rate_limit   = 2500
@@ -114,6 +123,7 @@ class Plan < Versioneye::Model
     enterprise.name_id = A_PLAN_XXXLARGE
     enterprise.name = 'Enterprise'
     enterprise.price = '500'
+    enterprise.os_projects = 500
     enterprise.private_projects = 500
     enterprise.api_rate_limit   = 5000
     enterprise.cmp_rate_limit   = 5000
@@ -123,6 +133,7 @@ class Plan < Versioneye::Model
     micro_y.name = 'Beginner Y'
     micro_y.price = '84'
     micro_y.period = A_PERIOD_YEARLY
+    micro_y.os_projects = 7
     micro_y.private_projects = 7
     micro_y.api_rate_limit   = 100
     micro_y.cmp_rate_limit   = 100
@@ -132,6 +143,7 @@ class Plan < Versioneye::Model
     small_y.name = 'Junior Y'
     small_y.price = '144'
     small_y.period = A_PERIOD_YEARLY
+    small_y.os_projects = 12
     small_y.private_projects = 12
     small_y.api_rate_limit   = 150
     small_y.cmp_rate_limit   = 150
@@ -141,6 +153,7 @@ class Plan < Versioneye::Model
     medium_y.name = 'Freelancer Y'
     medium_y.price = '264'
     medium_y.period = A_PERIOD_YEARLY
+    medium_y.os_projects = 22
     medium_y.private_projects = 22
     medium_y.api_rate_limit   = 300
     medium_y.cmp_rate_limit   = 300
@@ -150,6 +163,7 @@ class Plan < Versioneye::Model
     large_y.name = 'Advanced Y'
     large_y.price = '600'
     large_y.period = A_PERIOD_YEARLY
+    large_y.os_projects = 52
     large_y.private_projects = 52
     large_y.api_rate_limit   = 500
     large_y.cmp_rate_limit   = 500
@@ -159,6 +173,7 @@ class Plan < Versioneye::Model
     xlarge_y.name = 'Professional Y'
     xlarge_y.price = '1200'
     xlarge_y.period = A_PERIOD_YEARLY
+    xlarge_y.os_projects = 102
     xlarge_y.private_projects = 102
     xlarge_y.api_rate_limit   = 1000
     xlarge_y.cmp_rate_limit   = 1000
@@ -168,6 +183,7 @@ class Plan < Versioneye::Model
     agency_y.name = 'Agency Y'
     agency_y.price = '3000'
     agency_y.period = A_PERIOD_YEARLY
+    agency_y.os_projects = 252
     agency_y.private_projects = 252
     agency_y.api_rate_limit   = 2500
     agency_y.cmp_rate_limit   = 2500
@@ -177,6 +193,7 @@ class Plan < Versioneye::Model
     enterprise_y.name = 'Enterprise Y'
     enterprise_y.price = '6000'
     enterprise_y.period = A_PERIOD_YEARLY
+    enterprise_y.os_projects = 502
     enterprise_y.private_projects = 502
     enterprise_y.api_rate_limit   = 5000
     enterprise_y.cmp_rate_limit   = 5000
