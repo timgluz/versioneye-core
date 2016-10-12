@@ -16,6 +16,9 @@ describe GitRepoFileImportWorker do
       expect( user.github_repos ).to be_empty
       expect( GithubRepo.count ).to eq(0)
 
+      orga = OrganisationService.create_new_for user
+      expect(orga.save).to be_truthy
+
       VCR.use_cassette('git_repo_file_import_worker_github', allow_playback_repeats: true) do
         worker1 = Thread.new{ GitReposImportWorker.new.work }
         worker2 = Thread.new{ GitRepoImportWorker.new.work }
@@ -39,7 +42,7 @@ describe GitRepoFileImportWorker do
         expect( git_repo.project_files ).to_not be_empty
 
         expect( Project.count ).to eq(0)
-        GitRepoFileImportProducer.new("github:::#{user.username}:::#{git_repo.fullname}:::Gemfile:::master")
+        GitRepoFileImportProducer.new("github:::#{user.username}:::#{git_repo.fullname}:::Gemfile:::master:::#{orga.ids}")
         sleep 7
         expect( Project.count ).to eq(1)
         expect( Project.first.name ).to eq('veye1test/docker_web_ui')
@@ -104,6 +107,9 @@ describe GitRepoFileImportWorker do
       expect( user.github_repos ).to be_empty
       expect( GithubRepo.count ).to eq(0)
 
+      orga = OrganisationService.create_new_for user
+      expect(orga.save).to be_truthy
+
       VCR.use_cassette('git_repo_file_import_worker_github', allow_playback_repeats: true) do
         worker1 = Thread.new{ GitReposImportWorker.new.work }
         worker2 = Thread.new{ GitRepoImportWorker.new.work }
@@ -127,7 +133,7 @@ describe GitRepoFileImportWorker do
         expect( git_repo.project_files ).to_not be_empty
 
         expect( Project.count ).to eq(0)
-        GitRepoFileImportProducer.new("github:::#{user.username}:::#{git_repo.fullname}:::GemfileNA:::master")
+        GitRepoFileImportProducer.new("github:::#{user.username}:::#{git_repo.fullname}:::GemfileNA:::master:::#{orga.ids}")
         sleep 7
         expect( Project.count ).to eq(0)
 
@@ -147,6 +153,9 @@ describe GitRepoFileImportWorker do
       expect( user.save ).to be_truthy
       expect( user.github_repos ).to be_empty
       expect( BitbucketRepo.count ).to eq(0)
+
+      orga = OrganisationService.create_new_for user
+      expect(orga.save).to be_truthy
 
       VCR.use_cassette('git_repo_file_import_worker_bitbucket', allow_playback_repeats: true) do
         worker1 = Thread.new{ GitReposImportWorker.new.work }
@@ -171,7 +180,7 @@ describe GitRepoFileImportWorker do
         expect( git_repo.project_files ).to_not be_empty
 
         expect( Project.count ).to eq(0)
-        GitRepoFileImportProducer.new("bitbucket:::#{user.username}:::#{git_repo.fullname}:::composer.json:::master")
+        GitRepoFileImportProducer.new("bitbucket:::#{user.username}:::#{git_repo.fullname}:::composer.json:::master:::#{orga.ids}")
         sleep 7
         expect( Project.count ).to eq(1)
         expect( Project.first.name ).to eq('veye1test/composer')
