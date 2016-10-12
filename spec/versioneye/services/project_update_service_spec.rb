@@ -18,7 +18,7 @@ describe ProjectUpdateService do
       project = ProjectFactory.default user
       project.s3_filename = 'Gemfile'
       project.source = Project::A_SOURCE_UPLOAD
-      project.save.should be_truthy
+      expect( project.save ).to be_truthy
       Project.count.should == 1
 
       project = described_class.update_from_upload project, file
@@ -63,21 +63,21 @@ describe ProjectUpdateService do
       expect( project.source ).to eq( Project::A_SOURCE_URL )
       expect( project.url ).to eq( url )
       expect( project.dependencies ).to_not be_empty
-
-      # project.url = 'https://www.heise.dem/Gemfile'
-      # expect( project.save ).to be_truthy
-      # project = described_class.update project
-      # expect( project ).to_not be_nil
-      # expect( project.source ).to eq( Project::A_SOURCE_URL )
-      # expect( project.url ).to eq( 'https://www.heise.dem/Gemfile' )
-      # expect( project.dependencies ).to_not be_empty
     end
     it 'will update a multi file project' do
+      Plan.create_defaults
+
       user = UserFactory.create_new
-      gemfile = import_gemfile user
+      expect( user.save ).to be_truthy
+
+      orga = OrganisationService.create_new_for user
+      orga.plan = Plan.micro
+      expect( orga.save ).to be_truthy
+
+      gemfile = import_gemfile user, orga
       expect( gemfile ).to_not be_nil
 
-      podfile = import_podfile user
+      podfile = import_podfile user, orga
       expect( podfile ).to_not be_nil
 
       podfile.parent_id = gemfile.ids
@@ -167,18 +167,18 @@ describe ProjectUpdateService do
   end
 
 
-  def import_gemfile user
+  def import_gemfile user, orga
     gemfile = "spec/fixtures/files/Gemfile"
     file_attachment = Rack::Test::UploadedFile.new(gemfile, "application/octet-stream")
     file = {'datafile' => file_attachment}
-    ProjectImportService.import_from_upload file, user
+    ProjectImportService.import_from_upload file, user, false, orga.ids
   end
 
-  def import_podfile user
+  def import_podfile user, orga
     gemfile = "spec/fixtures/files/pod_file/example1/Podfile"
     file_attachment = Rack::Test::UploadedFile.new(gemfile, "application/octet-stream")
     file = {'datafile' => file_attachment}
-    ProjectImportService.import_from_upload file, user
+    ProjectImportService.import_from_upload file, user, false, orga.ids
   end
 
   def add_sv product
