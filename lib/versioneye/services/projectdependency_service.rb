@@ -166,7 +166,7 @@ class ProjectdependencyService < Versioneye::Service
     else
       req_version = projectdependency.version_requested
     end
-    
+
     newest_version = Naturalsorter::Sorter.sort_version([
       projectdependency.version_current,
       req_version
@@ -180,7 +180,7 @@ class ProjectdependencyService < Versioneye::Service
   def self.godep_to_semver(proj_dep)
     req_version = proj_dep.version_requested
     translated_version = '0.0.0+NA' #used when couldnt find version by SHA or TAG
-    
+
     the_prod = proj_dep.product
     if the_prod.nil?
       log.warn "check_godep: dependency #{proj_dep[:prod_key]} has no product attached"
