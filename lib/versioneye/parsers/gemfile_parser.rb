@@ -235,6 +235,9 @@ class GemfileParser < CommonParser
       elsif element.match(/\A:git/) or element.match(/^git:/)
         version = element
         break
+      elsif element.match(/\A:github/i) or element.match(/^github:/i)
+        version = element
+        break
       else
         version = element
       end
