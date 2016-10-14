@@ -175,7 +175,7 @@ class Organisation < Versioneye::Model
         ckey = "#{dep.language}:#{dep.possible_prod_key}:#{dep.version_current}"
         comps[ckey] = {} if !comps.keys.include?( ckey )
 
-        vkey = "#{dep.possible_prod_key}:#{dep.version_requested}:#{dep.licenses_string}"
+        vkey = "#{dep.possible_prod_key}::#{dep.version_requested}::#{dep.licenses_string}"
         comps[ckey][vkey] = [] if comps[ckey][vkey].nil?
 
         val = "#{project.language}:#{project.name}:#{project.ids}:#{project.version}"
