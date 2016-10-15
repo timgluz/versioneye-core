@@ -3,16 +3,22 @@ require 'spec_helper'
 describe ProjectdependencyService do
 
   before(:each) do
-    user              = UserFactory.create_new
+    Plan.create_defaults
 
-    @project          = ProjectFactory.create_new( user )
+    @user              = UserFactory.create_new
+    expect( @user.save ).to be_truthy
+
+    @orga             = OrganisationService.create_new_for(@user)
+    expect(@orga.save).to be_truthy
+
+    @project          = ProjectFactory.create_new( @user, nil, true, @orga )
     @project.language = Product::A_LANGUAGE_RUBY
 
     @product          = Product.new({:prod_type => Project::A_TYPE_RUBYGEMS, :language => Product::A_LANGUAGE_RUBY, :prod_key => 'gomezify', :name => 'gomezify'})
     @product.versions = Array.new
     @product.versions.push(Version.new({:version => '1.0'}))
     @product.version  = @product.versions.first.to_s
-    @product.save
+    expect( @product.save ).to be_truthy
   end
 
   describe "update_licenses" do
@@ -40,20 +46,21 @@ describe ProjectdependencyService do
     end
 
     it 'updates the dependencies with the license infos, dependency is conform with lwl' do
-      Projectdependency.count.should eq(0)
+      expect( Projectdependency.count ).to eq(0)
       dep = ProjectdependencyFactory.create_new(@project, @product)
       dep.version_current   = @product.version
       dep.version_requested = @product.version
-      dep.save
-      Projectdependency.count.should eq(1)
+      expect( dep.save ).to be_truthy
+      expect( Projectdependency.count ).to eq(1)
 
       license = LicenseFactory.create_new @product, "MIT"
       expect( license.save ).to be_truthy
 
-      lwl = LicenseWhitelistFactory.create_new 'MY_SECRET_WHITELIST', ['mit']
-      lwl.save
+      lwl = LicenseWhitelistFactory.create_new 'MY_SECRET_WHITELIST', ['mit'], @user, @orga
+      expect( lwl.save ).to be_truthy
+
       @project.license_whitelist_id = lwl.ids
-      @project.save
+      expect( @project.save ).to be_truthy
 
       ProjectdependencyService.update_licenses @project
 
@@ -77,7 +84,7 @@ describe ProjectdependencyService do
       license = LicenseFactory.create_new @product, "GPL-3.0"
       expect( license.save ).to be_truthy
 
-      lwl = LicenseWhitelistFactory.create_new 'MY_SECRET_WHITELIST', ['mit']
+      lwl = LicenseWhitelistFactory.create_new 'MY_SECRET_WHITELIST', ['mit'], @user, @orga
       lwl.save
       @project.license_whitelist_id = lwl.ids
       @project.save
@@ -104,13 +111,16 @@ describe ProjectdependencyService do
       license = LicenseFactory.create_new @product, "GPL-3.0"
       expect( license.save ).to be_truthy
 
-      lwl = LicenseWhitelistFactory.create_new 'MY_SECRET_WHITELIST', ['mit']
+      lwl = LicenseWhitelistFactory.create_new 'MY_SECRET_WHITELIST', ['mit'], @user, @orga
       lwl.save
       @project.license_whitelist_id = lwl.ids
 
       cwl = ComponentWhitelist.new({:name => 'my_cwl'})
       cwl.add dep.cwl_key
+      cwl.organisation = @orga
       cwl.save
+      p cwl.errors
+      expect( cwl.save ).to be_truthy
       @project.component_whitelist_id = cwl.ids
       @project.save
 
@@ -468,7 +478,7 @@ describe ProjectdependencyService do
       user    = UserFactory.create_new 45
       expect( user.save ).to be_truthy
 
-      project = ProjectFactory.create_new( user )
+      project = ProjectFactory.create_new( user, nil, true, @orga )
       project.source = Project::A_SOURCE_UPLOAD
       expect( project.save ).to be_truthy
 
@@ -516,11 +526,11 @@ describe ProjectdependencyService do
       user    = UserFactory.create_new 46
       expect( user.save ).to be_truthy
 
-      project = ProjectFactory.create_new( user )
+      project = ProjectFactory.create_new( user, nil, true, @orga )
       project.source = Project::A_SOURCE_UPLOAD
       expect( project.save ).to be_truthy
 
-      project2 = ProjectFactory.create_new( user, nil, false )
+      project2 = ProjectFactory.create_new( user, nil, false, @orga )
       project2.source = Project::A_SOURCE_UPLOAD
       expect( project2.save ).to be_truthy
 
@@ -602,8 +612,10 @@ describe ProjectdependencyService do
       expect( ProjectService.outdated?(project2) ).to be_truthy
     end
   end
-  
-  
+
+  let(:user1){ UserFactory.create_new }
+  let(:orga1){ OrganisationService.create_new_for(user1) }
+  let(:project1){ ProjectFactory.create_new( user1, nil, true, orga1 ) }
   let(:sha_head){ "3f7947a25d970e1e5f512276c14d5dcf731ccd5e" }
   let(:sha1){ "99c3df83b51532e3615f851d8c2dbb638f5313bf" }
   let(:sha2){ "7ed8a133d2804385eba5d3d3704f549a4d210b83" }
@@ -624,6 +636,7 @@ describe ProjectdependencyService do
       language: Product::A_LANGUAGE_GO,
       prod_key: 'Godep1',
       name: 'Godep1',
+      project: project1,
       version_current: prod1[:version],
       version_requested: sha1,
       outdated: nil # important: otherwise outdated? shortcuts as last_update_ago is too small
@@ -635,6 +648,7 @@ describe ProjectdependencyService do
       :projectdependency,
       language: Product::A_LANGUAGE_GO,
       prod_key: 'Godep1',
+      project: project1,
       name: 'Godep1',
       version_current: prod1[:version],
       version_requested: 'rc1',
@@ -648,6 +662,7 @@ describe ProjectdependencyService do
       language: Product::A_LANGUAGE_GO,
       prod_key: 'Godep1',
       name: 'Godep1',
+      project: project1,
       version_current: prod1[:version],
       version_requested: 'v1.7',
       outdated: nil
@@ -659,6 +674,7 @@ describe ProjectdependencyService do
       language: Product::A_LANGUAGE_GO,
       prod_key: 'Godep1',
       name: 'Godep1',
+      project: project1,
       version_current: prod1[:version],
       version_requested: '2.1',
       outdated: nil
@@ -718,7 +734,7 @@ describe ProjectdependencyService do
     it "returns false when it's matching with current version " do
       prod1.versions << FactoryGirl.build(:product_version, version: '2.1', tag: 'v2.1')
 
-      expect(ProjectdependencyService.outdated?(dep_cur)).to be_falsey      
+      expect(ProjectdependencyService.outdated?(dep_cur)).to be_falsey
     end
 
   end

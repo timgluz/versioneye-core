@@ -35,7 +35,7 @@ class Projectdependency < Versioneye::Model
 
   field :lwl_violation    , type: String # [nil, partial, yes]
 
-  belongs_to :project
+  belongs_to :project, optional: true
 
   embeds_many :license_caches, cascade_callbacks: true
 

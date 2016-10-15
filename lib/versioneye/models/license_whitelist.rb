@@ -9,7 +9,7 @@ class LicenseWhitelist < Versioneye::Model
 
   embeds_many :license_elements
 
-  belongs_to :user
+  belongs_to :user, optional: true
   belongs_to :organisation
 
   validates_presence_of :name, :message => 'is mandatory!'

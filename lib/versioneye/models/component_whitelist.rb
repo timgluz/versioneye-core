@@ -7,7 +7,7 @@ class ComponentWhitelist < Versioneye::Model
   field :default,          type: Boolean, default: false
   field :components,       type: Array, default: []
 
-  belongs_to :user
+  belongs_to :user, optional: true
   belongs_to :organisation
 
   validates_presence_of :name, :message => 'is mandatory!'
