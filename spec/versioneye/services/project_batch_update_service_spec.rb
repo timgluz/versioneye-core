@@ -119,8 +119,10 @@ describe ProjectBatchUpdateService do
       owner   = UserFactory.create_new 1023
       user    = UserFactory.create_new 1024
 
+      Plan.create_defaults
       orga    = Organisation.new(:name => "orga")
-      orga.save
+      orga.plan = Plan.micro
+      expect( orga.save ).to be_truthy
       team    = Team.new( :name => 'name', :organisation_id => orga.ids )
       expect( team.save ).to be_truthy
       expect( team.add_member(user) ).to be_truthy
