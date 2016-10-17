@@ -65,8 +65,7 @@ class ProjectService < Versioneye::Service
       if organisation && ( member_of_orga || user.admin == true )
         filter_options[:organisation_id] = organisation.ids
       else
-        filter_options[:user_id] = user.ids
-        filter_options[:organisation_id] = nil
+        filter_options[:organisation_id] = OrganisationService.index( user ).collect(&:ids).join(',')
       end
     end
 

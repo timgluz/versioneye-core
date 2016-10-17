@@ -18,6 +18,9 @@ class ProjectFactory
 
     if orga
       new_project.organisation_id = orga.ids
+      if orga.owner_team
+        new_project.teams = [orga.owner_team]
+      end
     end
 
     if save

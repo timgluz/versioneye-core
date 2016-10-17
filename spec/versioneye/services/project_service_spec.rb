@@ -4,34 +4,37 @@ describe ProjectService do
 
   let(:github_user) { FactoryGirl.create(:github_user)}
 
+  before(:each) do
+    Plan.create_defaults
+    @orga = OrganisationService.create_new_for github_user
+    expect( @orga.save ).to be_truthy
+  end
+
   describe "index" do
     it 'returns the single project for a user' do
-      user = UserFactory.create_new
-      project = ProjectFactory.create_new user
-      project.save
-      expect( ProjectService.index(user).count ).to eq(1)
+      project = ProjectFactory.create_new github_user, nil, true, @orga
+      expect( project.save ).to be_truthy
+      expect( ProjectService.index(github_user, {:organisation => @orga.ids}).count ).to eq(1)
     end
     it 'returns the single parent project for a user' do
-      user = UserFactory.create_new
-      project = ProjectFactory.create_new user
-      project.save
-      project2 = ProjectFactory.create_new user
+      project = ProjectFactory.create_new github_user, nil, true, @orga
+      expect( project.save ).to be_truthy
+      project2 = ProjectFactory.create_new github_user, nil, true, @orga
       project2.parent_id = project.ids
       project2.save
-      expect( ProjectService.index(user).count ).to eq(1)
+      expect( ProjectService.index(github_user).count ).to eq(1)
     end
     it 'returns 2 projects for a user' do
-      user = UserFactory.create_new
-      project = ProjectFactory.create_new user
-      project.save
-      project2 = ProjectFactory.create_new user
-      project2.save
-      expect( ProjectService.index(user).count ).to eq(2)
+      project = ProjectFactory.create_new github_user, nil, true, @orga
+      expect( project.save ).to be_truthy
+      project2 = ProjectFactory.create_new github_user, nil, true, @orga
+      expect( project2.save ).to be_truthy
+      expect( ProjectService.index(github_user).count ).to eq(2)
     end
     it 'returns 2 public projects for a user' do
       user  = UserFactory.create_new 1
       user2 = UserFactory.create_new 2
-      project = ProjectFactory.create_new user
+      project = ProjectFactory.create_new user, nil, true, @orga
       project.public = true
       project.name = 'bbb'
       project.parent_id = nil
@@ -48,7 +51,7 @@ describe ProjectService do
     it 'returns public projects for a user filtered by language' do
       user  = UserFactory.create_new 1
       user2 = UserFactory.create_new 2
-      project = ProjectFactory.create_new user
+      project = ProjectFactory.create_new user, nil, true, @orga
       project.public = true
       project.language = 'Ruby'
       project.parent_id = nil
@@ -65,7 +68,7 @@ describe ProjectService do
     it 'returns empty list for a user filtered by language' do
       user  = UserFactory.create_new 1
       user2 = UserFactory.create_new 2
-      project = ProjectFactory.create_new user
+      project = ProjectFactory.create_new user, nil, true, @orga
       project.public = true
       project.language = 'Ruby'
       project.parent_id = nil
@@ -81,13 +84,13 @@ describe ProjectService do
     it 'returns public projects for a user filtered by name' do
       user  = UserFactory.create_new 1
       user2 = UserFactory.create_new 2
-      project = ProjectFactory.create_new user
+      project = ProjectFactory.create_new user, nil, true, @orga
       project.public = true
       project.name = 'hansi_binsi'
       project.language = 'Ruby'
       project.parent_id = nil
       project.save
-      project2 = ProjectFactory.create_new user2
+      project2 = ProjectFactory.create_new user2, nil, true, @orga
       project2.public = true
       project2.language = 'Java'
       project2.parent_id = nil
@@ -104,13 +107,13 @@ describe ProjectService do
     it 'returns all projects for the user' do
       user = UserFactory.create_new
 
-      orga1 = Organisation.new(:name => 'orga1')
+      orga1 = Organisation.new(:name => 'orga1', :plan => Plan.micro)
       expect( orga1.save ).to be_truthy
 
-      orga2 = Organisation.new(:name => 'orga2')
+      orga2 = Organisation.new(:name => 'orga2', :plan => Plan.micro)
       expect( orga2.save ).to be_truthy
 
-      orga3 = Organisation.new(:name => 'orga3')
+      orga3 = Organisation.new(:name => 'orga3', :plan => Plan.micro)
       expect( orga3.save ).to be_truthy
 
       orga1_team1 = Team.new(:name => 'team1', :organisation_id => orga1.ids)
@@ -118,7 +121,7 @@ describe ProjectService do
       expect( orga1_team1.add_member(user) ).to be_truthy
       expect( OrganisationService.index( user ).count ).to eq(1)
 
-      orga1_project = ProjectFactory.create_new user
+      orga1_project = ProjectFactory.create_new user, nil, true, @orga
       orga1_project.user_id = nil
       orga1_project.organisation_id = orga1.ids
       orga1_project.team_ids = [orga1_team1.ids]
@@ -132,7 +135,7 @@ describe ProjectService do
       expect( orga1_team2.save ).to be_truthy
       expect( orga1_team2.add_member(user) ).to be_truthy
 
-      orga1_project2 = ProjectFactory.create_new user
+      orga1_project2 = ProjectFactory.create_new user, nil, true, @orga
       orga1_project2.user_id = nil
       orga1_project2.organisation_id = orga1.ids
       orga1_project2.team_ids = [orga1_team2.ids]
@@ -145,7 +148,7 @@ describe ProjectService do
       orga1_team3 = Team.new(:name => 'team3', :organisation_id => orga1.ids)
       expect( orga1_team3.save ).to be_truthy
 
-      orga1_project3 = ProjectFactory.create_new user
+      orga1_project3 = ProjectFactory.create_new user, nil, true, @orga
       orga1_project3.user_id = nil
       orga1_project3.organisation_id = orga1.ids
       orga1_project3.team_ids = [orga1_team2.ids]
@@ -158,7 +161,7 @@ describe ProjectService do
       expect( orga2_team1.save ).to be_truthy
       expect( orga2_team1.add_member(user) ).to be_truthy
 
-      orga2_project1 = ProjectFactory.create_new user
+      orga2_project1 = ProjectFactory.create_new user, nil, true, @orga
       orga2_project1.user_id = nil
       orga2_project1.organisation_id = orga2.ids
       orga2_project1.team_ids = [orga2_team1.ids]
@@ -308,7 +311,7 @@ describe ProjectService do
       zz_1 = '0.0.1'
 
       user    = UserFactory.create_new
-      project = ProjectFactory.create_new user
+      project = ProjectFactory.create_new user, nil, true
 
       prod_1  = ProductFactory.create_new 1
       prod_2  = ProductFactory.create_new 2
@@ -961,12 +964,12 @@ describe ProjectService do
     end
     it 'returns an empty list because Projectdependency is on whitelist' do
       user    = UserFactory.create_new
-      project = ProjectFactory.create_new user, nil, true
+      project = ProjectFactory.create_new user, nil, true, @orga
 
       prod_1 = ProductFactory.create_new 1
       liz_1  = LicenseFactory.create_new prod_1, 'MIT'
       dep_1  = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => prod_1.version}
-      whitelist = LicenseWhitelistFactory.create_new 'OSS', ['MiT']
+      whitelist = LicenseWhitelistFactory.create_new 'OSS', ['MiT'], nil, @orga
       whitelist.save
       project.license_whitelist_id = whitelist.id
       project.save
@@ -987,7 +990,7 @@ describe ProjectService do
       dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => prod_1.version}
       dep_2 = ProjectdependencyFactory.create_new project, prod_2, true, {:version_requested => prod_2.version}
 
-      whitelist = LicenseWhitelistFactory.create_new 'OSS', ['MiT']
+      whitelist = LicenseWhitelistFactory.create_new 'OSS', ['MiT'], nil, @orga
       whitelist.save
       project.license_whitelist_id = whitelist.id
       project.save
@@ -1051,7 +1054,7 @@ describe ProjectService do
       ProjectdependencyService.update_outdated!( dep_4 )
       ProjectdependencyService.update_outdated!( dep_5 )
 
-      whitelist = LicenseWhitelistFactory.create_new 'OSS', ['MIT']
+      whitelist = LicenseWhitelistFactory.create_new 'OSS', ['MIT'], nil, @orga
       expect( whitelist.save ).to be_truthy
 
       project.license_whitelist_id = whitelist.id
@@ -1106,7 +1109,7 @@ describe ProjectService do
       ProjectdependencyService.update_outdated!( dep_4 )
       ProjectdependencyService.update_outdated!( dep_5 )
 
-      whitelist = LicenseWhitelistFactory.create_new 'OSS', ['MIT']
+      whitelist = LicenseWhitelistFactory.create_new 'OSS', ['MIT'], nil, @orga
       whitelist.pessimistic_mode = true
       expect( whitelist.save ).to be_truthy
 
@@ -1173,7 +1176,7 @@ describe ProjectService do
       dep_1 = ProjectdependencyFactory.create_new project1 , prod_1, true, {:version_requested => prod_1.version}
       dep_2 = ProjectdependencyFactory.create_new project1 , prod_2, true, {:version_requested => prod_2.version}
 
-      whitelist = LicenseWhitelistFactory.create_new 'OSS', ['MIT']
+      whitelist = LicenseWhitelistFactory.create_new 'OSS', ['MIT'], nil, @orga
       expect( whitelist.save ).to be_truthy
 
       project1.license_whitelist_id = whitelist.id
@@ -1205,7 +1208,7 @@ describe ProjectService do
       dep_1 = ProjectdependencyFactory.create_new project1 , prod_1, true, {:version_requested => prod_1.version}
       dep_2 = ProjectdependencyFactory.create_new project1 , prod_2, true, {:version_requested => prod_2.version}
 
-      whitelist = LicenseWhitelistFactory.create_new 'OSS', ['MIT']
+      whitelist = LicenseWhitelistFactory.create_new 'OSS', ['MIT'], nil, @orga
       whitelist.pessimistic_mode = true
       expect( whitelist.save ).to be_truthy
 
