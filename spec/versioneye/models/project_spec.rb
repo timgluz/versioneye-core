@@ -3,10 +3,13 @@ require 'spec_helper'
 describe Project do
 
   before(:each) do
+    Plan.create_defaults
     @user = User.new({:fullname => 'Hans Tanz', :username => 'hanstanz',
       :email => 'hans@tanz.de', :password => 'password', :salt => 'salt',
       :terms => true, :datenerhebung => true})
     @user.save
+    @orga = OrganisationService.create_new_for @user
+    expect( @orga.save ).to be_truthy
   end
 
 
@@ -91,7 +94,7 @@ describe Project do
       project.license_whitelist.should be_nil
     end
     it 'returns nil' do
-      lwl = LicenseWhitelistFactory.create_new 'OkForMe'
+      lwl = LicenseWhitelistFactory.create_new 'OkForMe', [], @user, @orga
       lwl.save.should be_truthy
       project = Project.new({:license_whitelist_id => lwl.id.to_s})
       project.license_whitelist.should_not be_nil
@@ -106,10 +109,9 @@ describe Project do
       expect( project.unknown_license_deps ).to be_empty
     end
     it 'returns nil' do
-      user = UserFactory.create_new
-      project = ProjectFactory.create_new user
+      project = ProjectFactory.create_new @user, nil, true, @orga
 
-      lwl = LicenseWhitelistFactory.create_new 'OkForMe', ['MIT']
+      lwl = LicenseWhitelistFactory.create_new 'OkForMe', ['MIT'], @user, @orga
       expect( lwl.save ).to be_truthy
 
       project.license_whitelist_id = lwl.id.to_s
@@ -281,9 +283,7 @@ describe Project do
       col_user     = UserFactory.create_new 10022
       non_col_user = UserFactory.create_new 10023
 
-      orga = Organisation.new({:name => 'name'})
-      orga.save
-      team = Team.new(:name => 'test', :organisation_id => orga.ids)
+      team = Team.new(:name => 'test', :organisation_id => @orga.ids)
       expect( team.save ).to be_truthy
       expect( team.add_member(col_user) ).to be_truthy
       expect( team.members.count ).to eq(1)
@@ -302,9 +302,7 @@ describe Project do
       @test_project.parent_id = parent_project.ids
       @test_project.save
 
-      orga = Organisation.new({:name => 'name'})
-      orga.save
-      team = Team.new(:name => 'test', :organisation_id => orga.ids)
+      team = Team.new(:name => 'test', :organisation_id => @orga.ids)
       expect( team.save ).to be_truthy
       expect( team.add_member(col_user) ).to be_truthy
       expect( team.members.count ).to eq(1)
@@ -352,14 +350,12 @@ describe Project do
       @test_project.save
       @test_project.visible_for_user?( col_user ).should be_falsey
 
-      orga = Organisation.new({:name => 'name'})
-      orga.save
-      team = Team.new(:name => 'test', :organisation_id => orga.ids)
+      team = Team.new(:name => 'test', :organisation_id => @orga.ids)
       expect( team.save ).to be_truthy
       expect( team.add_member(col_user) ).to be_truthy
       expect( team.members.count ).to eq(1)
 
-      @test_project.organisation_id = orga.ids
+      @test_project.organisation_id = @orga.ids
       @test_project.teams << team
       @test_project.save
       @test_project.visible_for_user?( col_user ).should be_truthy

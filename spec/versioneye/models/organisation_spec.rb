@@ -255,7 +255,7 @@ describe Organisation do
       Organisation.delete_all
       orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
       expect( orga.save ).to be_truthy
-      
+
       user = UserFactory.create_new
       project = ProjectFactory.create_new user, nil, true, orga
       expect( project.save ).to be_truthy

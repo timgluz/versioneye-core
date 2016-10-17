@@ -89,8 +89,8 @@ class Project < Versioneye::Model
 
   validates :name, presence: true
 
-  belongs_to :user
-  belongs_to :organisation
+  belongs_to :user, optional: true
+  belongs_to :organisation, optional: true
   has_many   :projectdependencies
   has_and_belongs_to_many :teams
 

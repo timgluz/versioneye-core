@@ -2,6 +2,13 @@ require 'spec_helper'
 
 describe LicenseWhitelist do
 
+  before(:each) do
+    Plan.create_defaults
+    @user1 = UserFactory.create_new 391
+    @orga = OrganisationService.create_new_for @user1
+    expect( @orga.save ).to be_truthy
+  end
+
   describe 'to_s' do
     it 'returns the name' do
       license = LicenseWhitelist.new({:name => 'MIT'})
@@ -72,7 +79,7 @@ describe LicenseWhitelist do
 
   describe 'add_license_element' do
     it 'adds 1 element' do
-      license = LicenseWhitelist.new :name => 'OpenSource'
+      license = LicenseWhitelist.new :name => 'OpenSource', :organisation => @orga
       expect( license.license_elements_empty? ).to be_truthy
       license.add_license_element( 'MIT' )
       expect( license.license_elements_empty? ).to be_falsy
@@ -82,7 +89,7 @@ describe LicenseWhitelist do
       expect( license.license_elements.count ).to eq(1)
     end
     it 'adds 2 element, but only stores 1 because uniq' do
-      license = LicenseWhitelist.new :name => 'OpenSource'
+      license = LicenseWhitelist.new :name => 'OpenSource', :organisation => @orga
       expect( license.license_elements_empty? ).to be_truthy
       license.add_license_element( 'MIT' )
       license.add_license_element( 'MIT' )
@@ -93,7 +100,7 @@ describe LicenseWhitelist do
       expect( license.license_elements.count ).to eq(1)
     end
     it 'adds 2 element' do
-      license = LicenseWhitelist.new :name => 'OpenSource'
+      license = LicenseWhitelist.new :name => 'OpenSource', :organisation => @orga
       expect( license.license_elements_empty? ).to be_truthy
       license.add_license_element( 'MIT' )
       license.add_license_element( 'Ruby' )
@@ -107,7 +114,7 @@ describe LicenseWhitelist do
 
   describe 'remove_license_element' do
     it 'removes 1 element' do
-      license = LicenseWhitelist.new :name => 'OpenSource'
+      license = LicenseWhitelist.new :name => 'OpenSource', :organisation => @orga
       expect( license.license_elements_empty? ).to be_truthy
       license.add_license_element( 'MIT' )
       license.add_license_element( 'Ruby' )

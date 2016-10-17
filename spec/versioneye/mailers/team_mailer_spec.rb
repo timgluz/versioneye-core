@@ -5,16 +5,15 @@ describe TeamMailer do
   describe 'add_new_member' do
 
     it 'sends out a team email' do
+      Plan.create_defaults
+
       user  = UserFactory.create_new 1
       owner = UserFactory.create_new 2
 
-      orga = Organisation.new({:name => 'Orga'})
+      orga = OrganisationService.create_new_for owner
       expect( orga.save ).to be_truthy
 
       team = Team.new({:name => 'owner', :organisation_id => orga.ids })
-      expect( team.save ).to be_truthy
-      expect( team.add_member(owner) ).to be_truthy
-
 
       email = TeamMailer.add_new_member(orga, team, user, owner)
 
