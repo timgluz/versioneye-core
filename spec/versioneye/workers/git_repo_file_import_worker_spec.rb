@@ -4,6 +4,10 @@ require 'webmock'
 
 describe GitRepoFileImportWorker do
 
+  before(:each) do
+    Plan.create_defaults
+  end
+
   describe 'work' do
 
     it 'fetches files from GitHub' do

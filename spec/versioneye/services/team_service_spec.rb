@@ -2,21 +2,30 @@ require 'spec_helper'
 
 describe TeamService do
 
+  before(:each) do
+    Plan.create_defaults
+    @user = User.new({:fullname => 'Hans Tanz', :username => 'hanstanz',
+      :email => 'hans@tanz.de', :password => 'password', :salt => 'salt',
+      :terms => true, :datenerhebung => true})
+    @user.save
+    @orga = OrganisationService.create_new_for @user
+    expect( @orga.save ).to be_truthy
+  end
+
   describe "delete" do
 
     it "delete a team" do
-      user = UserFactory.create_new
-
+      user  = UserFactory.create_new 1
       orga = Organisation.new({:name => 'Orga'})
+      orga.plan = Plan.micro
       expect( orga.save ).to be_truthy
-
       team = Team.new({:name => 'owner', :organisation_id => orga.ids })
       expect( team.save ).to be_truthy
       expect( team.add_member(user) ).to be_truthy
-      expect( TeamMember.count ).to eq(1)
+      expect( TeamMember.count ).to eq(2)
       expect( TeamService.delete(team) ).to be_truthy
-      expect( TeamMember.count ).to eq(0)
-      expect( Team.count ).to eq(0)
+      expect( TeamMember.count ).to eq(1)
+      expect( Team.count ).to eq(1)
     end
 
   end
@@ -27,6 +36,7 @@ describe TeamService do
       owner = UserFactory.create_new 2
 
       orga = Organisation.new({:name => 'Orga'})
+      orga.plan = Plan.micro
       expect( orga.save ).to be_truthy
 
       team = Team.new({:name => 'owner', :organisation_id => orga.ids })
@@ -51,6 +61,7 @@ describe TeamService do
       expect( user.save ).to be_truthy
 
       orga = Organisation.new({:name => 'Orga'})
+      orga.plan = Plan.micro
       expect( orga.save ).to be_truthy
 
       expect{ TeamService.assign orga.ids, 'na', ['85'], user }.to raise_error("You have to be in the Owners team to do mass assignment.")
