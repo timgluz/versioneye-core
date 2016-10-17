@@ -16,25 +16,25 @@ describe BillingAddress do
       params[:email] = 'ema@ame.de'
 
       ba = described_class.new
-      ba.name.should be_nil
-      ba.company.should be_nil
-      ba.street.should be_nil
-      ba.zip.should be_nil
-      ba.city.should be_nil
-      ba.country.should be_nil
-      ba.taxid.should be_nil
-      ba.save.should be_falsey
+      expect( ba.name) .to be_nil
+      expect( ba.company) .to be_nil
+      expect( ba.street) .to be_nil
+      expect( ba.zip) .to be_nil
+      expect( ba.city) .to be_nil
+      expect( ba.country) .to be_nil
+      expect( ba.taxid) .to be_nil
+      expect( ba.save) .to be_falsey
 
       ba.update_from_params params
 
-      ba.name.should eq('Hans')
-      ba.company.should eq('HansImGlueck')
-      ba.street.should eq('HansStrasse 777')
-      ba.zip.should eq('12345')
-      ba.city.should eq('HansCity')
-      ba.country.should eq('DE')
-      ba.taxid.should eq('HansVat')
-      ba.save.should be_truthy
+      expect( ba.name) .to eq('Hans')
+      expect( ba.company) .to eq('HansImGlueck')
+      expect( ba.street) .to eq('HansStrasse 777')
+      expect( ba.zip) .to eq('12345')
+      expect( ba.city) .to eq('HansCity')
+      expect( ba.country) .to eq('DE')
+      expect( ba.taxid) .to eq('HansVat')
+      expect( ba.save) .to be_truthy
     end
 
   end
@@ -51,7 +51,7 @@ describe BillingAddress do
       params[:city]     = 'HansCity'
       params[:country]  = 'DE'
       ba.update_from_params params
-      ba.save.should be_falsey
+      expect( ba.save) .to be_falsey
     end
 
     it 'saves because company is coroporate type and has company name' do
@@ -68,7 +68,7 @@ describe BillingAddress do
       params[:taxid]    = 'DE87473'
       ba.update_from_params params
       resp = ba.save
-      resp.should be_truthy
+      expect( resp) .to be_truthy
     end
 
     it 'doesnt save because taxid is missing for coroporate type' do
@@ -83,7 +83,7 @@ describe BillingAddress do
       params[:company]  = 'HansImGlueck'
       params[:email]    = 'my@mail.de'
       ba.update_from_params params
-      ba.save.should be_falsey
+      expect( ba.save) .to be_falsey
     end
 
     it 'saves because type is individual, company is not mandatory' do
@@ -97,7 +97,7 @@ describe BillingAddress do
       params[:city]     = 'HansCity'
       params[:country]  = 'DE'
       ba.update_from_params params
-      ba.save.should be_truthy
+      expect( ba.save) .to be_truthy
     end
 
     it 'does not save because country is wrong' do
@@ -111,7 +111,7 @@ describe BillingAddress do
       params[:city]     = 'HansCity'
       params[:country]  = 'DD'
       ba.update_from_params params
-      ba.save.should be_falsey
+      expect( ba.save) .to be_falsey
     end
 
   end
