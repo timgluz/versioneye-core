@@ -3,9 +3,17 @@ require 'spec_helper'
 describe Organisation do
 
 
+  before(:each) do
+    Plan.create_defaults
+    @user1 = UserFactory.create_new 391
+    @orga = OrganisationService.create_new_for @user1
+    expect( @orga.save ).to be_truthy
+  end
+
+
   describe "to_param" do
     it 'returns the name' do
-      orga = Organisation.new({:name => 'Orga'})
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
       expect( orga.to_param ).to eq('Orga')
     end
   end
@@ -13,7 +21,7 @@ describe Organisation do
 
   describe "to_s" do
     it 'returns the name' do
-      orga = Organisation.new({:name => 'Orga'})
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
       expect( orga.to_s ).to eq('Orga')
     end
   end
@@ -21,18 +29,18 @@ describe Organisation do
 
   describe "default_lwl_id" do
     it 'returns nil because lwl list is empty' do
-      orga = Organisation.new({:name => 'Orga'})
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
       expect( orga.default_lwl_id ).to be_nil
     end
     it 'returns nil because there is no default lwl' do
-      orga = Organisation.new({:name => 'Orga'})
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
       lwl = LicenseWhitelist.new({:name => 'lwl'})
       lwl.organisation = orga
       expect( lwl.save ).to be_truthy
       expect( orga.default_lwl_id ).to be_nil
     end
     it 'returns the default lwl' do
-      orga = Organisation.new({:name => 'Orga'})
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
       lwl = LicenseWhitelist.new({:name => 'lwl', :default => true})
       lwl.organisation = orga
       expect( lwl.save ).to be_truthy
@@ -43,18 +51,18 @@ describe Organisation do
 
   describe "default_cwl_id" do
     it 'returns nil because lwl list is empty' do
-      orga = Organisation.new({:name => 'Orga'})
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
       expect( orga.default_cwl_id ).to be_nil
     end
     it 'returns nil because there is no default cwl' do
-      orga = Organisation.new({:name => 'Orga'})
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
       cwl = ComponentWhitelist.new({:name => 'cwl'})
       cwl.organisation = orga
       expect( cwl.save ).to be_truthy
       expect( orga.default_cwl_id ).to be_nil
     end
     it 'returns the default cwl' do
-      orga = Organisation.new({:name => 'Orga'})
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
       cwl  = ComponentWhitelist.new({:name => 'cwl', :default => true})
       cwl.organisation = orga
       expect( cwl.save ).to be_truthy
@@ -65,7 +73,7 @@ describe Organisation do
 
   describe "teams" do
     it 'owns a team' do
-      orga = Organisation.new({:name => 'Orga'})
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.free_plan })
       expect( orga.save ).to be_truthy
 
       team = Team.new({:name => 'owners', :organisation_id => orga })
@@ -83,11 +91,13 @@ describe Organisation do
   describe "unique_languages" do
     it 'returns the uniq. languages' do
       user = UserFactory.create_new
-      project = ProjectFactory.create_new user
+      project = ProjectFactory.create_new user, nil, true, @orga
       project.language = 'Java'
       expect( project.save ).to be_truthy
 
-      orga = Organisation.new({:name => 'Orga'})
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
+      orga.save
+      p orga.errors
       expect( orga.save ).to be_truthy
 
       project.organisation = orga
@@ -101,7 +111,7 @@ describe Organisation do
       expect( orga.unique_languages.first ).to eq('Java')
     end
     it 'returns an empty array because there are no projects' do
-      orga = Organisation.new({:name => 'Orga'})
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
       expect( orga.save ).to be_truthy
 
       team = Team.new({:name => 'owners', :organisation_id => orga })
@@ -115,12 +125,12 @@ describe Organisation do
   describe "unique_versions" do
     it 'returns the uniq. languages' do
       user = UserFactory.create_new
-      project = ProjectFactory.create_new user
+      project = ProjectFactory.create_new user, nil, true, @orga
       project.language = 'Java'
       project.version = '1.0.0'
       expect( project.save ).to be_truthy
 
-      orga = Organisation.new({:name => 'Orga'})
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
       expect( orga.save ).to be_truthy
 
       project.organisation = orga
@@ -134,7 +144,7 @@ describe Organisation do
       expect( orga.unique_versions.first ).to eq('1.0.0')
     end
     it 'returns an empty array because there are no projects' do
-      orga = Organisation.new({:name => 'Orga'})
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
       expect( orga.save ).to be_truthy
 
       team = Team.new({:name => 'owners', :organisation_id => orga })
@@ -147,7 +157,7 @@ describe Organisation do
 
   describe "owner_team" do
     it 'returns the owner team' do
-      orga = Organisation.new({:name => 'Orga'})
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
       expect( orga.save ).to be_truthy
 
       team = Team.new({:name => Team::A_OWNERS, :organisation_id => orga })
@@ -163,7 +173,7 @@ describe Organisation do
 
   describe "team_by" do
     it 'returns the team by name' do
-      orga = Organisation.new({:name => 'Orga'})
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
       expect( orga.save ).to be_truthy
 
       team = Team.new({:name => 'team1', :organisation_id => orga })
@@ -180,12 +190,15 @@ describe Organisation do
 
   describe "projects" do
     it 'owns a project' do
-      user = UserFactory.create_new
-      project = ProjectFactory.create_new user
-      expect( project.save ).to be_truthy
+      Organisation.delete_all
 
-      orga = Organisation.new({:name => 'Orga'})
+      user = UserFactory.create_new
+
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
       expect( orga.save ).to be_truthy
+
+      project = ProjectFactory.create_new user, nil, true, orga
+      expect( project.save ).to be_truthy
 
       project.organisation = orga
       expect( project.save ).to be_truthy
@@ -198,7 +211,7 @@ describe Organisation do
 
   describe "api" do
     it 'returns a new api' do
-      orga = Organisation.new({:name => 'Orga'})
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
       expect( orga.save ).to be_truthy
 
       api = orga.api
@@ -210,16 +223,19 @@ describe Organisation do
 
   describe "parent_projects" do
     it 'returns the parent projects' do
+      Organisation.delete_all
+
       user = UserFactory.create_new
-      project = ProjectFactory.create_new user
+
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
+      expect( orga.save ).to be_truthy
+
+      project = ProjectFactory.create_new user, nil, true, orga
       expect( project.save ).to be_truthy
 
-      project2 = ProjectFactory.create_new user
+      project2 = ProjectFactory.create_new user, nil, true, orga
       project2.parent_id = project.ids
       expect( project2.save ).to be_truthy
-
-      orga = Organisation.new({:name => 'Orga'})
-      expect( orga.save ).to be_truthy
 
       project.organisation = orga
       expect( project.save ).to be_truthy
@@ -236,15 +252,16 @@ describe Organisation do
 
   describe "team_projects" do
     it 'returns the team projects' do
+      Organisation.delete_all
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
+      expect( orga.save ).to be_truthy
+      
       user = UserFactory.create_new
-      project = ProjectFactory.create_new user
+      project = ProjectFactory.create_new user, nil, true, orga
       expect( project.save ).to be_truthy
 
-      project2 = ProjectFactory.create_new user
+      project2 = ProjectFactory.create_new user, nil, true, orga
       expect( project2.save ).to be_truthy
-
-      orga = Organisation.new({:name => 'Orga'})
-      expect( orga.save ).to be_truthy
 
       owners = Team.new({:name => 'owners', :organisation_id => orga.ids })
       owners.organisation = orga
@@ -275,10 +292,10 @@ describe Organisation do
   describe "unknown_license_deps" do
     it "returns the unknown license_deps" do
       user = UserFactory.create_new
-      project = ProjectFactory.create_new user
+      project = ProjectFactory.create_new user, nil, true, @orga
       expect( project.save ).to be_truthy
 
-      orga = Organisation.new({:name => 'Orga'})
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
       expect( orga.save ).to be_truthy
 
       project.organisation = orga
@@ -308,12 +325,12 @@ describe Organisation do
       orga = OrganisationService.create_new user, "myorga"
       expect( orga ).to_not be_nil
 
-      project = ProjectFactory.create_new user
+      project = ProjectFactory.create_new user, nil, true, @orga
       project.organisation = orga
       expect( project.save ).to be_truthy
       expect( orga.projects.count ).to eq(1)
 
-      child = ProjectFactory.create_new user
+      child = ProjectFactory.create_new user, nil, true, @orga
       child.organisation = orga
       child.parent_id = project.ids
       expect( child.save ).to be_truthy

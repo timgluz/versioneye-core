@@ -2,6 +2,13 @@ require 'spec_helper'
 
 describe ComponentWhitelist do
 
+  before(:each) do
+    Plan.create_defaults
+    @user1 = UserFactory.create_new
+    @orga = OrganisationService.create_new_for @user1
+    expect( @orga.save ).to be_truthy
+  end
+
   describe 'to_s' do
     it 'returns the name' do
       license = ComponentWhitelist.new({:name => 'MIT'})
@@ -29,7 +36,7 @@ describe ComponentWhitelist do
   describe 'find_by' do
     it 'returns the search element' do
       orga = Organisation.new :name => 'orga'
-      cwl = ComponentWhitelist.new({:name => 'MIT'})
+      cwl = ComponentWhitelist.new({:name => 'MIT', :organisation => @orga})
       cwl.organisation = orga
       cwl.save
       lw = ComponentWhitelist.fetch_by orga, 'MIT'
@@ -39,55 +46,55 @@ describe ComponentWhitelist do
 
   describe 'is_on_list?' do
     it 'returns true because on list' do
-      cwl = ComponentWhitelist.new({:name => 'MIT'})
+      cwl = ComponentWhitelist.new({:name => 'MIT', :organisation => @orga})
       cwl.add "junit:junit"
       expect( cwl.save ).to be_truthy
       expect( cwl.is_on_list?("junit:junit") ).to be_truthy
     end
     it 'returns true because on list' do
-      cwl = ComponentWhitelist.new({:name => 'MIT'})
+      cwl = ComponentWhitelist.new({:name => 'MIT', :organisation => @orga})
       cwl.add "junit:junit"
       expect( cwl.save ).to be_truthy
       expect( cwl.is_on_list?("junit:junit:2.0") ).to be_truthy
     end
     it 'returns true because on list' do
-      cwl = ComponentWhitelist.new({:name => 'MIT'})
+      cwl = ComponentWhitelist.new({:name => 'MIT', :organisation => @orga})
       cwl.add "net.sf.jasperreports:jasperreports:3.6.0"
       expect( cwl.save ).to be_truthy
       expect( cwl.is_on_list?("net.sf.jasperreports:jasperreports:3.6.0") ).to be_truthy
     end
     it 'returns true because on list' do
-      cwl = ComponentWhitelist.new({:name => 'MIT'})
+      cwl = ComponentWhitelist.new({:name => 'MIT', :organisation => @orga})
       cwl.add "net.sf.jasperreports"
       expect( cwl.save ).to be_truthy
       expect( cwl.is_on_list?("net.sf.jasperreports:jasperreports-core:4.6.0") ).to be_truthy
     end
     it 'returns true because on list' do
-      cwl = ComponentWhitelist.new({:name => 'MIT'})
+      cwl = ComponentWhitelist.new({:name => 'MIT', :organisation => @orga})
       cwl.add "org.apache"
       expect( cwl.save ).to be_truthy
       expect( cwl.is_on_list?("org.apache.maven:maven-core:4.6.0") ).to be_truthy
     end
     it 'returns false because not on list' do
-      cwl = ComponentWhitelist.new({:name => 'MIT'})
+      cwl = ComponentWhitelist.new({:name => 'MIT', :organisation => @orga})
       cwl.add "net.sf.jasperreports:jasperreports:3.6.0"
       expect( cwl.save ).to be_truthy
       expect( cwl.is_on_list?("net.sf.jasperreports:jasperreports:3.6.1") ).to be_falsey
     end
     it 'returns true because not on list' do
-      cwl = ComponentWhitelist.new({:name => 'MIT'})
+      cwl = ComponentWhitelist.new({:name => 'MIT', :organisation => @orga})
       cwl.add "net.sf.jasperreports:jasperreports"
       expect( cwl.save ).to be_truthy
       expect( cwl.is_on_list?("net.sf.jasperreports:jasperreports-core:3.6.1") ).to be_truthy
     end
     it 'returns false because not on list' do
-      cwl = ComponentWhitelist.new({:name => 'MIT'})
+      cwl = ComponentWhitelist.new({:name => 'MIT', :organisation => @orga})
       cwl.add "net.sf.jasperreports:jasperreports:"
       expect( cwl.save ).to be_truthy
       expect( cwl.is_on_list?("net.sf.jasperreports:jasperreports-core:3.6.1") ).to be_falsey
     end
     it 'returns false because not on list' do
-      cwl = ComponentWhitelist.new({:name => 'MIT'})
+      cwl = ComponentWhitelist.new({:name => 'MIT', :organisation => @orga})
       cwl.add "net.sf.jasperreports:jasperreports"
       expect( cwl.save ).to be_truthy
       expect( cwl.is_on_list?("com.sf.jasperreports:jasperreports:3.6.1") ).to be_falsey
@@ -100,7 +107,7 @@ describe ComponentWhitelist do
       orga = Organisation.new :name => 'orga'
       cwl = ComponentWhitelist.new({:name => 'CWL'})
       cwl.organisation = orga
-      cwl.save
+      expect( cwl.save ).to be_truthy
       Auditlog.add(user, "ComponentWhitelist", cwl.id.to_s, 'Added junit:junit')
       expect( cwl.auditlogs ).to_not be_nil
       expect( cwl.auditlogs.count ).to eq(1)
