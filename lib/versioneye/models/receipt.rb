@@ -37,7 +37,7 @@ class Receipt < Versioneye::Model
 
   embeds_many :receipt_lines
 
-  belongs_to :user
+  belongs_to :user, optional: true
   belongs_to :organisation
   belongs_to :plan
 
