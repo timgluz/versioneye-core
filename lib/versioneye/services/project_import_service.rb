@@ -259,7 +259,8 @@ class ProjectImportService < Versioneye::Service
     project.user        = user
     project.period      = Settings.instance.default_project_period
     project.public      = Settings.instance.default_project_public
-    project.organisation_id = orga_id
+
+    update_project_with_orga( project, orga_id, user )
 
     project = ProjectService.store( project )
     ProjectService.update_sums( project )
