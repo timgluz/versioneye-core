@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'cocoapods-core', '~> 0.39.0'
   s.add_runtime_dependency 'actionmailer', '~> 5.0.0.1'
   s.add_runtime_dependency 'pdfkit', '~> 0.8.2'
-  s.add_runtime_dependency 'bunny', '~> 2.5.1'
+  s.add_runtime_dependency 'bunny', '~> 2.6.0'
   s.add_runtime_dependency 'wkhtmltopdf-binary', '~> 0.12.3'
   s.add_runtime_dependency 'etcd', '~> 0.3.0'
   s.add_runtime_dependency 'mongoid', '~> 6.0.0'
