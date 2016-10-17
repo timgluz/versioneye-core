@@ -90,7 +90,9 @@ describe OrganisationService do
       user1.fullname = 'Han Solo'
       expect( user1.save ).to be_truthy
 
+      Plan.create_defaults
       orga = OrganisationService.create_new user, "myorga"
+      orga.plan = Plan.micro
       expect( orga ).to_not be_nil
 
       team = Team.new(:name => 'frontend', :organisation => orga.ids)
@@ -121,7 +123,9 @@ describe OrganisationService do
       user = UserFactory.create_new
       user.fullname = 'HansTanz'
       expect( user.save ).to be_truthy
+      Plan.create_defaults
       orga = OrganisationService.create_new user, "myorga"
+      orga.plan = Plan.micro
       expect( orga ).to_not be_nil
 
       orga = Organisation.first
@@ -138,7 +142,9 @@ describe OrganisationService do
       user = UserFactory.create_new
       user.fullname = 'HansTanz'
       expect( user.save ).to be_truthy
+      Plan.create_defaults
       orga = OrganisationService.create_new user, "myorga"
+      orga.plan = Plan.micro
       expect( orga ).to_not be_nil
       expect{ OrganisationService.create_new(user, "myorga") }.to raise_exception
     end
@@ -163,7 +169,9 @@ describe OrganisationService do
       user = UserFactory.create_new
       user.fullname = 'HansTanz'
       expect( user.save ).to be_truthy
+      Plan.create_defaults
       orga = OrganisationService.create_new user, "myorga"
+      orga.plan = Plan.micro
       expect( orga ).to_not be_nil
 
       expect( OrganisationService.owner?(orga, user) ).to be_truthy
@@ -180,7 +188,9 @@ describe OrganisationService do
       user = UserFactory.create_new
       user.fullname = 'HansTanz'
       expect( user.save ).to be_truthy
+      Plan.create_defaults
       orga = OrganisationService.create_new user, "myorga"
+      orga.plan = Plan.micro
       expect( orga ).to_not be_nil
 
       expect( OrganisationService.member?(orga, user) ).to be_truthy
@@ -233,7 +243,9 @@ describe OrganisationService do
       user = UserFactory.create_new
       user.fullname = 'HansTanz'
       expect( user.save ).to be_truthy
+      Plan.create_defaults
       orga = OrganisationService.create_new user, "myorga"
+      orga.plan = Plan.micro
       expect( orga ).to_not be_nil
       orga.mattp = true
       expect( orga.save ).to be_truthy
@@ -276,7 +288,9 @@ describe OrganisationService do
       user = UserFactory.create_new
       user.fullname = 'HansTanz'
       expect( user.save ).to be_truthy
+      Plan.create_defaults
       orga = OrganisationService.create_new user, "myorga"
+      orga.plan = Plan.micro
       expect( orga ).to_not be_nil
       team = Team.new({ :name => 'team_backend' })
       team.organisation_id = orga.ids
@@ -291,7 +305,9 @@ describe OrganisationService do
       user = UserFactory.create_new
       user.fullname = 'HansTanz'
       expect( user.save ).to be_truthy
+      Plan.create_defaults
       orga = OrganisationService.create_new user, "myorga"
+      orga.plan = Plan.micro
       expect( orga ).to_not be_nil
       orga.matattp = true
       expect( orga.save ).to be_truthy
@@ -312,10 +328,13 @@ describe OrganisationService do
       user = UserFactory.create_new
       expect( user.save ).to be_truthy
 
+      Plan.create_defaults
       orga = OrganisationService.create_new user, "myorga"
+      orga.plan = Plan.micro
       expect( orga ).to_not be_nil
 
       orga = OrganisationService.create_new user, "yourOrga"
+      orga.plan = Plan.micro
       expect( orga ).to_not be_nil
 
       orgas = OrganisationService.index user
@@ -333,7 +352,9 @@ describe OrganisationService do
       expect( user.save ).to be_truthy
       member = UserFactory.create_new 2
 
+      Plan.create_defaults
       orga = OrganisationService.create_new user, "myorga"
+      orga.plan = Plan.micro
       expect( orga ).to_not be_nil
 
       team = Team.new({ :name => 'team_backend' })
@@ -351,7 +372,9 @@ describe OrganisationService do
       expect( user.save ).to be_truthy
       member = UserFactory.create_new 2
 
+      Plan.create_defaults
       orga = OrganisationService.create_new user, "myorga"
+      orga.plan = Plan.micro
       expect( orga ).to_not be_nil
       orga.mattp = true
       orga.save
@@ -377,7 +400,9 @@ describe OrganisationService do
       user = UserFactory.create_new
       expect( user.save ).to be_truthy
 
+      Plan.create_defaults
       orga = OrganisationService.create_new user, "myorga"
+      orga.plan = Plan.micro
       expect( orga ).to_not be_nil
 
       orgas = OrganisationService.orgas_allowed_to_transfer user

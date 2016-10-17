@@ -12,7 +12,7 @@ class SubmittedUrl < Versioneye::Model
   field :declined_message, type: String
   field :integrated      , type: Boolean, default: false
 
-  belongs_to :product_resource
+  belongs_to :product_resource, optional: true
 
   validates :url       , presence: true
   validates :message   , presence: true
