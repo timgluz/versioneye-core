@@ -47,11 +47,11 @@ describe ReceiptService do
       expect( Receipt.count ).to eq( 1 )
       rec = Receipt.first
       rec.plan_id = Plan.small.name_id
-      rec.total.should eq('1200')
-      rec.currency.should eq('eur')
+      expect( rec.total ).to eq('1200')
+      expect( rec.currency ).to eq('eur')
 
       described_class.process_receipts
-      Receipt.count.should == 1
+      expect( Receipt.count ).to eq(1)
     end
 
   end
@@ -63,22 +63,22 @@ describe ReceiptService do
       receipt.organisation = orga
       receipt.type = Receipt::A_TYPE_CORPORATE
       html = described_class.compile_html_invoice receipt, true
-      html.match("5,04 EUR").should_not be_nil
-      html.match("0,96 EUR").should_not be_nil
-      html.match("6,00 EUR").should_not be_nil
-      html.match('Reverse Charge -').should be_nil
-      html.match('Non EU customers - Not taxable in Germany.').should be_nil
+      expect( html.match("5,04 EUR") ).to_not be_nil
+      expect( html.match("0,96 EUR") ).to_not be_nil
+      expect( html.match("6,00 EUR") ).to_not be_nil
+      expect( html.match('Reverse Charge -') ).to be_nil
+      expect( html.match('Non EU customers - Not taxable in Germany.') ).to be_nil
     end
     it 'compiles for German corp dude' do
       orga = Organisation.new({:name => 'test_name'})
       receipt = ReceiptFactory.create_new
       receipt.organisation = orga
       html = described_class.compile_html_invoice receipt, true
-      html.match("5,04 EUR").should_not be_nil
-      html.match("0,96 EUR").should_not be_nil
-      html.match("6,00 EUR").should_not be_nil
-      html.match('Reverse Charge -').should be_nil
-      html.match('Non EU customers - Not taxable in Germany.').should be_nil
+      expect( html.match("5,04 EUR") ).to_not be_nil
+      expect( html.match("0,96 EUR") ).to_not be_nil
+      expect( html.match("6,00 EUR") ).to_not be_nil
+      expect( html.match('Reverse Charge -') ).to be_nil
+      expect( html.match('Non EU customers - Not taxable in Germany.') ).to be_nil
     end
     it 'compiles for Franch corporate dude' do
       orga = Organisation.new({:name => 'test_name'})
@@ -87,11 +87,11 @@ describe ReceiptService do
       receipt.type = Receipt::A_TYPE_CORPORATE
       receipt.country = 'FR'
       html = described_class.compile_html_invoice receipt, true
-      html.match("5,04 EUR").should be_nil
-      html.match("0,96 EUR").should be_nil
-      html.match("6,00 EUR").should_not be_nil
-      html.match('Reverse Charge -').should_not be_nil
-      html.match('Non EU customers - Not taxable in Germany.').should be_nil
+      expect( html.match("5,04 EUR") ).to be_nil
+      expect( html.match("0,96 EUR") ).to be_nil
+      expect( html.match("6,00 EUR") ).to_not be_nil
+      expect( html.match('Reverse Charge -') ).to_not be_nil
+      expect( html.match('Non EU customers - Not taxable in Germany.') ).to be_nil
     end
     it 'compiles for Franch individual dude' do
       orga = Organisation.new({:name => 'test_name'})
@@ -100,11 +100,11 @@ describe ReceiptService do
       receipt.type = Receipt::A_TYPE_INDIVIDUAL
       receipt.country = 'FR'
       html = described_class.compile_html_invoice receipt, true
-      html.match("5,04 EUR").should be_nil
-      html.match("0,96 EUR").should be_nil
-      html.match("6,00 EUR").should_not be_nil
-      html.match('Reverse Charge -').should be_nil
-      html.match('Non EU customers - Not taxable in Germany.').should be_nil
+      expect( html.match("5,04 EUR") ).to be_nil
+      expect( html.match("0,96 EUR") ).to be_nil
+      expect( html.match("6,00 EUR") ).to_not be_nil
+      expect( html.match('Reverse Charge -') ).to be_nil
+      expect( html.match('Non EU customers - Not taxable in Germany.') ).to be_nil
     end
     it 'compiles for US corporate dude' do
       orga = Organisation.new({:name => 'test_name'})
@@ -113,11 +113,11 @@ describe ReceiptService do
       receipt.type = Receipt::A_TYPE_CORPORATE
       receipt.country = 'US'
       html = described_class.compile_html_invoice receipt, true
-      html.match("5,04 EUR").should be_nil
-      html.match("0,96 EUR").should be_nil
-      html.match("6,00 EUR").should_not be_nil
-      html.match('Reverse Charge -').should be_nil
-      html.match('Non EU customers - Not taxable in Germany.').should_not be_nil
+      expect( html.match("5,04 EUR") ).to be_nil
+      expect( html.match("0,96 EUR") ).to be_nil
+      expect( html.match("6,00 EUR") ).to_not be_nil
+      expect( html.match('Reverse Charge -') ).to be_nil
+      expect( html.match('Non EU customers - Not taxable in Germany.') ).to_not be_nil
     end
     it 'compiles for US individual dude' do
       orga = Organisation.new({:name => 'test_name'})
@@ -126,20 +126,22 @@ describe ReceiptService do
       receipt.type = Receipt::A_TYPE_INDIVIDUAL
       receipt.country = 'US'
       html = described_class.compile_html_invoice receipt, true
-      html.match("5,04 EUR").should be_nil
-      html.match("0,96 EUR").should be_nil
-      html.match("6,00 EUR").should_not be_nil
-      html.match('Reverse Charge -').should be_nil
-      html.match('Non EU customers - Not taxable in Germany.').should_not be_nil
+      expect( html.match("5,04 EUR") ).to be_nil
+      expect( html.match("0,96 EUR") ).to be_nil
+      expect( html.match("6,00 EUR") ).to_not be_nil
+      expect( html.match('Reverse Charge -') ).to be_nil
+      expect( html.match('Non EU customers - Not taxable in Germany.') ).to_not be_nil
     end
   end
 
   describe 'next_receipt_nr' do
     it 'returns 1001' do
-      described_class.next_receipt_nr.should == 1001
+      expect( described_class.next_receipt_nr ).to eq(1001)
     end
     it 'returns 1002' do
       orga = Organisation.new({:name => 'test_name'})
+      orga.plan = Plan.micro
+      expect(orga.save).to be_truthy
       nr = described_class.next_receipt_nr
       ba = BillingAddressFactory.create_new
       invoice = StripeInvoiceFactory.create_new
@@ -148,10 +150,12 @@ describe ReceiptService do
       receipt.update_from_invoice invoice
       receipt.invoice_id = 'tx_1'
       receipt.receipt_nr = nr
+      receipt.organisation = orga
+      receipt.plan = orga.plan
       result = receipt.save
-      result.should be_truthy
+      expect( result ).to be_truthy
       nr = described_class.next_receipt_nr
-      nr.should == 1002
+      expect( nr ).to eq(1002)
     end
   end
 
