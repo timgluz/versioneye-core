@@ -90,6 +90,18 @@ describe GemfileParser do
       @parser.fetch_version( elements ).should eql("")
     end
 
+    it "returns empty string with multiple platforms" do
+      line = "gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :mswin64]"
+      elements = @parser.fetch_line_elements( line )
+      @parser.fetch_version( elements ).should eql("")
+    end
+
+    it "returns correct version with multiple platforms" do
+      line = "gem 'tzinfo-data', '= 3.0.3', platforms: [:mingw, :mswin, :x64_mingw, :mswin64]"
+      elements = @parser.fetch_line_elements( line )
+      @parser.fetch_version( elements ).should eql("3.0.3")
+    end
+
     it "returns the right empty string because there is not version, only a group" do
       line = "gem 'rspec',     :group => [:test, :development]"
       elements = @parser.fetch_line_elements( line )
