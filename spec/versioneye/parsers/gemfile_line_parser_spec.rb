@@ -99,7 +99,7 @@ describe GemfileParser do
     it "returns correct version with multiple platforms" do
       line = "gem 'tzinfo-data', '= 3.0.3', platforms: [:mingw, :mswin, :x64_mingw, :mswin64]"
       elements = @parser.fetch_line_elements( line )
-      @parser.fetch_version( elements ).should eql("3.0.3")
+      @parser.fetch_version( elements ).should eql("= 3.0.3")
     end
 
     it "returns the right empty string because there is not version, only a group" do
