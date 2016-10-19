@@ -56,7 +56,7 @@ class TeamService < Versioneye::Service
       project.teams = [team]
       project.save
 
-      next if project.children.count == 0
+      return nil if project.children.count == 0
 
       project.children.each do |child|
         child.teams = [team]
