@@ -1,3 +1,3 @@
 module Versioneye
-  VERSION = '10.3.4'
+  VERSION = '10.3.5'
 end
