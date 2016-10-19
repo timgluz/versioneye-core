@@ -86,6 +86,8 @@ class Receipt < Versioneye::Model
   end
 
   def update_from_billing_address ba
+    return nil if ba.nil?
+
     self.type    = ba.type
     self.name    = ba.name
     self.street  = ba.street

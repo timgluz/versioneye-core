@@ -122,7 +122,7 @@ class Organisation < Versioneye::Model
   end
 
 
-  def component_list team = nil, language = nil, version = nil
+  def component_list team = nil, language = nil, version = nil, after_filter = 'ALL'
     return {} if projects.to_a.empty?
 
     comps = {}
@@ -139,6 +139,9 @@ class Organisation < Versioneye::Model
       end
     end
 
+    if after_filter.to_s.eql?('duplicates_only')
+      return duplicates_only_filter( comps )
+    end
     comps
   end
 
@@ -171,16 +174,27 @@ class Organisation < Versioneye::Model
   private
 
 
+    def duplicates_only_filter( comps )
+      response = {}
+      comps.keys.each do |key|
+        if comps[key].keys.count > 1
+          response[key] = comps[key]
+        end
+      end
+      response
+    end
+
+
     def collect_components project, comps
       project.dependencies.each do |dep|
-        ckey = "#{dep.language}:#{dep.possible_prod_key}:#{dep.version_current}"
-        comps[ckey] = {} if !comps.keys.include?( ckey )
+        component_key = "#{dep.language}:#{dep.possible_prod_key}:#{dep.version_current}"
+        comps[component_key] = {} if !comps.keys.include?( component_key )
 
-        vkey = "#{dep.possible_prod_key}::#{dep.version_requested}::#{dep.licenses_string}"
-        comps[ckey][vkey] = [] if comps[ckey][vkey].nil?
+        version_key = "#{dep.possible_prod_key}::#{dep.version_requested}::#{dep.licenses_string}"
+        comps[component_key][version_key] = [] if comps[component_key][version_key].nil?
 
         val = "#{project.language}:#{project.name}:#{project.ids}:#{project.version}"
-        comps[ckey][vkey] << val if !comps[ckey][vkey].include?( val )
+        comps[component_key][version_key] << val if !comps[component_key][version_key].include?( val )
       end
       comps
     end
