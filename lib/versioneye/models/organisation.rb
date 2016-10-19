@@ -229,7 +229,7 @@ class Organisation < Versioneye::Model
         team_name = nil
         team_name = project.teams.first.name if !project.teams.to_a.empty? && !project.teams.first.nil?
         val = {:project_language => project.language, :project_name => project.name,
-               :project_id => project.ids, :project_verison => project.version,
+               :project_id => project.ids, :project_version => project.version,
                :project_teams => team_name}
         comps[component_key][version_key] << val if !comps[component_key][version_key].include?( val )
       end
