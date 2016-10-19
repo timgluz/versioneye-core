@@ -127,9 +127,13 @@ class Organisation < Versioneye::Model
 
     comps = {}
     projects.each do |project|
+      if (project.teams.to_a.empty? && self.owner_team)
+        project.teams = [self.owner_team]
+        project.save
+      end
+
       team_id = nil
       team_id = project.teams.first.ids if project.teams && project.teams.first
-      p "team_id: #{team_id} - team: #{team}"
       next if !team.to_s.eql?('ALL') && !team_id.to_s.eql?( team.to_s )
       next if !language.to_s.empty? && !language.to_s.eql?('ALL') && !project.language.to_s.downcase.eql?( language.to_s.downcase )
       next if !version.to_s.empty? && !version.to_s.eql?('ALL') && !project.version.to_s.downcase.eql?( version.to_s.downcase )
@@ -138,6 +142,10 @@ class Organisation < Versioneye::Model
       next if project.children.count == 0
 
       project.children.each do |child|
+        if child.teams.to_a.empty?
+          child.teams = project.teams
+          child.save
+        end
         collect_components child.dependencies, comps
       end
     end
