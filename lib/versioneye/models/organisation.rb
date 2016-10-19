@@ -129,7 +129,8 @@ class Organisation < Versioneye::Model
     projects.each do |project|
       team_id = nil
       team_id = project.teams.first.ids if project.teams && project.teams.first
-      next if !team.to_s.eql?('ALL') && !project_id.to_s.eql?( team )
+      p "team_id: #{team_id} - team: #{team}"
+      next if !team.to_s.eql?('ALL') && !team_id.to_s.eql?( team.to_s )
       next if !language.to_s.empty? && !language.to_s.eql?('ALL') && !project.language.to_s.downcase.eql?( language.to_s.downcase )
       next if !version.to_s.empty? && !version.to_s.eql?('ALL') && !project.version.to_s.downcase.eql?( version.to_s.downcase )
 
