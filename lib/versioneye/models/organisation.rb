@@ -122,12 +122,14 @@ class Organisation < Versioneye::Model
   end
 
 
-  def component_list team = nil, language = nil, version = nil, after_filter = 'ALL'
+  def component_list team = 'ALL', language = nil, version = nil, after_filter = 'ALL'
     return {} if projects.to_a.empty?
 
     comps = {}
     projects.each do |project|
-      next if !team.to_s.empty? && !team.to_s.eql?('ALL') && !project.teams.empty? && !project.teams.first.ids.eql?( team )
+      team_id = nil
+      team_id = project.teams.first.ids if project.teams && project.teams.first
+      next if !team.to_s.eql?('ALL') && !project_id.to_s.eql?( team )
       next if !language.to_s.empty? && !language.to_s.eql?('ALL') && !project.language.to_s.downcase.eql?( language.to_s.downcase )
       next if !version.to_s.empty? && !version.to_s.eql?('ALL') && !project.version.to_s.downcase.eql?( version.to_s.downcase )
 
