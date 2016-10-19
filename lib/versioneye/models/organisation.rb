@@ -131,18 +131,25 @@ class Organisation < Versioneye::Model
       next if !language.to_s.empty? && !language.to_s.eql?('ALL') && !project.language.to_s.downcase.eql?( language.to_s.downcase )
       next if !version.to_s.empty? && !version.to_s.eql?('ALL') && !project.version.to_s.downcase.eql?( version.to_s.downcase )
 
-      collect_components project, comps
+      collect_components project.dependencies, comps
       next if project.children.count == 0
 
       project.children.each do |child|
-        collect_components child, comps
+        collect_components child.dependencies, comps
       end
     end
 
     if after_filter.to_s.eql?('duplicates_only')
       return duplicates_only_filter( comps )
+    elsif after_filter.to_s.eql?('show_duplicates')
+      show_duplicates_filter( comps )
+      return comps
     end
     comps
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    {}
   end
 
 
@@ -174,6 +181,18 @@ class Organisation < Versioneye::Model
   private
 
 
+    def show_duplicates_filter( comps )
+      project_ids = Project.where(:organisation_id => self.ids).distinct(:id)
+      comps.keys.each do |key|
+        sps = key.split(":")
+        language = sps[0]
+        prod_key = sps[1]
+        pdeps = Projectdependency.where(:language => language, :prod_key => prod_key, :project_id => project_ids)
+        collect_components pdeps, comps, true
+      end
+    end
+
+
     def duplicates_only_filter( comps )
       response = {}
       comps.keys.each do |key|
@@ -185,14 +204,17 @@ class Organisation < Versioneye::Model
     end
 
 
-    def collect_components project, comps
-      project.dependencies.each do |dep|
+    def collect_components project_dependencies, comps, ignore_comp_key = false
+      project_dependencies.each do |dep|
         component_key = "#{dep.language}:#{dep.possible_prod_key}:#{dep.version_current}"
-        comps[component_key] = {} if !comps.keys.include?( component_key )
+        if ignore_comp_key == false
+          comps[component_key] = {} if !comps.keys.include?( component_key )
+        end
 
         version_key = "#{dep.possible_prod_key}::#{dep.version_requested}::#{dep.licenses_string}"
         comps[component_key][version_key] = [] if comps[component_key][version_key].nil?
 
+        project = dep.project
         val = "#{project.language}:#{project.name}:#{project.ids}:#{project.version}"
         comps[component_key][version_key] << val if !comps[component_key][version_key].include?( val )
       end
