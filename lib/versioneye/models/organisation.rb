@@ -215,7 +215,9 @@ class Organisation < Versioneye::Model
         comps[component_key][version_key] = [] if comps[component_key][version_key].nil?
 
         project = dep.project
-        val = "#{project.language}:#{project.name}:#{project.ids}:#{project.version}"
+        val = {:project_language => project.language, :project_name => project.name,
+               :project_id => project.ids, :project_verison => project.version,
+               :project_teams => project.teams.first}
         comps[component_key][version_key] << val if !comps[component_key][version_key].include?( val )
       end
       comps
