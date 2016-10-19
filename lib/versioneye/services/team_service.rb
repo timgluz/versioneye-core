@@ -55,6 +55,13 @@ class TeamService < Versioneye::Service
 
       project.teams = [team]
       project.save
+
+      next if project.children.count == 0
+
+      project.children.each do |child|
+        child.teams = [team]
+        child.save
+      end
     rescue => e
       log.error e.message
       log.error e.backtrace.join("\n")
