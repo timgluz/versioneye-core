@@ -364,6 +364,58 @@ describe Organisation do
       expect( comps['Java:org.junit/junit:2.0.0']['org.junit/junit::1.9.9::UNKNOWN'] ).to_not be_nil
     end
 
+    it "returns the correct component_list" do
+      user = UserFactory.create_new
+      expect( user.save ).to be_truthy
+
+      team = Team.new(:name => 'devs', :organisation => @orga)
+      expect( team.save ).to be_truthy
+
+      TeamService.add 'devs', @orga.ids, user.username, @user1
+      expect( @orga.teams.count ).to eq(2)
+
+      project = ProjectFactory.create_new user, nil, true, @orga
+      project.language = 'Java'
+      project.teams = [team]
+      expect( project.save ).to be_truthy
+      expect( @orga.projects.count ).to eq(1)
+
+      project2 = ProjectFactory.create_new user, nil, true, @orga
+      project2.language = 'Java'
+      project2.teams = [@orga.owner_team]
+      expect( project2.save ).to be_truthy
+      expect( @orga.projects.count ).to eq(2)
+
+      prod_2  = ProductFactory.create_for_maven 'org.junit', 'junit', '2.0.0'
+      prod_2.add_version '1.9.9'
+      expect( prod_2.save ).to be_truthy
+
+      dep_1 = ProjectdependencyFactory.create_new project, prod_2, true
+      dep_1.version_requested = prod_2.version
+      expect( dep_1.save ).to be_truthy
+
+      dep_2 = ProjectdependencyFactory.create_new project2, prod_2, true
+      dep_2.version_requested = '1.9.9'
+      expect( dep_2.save ).to be_truthy
+
+      expect( @orga.projects.first.dependencies.count ).to eq(1)
+      expect( @orga.projects[1].dependencies.count ).to eq(1)
+
+      comps = @orga.component_list team.ids, 'ALL', 'ALL', 'ALL'
+      expect( comps ).to_not be_nil
+      expect( comps.count ).to eq(1)
+      expect( comps['Java:org.junit/junit:2.0.0'] ).to_not be_nil
+      expect( comps['Java:org.junit/junit:2.0.0']['org.junit/junit::2.0.0::UNKNOWN'] ).to_not be_nil
+      expect( comps['Java:org.junit/junit:2.0.0']['org.junit/junit::1.9.9::UNKNOWN'] ).to     be_nil
+
+      comps = @orga.component_list team.ids, 'ALL', 'ALL', 'show_duplicates'
+      expect( comps ).to_not be_nil
+      expect( comps.count ).to eq(1)
+      expect( comps['Java:org.junit/junit:2.0.0'] ).to_not be_nil
+      expect( comps['Java:org.junit/junit:2.0.0']['org.junit/junit::2.0.0::UNKNOWN'] ).to_not be_nil
+      expect( comps['Java:org.junit/junit:2.0.0']['org.junit/junit::1.9.9::UNKNOWN'] ).to_not be_nil
+    end
+
   end
 
 end

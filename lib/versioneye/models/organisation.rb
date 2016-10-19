@@ -198,7 +198,7 @@ class Organisation < Versioneye::Model
         sps = key.split(":")
         language = sps[0]
         prod_key = sps[1]
-        pdeps = Projectdependency.where(:language => language, :prod_key => prod_key, :project_id => project_ids)
+        pdeps = Projectdependency.where(:language => language, :prod_key => prod_key, :project_id.in => project_ids)
         collect_components pdeps, comps, true
       end
     end
