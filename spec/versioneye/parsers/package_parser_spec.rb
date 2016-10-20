@@ -7,7 +7,7 @@ describe PackageParser do
     it "parse from https the file correctly" do
       parser = PackageParser.new
       project = parser.parse('https://s3.amazonaws.com/veye_test_env/package.json')
-      project.should_not be_nil
+      expect( project ).to_not be_nil
     end
 
     it "parse from http the file correctly" do
@@ -40,142 +40,147 @@ describe PackageParser do
 
       parser = PackageParser.new
       project = parser.parse('http://s3.amazonaws.com/veye_test_env/package.json')
-      project.should_not be_nil
-      project.dependencies.size.should eql(20)
+      expect( project ).to_not be_nil
+      expect( project.dependencies.size ).to eql(21)
 
       dep_01 = project.dependencies.first
-      dep_01.name.should eql('connect-redis')
-      dep_01.version_requested.should eql('1.3.0')
-      dep_01.version_current.should eql('1.3.0')
-      dep_01.comperator.should eql('=')
+      expect( dep_01.name ).to eql('connect-redis')
+      expect( dep_01.version_requested ).to eql('1.3.0')
+      expect( dep_01.version_current ).to eql('1.3.0')
+      expect( dep_01.comperator ).to eql('=')
 
       dep_02 = project.dependencies[1]
-      dep_02.name.should eql('redis')
-      dep_02.version_requested.should eql('1.3.0')
-      dep_02.version_current.should eql('1.3.0')
-      dep_02.comperator.should eql('=')
+      expect( dep_02.name ).to eql('redis')
+      expect( dep_02.version_requested ).to eql('1.3.0')
+      expect( dep_02.version_current ).to eql('1.3.0')
+      expect( dep_02.comperator ).to eql('=')
 
       dep_03 = project.dependencies[2]
-      dep_03.name.should eql('memcache')
-      dep_03.version_requested.should eql('1.4.0')
-      dep_03.version_current.should eql('1.4.0')
-      dep_03.comperator.should eql('=')
+      expect( dep_03.name ).to eql('memcache')
+      expect( dep_03.version_requested ).to eql('1.4.0')
+      expect( dep_03.version_current ).to eql('1.4.0')
+      expect( dep_03.comperator ).to eql('=')
 
       dep_04 = project.dependencies[3]
-      dep_04.name.should eql('mongo')
-      dep_04.version_requested.should eql('1.1.7')
-      dep_04.version_current.should eql('1.1.7')
-      dep_04.comperator.should eql('=')
+      expect( dep_04.name ).to eql('mongo')
+      expect( dep_04.version_requested ).to eql('1.1.7')
+      expect( dep_04.version_current ).to eql('1.1.7')
+      expect( dep_04.comperator ).to eql('=')
 
       dep_05 = project.dependencies[4]
-      dep_05.name.should eql('mongoid')
-      dep_05.version_requested.should eql('1.1.7')
-      dep_05.version_current.should eql('1.1.7')
-      dep_05.comperator.should eql('=')
+      expect( dep_05.name ).to eql('mongoid')
+      expect( dep_05.version_requested ).to eql('1.1.7')
+      expect( dep_05.version_current ).to eql('1.1.7')
+      expect( dep_05.comperator ).to eql('=')
 
       dep_06 = project.dependencies[5]
-      dep_06.name.should eql('express')
-      dep_06.version_requested.should eql('2.4.7')
-      dep_06.version_current.should eql('2.4.7')
-      dep_06.comperator.should eql('=')
+      expect( dep_06.name ).to eql('express')
+      expect( dep_06.version_requested ).to eql('2.4.7')
+      expect( dep_06.version_current ).to eql('2.4.7')
+      expect( dep_06.comperator ).to eql('=')
 
       dep_07 = project.dependencies[6]
-      dep_07.name.should eql('fs-ext')
-      dep_07.version_requested.should eql('0.2.7')
-      dep_07.version_current.should eql('2.4.7')
-      dep_07.comperator.should eql('=')
+      expect( dep_07.name ).to eql('fs-ext')
+      expect( dep_07.version_requested ).to eql('0.2.7')
+      expect( dep_07.version_current ).to eql('2.4.7')
+      expect( dep_07.comperator ).to eql('=')
 
       dep_08 = project.dependencies[7]
-      dep_08.name.should eql('jade')
-      dep_08.version_requested.should eql('0.2.7')
-      dep_08.version_current.should eql('2.4.7')
-      dep_08.comperator.should eql('~')
+      expect( dep_08.name ).to eql('jade')
+      expect( dep_08.version_requested ).to eql('0.2.7')
+      expect( dep_08.version_current ).to eql('2.4.7')
+      expect( dep_08.comperator ).to eql('~')
 
       dep_09 = project.dependencies[8]
-      dep_09.name.should eql('mailer')
-      dep_09.version_requested.should eql('0.6.9')
-      dep_09.version_current.should eql('0.7.0')
-      dep_09.comperator.should eql('=')
+      expect( dep_09.name ).to eql('mailer')
+      expect( dep_09.version_requested ).to eql('0.6.9')
+      expect( dep_09.version_current ).to eql('0.7.0')
+      expect( dep_09.comperator ).to eql('=')
 
       dep_10 = project.dependencies[9]
-      dep_10.name.should eql('markdown')
-      dep_10.version_requested.should eql('0.2.0')
-      dep_10.version_current.should eql('0.4.0')
-      dep_10.comperator.should eql('<')
+      expect( dep_10.name ).to eql('markdown')
+      expect( dep_10.version_requested ).to eql('0.2.0')
+      expect( dep_10.version_current ).to eql('0.4.0')
+      expect( dep_10.comperator ).to eql('<')
 
       dep_11 = project.dependencies[10]
-      dep_11.name.should eql('mu2')
-      dep_11.version_requested.should eql('0.6.0')
-      dep_11.version_current.should eql('0.6.0')
-      dep_11.comperator.should eql('>')
+      expect( dep_11.name ).to eql('mu2')
+      expect( dep_11.version_requested ).to eql('0.6.0')
+      expect( dep_11.version_current ).to eql('0.6.0')
+      expect( dep_11.comperator ).to eql('>')
 
       dep_12 = project.dependencies[11]
-      dep_12.name.should eql('pg')
-      dep_12.version_requested.should eql('0.6.6')
-      dep_12.version_current.should eql('0.6.6')
-      dep_12.comperator.should eql('>=')
+      expect( dep_12.name ).to eql('pg')
+      expect( dep_12.version_requested ).to eql('0.6.6')
+      expect( dep_12.version_current ).to eql('0.6.6')
+      expect( dep_12.comperator ).to eql('>=')
 
       dep_13 = project.dependencies[12]
-      dep_13.name.should eql('pg_connect')
-      dep_13.version_requested.should eql('0.6.9')
-      dep_13.version_current.should eql('0.6.9')
-      dep_13.comperator.should eql('<=')
+      expect( dep_13.name ).to eql('pg_connect')
+      expect( dep_13.version_requested ).to eql('0.6.9')
+      expect( dep_13.version_current ).to eql('0.6.9')
+      expect( dep_13.comperator ).to eql('<=')
 
       dep_14 = project.dependencies[13]
-      dep_14.name.should eql('mocha')
-      dep_14.version_requested.should eql('1.16.2')
-      dep_14.version_current.should eql('1.16.2')
-      dep_14.comperator.should eql('=')
-      dep_14.version_label.should eql('latest')
-      dep_14.outdated?().should be_falsey
+      expect( dep_14.name ).to eql('mocha')
+      expect( dep_14.version_requested ).to eql('1.16.2')
+      expect( dep_14.version_current ).to eql('1.16.2')
+      expect( dep_14.comperator ).to eql('=')
+      expect( dep_14.version_label ).to eql('latest')
+      expect( dep_14.outdated?() ).to be_falsey
 
       dep_15 = project.dependencies[14]
-      dep_15.name.should eql('bruno')
-      dep_15.version_requested.should eql('1.12.1')
-      dep_15.version_current.should eql('1.12.1')
-      dep_15.comperator.should eql('^')
-      dep_15.version_label.should eql('^1.12')
-      dep_15.outdated?().should be_falsey
+      expect( dep_15.name ).to eql('bruno')
+      expect( dep_15.version_requested ).to eql('1.12.1')
+      expect( dep_15.version_current ).to eql('1.12.1')
+      expect( dep_15.comperator ).to eql('^')
+      expect( dep_15.version_label ).to eql('^1.12')
+      expect( dep_15.outdated?() ).to be_falsey
 
       dep_15 = project.dependencies[15]
-      dep_15.name.should eql('gulp')
-      dep_15.version_requested.should eql('1.12.1')
-      dep_15.version_current.should eql('1.12.1')
-      dep_15.comperator.should eql('!=')
-      dep_15.version_label.should eql('1.0')
-      dep_15.outdated?().should be_falsey
+      expect( dep_15.name ).to eql('gulp')
+      expect( dep_15.version_requested ).to eql('1.12.1')
+      expect( dep_15.version_current ).to eql('1.12.1')
+      expect( dep_15.comperator ).to eql('!=')
+      expect( dep_15.version_label ).to eql('1.0')
+      expect( dep_15.outdated?() ).to be_falsey
 
       dep_16 = project.dependencies[16]
-      dep_16.name.should eql('async')
-      dep_16.version_requested.should eql('0.9.0')
-      dep_16.version_current.should eql('0.9.0')
-      dep_16.comperator.should eql('=')
-      dep_16.version_label.should eql('0.x')
-      dep_16.outdated?().should be_falsey
+      expect( dep_16.name ).to eql('async')
+      expect( dep_16.version_requested ).to eql('0.9.0')
+      expect( dep_16.version_current ).to eql('0.9.0')
+      expect( dep_16.comperator ).to eql('=')
+      expect( dep_16.version_label ).to eql('0.x')
+      expect( dep_16.outdated?() ).to be_falsey
 
       dep_17 = project.dependencies[17]
-      dep_17.name.should eql('gulp-webserver')
-      dep_17.version_label.should eql('^0.9.*')
-      dep_17.version_requested.should eql('0.9.1')
-      dep_17.version_current.should eql('0.9.1')
-      dep_17.comperator.should eql('^')
-      dep_17.outdated?().should be_falsey
+      expect( dep_17.name ).to eql('gulp-webserver')
+      expect( dep_17.version_label ).to eql('^0.9.*')
+      expect( dep_17.version_requested ).to eql('0.9.1')
+      expect( dep_17.version_current ).to eql('0.9.1')
+      expect( dep_17.comperator ).to eql('^')
+      expect( dep_17.outdated?() ).to be_falsey
 
       dep_18 = project.dependencies[18]
-      dep_18.name.should eql('eslint')
-      dep_18.version_label.should eql('^0.24.0')
-      dep_18.version_requested.should eql('0.24.1')
-      dep_18.version_current.should eql('1.1.0')
-      dep_18.comperator.should eql('^')
-      dep_18.outdated?().should be_truthy
+      expect( dep_18.name ).to eql('eslint')
+      expect( dep_18.version_label ).to eql('^0.24.0')
+      expect( dep_18.version_requested ).to eql('0.24.1')
+      expect( dep_18.version_current ).to eql('1.1.0')
+      expect( dep_18.comperator ).to eql('^')
+      expect( dep_18.outdated?() ).to be_truthy
 
       dep_19 = project.dependencies[19]
-      dep_19.name.should eql('inquirer')
-      dep_19.version_label.should eql('^0.8.0')
-      dep_19.version_requested.should eql('0.8.5')
-      dep_19.version_current.should eql('0.9.0')
-      dep_19.comperator.should eql('^')
-      dep_19.outdated?().should be_truthy
+      expect( dep_19.name ).to eql('inquirer')
+      expect( dep_19.version_label ).to eql('^0.8.0')
+      expect( dep_19.version_requested ).to eql('0.8.5')
+      expect( dep_19.version_current ).to eql('0.9.0')
+      expect( dep_19.comperator ).to eql('^')
+      expect( dep_19.outdated?() ).to be_truthy
+
+      dep_20 = project.dependencies[20]
+      expect( dep_20.name ).to eql('react-native-storybook')
+      expect( dep_20.scope ).to eql('kadira')
+      expect( dep_20.version_label ).to eql('^2.1.4')
     end
 
   end
@@ -183,13 +188,13 @@ describe PackageParser do
   describe 'pre_process' do
 
     it 'returns the changed version' do
-      described_class.new.pre_process("4").should eq("4.*")
+      expect( described_class.new.pre_process("4") ).to eq("4.*")
     end
     it 'returns the changed version' do
-      described_class.new.pre_process("4.2").should eq("4.2.*")
+      expect( described_class.new.pre_process("4.2") ).to eq("4.2.*")
     end
     it 'returns the unchanged version' do
-      described_class.new.pre_process("4.2.2").should eq("4.2.2")
+      expect( described_class.new.pre_process("4.2.2") ).to eq("4.2.2")
     end
 
   end
