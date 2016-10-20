@@ -132,11 +132,17 @@ class Organisation < Versioneye::Model
         project.save
       end
 
-      team_id = nil
-      team_id = project.teams.first.ids if project.teams && project.teams.first
-      next if !team.to_s.eql?('ALL') && !team_id.to_s.eql?( team.to_s )
       next if !language.to_s.empty? && !language.to_s.eql?('ALL') && !project.language.to_s.downcase.eql?( language.to_s.downcase )
-      next if !version.to_s.empty? && !version.to_s.eql?('ALL') && !project.version.to_s.downcase.eql?( version.to_s.downcase )
+      next if !version.to_s.empty?  && !version.to_s.eql?('ALL')  && !project.version.to_s.downcase.eql?(  version.to_s.downcase  )
+
+      team_match = false
+      project.teams.each do |team_object|
+        if team.to_s.eql?('ALL') || team_object.ids.eql?(team.to_s) || team_object.name.eql?(team.to_s)
+          team_match = true
+          break
+        end
+      end
+      next if team_match == false
 
       collect_components project.dependencies, comps
       next if project.children.count == 0
