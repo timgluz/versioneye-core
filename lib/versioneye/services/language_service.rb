@@ -1,7 +1,7 @@
 class LanguageService < Versioneye::Service
 
 
-  A_DISTINCT_LANGUAGES = ["Java", "PHP", "CSS", "Ruby", "Python", "Node.JS", "CoffeeScript", "HTML", "JavaScript", "Clojure", "Objective-C", "R", "Biicode", "PureScript", "Go", "Haskell", "Perl", "C#", "TypeScript", "Handlebars", "Opa", "C", "none", "Nix", "Shell", "wisp", "LiveScript", "Makefile", "ApacheConf", "C++", "ActionScript", "Scala", "Processing", "PowerShell", "Dart", "XSLT", "Lua", "XML", "ASP", "TeX", "Liquid", "Groovy", "Gettext Catalog", "Cirru", "Smarty", "Eagle", "Puppet", "SuperCollider", "Chef"]
+  A_DISTINCT_LANGUAGES = ["Java", "CSharp", "PHP", "CSS", "Ruby", "Python", "Node.JS", "CoffeeScript", "HTML", "JavaScript", "Clojure", "Objective-C", "R", "Biicode", "PureScript", "Go", "Haskell", "Perl", "C#", "TypeScript", "Handlebars", "Opa", "C", "none", "Nix", "Shell", "wisp", "LiveScript", "Makefile", "ApacheConf", "C++", "ActionScript", "Scala", "Processing", "PowerShell", "Dart", "XSLT", "Lua", "XML", "ASP", "TeX", "Liquid", "Groovy", "Gettext Catalog", "Cirru", "Smarty", "Eagle", "Puppet", "SuperCollider", "Chef"]
   A_KEY = "distinct_languages"
 
 
