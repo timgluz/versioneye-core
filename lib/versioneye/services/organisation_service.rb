@@ -2,13 +2,13 @@ class OrganisationService < Versioneye::Service
 
 
   def self.create_new user, name
-    if !Organisation.where({:name => name.downcase}).empty?
+    if !Organisation.where({:name => name}).empty?
       raise "Organisation with name '#{name}' exists already. Please choose another name."
     end
     if Settings.instance.orga_creation_admin_only == true && user.admin == false
       raise "Only admins can create new organisations."
     end
-    orga = Organisation.new({:name => name.downcase})
+    orga = Organisation.new({:name => name})
     orga.plan = Plan.free_plan
     orga.save
     team = Team.new(:name => Team::A_OWNERS)
