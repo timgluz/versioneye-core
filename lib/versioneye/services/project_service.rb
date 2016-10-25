@@ -270,7 +270,10 @@ class ProjectService < Versioneye::Service
 
     subproject.parent_id = project.id
     subproject.license_whitelist_id = project.license_whitelist_id
+    subproject.component_whitelist_id = project.component_whitelist_id
     subproject.save
+
+    update_sums( project )
 
     reset_badge project
     reset_badge subproject
