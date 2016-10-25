@@ -239,11 +239,11 @@ class GemfileParser < CommonParser
         version = element
         break
       else
-        version = element
+        version = element if gem_requirement?(element)
       end
     end
-    version = version.gsub('"', '')
-    version.gsub("'", "")
+
+    strip_quotes(version)
   end
 
 
@@ -313,5 +313,21 @@ class GemfileParser < CommonParser
     log.error e.backtrace.join("\n")
   end
 
+  private
+
+  def strip_quotes(version)
+    version = version.gsub('"', '')
+    version.gsub("'", '')
+  end
+
+  def gem_requirement?(requirement)
+    begin
+      requirement = strip_quotes(requirement)
+      Gem::Requirement.parse(requirement)
+      true
+    rescue Gem::Requirement::BadRequirementError
+      false
+    end
+  end
 
 end
