@@ -194,6 +194,10 @@ class Organisation < Versioneye::Model
     versions
   end
 
+  def private_project_count
+    Project.where( organisation_id: self.ids, private_project: true, :parent_id => nil ).count
+  end
+
 
   private
 
