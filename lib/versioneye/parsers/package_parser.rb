@@ -66,14 +66,14 @@ class PackageParser < CommonParser
 
 
   def parse_line( package_name, version_label, project, scope = Dependency::A_SCOPE_COMPILE )
-
+    product = Product.fetch_product( Product::A_LANGUAGE_NODEJS, package_name )
     matchi = package_name.match(/\A(@\S*\/)\S*/i)
-    if matchi
+    if product.nil? && matchi
       package_name = package_name.gsub(matchi[1], '')
       scope = matchi[1].gsub("@", '').gsub("/", "")
+      product = Product.fetch_product( Product::A_LANGUAGE_NODEJS, package_name )
     end
 
-    product    = Product.fetch_product( Product::A_LANGUAGE_NODEJS, package_name )
     dependency = init_dependency( product, package_name )
     dependency.scope = scope
     parse_requested_version( version_label, dependency, product )

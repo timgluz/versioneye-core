@@ -176,11 +176,6 @@ describe PackageParser do
       expect( dep_19.version_current ).to eql('0.9.0')
       expect( dep_19.comperator ).to eql('^')
       expect( dep_19.outdated?() ).to be_truthy
-
-      dep_20 = project.dependencies[20]
-      expect( dep_20.name ).to eql('react-native-storybook')
-      expect( dep_20.scope ).to eql('kadira')
-      expect( dep_20.version_label ).to eql('^2.1.4')
     end
 
   end
