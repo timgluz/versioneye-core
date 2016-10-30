@@ -24,6 +24,6 @@ class PrIssue < Versioneye::Model
 
   belongs_to :pullrequest
 
-  index({ pullrequest_id: 1, file: 1 }, { name: "prid_file_index",  background: true, unique: true })
+  index({ pullrequest_id: 1, file: 1 }, { name: "prid_file_index",  background: true, unique: false })
 
 end
