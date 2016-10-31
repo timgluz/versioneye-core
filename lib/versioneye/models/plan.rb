@@ -30,7 +30,7 @@ class Plan < Versioneye::Model
   field :name            , type: String
   field :price           , type: String
   field :period          , type: String, default: A_PERIOD_MONTHLY
-  field :private_projects, type: Integer, default: 1  # losed source projects
+  field :private_projects, type: Integer, default: 1  # closed source projects
   field :os_projects     , type: Integer, default: 1  # OS = Open Source
   field :api_rate_limit  , type: Integer, default: 50
   field :cmp_rate_limit  , type: Integer, default: 50
