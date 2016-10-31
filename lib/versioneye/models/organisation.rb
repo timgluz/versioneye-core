@@ -18,6 +18,9 @@ class Organisation < Versioneye::Model
   field :stripe_token      , type: String
   field :stripe_customer_id, type: String
 
+  field :max_private_projects, type: Integer, default: 0  # max closed source projects allowed
+  field :max_os_projects     , type: Integer, default: 0  # max Open Source projects allowed
+
   belongs_to :plan
   has_one    :billing_address
   has_many   :projects
@@ -196,6 +199,18 @@ class Organisation < Versioneye::Model
 
   def private_project_count
     Project.where( organisation_id: self.ids, private_project: true, :parent_id => nil ).count
+  end
+
+  def max_private_projects_count
+    return self.max_private_projects  if self.max_private_projects > 0
+    return self.plan.private_projects if !self.plan.nil?
+    1
+  end
+
+  def max_os_projects_count
+    return self.max_os_projects  if self.max_os_projects > 0
+    return self.plan.os_projects if !self.plan.nil?
+    1
   end
 
 
