@@ -238,8 +238,8 @@ class ProjectImportService < Versioneye::Service
 
   # This is currently used by the VersionEye API project and the file upload in the Web UI.
   # Check allowed_to_add_project? with current plan.
-  def self.import_from_upload file, user = nil, api_created = false, orga_id = nil
-    if allowed_to_add_project?(orga_id, api_created) == false
+  def self.import_from_upload file, user = nil, api_created = false, orga_id = nil, tempp = false
+    if tempp == false && allowed_to_add_project?(orga_id, api_created) == false
       raise "You reached the limit of your current subscription. Please upgrade your plan to monitor more projects."
     end
 

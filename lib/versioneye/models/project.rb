@@ -75,8 +75,8 @@ class Project < Versioneye::Model
 
   field :temp           , type: Boolean, :default => false  # temporary project. if true it doesn't show up in the UI and will be removed by a background job.
   field :temp_lock      , type: Boolean, :default => false  # temporary locked for deletion.
-  field :public         , type: Boolean, :default => false  # visible for everybody
-  field :private_project, type: Boolean, :default => false  # private project from GitHub/Bitbucket
+  field :public         , type: Boolean, :default => false  # visible for everybody on VersionEye
+  field :private_project, type: Boolean, :default => false  # private project from GitHub/Bitbucket/API. This is important for the business model.
   field :parent_id      , type: String,  :default => nil    # id of the parent project.
 
   field :license_whitelist_id, type: String
