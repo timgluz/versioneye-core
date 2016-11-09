@@ -40,7 +40,8 @@ class Stash < Versioneye::Service
     path = "/plugins/servlet/applinks/whoami"
     username = get_json(path, token, secret, true)
 
-    path = "#{A_API_V1_PATH}/users/#{username}"
+    slug = username.to_s.gsub("@", "_")
+    path = "#{A_API_V1_PATH}/users/#{slug}"
     response = get_json(path, token, secret)
 
     response
