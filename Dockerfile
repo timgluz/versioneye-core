@@ -18,4 +18,4 @@ ADD . /app/
 
 WORKDIR /app
 
-RUN bundle install
+RUN bundle update
