@@ -1,6 +1,13 @@
 class AuthorService < Versioneye::Service
 
 
+  def self.update_authors_all
+    Product::A_LANGS_LANGUAGE_PAGE.each do |lang|
+      self.update_authors lang
+    end
+  end
+
+
   def self.update_authors language
     Developer.where(:language => language).any_of({:to_author => false}, {:to_author => nil}).each do |dev|
       dev_to_author dev
