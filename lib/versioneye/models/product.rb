@@ -241,6 +241,9 @@ class Product < Versioneye::Model
 
   def add_svid version_number, sv
     version = version_by_number version_number
+    if version.nil? && self.prod_key.match(/\Aorg.spring/)
+      version = version_by_number "#{version_number}.RELEASE"
+    end
     return false if version.nil?
     return false if version.sv_ids.include?(sv.ids)
 
