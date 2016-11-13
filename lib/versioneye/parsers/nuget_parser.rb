@@ -10,9 +10,9 @@ class NugetParser < CommonParser
     ident           = "[\\w-]" # identificator aka textual value
     prerelease_info = "\\-(?<prerelease>#{ident}[\\.#{ident}]*)" # matches release info: -alpha.1
     build_info      = "\\+(?<build>#{ident}[\\.#{ident}]*)"      # matches build info
-    #version         = "(?<version>(#{numeric})(\\.(#{numeric})(\\.(#{numeric}))?)?)" #old major.minor.patch 
+    #version         = "(?<version>(#{numeric})(\\.(#{numeric})(\\.(#{numeric}))?)?)" #old major.minor.patch
     version         = "(?<version>(#{numeric})(\\.(#{numeric})(\\.(#{numeric}))*)?)" #matches more than m.m.p
-  
+
     semver          = "#{version}(#{prerelease_info})?(#{build_info})?"
 
     #version range doc: https://docs.nuget.org/create/versioning#Specifying-Version-Ranges-in-.nuspec-Files
@@ -78,7 +78,7 @@ class NugetParser < CommonParser
     return dependency if product.nil?
 
     version_label = cleanup_version version_label
-    
+
     # Ignore cases like => "dev-master | ^1.0"
     if version_label.match(/.+\|.+/).nil?
       dependency[:stability] = VersionTagRecognizer.stability_tag_for version_label
@@ -234,7 +234,7 @@ class NugetParser < CommonParser
       target: target,
       scope: scope
     })
-    
+
     dep
   end
 
