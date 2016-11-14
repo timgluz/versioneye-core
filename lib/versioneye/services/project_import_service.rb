@@ -43,7 +43,7 @@ class ProjectImportService < Versioneye::Service
     check_permission_for_github_repo user, orga_id, repo_name, private_project
 
     project_file = Github.fetch_project_file_from_branch(repo_name, filename, branch, user[:github_token] )
-    if project_file.nil?
+    if project_file.nil? || project_file.to_s.strip.empty?
       log.error " Can't import project file `#{filename}` from #{repo_name} branch #{branch} "
       raise " Didn't find any project file of a supported package manager."
     end
@@ -51,6 +51,9 @@ class ProjectImportService < Versioneye::Service
     project = create_project_from project_file, user.github_token, filename
     if project.nil?
       raise "The project file could not be parsed. Maybe it's not valid?"
+    end
+    if project.is_a?( String )
+      raise "The project file could not be parsed. #{project}"
     end
 
     project.update_attributes({
@@ -126,6 +129,9 @@ class ProjectImportService < Versioneye::Service
       log.error " Can't import project file `#{filename}` from #{repo_name} branch #{branch} "
       return " Didn't find any project file of a supported package manager."
     end
+    if project.is_a?( String )
+      raise "The project file could not be parsed. #{project}"
+    end
 
     project_type = ProjectService.type_by_filename filename
     file_name = filename.split("/").last
@@ -178,6 +184,9 @@ class ProjectImportService < Versioneye::Service
     if project_file.nil? || project_file.empty? || project_file == "error" || project_file.eql?("Not Found")
       log.error " Can't import project file `#{filename}` from #{repo_name} branch #{branch} "
       return " Didn't find any project file of a supported package manager."
+    end
+    if project.is_a?( String )
+      raise "The project file could not be parsed. #{project}"
     end
 
     project_type = ProjectService.type_by_filename filename

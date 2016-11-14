@@ -3,7 +3,7 @@ require 'dalli'
 
 class GitRepoFileImportWorker < Worker
 
-  A_TASK_TTL = 60 # 60 seconds = 1 minutes
+  A_TASK_TTL = 120 # 120 seconds = 2 minutes
 
   def work
     connection = get_connection
@@ -50,17 +50,23 @@ class GitRepoFileImportWorker < Worker
         return
       end
 
-      project = nil
-      if provider.eql?("stash")
-        project = ProjectImportService.import_from_stash user, repo_name, filename, branch, orga_id
-      elsif provider.eql?("github")
-        project = ProjectImportService.import_from_github user, repo_name, filename, branch, orga_id
-      elsif provider.eql?("bitbucket")
-        project = ProjectImportService.import_from_bitbucket user, repo_name, filename, branch, orga_id
+      project = Project.where(:scm_fullname => repo_name, :scm_branch => branch, :s3_filename => filename, :organisation_id => orga_id ).first
+      if project.nil?
+        if provider.eql?("stash")
+          project = ProjectImportService.import_from_stash user, repo_name, filename, branch, orga_id
+        elsif provider.eql?("github")
+          project = ProjectImportService.import_from_github user, repo_name, filename, branch, orga_id
+        elsif provider.eql?("bitbucket")
+          project = ProjectImportService.import_from_bitbucket user, repo_name, filename, branch, orga_id
+        end
       end
 
       if project && project.is_a?(Project)
         cache.set( message, "done_#{project.id.to_s}", A_TASK_TTL )
+      elsif project && project.is_a?(String)
+        cache.set( message, "error_#{project}", A_TASK_TTL )
+      else
+        cache.set( message, "error_Unknown_ERROR", A_TASK_TTL )
       end
     rescue => e
       cache.set( message, "error_#{e.message}", A_TASK_TTL )

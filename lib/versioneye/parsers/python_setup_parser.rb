@@ -12,7 +12,7 @@ class PythonSetupParser < RequirementsParser
 
 
   def parse_content(doc, token = nil)
-    return nil if doc.to_s.empty?
+    return nil if doc.to_s.strip.empty?
     return nil if doc.to_s.strip.eql?('Not Found')
 
     project      = Project.new({:project_type => Project::A_TYPE_PIP, :language => Product::A_LANGUAGE_PYTHON })
