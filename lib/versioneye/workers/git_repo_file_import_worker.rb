@@ -3,7 +3,7 @@ require 'dalli'
 
 class GitRepoFileImportWorker < Worker
 
-  A_TASK_TTL = 120 # 120 seconds = 2 minutes
+  A_TASK_TTL = 60 # 60 seconds = 1 minute
 
   def work
     connection = get_connection

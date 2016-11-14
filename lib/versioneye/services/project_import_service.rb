@@ -34,6 +34,9 @@ class ProjectImportService < Versioneye::Service
 
 
   def self.import_from_github_async user, repo_name, filename, branch = 'master', orga_id = ''
+    project = Project.where(:scm_fullname => repo_name, :scm_branch => branch, :s3_filename => filename, :organisation_id => orga_id ).first
+    return "done_#{project.ids}" if project
+
     key = "github:::#{user.username}:::#{repo_name}:::#{filename}:::#{branch}:::#{orga_id}"
     task_status( key ){ GitRepoFileImportProducer.new( key ) }
   end
@@ -109,6 +112,9 @@ class ProjectImportService < Versioneye::Service
 
 
   def self.import_from_bitbucket_async user, repo_name, filename, branch = 'master', orga_id = ''
+    project = Project.where(:scm_fullname => repo_name, :scm_branch => branch, :s3_filename => filename, :organisation_id => orga_id ).first
+    return "done_#{project.ids}" if project
+
     key = "bitbucket:::#{user.username}:::#{repo_name}:::#{filename}:::#{branch}:::#{orga_id}"
     task_status( key ){ GitRepoFileImportProducer.new( key ) }
   end
