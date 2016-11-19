@@ -54,8 +54,7 @@ class ProjectImportService < Versioneye::Service
     project = create_project_from project_file, user.github_token, filename
     if project.nil?
       raise "The project file could not be parsed. Maybe it's not valid?"
-    end
-    if project.is_a?( String )
+    elsif project.is_a?( String )
       raise "The project file could not be parsed. #{project}"
     end
 
@@ -135,9 +134,6 @@ class ProjectImportService < Versioneye::Service
       log.error " Can't import project file `#{filename}` from #{repo_name} branch #{branch} "
       return " Didn't find any project file of a supported package manager."
     end
-    if project.is_a?( String )
-      raise "The project file could not be parsed. #{project}"
-    end
 
     project_type = ProjectService.type_by_filename filename
     file_name = filename.split("/").last
@@ -146,6 +142,8 @@ class ProjectImportService < Versioneye::Service
 
     if project.nil?
       raise "The project file could not be parsed. Maybe it's not valid?"
+    elsif project.is_a?( String )
+      raise "The project file could not be parsed. #{project}"
     end
 
     revision = BitbucketRepo.revision_for user, repo_name, branch, filename
@@ -201,6 +199,8 @@ class ProjectImportService < Versioneye::Service
 
     if project.nil?
       raise "The project file could not be parsed. Maybe it's not valid?"
+    elsif project.is_a?( String )
+      raise "The project file could not be parsed. #{project}"
     end
 
     project.update_attributes({
