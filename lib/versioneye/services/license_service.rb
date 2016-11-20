@@ -87,6 +87,38 @@ class LicenseService < Versioneye::Service
   end
 
 
+  def self.update_spdx_ids
+    all_licenses_paged do |licenses|
+      licenses.each do |license|
+        p license.identifier
+      end
+    end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+  end
+
+
+  def self.all_licenses_paged
+    count = License.count()
+    page = 100
+    iterations = count / page
+    iterations += 1
+    (0..iterations).each do |i|
+      skip = i * page
+      licenses = License.all().skip(skip).limit(page)
+
+      yield licenses
+
+      co = i * page
+      log.info "all_licenses_paged iteration: #{i} - licenses processed: #{co}"
+    end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+  end
+
+
   private
 
 

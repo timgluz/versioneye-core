@@ -15,7 +15,7 @@ class License < Versioneye::Model
   field :url            , type: String # URL to the license text
   field :comments       , type: String # Maven specific
   field :distributions  , type: String # Maven specific
-  field :spdx_identifier, type: String # For example AGPL-1.0. See http://spdx.org/licenses/
+  field :spdx_id        , type: String # For example AGPL-1.0. See http://spdx.org/licenses/
   field :source         , type: String # Where it was crawled
 
   # TODO This is causing a too large index. For Python some names are containnign the license text. This need to be fixest! See -> License.where(:name => /\n/).count

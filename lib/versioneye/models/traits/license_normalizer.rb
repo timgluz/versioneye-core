@@ -16,9 +16,13 @@ module VersionEye
     def identifier name
       return 'unknown' if name.to_s.empty?
 
-      # return name if name.size > 100
-      spdx_id = spdx_identifier
-      return spdx_id if spdx_id
+      return name if name.size > 100
+
+      self.spdx_id = spdx_identifier
+      if !self.spdx_id.to_s.empty?
+        self.save
+        return self.spdx_id
+      end
 
       name.gsub("Licence", "License")
     rescue => e
