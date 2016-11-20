@@ -48,9 +48,7 @@ class Developer < Versioneye::Model
 
 
   def to_param
-    return Author.encode_name(self.name)      if !self.name.to_s.empty?
-    return Author.encode_name(self.developer) if !self.developer.to_s.empty?
-    return ""
+    Author.encode_name(self.dev_identifier)
   end
 
 
