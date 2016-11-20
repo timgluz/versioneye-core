@@ -55,7 +55,11 @@ class Developer < Versioneye::Model
 
 
   def product
-    Product.fetch_product language, prod_key
+    product = Product.fetch_product language, prod_key
+    if product.nil? && self.language.to_s.eql?(Product::A_LANGUAGE_JAVA)
+      product = Product.fetch_product Product::A_LANGUAGE_CLOJURE, prod_key
+    end
+    product
   end
 
 
