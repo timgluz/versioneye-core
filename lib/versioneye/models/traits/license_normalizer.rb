@@ -18,11 +18,8 @@ module VersionEye
 
       return name if name.size > 100
 
-      self.spdx_id = spdx_identifier
-      if !self.spdx_id.to_s.empty?
-        self.save
-        return self.spdx_id
-      end
+      spdx_id = spdx_identifier
+      return spdx_id if !spdx_id.to_s.empty?
 
       name.gsub("Licence", "License")
     rescue => e
