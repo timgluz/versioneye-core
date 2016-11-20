@@ -39,8 +39,11 @@ class Developer < Versioneye::Model
 
 
   def dev_identifier
-    return self.name if !self.name.to_s.empty?
-    return self.developer
+    return self.name      if !self.name.to_s.empty?
+    return self.developer if !self.developer.to_s.empty?
+    return self.email     if !self.email.to_s.empty?
+    return self.organization if !self.organization.to_s.empty?
+    return self.ids
   end
 
 
