@@ -62,11 +62,21 @@ class Developer < Versioneye::Model
     if product.nil? && Product.where(:prod_key => prod_key).count.to_i == 1
       product = Product.where(:prod_key => prod_key).first
     end
+    update_language product
+    product
+  end
+
+
+  def update_language product
     if product && !self.language.to_s.eql?(product.language.to_s)
+      return nil if Developer.where(:language => product.language, :prod_key => self.prod_key).count.to_i > 0
+
       self.language = product.language
       self.save
     end
-    product
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
 
