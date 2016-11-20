@@ -59,6 +59,13 @@ class Developer < Versioneye::Model
     if product.nil? && self.language.to_s.eql?(Product::A_LANGUAGE_JAVA)
       product = Product.fetch_product Product::A_LANGUAGE_CLOJURE, prod_key
     end
+    if product.nil? && Product.where(:prod_key => prod_key).count.to_i == 1
+      product = Product.where(:prod_key => prod_key).first
+    end
+    if product && !self.language.to_s.eql?(product.language.to_s)
+      self.language = product.language
+      self.save
+    end
     product
   end
 
