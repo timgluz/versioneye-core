@@ -19,12 +19,13 @@ class AuthorService < Versioneye::Service
     product = dev.product
     if product.nil?
       log.error "ERROR - developer #{dev.ids} #{dev.name} without product for #{dev.language}/#{dev.prod_key}!"
+      dev.delete
       return nil
     end
 
     author = find_or_create_author_by dev
     if author.nil?
-      log.error " -- ERROR - could not fetch author for developer.id #{dev.ids} with email #{dev.email}"
+      log.error " -- ERROR - could not fetch author for developer.id #{dev.ids} with email #{dev.email} and identifier #{dev.dev_identifier}"
       return nil
     end
 
