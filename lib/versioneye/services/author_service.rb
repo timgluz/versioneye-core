@@ -16,6 +16,8 @@ class AuthorService < Versioneye::Service
 
 
   def self.dev_to_author dev
+    return nil if dev.nil?
+
     product = dev.product
     if product.nil?
       log.error "ERROR - developer #{dev.ids} #{dev.name} without product for #{dev.language}/#{dev.prod_key}!"
@@ -90,8 +92,7 @@ class AuthorService < Versioneye::Service
       author = Author.where( :emails => dev.email ).first if author.nil?
       return author if author
     end
-    name_id = Author.encode_name( dev.dev_identifier )
-    author  = Author.where( :name_id => name_id ).first
+    author = dev.author
     if author.nil?
       author = Author.new({:name_id => name_id, :name => dev.dev_identifier})
       log.info "New Author #{name_id}"

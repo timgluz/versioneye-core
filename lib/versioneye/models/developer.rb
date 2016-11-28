@@ -52,6 +52,12 @@ class Developer < Versioneye::Model
   end
 
 
+  def author
+    name_id = Author.encode_name( self.dev_identifier )
+    Author.where( :name_id => name_id ).first
+  end
+
+
   def product
     product = Product.fetch_product language, prod_key
     if product.nil? && self.language.to_s.eql?(Product::A_LANGUAGE_JAVA)
