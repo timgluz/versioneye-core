@@ -19,6 +19,7 @@ class User < Versioneye::Model
   field :datenerhebung     , type: Boolean
   field :privacy_products  , type: String, default: 'everybody'
   field :privacy_comments  , type: String, default: 'everybody'
+  field :include_in_autocomplete, type: Boolean, default: true
 
   field :description, type: String
   field :location   , type: String
