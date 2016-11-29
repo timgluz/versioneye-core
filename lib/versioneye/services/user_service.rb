@@ -2,9 +2,10 @@ class UserService < Versioneye::Service
 
 
   def self.search(term)
-    User.where(:fullname.ne => 'Deleted').any_of({:username => /#{term}/i}, {:email => /#{term}/i})
+    User.where(:fullname.ne => 'Deleted', :include_in_autocomplete => true)
+        .any_of({:username => /#{term}/i}, {:email => /#{term}/i})
   rescue => e
-    log.error e.message
+    log.error "ERROR in UserService.search - #{e.message}"
     log.error e.backtrace.join("\n")
     return []
   end
