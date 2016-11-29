@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'dalli', '~> 2.7.6'
   s.add_runtime_dependency 'oauth', '~> 0.5.0'
   s.add_runtime_dependency 'aws-sdk', '~> 2.6.19'
-  s.add_runtime_dependency 'stripe', '~> 1.56.0'
+  s.add_runtime_dependency 'stripe', '~> 1.57.0'
   s.add_runtime_dependency 'tire', '~> 0.6.2'
   s.add_runtime_dependency 'octokit', '~> 4.6.0'
   s.add_runtime_dependency 'semverly', '~> 1.0.0'
