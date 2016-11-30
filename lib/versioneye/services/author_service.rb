@@ -87,13 +87,14 @@ class AuthorService < Versioneye::Service
   def self.find_or_create_author_by dev
     return nil if dev_to_ignore?( dev )
 
-    if dev.dev_identifier.to_s.empty?
+    if dev.name.to_s.empty? && dev.developer.to_s.empty?
       author = Author.where( :email => dev.email ).first
       author = Author.where( :emails => dev.email ).first if author.nil?
       return author if author
     end
     author = dev.author
     if author.nil?
+      name_id = Author.encode_name( dev.dev_identifier )
       author = Author.new({:name_id => name_id, :name => dev.dev_identifier})
       log.info "New Author #{name_id}"
     end

@@ -5,10 +5,11 @@ describe ReceiptMailer do
   describe 'receipt_email' do
 
     it 'should contain the receipt pdf' do
-
+      Plan.create_defaults
       user = UserFactory.create_new
       receipt = ReceiptFactory.create_new 1
       receipt.user = user
+      receipt.plan = Plan.small
 
       pdf = File.read("./spec/fixtures/files/invoice.pdf")
 

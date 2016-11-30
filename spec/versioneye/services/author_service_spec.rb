@@ -51,10 +51,10 @@ describe AuthorService do
       expect( AuthorService.dev_to_author(dev) ).to be_nil
     end
 
-    it "doesnt convert because dev has no name and email not exist in author collection" do
+    it "convert because dev has email" do
       product = ProductFactory.create_new
       dev = Developer.new({:email => 'test@web.de', :language => product.language, :prod_key => product.prod_key, :version => product.version})
-      expect( AuthorService.dev_to_author(dev) ).to be_nil
+      expect( AuthorService.dev_to_author(dev) ).to_not be_nil
     end
 
     it "converts because it creates a new author" do
