@@ -3,7 +3,7 @@ class ReceiptMailer < SuperMailer
 
   def receipt_email( receipt, pdf )
     @receipt = receipt
-    email = fetch_email receipt
+    email    = fetch_email receipt
     attachments[receipt.filename] = pdf
 
     m = mail(:to => email, :subject => "Receipt - #{receipt.receipt_nr}") do |format|
