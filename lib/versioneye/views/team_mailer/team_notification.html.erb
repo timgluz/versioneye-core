@@ -18,6 +18,7 @@
     <% if @team.security_notifications %>
       <col width="80px" />
     <% end %>
+    <col width="*" />
   </colgroup>
   <thead>
     <tr>
@@ -31,12 +32,16 @@
       <% if @team.security_notifications %>
         <th style="text-align: left;">Security</th>
       <% end %>
+      <th style="text-align: left;"></th>
     </tr>
   </thead>
   <tbody>
+    <% z = 0 %>
     <% @projects.each do |project| %>
-      <tr>
-        <td style="word-wrap: break-word">
+      <% bg_color = 'white' %>
+      <% bg_color = '#F0F0F0' if (z % 2) == 1 %>
+      <tr style="background-color: <%= bg_color %>">
+        <td style="word-wrap: break-word;">
           <a href="<%= @projectlink %>/<%= project.id.to_s %>?utm_medium=email&amp;utm_source=project_notifications"><%= project.name %></a>
         </td>
         <% if @team.version_notifications %>
@@ -54,7 +59,9 @@
         <% if @team.security_notifications %>
           <td>N/A</td>
         <% end %>
+        <td></td>
       </tr>
+      <% z += 1 %>
     <% end %>
   </tbody>
 </table>
