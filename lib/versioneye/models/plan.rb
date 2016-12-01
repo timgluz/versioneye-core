@@ -43,8 +43,7 @@ class Plan < Versioneye::Model
   end
 
   def self.create_free_plan
-    trial_0 = Plan.new
-    trial_0.name_id = A_PLAN_FREE
+    trial_0 = Plan.find_or_create_by(:name_id => A_PLAN_FREE)
     trial_0.name = 'Free'
     trial_0.price = '0'
     trial_0.os_projects = 4
@@ -72,7 +71,7 @@ class Plan < Versioneye::Model
     micro.private_projects = 5
     micro.api_rate_limit   = 100
     micro.cmp_rate_limit   = 100
-    free.prio = 5
+    micro.prio = 5
     micro.save
 
     small = Plan.find_or_create_by(:name_id => A_PLAN_SMALL)
@@ -82,7 +81,7 @@ class Plan < Versioneye::Model
     small.private_projects = 10
     small.api_rate_limit   = 150
     small.cmp_rate_limit   = 150
-    free.prio = 10
+    small.prio = 10
     small.save
 
     medium = Plan.find_or_create_by(:name_id => A_PLAN_MEDIUM)
@@ -92,7 +91,7 @@ class Plan < Versioneye::Model
     medium.private_projects = 20
     medium.api_rate_limit   = 300
     medium.cmp_rate_limit   = 300
-    free.prio = 15
+    medium.prio = 15
     medium.save
 
     large = Plan.find_or_create_by(:name_id => A_PLAN_LARGE)
@@ -103,7 +102,7 @@ class Plan < Versioneye::Model
     large.private_projects = 50
     large.api_rate_limit   = 500
     large.cmp_rate_limit   = 500
-    free.prio = 20
+    large.prio = 20
     large.save
 
     xlarge = Plan.find_or_create_by(:name_id => A_PLAN_XLARGE)
@@ -113,7 +112,7 @@ class Plan < Versioneye::Model
     xlarge.private_projects = 100
     xlarge.api_rate_limit   = 1000
     xlarge.cmp_rate_limit   = 1000
-    free.prio = 25
+    xlarge.prio = 25
     xlarge.save
 
     agency = Plan.find_or_create_by(:name_id => A_PLAN_XXLARGE)
@@ -124,7 +123,7 @@ class Plan < Versioneye::Model
     agency.private_projects = 250
     agency.api_rate_limit   = 2500
     agency.cmp_rate_limit   = 2500
-    free.prio = 30
+    agency.prio = 30
     agency.save
 
     enterprise = Plan.find_or_create_by(:name_id => A_PLAN_XXXLARGE)
@@ -135,7 +134,7 @@ class Plan < Versioneye::Model
     enterprise.private_projects = 500
     enterprise.api_rate_limit   = 5000
     enterprise.cmp_rate_limit   = 5000
-    free.prio = 35
+    enterprise.prio = 35
     enterprise.save
 
     micro_y = Plan.find_or_create_by(:name_id => A_PLAN_MICRO_Y)
@@ -157,7 +156,7 @@ class Plan < Versioneye::Model
     small_y.private_projects = 12
     small_y.api_rate_limit   = 150
     small_y.cmp_rate_limit   = 150
-    free.prio = 11
+    small_y.prio = 11
     small_y.save
 
     medium_y = Plan.find_or_create_by(:name_id => A_PLAN_MEDIUM_Y)
@@ -201,7 +200,7 @@ class Plan < Versioneye::Model
     agency_y.private_projects = 252
     agency_y.api_rate_limit   = 2500
     agency_y.cmp_rate_limit   = 2500
-    agency_y = 31
+    agency_y.prio = 31
     agency_y.save
 
     enterprise_y = Plan.find_or_create_by(:name_id => A_PLAN_XXXLARGE_Y)
