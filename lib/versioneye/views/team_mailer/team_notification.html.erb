@@ -18,7 +18,6 @@
     <% if @team.security_notifications %>
       <col width="80px" />
     <% end %>
-    <col width="*" />
   </colgroup>
   <thead>
     <tr>
@@ -32,14 +31,13 @@
       <% if @team.security_notifications %>
         <th style="text-align: left;">Security</th>
       <% end %>
-      <th style="text-align: left;"></th>
     </tr>
   </thead>
   <tbody>
     <% z = 0 %>
     <% @projects.each do |project| %>
       <% bg_color = 'white' %>
-      <% bg_color = '#F0F0F0' if (z % 2) == 1 %>
+      <% bg_color = '#F0F0F0' if (z % 2) == 0 %>
       <tr style="background-color: <%= bg_color %>">
         <td style="word-wrap: break-word;">
           <a href="<%= @projectlink %>/<%= project.id.to_s %>?utm_medium=email&amp;utm_source=project_notifications"><%= project.name %></a>
@@ -57,9 +55,11 @@
           </td>
         <% end %>
         <% if @team.security_notifications %>
-          <td>N/A</td>
+          <td>
+            <% color = project.licenses_red_sum.to_i == 0 ? "green" : "red" %>
+            <span title="security vulnerabilities" style="color: <%= color %>"><%= project.sv_count_sum %></span>
+          </td>
         <% end %>
-        <td></td>
       </tr>
       <% z += 1 %>
     <% end %>
