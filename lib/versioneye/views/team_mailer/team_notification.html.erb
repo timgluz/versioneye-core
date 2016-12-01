@@ -1,25 +1,35 @@
 
-<div style="font-size: 20px; padding-bottom: 15px;">
-  Team notification email
+<div style="font-size: 20px;">
+  <b>Organisation:</b> <%= @orga.name %>
 </div>
-
 <div style="font-size: 20px; padding-bottom: 15px;">
-  <span><b>Organisation:</b></span>: <%= @orga.name %></br>
-  <span><b>Team:</b></span>: <%= @team.name %></br>
+  <b>Team:</b> <%= @team.name %>
 </div>
 
 <table style="table-layout: fixed; width: 100%">
+  <colgroup>
+    <col width="*" />
+    <% if @team.version_notifications %>
+      <col width="80px" />
+    <% end %>
+    <% if @team.license_notifications %>
+      <col width="80px" />
+    <% end %>
+    <% if @team.security_notifications %>
+      <col width="80px" />
+    <% end %>
+  </colgroup>
   <thead>
     <tr>
-      <th>Project</th>
+      <th style="text-align: left;">Project</th>
       <% if @team.version_notifications %>
-        <th>Outdated</th>
+        <th style="text-align: left;">Outdated</th>
       <% end %>
       <% if @team.license_notifications %>
-        <th>Licenses</th>
+        <th style="text-align: left;">Licenses</th>
       <% end %>
       <% if @team.security_notifications %>
-        <th>Security</th>
+        <th style="text-align: left;">Security</th>
       <% end %>
     </tr>
   </thead>
