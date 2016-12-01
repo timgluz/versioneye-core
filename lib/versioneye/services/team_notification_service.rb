@@ -23,7 +23,7 @@ class TeamNotificationService  < Versioneye::Service
     return nil if team.notifications_all_disabled?
 
     projects = orga.team_projects team.ids
-    return nil if projects.nil? || !projects.empty?
+    return nil if projects.nil? || projects.empty?
 
     TeamMailer.team_notification( orga, team, projects )
   end
