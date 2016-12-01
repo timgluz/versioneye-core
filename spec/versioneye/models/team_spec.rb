@@ -26,6 +26,20 @@ describe Team do
     end
   end
 
+  describe "notifications_all_disabled?" do
+    it "returns false by default" do
+      team = Team.new({:name => 'owner' })
+      expect(team.notifications_all_disabled?).to be_falsey
+    end
+    it "returns true" do
+      team = Team.new({:name => 'owner' })
+      team.version_notifications  = false
+      team.license_notifications  = false
+      team.security_notifications = false
+      expect(team.notifications_all_disabled?).to be_truthy
+    end
+  end
+
   describe "add_member" do
     it "adds an member" do
       # false because already member

@@ -14,4 +14,17 @@ class TeamMailer < SuperMailer
   end
 
 
+  def team_notification( orga, team, projects )
+    @orga = orga
+    @team = team
+    @projects = projects
+    @server_url = Settings.instance.server_url
+    @projectlink = "#{Settings.instance.server_url}/user/projects"
+    m = mail( :to => team.emails, :subject => "Team notifications for #{orga.name}/#{team.name}" ) do |format|
+      format.html{ render layout: 'email_html_layout' }
+    end
+    set_from( m )
+  end
+
+
 end

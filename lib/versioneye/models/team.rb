@@ -28,6 +28,24 @@ class Team < Versioneye::Model
     name
   end
 
+  def notifications_all_disabled?
+    self.version_notifications == false &&
+    self.license_notifications == false &&
+    self.security_notifications == false
+  end
+
+  def emails
+    ems = []
+    members.each do |member|
+      next if member.user.nil?
+      next if member.user.deleted_user
+
+      email = member.user.email
+      ems << email if !ems.include?( email )
+    end
+    ems.join(',')
+  end
+
   def add_member user
     return false if user.nil?
     self.members.each do |member|
