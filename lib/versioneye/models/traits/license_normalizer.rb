@@ -16,7 +16,8 @@ module VersionEye
     def identifier name
       return 'unknown' if name.to_s.empty?
 
-      # return name if name.size > 100
+      return name if name.size > 100
+      return name if name.to_s.match(/and\s*\n/i)
 
       spdx_id = spdx_identifier
       return spdx_id if !spdx_id.to_s.empty?
