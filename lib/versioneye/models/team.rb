@@ -7,6 +7,10 @@ class Team < Versioneye::Model
 
   field :name, type: String
 
+  field :version_notifications,  type: Boolean, default: true
+  field :license_notifications,  type: Boolean, default: true
+  field :security_notifications, type: Boolean, default: true
+
   has_many :members, class_name: 'TeamMember'
 
   belongs_to :organisation
