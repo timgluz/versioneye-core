@@ -34,6 +34,7 @@ class Plan < Versioneye::Model
   field :os_projects     , type: Integer, default: 1  # OS = Open Source
   field :api_rate_limit  , type: Integer, default: 50
   field :cmp_rate_limit  , type: Integer, default: 50
+  field :prio            , type: Integer, default: 0  # Priority
 
   has_many :organisations
 
@@ -61,6 +62,7 @@ class Plan < Versioneye::Model
     free.private_projects = 1
     free.api_rate_limit   = 50
     free.cmp_rate_limit   = 50
+    free.prio = 0
     free.save
 
     micro = Plan.find_or_create_by(:name_id => A_PLAN_MICRO)
@@ -70,6 +72,7 @@ class Plan < Versioneye::Model
     micro.private_projects = 5
     micro.api_rate_limit   = 100
     micro.cmp_rate_limit   = 100
+    free.prio = 5
     micro.save
 
     small = Plan.find_or_create_by(:name_id => A_PLAN_SMALL)
@@ -79,6 +82,7 @@ class Plan < Versioneye::Model
     small.private_projects = 10
     small.api_rate_limit   = 150
     small.cmp_rate_limit   = 150
+    free.prio = 10
     small.save
 
     medium = Plan.find_or_create_by(:name_id => A_PLAN_MEDIUM)
@@ -88,6 +92,7 @@ class Plan < Versioneye::Model
     medium.private_projects = 20
     medium.api_rate_limit   = 300
     medium.cmp_rate_limit   = 300
+    free.prio = 15
     medium.save
 
     large = Plan.find_or_create_by(:name_id => A_PLAN_LARGE)
@@ -98,6 +103,7 @@ class Plan < Versioneye::Model
     large.private_projects = 50
     large.api_rate_limit   = 500
     large.cmp_rate_limit   = 500
+    free.prio = 20
     large.save
 
     xlarge = Plan.find_or_create_by(:name_id => A_PLAN_XLARGE)
@@ -107,6 +113,7 @@ class Plan < Versioneye::Model
     xlarge.private_projects = 100
     xlarge.api_rate_limit   = 1000
     xlarge.cmp_rate_limit   = 1000
+    free.prio = 25
     xlarge.save
 
     agency = Plan.find_or_create_by(:name_id => A_PLAN_XXLARGE)
@@ -117,6 +124,7 @@ class Plan < Versioneye::Model
     agency.private_projects = 250
     agency.api_rate_limit   = 2500
     agency.cmp_rate_limit   = 2500
+    free.prio = 30
     agency.save
 
     enterprise = Plan.find_or_create_by(:name_id => A_PLAN_XXXLARGE)
@@ -127,6 +135,7 @@ class Plan < Versioneye::Model
     enterprise.private_projects = 500
     enterprise.api_rate_limit   = 5000
     enterprise.cmp_rate_limit   = 5000
+    free.prio = 35
     enterprise.save
 
     micro_y = Plan.find_or_create_by(:name_id => A_PLAN_MICRO_Y)
@@ -137,6 +146,7 @@ class Plan < Versioneye::Model
     micro_y.private_projects = 7
     micro_y.api_rate_limit   = 100
     micro_y.cmp_rate_limit   = 100
+    micro_y.prio = 6
     micro_y.save
 
     small_y = Plan.find_or_create_by(:name_id => A_PLAN_SMALL_Y)
@@ -147,6 +157,7 @@ class Plan < Versioneye::Model
     small_y.private_projects = 12
     small_y.api_rate_limit   = 150
     small_y.cmp_rate_limit   = 150
+    free.prio = 11
     small_y.save
 
     medium_y = Plan.find_or_create_by(:name_id => A_PLAN_MEDIUM_Y)
@@ -157,6 +168,7 @@ class Plan < Versioneye::Model
     medium_y.private_projects = 22
     medium_y.api_rate_limit   = 300
     medium_y.cmp_rate_limit   = 300
+    medium_y.prio = 16
     medium_y.save
 
     large_y = Plan.find_or_create_by(:name_id => A_PLAN_LARGE_Y)
@@ -167,6 +179,7 @@ class Plan < Versioneye::Model
     large_y.private_projects = 52
     large_y.api_rate_limit   = 500
     large_y.cmp_rate_limit   = 500
+    large_y.prio = 21
     large_y.save
 
     xlarge_y = Plan.find_or_create_by(:name_id => A_PLAN_XLARGE_Y)
@@ -177,6 +190,7 @@ class Plan < Versioneye::Model
     xlarge_y.private_projects = 102
     xlarge_y.api_rate_limit   = 1000
     xlarge_y.cmp_rate_limit   = 1000
+    xlarge_y.prio = 26
     xlarge_y.save
 
     agency_y = Plan.find_or_create_by(:name_id => A_PLAN_XXLARGE_Y)
@@ -187,6 +201,7 @@ class Plan < Versioneye::Model
     agency_y.private_projects = 252
     agency_y.api_rate_limit   = 2500
     agency_y.cmp_rate_limit   = 2500
+    agency_y = 31
     agency_y.save
 
     enterprise_y = Plan.find_or_create_by(:name_id => A_PLAN_XXXLARGE_Y)
@@ -197,6 +212,7 @@ class Plan < Versioneye::Model
     enterprise_y.private_projects = 502
     enterprise_y.api_rate_limit   = 5000
     enterprise_y.cmp_rate_limit   = 5000
+    enterprise_y.prio = 36
     enterprise_y.save
   end
 
