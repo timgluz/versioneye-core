@@ -7,6 +7,10 @@ class Team < Versioneye::Model
 
   field :name, type: String
 
+  field :version_notifications,  type: Boolean, default: true
+  field :license_notifications,  type: Boolean, default: true
+  field :security_notifications, type: Boolean, default: true
+
   has_many :members, class_name: 'TeamMember'
 
   belongs_to :organisation
@@ -22,6 +26,24 @@ class Team < Versioneye::Model
 
   def to_param
     name
+  end
+
+  def notifications_all_disabled?
+    self.version_notifications == false &&
+    self.license_notifications == false &&
+    self.security_notifications == false
+  end
+
+  def emails
+    ems = []
+    members.each do |member|
+      next if member.user.nil?
+      next if member.user.deleted_user
+
+      email = member.user.email
+      ems << email if !ems.include?( email )
+    end
+    ems.join(',')
   end
 
   def add_member user

@@ -1,0 +1,76 @@
+
+<div style="font-size: 20px;">
+  <b>Organisation:</b> <%= @orga.name %>
+</div>
+<div style="font-size: 20px; padding-bottom: 15px;">
+  <b>Team:</b> <%= @team.name %>
+</div>
+
+<table style="table-layout: fixed; width: 100%">
+  <colgroup>
+    <col width="*" />
+    <% if @team.version_notifications %>
+      <col width="80px" />
+    <% end %>
+    <% if @team.license_notifications %>
+      <col width="80px" />
+    <% end %>
+    <% if @team.security_notifications %>
+      <col width="80px" />
+    <% end %>
+  </colgroup>
+  <thead>
+    <tr>
+      <th style="text-align: left;">Project</th>
+      <% if @team.version_notifications %>
+        <th style="text-align: left;">Outdated</th>
+      <% end %>
+      <% if @team.license_notifications %>
+        <th style="text-align: left;">Licenses</th>
+      <% end %>
+      <% if @team.security_notifications %>
+        <th style="text-align: left;">Security</th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% z = 0 %>
+    <% @projects.each do |project| %>
+      <% bg_color = 'white' %>
+      <% bg_color = '#F0F0F0' if (z % 2) == 0 %>
+      <tr style="background-color: <%= bg_color %>">
+        <td style="word-wrap: break-word;">
+          <a href="<%= @projectlink %>/<%= project.id.to_s %>?utm_medium=email&amp;utm_source=project_notifications"><%= project.name %></a>
+        </td>
+        <% if @team.version_notifications %>
+          <% color = project.out_number_sum.to_i == 0 ? "green" : "red" %>
+          <td><span title="out-dated dependencies" style="color: <%= color %>"><%= project.out_number_sum %></span></td>
+        <% end %>
+        <% if @team.license_notifications %>
+          <td>
+            <% color = project.licenses_red_sum.to_i == 0 ? "green" : "red" %>
+            <span title="licenses violating the license whitelist" style="color: <%= color %>"><%= project.licenses_red_sum %></span> :
+            <% color = project.licenses_unknown_sum.to_i == 0 ? "green" : "orange" %>
+            <span title="unknown licenses" style="color: <%= color %>"><%= project.licenses_unknown_sum %></span>
+          </td>
+        <% end %>
+        <% if @team.security_notifications %>
+          <td>
+            <% color = project.licenses_red_sum.to_i == 0 ? "green" : "red" %>
+            <span title="security vulnerabilities" style="color: <%= color %>"><%= project.sv_count_sum %></span>
+          </td>
+        <% end %>
+      </tr>
+      <% z += 1 %>
+    <% end %>
+  </tbody>
+</table>
+
+<p>
+  We keep you informed. <br/>
+  Have a great day!
+</p>
+<p>
+  Your VersionEye Team<br/>
+  <a href="<%= Settings.instance.server_url %>?utm_medium=email&amp;utm_source=team_notifications"><%= Settings.instance.server_url %></a>
+</p>
