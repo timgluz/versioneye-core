@@ -53,13 +53,18 @@ class TeamService < Versioneye::Service
       project = Project.where(:id => project_id, :organisation_id => orga.ids).first
       return nil if project.nil?
 
-      project.teams = [team]
+      return nil if project.teams.count > 0 &&
+                    project.teams.map(&:name).include?(team.name)
+
+      project.teams.push( team )
       project.save
 
       return nil if project.children.count == 0
 
       project.children.each do |child|
-        child.teams = [team]
+        next if child.teams.count > 0 &&
+                child.teams.map(&:name).include?(team.name)
+        child.teams.push(team)
         child.save
       end
     rescue => e
