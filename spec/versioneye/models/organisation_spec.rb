@@ -271,6 +271,26 @@ describe Organisation do
   end
 
 
+  describe "change_visibility_allowed?" do
+    it 'returns false' do
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.free_plan})
+      expect( orga.save ).to be_truthy
+      expect( orga.change_visibility_allowed? ).to be_falsey
+    end
+    it 'returns true' do
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.medium})
+      expect( orga.save ).to be_truthy
+      expect( orga.change_visibility_allowed? ).to be_truthy
+    end
+    it 'returns true' do
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.free_plan})
+      orga.change_visibility = true
+      expect( orga.save ).to be_truthy
+      expect( orga.change_visibility_allowed? ).to be_truthy
+    end
+  end
+
+
   describe "parent_projects" do
     it 'returns the parent projects' do
       Organisation.delete_all

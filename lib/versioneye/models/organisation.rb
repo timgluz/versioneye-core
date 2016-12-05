@@ -21,6 +21,7 @@ class Organisation < Versioneye::Model
   field :max_private_projects, type: Integer, default: 0  # max closed source projects allowed
   field :max_os_projects     , type: Integer, default: 0  # max Open Source projects allowed
   field :pdf_exports         , type: Boolean, default: false
+  field :change_visibility   , type: Boolean, default: false
 
   belongs_to :plan
   has_one    :billing_address
@@ -218,6 +219,21 @@ class Organisation < Versioneye::Model
     return true if self.pdf_exports == true
     return true if self.plan.price.to_i > 20
     return false
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    false
+  end
+
+  def change_visibility_allowed?
+    return true if Settings.instance.environment.eql?("enterprise")
+    return true if self.change_visibility == true
+    return true if self.plan.price.to_i > 0
+    return false
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    false
   end
 
 
