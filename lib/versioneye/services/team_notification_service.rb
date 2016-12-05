@@ -21,6 +21,7 @@ class TeamNotificationService  < Versioneye::Service
   def self.process_team orga, team
     p " - Process orga #{orga.name} and team #{team.name}"
     return nil if team.notifications_all_disabled?
+    return nil if team.notify_today? == false
 
     projects = orga.team_projects team.ids
     return nil if projects.nil? || projects.empty?

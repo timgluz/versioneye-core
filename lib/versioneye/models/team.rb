@@ -11,6 +11,14 @@ class Team < Versioneye::Model
   field :license_notifications,  type: Boolean, default: true
   field :security_notifications, type: Boolean, default: true
 
+  field :monday,    type: Boolean, default: true
+  field :tuesday,   type: Boolean, default: true
+  field :wednesday, type: Boolean, default: true
+  field :thursday,  type: Boolean, default: true
+  field :friday,    type: Boolean, default: true
+  field :saturday,  type: Boolean, default: false
+  field :sunday,    type: Boolean, default: false
+
   has_many :members, class_name: 'TeamMember'
 
   belongs_to :organisation
@@ -29,9 +37,21 @@ class Team < Versioneye::Model
   end
 
   def notifications_all_disabled?
-    self.version_notifications == false &&
-    self.license_notifications == false &&
+    self.version_notifications  == false &&
+    self.license_notifications  == false &&
     self.security_notifications == false
+  end
+
+  def notify_today?
+    wday = DateTime.new.strftime('%A')
+    return true if wday.eql?('Monday')    && self.monday
+    return true if wday.eql?('Tuesday')   && self.tuesday
+    return true if wday.eql?('Wednesday') && self.wednesday
+    return true if wday.eql?('Thursday')  && self.thursday
+    return true if wday.eql?('Friday')    && self.friday
+    return true if wday.eql?('Saturday')  && self.saturday
+    return true if wday.eql?('Sunday')    && self.sunday
+    return false
   end
 
   def emails
