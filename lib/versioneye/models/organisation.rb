@@ -20,6 +20,7 @@ class Organisation < Versioneye::Model
 
   field :max_private_projects, type: Integer, default: 0  # max closed source projects allowed
   field :max_os_projects     , type: Integer, default: 0  # max Open Source projects allowed
+  field :pdf_exports         , type: Boolean, default: false
 
   belongs_to :plan
   has_one    :billing_address
@@ -211,6 +212,12 @@ class Organisation < Versioneye::Model
     return self.max_os_projects  if self.max_os_projects > 0
     return self.plan.os_projects if !self.plan.nil?
     1
+  end
+
+  def pdf_exports_allowed?
+    return true if self.pdf_exports == true
+    return true if self.plan.price.to_i > 20
+    return false
   end
 
 

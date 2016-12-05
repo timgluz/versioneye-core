@@ -221,6 +221,56 @@ describe Organisation do
   end
 
 
+  describe "max_os_projects_count" do
+    it 'returns 5' do
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
+      expect( orga.save ).to be_truthy
+      expect( orga.max_os_projects_count ).to eq(5)
+    end
+    it 'returns 10' do
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
+      orga.max_os_projects = 10
+      expect( orga.save ).to be_truthy
+      expect( orga.max_os_projects_count ).to eq(10)
+    end
+  end
+
+
+  describe "max_private_projects_count" do
+    it 'returns 5' do
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
+      expect( orga.save ).to be_truthy
+      expect( orga.max_private_projects_count ).to eq(5)
+    end
+    it 'returns 10' do
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
+      orga.max_private_projects = 10
+      expect( orga.save ).to be_truthy
+      expect( orga.max_private_projects_count ).to eq(10)
+    end
+  end
+
+
+  describe "pdf_exports_allowed?" do
+    it 'returns false' do
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
+      expect( orga.save ).to be_truthy
+      expect( orga.pdf_exports_allowed? ).to be_falsey
+    end
+    it 'returns true' do
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.medium})
+      expect( orga.save ).to be_truthy
+      expect( orga.pdf_exports_allowed? ).to be_truthy
+    end
+    it 'returns true' do
+      orga = Organisation.new({:name => 'Orga', :plan => Plan.micro})
+      orga.pdf_exports = true
+      expect( orga.save ).to be_truthy
+      expect( orga.pdf_exports_allowed? ).to be_truthy
+    end
+  end
+
+
   describe "parent_projects" do
     it 'returns the parent projects' do
       Organisation.delete_all
