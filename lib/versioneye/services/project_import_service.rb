@@ -5,7 +5,7 @@ class ProjectImportService < Versioneye::Service
   A_TASK_TTL       = 60 # 60 seconds = 1 minute
 
 
-  def self.import_all_github user, orga_id, pfs = ['Gemfile', 'Gemfile.lock', '.gemspec' 'package.json', 'pom.xml', 'bower.json', 'Podfile', 'Podfile.lock', '.gradle'], max_depth = 2
+  def self.import_all_github user, orga_id, pfs = ['Gemfile', 'Gemfile.lock', '.gemspec', 'package.json', 'pom.xml', 'bower.json', 'Podfile', 'Podfile.lock', '.gradle'], max_depth = 2
     user.github_repos.where(:fullname => /\Ablinkist/, :private => true).each do |repo|
       if repo.branches.to_a.empty?
         p " - No branches for #{repo.fullname}"
