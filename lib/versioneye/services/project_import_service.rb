@@ -7,24 +7,40 @@ class ProjectImportService < Versioneye::Service
 
   def self.import_all_github user, orga_id, pfs = ['Gemfile', 'Gemfile.lock', 'package.json', 'pom.xml', 'bower.json', 'Podfile', 'Podfile.lock', 'build.gradle']
     user.github_repos.where(:fullname => /\Ablinkist/, :private => true).each do |repo|
-      next if repo.branches.to_a.empty?
+      if repo.branches.to_a.empty?
+        p " - No branches for #{repo.fullname}"
+        next
+      end
 
       branch = ''
-      branch = 'master'  if repo.branches.include?("master")
       branch = 'develop' if repo.branches.include?('develop')
-      next if branch.empty?
+      branch = 'master'  if repo.branches.include?("master")
+      if branch.empty?
+        p " - No [develop, master] branche found for #{repo.fullname}"
+        next
+      end
 
       import_all_github_from user, repo, branch, pfs, orga_id
     end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
 
   def self.import_all_github_from user, repo, branch, pfs, orga_id
+    if repo.project_files[branch].empty?
+      p " - No files found for #{repo.fullname} in branch #{branch}"
+      return nil
+    end
+
     repo.project_files[branch].each do |pf|
       path = pf['path']
       if pfs.include?( path )
-        p "import - #{user.username} - #{repo.fullname} - #{path} - #{branch}"
+        p "Import - #{user.username} - #{repo.fullname} - #{path} - #{branch}"
         import_from_github user, repo.fullname, pf['path'], branch, orga_id
+      else
+        p " - Skip #{repo.fullname} because no #{pfs} found in branch #{branch}"
       end
     end
   rescue => e
