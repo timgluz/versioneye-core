@@ -5,7 +5,7 @@ class ProjectImportService < Versioneye::Service
   A_TASK_TTL       = 60 # 60 seconds = 1 minute
 
 
-  def self.import_all_github user, pfs = ['Gemfile', 'package.json', 'pom.xml', 'bower.json', 'Podfile', 'build.gradle']
+  def self.import_all_github user, orga_id, pfs = ['Gemfile', 'Gemfile.lock', 'package.json', 'pom.xml', 'bower.json', 'Podfile', 'Podfile.lock', 'build.gradle']
     user.github_repos.where(:fullname => /\Ablinkist/, :private => true).each do |repo|
       next if repo.branches.to_a.empty?
 
@@ -14,17 +14,17 @@ class ProjectImportService < Versioneye::Service
       branch = 'develop' if repo.branches.include?('develop')
       next if branch.empty?
 
-      import_all_github_from user, repo, branch, pfs
+      import_all_github_from user, repo, branch, pfs, orga_id
     end
   end
 
 
-  def self.import_all_github_from user, repo, branch, pfs
+  def self.import_all_github_from user, repo, branch, pfs, orga_id
     repo.project_files[branch].each do |pf|
       path = pf['path']
       if pfs.include?( path )
         p "import - #{user.username} - #{repo.fullname} - #{path} - #{branch}"
-        import_from_github user, repo.fullname, pf['path'], branch
+        import_from_github user, repo.fullname, pf['path'], branch, orga_id
       end
     end
   rescue => e
