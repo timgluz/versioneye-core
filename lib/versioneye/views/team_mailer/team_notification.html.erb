@@ -57,7 +57,9 @@
         <% if @team.security_notifications %>
           <td>
             <% color = project.licenses_red_sum.to_i == 0 ? "green" : "red" %>
-            <span title="security vulnerabilities" style="color: <%= color %>"><%= project.sv_count_sum %></span>
+            <% sv_count = 0 %>
+            <% sv_count = project.sv_count_sum if project.sv_count_sum.to_i >= 0 %>
+            <span title="security vulnerabilities" style="color: <%= color %>"><%= sv_count %></span>
           </td>
         <% end %>
       </tr>
