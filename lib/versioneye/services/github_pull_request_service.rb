@@ -57,7 +57,7 @@ class GithubPullRequestService < Versioneye::Service
     new_project  = ProjectImportService.create_project_from project_file, token
     new_project.name = filename
     new_project.temp = true
-    new_project.temp_lock = true # prevent from deletion
+    new_project.temp_lock = true # prevent from deleting
     new_project.license_whitelist_id   = project.license_whitelist_id
     new_project.component_whitelist_id = project.component_whitelist_id
     new_project.save
