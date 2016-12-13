@@ -65,9 +65,9 @@ class GithubPullRequestService < Versioneye::Service
     ProjectdependencyService.update_licenses_security new_project
 
     new_project.dependencies.each do |dep|
-      if (!dep.sv_ids.empty? ||                 # security vulnerability
-           dep.license_caches.to_a.empty? ||    # unknown license
-           dep.lwl_violation.to_s.eql?('true')) # license whitelist violation
+      if (!dep.sv_ids.empty? ||                # security vulnerability
+           dep.license_caches.to_a.empty? ||   # unknown license
+           dep.license_violation == true)      # violating lwl and/or cwl
         create_pr_issue filename, dep, pr
       end
     end
