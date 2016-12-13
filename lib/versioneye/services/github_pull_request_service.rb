@@ -93,13 +93,14 @@ class GithubPullRequestService < Versioneye::Service
       :version_current => dep.version_current,
       :license => dep.licenses_string,
       :security_count =>  dep.sv_ids.count,
-      :lwl_violation => dep.lwl_violation
+      :lwl_violation => dep.lwl_violation,
+      :license_violation => dep.license_violation
       })
     issue.pullrequest = pullrequest
     if issue.save
       pullrequest.security_count        += 1 if issue.security_count > 0
       pullrequest.unknown_license_count += 1 if issue.license.eql?('UNKNOWN')
-      pullrequest.lwl_violation_count   += 1 if issue.lwl_violation
+      pullrequest.lwl_violation_count   += 1 if issue.license_violation
       pullrequest.status = Pullrequest::A_STATUS_ERROR
       pullrequest.save
     end
