@@ -315,7 +315,7 @@ class ProjectdependencyService < Versioneye::Service
           licenseCach.save
         end # end for each loop
         dependency.lwl_violation = ProjectService.red_license?( dependency, project.license_whitelist )
-        if ProjectService.whitelisted?( dependency.license_caches, project.license_whitelist ) == false
+        if project.license_whitelist && ProjectService.whitelisted?( dependency.license_caches, project.license_whitelist ) == false
           dependency.license_violation = true
         end
         dependency.save
