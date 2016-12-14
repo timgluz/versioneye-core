@@ -85,7 +85,7 @@ describe Bitbucket do
                                    user_with_token[:bitbucket_secret])
         expect( user_info             ).to_not be_nil
         expect( user_info.is_a?(Hash) ).to be_truthy
-        expect( user_info[:username]  ).to eql(user_with_token[:bitbucket_login])
+        expect( user_info[:username]  ).to eql( user_with_token[:bitbucket_login] )
       end
     end
 
