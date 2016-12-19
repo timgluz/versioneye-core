@@ -36,7 +36,7 @@ class LwlPdfService < LwlService
 
   def self.compile_html project, exclude_kids = false, flatten = true
     fill_dto project, flatten
-    children = prepare_kids project, exclude_kids, flatten
+    children  = prepare_kids project, exclude_kids, flatten
     namespace = OpenStruct.new(project: project, children: children)
     content_file = Settings.instance.lwl_pdf_content
     erb = ERB.new(File.read(content_file))

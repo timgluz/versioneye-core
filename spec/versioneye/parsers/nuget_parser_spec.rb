@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe NugetParser do
   let(:test_file_url){
-    "https://s3.amazonaws.com/veye_test_env/nuget/Microsoft.AspNet.SignalR.Client.nuspec" 
+    "https://s3.amazonaws.com/veye_test_env/nuget/Microsoft.AspNet.SignalR.Client.nuspec"
   }
   let(:product1){
     FactoryGirl.create(
@@ -61,7 +61,7 @@ describe NugetParser do
 
     it "matches patched_patch semvers" do
       semver = parser.rules[:semver]
-      
+
       expect( semver.match '2.0.30506.0' ).not_to be_nil
       expect( semver.match '1.6.6.0' ).not_to be_nil
       expect( semver.match '0.18.3.1' ).not_to be_nil
@@ -84,7 +84,7 @@ describe NugetParser do
       expect( less_equal.match("(,1.0]") ).not_to be_nil
       expect( less_equal.match("(,2.2.0]") ).not_to be_nil
     end
-   
+
     it "matches rule of exact match" do
       exact = parser.rules[:exact]
 
@@ -96,7 +96,7 @@ describe NugetParser do
 
     it "matches rule of greater_than" do
       greater_than = parser.rules[:greater_than]
-      
+
       expect( greater_than.match("(1,)") ).not_to be_nil
       expect( greater_than.match("(1.0,)") ).not_to be_nil
       expect( greater_than.match("(1.2.0,)") ).not_to be_nil
@@ -116,12 +116,12 @@ describe NugetParser do
       expect( greater_than.match("[1,)") ).not_to be_nil
       expect( greater_than.match("[1.0,)") ).not_to be_nil
       expect( greater_than.match("[1.2.0,)") ).not_to be_nil
-     
+
     end
 
     it "matches range 1.0 < x < 2.0" do
       range = parser.rules[:gt_range_lt]
-      
+
       expect( range.match("(1,2)") ).not_to be_nil
       expect( range.match("(1.0,2.0)") ).not_to be_nil
       expect( range.match("(1.0,2.0.1)") ).not_to be_nil
@@ -135,9 +135,9 @@ describe NugetParser do
       expect( range.match("[1.0,2.0.2)") ).not_to be_nil
     end
 
-    it "matches range 1.0 < x <= 2.0" do 
+    it "matches range 1.0 < x <= 2.0" do
       range = parser.rules[:gt_range_lte]
-      
+
       expect( range.match("(1,2]") ).not_to be_nil
       expect( range.match("(1.0,2.0]") ).not_to be_nil
       expect( range.match("(1.0,2.0.3]") ).not_to be_nil
@@ -167,7 +167,7 @@ describe NugetParser do
 
     it "returns unparsed label when product is nil" do
       version_data = parser.parse_version_data("0.9", nil)
-      
+
       expect( version_data ).not_to be_nil
       expect( version_data[:version]  ).to eq("0.9")
       expect( version_data[:label]    ).to eq("0.9")
@@ -212,7 +212,7 @@ describe NugetParser do
 
     it "returns correct version for requested version (1.6,)" do
       version_data = parser.parse_version_data("(1.6,)", product3)
-      
+
       expect( version_data ).not_to be_nil
       expect( version_data[:label] ).to eq("(1.6,)")
       expect( version_data[:version] ).to eq("2.1")
@@ -221,7 +221,7 @@ describe NugetParser do
 
     it "returns correct version for requested version 1.6" do
       version_data = parser.parse_version_data("1.6", product3)
-    
+
       expect( version_data).not_to be_nil
       expect( version_data[:label] ).to eq("1.6")
       expect( version_data[:version] ).to eq("2.1")
@@ -230,7 +230,7 @@ describe NugetParser do
 
     it "returns correct version for requested version (1.6, 2.0)" do
       version_data = parser.parse_version_data("(1.6, 2.0)", product3)
-      
+
       expect( version_data).not_to be_nil
       expect( version_data[:label] ).to eq("(1.6,2.0)")
       expect( version_data[:version] ).to eq("1.9")
@@ -449,8 +449,8 @@ describe NugetParser do
       expect(res[:version_requested]).to eq('2.0')
       expect(res[:version_label]).to eq('(1.9,)')
       expect(res[:comperator]).to eq('>')
-      
-    
+
+
       res = parser.parse_requested_version('(,2.2)', depx, product4)
       expect(res).not_to be_nil
       expect(res[:version_requested]).to eq('2.0')

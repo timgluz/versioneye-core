@@ -60,7 +60,7 @@ describe NugetJsonParser do
     FactoryGirl.create(
       :product_with_versions,
       prod_key: "Microsoft.Dnx.Compilation.CSharp.Common",
-      name:"Microsoft.Dnx.Compilation.CSharp.Common", 
+      name:"Microsoft.Dnx.Compilation.CSharp.Common",
       prod_type: Project::A_TYPE_NUGET,
       language: Product::A_LANGUAGE_CSHARP,
       version: "1.0.0-rc1-final"
@@ -81,7 +81,7 @@ describe NugetJsonParser do
 
       expect( project.projectdependencies.size ).to eq(6)
       deps = project.projectdependencies
-      
+
       expect( deps[0].name ).to eq(product4[:name])
       expect( deps[0].version_requested ).to eq(product4[:version])
       expect( deps[0].comperator ).to eq("=")
@@ -117,7 +117,7 @@ describe NugetJsonParser do
 
       expect( project.projectdependencies.size ).to eq(6)
       deps = project.projectdependencies
- 
+
       expect( deps[0].name ).to eq(product4[:name])
       expect( deps[0].version_requested ).to eq(product4[:version])
       expect( deps[0].comperator ).to eq(">=")
@@ -129,7 +129,7 @@ describe NugetJsonParser do
       expect( deps[2].name ).to eq(product6[:name])
       expect( deps[2].version_requested ).to eq(product6[:version])
       expect( deps[2].comperator ).to eq("=")
-      
+
     end
 
     let(:igor_project_file){ File.read "spec/fixtures/files/nuget/igor_project.json"  }
