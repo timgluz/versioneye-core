@@ -1,0 +1,46 @@
+<p>
+  Hey sales guy,
+</p>
+<p>
+  There is a new lead available:
+</p>
+<p>
+  <table>
+    <tr>
+      <td>SCM: </td>
+      <td><%= @el.scm %></td>
+    </tr>
+    <tr>
+      <td>Binary repository: </td>
+      <td><%= @el.repository %></td>
+    </tr>
+    <tr>
+      <td>CI system: </td>
+      <td><%= @el.ci %></td>
+    </tr>
+    <tr>
+      <td>Virtualization: </td>
+      <td><%= @el.virtualization %></td>
+    </tr>
+    <tr>
+      <td>Name: </td>
+      <td><%= @el.name %></td>
+    </tr>
+    <tr>
+      <td>Email: </td>
+      <td><%= @el.email %></td>
+    </tr>
+    <tr>
+      <td>Note: </td>
+      <td><%= @el.Note %></td>
+    </tr>
+  </table>
+</p>
+<p>
+  Keep selling! <br/>
+  And have a great day!
+</p>
+<p>
+  Your VersionEye Team<br/>
+  <a href="<%= Settings.instance.server_url %>?utm_medium=email&amp;utm_source=new_version"><%= Settings.instance.server_url %></a>
+</p>
