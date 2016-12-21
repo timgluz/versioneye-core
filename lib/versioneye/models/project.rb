@@ -367,6 +367,7 @@ class Project < Versioneye::Model
         dep.outdated = false
         dep.outdated_updated_at = DateTime.now
         self.out_number = self.out_number.to_i - 1
+        self.out_number = 0 if self.out_number.to_i < 0
       end
       projectdependencies.push dep
       dep.save
