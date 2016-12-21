@@ -60,6 +60,9 @@ class Team < Versioneye::Model
       next if member.user.nil?
       next if member.user.deleted_user
 
+      uns = UserNotificationSetting.fetch_or_create_notification_setting( member.user )
+      next if uns.project_emails == false
+
       email = member.user.email
       ems << email if !ems.include?( email )
     end

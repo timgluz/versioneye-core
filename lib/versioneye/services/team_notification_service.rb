@@ -31,6 +31,7 @@ class TeamNotificationService  < Versioneye::Service
     p " - Process orga #{orga.name} and team #{team.name}"
     return nil if team.notifications_all_disabled?
     return nil if team.notify_today? == false
+    return nil if team.emails.empty?
     return nil if MailTrack.send_team_email_already?(MailTrack::A_TEMPLATE_TEAM_NOTIFICATION, orga.ids, team.ids)
 
     projects = orga.team_projects team.ids
