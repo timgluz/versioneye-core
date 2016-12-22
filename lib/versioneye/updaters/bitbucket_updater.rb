@@ -1,7 +1,7 @@
 class BitbucketUpdater < CommonUpdater
 
 
-  def update project, send_email = false
+  def update project
     project.parsing_errors = []
     project_file = fetch_project_file project
     if project_file.to_s.empty? || project_file.match("you've found a dead link")
@@ -10,7 +10,7 @@ class BitbucketUpdater < CommonUpdater
     end
 
     new_project = parse project_file, project.filename
-    update_old_with_new project, new_project, send_email
+    update_old_with_new project, new_project
   rescue => e
     log.error "ERROR occured by parsing project from Bitbucket API - #{e.message}"
     log.error e.backtrace.join("\n")

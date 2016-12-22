@@ -1,7 +1,7 @@
 class UrlUpdater < CommonUpdater
 
 
-  def update( project, send_email = false )
+  def update project
     return nil if project.nil?
     return nil if project.url.to_s.empty?
 
@@ -19,7 +19,7 @@ class UrlUpdater < CommonUpdater
     end
 
     new_project.url = project.url
-    update_old_with_new project, new_project, send_email
+    update_old_with_new project, new_project
   rescue => e
     log.error "ERROR occured by parsing #{project.url} - #{e.message}"
     log.error e.backtrace.join("\n")

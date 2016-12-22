@@ -35,11 +35,11 @@ class ProjectUpdateService < Versioneye::Service
   def self.update project, send_email = false
     return nil if not_updateable?( project )
 
-    project = update_single project, send_email
+    project = update_single project
     project.children.each do |child_project|
       child_project.license_whitelist_id = project.license_whitelist_id
       child_project.save
-      update_single child_project, send_email
+      update_single child_project
     end
     ProjectService.update_sums( project )
     ProjectService.reset_badge_for project.ids
@@ -51,12 +51,12 @@ class ProjectUpdateService < Versioneye::Service
   end
 
 
-  def self.update_single project, send_email = false
+  def self.update_single project
     return nil if not_updateable?( project )
 
     project.parsing_errors = []
     updater = UpdateStrategy.updater_for project.source
-    updater.update project, send_email
+    updater.update project
     ProjectService.reset_badge_for project.ids
     project
   rescue => e

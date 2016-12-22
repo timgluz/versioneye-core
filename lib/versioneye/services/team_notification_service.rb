@@ -49,7 +49,7 @@ class TeamNotificationService  < Versioneye::Service
 
     orga.projects.each do |project|
       p " -- Update project #{project.language}/#{project.name}"
-      ProjectUpdateService.update project, false
+      ProjectUpdateService.update project
     end
     p " -- All projects updated for orga #{orga.name}"
   end

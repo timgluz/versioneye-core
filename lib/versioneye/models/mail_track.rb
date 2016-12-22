@@ -4,7 +4,6 @@ class MailTrack < Versioneye::Model
   include Mongoid::Timestamps
 
   A_TEMPLATE_NEW_VERSION  = 'new_version_email'
-  A_TEMPLATE_PROJECT_NOTI = 'projectnotifications_email'
   A_TEMPLATE_PROJECT_SV   = 'projects_security_email'
   A_TEMPLATE_NEWSLETTER   = 'newsletter'
   A_TEMPLATE_TEAM_NOTIFICATION = 'team_notification'

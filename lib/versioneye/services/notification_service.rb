@@ -6,7 +6,7 @@ class NotificationService < Versioneye::Service
   follow X libraries directly will receive an email notification from
   this service.
   This service is NOT responsible for sending out project notification emails!
-  For the project notifications check out `ProjectBatchUpdateService`.
+  For the project notifications check out `TeamNotificationService`.
 =end
 
   def self.send_notifications

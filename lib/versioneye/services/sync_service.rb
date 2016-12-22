@@ -44,7 +44,7 @@ class SyncService < Versioneye::Service
 
     log.info "sync lock true ... start reparse project"
     project.update_attribute(:sync_lock, true)
-    ProjectUpdateService.update project, false
+    ProjectUpdateService.update project
     project.update_attribute(:sync_lock, false)
     log.info "sync lock false ... sync done for project #{project.ids}"
 

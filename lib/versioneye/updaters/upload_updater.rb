@@ -1,6 +1,6 @@
 class UploadUpdater < CommonUpdater
 
-  def update( project, send_email = false )
+  def update project
     return nil if project.nil?
 
     out_number = 0
@@ -26,20 +26,6 @@ class UploadUpdater < CommonUpdater
     project.dep_number = dep_number
     project.out_number = out_number
     project.sum_own!
-
-    return project if send_email == false
-    return project if project.user && project.user.email_inactive == false
-
-    outdated_deps  = project.out_number > 0
-    # The next line is commented out because right now the user can not edit licenses
-    # license_alerts = !unknown_licenses.empty? || !red_licenses.empty?
-    license_alerts = !red_licenses.empty?
-
-    if ( outdated_deps || license_alerts )
-      log.info "Send out email notification for project #{project.name} to user #{project.user.fullname}"
-      ProjectMailer.projectnotification_email( project, nil, unknown_licenses, red_licenses ).deliver
-    end
-
     project
   end
 

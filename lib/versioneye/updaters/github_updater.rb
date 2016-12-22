@@ -1,7 +1,7 @@
 class GithubUpdater < CommonUpdater
 
 
-  def update project, send_email = false
+  def update project
     project.parsing_errors = []
     token = fetch_token_for project
     project_file = fetch_project_file project, token
@@ -15,7 +15,7 @@ class GithubUpdater < CommonUpdater
       store_errors project, "The project file could be fetched from the GitHub API but the file could not be parsed. Please contact the VersionEye team."
       return nil
     end
-    update_old_with_new project, new_project, send_email
+    update_old_with_new project, new_project
   rescue => e
     log.error "ERROR occured by parsing project from GitHub API - #{e.message}"
     log.error e.backtrace.join("\n")

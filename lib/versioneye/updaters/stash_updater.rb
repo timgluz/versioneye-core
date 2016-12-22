@@ -1,7 +1,7 @@
 class StashUpdater < CommonUpdater
 
 
-  def update project, send_email = false
+  def update project
     project.parsing_errors = []
     project_file = fetch_project_file project
     if project_file.to_s.strip.empty?
@@ -11,7 +11,7 @@ class StashUpdater < CommonUpdater
 
     filename    = fetch_filename project
     new_project = StashService.parse_content project_file, filename
-    update_old_with_new project, new_project, send_email
+    update_old_with_new project, new_project
   rescue => e
     log.error "ERROR occured by parsing project from Stash API - #{e.message}"
     log.error e.backtrace.join("\n")

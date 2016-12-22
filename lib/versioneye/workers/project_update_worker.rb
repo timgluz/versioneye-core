@@ -43,8 +43,6 @@ class ProjectUpdateWorker < Worker
     pp  = msg.gsub("project_", "")
     pps = pp.split(":::")
     project_id = pps[0]
-    send_email = false
-    send_email = true if pps[1].eql?('true')
     project = Project.find project_id
     if project.nil?
       log.error " [x] ProjectUpdateWorker no project found for #{project_id}"
@@ -52,7 +50,7 @@ class ProjectUpdateWorker < Worker
     end
 
     log.info " - ProjectUpdateService.update #{project_id}"
-    ProjectUpdateService.update project, send_email
+    ProjectUpdateService.update project
 
     task_key    = "task_#{project.ids}"
     task_status = cache.set( task_key, ProjectUpdateService::A_TASK_DONE, ProjectUpdateService::A_TASK_TTL )

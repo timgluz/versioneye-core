@@ -22,19 +22,6 @@ describe CommonUpdater do
       ActionMailer::Base.deliveries.size.should == 0
     end
 
-    it 'send out email' do
-      ActionMailer::Base.deliveries.clear
-      user = UserFactory.create_new
-      old_project = ProjectFactory.default user
-      new_project = ProjectFactory.new_project user
-      new_project.out_number = 1
-
-      CommonUpdater.new.update_old_with_new old_project, new_project, true
-
-      # Epcect that 1 emails is send
-      ActionMailer::Base.deliveries.size.should == 1
-    end
-
   end
 
 end

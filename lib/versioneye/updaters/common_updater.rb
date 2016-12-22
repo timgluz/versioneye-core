@@ -1,7 +1,7 @@
 class CommonUpdater < Versioneye::Service
 
 
-  def update_old_with_new old_project, new_project, send_email = false
+  def update_old_with_new old_project, new_project
     return nil if old_project.nil? || new_project.nil?
 
     old_project.update_from new_project
@@ -13,20 +13,9 @@ class CommonUpdater < Versioneye::Service
 
     unknown_licenses = ProjectService.unknown_licenses( old_project )
     red_licenses     = ProjectService.red_licenses( old_project )
-    old_project.licenses_red = red_licenses.count
+    old_project.licenses_red     = red_licenses.count
     old_project.licenses_unknown = unknown_licenses.count
     old_project.save
-
-    active_email   = send_email && old_project.user && old_project.user.email_inactive == false
-    outdated_deps  = old_project.out_number > 0
-    # The next line is commented out because right now the user can not edit licenses
-    # license_alerts = !unknown_licenses.empty? || !red_licenses.empty?
-    license_alerts = old_project.licenses_red.to_i > 0
-
-    if active_email && ( outdated_deps || license_alerts )
-      log.info "Send out email notification for project #{old_project.name} to user #{old_project.user.fullname}"
-      ProjectMailer.projectnotification_email( old_project, nil, unknown_licenses, red_licenses ).deliver_now
-    end
   end
 
 
