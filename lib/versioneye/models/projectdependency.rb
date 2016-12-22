@@ -16,7 +16,7 @@ class Projectdependency < Versioneye::Model
   field :name       , type: String
   field :group_id   , type: String # Maven specific
   field :artifact_id, type: String # Maven specific
-  field :target,      type: String #Nuget specific to specify runtime
+  field :target,      type: String # Nuget specific to specify runtime
 
   field :version_current  , type: String  # the newest version from the database
   field :version_requested, type: String  # requested version from the project file -> locked version

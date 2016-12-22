@@ -190,7 +190,9 @@ class ProjectService < Versioneye::Service
 
 
   def self.remove_temp_projects
-    Project.where(:temp => true, :temp_lock => false).delete_all
+    Project.where(:temp => true, :temp_lock => false).each do |project|
+      destroy project
+    end
   end
 
 
