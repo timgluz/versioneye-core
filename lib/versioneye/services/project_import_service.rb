@@ -130,8 +130,10 @@ class ProjectImportService < Versioneye::Service
   def self.create_project_from project_file, token = nil, filename = nil
     file_txt = GitHubService.pure_text_from project_file
     fn_last  = GitHubService.filename_from project_file
-    filename = fn_last if filename.to_s.empty?
-    parser   = ProjectParseService.parser_for filename
+    if filename.to_s.empty?
+      filename = fn_last
+    end
+    parser = ProjectParseService.parser_for filename
     ProjectParseService.parse_content parser, file_txt, fn_last, token
   end
 

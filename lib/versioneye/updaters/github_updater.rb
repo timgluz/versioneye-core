@@ -10,7 +10,11 @@ class GithubUpdater < CommonUpdater
       return nil
     end
 
-    new_project = ProjectImportService.create_project_from project_file, token
+    new_project = ProjectImportService.create_project_from project_file, token, project_file[:name]
+    if new_project.nil?
+      store_errors project, "The project file could be fetched from the GitHub API but the file could not be parsed. Please contact the VersionEye team."
+      return nil
+    end
     update_old_with_new project, new_project, send_email
   rescue => e
     log.error "ERROR occured by parsing project from GitHub API - #{e.message}"
@@ -40,8 +44,7 @@ class GithubUpdater < CommonUpdater
   private
 
 
-    def store_errors project
-      message = "Project could not be parsed from the GitHub API. Please make sure that the credentials are still valid and the repository still exists."
+    def store_errors project, message = "Project could not be parsed from the GitHub API. Please make sure that the credentials are still valid and the repository still exists."
       log.error message
       store_parsing_errors project, message
     end
