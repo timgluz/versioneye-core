@@ -68,6 +68,7 @@ class RequirementsParser < CommonParser
     if requirement.count > 1
       version = requirement[1]
       version = version.gsub("\n", '')
+      version = version.gsub("\\", '')
       version = version.gsub(/--hash.+\z/i, '') # ignore hash values
       dependency.version_label = version.strip
     end
