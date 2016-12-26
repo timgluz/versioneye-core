@@ -18,7 +18,7 @@ class TransferService < Versioneye::Service
     datef    = Time.at(tr.date).strftime("%d.%m.%Y")
 
     p ""
-    p "#{datef} Charged: #{'%.02f' % gross} #{currency} - Fee: #{'%.02f' % fees} #{currency} - Transfered: #{'%.02f' % net} #{currency}"
+    p "#{datef} - #{tr.id} - Charged: #{'%.02f' % gross} #{currency} - Fee: #{'%.02f' % fees} #{currency} - Transfered: #{'%.02f' % net} #{currency}"
     tr.transactions.each do |tx|
       process_transaction tx, currency
     end
