@@ -41,12 +41,12 @@ class Dependency < Versioneye::Model
 
   # known or unknown dependency.
   # If there is no product for dep_prod_key in our db then it's unknown
-  field :known       , type: Boolean
+  field :known, type: Boolean
 
   # The current/newest version of the product, which this dep is referencing
   field :current_version, type: String
   # The parsed version, without operator
-  field :parsed_version , type: String
+  field :parsed_version, type: String
   field :outdated, type: Boolean
 
   index({ language: 1, prod_key: 1, prod_version: 1, dep_prod_key: 1, version: 1, scope: 1 }, { name: "parent_fk_index", background: true, unique: true, drop_dups: true})
