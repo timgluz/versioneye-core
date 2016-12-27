@@ -38,7 +38,7 @@ class TeamNotificationService  < Versioneye::Service
     return nil if projects.nil? || projects.empty?
 
     TeamMailer.team_notification( orga, team, projects ).deliver_now
-    MailTrack.add MailTrack::A_TEMPLATE_TEAM_NOTIFICATION, orga.ids, team.ids, projects.map(&:ids)
+    MailTrack.add_team MailTrack::A_TEMPLATE_TEAM_NOTIFICATION, orga.ids, team.ids, projects.map(&:ids)
   end
 
 
