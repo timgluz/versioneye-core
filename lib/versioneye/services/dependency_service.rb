@@ -56,7 +56,7 @@ class DependencyService < Versioneye::Service
 
     soft_outdated?( dependency, product )
   rescue => e
-    log.error e.message
+    log.error "ERROR in outdated?( #{dependency.ids} ) - #{dependency.version} - #{e.message}"
     log.error e.backtrace.join("\n")
     return false
   end
