@@ -85,7 +85,7 @@ class DependencyService < Versioneye::Service
     dependency.save
     return true
   rescue => e
-    log.error e.message
+    log.error "ERROR in outdated?( #{dependency.ids} ) - #{dependency.version} - #{e.message}"
     log.error e.backtrace.join("\n")
     return false
   end
