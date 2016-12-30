@@ -52,7 +52,7 @@ class VersionService < Versioneye::Service
 
 
   def self.newest_version_from( versions, stability = 'stable')
-    return nil if !versions || versions.empty?
+    return nil if versions.nil? || versions.empty?
     VersionService.newest_version( versions, stability )
   end
 

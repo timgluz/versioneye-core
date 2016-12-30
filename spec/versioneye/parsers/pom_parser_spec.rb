@@ -81,6 +81,23 @@ describe PomParser do
       product_15.add_version "1.1.0"
       product_15.save
 
+      product_16 = ProductFactory.create_for_maven("com.versioneye", "versioneye-core-j-6", "1.0.0")
+      product_16.save
+      product_16.add_version "1.5.0"
+      product_16.add_version "2.0.0"
+      product_16.save
+
+      product_17 = ProductFactory.create_for_maven("com.versioneye", "versioneye-core-j-7", "1.0.0")
+      product_17.save
+      product_17.add_version "1.5.0"
+      product_17.add_version "2.0.0"
+      product_17.save
+
+      product_18 = ProductFactory.create_for_maven("com.versioneye", "versioneye-core-j-8", "1.0.0")
+      product_18.save
+      product_18.add_version "1.5.0"
+      product_18.save
+
       parser = PomParser.new
       project = parser.parse("https://s3.amazonaws.com/veye_test_env/pom.xml")
       project.should_not be_nil
@@ -205,6 +222,33 @@ describe PomParser do
       dependency_16.comperator.should eql("==")
       dependency_16.outdated.should eql(true)
       dependency_16.scope.should eql("compile")
+
+      dependency_17 = fetch_by_name project.dependencies, 'versioneye-core-j-6'
+      dependency_17.name.should eql("versioneye-core-j-6")
+      dependency_17.version_label.should eql('[1.0.0,2.0.0]')
+      dependency_17.version_requested.should eql("2.0.0")
+      dependency_17.version_current.should eql("2.0.0")
+      dependency_17.comperator.should eql("==")
+      dependency_17.outdated.should eql(false)
+      dependency_17.scope.should eql("compile")
+
+      dependency_18 = fetch_by_name project.dependencies, 'versioneye-core-j-7'
+      dependency_18.name.should eql("versioneye-core-j-7")
+      dependency_18.version_label.should eql('[1.0.0,2.0.0)')
+      dependency_18.version_requested.should eql("1.5.0")
+      dependency_18.version_current.should eql("2.0.0")
+      dependency_18.comperator.should eql("==")
+      dependency_18.outdated.should eql(true)
+      dependency_18.scope.should eql("compile")
+
+      dependency_19 = fetch_by_name project.dependencies, 'versioneye-core-j-8'
+      dependency_19.name.should eql("versioneye-core-j-8")
+      dependency_19.version_label.should eql('(1.0.0,2.0.0]')
+      dependency_19.version_requested.should eql("1.5.0")
+      dependency_19.version_current.should eql("1.5.0")
+      dependency_19.comperator.should eql("==")
+      dependency_19.outdated.should eql(false)
+      dependency_19.scope.should eql("compile")
     end
 
   end

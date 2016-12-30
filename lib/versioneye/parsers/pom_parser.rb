@@ -3,6 +3,7 @@ require 'versioneye/parsers/common_parser'
 class PomParser < CommonParser
 
   # Parser for pom.xml file from Maven2/Maven3. Java.
+  # https://maven.apache.org/pom.html#Dependency_Version_Requirement_Specification
   # XPath: //project/dependencyManagement/dependencies/dependency
   # XPath: //project/dependencies/dependency
   #
@@ -121,6 +122,38 @@ class PomParser < CommonParser
       newest = VersionService.newest_version_from( product.versions, 'dev')
       dependency.version_requested = newest.to_s
       dependency.version_label = version
+
+    elsif version.match(/\A\[(.+),(.+)\]\z/i) # between ->  * <= X <= *
+      dependency.version_label = String.new(version)
+      matches = version.match(/\A\[(.+),(.+)\]\z/i)
+      bottom_border = matches[1]
+      top_border    = matches[2]
+      subset = VersionService.version_range( product.versions, bottom_border, top_border )
+      newest = VersionService.newest_version_number( subset )
+      dependency.version_requested = newest
+      dependency.comperator = "=="
+
+    elsif version.match(/\A\[(.+),(.+)\)\z/i) # between ->  * <= X < *
+      dependency.version_label = String.new(version)
+      matches = version.match(/\A\[(.+),(.+)\)\z/i)
+      bottom_border = matches[1]
+      top_border    = matches[2]
+      subset1 = VersionService.greater_than_or_equal( product.versions, bottom_border, true )
+      subset2 = VersionService.smaller_than( subset1, top_border, true )
+      newest  = VersionService.newest_version_number( subset2 )
+      dependency.version_requested = newest
+      dependency.comperator = "=="
+
+    elsif version.match(/\A\((.+),(.+)\]\z/i) # between ->  * < X <= *
+      dependency.version_label = String.new(version)
+      matches = version.match(/\A\((.+),(.+)\]\z/i)
+      bottom_border = matches[1]
+      top_border    = matches[2]
+      subset1 = VersionService.greater_than( product.versions, bottom_border, true )
+      subset2 = VersionService.smaller_than_or_equal( subset1, top_border, true )
+      newest  = VersionService.newest_version_number( subset2 )
+      dependency.version_requested = newest
+      dependency.comperator = "=="
 
     elsif version.match(/\A\[.*\]\z/) # ==
       dependency.version_label = String.new(version)
