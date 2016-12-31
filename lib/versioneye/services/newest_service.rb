@@ -51,6 +51,7 @@ class NewestService < Versioneye::Service
     loop do
       post_process
       update_nils
+      update_nils2
       multi_log "sleep for a while"
       sleep 60
     end
@@ -58,14 +59,10 @@ class NewestService < Versioneye::Service
 
 
   def self.update_nils
-    Dependency.where(:known => true, :version.ne => nil, :parsed_version => nil).each do |dep|
+    Dependency.where( :known => true, :version.ne => nil )
+              .any_of({:parsed_version => nil}, {:current_version => nil}) ).each do |dep|
       DependencyService.update_parsed_version dep, dep.product
       DependencyService.outdated? dep, true
-      multi_log "NewestService.update_nils #{dep.ids} #{dep.dep_prod_key}:#{dep.version}:#{dep.parsed_version}:#{dep.current_version}"
-    end
-
-    Dependency.where(:current_version => nil, :dep_prod_key.ne => nil, :known => true).each do |dep|
-      DependencyService.outdated?( dep )
       multi_log "NewestService.update_nils #{dep.ids} #{dep.dep_prod_key}:#{dep.version}:#{dep.parsed_version}:#{dep.current_version}"
     end
   rescue => e

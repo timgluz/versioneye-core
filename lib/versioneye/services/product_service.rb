@@ -24,6 +24,11 @@ class ProductService < Versioneye::Service
     product.version = version if version
     product.project_usage = ReferenceService.project_references( lang, prod_key ).count
 
+    product.all_dependencies().any_of({:parsed_version => nil}, {:current_version => nil}).each do |dep|
+      DependencyService.update_parsed_version dep, dep.product
+      DependencyService.outdated? dep, true
+    end
+
     product
   end
 
