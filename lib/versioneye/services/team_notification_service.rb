@@ -48,11 +48,24 @@ class TeamNotificationService  < Versioneye::Service
     return nil if orga.projects.empty?
 
     orga.projects.each do |project|
+      next if project_processed?( orga, project )
+
       p " -- Update project #{project.language}/#{project.name}"
       ProjectUpdateService.update project
     end
     p " -- All projects updated for orga #{orga.name}"
   end
+
+
+  private
+
+
+    def self.project_processed?( orga, project )
+      project.teams.each do |team|
+        return true if MailTrack.send_team_email_already?(MailTrack::A_TEMPLATE_TEAM_NOTIFICATION, orga.ids, team.ids)
+      end
+      false
+    end
 
 
 end

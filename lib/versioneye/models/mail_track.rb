@@ -31,7 +31,7 @@ class MailTrack < Versioneye::Model
 
 
   def self.send_team_email_already?(template_name, orga_id = nil, team_id = nil)
-    time_ago = DateTime.now - 12.hours
+    time_ago = DateTime.now - 20.hours
     MailTrack.where(:template => template_name,
                     :orga_id => orga_id,
                     :team_id => team_id,
