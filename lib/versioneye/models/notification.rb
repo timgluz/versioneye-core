@@ -9,16 +9,6 @@ class Notification < Versioneye::Model
   field :read          , type: Boolean, default: false
   field :sent_email    , type: Boolean, default: false
   field :email_disabled, type: Boolean, default: false
-  field :classification, type: String # nil for follow. Oterwise project.
-
-  field :noti_type,  type: String, default: 'email' # [email, webhook]
-  field :event_type, type: String # [security, license, version]
-
-  field :email, type: String
-  field :name,  type: String
-
-  field :webhook,       type: String
-  field :webhook_token, type: String
 
   belongs_to :user
   belongs_to :product
@@ -27,14 +17,13 @@ class Notification < Versioneye::Model
   index({user_id: 1}, { name: "user_index", background: true})
   index({user_id: 1, sent_email: 1}, { name: "user_unsent_index", background: true})
 
-  scope :no_classification, ->{where(classification: nil)}
   scope :all_not_sent     , ->{where(sent_email: false)}
   scope :by_user          , ->(user){where(user_id: user.id)}
   scope :by_user_id       , ->(user_id){where(user_id: user_id).desc(:created_at).limit(30)}
 
 
   def self.unsent_user_notifications( user )
-    by_user( user ).where(sent_email: false, classification: nil)
+    by_user( user ).where(sent_email: false)
   end
 
 
