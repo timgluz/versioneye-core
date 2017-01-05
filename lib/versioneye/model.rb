@@ -33,6 +33,7 @@ module Versioneye
     require 'versioneye/models/language_feed'
     require 'versioneye/models/component_whitelist'
     require 'versioneye/models/license'
+    require 'versioneye/models/license_suggestion'
     require 'versioneye/models/license_whitelist'
     require 'versioneye/models/license_element'
     require 'versioneye/models/license_cach'
