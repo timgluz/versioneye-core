@@ -103,7 +103,10 @@ class AuthorService < Versioneye::Service
 
 
   def self.dev_to_ignore? dev
-    dev && dev.dev_identifier.to_s.eql?('Matej Kieres')
+    return true if dev && dev.dev_identifier.to_s.eql?('Matej Kieres')
+    return true if dev && dev.dev_identifier.to_s.eql?('Artiom Mocrenco')
+    return true if dev && dev.dev_identifier.to_s.eql?('artiom_mocrenco')
+    return false
   end
 
 
