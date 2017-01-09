@@ -318,13 +318,13 @@ class ProjectdependencyService < Versioneye::Service
         if project.license_whitelist && ProjectService.whitelisted?( dependency.license_caches, project.license_whitelist ) == false
           dependency.license_violation = true
         end
-        dependency.save
       elsif project.component_whitelist && project.component_whitelist.is_on_list?( dependency.cwl_key )
         licenseCach = LicenseCach.new({:name => "N/A", :on_cwl => true} )
         dependency.license_caches.push licenseCach
         dependency.lwl_violation = nil
         licenseCach.save
       end
+      dependency.save
     end
 
 
