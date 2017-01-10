@@ -27,6 +27,13 @@ class PomJsonParser < PomParser
     return nil if pom_json.nil?
 
     project = Project.new({:project_type => Project::A_TYPE_MAVEN2, :language => Product::A_LANGUAGE_JAVA })
+    project.name         = pom_json['name']
+    project.group_id     = pom_json['group_id']
+    project.artifact_id  = pom_json['artifact_id']
+    project.version      = pom_json['version']
+    project.project_type = pom_json['prod_type'] if !pom_json['prod_type'].to_s.empty?
+    project.language     = pom_json['language']  if !pom_json['language'].to_s.empty?
+    project.license      = fetch_license( pom_json )
     pom_json['dependencies'].each do |json_dep|
       version     = json_dep['version']
       name        = json_dep['name']
@@ -44,27 +51,36 @@ class PomJsonParser < PomParser
       project.projectdependencies.push(dependency)
     end
     project.dep_number   = project.dependencies.size
-    project.name         = pom_json['name']
-    project.group_id     = pom_json['group_id']
-    project.artifact_id  = pom_json['artifact_id']
-    project.version      = pom_json['version']
-    project.project_type = pom_json['prod_type'] if !pom_json['prod_type'].to_s.empty?
-    project.language     = pom_json['language']  if !pom_json['language'].to_s.empty?
     project
   end
 
 
   def init_dependency name, group_id, artifact_id, version, scope
-    dependency             = Projectdependency.new
-    dependency.language    = Product::A_LANGUAGE_JAVA
-    dependency.name        = name
-    dependency.group_id    = group_id
-    dependency.artifact_id = artifact_id
+    dependency                   = Projectdependency.new
+    dependency.language          = Product::A_LANGUAGE_JAVA
+    dependency.name              = name
+    dependency.group_id          = group_id
+    dependency.artifact_id       = artifact_id
     dependency.version_requested = version
-    dependency.version_label = version
-    dependency.scope       = scope
+    dependency.version_label     = version
+    dependency.scope             = scope
     dependency
   end
 
-end
 
+  private
+
+
+    def fetch_license pom_json
+      licenses = pom_json['licenses']
+      return nil if licenses.to_s.empty?
+
+      if licenses.is_a? Array
+        return licenses.map { |lic| "#{lic['name']}" }.join(", ")
+      elsif licenses.is_a? String
+        return licenses
+      end
+      nil
+    end
+
+end
