@@ -27,9 +27,11 @@ class License < Versioneye::Model
   validates_presence_of :prod_key, :message => 'prod_key is mandatory!'
   validates_presence_of :name, :message => 'name is mandatory!'
 
+
   def product
     Product.fetch_product(self.language, self.prod_key)
   end
+
 
   def self.for_product( product, ignore_version = false )
     licenses = []
@@ -43,6 +45,7 @@ class License < Versioneye::Model
     end
     licenses
   end
+
 
   # Returns the licenses with nil version!
   def self.for_product_global product
@@ -62,6 +65,7 @@ class License < Versioneye::Model
     license
   end
 
+
   def to_s
     if url
       return "[License for (#{language}/#{prod_key}/#{version}) : #{name}/#{url}]"
@@ -69,5 +73,6 @@ class License < Versioneye::Model
       return "[License for (#{language}/#{prod_key}/#{version}) : #{name}]"
     end
   end
+
 
 end

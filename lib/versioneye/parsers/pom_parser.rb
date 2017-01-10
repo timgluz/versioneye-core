@@ -19,6 +19,7 @@ class PomParser < CommonParser
     nil
   end
 
+
   def parse_content( content, token = nil )
     return nil if content.to_s.empty?
     return nil if content.to_s.strip.eql?('Not Found')
@@ -39,6 +40,7 @@ class PomParser < CommonParser
     log.error e.backtrace.join("\n")
     nil
   end
+
 
   def fetch_dependency(node, properties, project, scope = Dependency::A_SCOPE_COMPILE)
     dependency = Projectdependency.new
@@ -69,6 +71,7 @@ class PomParser < CommonParser
     dependency
   end
 
+
   def fetch_properties( doc )
     properties = Hash.new
     doc.xpath('//project/properties').each do |node|
@@ -85,6 +88,7 @@ class PomParser < CommonParser
     properties
   end
 
+
   def get_variable_value_from_pom( properties, val )
     return val if !val.include?('${') || !val.include?('}')
 
@@ -98,6 +102,7 @@ class PomParser < CommonParser
     end
     value
   end
+
 
   def parse_requested_version(version_number, dependency, product)
     if version_number.to_s.empty?
@@ -201,6 +206,7 @@ class PomParser < CommonParser
 
     end
   end
+
 
   def init_project( doc )
     project              = Project.new
