@@ -161,7 +161,7 @@ class ProjectdependencyService < Versioneye::Service
 
     outdated = false
 
-    #handle GO-DEP versions differently
+    # Handle GO-DEP versions differently
     if projectdependency[:language] == Product::A_LANGUAGE_GO
       req_version = godep_to_semver(projectdependency)
     else
@@ -239,8 +239,11 @@ class ProjectdependencyService < Versioneye::Service
     product = projectdependency.product
     return false if product.nil?
 
-    newest_version = VersionService.newest_version_number( product.versions, projectdependency.stability )
-    return false if newest_version.nil? || newest_version.empty?
+    newest_version = product.dist_tags_latest
+    if newest_version.to_s.empty?
+      newest_version = VersionService.newest_version_number( product.versions, projectdependency.stability )
+    end
+    return false if newest_version.to_s.empty?
 
     version_current = projectdependency.version_current
     if version_current.to_s.empty? || !version_current.eql?( newest_version )
