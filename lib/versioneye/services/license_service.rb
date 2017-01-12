@@ -90,13 +90,14 @@ class LicenseService < Versioneye::Service
   def self.update_spdx_ids
     all_licenses_paged do |licenses|
       licenses.each do |license|
-        license.spdx_id = license.name_substitute
+        license.spdx_id = license.spdx_identifier
         license.save
       end
     end
   rescue => e
     log.error e.message
     log.error e.backtrace.join('\n')
+    update_spdx_ids
   end
 
 
