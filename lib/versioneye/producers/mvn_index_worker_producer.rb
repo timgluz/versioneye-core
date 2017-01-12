@@ -1,7 +1,8 @@
 class MvnIndexWorkerProducer < Producer
 
+
   # "central::http://repo.maven.apache.org/maven2::g:a:pom:v::published_date"
-  # "central::http://repo.maven.apache.org/maven2::com.versioneye:versioneye-maven-plugin:pom:3.9.2::"
+  # "central::http://repo.maven.apache.org/maven2::com.versioneye:versioneye-maven-plugin:pom:3.11.1::"
   def initialize msg
     connection = get_connection
     connection.start
