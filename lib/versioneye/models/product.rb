@@ -16,7 +16,7 @@ class Product < Versioneye::Model
   field :prod_type    , type: String # Identifies the package manager
   field :language     , type: String
   field :version      , type: String, default: '0.0.0+NA' # latest stable version
-  field :dist_tags_latest, type: String
+  field :dist_tags_latest, type: String # NPM specific
   field :sha1         , type: String
   field :sha256       , type: String
   field :sha512       , type: String
