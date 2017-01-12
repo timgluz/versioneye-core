@@ -11,6 +11,7 @@ class Api < Versioneye::Model
   field :comp_limit         , type: Integer, default: 50 # Component limit
   field :active             , type: Boolean, default: true
   field :update_di          , type: Boolean, default: false # Update Docker Images
+  field :read_only          , type: Boolean, default: false
 
 
   index({ api_key: 1 }, { name: "api_key_index", unique: true, drop_dups: true, background: true })
