@@ -72,6 +72,7 @@ module Versioneye
     require 'versioneye/mailers/versioncommentreply_mailer'
     require 'versioneye/mailers/team_mailer'
     require 'versioneye/mailers/lead_mailer'
+    require 'versioneye/mailers/license_mailer'
 
     require 'versioneye/parsers/berksfile_parser'
     require 'versioneye/parsers/berksfilelock_parser'

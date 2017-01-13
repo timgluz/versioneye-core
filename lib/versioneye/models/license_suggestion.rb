@@ -11,6 +11,7 @@ class LicenseSuggestion < Versioneye::Model
   field :name    , type: String # For example MIT
   field :url     , type: String # URL to the license text
   field :comments, type: String
+  field :approved, type: Boolean, default: false
 
   belongs_to :user, optional: true
   belongs_to :organisation, optional: true
@@ -21,5 +22,34 @@ class LicenseSuggestion < Versioneye::Model
   validates_presence_of :prod_key, :message => 'prod_key is mandatory!'
   validates_presence_of :version , :message => 'version is mandatory!'
   validates_presence_of :name    , :message => 'name is mandatory!'
+
+
+  def approve!
+    license = License.where({:language => self.language, :prod_key => self.prod_key, :version => self.version, :name => self.name}).first
+    if license
+      log.info "License exist already!"
+      return false
+    end
+
+    license = License.new({:language => self.language, :prod_key => self.prod_key})
+    license.version  = self.version
+    license.name     = self.name
+    license.url      = self.url
+    license.comments = self.comments
+    saved = license.save
+    if saved
+      self.approved = true
+      self.save
+    end
+    saved
+  rescue => e
+    log.error "approve! - #{e.message}"
+    false
+  end
+
+
+  def self.unapproved
+    LicenseSuggestion.where(:approved => false)
+  end
 
 end
