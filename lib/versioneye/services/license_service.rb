@@ -90,6 +90,8 @@ class LicenseService < Versioneye::Service
   def self.update_spdx_ids v = "1.0.0"
     all_licenses_paged(v) do |licenses|
       licenses.each do |license|
+        next if license.name.to_s.empty?
+
         license.spdx_id = license.spdx_identifier
         license.update_version = v
         license.save

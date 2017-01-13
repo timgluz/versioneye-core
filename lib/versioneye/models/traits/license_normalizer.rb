@@ -32,6 +32,7 @@ module VersionEye
 
     # http://spdx.org/licenses/
     def spdx_identifier
+      return nil if name.to_s.empty?
 
       spdx = spdx_2_0_map
 
