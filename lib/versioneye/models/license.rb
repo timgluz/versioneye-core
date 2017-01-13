@@ -17,6 +17,7 @@ class License < Versioneye::Model
   field :distributions  , type: String # Maven specific
   field :spdx_id        , type: String # For example AGPL-1.0. See http://spdx.org/licenses/
   field :source         , type: String # Where it was crawled
+  field :update_version , type: String
 
   # TODO This is causing a too large index. For Python some names are containnign the license text. This need to be fixest! See -> License.where(:name => /\n/).count
   # index({ language: 1, prod_key: 1, version: 1, name: 1 }, { name: "language_prod_key_version_name_index", background: true })

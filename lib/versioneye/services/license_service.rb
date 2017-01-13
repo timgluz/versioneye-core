@@ -87,28 +87,30 @@ class LicenseService < Versioneye::Service
   end
 
 
-  def self.update_spdx_ids
-    all_licenses_paged do |licenses|
+  def self.update_spdx_ids v = "1.0.0"
+    all_licenses_paged(v) do |licenses|
       licenses.each do |license|
         license.spdx_id = license.spdx_identifier
+        license.update_version = v
         license.save
       end
     end
+    true
   rescue => e
     log.error e.message
     log.error e.backtrace.join('\n')
-    update_spdx_ids
+    update_spdx_ids v
   end
 
 
-  def self.all_licenses_paged
+  def self.all_licenses_paged(v = "1.0.0")
     count = License.count()
     page = 100
     iterations = count / page
     iterations += 1
     (0..iterations).each do |i|
       skip = i * page
-      licenses = License.all().skip(skip).limit(page)
+      licenses = License.where(:update_version.ne => v).skip(skip).limit(page)
 
       yield licenses
 
