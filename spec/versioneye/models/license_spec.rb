@@ -12,6 +12,20 @@ describe License do
 
   end
 
+  describe 'label' do
+
+    it 'returns the spdx_id' do
+      license = License.new({:spdx_id => 'MIT', :name => ''})
+      expect( license.label ).to eq("MIT")
+    end
+
+    it 'returns the spdx_id identifier' do
+      license = License.new({:spdx_id => '', :name => 'MIT'})
+      expect( license.label ).to eq("MIT")
+    end
+
+  end
+
   describe 'find_or_create' do
 
     it 'creates a new one' do

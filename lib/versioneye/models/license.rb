@@ -20,9 +20,8 @@ class License < Versioneye::Model
   field :update_version , type: String
 
   # TODO This is causing a too large index. For Python some names are containnign the license text. This need to be fixest! See -> License.where(:name => /\n/).count
-  # index({ language: 1, prod_key: 1, version: 1, name: 1 }, { name: "language_prod_key_version_name_index", background: true })
-  index({ language: 1, prod_key: 1, version: 1 },          { name: "language_prod_key_version_index"     , background: true })
-  index({ language: 1, prod_key: 1},                       { name: "language_prod_key_index"             , background: true })
+  index({ language: 1, prod_key: 1, version: 1 }, { name: "language_prod_key_version_index", background: true })
+  index({ language: 1, prod_key: 1}             , { name: "language_prod_key_index"        , background: true })
 
   validates_presence_of :language, :message => 'language is mandatory!'
   validates_presence_of :prod_key, :message => 'prod_key is mandatory!'
@@ -31,6 +30,13 @@ class License < Versioneye::Model
 
   def product
     Product.fetch_product(self.language, self.prod_key)
+  end
+
+
+  def label
+    return spdx_id if !spdx_id.to_s.empty?
+
+    name_substitute
   end
 
 
