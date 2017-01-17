@@ -399,6 +399,14 @@ class Product < Versioneye::Model
     licenses
   end
 
+  def add_license name, version_number = nil
+    versions.each do |version|
+      if version_number.nil? || version.to_s.eql?(version_number)
+        version.add_license name
+      end
+    end
+  end
+
   def developers
     Developer.find_by self.language, self.prod_key, self.version
   end
