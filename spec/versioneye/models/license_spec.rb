@@ -974,6 +974,14 @@ describe License do
       license = License.new({:name => "General Public License 3 or later"})
       license.name_substitute.should eq("GPL-3.0+")
     end
+    it "should return GPL 3.0+ name" do
+      license = License.new({:name => "GNU General Public License v3 or later (GPLv3+)"})
+      license.name_substitute.should eq("GPL-3.0+")
+    end
+    it "should return GPL 3.0+ name" do
+      license = License.new({:name => "GPLv3 GNU General Public License v3 or later (GPLv3+)"})
+      license.name_substitute.should eq("GPL-3.0+")
+    end
 
 
     it "should return LGPL 2.0 name" do
