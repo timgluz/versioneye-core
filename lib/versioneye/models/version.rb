@@ -69,4 +69,8 @@ class Version < Versioneye::Model
     License.where(:language => product.language, :prod_key => product.prod_key, :version => self.version)
   end
 
+  def add_license( name )
+    License.find_or_create_by( :language => product.language, :prod_key => product.prod_key, :version => self.version, :name => name )
+  end
+
 end
