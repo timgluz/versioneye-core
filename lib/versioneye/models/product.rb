@@ -365,7 +365,8 @@ class Product < Versioneye::Model
   def license_info
     licenses = self.licenses false
     return 'unknown' if licenses.nil? || licenses.empty?
-    licenses.map{|a| a.name_substitute}.join(', ')
+
+    licenses.map{|a| a.label}.join(', ')
   end
 
   def comments
