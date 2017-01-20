@@ -18,10 +18,10 @@ class LicenseSuggestion < Versioneye::Model
 
   index({ language: 1, prod_key: 1, version: 1 }, { name: "language_prod_key_version_index", background: true })
 
-  validates_presence_of :language, :message => 'language is mandatory!'
-  validates_presence_of :prod_key, :message => 'prod_key is mandatory!'
-  validates_presence_of :version , :message => 'version is mandatory!'
-  validates_presence_of :name    , :message => 'name is mandatory!'
+  validates_presence_of :language, :message => 'is mandatory!'
+  validates_presence_of :prod_key, :message => 'is mandatory!'
+  validates_presence_of :version , :message => 'is mandatory!'
+  validates_presence_of :name    , :message => 'is mandatory!'
 
 
   def approve!
