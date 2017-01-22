@@ -6,9 +6,15 @@
 </p>
 <p>
   <table>
+    <% if @ls.user %>
+    <tr>
+      <td>User: </td>
+      <td><a href="https://www.versioneye.com/users/<%= @ls.user.username %>"><%= @ls.user.username %></a></td>
+    </tr>
+    <% end %>
     <tr>
       <td>Product: </td>
-      <td><%= @ls.language %> / <%= @ls.prod_key %> : <%= @ls.version %></td>
+      <td><a href="https://www.versioneye.com/<%= Product.encode_language(@ls.language) %>/<%= Product.encode_prod_key(@ls.prod_key) %>/<%= @ls.version %>">https://www.versioneye.com/<%= Product.encode_language(@ls.language) %>/<%= Product.encode_prod_key(@ls.prod_key) %>/<%= @ls.version %></a></td>
     </tr>
     <tr>
       <td>License: </td>
