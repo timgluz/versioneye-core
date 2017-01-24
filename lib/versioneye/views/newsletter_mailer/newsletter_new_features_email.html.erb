@@ -3,36 +3,28 @@
     Hey <%= @user.fullname %>,
 
     <p style="padding-bottom: 0px;">
-      Here are the latest news from VersionEye.
+      Happy new year! Here are the latest news from VersionEye.
     </p>
 
-    <h3>Team Notifications</h3>
+    <h3>Suggest a license</h3>
     <p>
-      We completely refactored the notification engine to make it more flexible.
-      Up to now you could only configure the frequency of the notification email in the project settings.
-      Many of you asked for a more flexible way to configure notifications.
-      Specially in big companies you have people with different interests. Some are only interested in security notifications
-      and others are maybe only interested in license notifications.
-      With the new model the notifications are configured on the team level.
-      Each team can choose which kind of notifications they are interested in and on which days of the week
-      they want to receive them. And now it is also possible to assign multiple teams to one project.
+      VersionEye is monitoring now more than 1.2 Million open source projects and collecting all kind of meta information to this projects. One kind of the meta information is the corresponding license. Currently the VersionEye database contains licenses to more than 8 Million artefacts.
       <br/><br/>
-      <img style="max-width: 100%; height: auto; width: auto\9;" src="https://versioneye.files.wordpress.com/2016/12/team_notifications_01.png?w=450">
+      However, it is not always possible to fetch the license automatically. Sometimes things go wrong and sometimes the license is not available through a repository API. Sometimes human interaction is required to find the license for an artefact. Now everybody from the VersionEye community can suggest a license to an artefact. If you are on a VersionEye product page with an unknown license you will see a new “Suggest a license” link now.
       <br/><br/>
-      Learn more about this cool feature <a href="https://blog.versioneye.com/2016/12/05/new-team-notifications/">here</a>.
+      Learn more about this feature <a href="https://blog.versioneye.com/2017/01/18/suggest-new-licenses/">here</a>.
     </p>
 
-    <h3>NVD Integration</h3>
+    <h3>Recognising SPDX licenses from raw text/html</h3>
     <p>
-      We started to integrate <a href="https://nvd.nist.gov/">NVD</a> as 8th security database for VersionEye.
-      NVD is one of the biggest sources of security vulnerabilities. The problem with NVD is that by default it's not
-      matching with any package manager. The OWASP project tries to do the matching with fuzzy logic, but the results
-      contain a lot of false positives/negatives. We started to build up a mapping between NVD CPEs and Maven coordinates
-      which aims to have 0 false positives/negatives. With that approach we could already identify many current
-      security vulnerabilities in popular Java projects like the Spring Framework, Vaadin and many more.
-      The good news is that all security vulnerabilities we found are fixed in the newest version of the package.
-      It makes sense to keep their dependencies up-to-date ;-)<br/>
-      We will continually improve this mapping and roll it out for the .NET Nuget platform by beginning of next year.
+      Sometimes the maintainers of a project didn’t provide the license information that way that it’s easy to read and recognise for machines. Our new license is using maching learning to detect known licenses in raw text and HTML files. That way we could assign SPDX identifiers to many artefacts where the license name was unknown before.
+      <br/><br/>
+      Learn more about this feature <a href="https://blog.versioneye.com/2017/01/24/lets-make-licenses-great-again/">here</a>.
+    </p>
+
+    <h3>VersionEye Maven Plugin 3.11.1</h3>
+    <p>
+      Version 3.11.1 of the famous VersionEye Maven Plugin is out! It contains a BugFix which was related to Maven reactor builds. Read more to this patch <a href="https://blog.versioneye.com/2017/01/12/versioneye-maven-plugin-3-11-1/">here</a>
     </p>
 
     <p>
