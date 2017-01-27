@@ -5,10 +5,9 @@ class CommonUpdater < Versioneye::Service
     return nil if old_project.nil? || new_project.nil?
 
     old_project.update_from new_project
+    update_private_project( old_project )
     ProjectService.reset_badge old_project
-
     SyncService.sync_project_async old_project # For Enterprise environment
-
     ProjectdependencyService.update_licenses_security old_project
 
     unknown_licenses = ProjectService.unknown_licenses( old_project )
@@ -28,6 +27,16 @@ class CommonUpdater < Versioneye::Service
     project.save
   rescue => e
     log.error "ERROR occured store_parsing_errors - #{e.message}"
+    log.error e.backtrace.join("\n")
+  end
+
+
+  def update_private_project project
+    user = user_for project
+    project.private_project = Github.private_repo? user.github_token, project.scm_fullname
+    project.save
+  rescue => e
+    log.error e.message
     log.error e.backtrace.join("\n")
   end
 
