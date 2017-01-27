@@ -11,7 +11,7 @@ ENV LC_CTYPE=en_US.UTF-8
 RUN apt-get update
 RUN apt-get install -y libfontconfig1 # mandatory for PDFKit
 RUN apt-get install -y supervisor;
-RUN gem install bundler --version 1.13.6
+RUN gem install bundler --version 1.13.7
 RUN rm -Rf /app; mkdir -p /app; mkdir -p /app/log; mkdir -p /app/pids
 
 ADD . /app/
