@@ -50,6 +50,10 @@ class Organisation < Versioneye::Model
     api
   end
 
+  def api_key
+    self.api.api_key
+  end
+
   def fetch_or_create_billing_address
     if self.billing_address.nil?
       self.billing_address = BillingAddress.new
