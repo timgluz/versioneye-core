@@ -27,6 +27,7 @@ describe User do
       expect( api.save ).to be_truthy
       expect( github_user.api ).to_not be_nil
       expect( github_user.api.api_key ).to eq( api.api_key )
+      expect( github_user.api_key ).to eq( api.api_key )
     end
   end
 
