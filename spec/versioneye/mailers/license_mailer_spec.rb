@@ -9,7 +9,7 @@ describe LicenseMailer do
         :version => '1.0.0', :name => 'MIT', :url => 'source', :comments => 'comm'})
       email = LicenseMailer.new_license_suggestion( ls )
 
-      email.encoded.should include( "Ruby" )
+      email.encoded.should include( "ruby" )
       email.encoded.should include( 'rails' )
       email.encoded.should include( 'Mannheim' )
 
