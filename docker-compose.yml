@@ -6,8 +6,9 @@ mongodb:
   restart: always
   ports:
    - "27017:27017"
-  # volumes:
-  #  - /mnt/mongodb:/data
+  volumes:
+    - /Users/timgluz/workspace/versioneye/versioneye-core/data:/dumps
+    - /Users/timgluz/workspace/versioneye/versioneye-core/tmp/veye_dev:/data
 
 # AMQ Message Server
 rabbitmq:
