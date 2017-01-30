@@ -14,7 +14,6 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = ['LICENSE.txt', 'README.md']
   s.files            = `git ls-files -z`.split("\0")
 
-  s.add_runtime_dependency 'bundler', '~> 1.14'
   s.add_runtime_dependency 'naturalsorter', '~> 3.0.15'
   s.add_runtime_dependency 'dalli', '~> 2.7.6'
   s.add_runtime_dependency 'oauth', '~> 0.5.0'
