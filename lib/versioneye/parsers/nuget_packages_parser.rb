@@ -52,7 +52,8 @@ class NugetPackagesParser < NugetParser
     target = pkg_node.attr('targetFramework').to_s.strip
 
     version_label = if allowed_range.empty?
-                      '[' + version_requested.to_s + ']' #nuget install pulls only fixed versions; and [x] matches with Nuget comperator;
+                      #nuget install pulls only fixed versions; and [x] matches with Nuget comperator;
+                      '[' + version_requested.to_s.strip + ']' 
                     else
                       allowed_range #it's already using Nuget version ranges
                     end

@@ -137,6 +137,81 @@ describe NugetPackagesParser do
       expect( deps[4].name ).to eq(product7[:name])
       expect( deps[4].version_requested ).to eq(product7[:version])
       expect( deps[4].comperator).to eq('=')
+    end
+  end
+
+  let(:issue58_file){File.read("spec/fixtures/files/nuget/packages_issue58.config")}
+  let(:product8){
+    FactoryGirl.build(
+      :product_with_versions,
+      name:     'Newtonsoft.Json',
+      prod_key: 'Newtonsoft.Json',
+      prod_type: Project::A_TYPE_NUGET,
+      language: Product::A_LANGUAGE_CSHARP,
+      version: '9.0.1'
+    )
+  }
+
+  let(:product9){
+    FactoryGirl.build(
+      :product_with_versions,
+      name:     'xunit',
+      prod_key: 'xunit',
+      prod_type: Project::A_TYPE_NUGET,
+      language: Product::A_LANGUAGE_CSHARP,
+      version: '2.1.0'
+    )
+  }
+
+  let(:product10){
+    FactoryGirl.build(
+      :product_with_versions,
+      name: 'xunit.runner.visualstudio',
+      prod_key: 'xunit.runner.visualstudio',
+      prod_type: Project::A_TYPE_NUGET,
+      language: Product::A_LANGUAGE_CSHARP,
+      version: '2.1.0'
+    )
+  }
+
+  context "issue58 fails to parse versions with build infos" do
+
+    it "fixes issue with exact match" do
+      product8.versions << FactoryGirl.build(:product_version, version: '9.0.1')
+
+      product9.versions << FactoryGirl.build(:product_version, version: '2.1.0')
+      product9.versions << FactoryGirl.build(:product_version, version: '2.2.0-beta1-build3239')
+      product9.versions << FactoryGirl.build(:product_version, version: '2.2.0-beta3-build3402')
+      product9.versions << FactoryGirl.build(:product_version, version: '2.2.0-beta5-build3474')
+
+      product9.save
+
+      product10.versions << FactoryGirl.build(:product_version, version: '2.1.0')
+      product10.versions << FactoryGirl.build(:product_version, version: '2.2.0-beta3-build1182')
+      product10.versions << FactoryGirl.build(:product_version, version: '2.2.0-beta3-build1187')
+      product10.versions << FactoryGirl.build(:product_version, version: '2.2.0-beta5-build1225')
+      product10.save
+
+      project = parser.parse_content(issue58_file, "ftp://spec_test")
+      expect(project).not_to be_nil
+      expect(project.projectdependencies.size).to eq(3)
+
+      deps = project.projectdependencies
+      
+      expect( deps[0].name ).to eq(product8[:name])
+      expect( deps[0].version_requested ).to eq(product8[:version])
+      expect( deps[0].version_label ).to eq('[9.0.1]')
+      expect( deps[0].comperator).to eq('=')
+
+      expect( deps[1].name ).to eq(product9[:name])
+      expect( deps[1].version_requested ).to eq('2.2.0-beta3-build3402')
+      expect( deps[1].version_label ).to eq('[2.2.0-beta3-build3402]')
+      expect( deps[1].comperator).to eq('=')
+
+      expect( deps[2].name ).to eq(product10[:name])
+      expect( deps[2].version_requested ).to eq('2.2.0-beta3-build1187')
+      expect( deps[2].version_label ).to eq('[2.2.0-beta3-build1187]')
+      expect( deps[2].comperator).to eq('=')
 
     end
   end
