@@ -10,10 +10,9 @@ class NugetParser < CommonParser
     ident           = "[\\w-]" # identificator aka textual value
     prerelease_info = "\\-(?<prerelease>#{ident}[\\.#{ident}]*)" # matches release info: -alpha.1
     build_info      = "\\+(?<build>#{ident}[\\.#{ident}]*)"      # matches build info
-    #version         = "(?<version>(#{numeric})(\\.(#{numeric})(\\.(#{numeric}))?)?)" #old major.minor.patch
     version         = "(?<version>(#{numeric})(\\.(#{numeric})(\\.(#{numeric}))*)?)" #matches more than m.m.p
 
-    semver          = "#{version}(#{prerelease_info})?(#{build_info})?"
+    semver          = "(?<semver>#{version}(#{prerelease_info})?(#{build_info})?)"
 
     #version range doc: https://docs.nuget.org/create/versioning#Specifying-Version-Ranges-in-.nuspec-Files
     empty_string    = "^\\s*$"                    # ""        | current
@@ -98,7 +97,7 @@ class NugetParser < CommonParser
   end
 
   def cleanup_version(version_label)
-    version_label.to_s.gsub(/\s*/, "").strip
+    version_label.to_s.gsub(/\s+/, "").strip
   end
 
   # parses raw version label and matches its comperator range with Product versions
@@ -106,7 +105,7 @@ class NugetParser < CommonParser
     version = cleanup_version(version_label)
 
     version_data = {
-      version: version,
+      version: version, #it uses unparsed version label only if version filtering failed
       label: version,
       comperator: '='
     }
@@ -122,28 +121,29 @@ class NugetParser < CommonParser
       version_data[:label] = '*'
 
     elsif ( m = rules[:exact].match(version) )
-      res = VersionService.from_ranges(product.versions, m[:version])
+      res = VersionService.from_ranges(product.versions, m[:semver])
       latest_version = VersionService.newest_version res
+
       version_data[:version] = latest_version[:version] if latest_version
       version_data[:comperator] = '='
 
     elsif ( m = rules[:less_than].match(version) )
-      latest_version = VersionService.smaller_than(product.versions, m[:version])
+      latest_version = VersionService.smaller_than(product.versions, m[:semver])
       version_data[:version]    = latest_version[:version] if latest_version
       version_data[:comperator] = '<'
 
     elsif ( m = rules[:less_equal].match(version) )
-      latest_version = VersionService.smaller_than_or_equal(product.versions, m[:version])
+      latest_version = VersionService.smaller_than_or_equal(product.versions, m[:semver])
       version_data[:version]    =  latest_version[:version] if latest_version
       version_data[:comperator] = '<='
 
     elsif ( m = rules[:greater_than].match(version) )
-      latest_version = VersionService.greater_than(product.versions, m[:version])
+      latest_version = VersionService.greater_than(product.versions, m[:semver])
       version_data[:version]    = latest_version[:version] if latest_version
       version_data[:comperator] = '>'
 
     elsif ( m = rules[:greater_eq_than].match(version) or m = rules[:greater_eq_than2].match(version))
-      latest_version = VersionService.greater_than_or_equal(product.versions, m[:version])
+      latest_version = VersionService.greater_than_or_equal(product.versions, m[:semver])
       version_data[:version] = latest_version[:version] if latest_version
       version_data[:comperator] = '>='
 

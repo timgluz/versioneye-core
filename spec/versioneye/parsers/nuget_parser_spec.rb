@@ -92,6 +92,7 @@ describe NugetParser do
       expect( exact.match("[1.0]") ).not_to be_nil
       expect( exact.match("[2.0.1]") ).not_to be_nil
       expect( exact.match("[2.0.1,]") ).not_to be_nil
+      expect( exact.match("[2.2.0-beta3-build1187]" )).not_to be_nil
     end
 
     it "matches rule of greater_than" do
