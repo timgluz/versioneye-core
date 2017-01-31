@@ -303,11 +303,11 @@ class ProjectdependencyService < Versioneye::Service
         licenses.each do |license|
           next if license.nil?
 
-          licenseCach = LicenseCach.new({:name => license.name_substitute, :url => license.link} )
+          licenseCach = LicenseCach.new({:name => license.label, :url => license.link} )
           licenseCach.license_id = license.id.to_s
 
           if project.license_whitelist
-            licenseCach.on_whitelist = project.license_whitelist.include_license_substitute?( license.name_substitute )
+            licenseCach.on_whitelist = project.license_whitelist.include_license_substitute?( license.label )
           end
 
           if project.component_whitelist
