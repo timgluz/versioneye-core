@@ -16,15 +16,25 @@ class ComponentWhitelistService < Versioneye::Service
   end
 
   def self.add organisation, list_name, cwl_key
+    return false if cwl_key.to_s.empty?
+
     cwl = ComponentWhitelist.fetch_by organisation, list_name
     cwl.add cwl_key
     cwl.save
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join "\n"
+    false
   end
 
   def self.remove organisation, list_name, cwl_key
     cwl = ComponentWhitelist.fetch_by organisation, list_name
     cwl.remove cwl_key
     cwl.save
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join "\n"
+    false
   end
 
   def self.default organisation, list_name

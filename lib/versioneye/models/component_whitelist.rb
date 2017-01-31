@@ -44,7 +44,9 @@ class ComponentWhitelist < Versioneye::Model
     return true if self.components.include?(element.downcase)
 
     components.each do |component|
-      return true if element.downcase.match( /\A#{component}/ )
+      next if component.to_s.empty?
+
+      return true if element.to_s.downcase.match( /\A#{component.to_s}/ )
     end
 
     false
