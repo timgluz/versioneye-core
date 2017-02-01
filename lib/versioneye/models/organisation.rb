@@ -44,14 +44,14 @@ class Organisation < Versioneye::Model
     Receipt.where(:organisation_id => self.ids)
   end
 
-  def api
-    api = Api.where( organisation_id: self.ids ).first
-    api = Api.create_new_for_orga( self ) if api.nil?
+  def api( read_only = false )
+    api = Api.where( active: true, organisation_id: self.ids, read_only: read_only ).first
+    api = Api.create_new_for_orga( self, read_only ) if api.nil?
     api
   end
 
-  def api_key
-    self.api.api_key
+  def api_key( read_only = false )
+    self.api( read_only ).api_key
   end
 
   def fetch_or_create_billing_address

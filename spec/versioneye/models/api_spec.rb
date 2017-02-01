@@ -51,6 +51,20 @@ describe Api do
       expect( api.api_key ).to_not be_nil
       expect( api.rate_limit ).to eq(medium_plan.api_rate_limit)
       expect( api.rate_limit ).to_not eq(50)
+      expect( api.read_only ).to be_falsey
+    end
+
+    it "creates a new read only api instance" do
+      Plan.create_defaults
+      medium_plan = Plan.medium
+      orga = Organisation.new({:name => "test_orga"})
+      orga.plan = medium_plan
+      expect( orga.save ).to be_truthy
+      api = Api.create_new_for_orga(orga, true)
+      expect( api ).to_not be_nil
+      expect( api.user_id ).to be_nil
+      expect( api.organisation_id ).to eq(orga.ids)
+      expect( api.read_only ).to be_truthy
     end
 
   end

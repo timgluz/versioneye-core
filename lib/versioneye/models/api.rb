@@ -32,12 +32,13 @@ class Api < Versioneye::Model
     new_api
   end
 
-  def self.create_new_for_orga( organisation )
+  def self.create_new_for_orga( organisation, read_only = false )
     new_api = Api.new( organisation_id: organisation.ids )
     new_api.generate_api_key!
     if organisation && organisation.plan
       new_api.rate_limit = organisation.plan.api_rate_limit
     end
+    new_api.read_only = read_only
     new_api.save
     new_api
   end
