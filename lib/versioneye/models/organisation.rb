@@ -131,6 +131,28 @@ class Organisation < Versioneye::Model
   end
 
 
+  def component_list_csv team = 'ALL', language = nil, version = nil, after_filter = 'ALL'
+    comps = component_list team, language, version, after_filter
+    csv_string = CSV.generate(:col_sep => ";") do |csv|
+      csv << ['Language', 'Dependency', 'Version', 'License', 'Project ID', 'Project Name', 'Project Version', 'Project GroupId', 'Project ArtifactId']
+      comps.keys.each do |key|
+        dep_lang = key.split(":")[0]
+        dep = comps[key]
+        dep.keys.each do |dep_key|
+          sps = dep_key.split("::")
+          prod_key = sps[0]
+          dep_version = sps[1]
+          dep_license = sps[2]
+          dep[dep_key].each do |pr|
+            csv << [dep_lang, prod_key, dep_version, dep_license, pr[:project_id], pr[:project_name], pr[:project_version], pr[:project_group_id], pr[:project_artifact_ids]]
+          end
+        end
+      end
+    end
+    csv_string
+  end
+
+
   def component_list team = 'ALL', language = nil, version = nil, after_filter = 'ALL'
     return {} if projects.to_a.empty?
 
