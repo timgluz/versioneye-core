@@ -144,7 +144,7 @@ class Organisation < Versioneye::Model
           dep_version = sps[1]
           dep_license = sps[2]
           dep[dep_key].each do |pr|
-            csv << [dep_lang, prod_key, dep_version, dep_license, pr[:project_id], pr[:project_name], pr[:project_version], pr[:project_group_id], pr[:project_artifact_ids]]
+            csv << [dep_lang, prod_key, dep_version, dep_license, pr[:project_id], pr[:project_name], pr[:project_version], pr[:project_group_id], pr[:project_artifact_id]]
           end
         end
       end
