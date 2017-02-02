@@ -36,6 +36,22 @@ class Team < Versioneye::Model
     name
   end
 
+  def projects
+    return nil if self.organisation.nil?
+    self.organisation.team_projects( self.ids )
+  end
+
+  def users
+    response = []
+    self.members.each do |member|
+      next if member.nil? || member.user.nil?
+
+      user = member.user
+      response << {:id => user.ids, :username => user.username, :fullname => user.username}
+    end
+    response
+  end
+
   def notifications_all_disabled?
     self.version_notifications  == false &&
     self.license_notifications  == false &&
