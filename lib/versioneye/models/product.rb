@@ -244,6 +244,12 @@ class Product < Versioneye::Model
     if version.nil? && self.prod_key.match(/\Aorg.spring/)
       version = version_by_number "#{version_number}.RELEASE"
     end
+    if version.nil? && self.prod_key.match(/\Aorg\.apache\.hbase/)
+      version = version_by_number "#{version_number}-hadoop1"
+    end
+    if version.nil? && self.prod_key.match(/\Aorg\.apache\.hbase/)
+      version = version_by_number "#{version_number}-hadoop2"
+    end
     return false if version.nil?
     return false if version.sv_ids.include?(sv.ids)
 
