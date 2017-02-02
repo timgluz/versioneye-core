@@ -282,6 +282,7 @@ class Organisation < Versioneye::Model
         team_names = project.teams.map(&:name) if !project.teams.to_a.empty?
         val = {:project_language => project.language, :project_name => project.name,
                :project_id => project.ids, :project_version => project.version,
+               :project_group_id => project.group_id, :project_artifact_id => project.artifact_id,
                :project_teams => team_names}
         comps[component_key][version_key] << val if !comps[component_key][version_key].include?( val )
       end
