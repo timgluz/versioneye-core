@@ -134,17 +134,19 @@ class Organisation < Versioneye::Model
   def component_list_csv team = 'ALL', language = nil, version = nil, after_filter = 'ALL'
     comps = component_list team, language, version, after_filter
     csv_string = CSV.generate(:col_sep => ";") do |csv|
-      csv << ['Language', 'Dependency', 'Version', 'License', 'Project ID', 'Project Name', 'Project Version', 'Project GroupId', 'Project ArtifactId']
+      csv << ['Language', 'Dependency', 'Newest Version', ' Used Version', 'License', 'Security Vulnerabilities', 'Project ID', 'Project Name', 'Project Version', 'Project GroupId', 'Project ArtifactId']
       comps.keys.each do |key|
         dep_lang = key.split(":")[0]
+        newest_version = key.split(":")[2]
         dep = comps[key]
-        dep.keys.each do |dep_key|
-          sps = dep_key.split("::")
+        dep.keys.each do |dep_version_key|
+          sps = dep_version_key.split("::")
           prod_key = sps[0]
           dep_version = sps[1]
           dep_license = sps[2]
-          dep[dep_key].each do |pr|
-            csv << [dep_lang, prod_key, dep_version, dep_license, pr[:project_id], pr[:project_name], pr[:project_version], pr[:project_group_id], pr[:project_artifact_id]]
+          dep_sv_count = sps[3]
+          dep[dep_version_key].each do |pr|
+            csv << [dep_lang, prod_key, newest_version, dep_version, dep_license, dep_sv_count, pr[:project_id], pr[:project_name], pr[:project_version], pr[:project_group_id], pr[:project_artifact_id]]
           end
         end
       end
@@ -296,7 +298,7 @@ class Organisation < Versioneye::Model
           comps[component_key] = {} if !comps.keys.include?( component_key )
         end
 
-        version_key = "#{dep.possible_prod_key}::#{dep.version_requested}::#{dep.licenses_string}"
+        version_key = "#{dep.possible_prod_key}::#{dep.version_requested}::#{dep.licenses_string}::#{dep.sv_ids.count}"
         comps[component_key][version_key] = [] if comps[component_key][version_key].nil?
 
         project = dep.project
