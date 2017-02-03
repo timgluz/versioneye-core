@@ -122,10 +122,10 @@ describe YarnParser do
     )
   }
 
-  describe "parse_content" do
-    it "returns expected dependencies" do
+  describe "parse_file_content" do
+    it "extracts correct dependency data from the file" do
       txt = File.read test_file_path
-      deps = parser.parse_content txt
+      deps = parser.parse_file_content txt
       expect(deps).not_to be_nil
       expect(deps.size).to eq(6)
 
@@ -162,4 +162,61 @@ describe YarnParser do
     
     end 
   end
+
+  describe "parse_content" do
+    it "parses dependencies and return project" do
+      #save products so it could find it from DB
+      product1.save
+      product2.save
+      product3.save
+      product4.save
+      product5.save
+      product6.save
+
+      #run test
+      txt = File.read test_file_path
+      project = parser.parse_content txt
+      
+      expect(project).not_to be_nil
+      expect(project.dep_number).to eq(6)
+
+      dep = project.dependencies[0]
+      expect(dep[:name]).to eq(product1[:name])
+      expect(dep[:version_requested]).to eq(product1[:version])
+      expect(dep[:version_current]).to eq(product1[:version])
+      expect(dep[:comperator]).to eq('=')
+
+      dep = project.dependencies[1]
+      expect(dep[:name]).to eq(product2[:name])
+      expect(dep[:version_requested]).to eq(product2[:version])
+      expect(dep[:version_current]).to eq(product2[:version])
+      expect(dep[:comperator]).to eq('=')
+
+      dep = project.dependencies[2]
+      expect(dep[:name]).to eq(product3[:name])
+      expect(dep[:version_requested]).to eq(product3[:version])
+      expect(dep[:version_current]).to eq(product3[:version])
+      expect(dep[:comperator]).to eq('=')
+
+      dep = project.dependencies[3]
+      expect(dep[:name]).to eq(product4[:name])
+      expect(dep[:version_requested]).to eq(product4[:version])
+      expect(dep[:version_current]).to eq(product4[:version])
+      expect(dep[:comperator]).to eq('=')
+
+      dep = project.dependencies[4]
+      expect(dep[:name]).to eq(product5[:name])
+      expect(dep[:version_requested]).to eq(product5[:version])
+      expect(dep[:version_current]).to eq(product5[:version])
+      expect(dep[:comperator]).to eq('=')
+
+      dep = project.dependencies[5]
+      expect(dep[:name]).to eq(product6[:name])
+      expect(dep[:version_requested]).to eq(product6[:version])
+      expect(dep[:version_current]).to eq(product6[:version])
+      expect(dep[:comperator]).to eq('=')
+
+    end
+  end
+
 end

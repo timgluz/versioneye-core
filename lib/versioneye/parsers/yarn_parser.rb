@@ -1,6 +1,6 @@
 require 'versioneye/parsers/common_parser'
 
-class YarnParser < CommonParser
+class YarnParser < PackageParser
   attr_reader :rules
 
   def initialize
@@ -25,8 +25,36 @@ class YarnParser < CommonParser
     }
   end
 
+  def parse_content( content, token = nil)
+    content = content.to_s.strip
+    return nil if content.empty?
+    return nil if content.eql?('Not found')
+
+    dep_items = parse_file_content content
+    if dep_items.nil?
+      log.error "Failed to parse file content from:\n#{content}"
+      return
+    end
+
+    project = init_project({'name' => 'yarn.lock'})   
+    parse_dependencies(dep_items, project)
+
+    project.dep_number = project.dependencies.size
+    project
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
+  end
+
+  def parse_dependencies(dep_items, project)
+    dep_items.each do |dep|
+      parse_line(dep[:name], dep[:version], project)
+    end
+  end
+
   #parses dependencies from yarn.lock file and returns hash-map of dependency results
-  def parse_content(text_content)
+  def parse_file_content(text_content)
     deps = []
     isSubDep = false
     isOptionalDep = false
@@ -42,7 +70,7 @@ class YarnParser < CommonParser
         #init a new dependency object
         dep = {
           name: dep_name,
-          version: selector,
+          version: selector, #uses version selector only if there's no version row
           deps: [],
           optionalDeps: []
         }
