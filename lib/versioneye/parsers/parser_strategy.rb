@@ -26,7 +26,11 @@ class ParserStrategy
         end
 
       when Project::A_TYPE_NPM
-        return PackageParser.new
+        if url.match(/yarn\.lock/i)
+          return YarnParser.new
+        else
+          return PackageParser.new
+        end
 
       when Project::A_TYPE_GRADLE
         return GradleParser.new
