@@ -429,9 +429,9 @@ describe Organisation do
 
       expect( comps ).to_not be_nil
       expect( comps.count ).to eq(2)
-      expect( comps['Java:org.testng/testng:1.0.0']['org.testng/testng::1.0.0::UNKNOWN'] ).to_not be_nil
-      expect( comps['Java:org.junit/junit:2.0.0']['org.junit/junit::2.0.0::UNKNOWN'] ).to_not be_nil
-      expect( comps['Java:org.junit/junit:2.0.0']['org.junit/junit::1.9.9::UNKNOWN'] ).to_not be_nil
+      expect( comps['Java:org.testng/testng:1.0.0']['org.testng/testng::1.0.0::UNKNOWN::0'] ).to_not be_nil
+      expect( comps['Java:org.junit/junit:2.0.0']['org.junit/junit::2.0.0::UNKNOWN::0'] ).to_not be_nil
+      expect( comps['Java:org.junit/junit:2.0.0']['org.junit/junit::1.9.9::UNKNOWN::0'] ).to_not be_nil
     end
 
     it "returns the correct component_list" do
@@ -475,15 +475,15 @@ describe Organisation do
       expect( comps ).to_not be_nil
       expect( comps.count ).to eq(1)
       expect( comps['Java:org.junit/junit:2.0.0'] ).to_not be_nil
-      expect( comps['Java:org.junit/junit:2.0.0']['org.junit/junit::2.0.0::UNKNOWN'] ).to_not be_nil
-      expect( comps['Java:org.junit/junit:2.0.0']['org.junit/junit::1.9.9::UNKNOWN'] ).to     be_nil
+      expect( comps['Java:org.junit/junit:2.0.0']['org.junit/junit::2.0.0::UNKNOWN::0'] ).to_not be_nil
+      expect( comps['Java:org.junit/junit:2.0.0']['org.junit/junit::1.9.9::UNKNOWN::0'] ).to     be_nil
 
       comps = @orga.component_list team.name, 'ALL', 'ALL', 'show_duplicates'
       expect( comps ).to_not be_nil
       expect( comps.count ).to eq(1)
       expect( comps['Java:org.junit/junit:2.0.0'] ).to_not be_nil
-      expect( comps['Java:org.junit/junit:2.0.0']['org.junit/junit::2.0.0::UNKNOWN'] ).to_not be_nil
-      expect( comps['Java:org.junit/junit:2.0.0']['org.junit/junit::1.9.9::UNKNOWN'] ).to_not be_nil
+      expect( comps['Java:org.junit/junit:2.0.0']['org.junit/junit::2.0.0::UNKNOWN::0'] ).to_not be_nil
+      expect( comps['Java:org.junit/junit:2.0.0']['org.junit/junit::1.9.9::UNKNOWN::0'] ).to_not be_nil
     end
 
   end
