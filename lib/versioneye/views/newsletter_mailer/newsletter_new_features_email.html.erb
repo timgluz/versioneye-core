@@ -4,28 +4,37 @@
     Hey <%= @user.fullname %>,
 
     <p style="padding-bottom: 0px;">
-      Happy new year! Here are the latest news from VersionEye.
+      In February 2012 the VersionEye project was started in Mannheim / Germany. Unbelievable, but that’s already 5 years ago. Back then in 2012 VersionEye was only tracking versions for Java, Ruby and Python libraries, all together less than 150K components. There was no GitHub integration, no Bitbucket &amp; Stash integration, no API and almost no traffic on the VersionEye.com page. But that changed. Last month VersionEye.com had more than 1 Million pageviews.
+    </p>
+    <p>
+      <img src="https://versioneye.files.wordpress.com/2017/02/screen-shot-2017-02-06-at-10-49-38.png" style="max-width: 100%" ></img>
+    </p>
+    <p>
+      By the way: Since January 2014 we spent exactly 0 EUR for Ads and Marketing. All the traffic we are getting is organic.
+      Many thanks to all the people who are using the product, giving feedback and helping improving it.<br/>
+      <a href="https://blog.versioneye.com/2017/02/06/5-years-of-versioneye/">Read here the full blog post</a>.
     </p>
 
-    <h3>Suggest a license</h3>
+    <h3>New API Endpoints</h3>
     <p>
-      VersionEye is monitoring now more than 1.2 Million open source projects and collecting all kind of meta information to this projects. One kind of the meta information is the corresponding license. Currently the VersionEye database contains licenses to more than 8 Million artefacts.
-      <br/><br/>
-      However, it is not always possible to fetch the license automatically. Sometimes things go wrong and sometimes the license is not available through a repository API. Sometimes human interaction is required to find the license for an artefact. Now everybody from the VersionEye community can suggest a license to an artefact. If you are on a VersionEye product page with an unknown license you will see a new “Suggest a license” link now.
-      <br/><br/>
-      Learn more about this feature <a href="https://blog.versioneye.com/2017/01/18/suggest-new-licenses/">here</a>.
+      The VersionEye API is heavily used! In the mean while the VersionEye API is serving more HTTP requests then the web application. That’s why made it even more awesome :-)<br/>
+      We upgraded the SwaggerUI for our API documentation. The new version of SwaggerUI shows out of the box CURL commands for each request. Beside that we added 5 new API Endpoints for the user and organisation object. All the details are documented <a href="https://blog.versioneye.com/2017/02/03/new-api-endpoints/">here</a>.
     </p>
 
-    <h3>Recognising SPDX licenses from raw text/html</h3>
+    <h3>CSV Export for the OS Inventory</h3>
     <p>
-      Sometimes the maintainers of a project didn’t provide the license information that way that it’s easy to read and recognise for machines. Our new license crawler is using maching learning to detect known licenses in raw text and HTML files. That way we could assign SPDX identifiers to many artefacts where the license name was unknown before.
-      <br/><br/>
-      Learn more about this feature <a href="https://blog.versioneye.com/2017/01/24/lets-make-licenses-great-again/">here</a>.
+      As VersionEye knows all the dependencies from all your projects it can easily display you the inventory list of all your dependencies over all your projects, in real time. Now the inventory list can be exported as CSV file. That way you can open your inventory list in Microsoft Execel, which is a lovely tool for all big Enterprises. Read more details about this new feature
+       <a href="https://blog.versioneye.com/2017/02/03/csv-export-for-os-inventory/">here</a>
     </p>
 
-    <h3>VersionEye Maven Plugin 3.11.1</h3>
+    <h3>Simplified component whitelist</h3>
     <p>
-      Version 3.11.1 of the famous VersionEye Maven Plugin is out! It contains a BugFix which was related to Maven reactor builds. Read more to this patch <a href="https://blog.versioneye.com/2017/01/12/versioneye-maven-plugin-3-11-1/">here</a>
+      With the component whitelist in VersionEye you can whitelist certain components. Until now you had to know exactly which value you have to put on your component whitelist. For many people it was confusing. Now we simplified that. Now in the project detail view there is a "+" icon directly next to problematic dependencies. By clicking on the "+" icon the dependency is added to the component whitelist. Read more about this new feature <a href="https://blog.versioneye.com/2017/01/31/simplified-component-whitelist/">here</a>
+    </p>
+
+    <h3>Read Only API Key</h3>
+    <p>
+      Now every organisation at VersionEye has 2 API keys. Beside the "normal" one there is a new read only API key. Read more about this new feature <a href="https://blog.versioneye.com/2017/02/03/new-api-endpoints/">here</a>.
     </p>
 
     <p>
