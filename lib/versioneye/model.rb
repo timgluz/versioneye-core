@@ -4,6 +4,7 @@ module Versioneye
     require 'versioneye/log'
 
     require 'versioneye/models/api_cmp'
+    require 'versioneye/models/artefact'
     require 'versioneye/models/pullrequest'
     require 'versioneye/models/pr_issue'
     require 'versioneye/models/mail_track'
