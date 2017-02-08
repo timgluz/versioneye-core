@@ -70,7 +70,7 @@ class GitRepoFileImportWorker < Worker
       end
     rescue => e
       cache.set( message, "error_#{e.message}", A_TASK_TTL )
-      log.error "ERROR in GitRepoFileImportWorker: #{e.message}"
+      log.error "ERROR in GitRepoFileImportWorker! Input: #{message} Output: #{e.message}"
       log.error e.backtrace.join("\n")
     end
 

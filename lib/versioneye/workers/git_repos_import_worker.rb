@@ -60,7 +60,7 @@ class GitReposImportWorker < Worker
       GitHubService.cache_user_all_repos(user, orga_names)
       cache.set( user_task_key, GitHubService::A_TASK_DONE, GitHubService::A_TASK_TTL )
     rescue => e
-      log.error e.message
+      log.error "ERROR in import_github_repos for user #{user} - e.message"
       log.error e.backtrace.join("\n")
     end
 
@@ -75,7 +75,7 @@ class GitReposImportWorker < Worker
       BitbucketService.cache_user_all_repos( user )
       cache.set( user_task_key, BitbucketService::A_TASK_DONE, BitbucketService::A_TASK_TTL )
     rescue => e
-      log.error e.message
+      log.error "ERROR in import_bitbucket_repos for user #{user} - e.message"
       log.error e.backtrace.join("\n")
     end
 
@@ -90,7 +90,7 @@ class GitReposImportWorker < Worker
       StashService.cache_user_all_repos( user )
       cache.set( user_task_key, StashService::A_TASK_DONE, StashService::A_TASK_TTL )
     rescue => e
-      log.error e.message
+      log.error "ERROR in import_stash_repos for user #{user} - e.message"
       log.error e.backtrace.join("\n")
     end
 
