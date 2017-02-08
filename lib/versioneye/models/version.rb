@@ -73,4 +73,31 @@ class Version < Versioneye::Model
     License.find_or_create_by( :language => product.language, :prod_key => product.prod_key, :version => self.version, :name => name )
   end
 
+  def to_artefact!
+    if !self.sha1.to_s.empty? && Artefact.where(:sha_value => self.sha1).count == 0
+      create_artefact(self.sha1, "sha1")
+    end
+    if !self.sha256.to_s.empty? && Artefact.where(:sha_value => self.sha256).count == 0
+      create_artefact(self.sha256, "sha256")
+    end
+    if !self.sha512.to_s.empty? && Artefact.where(:sha_value => self.sha512).count == 0
+      create_artefact(self.sha512, "sha512")
+    end
+  end
+
+  def create_artefact(sha_value, sha_method)
+    artefact = Artefact.new({:language => product.language,
+                  :prod_key => product.prod_key,
+                  :version => self.version,
+                  :group_id => product.group_id,
+                  :artifact_id => product.artifact_id,
+                  :prod_type => product.prod_type,
+                  :sha_value => sha_value,
+                  :sha_method => sha_method})
+    artefact.save
+  rescue => e
+    log.error e.message
+    false
+  end
+
 end
