@@ -220,7 +220,7 @@ class ProjectImportService < Versioneye::Service
       log.error " Can't import project file `#{filename}` from #{repo_name} branch #{branch} "
       return " Didn't find any project file of a supported package manager."
     end
-    if project.is_a?( String )
+    if project_file.is_a?( String )
       raise "The project file could not be parsed. #{project}"
     end
 
