@@ -61,6 +61,7 @@ class LwlService < Versioneye::Service
       dep.license_caches.each do |lc|
         line = build_line(dep)
         line[:license] = lc.name
+        line[:license_url] = lc.url
         line[:whitelisted] = lc.is_whitelisted?
         lines << line
         whitelisted = true if lc.is_whitelisted?
