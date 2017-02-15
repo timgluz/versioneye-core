@@ -144,13 +144,9 @@ class Project < Versioneye::Model
   end
 
   def dependencies(scope = nil)
-    return self.projectdependencies if scope.nil?
     return self.projectdependencies if self.projectdependencies.nil? || self.projectdependencies.empty?
-    deps = []
-    self.projectdependencies.each do |dependency|
-      deps << dependency if dependency.scope.eql?(scope)
-    end
-    deps
+    return self.projectdependencies if scope.nil?
+    return self.projectdependencies.where(:scope => scope)
   end
 
   def sorted_dependencies_by_rank( deps = nil )
