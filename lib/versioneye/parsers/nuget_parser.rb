@@ -46,6 +46,63 @@ class NugetParser < CommonParser
     }
   end
 
+  # removes leading zeros and excess 0 after patch part
+  #breaking changes from 3.4 
+  #details: https://docs.microsoft.com/en-us/nuget/create-packages/dependency-versions
+  def normalize_version(version_label)
+    version, metadata, separator = split_version( version_label )
+
+    # remove spaces in the label
+    version = version.gsub(/\s/, '')
+    #replace leading zeros in version number
+    version = version.gsub(/\b0+(\d+)\b/, '\1')
+    # remove leading 0 if version has 4part: 1.1.1.0 -> 1.1.1
+    if version.match /^\d+(\.\d+){2,2}\.0+/
+      rpos = version.rindex('.') - 1
+      version = version[0..rpos]
+    end
+
+    lbl = version.to_s.strip
+    lbl += (separator.to_s + metadata) unless metadata.to_s.empty?
+
+    lbl
+  end
+
+  # adds missing minor, patch part as 0
+  def pad_zeros(version_label)
+    version, metadata, separator = split_version( version_label )
+
+    padded_version = case (version + ' ') #hack to make negation to work
+                     when /^\d+(?!\.)/ then version + '.0.0'
+                     when /^\d+\.\d+(?!\.)/ then version + '.0'
+                     else version
+                     end
+
+    padded_version += (separator.to_s + metadata) unless metadata.to_s.empty?
+    padded_version
+  end
+
+  # separates version from metadata, so we could manipulate version without changing metadata
+  # returns:
+  #   [version, metadata, separator] - separator is earliest build (+) or prerelease (-) separator
+  def split_version(version_label)
+    version_label = version_label.to_s.strip
+
+    build_start = version_label.index('+').to_i
+    prerelease_start = version_label.index('-').to_i
+
+    #-- split version so metadata would stay untouched
+    separator = if build_start == 0 and prerelease_start == 0
+                  '--' #shouldnt exist, so it doesnt split string
+                elsif prerelease_start == 0 or (build_start != 0 and build_start < prerelease_start )
+                  '+'
+                elsif build_start == 0 or (prerelease_start != 0 and prerelease_start < build_start)
+                  '-'
+                end
+    version, _, metadata = version_label.partition separator
+    [version, metadata, separator]
+  end
+
   def parse( url )
     response_body = fetch_response_body(url)
     if response_body.nil?
@@ -121,7 +178,9 @@ class NugetParser < CommonParser
       version_data[:label] = '*'
 
     elsif ( m = rules[:exact].match(version) )
-      res = VersionService.from_ranges(product.versions, m[:semver])
+      lbl = m[:semver].to_s.strip
+      possible_formats = [lbl, normalize_version(lbl), pad_zeros(lbl), (lbl + '.0')] 
+      res = VersionService.versions_by_whitelist(product.versions, possible_formats)
       latest_version = VersionService.newest_version res
 
       version_data[:version] = latest_version[:version] if latest_version

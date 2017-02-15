@@ -153,6 +153,65 @@ describe NugetParser do
       expect( range.match("[1.2.1,2.0+build.1]") ).not_to be_nil
    end
   end
+  
+  context "split_version" do
+    it "splits front of leading prerelease" do
+      expect(parser.split_version('1-alpha+build1') ).to eq(['1', 'alpha+build1', '-'])
+      expect(parser.split_version('1.0-beta+build2')).to eq(['1.0', 'beta+build2', '-'])
+      expect(parser.split_version('1.2.3-gamma')).to eq(['1.2.3', 'gamma', '-'])
+    end
+
+    it "splits front of build data" do
+      expect(parser.split_version('1+build1-alpha')).to eq(['1', 'build1-alpha', '+'])
+      expect(parser.split_version('1.0+build2-beta')).to eq(['1.0', 'build2-beta', '+'])
+      expect(parser.split_version('1.2.3+build3')).to eq(['1.2.3', 'build3', '+'])
+    end
+  end
+
+  context "normalize_version" do
+    it "removes leading zeros in versionlabel" do
+      expect( parser.normalize_version('1.00')    ).to eq('1.0')
+      expect( parser.normalize_version('1.01.1')  ).to eq('1.1.1')
+      expect( parser.normalize_version('1.00.0.1')).to eq('1.0.0.1')
+      
+      expect( parser.normalize_version('001.1001.000001') ).to eq('1.1001.1')
+    end
+
+    it "leaves proper versions untouched" do
+      expect( parser.normalize_version('1.0') ).to eq('1.0')
+      expect( parser.normalize_version('1.1.0') ).to eq('1.1.0')
+    end
+
+    it "leaves version metadata as it is" do
+      expect( parser.normalize_version('1.0-beta') ).to eq('1.0-beta')
+      expect( parser.normalize_version('1.0.0-beta+build1001') ).to eq('1.0.0-beta+build1001')
+      expect( parser.normalize_version('1.0001.000-a+1001') ).to eq('1.1.0-a+1001')
+    end
+
+    it "removes extra 0 in extended semver" do
+      expect( parser.normalize_version('1.0.0.0') ).to eq('1.0.0')
+      expect( parser.normalize_version('1.0.01.0') ).to eq('1.0.1')
+    end
+  end
+
+  context "pad_zeros" do
+    it "fills missing minor or patch part with zeroes" do
+      expect(parser.pad_zeros('1')).to eq('1.0.0')
+      expect(parser.pad_zeros('1.0')).to eq('1.0.0')
+      expect(parser.pad_zeros('1.3')).to eq('1.3.0')
+    end
+
+    it "lefts proper semver untouched" do
+      expect(parser.pad_zeros('1.2.0')).to eq('1.2.0')
+      expect(parser.pad_zeros('1.3.3')).to eq('1.3.3')
+    end
+
+    it "doest change version metadata" do
+      expect(parser.pad_zeros('1-alpha+build1')).to eq('1.0.0-alpha+build1')
+      expect(parser.pad_zeros('1.0-beta+build453')).to eq('1.0.0-beta+build453')
+      expect(parser.pad_zeros('1.2.3+build123')).to eq('1.2.3+build123')
+    end
+  end
 
   context "parse_version_data" do
     before :each do
@@ -461,6 +520,90 @@ describe NugetParser do
       expect(res).not_to be_nil
       expect(res[:version_requested]).to eq('2.0')
       expect(res[:comperator]).to eq('<=')
+    end
+  end
+
+  let(:issue62_file_content) { File.read('spec/fixtures/files/nuget/issue62.nuspec') }
+  let(:product5){
+    FactoryGirl.create(
+      :product,
+      name: 'CommonServiceLocator',
+      prod_key: 'CommonServiceLocator',
+      prod_type: Project::A_TYPE_NUGET,
+      language: Product::A_LANGUAGE_CSHARP,
+      version: "1.3.0",
+    )
+  }
+  let(:product6){
+    FactoryGirl.create(
+      :product,
+      name: 'Newtonsoft.Json',
+      prod_key: 'Newtonsoft.Json',
+      prod_type: Project::A_TYPE_NUGET,
+      language: Product::A_LANGUAGE_CSHARP,
+      version: "5.0.0",
+    )
+  }
+
+  let(:product7){
+    FactoryGirl.create(
+      :product,
+      name: 'Microsoft.Web.Infrastructure',
+      prod_key: 'Microsoft.Web.Infrastructure',
+      prod_type: Project::A_TYPE_NUGET,
+      language: Product::A_LANGUAGE_CSHARP,
+      version: "1.0.0",
+    )
+  }
+
+  context "issue62 - not normalized versions affects exact matching" do
+    before :each do
+      product5.versions << FactoryGirl.build(:product_version, version: '1.2.0')
+      product5.versions << FactoryGirl.build(:product_version, version: '1.3.0')
+      product5.versions << FactoryGirl.build(:product_version, version: '1.3.1')
+      product5.save
+
+      product6.versions << FactoryGirl.build(:product_version, version: '5.0.0')
+      product6.save
+
+      product7.versions << FactoryGirl.build(:product_version, version: '1.0.0')
+      product7.versions << FactoryGirl.build(:product_version, version: '1.0.1')
+      product7.save
+    end
+    
+    it "parses and matches all the versions correctly" do
+      proj = parser.parse_content(issue62_file_content, 'ftp://spec3')
+      expect(proj).not_to be_nil
+      expect( proj.projectdependencies.size ).to eq(3)
+
+      dep = proj.dependencies[0]
+      expect(dep[:name]).to eq(product5[:name])
+      expect(dep[:prod_key]).to eq(product5[:prod_key])
+      expect(dep[:version_label]).to eq('[1.3]')
+      expect(dep[:version_requested]).to eq('1.3.0')
+      expect(dep[:version_current]).to eq('1.3.1')
+      expect(dep[:comperator]).to eq('=')
+      expect(dep[:outdated]).to be_truthy
+     
+      dep = proj.dependencies[1]
+      expect(dep[:name]).to eq(product6[:name])
+      expect(dep[:prod_key]).to eq(product6[:prod_key])
+      expect(dep[:version_label]).to eq('[5.0.0]')
+      expect(dep[:version_requested]).to eq('5.0.0')
+      expect(dep[:version_current]).to eq('5.0.0')
+      expect(dep[:comperator]).to eq('=')
+      expect(dep[:outdated]).to be_falsey
+
+      dep = proj.dependencies[2]
+      expect(dep[:name]).to eq(product7[:name])
+      expect(dep[:prod_key]).to eq(product7[:prod_key])
+      expect(dep[:version_label]).to eq('[1.0.0.0]')
+      expect(dep[:version_requested]).to eq('1.0.0')
+      expect(dep[:version_current]).to eq('1.0.1')
+      expect(dep[:comperator]).to eq('=')
+      expect(dep[:outdated]).to be_truthy
+
+
     end
   end
 end
