@@ -25,6 +25,9 @@ class Projectdependency < Versioneye::Model
   field :scope            , type: String, :default => Dependency::A_SCOPE_COMPILE
   field :release          , type: Boolean
   field :stability        , type: String, :default => VersionTagRecognizer::A_STABILITY_STABLE
+  field :transitive       , type: Boolean, :default => false
+  # deepness in the transitive hirarchie. Direct dependencies are deepness 0.
+  field :deepness         , type: Integer, :default => 0
 
   field :outdated           , type: Boolean
   field :outdated_updated_at, type: DateTime, :default => DateTime.now
