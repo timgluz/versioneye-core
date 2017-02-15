@@ -143,50 +143,6 @@ class Project < Versioneye::Model
     scopes
   end
 
-
-  def create_transitive_deps(deepness = 0, uniq_map = Hash.new)
-    dependencies.each do |dep|
-      create_transitive_dep( dep, deepness, uniq_map )
-    end
-    uniq_map
-  end
-
-  def create_transitive_dep(dep, deepness = 0, uniq_map = Hash.new)
-    ukey = "#{dep.language}:#{dep.prod_key}:#{dep.version_requested}"
-    return nil if uniq_map.keys.include?( ukey )
-
-    uniq_map[ukey] = dep
-    dep.deepness = deepness
-    dep.save
-    product = dep.product
-    return nil if product.nil?
-
-    product.version = dep.version_requested
-    prod_deps = product.all_dependencies
-    return nil if prod_deps.empty?
-
-    prod_deps.each do |prod_dep|
-      project_dep = Projectdependency.find_or_create_by({
-        :project_id => self.id,
-        :language => prod_dep.language,
-        :prod_key => prod_dep.dep_prod_key,
-        :name => prod_dep.name,
-        :group_id => prod_dep.group_id,
-        :artifact_id => prod_dep.artifact_id,
-        :scope => prod_dep.scope,
-        :version_current => prod_dep.current_version,
-        :version_requested => prod_dep.parsed_version,
-        :version_label => prod_dep.parsed_version,
-        :transitive => true,
-        :deepness => deepness.to_i + 1
-      })
-      project_dep.save
-      create_transitive_dep( project_dep, deepness.to_i + 1, uniq_map )
-    end
-    uniq_map
-  end
-
-
   def dependencies(scope = nil)
     return self.projectdependencies if self.projectdependencies.nil? || self.projectdependencies.empty?
     return self.projectdependencies if scope.nil?

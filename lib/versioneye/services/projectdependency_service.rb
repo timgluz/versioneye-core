@@ -4,6 +4,62 @@ class ProjectdependencyService < Versioneye::Service
 
   A_SECONDS_PER_DAY = 24 * 60 * 60 # 24h * 60min * 60s = 86400
 
+
+  def self.create_transitive_deps( project )
+    deepness = 0,
+    uniq_map = Hash.new
+    project.dependencies.each do |dep|
+      create_transitive_dep( project, dep, deepness, uniq_map )
+    end
+    uniq_map
+  end
+
+  def self.create_transitive_dep( project, dep, deepness = 0, uniq_map = Hash.new)
+    ukey = "#{dep.language}:#{dep.prod_key}:#{dep.version_requested}"
+    return nil if uniq_map.keys.include?( ukey )
+
+    uniq_map[ukey] = dep
+    product = dep.product
+    return nil if product.nil?
+
+    product.version = dep.version_requested
+    prod_deps = product.all_dependencies
+    return nil if prod_deps.empty?
+
+    prod_deps.each do |prod_dep|
+      project_dep = Projectdependency.where(
+          :project_id => project.ids,
+          :language => prod_dep.language,
+          :prod_key => prod_dep.dep_prod_key,
+          :version_requested => prod_dep.parsed_version
+      ).first
+
+      project_dep = Projectdependency.new({
+          :project_id => project.ids,
+          :language => prod_dep.language,
+          :prod_key => prod_dep.dep_prod_key,
+          :version_requested => prod_dep.parsed_version,
+          :deepness => deepness.to_i + 1
+      }) if project_dep.nil?
+
+      project_dep.name = prod_dep.name
+      project_dep.group_id = prod_dep.group_id
+      project_dep.artifact_id = prod_dep.artifact_id
+      project_dep.scope = prod_dep.scope
+      project_dep.version_current = prod_dep.current_version
+      project_dep.version_label = prod_dep.parsed_version
+      project_dep.transitive = true
+      project_dep.save
+
+      update_licenses_for project, project_dep, project_dep.product
+      update_security_for project, project_dep, project_dep.product
+
+      create_transitive_dep( project, project_dep, deepness.to_i + 1, uniq_map )
+    end
+    uniq_map
+  end
+
+
   # Updates projectdependency.license_caches for each projectdependency of the project
   def self.update_licenses project
     project.projectdependencies.each do |dep|
