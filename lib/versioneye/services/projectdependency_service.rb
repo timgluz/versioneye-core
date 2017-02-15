@@ -6,7 +6,7 @@ class ProjectdependencyService < Versioneye::Service
 
 
   def self.create_transitive_deps( project )
-    deepness = 0,
+    deepness = 0
     uniq_map = Hash.new
     project.dependencies.each do |dep|
       create_transitive_dep( project, dep, deepness, uniq_map )
