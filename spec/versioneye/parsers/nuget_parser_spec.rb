@@ -153,6 +153,65 @@ describe NugetParser do
       expect( range.match("[1.2.1,2.0+build.1]") ).not_to be_nil
    end
   end
+  
+  context "split_version" do
+    it "splits front of leading prerelease" do
+      expect(parser.split_version('1-alpha+build1') ).to eq(['1', 'alpha+build1', '-'])
+      expect(parser.split_version('1.0-beta+build2')).to eq(['1.0', 'beta+build2', '-'])
+      expect(parser.split_version('1.2.3-gamma')).to eq(['1.2.3', 'gamma', '-'])
+    end
+
+    it "splits front of build data" do
+      expect(parser.split_version('1+build1-alpha')).to eq(['1', 'build1-alpha', '+'])
+      expect(parser.split_version('1.0+build2-beta')).to eq(['1.0', 'build2-beta', '+'])
+      expect(parser.split_version('1.2.3+build3')).to eq(['1.2.3', 'build3', '+'])
+    end
+  end
+
+  context "normalize_version" do
+    it "removes leading zeros in versionlabel" do
+      expect( parser.normalize_version('1.00')    ).to eq('1.0')
+      expect( parser.normalize_version('1.01.1')  ).to eq('1.1.1')
+      expect( parser.normalize_version('1.00.0.1')).to eq('1.0.0.1')
+      
+      expect( parser.normalize_version('001.1001.000001') ).to eq('1.1001.1')
+    end
+
+    it "leaves proper versions untouched" do
+      expect( parser.normalize_version('1.0') ).to eq('1.0')
+      expect( parser.normalize_version('1.1.0') ).to eq('1.1.0')
+    end
+
+    it "leaves version metadata as it is" do
+      expect( parser.normalize_version('1.0-beta') ).to eq('1.0-beta')
+      expect( parser.normalize_version('1.0.0-beta+build1001') ).to eq('1.0.0-beta+build1001')
+      expect( parser.normalize_version('1.0001.000-a+1001') ).to eq('1.1.0-a+1001')
+    end
+
+    it "removes extra 0 in extended semver" do
+      expect( parser.normalize_version('1.0.0.0') ).to eq('1.0.0')
+      expect( parser.normalize_version('1.0.01.0') ).to eq('1.0.1')
+    end
+  end
+
+  context "pad_zeros" do
+    it "fills missing minor or patch part with zeroes" do
+      expect(parser.pad_zeros('1')).to eq('1.0.0')
+      expect(parser.pad_zeros('1.0')).to eq('1.0.0')
+      expect(parser.pad_zeros('1.3')).to eq('1.3.0')
+    end
+
+    it "lefts proper semver untouched" do
+      expect(parser.pad_zeros('1.2.0')).to eq('1.2.0')
+      expect(parser.pad_zeros('1.3.3')).to eq('1.3.3')
+    end
+
+    it "doest change version metadata" do
+      expect(parser.pad_zeros('1-alpha+build1')).to eq('1.0.0-alpha+build1')
+      expect(parser.pad_zeros('1.0-beta+build453')).to eq('1.0.0-beta+build453')
+      expect(parser.pad_zeros('1.2.3+build123')).to eq('1.2.3+build123')
+    end
+  end
 
   context "parse_version_data" do
     before :each do
