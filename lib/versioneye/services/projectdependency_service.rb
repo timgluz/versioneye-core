@@ -36,14 +36,18 @@ class ProjectdependencyService < Versioneye::Service
           :version_requested => prod_dep.parsed_version
       ).first
 
+      if project_dep
+        create_transitive_dep( project, project_dep, deepness.to_i + 1, uniq_map )
+        next
+      end
+
       project_dep = Projectdependency.new({
           :project_id => project.ids,
           :language => prod_dep.language,
           :prod_key => prod_dep.dep_prod_key,
           :version_requested => prod_dep.parsed_version,
           :deepness => deepness.to_i + 1
-      }) if project_dep.nil?
-
+      })
       project_dep.name = prod_dep.name
       project_dep.group_id = prod_dep.group_id
       project_dep.artifact_id = prod_dep.artifact_id
