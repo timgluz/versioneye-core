@@ -33,20 +33,20 @@ class CircleElementService < Versioneye::Service
 
   def self.fetch_deps(deep, hash, parent_hash, lang)
     return hash if hash.empty?
+
     new_hash = Hash.new
     hash.each do |prod_key, element|
-      product = Product.find_by_lang_key( lang, prod_key )
-      if product.nil?
-        next
+      product = Product.fetch_product( lang, prod_key )
+      next if product.nil?
+
+      if ( !element.version.to_s.empty? && !element.version.to_s.eql?("0") && product.version_by_number( element.version ) )
+        product.version = element.version
       end
-      valid_version = ( element.version && !element.version.eql?("") && !element.version.eql?("0") && product.version_by_number( element.version ) )
-      product.version = element.version if valid_version
       dependencies = product.dependencies(nil)
       dependencies.each do |dep|
-        if dep.name.nil? || dep.name.empty?
-          next
-        end
-        DependencyService.update_parsed_version( dep ) if dep.parsed_version.nil?
+        next if dep.nil? || dep.name.to_s.empty? || dep.dep_prod_key.to_s.empty?
+
+        DependencyService.update_parsed_version( dep ) if dep.parsed_version.to_s.empty?
         key = dep.dep_prod_key
         ele = self.get_element_from_hash(new_hash, hash, parent_hash, key)
         if ele
