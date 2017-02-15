@@ -97,7 +97,7 @@ class DependencyService < Versioneye::Service
     end
     return nil if product.nil?
 
-    if ( dependency.version.to_s.empty? || dependency.version.to_s.eql?("*") )
+    if ( dependency.version.to_s.empty? || dependency.version.to_s.eql?("*") || dependency.version.to_s.eql?("0.0.0-NA") )
       dependency.parsed_version = product.version
       return
     end

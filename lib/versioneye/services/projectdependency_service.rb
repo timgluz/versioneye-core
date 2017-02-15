@@ -27,6 +27,8 @@ class ProjectdependencyService < Versioneye::Service
     return nil if prod_deps.empty?
 
     prod_deps.each do |prod_dep|
+      DependencyService.update_parsed_version( prod_dep )
+      prod_dep.save
       project_dep = Projectdependency.where(
           :project_id => project.ids,
           :language => prod_dep.language,
