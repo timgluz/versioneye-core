@@ -153,17 +153,17 @@ class Project < Versioneye::Model
 
   def create_transitive_dep(dep, deepness = 0, uniq_map = Hash.new)
     ukey = "#{dep.language}:#{dep.prod_key}:#{dep.version_requested}"
-    next if uniq_map.keys.include?( ukey )
+    return nil if uniq_map.keys.include?( ukey )
 
     uniq_map[ukey] = dep
     dep.deepness = deepness
     dep.save
     product = dep.product
-    next if product.nil?
+    return nil if product.nil?
 
     product.version = dep.version_requested
     prod_deps = product.all_dependencies
-    next if prod_deps.empty?
+    return nil if prod_deps.empty?
 
     prod_deps.each do |prod_dep|
       project_dep = Projectdependency.find_or_create_by({
