@@ -178,7 +178,9 @@ class NugetParser < CommonParser
       version_data[:label] = '*'
 
     elsif ( m = rules[:exact].match(version) )
-      res = VersionService.from_ranges(product.versions, m[:semver])
+      lbl = m[:semver].to_s.strip
+      possible_formats = [lbl, normalize_version(lbl), pad_zeros(lbl), (lbl + '.0')] 
+      res = VersionService.versions_by_whitelist(product.versions, possible_formats)
       latest_version = VersionService.newest_version res
 
       version_data[:version] = latest_version[:version] if latest_version

@@ -522,4 +522,88 @@ describe NugetParser do
       expect(res[:comperator]).to eq('<=')
     end
   end
+
+  let(:issue62_file_content) { File.read('spec/fixtures/files/nuget/issue62.nuspec') }
+  let(:product5){
+    FactoryGirl.create(
+      :product,
+      name: 'CommonServiceLocator',
+      prod_key: 'CommonServiceLocator',
+      prod_type: Project::A_TYPE_NUGET,
+      language: Product::A_LANGUAGE_CSHARP,
+      version: "1.3.0",
+    )
+  }
+  let(:product6){
+    FactoryGirl.create(
+      :product,
+      name: 'Newtonsoft.Json',
+      prod_key: 'Newtonsoft.Json',
+      prod_type: Project::A_TYPE_NUGET,
+      language: Product::A_LANGUAGE_CSHARP,
+      version: "5.0.0",
+    )
+  }
+
+  let(:product7){
+    FactoryGirl.create(
+      :product,
+      name: 'Microsoft.Web.Infrastructure',
+      prod_key: 'Microsoft.Web.Infrastructure',
+      prod_type: Project::A_TYPE_NUGET,
+      language: Product::A_LANGUAGE_CSHARP,
+      version: "1.0.0",
+    )
+  }
+
+  context "issue62 - not normalized versions affects exact matching" do
+    before :each do
+      product5.versions << FactoryGirl.build(:product_version, version: '1.2.0')
+      product5.versions << FactoryGirl.build(:product_version, version: '1.3.0')
+      product5.versions << FactoryGirl.build(:product_version, version: '1.3.1')
+      product5.save
+
+      product6.versions << FactoryGirl.build(:product_version, version: '5.0.0')
+      product6.save
+
+      product7.versions << FactoryGirl.build(:product_version, version: '1.0.0')
+      product7.versions << FactoryGirl.build(:product_version, version: '1.0.1')
+      product7.save
+    end
+    
+    it "parses and matches all the versions correctly" do
+      proj = parser.parse_content(issue62_file_content, 'ftp://spec3')
+      expect(proj).not_to be_nil
+      expect( proj.projectdependencies.size ).to eq(3)
+
+      dep = proj.dependencies[0]
+      expect(dep[:name]).to eq(product5[:name])
+      expect(dep[:prod_key]).to eq(product5[:prod_key])
+      expect(dep[:version_label]).to eq('[1.3]')
+      expect(dep[:version_requested]).to eq('1.3.0')
+      expect(dep[:version_current]).to eq('1.3.1')
+      expect(dep[:comperator]).to eq('=')
+      expect(dep[:outdated]).to be_truthy
+     
+      dep = proj.dependencies[1]
+      expect(dep[:name]).to eq(product6[:name])
+      expect(dep[:prod_key]).to eq(product6[:prod_key])
+      expect(dep[:version_label]).to eq('[5.0.0]')
+      expect(dep[:version_requested]).to eq('5.0.0')
+      expect(dep[:version_current]).to eq('5.0.0')
+      expect(dep[:comperator]).to eq('=')
+      expect(dep[:outdated]).to be_falsey
+
+      dep = proj.dependencies[2]
+      expect(dep[:name]).to eq(product7[:name])
+      expect(dep[:prod_key]).to eq(product7[:prod_key])
+      expect(dep[:version_label]).to eq('[1.0.0.0]')
+      expect(dep[:version_requested]).to eq('1.0.0')
+      expect(dep[:version_current]).to eq('1.0.1')
+      expect(dep[:comperator]).to eq('=')
+      expect(dep[:outdated]).to be_truthy
+
+
+    end
+  end
 end
