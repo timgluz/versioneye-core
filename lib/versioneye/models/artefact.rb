@@ -11,6 +11,7 @@ class Artefact < Versioneye::Model
   field :classifier   , type: String
   field :packaging    , type: String
   field :prod_type    , type: String
+  field :file         , type: String
   field :sha_value    , type: String
   field :sha_method   , type: String
 
