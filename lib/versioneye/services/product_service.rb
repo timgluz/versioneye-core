@@ -261,4 +261,31 @@ class ProductService < Versioneye::Service
   end
 
 
+  def self.count_licenses( language )
+    ha = {}
+    count = 0
+    Product.where(:language => language).each do |prod|
+      licenses = prod.license_info
+      if licenses.to_s.empty? || licenses.to_s.eql?('unknown') || licenses.to_s.eql?('N/A')
+        ha['unknown'] = ha['unknown'].to_i + 1
+      elsif licenses.match(/Apache/i)
+        ha['Apache'] = ha['Apache'].to_i + 1
+      elsif licenses.match(/BSD/i)
+        ha['BSD'] = ha['BSD'].to_i + 1
+      elsif licenses.match(/LGPL/i)
+        ha['LGPL'] = ha['LGPL'].to_i + 1
+      elsif licenses.match(/AGPL/i)
+        ha['AGPL'] = ha['AGPL'].to_i + 1
+      elsif licenses.match(/GPL/i)
+        ha['GPL'] = ha['GPL'].to_i + 1
+      elsif licenses.match(/mit/i)
+        ha['MIT'] = ha['MIT'].to_i + 1
+      end
+      count += 1
+      p count
+    end
+    ha
+  end
+
+
 end
