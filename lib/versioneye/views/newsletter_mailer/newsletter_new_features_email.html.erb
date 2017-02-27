@@ -4,39 +4,11 @@
     Hey <%= @user.fullname %>,
 
     <p style="padding-bottom: 0px;">
-      In February 2012 the VersionEye project was started in Mannheim / Germany. Unbelievable, but that’s already 5 years ago. Back then in 2012 VersionEye was only tracking versions for Java, Ruby and Python libraries, all together less than 150K components. There was no GitHub integration, no Bitbucket &amp; Stash integration, no API and almost no traffic on the VersionEye.com page. But that changed. Last month VersionEye.com had more than 1 Million pageviews.
+      The public VersionEye API is exposing a lot of information about open source projects. If you know the coordinates of a component (software library) in a certain package manager, you can use the VersionEye API fetch all kind of meta information about the component. Meta information like available versions, licenses, security vulnerabilities and many more.
     </p>
     <p>
-      <img src="https://versioneye.files.wordpress.com/2017/02/screen-shot-2017-02-06-at-10-49-38.png" style="max-width: 100%" ></img>
+      But what if you don’t know the coordinates of a component? What if you have somewhere on your disk a “beanutils.jar” and you don’t know which version it is or to which Maven GroupId it belongs to? You don’t know which license it has and you don’t know if it is vulnerable or not! For this problem the VersionEye API has a solution now. Simply create the SHA1 value for the “beanutils.jar” file and send it to the VersionEye API. You will get back the coordinates of the component in the corresponding package manager. This works for Java, C#, Node.JS and Python. All together we have almost 10 Million SHA values in our database. Support for Ruby and other languages is coming soon. Read more about this new feature <a href="https://blog.versioneye.com/2017/02/08/identifying-components-by-sha-values/">here</a>
     </p>
-    <p>
-      By the way: Since January 2014 we spent exactly 0 EUR for Ads and Marketing. All the traffic we are getting is organic.
-      Many thanks to all the people who are using the product, giving feedback and helping improving it.<br/>
-      <a href="https://blog.versioneye.com/2017/02/06/5-years-of-versioneye/">Read here the full blog post</a>.
-    </p>
-
-    <h3>New API Endpoints</h3>
-    <p>
-      The VersionEye API is heavily used! In the mean while the VersionEye API is serving more HTTP requests then the web application. That’s why made it even more awesome :-)<br/>
-      We upgraded the SwaggerUI for our API documentation. The new version of SwaggerUI shows out of the box CURL commands for each request. Beside that we added 5 new API Endpoints for the user and organisation object. All the details are documented <a href="https://blog.versioneye.com/2017/02/03/new-api-endpoints/">here</a>.
-    </p>
-
-    <h3>CSV Export for the OS Inventory</h3>
-    <p>
-      As VersionEye knows all the dependencies from all your projects it can easily display you the inventory list of all your dependencies over all your projects, in real time. Now the inventory list can be exported as CSV file. That way you can open your inventory list in Microsoft Execel, which is a lovely tool for all big Enterprises. Read more details about this new feature
-       <a href="https://blog.versioneye.com/2017/02/03/csv-export-for-os-inventory/">here</a>
-    </p>
-
-    <h3>Simplified component whitelist</h3>
-    <p>
-      With the component whitelist in VersionEye you can whitelist certain components. Until now you had to know exactly which value you have to put on your component whitelist. For many people it was confusing. Now we simplified that. Now in the project detail view there is a "+" icon directly next to problematic dependencies. By clicking on the "+" icon the dependency is added to the component whitelist. Read more about this new feature <a href="https://blog.versioneye.com/2017/01/31/simplified-component-whitelist/">here</a>
-    </p>
-
-    <h3>Read Only API Key</h3>
-    <p>
-      Now every organisation at VersionEye has 2 API keys. Beside the "normal" one there is a new read only API key. Read more about this new feature <a href="https://blog.versioneye.com/2017/02/03/new-api-endpoints/">here</a>.
-    </p>
-
     <p>
       Your feedback is highly appreciated.<br/>
       Simply reply to this email if you want to give feedback.
