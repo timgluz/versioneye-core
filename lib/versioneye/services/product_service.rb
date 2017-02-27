@@ -282,7 +282,7 @@ class ProductService < Versioneye::Service
         ha['MIT'] = ha['MIT'].to_i + 1
       end
       count += 1
-      p count
+      p "#{count} - #{ha}"
     end
     ha
   end
