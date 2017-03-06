@@ -58,7 +58,7 @@ class ProjectdependencyService < Versioneye::Service
       project_dep.save
 
       tt = ""
-      deepness.times.do |ds|
+      deepness.times do |ds|
         tt += " "
       end
       p "#{tt} - #{project_dep.prod_key}:#{project_dep.version_requested} - #{project_dep.deepness}"
