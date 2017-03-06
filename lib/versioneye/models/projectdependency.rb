@@ -26,6 +26,8 @@ class Projectdependency < Versioneye::Model
   field :release          , type: Boolean
   field :stability        , type: String, :default => VersionTagRecognizer::A_STABILITY_STABLE
   field :transitive       , type: Boolean, :default => false
+  field :parent_id, type: BSON::ObjectId # refers parent project parent id
+
   # deepness in the transitive hirarchie. Direct dependencies are deepness 0.
   field :deepness         , type: Integer, :default => 0
 

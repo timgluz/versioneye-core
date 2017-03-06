@@ -28,6 +28,8 @@ class ParserStrategy
       when Project::A_TYPE_NPM
         if url.match(/yarn\.lock/i)
           return YarnParser.new
+        elsif url.match(/npm-shrinkwrap\.json\z/i)
+          return ShrinkwrapParser.new
         else
           return PackageParser.new
         end

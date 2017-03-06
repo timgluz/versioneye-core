@@ -110,6 +110,11 @@ describe ParserStrategy do
       expect( parser.is_a?(YarnParser) ).to be_truthy
     end
 
+    it "returns ShrinkwrapParser" do
+      parser = ParserStrategy.parser_for(Project::A_TYPE_NPM, 'npm-shrinkwrap.json')
+      expect( parser.is_a?(ShrinkwrapParser) ).to be_truthy
+    end
+
     it "returns nil" do
       parser = ParserStrategy.parser_for( "HujBuy", "lein" )
       expect( parser ).to be_nil

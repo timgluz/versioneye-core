@@ -1,0 +1,44 @@
+{
+  "name": "baconsnake",
+  "version": "0.1.0",
+  "dependencies": {
+    "bower": {
+      "version": "1.4.1",
+      "from": "bower@>=1.0.0 <2.0.0",
+      "dependencies": {
+        "archy": {
+          "version": "1.0.0",
+          "from": "archy@1.0.0"
+        },
+        "bower-config": {
+          "version": "0.6.1",
+          "from": "bower-config@>=0.6.1 <0.7.0",
+          "dependencies": {
+            "graceful-fs": {
+              "version": "2.0.3",
+              "from": "graceful-fs@>=2.0.0 <2.1.0"
+            },
+            "mout": {
+              "version": "0.9.1",
+              "from": "mout@>=0.9.0 <0.10.0"
+            },
+            "optimist": {
+              "version": "0.6.1",
+              "from": "optimist@>=0.6.0 <0.7.0",
+              "dependencies": {
+                "wordwrap": {
+                  "version": "0.0.3",
+                  "from": "wordwrap@>=0.0.2 <0.1.0"
+                },
+                "minimist": {
+                  "version": "0.0.10",
+                  "from": "minimist@>=0.0.1 <0.1.0"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
