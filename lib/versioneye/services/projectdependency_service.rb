@@ -23,7 +23,7 @@ class ProjectdependencyService < Versioneye::Service
     return nil if product.nil?
 
     product.version = dep.version_requested
-    prod_deps = product.all_dependencies
+    prod_deps = product.all_dependencies( dep.version_requested )
     return nil if prod_deps.empty?
 
     prod_deps.each do |prod_dep|
@@ -48,13 +48,16 @@ class ProjectdependencyService < Versioneye::Service
           :version_requested => prod_dep.parsed_version,
           :deepness => deepness.to_i + 1
       })
-      project_dep.name = prod_dep.name
-      project_dep.group_id = prod_dep.group_id
-      project_dep.artifact_id = prod_dep.artifact_id
-      project_dep.scope = prod_dep.scope
+      project_dep.name            = prod_dep.name
+      project_dep.group_id        = prod_dep.group_id
+      project_dep.artifact_id     = prod_dep.artifact_id
+      project_dep.scope           = prod_dep.scope
       project_dep.version_current = prod_dep.current_version
-      project_dep.version_label = prod_dep.parsed_version
-      project_dep.transitive = true
+      project_dep.version_label   = prod_dep.parsed_version
+      project_dep.transitive      = true
+      project_dep.parent_prod_key = dep.prod_key
+      project_dep.parent_version  = dep.version_requested
+      project_dep.parent_id       = dep.id
       project_dep.save
 
       tt = ""
