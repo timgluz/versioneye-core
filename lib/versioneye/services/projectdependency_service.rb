@@ -57,6 +57,12 @@ class ProjectdependencyService < Versioneye::Service
       project_dep.transitive = true
       project_dep.save
 
+      tt = ""
+      deepness.times.do |ds|
+        tt += " "
+      end
+      p "#{tt} - #{project_dep.prod_key}:#{project_dep.version_requested} - #{project_dep.deepness}"
+
       update_licenses_for project, project_dep, project_dep.product
       update_security_for project, project_dep, project_dep.product
 
