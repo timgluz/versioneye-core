@@ -4,7 +4,7 @@ describe GodepParser do
   let(:test_file_url){}
   let(:test_file){ File.read("spec/fixtures/files/godep/Godeps.json") }
   let(:parser){ GodepParser.new }
-    
+
   let(:shax){ '0d7f52660096c5a22f2cb95c102e0693f773a593' }
   let(:product1_sha){ "0754dfcca172cfc4c07a61c123b23e5127d26760" }
 
@@ -50,6 +50,19 @@ describe GodepParser do
       version: "0.2.0"
     )
   }
+
+  context "extract_product_ids" do
+    it "returns correct product ids for spec file" do
+      res = parser.extract_product_ids test_file
+      expect(res).not_to be nil
+      expect(res.size).to eq(4)
+      expect(res[0]).to eq('github.com/OpenBazaar/go-blockstackclient')
+      expect(res[1]).to eq('github.com/btcsuite/btcd/blockchain')
+      expect(res[2]).to eq('github.com/btcsuite/seelog')
+      expect(res[3]).to eq('github.com/fatih/color')
+    end
+  end
+
 
   context "parse_requested_version" do
     let(:dep_empty){
@@ -101,7 +114,7 @@ describe GodepParser do
       expect( dep[:version_label] ).to eq(shax)
       expect( dep[:version_requested] ).to eq('1.6')
       expect( dep[:version_current] ).to eq(product2[:version])
-      expect( dep[:outdated] ).to be_nil 
+      expect( dep[:outdated] ).to be_nil
     end
 
     it "returns dependency that uses semver matching with Comment tag on the line" do
@@ -120,7 +133,7 @@ describe GodepParser do
   end
 
   context "parse_content" do
-    let(:product2_tag){ 'BTCD_0_12_0_BETA-88-g0d7f526' }    
+    let(:product2_tag){ 'BTCD_0_12_0_BETA-88-g0d7f526' }
 
     before do
       product1.versions << FactoryGirl.build(
@@ -174,21 +187,21 @@ describe GodepParser do
       expect( deps[1].version_requested ).to eq( '1.6' )
       expect( deps[1].version_current ).to eq(product2[:version] )
       expect( deps[1].outdated ).to be_truthy
-    
+
       expect( deps[2].name ).to eq(product3[:name] )
       expect( deps[2].prod_key ).to eq(product3[:prod_key])
       expect( deps[2].version_label ).to eq( "v2.1-84-g313961b" )
       expect( deps[2].version_requested ).to eq( "313961b101eb55f65ae0f03ddd4e322731763b6c" )
       expect( deps[2].version_current ).to eq('0.0.0+NA')
       expect( deps[2].outdated ).to be_falsey
-      
+
       expect( deps[3].name ).to eq(product4[:name] )
       expect( deps[3].prod_key ).to eq(product4[:prod_key])
       expect( deps[3].version_label ).to eq( "v0.2.0" )
       expect( deps[3].version_requested ).to eq( '0.2.0' )
       expect( deps[3].version_current ).to eq('0.2.0')
       expect( deps[3].outdated ).to be_falsey
-    
+
     end
   end
 end

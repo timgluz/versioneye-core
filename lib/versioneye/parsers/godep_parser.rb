@@ -34,6 +34,19 @@ class GodepParser < PackageParser
     nil
   end
 
+  #extracts project ids for crawler
+  def extract_product_ids(content)
+    raise "GodepParser.parse_content: empty document" if content.to_s.empty?
+
+    godeps_doc = from_json content #replaces unicode spaces and returns symbolized doc
+    raise "GodepParser.parse_content: failed to parse #{content}" if godeps_doc.nil?
+
+    godeps_doc[:Deps].to_a.reduce([]) do |acc, dep|
+      acc << dep[:ImportPath]
+      acc
+    end
+  end
+
   def parse_dependencies(project, deps)
     return project if deps.to_a.empty?
 
@@ -82,7 +95,7 @@ class GodepParser < PackageParser
     # use version semver+sha<> if possible other wise just use SHA
     dependency[:version_requested] = (version_db[:version] ||  version_label ) #SEMVER_FROM_DB or SHA
     dependency[:version_label] = ( dep_comment || version_label ) #TAG or SHA
-   
+
     dependency
   end
 
