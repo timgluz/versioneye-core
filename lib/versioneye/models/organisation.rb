@@ -162,24 +162,16 @@ class Organisation < Versioneye::Model
 
     comps = {}
     projects.each do |project|
-      if (project.teams.to_a.empty? && self.owner_team)
+      if project.teams.nil? || project.teams.empty?
         project.teams = [self.owner_team]
         project.save
       end
 
       next if !language.to_s.empty? && !language.to_s.eql?('ALL') && !project.language.to_s.downcase.eql?( language.to_s.downcase )
       next if !version.to_s.empty?  && !version.to_s.eql?('ALL')  && !project.version.to_s.downcase.eql?(  version.to_s.downcase  )
+      next if team_match?(team, project) == false
 
-      team_match = false
-      project.teams.each do |team_object|
-        if team.to_s.eql?('ALL') || team_object.ids.eql?(team.to_s) || team_object.name.eql?(team.to_s)
-          team_match = true
-          break
-        end
-      end
-      next if team_match == false
-
-      time = Benchmark.measure { collect_components( project.dependencies, comps ) }
+      time = Benchmark.measure { collect_components( project, project.dependencies, comps ) }
       p "#{time.real} for #{project.ids} - #{project.name}"
       next if project.children.count == 0
 
@@ -189,7 +181,7 @@ class Organisation < Versioneye::Model
           child.save
         end
 
-        time = Benchmark.measure { collect_components( child.dependencies, comps ) }
+        time = Benchmark.measure { collect_components( child, child.dependencies, comps ) }
         p " - #{time.real} for child #{project.ids} - #{project.name}"
       end
     end
@@ -273,6 +265,17 @@ class Organisation < Versioneye::Model
   private
 
 
+    def team_match?(team, project)
+      team_match = false
+      project.teams.each do |team_object|
+        if team.to_s.eql?('ALL') || team_object.ids.eql?(team.to_s) || team_object.name.eql?(team.to_s)
+          return true
+        end
+      end
+      false
+    end
+
+
     def show_duplicates_filter( comps )
       project_ids = Project.where(:organisation_id => self.ids).distinct(:id)
       comps.keys.each do |key|
@@ -296,24 +299,22 @@ class Organisation < Versioneye::Model
     end
 
 
-    def collect_components project_dependencies, comps, ignore_comp_key = false
+    def collect_components project, project_dependencies, comps, ignore_comp_key = false
       project_dependencies.each do |dep|
         component_key = "#{dep.language}:#{dep.possible_prod_key}:#{dep.version_current}"
-        if ignore_comp_key == false
-          comps[component_key] = {} if !comps.keys.include?( component_key )
-        end
+        comps[component_key] = {} if (!comps.keys.include?( component_key ) && ignore_comp_key == false)
 
         version_key = "#{dep.possible_prod_key}::#{dep.version_requested}::#{dep.licenses_string}::#{dep.sv_ids.count}"
         comps[component_key][version_key] = [] if comps[component_key][version_key].nil?
 
-        project = dep.project
+        project = dep.project if project.nil?
         team_names = nil
-        team_names = project.teams.map(&:name) if !project.teams.to_a.empty?
+        team_names = project.teams.map(&:name) if !project.teams.nil? && !project.teams.empty?
         val = {:project_language => project.language, :project_name => project.name,
                :project_id => project.ids, :project_version => project.version,
                :project_group_id => project.group_id, :project_artifact_id => project.artifact_id,
                :project_teams => team_names}
-        comps[component_key][version_key] << val if !comps[component_key][version_key].include?( val )
+        comps[component_key][version_key] << val
       end
       comps
     end
