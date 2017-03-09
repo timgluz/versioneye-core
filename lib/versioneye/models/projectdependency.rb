@@ -30,6 +30,9 @@ class Projectdependency < Versioneye::Model
   field :parent_prod_key  , type: String
   field :parent_version   , type: String
 
+  field :status_class  , type: String
+  field :status_rank   , type: String
+
   # deepness in the transitive hirarchie. Direct dependencies are deepness 0.
   field :deepness         , type: Integer, :default => 0
 
@@ -49,7 +52,6 @@ class Projectdependency < Versioneye::Model
   belongs_to :project, optional: true
 
   embeds_many :license_caches, cascade_callbacks: true
-
 
   index({project_id: 1}, { name: "project_index", background: true})
   index({language: 1, prod_key: 1}, { name: "lang_prod_key_index", background: true})
