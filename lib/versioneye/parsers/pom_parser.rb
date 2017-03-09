@@ -128,6 +128,16 @@ class PomParser < CommonParser
       dependency.version_requested = newest.to_s
       dependency.version_label = version
 
+    elsif version.match(/\A\[(.+)\],\[(.+)\]\z/i) # like this [3.1.1],[3.2.0,3.2.99]
+      dependency.version_label = String.new(version)
+      matches = version.match(/\A\[(.+)\],\[(.+)\]\z/i)
+      bottom_border = matches[1].split(",").first
+      top_border    = matches[2].split(",").last
+      subset = VersionService.version_range( product.versions, bottom_border, top_border )
+      newest = VersionService.newest_version_number( subset )
+      dependency.version_requested = newest
+      dependency.comperator = "=="
+
     elsif version.match(/\A\[(.+),(.+)\]\z/i) # between ->  * <= X <= *
       dependency.version_label = String.new(version)
       matches = version.match(/\A\[(.+),(.+)\]\z/i)
