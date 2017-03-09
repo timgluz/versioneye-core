@@ -156,11 +156,12 @@ class Organisation < Versioneye::Model
     csv_string
   end
 
-
+  # https://github.com/versioneye/versioneye-api/blob/master/docs/api/v2/organisation.md
   def component_list team = 'ALL', language = nil, version = nil, after_filter = 'ALL'
     return {} if projects.to_a.empty?
 
     comps = {}
+    dep_projs = []
     projects.each do |project|
       if project.teams.nil? || project.teams.empty?
         project.teams = [self.owner_team]
@@ -171,7 +172,7 @@ class Organisation < Versioneye::Model
       next if !version.to_s.empty?  && !version.to_s.eql?('ALL')  && !project.version.to_s.downcase.eql?(  version.to_s.downcase  )
       next if team_match?(team, project) == false
 
-      time = Benchmark.measure { collect_components( project, project.dependencies, comps ) }
+      time = Benchmark.measure { collect_components( project, project.dependencies, comps, dep_projs ) }
       p "#{time.real} for #{project.ids} - #{project.name}"
       next if project.children.count == 0
 
@@ -181,7 +182,7 @@ class Organisation < Versioneye::Model
           child.save
         end
 
-        time = Benchmark.measure { collect_components( child, child.dependencies, comps ) }
+        time = Benchmark.measure { collect_components( child, child.dependencies, comps, dep_projs ) }
         p " - #{time.real} for child #{project.ids} - #{project.name}"
       end
     end
@@ -283,7 +284,7 @@ class Organisation < Versioneye::Model
         language = sps[0]
         prod_key = sps[1]
         pdeps = Projectdependency.where(:language => language, :prod_key => prod_key, :project_id.in => project_ids)
-        collect_components pdeps, comps, true
+        collect_components pdeps, comps, [], true
       end
     end
 
@@ -299,7 +300,7 @@ class Organisation < Versioneye::Model
     end
 
 
-    def collect_components project, project_dependencies, comps, ignore_comp_key = false
+    def collect_components project, project_dependencies, comps, dep_projs = [], ignore_comp_key = false
       project_dependencies.each do |dep|
         component_key = "#{dep.language}:#{dep.possible_prod_key}:#{dep.version_current}"
         comps[component_key] = {} if (!comps.keys.include?( component_key ) && ignore_comp_key == false)
@@ -308,6 +309,9 @@ class Organisation < Versioneye::Model
         comps[component_key][version_key] = [] if comps[component_key][version_key].nil?
 
         project = dep.project if project.nil?
+        dep_pro_key = "#{version_key}_#{project.ids}"
+        next if dep_projs.include?( dep_pro_key )
+
         team_names = nil
         team_names = project.teams.map(&:name) if !project.teams.nil? && !project.teams.empty?
         val = {:project_language => project.language, :project_name => project.name,
@@ -315,6 +319,7 @@ class Organisation < Versioneye::Model
                :project_group_id => project.group_id, :project_artifact_id => project.artifact_id,
                :project_teams => team_names}
         comps[component_key][version_key] << val
+        dep_projs.push dep_pro_key
       end
       comps
     end
