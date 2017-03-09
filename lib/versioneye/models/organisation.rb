@@ -1,5 +1,7 @@
 class Organisation < Versioneye::Model
 
+  require 'benchmark'
+
   include Mongoid::Document
   include Mongoid::Timestamps
 
@@ -177,7 +179,8 @@ class Organisation < Versioneye::Model
       end
       next if team_match == false
 
-      collect_components project.dependencies, comps
+      time = Benchmark.measure { collect_components( project.dependencies, comps ) }
+      p "#{time.real} for #{project.ids} - #{project.name}"
       next if project.children.count == 0
 
       project.children.each do |child|
@@ -185,7 +188,9 @@ class Organisation < Versioneye::Model
           child.teams = project.teams
           child.save
         end
-        collect_components child.dependencies, comps
+
+        time = Benchmark.measure { collect_components( child.dependencies, comps ) }
+        p " - #{time.real} for child #{project.ids} - #{project.name}"
       end
     end
 
