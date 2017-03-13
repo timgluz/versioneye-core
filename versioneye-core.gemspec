@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'naturalsorter', '~> 3.0.16'
   s.add_runtime_dependency 'dalli', '~> 2.7.6'
   s.add_runtime_dependency 'oauth', '~> 0.5.0'
-  s.add_runtime_dependency 'aws-sdk', '~> 2.7.2'
+  s.add_runtime_dependency 'aws-sdk', '~> 2.8.5'
   s.add_runtime_dependency 'stripe', '~> 1.58.0'
   s.add_runtime_dependency 'tire', '~> 0.6.2'
   s.add_runtime_dependency 'octokit', '~> 4.6.0'
@@ -33,6 +33,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'etcd', '~> 0.3.0'
   s.add_runtime_dependency 'mongoid', '~> 6.1.0'
   s.add_runtime_dependency 'will_paginate_mongoid', '= 2.0.1'
-  s.add_runtime_dependency 'net-ldap', '~> 0.15.0'
+  s.add_runtime_dependency 'net-ldap', '~> 0.16.0'
   s.add_runtime_dependency 'gemnasium-parser', '~> 0.1.9'
 end
