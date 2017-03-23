@@ -24,7 +24,7 @@ class TeamService < Versioneye::Service
 
 
   # Assign a number of projects to a team
-  def self.assign orga_id, team_name, project_ids, user
+  def self.assign orga_id, team_name, project_ids, user, single_assignment = false
     orga = Organisation.find orga_id
     if orga.nil?
       raise "Organisation `#{orga_id}` doesn't exist"
@@ -40,7 +40,7 @@ class TeamService < Versioneye::Service
     end
 
     project_ids.each do |project_id|
-      add_project_to_team( project_id, orga, team )
+      add_project_to_team( project_id, orga, team, single_assignment )
     end
     true
   end
@@ -49,9 +49,11 @@ class TeamService < Versioneye::Service
   private
 
 
-    def self.add_project_to_team project_id, orga, team
+    def self.add_project_to_team project_id, orga, team, single_assignment = false
       project = Project.where(:id => project_id, :organisation_id => orga.ids).first
       return nil if project.nil?
+
+      project.teams = [] if single_assignment
 
       return nil if project.teams.count > 0 &&
                     project.teams.map(&:name).include?(team.name)
@@ -62,9 +64,7 @@ class TeamService < Versioneye::Service
       return nil if project.children.count == 0
 
       project.children.each do |child|
-        next if child.teams.count > 0 &&
-                child.teams.map(&:name).include?(team.name)
-        child.teams.push(team)
+        child.teams = project.teams
         child.save
       end
     rescue => e
