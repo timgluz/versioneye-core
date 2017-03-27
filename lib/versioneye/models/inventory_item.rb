@@ -11,7 +11,7 @@ class InventoryItem < Versioneye::Model
   field :project_version , type: String
   field :project_group_id, type: String
   field :project_artifact_id, type: String
-  field :project_teams   , type: String
+  field :project_teams   , type: Array
 
   embedded_in :inventory
 
