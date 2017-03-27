@@ -160,6 +160,17 @@ class Organisation < Versioneye::Model
   def component_list team = 'ALL', language = nil, version = nil, after_filter = 'ALL'
     return {} if projects.to_a.empty?
 
+    inventory = Inventory.find_or_create_by( :orga_name => self.name,
+                                             :team_name => team,
+                                             :language => language,
+                                             :project_version => version,
+                                             :post_filter => after_filter )
+    hour_ago = Time.now - 1.hour
+    if inventory.updated_at > hour_ago && !inventory.inventory_items.empty?
+      return build_comps_hash_from( inventory )
+    end
+
+    inventory.inventory_items.destroy_all
     comps = {}
     dep_projs = []
     projects.each do |project|
@@ -172,7 +183,7 @@ class Organisation < Versioneye::Model
       next if !version.to_s.empty?  && !version.to_s.eql?('ALL')  && !project.version.to_s.downcase.eql?(  version.to_s.downcase  )
       next if team_match?(team, project) == false
 
-      time = Benchmark.measure { collect_components( project, project.dependencies, comps, dep_projs ) }
+      time = Benchmark.measure { collect_components( inventory, project, project.dependencies, comps, dep_projs ) }
       p "#{time.real} for #{project.ids} - #{project.name}"
       next if project.children.count == 0
 
@@ -182,7 +193,7 @@ class Organisation < Versioneye::Model
           child.save
         end
 
-        time = Benchmark.measure { collect_components( child, child.dependencies, comps, dep_projs ) }
+        time = Benchmark.measure { collect_components( inventory, child, child.dependencies, comps, dep_projs ) }
         p " - #{time.real} for child #{project.ids} - #{project.name}"
       end
     end
@@ -284,7 +295,7 @@ class Organisation < Versioneye::Model
         language = sps[0]
         prod_key = sps[1]
         pdeps = Projectdependency.where(:language => language, :prod_key => prod_key, :project_id.in => project_ids)
-        collect_components nil, pdeps, comps, [], true
+        collect_components nil, nil, pdeps, comps, [], true
       end
     end
 
@@ -300,7 +311,7 @@ class Organisation < Versioneye::Model
     end
 
 
-    def collect_components project, project_dependencies, comps, dep_projs = [], ignore_comp_key = false
+    def collect_components inventory, project, project_dependencies, comps, dep_projs = [], ignore_comp_key = false
       project_dependencies.each do |dep|
         component_key = "#{dep.language}:#{dep.possible_prod_key}:#{dep.version_current}"
         comps[component_key] = {} if (!comps.keys.include?( component_key ) && ignore_comp_key == false)
@@ -314,12 +325,30 @@ class Organisation < Versioneye::Model
 
         team_names = nil
         team_names = project.teams.map(&:name) if !project.teams.nil? && !project.teams.empty?
-        val = {:project_language => project.language, :project_name => project.name,
+        values = {:project_language => project.language, :project_name => project.name,
                :project_id => project.ids, :project_version => project.version,
                :project_group_id => project.group_id, :project_artifact_id => project.artifact_id,
                :project_teams => team_names}
-        comps[component_key][version_key] << val
+        comps[component_key][version_key] << values
         dep_projs.push dep_pro_key
+
+        if inventory
+          inventory.inventory_items.push InventoryItem.new( {:lpkv => component_key, :comp_key => version_key}.merge(values) )
+        end
+      end
+      comps
+    end
+
+
+    def build_comps_hash_from inventory
+      comps = {}
+      inventory.inventory_items.desc(:lpkv, :comp_key).each do |item|
+        comps[item.lpkv] = {} if (!comps.keys.include?( item.lpkv ) )
+        comps[item.lpkv][item.comp_key] = [] if comps[item.lpkv][item.comp_key].nil?
+        comps[item.lpkv][item.comp_key] << {:project_language => item.project_language, :project_name => item.project_name,
+               :project_id => item.project_id, :project_version => item.project_version,
+               :project_group_id => item.project_group_id, :project_artifact_id => item.project_artifact_id,
+               :project_teams => item.project_teams}
       end
       comps
     end

@@ -26,6 +26,8 @@ module Versioneye
     require 'versioneye/models/email_setting'
     require 'versioneye/models/enterprise_lead'
     require 'versioneye/models/github_repo'
+    require 'versioneye/models/inventory'
+    require 'versioneye/models/inventory_item'
     require 'versioneye/models/stash_repo'
     require 'versioneye/models/scm_changelog_entry'
     require 'versioneye/models/json_cache'
