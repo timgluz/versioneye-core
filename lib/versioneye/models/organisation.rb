@@ -171,6 +171,9 @@ class Organisation < Versioneye::Model
     end
 
     inventory.inventory_items.destroy_all
+    inventory.updated_at = Time.now
+    inventory.save
+
     comps = {}
     dep_projs = []
     projects.each do |project|
