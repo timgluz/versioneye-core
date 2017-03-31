@@ -60,18 +60,20 @@ class GithubPullRequestService < Versioneye::Service
     new_project.temp_lock = true # prevent from deleting
     new_project.license_whitelist_id   = project.license_whitelist_id
     new_project.component_whitelist_id = project.component_whitelist_id
+    new_project.muted_svs              = project.muted_svs
     new_project.save
 
     ProjectdependencyService.update_licenses_security new_project
 
     new_project.dependencies.each do |dep|
-      if (!dep.sv_ids.empty? ||                # security vulnerability
+      if (!dep.unmuted_security_vulnerabilities.empty? || # security vulnerability
            dep.license_caches.to_a.empty? ||   # unknown license
            dep.license_violation == true)      # violating lwl and/or cwl
         # Skip if no security vulnerability and on component whitelist
         if (dep.sv_ids.empty? && new_project.component_whitelist.is_on_list?( dep.cwl_key ))
           next
         end
+
         create_pr_issue filename, dep, pr
       end
     end

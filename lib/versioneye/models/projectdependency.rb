@@ -98,7 +98,20 @@ class Projectdependency < Versioneye::Model
 
   def security_vulnerabilities
     return nil if sv_ids.to_a.empty?
+
     SecurityVulnerability.where(:_id.in => sv_ids)
+  end
+
+
+  def unmuted_security_vulnerabilities
+    return [] if sv_ids.to_a.empty?
+    return sv_ids if project.nil? || project.muted_svs.nil? || project.muted_svs.keys.empty?
+
+    secs = []
+    sv_ids.each do |sv_id|
+      secs << sv_id if !project.muted_svs.keys.include?(sv_id.to_s)
+    end
+    secs
   end
 
 

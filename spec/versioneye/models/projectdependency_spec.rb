@@ -140,6 +140,26 @@ describe Projectdependency do
   end
 
 
+  describe 'unmuted_security_vulnerabilities' do
+    it 'returns an empty list' do
+      dep = Projectdependency.new( :language => "Node.JS" )
+      expect( dep.unmuted_security_vulnerabilities ).to be_empty
+    end
+    it 'returns an empty list' do
+      dep = Projectdependency.new( :language => "Node.JS" )
+      dep.sv_ids = [22]
+      expect( dep.unmuted_security_vulnerabilities ).to_not be_empty
+    end
+    it 'returns an empty list' do
+      project.muted_svs = {'22' => 'not important.'}
+      dep = Projectdependency.new( :language => "Node.JS" )
+      dep.sv_ids = [22]
+      dep.project = project
+      expect( dep.unmuted_security_vulnerabilities ).to be_empty
+    end
+  end
+
+
   describe 'product' do
 
     it 'returns the right product' do
