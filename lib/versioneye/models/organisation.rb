@@ -304,9 +304,23 @@ class Organisation < Versioneye::Model
         pdeps = Projectdependency.where(:language => language, :prod_key => prod_key, :project_id.in => project_ids)
         next if pdeps.count < 2
 
+        team_names = uniq_teams( pdeps )
+        next if team_names.count < 2
+
         collect_components inventory, nil, pdeps, response
       end
       response
+    end
+
+    def uniq_teams project_dependencies
+      team_names = []
+      project_dependencies.each do |pdep|
+        project = pdep.project
+        project.teams.each do |team|
+          team_names << team.name if !team_names.include?( team.name )
+        end
+      end
+      team_names
     end
 
 
