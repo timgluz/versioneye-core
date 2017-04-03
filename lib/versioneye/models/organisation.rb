@@ -204,8 +204,7 @@ class Organisation < Versioneye::Model
     if after_filter.to_s.eql?('duplicates_only')
       return duplicates_only_filter( comps )
     elsif after_filter.to_s.eql?('show_duplicates')
-      show_duplicates_filter( comps )
-      return comps
+      return show_duplicates_filter( inventory, comps )
     end
     comps
   rescue => e
@@ -291,15 +290,23 @@ class Organisation < Versioneye::Model
     end
 
 
-    def show_duplicates_filter( comps )
+    def show_duplicates_filter( inventory, comps )
+      inventory.inventory_items.destroy_all
+      inventory.updated_at = Time.now
+      inventory.save
+
+      response = {}
       project_ids = Project.where(:organisation_id => self.ids).distinct(:id)
       comps.keys.each do |key|
         sps = key.split(":")
         language = sps[0]
         prod_key = sps[1]
         pdeps = Projectdependency.where(:language => language, :prod_key => prod_key, :project_id.in => project_ids)
-        collect_components nil, nil, pdeps, comps, [], true
+        next if pdeps.count < 2
+
+        collect_components inventory, nil, pdeps, response
       end
+      response
     end
 
 
@@ -314,15 +321,18 @@ class Organisation < Versioneye::Model
     end
 
 
-    def collect_components inventory, project, project_dependencies, comps, dep_projs = [], ignore_comp_key = false
+    def collect_components inventory, project, project_dependencies, comps, dep_projs = []
       project_dependencies.each do |dep|
         component_key = "#{dep.language}:#{dep.possible_prod_key}:#{dep.version_current}"
-        comps[component_key] = {} if (!comps.keys.include?( component_key ) && ignore_comp_key == false)
+        comps[component_key] = {} if (!comps.keys.include?( component_key ))
 
         version_key = "#{dep.possible_prod_key}::#{dep.version_requested}::#{dep.licenses_string}::#{dep.sv_ids.count}"
         comps[component_key][version_key] = [] if comps[component_key][version_key].nil?
 
         project = dep.project if project.nil?
+        if project && dep.project && !dep.project.ids.eql?( project.ids )
+          project = dep.project
+        end
         dep_pro_key = "#{version_key}_#{project.ids}"
         next if dep_projs.include?( dep_pro_key )
 

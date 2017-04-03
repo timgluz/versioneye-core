@@ -11,6 +11,7 @@ class ProjectdependencyFactory
       dependency.version_current = product.version
       dependency.version_label   = product.version
     end
+    dependency.project = project
     if store
       dependency.save
     end

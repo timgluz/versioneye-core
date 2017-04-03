@@ -449,31 +449,36 @@ describe Organisation do
       TeamService.add 'devs', @orga.ids, user.username, @user1
       expect( @orga.teams.count ).to eq(2)
 
-      project = ProjectFactory.create_new user, nil, true, @orga
+      project = ProjectFactory.create_new user, {:name => 'project_1'}, true, @orga
       project.language = 'Java'
       project.teams = [team]
       expect( project.save ).to be_truthy
       expect( @orga.projects.count ).to eq(1)
 
-      project2 = ProjectFactory.create_new user, nil, true, @orga
+      project2 = ProjectFactory.create_new user, {:name => 'project_2'}, true, @orga
       project2.language = 'Java'
       project2.teams = [@orga.owner_team]
       expect( project2.save ).to be_truthy
+      expect( project2.teams.count ).to eq(1)
+      expect( project2.teams.first.name ).to eq("Owners")
       expect( @orga.projects.count ).to eq(2)
+      expect( Project.count ).to eq(2)
 
-      prod_2  = ProductFactory.create_for_maven 'org.junit', 'junit', '2.0.0'
-      prod_2.add_version '1.9.9'
-      expect( prod_2.save ).to be_truthy
+      junit  = ProductFactory.create_for_maven 'org.junit', 'junit', '2.0.0'
+      junit.add_version '1.9.9'
+      expect( junit.save ).to be_truthy
 
-      dep_1 = ProjectdependencyFactory.create_new project, prod_2, true
-      dep_1.version_requested = prod_2.version
+      dep_1 = ProjectdependencyFactory.create_new project, junit, true
+      dep_1.version_requested = junit.version
       expect( dep_1.save ).to be_truthy
 
-      dep_2 = ProjectdependencyFactory.create_new project2, prod_2, true
+      dep_2 = ProjectdependencyFactory.create_new project2, junit, true
+      dep_2.version_label = '1.9.9'
       dep_2.version_requested = '1.9.9'
       expect( dep_2.save ).to be_truthy
+      expect( dep_2.project.ids.eql?(project2.ids) ).to be_truthy
 
-      expect( @orga.projects.first.dependencies.count ).to eq(1)
+      expect( @orga.projects[0].dependencies.count ).to eq(1)
       expect( @orga.projects[1].dependencies.count ).to eq(1)
 
       comps = @orga.component_list team.ids, 'ALL', 'ALL', 'ALL'
@@ -487,6 +492,7 @@ describe Organisation do
       expect( comps ).to_not be_nil
       expect( comps.count ).to eq(1)
       expect( comps['Java:org.junit/junit:2.0.0'] ).to_not be_nil
+      expect( comps['Java:org.junit/junit:2.0.0'].count ).to eq(2)
       expect( comps['Java:org.junit/junit:2.0.0']['org.junit/junit::2.0.0::UNKNOWN::0'] ).to_not be_nil
       expect( comps['Java:org.junit/junit:2.0.0']['org.junit/junit::1.9.9::UNKNOWN::0'] ).to_not be_nil
     end
