@@ -22,6 +22,9 @@ class LicenseService < Versioneye::Service
       cols = line.split(";")
       create_spdx_license cols[0], cols[1], cols[2]
     end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
   end
 
 
