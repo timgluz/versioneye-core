@@ -70,7 +70,7 @@ class ComponentWhitelistService < Versioneye::Service
     ProjectService.update_license_numbers! project
 
     project.children.each do |child|
-      child.license_whitelist_id = cwl_id
+      child.component_whitelist_id = cwl_id
       ProjectService.update_license_numbers! child
     end
     ProjectService.update_sums project

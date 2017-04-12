@@ -99,6 +99,12 @@ describe ComponentWhitelist do
       expect( cwl.save ).to be_truthy
       expect( cwl.is_on_list?("com.sf.jasperreports:jasperreports:3.6.1") ).to be_falsey
     end
+    it 'returns true because on list' do
+      cwl = ComponentWhitelist.new({:name => 'MyComps', :organisation => @orga})
+      cwl.add "php:wpackagist-plugin"
+      expect( cwl.save ).to be_truthy
+      expect( cwl.is_on_list?("php:wpackagist-plugin/onelogin-saml-sso") ).to be_truthy
+    end
   end
 
   describe 'auditlogs' do
