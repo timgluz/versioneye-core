@@ -99,6 +99,7 @@ class Project < Versioneye::Model
   index({name: 1},    { name: "name_index",    background: true})
   index({source: 1},  { name: "source_index",  background: true})
   index({parent_id: 1}, { name: "parentid_index", background: true})
+  index({parent_id: 1, temp: 1, team_ids: 1, organisation_id: 1}, { name: "project_overview_index", background: true})
 
   scope :by_user   , ->(user)    { where(user_id: user[:_id].to_s) }
   scope :by_user_id, ->(user_id) { where(user_id: user_id.to_s) }
