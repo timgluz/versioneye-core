@@ -63,6 +63,7 @@ class Product < Versioneye::Model
   index({ updated_at: -1},               { name: "updated_at_index", background: true})
   index({ updated_at: -1, language: -1}, { name: "updated_language_index", background: true})
   index({ tags: 1},                      { name: "tags_index", background: true})
+  index({ language: 1},                  { name: "language_index", background: true})
 
   attr_accessor :version_newest, :project_usage
   attr_accessor :released_days_ago, :released_ago_in_words, :released_ago_text
