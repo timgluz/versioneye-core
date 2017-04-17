@@ -3,12 +3,9 @@ source "http://rubygems.org"
 # Specify your gem's dependencies in versioneye-core.gemspec
 gemspec
 
-# 20% performance boost for dalli. Doesn't work on Windows.
-gem 'kgio', '~> 2.11.0', platforms: :ruby
-
 group :test do
   gem 'rack-test'       , '0.6.3'
-  gem 'fakes3'          , '0.2.4'
+  gem 'fakes3'          , '1.0.0'
   gem 'simplecov'       , '~> 0.14.1'
   gem 'rspec'           , '~> 3.5.0'
   gem 'rspec_junit_formatter', '0.2.3'
