@@ -14,6 +14,6 @@ group :test do
   gem 'capybara'        , '~> 2.13.0'
   gem 'capybara-firebug', '~> 2.1.0'
   gem 'vcr'             , '3.0.3', :require => false
-  gem 'webmock'         , '~> 2.1.0', :require => false
+  gem 'webmock'         , '~> 3.0.1', :require => false
   gem 'fakeweb'         , '~> 1.3.0'
 end
