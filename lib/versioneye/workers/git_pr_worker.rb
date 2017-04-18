@@ -28,15 +28,13 @@ class GitPrWorker < Worker
 
   private
 
-    def handle_pr msg
+    def handle_pr message
       sps         = message.split(":::")
       repo_name   = sps[0]
       branch      = sps[1]
       commits_url = sps[2]
       pr_nr       = sps[3]
-      multi_log " [*] GitPrWorker - GithubPullRequestService.process #{repo_name}, #{branch}, #{commits_url}, #{pr_nr}"  
       GithubPullRequestService.process repo_name, branch, commits_url, pr_nr
-      multi_log " [*] GitPrWorker - FINISHED GithubPullRequestService.process #{repo_name}, #{branch}, #{commits_url}, #{pr_nr}"  
     rescue => e
       log.error "ERROR in GitPrWorker! Input: #{message} Output: #{e.message}"
       log.error e.backtrace.join("\n")
