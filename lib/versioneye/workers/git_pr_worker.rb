@@ -3,8 +3,6 @@ require 'dalli'
 
 class GitPrWorker < Worker
 
-  A_TASK_TTL = 60 # 60 seconds = 1 minute
-
   def work
     connection = get_connection
     connection.start
@@ -36,7 +34,9 @@ class GitPrWorker < Worker
       branch      = sps[1]
       commits_url = sps[2]
       pr_nr       = sps[3]
+      multi_log " [*] GitPrWorker - GithubPullRequestService.process #{repo_name}, #{branch}, #{commits_url}, #{pr_nr}"  
       GithubPullRequestService.process repo_name, branch, commits_url, pr_nr
+      multi_log " [*] GitPrWorker - FINISHED GithubPullRequestService.process #{repo_name}, #{branch}, #{commits_url}, #{pr_nr}"  
     rescue => e
       log.error "ERROR in GitPrWorker! Input: #{message} Output: #{e.message}"
       log.error e.backtrace.join("\n")
