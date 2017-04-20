@@ -20,6 +20,7 @@ class Project < Versioneye::Model
   A_TYPE_NUGET     = 'Nuget'
   A_TYPE_GODEP     = 'Godep'
   A_TYPE_CPAN      = 'Cpan'
+  A_TYPE_CRATES    = 'crates'
 
   A_SOURCE_UPLOAD    = 'upload'
   A_SOURCE_URL       = 'url'
