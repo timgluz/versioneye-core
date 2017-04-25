@@ -105,6 +105,7 @@ module Versioneye
     require 'versioneye/parsers/gemspec_parser'
     require 'versioneye/parsers/yarn_parser'
     require 'versioneye/parsers/shrinkwrap_parser'
+    require 'versioneye/parsers/cargo_parser'
 
     require 'versioneye/updaters/update_strategy'
     require 'versioneye/updaters/common_updater'
