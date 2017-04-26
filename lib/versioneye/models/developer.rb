@@ -1,5 +1,9 @@
 class Developer < Versioneye::Model
 
+# In this collection the crawlers are writing directly the author & maintainer
+# information. Each product & version pair can have multiple entries here.
+# The AuthorService is generating uniq. Author profiles out of this raw data.
+
   include Mongoid::Document
   include Mongoid::Timestamps
 

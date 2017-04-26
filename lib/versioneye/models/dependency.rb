@@ -16,7 +16,7 @@ class Dependency < Versioneye::Model
   A_SCOPE_COMPILE     = 'compile'     # NPM, Maven and many more!
   A_SCOPE_DEVELOPMENT = 'development' # NPM, Bower
   A_SCOPE_BUNDLED     = 'bundled'     # NPM
-  A_SCOPE_OPTIONAL    = 'optional'    # NPM
+  A_SCOPE_OPTIONAL    = 'optional'    # NPM & Rust
   A_SCOPE_BUILD       = 'build'       # CPAN
   A_SCOPE_CONFIGURE   = 'configure'   # CPAN
 
