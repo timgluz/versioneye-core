@@ -3,11 +3,12 @@ require 'spec_helper'
 describe CargoParser do
 
   let(:parser){ CargoParser.new }
+  let(:test_filepath){ 'spec/fixtures/files/cargo/Cargo.toml' }
 
   let(:product1){
     Product.new(
       language: Product::A_LANGUAGE_RUST,
-      prod_type: Project::A_TYPE_CRATES,
+      prod_type: Project::A_TYPE_CARGO,
       prod_key: 'nanomsg',
       name: 'nanomsg',
       version: '0.6.2'
@@ -246,6 +247,219 @@ describe CargoParser do
       expect(dep[:version_requested]).to eq('0.6.2')
       expect(dep[:version_label]).to eq('>= 0.2, < 0.7')
       expect(dep[:comperator]).to eq('||')
+    end
+
+    it "parses correctly git versions" do
+      dep = parser.parse_requested_version 'git://github.com/serde/serde', dep1, product1
+      expect(dep).not_to be_nil
+      expect(dep[:version_requested]).to eq('GIT')
+      expect(dep[:version_label]).to eq('GIT')
+      expect(dep[:comperator]).to eq('=')
+    end
+
+    it "parses correctly path versions" do
+      dep = parser.parse_requested_version 'hello_utils', dep1, product1
+      expect(dep).not_to be_nil
+      expect(dep[:version_requested]).to eq('PATH')
+      expect(dep[:version_label]).to eq('PATH')
+      expect(dep[:comperator]).to eq('=')
+    end
+  end
+
+  let(:product2){
+    Product.new(
+      prod_type: Project::A_TYPE_CARGO,
+      language: Product::A_LANGUAGE_RUST,
+      prod_key: 'serde',
+      name: 'serde',
+      version: '1.0.0'
+    )
+  }
+
+  let(:product3){
+    Product.new(
+      prod_type: Project::A_TYPE_CARGO,
+      language: Product::A_LANGUAGE_RUST,
+      prod_key: 'time',
+      name: 'time',
+      version: '1.2.4'
+    )
+  }
+
+  let(:product4){
+    Product.new(
+      prod_type: Project::A_TYPE_CARGO,
+      language: Product::A_LANGUAGE_RUST,
+      prod_key: 'rand',
+      name: 'rand',
+      version: '2.3.0'
+    )
+  }
+
+  let(:product5){
+    Product.new(
+      prod_type: Project::A_TYPE_CARGO,
+      language: Product::A_LANGUAGE_RUST,
+      prod_key: 'hello_utils',
+      name: 'hello_utils',
+      version: '2.5.2'
+    )
+  }
+
+  let(:product6){
+    Product.new(
+      prod_type: Project::A_TYPE_CARGO,
+      language: Product::A_LANGUAGE_RUST,
+      prod_key: 'www',
+      name: 'www',
+      version: '2.6.2'
+    )
+  }
+
+  let(:product7){
+    Product.new(
+      prod_type: Project::A_TYPE_CARGO,
+      language: Product::A_LANGUAGE_RUST,
+      prod_key: 'multipart',
+      name: 'multipart',
+      version: '1.2.0'
+    )
+  }
+
+  let(:product8){
+    Product.new(
+      prod_type: Project::A_TYPE_CARGO,
+      language: Product::A_LANGUAGE_RUST,
+      prod_key: 'tempdir',
+      name: 'tempdir',
+      version: '0.3'
+    )
+  }
+
+  let(:product9){
+    Product.new(
+      prod_type: Project::A_TYPE_CARGO,
+      language: Product::A_LANGUAGE_RUST,
+      prod_key: 'gcc',
+      name: 'gcc',
+      version: '0.5'
+    )
+  }
+
+  context 'parse_content' do
+    before do
+      product2.versions << Version.new(version: '1.0.0')
+      product2.save
+
+      product3.versions << Version.new(version: '1.2.3')
+      product3.save
+      product4.save
+      product5.save
+
+      product6.versions = []
+      product6.versions << Version.new(version: '2.6.2')
+      product6.versions << Version.new(version: '0.7.2')
+      product6.save
+
+      product7.save
+
+      product8.versions = []
+      product8.versions << Version.new(version: '0.3')
+      product8.versions << Version.new(version: '0.5')
+      product8.save
+
+      product9.versions = []
+      product9.versions << Version.new(version: '0.3')
+      product9.versions << Version.new(version: '0.9')
+      product9.save
+    end
+
+    it "parses project file correctly" do
+      content = File.read test_filepath
+      project = parser.parse_content content
+      expect(project.nil?).to be_falsey
+      expect(project.projectdependencies.size).to eq(8)
+
+      dep1 = project.dependencies[0]
+      expect(dep1[:name]).to eq(product2[:name])
+      expect(dep1[:prod_key]).to eq(product2[:prod_key])
+      expect(dep1[:language]).to eq(product2[:language])
+      expect(dep1[:scope]).to eq(Dependency::A_SCOPE_COMPILE)
+      expect(dep1[:version_requested]).to eq('1.0.0')
+      expect(dep1[:version_label]).to eq('1.0.0')
+      expect(dep1[:comperator]).to eq('^')
+      expect(dep1[:outdated]).to be_falsey
+
+      dep2 = project.dependencies[1]
+      expect(dep2[:name]).to eq(product3[:name])
+      expect(dep2[:prod_key]).to eq(product3[:prod_key])
+      expect(dep2[:language]).to eq(product3[:language])
+      expect(dep2[:scope]).to eq(Dependency::A_SCOPE_COMPILE)
+      expect(dep2[:version_requested]).to eq('1.2.3')
+      expect(dep2[:version_label]).to eq('1.2.3')
+      expect(dep2[:comperator]).to eq('~')
+      expect(dep2[:outdated]).to be_falsey
+
+
+      dep3 = project.dependencies[2]
+      expect(dep3[:name]).to eq(product4[:name])
+      expect(dep3[:prod_key]).to eq(product4[:prod_key])
+      expect(dep3[:language]).to eq(product4[:language])
+      expect(dep3[:scope]).to eq(Dependency::A_SCOPE_COMPILE)
+      expect(dep3[:version_requested]).to eq('GIT')
+      expect(dep3[:version_label]).to eq('GIT')
+      expect(dep3[:comperator]).to eq('=')
+      expect(dep3[:outdated]).to be_falsey
+
+      dep4 = project.dependencies[3]
+      expect(dep4[:name]).to eq(product5[:name])
+      expect(dep4[:prod_key]).to eq(product5[:prod_key])
+      expect(dep4[:language]).to eq(product5[:language])
+      expect(dep4[:scope]).to eq(Dependency::A_SCOPE_COMPILE)
+      expect(dep4[:version_requested]).to eq('PATH')
+      expect(dep4[:version_label]).to eq('PATH')
+      expect(dep4[:comperator]).to eq('=')
+      expect(dep4[:outdated]).to be_falsey
+
+      dep5 = project.dependencies[4]
+      expect(dep5[:name]).to eq(product6[:name])
+      expect(dep5[:prod_key]).to eq(product6[:prod_key])
+      expect(dep5[:language]).to eq(product6[:language])
+      expect(dep5[:scope]).to eq(Dependency::A_SCOPE_OPTIONAL)
+      expect(dep5[:version_requested]).to eq('0.4.0')
+      expect(dep5[:version_label]).to eq('0.3')
+      expect(dep5[:comperator]).to eq('^')
+      expect(dep5[:outdated]).to be_truthy
+
+      dep6 = project.dependencies[5]
+      expect(dep6[:name]).to eq(product7[:name])
+      expect(dep6[:prod_key]).to eq(product7[:prod_key])
+      expect(dep6[:language]).to eq(product7[:language])
+      expect(dep6[:scope]).to eq(Dependency::A_SCOPE_COMPILE)
+      expect(dep6[:version_requested]).to eq('2.0.0')
+      expect(dep6[:version_label]).to eq('1.2.0')
+      expect(dep6[:comperator]).to eq('^')
+      expect(dep6[:outdated]).to be_falsey
+
+      dep7 = project.dependencies[6]
+      expect(dep7[:name]).to eq(product8[:name])
+      expect(dep7[:prod_key]).to eq(product8[:prod_key])
+      expect(dep7[:language]).to eq(product8[:language])
+      expect(dep7[:scope]).to eq(Dependency::A_SCOPE_DEVELOPMENT)
+      expect(dep7[:version_requested]).to eq('0.3')
+      expect(dep7[:version_label]).to eq('0.3')
+      expect(dep7[:comperator]).to eq('=')
+      expect(dep7[:outdated]).to be_truthy
+
+      dep8 = project.dependencies[7]
+      expect(dep8[:name]).to eq(product9[:name])
+      expect(dep8[:prod_key]).to eq(product9[:prod_key])
+      expect(dep8[:language]).to eq(product9[:language])
+      expect(dep8[:scope]).to eq(Dependency::A_SCOPE_BUILD)
+      expect(dep8[:version_requested]).to eq('0.9')
+      expect(dep8[:version_label]).to eq('0.3')
+      expect(dep8[:comperator]).to eq('>')
+      expect(dep8[:outdated]).to be_falsey
     end
   end
 end

@@ -1,5 +1,6 @@
 require 'versioneye/parsers/common_parser'
 require 'semverly'
+require 'tomlrb'
 
 # Parser for cargo.toml used in Rust projects.
 # official doc: http://doc.crates.io/specifying-dependencies.html
@@ -8,8 +9,96 @@ require 'semverly'
 class CargoParser < CommonParser
   FIXNUM_MAX = (2**(0.size * 8 -2) -1)
 
+  def parse(url)
+    return nil if url.to_s.empty?
+
+    content = self.fetch_response_body url
+    parse_content content
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
+  end
+
+  def parse_content(content)
+    return nil if content.to_s.empty?
+    return nil if content.to_s.strip.eql?('Not Found')
+
+    doc = Tomlrb.parse(content, symbolize_keys: true)
+    if doc.nil?
+      log.error "Failed to parse Cargo.toml content: #{content}"
+      return nil
+    end
+
+    project = init_project doc
+    parse_dependencies doc[:dependencies].to_a, project, Dependency::A_SCOPE_COMPILE
+    parse_dependencies doc[:"dev-dependencies"].to_a, project, Dependency::A_SCOPE_DEVELOPMENT
+    parse_dependencies doc[:"build-dependencies"].to_a, project, Dependency::A_SCOPE_BUILD
+    parse_dependencies doc[:"test-dependencies"].to_a, project, Dependency::A_SCOPE_TEST
+
+    #TODO: add target dependencies
+    #
+    project.dep_number = project.dependencies.size
+    project
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
+  end
+
+
+  def parse_dependencies(dependencies, project, scope)
+    deps = []
+    dependencies.to_a.each do |dep_id, dep_doc|
+      deps << parse_dependency(dep_id, dep_doc, project, scope)
+    end
+
+    deps
+  end
+
+  def parse_dependency(pkg_id, version_doc, project, default_scope)
+    pkg_id = pkg_id.to_s.strip
+    product = Product.where(
+      language: Product::A_LANGUAGE_RUST,
+      prod_key: pkg_id
+    ).first
+
+    dependency = init_dependency product, pkg_id
+    scope = if version_doc.is_a?(Hash)
+              if version_doc.has_key?(:optional) and version_doc[:optional] == true
+                Dependency::A_SCOPE_OPTIONAL
+              else
+                default_scope
+              end
+            else
+              default_scope
+            end
+    dependency[:scope] = scope
+
+    if version_doc.is_a?(String)
+      parse_requested_version(version_doc, dependency, product)
+
+    elsif version_doc.is_a?(Hash) and version_doc.has_key?(:version)
+      version_label = version_doc[:version].to_s.strip
+      parse_requested_version(version_label, dependency, product)
+
+    elsif version_doc.is_a?(Hash) and version_doc.has_key?(:git)
+      parse_requested_version(version_doc[:git], dependency, product)
+
+    elsif version_doc.is_a?(Hash) and version_doc.has_key?(:path)
+      parse_requested_version(version_doc[:path], dependency, product)
+    end
+
+    project.out_number += 1 if ProjectdependencyService.outdated?(dependency)
+    project.unknown_number += 1 if product.nil?
+    project.projectdependencies.push dependency
+
+    dependency
+  end
+
   def parse_requested_version(version, dependency, product)
     version = version.to_s.strip
+
     if version.empty? or ['*', 'X', 'x'].include?(version)
       log.error "#{product} version label is missing."
       dependency[:version_label] = version
@@ -80,10 +169,21 @@ class CargoParser < CommonParser
       dependency[:version_requested]  = newest_tilde_version(product.versions, version_label)
       dependency[:version_label]      = version_label
       dependency[:comperator]         = '~'
+
     elsif version =~ /\.[\*|x|X]/
       dependency[:version_requested] = VersionService.newest_version_from_wildcard(product.versions, version)
       dependency[:version_label]      = version
       dependency[:comperator]         = '*'
+
+    elsif version =~ /\Agit:/i or version =~ /\Ahttps?:/i
+      dependency[:version_requested]  = 'GIT'
+      dependency[:version_label]      = 'GIT'
+      dependency[:comperator]         = '='
+
+    elsif version.is_a?(String) and is_semver(version) == false
+      dependency[:version_requested]  = 'PATH'
+      dependency[:version_label]      = 'PATH'
+      dependency[:comperator]         = '='
     end
 
     dependency
@@ -211,5 +311,29 @@ class CargoParser < CommonParser
     end
 
     upper_ver.to_s
+  end
+
+  def init_project(project_doc)
+    Project.new(
+      project_type: Project::A_TYPE_CARGO,
+      language: Product::A_LANGUAGE_RUST,
+      name: project_doc[:package][:name],
+      version: project_doc[:package][:version]
+    )
+  end
+
+  def init_dependency(product, pkg_id)
+    dep = Projectdependency.new(
+      name: pkg_id,
+      language: Product::A_LANGUAGE_RUST
+    )
+
+    if product
+      dep[:language] = product[:language]
+      dep[:prod_key] = product[:prod_key]
+      dep[:version_current] = product[:version]
+    end
+
+    dep
   end
 end
