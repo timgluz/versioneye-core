@@ -31,13 +31,9 @@ class CargoParser < CommonParser
     end
 
     project = init_project doc
-    parse_dependencies doc[:dependencies].to_a, project, Dependency::A_SCOPE_COMPILE
-    parse_dependencies doc[:"dev-dependencies"].to_a, project, Dependency::A_SCOPE_DEVELOPMENT
-    parse_dependencies doc[:"build-dependencies"].to_a, project, Dependency::A_SCOPE_BUILD
-    parse_dependencies doc[:"test-dependencies"].to_a, project, Dependency::A_SCOPE_TEST
+    parse_dependencies doc, project, Dependency::A_SCOPE_COMPILE
+    parse_platform_dependencies doc[:target], project, Dependency::A_SCOPE_COMPILE
 
-    #TODO: add target dependencies
-    #
     project.dep_number = project.dependencies.size
     project
   rescue => e
@@ -46,17 +42,51 @@ class CargoParser < CommonParser
     nil
   end
 
+  def parse_platform_dependencies(platforms, project, scope)
+    platform_deps = []
+    platforms.to_a.each do |target_key, target_docs|
+      target_id = extract_target_id(target_key)
+      log.info "Going to parse #{target_id} dependencies"
 
-  def parse_dependencies(dependencies, project, scope)
+      deps = parse_dependencies(target_docs, project, scope, target_id)
+      platform_deps += deps
+    end
+
+    platform_deps
+  end
+
+  def extract_target_id(target_key)
+    m = target_key.to_s.match(/\Acfg\((.+)\)\z/)
+    return if m.nil?
+    m[1] if m.size == 2
+  end
+
+  def parse_dependencies(dependencies, project, scope, target_id = nil)
     deps = []
-    dependencies.to_a.each do |dep_id, dep_doc|
-      deps << parse_dependency(dep_id, dep_doc, project, scope)
+    #extract compile dependencies
+    dependencies[:dependencies].to_a.each do |dep_id, dep_doc|
+      deps << parse_dependency(dep_id, dep_doc, project, Dependency::A_SCOPE_COMPILE, target_id)
+    end
+
+    #extract development dependencies
+    dependencies[:"dev-dependencies"].to_a.each do |dep_id, dep_doc|
+      deps << parse_dependency(dep_id, dep_doc, project, Dependency::A_SCOPE_DEVELOPMENT, target_id)
+    end
+
+    #extract build dependencies
+    dependencies[:"build-dependencies"].to_a.each do |dep_id, dep_doc|
+      deps << parse_dependency(dep_id, dep_doc, project, Dependency::A_SCOPE_BUILD, target_id)
+    end
+
+    #extract test dependencies
+    dependencies[:"test-dependencies"].to_a.each do |dep_id, dep_doc|
+      deps << parse_dependency(dep_id, dep_doc, project, Dependency::A_SCOPE_TEST, target_id)
     end
 
     deps
   end
 
-  def parse_dependency(pkg_id, version_doc, project, default_scope)
+  def parse_dependency(pkg_id, version_doc, project, default_scope, target_id = nil)
     pkg_id = pkg_id.to_s.strip
     product = Product.where(
       language: Product::A_LANGUAGE_RUST,
@@ -64,6 +94,8 @@ class CargoParser < CommonParser
     ).first
 
     dependency = init_dependency product, pkg_id
+    dependency[:target] = target_id
+
     scope = if version_doc.is_a?(Hash)
               if version_doc.has_key?(:optional) and version_doc[:optional] == true
                 Dependency::A_SCOPE_OPTIONAL

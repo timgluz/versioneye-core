@@ -346,6 +346,26 @@ describe CargoParser do
     )
   }
 
+  let(:product10){
+    Product.new(
+      prod_type: Project::A_TYPE_CARGO,
+      language: Product::A_LANGUAGE_RUST,
+      prod_key: 'winhttp',
+      name: 'winhttp',
+      version: '0.4.0'
+    )
+  }
+
+  let(:product11){
+    Product.new(
+      prod_type: Project::A_TYPE_CARGO,
+      language: Product::A_LANGUAGE_RUST,
+      prod_key: 'mio',
+      name: 'mio',
+      version: '0.0.1'
+    )
+  }
+
   context 'parse_content' do
     before do
       product2.versions << Version.new(version: '1.0.0')
@@ -372,13 +392,16 @@ describe CargoParser do
       product9.versions << Version.new(version: '0.3')
       product9.versions << Version.new(version: '0.9')
       product9.save
+
+      product10.save
+      product11.save
     end
 
     it "parses project file correctly" do
       content = File.read test_filepath
       project = parser.parse_content content
       expect(project.nil?).to be_falsey
-      expect(project.projectdependencies.size).to eq(8)
+      expect(project.projectdependencies.size).to eq(10)
 
       dep1 = project.dependencies[0]
       expect(dep1[:name]).to eq(product2[:name])
@@ -460,6 +483,27 @@ describe CargoParser do
       expect(dep8[:version_label]).to eq('0.3')
       expect(dep8[:comperator]).to eq('>')
       expect(dep8[:outdated]).to be_falsey
+
+      dep9 = project.dependencies[8]
+      expect(dep9[:name]).to eq(product10[:name])
+      expect(dep9[:prod_key]).to eq(product10[:prod_key])
+      expect(dep9[:language]).to eq(product10[:language])
+      expect(dep9[:scope]).to eq(Dependency::A_SCOPE_COMPILE)
+      expect(dep9[:version_requested]).to eq('0.5.0')
+      expect(dep9[:version_label]).to eq('0.4.0')
+      expect(dep9[:comperator]).to eq('^')
+      expect(dep9[:outdated]).to be_falsey
+      expect(dep9[:target]).to eq('windows')
+
+      dep10 = project.dependencies[9]
+      expect(dep10[:name]).to eq(product11[:name])
+      expect(dep10[:prod_key]).to eq(product11[:prod_key])
+      expect(dep10[:language]).to eq(product11[:language])
+      expect(dep10[:scope]).to eq(Dependency::A_SCOPE_DEVELOPMENT)
+      expect(dep10[:version_requested]).to eq('0.0.2')
+      expect(dep10[:comperator]).to eq('^')
+      expect(dep10[:outdated]).to be_falsey
+      expect(dep10[:target]).to eq('unix')
     end
   end
 end
