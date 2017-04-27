@@ -689,7 +689,32 @@ describe VersionService do
       versions.size.should eq(1)
       versions.first.to_s.should eq("2.0.0")
     end
+  end
 
+  describe 'from_common_range' do
+    before do
+      product.versions = []
+      product.versions << Version.new(version: '0.2.8')
+      product.versions << Version.new(version: '0.4.0')
+      product.versions << Version.new(version: '0.6.0')
+      product.versions << Version.new(version: '0.6.2')
+      product.versions << Version.new(version: '0.7.0')
+      product.versions << Version.new(version: '1.0.0')
+
+      product.save
+    end
+
+    it "returns the right value for closed range `>= 0.3, < 0.7`" do
+      highest_version = VersionService.from_common_range(product.versions, '>= 0.3, < 0.7', false)
+      expect( highest_version ).not_to be_nil
+      expect( highest_version[:version]).to eq('0.6.2')
+    end
+
+    it "returns the latest version when right border is open" do
+      highest_version = VersionService.from_common_range(product.versions, '> 0.5', false)
+      expect( highest_version ).not_to be_nil
+      expect( highest_version[:version]).to eq('1.0.0')
+    end
   end
 
 

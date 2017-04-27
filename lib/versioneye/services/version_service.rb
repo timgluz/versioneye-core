@@ -221,12 +221,12 @@ class VersionService < Versioneye::Service
   end
 
   # For ranges like "<3.11 || >= 4 <4.5"
-  def self.from_or_ranges versions, version_string
+  def self.from_or_ranges( versions, version_string, separator = '||')
     filtered_versions = []
-    sps = version_string.split("||")
+    sps = version_string.split(separator)
     sps.each do |vs|
       v = clean_range vs.strip
-      v = v.gsub(" ", ",")
+      v = v.gsub(/\s+/, ",")
       filtered = from_ranges(versions, v)
       filtered.each do |ver|
         filtered_versions << ver
@@ -241,6 +241,31 @@ class VersionService < Versioneye::Service
     expr = expr.gsub("= ", "=")
     expr = expr.gsub("~ ", "~")
     expr
+  end
+
+
+  # returns common_range which is version that match all the selectors
+  # params:
+  #   product_versions - version models from Product.versions field
+  #   version_label    - string, '>= 0.3, < 0.7'
+  #   range            - boolean, true = it returns whole range, false = only the highest
+  #   separator        - string, character which is used to separate different selectors
+  def self.from_common_range(product_versions, version_label, range = true, separator = ',')
+    ranges = []
+    version_label.to_s.split(separator).each do |version_range|
+      ranges << VersionService.from_ranges(product_versions, version_range)
+    end
+
+    common_range = ranges.to_a.reduce(product_versions) do |intersection, range|
+      VersionService.intersect_versions(intersection, range, true)
+    end
+
+    #return a versions that match all the selectors or only highest
+    if range
+      common_range
+    else
+      VersionService.newest_version(common_range)
+    end
   end
 
 

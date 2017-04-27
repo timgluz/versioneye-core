@@ -235,5 +235,17 @@ describe CargoParser do
       expect(dep[:version_label]).to eq('1.*')
       expect(dep[:comperator]).to eq('*')
     end
+
+    it "parses correctly combined range selectors" do
+      product1.versions << Version.new(version: '0.7.0')
+      product1.versions << Version.new(version: '1.0.0')
+      product1.save
+
+      dep = parser.parse_requested_version '>= 0.2, < 0.7', dep1, product1
+      expect(dep).not_to be_nil
+      expect(dep[:version_requested]).to eq('0.6.2')
+      expect(dep[:version_label]).to eq('>= 0.2, < 0.7')
+      expect(dep[:comperator]).to eq('||')
+    end
   end
 end

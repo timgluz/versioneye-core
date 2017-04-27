@@ -23,7 +23,12 @@ class CargoParser < CommonParser
       return dependency
     end
 
-    if version[0] == '='
+    if version =~ /\,/
+      dependency[:version_requested]  = VersionService.from_common_range(product.versions, version, false)
+      dependency[:version_label]      = version
+      dependency[:comperator]         = "||"
+
+    elsif version[0] == '='
       version_label = version.gsub(/\=\s*/, '').to_s.strip
       version_db = product.versions.where(version: version_label).first
       unless version_db
