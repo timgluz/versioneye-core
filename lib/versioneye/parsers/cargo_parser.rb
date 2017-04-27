@@ -76,7 +76,7 @@ class CargoParser < CommonParser
       dependency[:version_label]      = version_label
       dependency[:comperator]         = '~'
     elsif version =~ /\.[\*|x|X]/
-      dependency[:version_requested]  = newest_wildcard_version(product.versions, version)
+      dependency[:version_requested] = VersionService.newest_version_from_wildcard(product.versions, version)
       dependency[:version_label]      = version
       dependency[:comperator]         = '*'
     end
@@ -119,22 +119,6 @@ class CargoParser < CommonParser
       else
         version_label
       end
-  end
-
-  def newest_wildcard_version(versions, version_label)
-    lower_border = wildcard_lower_border version_label
-    upper_border = wildcard_upper_border version_label
-    if lower_border.nil? or upper_border.nil?
-      return version_label
-    end
-
-    greater_than = VersionService.greater_than_or_equal versions, lower_border, true
-    newest_version = VersionService.smaller_than(greater_than, upper_border)
-    if newest_version
-      newest_version
-    else
-      version_label
-    end
   end
 
   # turns caret semver selector into lower version
@@ -219,42 +203,6 @@ class CargoParser < CommonParser
       upper_ver.major += 1
       upper_ver.minor = 0
       upper_ver.patch = 0
-    end
-
-    upper_ver.to_s
-  end
-
-  # finds the lower version of the wildcard selector
-  # replaces each * with 0
-  def wildcard_lower_border(version_label)
-    version = version_label.to_s.gsub(/\*+/, '0').to_s
-    lower_ver = SemVer.parse version
-    return nil if lower_ver.nil?
-
-    #remove metadata and prerelease details
-    lower_ver.metadata = nil
-    lower_ver.prerelease = nil
-
-    lower_ver.to_s
-  end
-
-  #finds the highest version of the wildcard selector
-  # replaces each * with 0 and increments rightmost non-zero value
-  def wildcard_upper_border(version_label)
-    version = version_label.to_s.gsub(/\*+/, '0').to_s
-    upper_ver = SemVer.parse version
-    return nil if upper_ver.nil?
-
-    #remove metadata and prerelease details
-    upper_ver.metadata = nil
-    upper_ver.prerelease = nil
-
-    if version_label =~ /^\d+\.\d+\.[\*|x|X]/
-      upper_ver.minor += 1
-    elsif version_label =~ /^\d+\.[\*|x|X]/
-      upper_ver.major += 1
-    elsif version_label =~ /\*|x|X/
-      upper_ver.major = FIXNUM_MAX #earliest rules should match this aka use latest version rule
     end
 
     upper_ver.to_s

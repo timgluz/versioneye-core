@@ -79,25 +79,6 @@ describe CargoParser do
     end
   end
 
-  context "wildcard_lower_border" do
-    it "returns correct lower border" do
-      expect( parser.wildcard_lower_border('1.2.*')).to eq('1.2.0')
-      expect( parser.wildcard_lower_border('1.*')).to eq('1.0.0')
-      expect( parser.wildcard_lower_border('*')).to eq('0.0.0')
-    end
-  end
-
-  context "wildcard_upper_border" do
-    it "returns correct upper borders" do
-      expect( parser.wildcard_upper_border('1.2.*')).to eq('1.3.0')
-      expect( parser.wildcard_upper_border('1.*')).to eq('2.0.0')
-      expect( parser.wildcard_upper_border('0.6.*')).to eq('0.7.0')
-      expect( parser.wildcard_upper_border('0.*')).to eq('1.0.0')
-      expect( parser.wildcard_upper_border('*')).to eq("#{CargoParser::FIXNUM_MAX}.0.0")
-    end
-  end
-
-
   context "parse_requested_version" do
     before do
       product1.versions << Version.new(version: '0.6.0')
