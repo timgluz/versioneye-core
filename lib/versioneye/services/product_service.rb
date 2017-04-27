@@ -134,7 +134,7 @@ class ProductService < Versioneye::Service
   def self.update_meta_data product, update_used_by = true
     self.update_version_data  product, false
     if update_used_by == true
-      self.update_used_by_count product, false
+      self.update_used_by_count product, true
     end
     self.update_average_release_time product
     self.update_followers_for product
