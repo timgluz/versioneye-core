@@ -4,19 +4,33 @@
     Hey <%= @user.fullname %>,
 
     <p style="padding-bottom: 0px;">
-      The public VersionEye API is exposing a lot of information about open source projects. If you know the coordinates of a component (software library) in a certain package manager, you can use the VersionEye API fetch all kind of meta information about the component. Meta information like available versions, licenses, security vulnerabilities and many more.
+      Hope you are doing well. Here are the latest news from VersionEye.
+    </p>
+    <h2>Shazam for software libraries</h2>
+    <p>
+      Nowadays its’ common to use package managers to describe, fetch and install 3rd party open source dependencies. But that was not always the case and there are many legacy projects out there in the Enterprises of this world there 3rd party libraries are stored in a “lib” directory without any documentation. It’s not a rare case that there are dependencies like a “beanutils.jar”. But which version is it? Which license does it have? Are there any known security vulnerabilities? Nobody knows!
     </p>
     <p>
-      But what if you don’t know the coordinates of a component? What if you have somewhere on your disk a “beanutils.jar” and you don’t know which version it is or to which Maven GroupId it belongs to? You don’t know which license it has and you don’t know if it is vulnerable or not! For this problem the VersionEye API has a solution now. Simply create the SHA1 value for the “beanutils.jar” file and send it to the VersionEye API. You will get back the coordinates of the component in the corresponding package manager.
+      That’s why we developed a command line tool which can identify those files and output an inventory with all relevant information. The <a href="https://github.com/versioneye/veye-checker">veye_checker</a> is implemented in Rust and we have binaries for Windows, Linux and Mac OS X which run out of the box! Simply download the binary from <a href="https://github.com/versioneye/veye-checker/releases/tag/v0.1.0">here</a>, make the binary executable and run this command:
     </p>
+    <pre style="margin: 0 0 1.75em;
+    max-width: 100%;
+    padding: .6em;
+    background: #f7fafb;
+    border: 1px solid #e3edf3;
+    border-radius: 3px;
+    font-family: "Courier 10 Pitch", Courier, monospace;
+    font-size: 15px;
+    font-size: 1.5rem;
+    line-height: 1.5;
+    white-space: pre;
+    overflow: auto;">./veye_checker resolve ~/lib -a "YOUR_API_KEY" -o inventory.csv</pre>
     <p>
-      This works for Java, C#, Node.JS and Python. All together we have almost 10 Million SHA values in our database. Support for Ruby and other languages is coming soon. Read more about this new feature <a href="https://blog.versioneye.com/2017/02/08/identifying-components-by-sha-values/">here</a>
+      The results is a CSV which shows you exactly the files, their coordinates in the corresponding package manager, their license, the number of security vulnerabilities and a link to their VersionEye page. Read more <a href="https://blog.versioneye.com/2017/04/27/shazam-for-software-libraries/">here</a>.
     </p>
+    <h2>Maven VersionEye Plugin 3.11.2</h2>
     <p>
-      <a href="https://blog.versioneye.com/2017/02/08/identifying-components-by-sha-values/"><img src="https://versioneye.files.wordpress.com/2017/02/screen-shot-2017-02-22-at-08-48-40.png" style="max-width: 100%" ></img></a>
-    </p>
-    <p>
-      Currently we are working on a command line tool (implemented in Rust) which scans a directory or a whole hard disk and identifies binaries based on their SHA values.
+      This releases improves the implementation of this configuration option "transitiveDependencies". Now this option will collect ALL transitive dependencies with RUNTIME scope. That means transitive dependencies with TEST or PROVIDED scopes are ignored. Read more <a href="https://github.com/versioneye/versioneye_maven_plugin/releases/tag/3.11.2">here</a>.
     </p>
     <p>
       Your feedback is highly appreciated.<br/>

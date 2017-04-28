@@ -9,7 +9,9 @@ class StatisticService < Versioneye::Service
       Product::A_LANGUAGE_CSHARP,
       Product::A_LANGUAGE_R,
       Product::A_LANGUAGE_CLOJURE,
-      Product::A_LANGUAGE_OBJECTIVEC
+      Product::A_LANGUAGE_OBJECTIVEC,
+      Product::A_LANGUAGE_RUST,
+      Product::A_LANGUAGE_CHEF
     ]
 
   def self.language_project_count

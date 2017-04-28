@@ -1,5 +1,12 @@
 class Author < Versioneye::Model
 
+# The Author collections is an aggregation for the Developer collection.
+# The crawlers are storing author & maintainer information in the
+# Developer collection. The AuthorService is generating out of the
+# Developer colleciton Author profiles. An Author profile can combine
+# multiple entries from the Developer collection. That's for example the
+# case if a developer is publishing packages with 2 different emails addresses.
+
   include Mongoid::Document
   include Mongoid::Timestamps
 
