@@ -30,3 +30,6 @@ winhttp = "0.4.0"
 
 [target.'cfg(unix)'.dev-dependencies]
 mio = "0.0.1"
+
+[target.i686-pc-windows-gnu.dependencies]
+winapi-i686-pc-windows-gnu = { version = "0.3", path = "i686" }

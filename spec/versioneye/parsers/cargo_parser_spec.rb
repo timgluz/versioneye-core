@@ -366,6 +366,17 @@ describe CargoParser do
     )
   }
 
+  let(:product12){
+    Product.new(
+      prod_type: Project::A_TYPE_CARGO,
+      language: Product::A_LANGUAGE_RUST,
+      prod_key: 'winapi-i686-pc-windows-gnu',
+      name: 'winapi-i686-pc-windows-gnu',
+      version: '0.3'
+    )
+  }
+
+
   context 'parse_content' do
     before do
       product2.versions << Version.new(version: '1.0.0')
@@ -395,13 +406,14 @@ describe CargoParser do
 
       product10.save
       product11.save
+      product12.save
     end
 
     it "parses project file correctly" do
       content = File.read test_filepath
       project = parser.parse_content content
       expect(project.nil?).to be_falsey
-      expect(project.projectdependencies.size).to eq(10)
+      expect(project.projectdependencies.size).to eq(11)
 
       dep1 = project.dependencies[0]
       expect(dep1[:name]).to eq(product2[:name])
@@ -504,6 +516,17 @@ describe CargoParser do
       expect(dep10[:comperator]).to eq('^')
       expect(dep10[:outdated]).to be_falsey
       expect(dep10[:target]).to eq('unix')
+
+      dep11 = project.dependencies[10]
+      expect(dep11[:name]).to eq(product12[:name])
+      expect(dep11[:prod_key]).to eq(product12[:prod_key])
+      expect(dep11[:language]).to eq(product12[:language])
+      expect(dep11[:scope]).to eq(Dependency::A_SCOPE_COMPILE)
+      expect(dep11[:version_requested]).to eq('0.4.0')
+      expect(dep11[:comperator]).to eq('^')
+      expect(dep11[:outdated]).to be_falsey
+      expect(dep11[:target]).to eq('i686-pc-windows-gnu')
+
     end
   end
 end

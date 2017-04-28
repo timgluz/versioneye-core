@@ -56,9 +56,15 @@ class CargoParser < CommonParser
   end
 
   def extract_target_id(target_key)
-    m = target_key.to_s.match(/\Acfg\((.+)\)\z/)
-    return if m.nil?
-    m[1] if m.size == 2
+    id = target_key.to_s.strip
+
+    # extract target id from cfg
+    if id =~ /\Acfg\(/i
+      m = id.to_s.match(/\Acfg\((.+)\)\z/)
+      id = m[1] if m  and m.size == 2
+    end
+
+    id
   end
 
   def parse_dependencies(dependencies, project, scope, target_id = nil)
