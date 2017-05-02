@@ -115,6 +115,11 @@ describe ParserStrategy do
       expect( parser.is_a?(ShrinkwrapParser) ).to be_truthy
     end
 
+    it "returns CargoParser" do
+      parser = ParserStrategy.parser_for(Project::A_TYPE_CARGO, 'Cargo.toml')
+      expect( parser.is_a?(CargoParser) ).to be_truthy
+    end
+
     it "returns nil" do
       parser = ParserStrategy.parser_for( "HujBuy", "lein" )
       expect( parser ).to be_nil

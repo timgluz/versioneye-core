@@ -1,0 +1,35 @@
+[package]
+name = "cargo_parser"
+version = "2.4.0"
+authors = ["Demo Project <admin@acm.org>"]
+
+[dependencies]
+serde = "1.0.0"
+time  = "~1.2.3"
+rand = { git = "https://github.com/rust-lang-nursery/rand", branch = "next" }
+hello_utils = { path = "hello_utils" }
+www = { version = "0.3", optional = true }
+
+[dependencies.multipart]
+version = "1.2.0"
+default-features = false
+features = ["client", "hyper"]
+
+[dev-dependencies]
+tempdir = "= 0.3"
+
+[build-dependencies]
+gcc = "> 0.3"
+
+
+[replace]
+"rand:0.3.14" = { git = 'https://github.com/rust-lang-nursery/rand' }
+
+[target.'cfg(windows)'.dependencies]
+winhttp = "0.4.0"
+
+[target.'cfg(unix)'.dev-dependencies]
+mio = "0.0.1"
+
+[target.i686-pc-windows-gnu.dependencies]
+winapi-i686-pc-windows-gnu = { version = "0.3", path = "i686" }

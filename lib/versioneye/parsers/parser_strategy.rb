@@ -91,6 +91,10 @@ class ParserStrategy
 
       when Project::A_TYPE_CPAN
         return CpanParser.new
+
+      when Project::A_TYPE_CARGO
+        return CargoParser.new
+
       else
         nil
 

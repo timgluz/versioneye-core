@@ -47,7 +47,7 @@ class NugetParser < CommonParser
   end
 
   # removes leading zeros and excess 0 after patch part
-  #breaking changes from 3.4 
+  #breaking changes from 3.4
   #details: https://docs.microsoft.com/en-us/nuget/create-packages/dependency-versions
   def normalize_version(version_label)
     version, metadata, separator = split_version( version_label )
@@ -179,7 +179,7 @@ class NugetParser < CommonParser
 
     elsif ( m = rules[:exact].match(version) )
       lbl = m[:semver].to_s.strip
-      possible_formats = [lbl, normalize_version(lbl), pad_zeros(lbl), (lbl + '.0')] 
+      possible_formats = [lbl, normalize_version(lbl), pad_zeros(lbl), (lbl + '.0')]
       res = VersionService.versions_by_whitelist(product.versions, possible_formats)
       latest_version = VersionService.newest_version res
 
