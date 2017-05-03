@@ -120,6 +120,11 @@ describe ParserStrategy do
       expect( parser.is_a?(CargoParser) ).to be_truthy
     end
 
+    it "returns CargoLockParser" do
+      parser = ParserStrategy.parser_for(Project::A_TYPE_CARGO, 'Cargo.lock')
+      expect( parser.is_a?(CargoLockParser) ).to be_truthy
+    end
+
     it "returns nil" do
       parser = ParserStrategy.parser_for( "HujBuy", "lein" )
       expect( parser ).to be_nil
