@@ -72,13 +72,6 @@ class CargoLockParser < CommonParser
     nil
   end
 
-  def build_package_index(packages)
-    packages.to_a.reduce({}) do |idx, pkg_doc|
-      idx.store [pkg_doc[:name], pkg_doc[:version]], pkg_doc
-      idx
-    end
-  end
-
   def parse_recursive_dependencies(project, packages_idx, dep_line, parent_dep = nil,  depth = 0)
     if depth > 32
       log.error "parse_recursive_dependencies: too deep stack - cycled deps"
@@ -91,27 +84,27 @@ class CargoLockParser < CommonParser
       return
     end
 
-    parent_doc = packages_idx.fetch([ pkg_id, version_label ])
+    pkg_doc = packages_idx.fetch([ pkg_id, version_label ])
     product = Product.where(
       language: Product::A_LANGUAGE_RUST,
       prod_key: pkg_id
     ).first
 
-    parent_dep = init_dependency(product, pkg_id, version_label, parent_dep, depth)
-    parse_requested_version(version_label, parent_dep, product)
+    current_dep = init_dependency(product, pkg_id, version_label, parent_dep, depth)
+    parse_requested_version(version_label, current_dep, product)
 
-    project.out_number += 1 if ProjectdependencyService.outdated?(parent_dep)
+    project.out_number += 1 if ProjectdependencyService.outdated?(current_dep)
     project.unknown_number += 1 if product.nil?
-    project.dependencies << parent_dep
+    project.dependencies << current_dep
 
     #parse subdependencies from doc[:package].parentdoc[:dependencies]
-    parent_doc[:dependencies].to_a.each do |sub_dep_line|
+    pkg_doc[:dependencies].to_a.each do |sub_dep_line|
       parse_recursive_dependencies(
-        project, packages_idx, sub_dep_line, parent_dep, depth += 1
+        project, packages_idx, sub_dep_line, current_dep, depth + 1
       )
     end
 
-    parent_dep
+    current_dep
   end
 
   def parse_requested_version(version, dependency, product)
@@ -149,8 +142,17 @@ class CargoLockParser < CommonParser
     m = @dep_rule.match dep_text.to_s.strip
     return if m.nil?
 
-    [m[:name], m[:version]]
+    [m[:name].to_s.strip, m[:version].to_s.strip ]
   end
+
+  #makes it faster to lookup transitive dependencies on recursive path
+  def build_package_index(packages)
+    packages.to_a.reduce({}) do |idx, pkg_doc|
+      idx.store [pkg_doc[:name], pkg_doc[:version]], pkg_doc
+      idx
+    end
+  end
+
 
   def init_project(project_doc)
     Project.new(
@@ -169,17 +171,19 @@ class CargoLockParser < CommonParser
       language: Product::A_LANGUAGE_RUST,
       version_label: version_label,
       parent_prod_key: parent_dep[:prod_key],
-      parent_version: parent_dep[:version_label]
+      parent_version: parent_dep[:version_label],
     ).first_or_initialize
 
     if product
       dep[:language] = product[:language]
       dep[:prod_key] = product[:prod_key]
       dep[:version_current] = product[:version]
+    else
+      log.warn "init_dependency: no product for #{pkg_id}/#{version_label}"
     end
 
     if parent_dep
-      dep[:transitive] = (depth > 0) ? true : false
+      dep[:transitive] = (depth > 0)
       dep[:parent_id] = parent_dep[:id]
       dep[:parent_prod_key] = parent_dep[:prod_key]
       dep[:parent_version] = parent_dep[:version_label]

@@ -55,6 +55,11 @@ describe CargoLockParser do
   }
 
   context "parse_requested_version" do
+    after do
+      Project.delete_all
+      Projectdependency.delete_all
+    end
+
     it "updates dependency versions if product and it version exists" do
       product1.versions << Version.new(version: '0.3.6')
       product1.save
@@ -205,11 +210,78 @@ describe CargoLockParser do
     )
   }
 
+  let(:product4){
+    Product.new(
+      language: Product::A_LANGUAGE_RUST,
+      prod_type: Project::A_TYPE_CARGO,
+      prod_key: 'winapi',
+      name: 'winapi',
+      version: '0.1.20'
+    )
+  }
+
+  let(:product5){
+    Product.new(
+      language: Product::A_LANGUAGE_RUST,
+      prod_type: Project::A_TYPE_CARGO,
+      prod_key: 'libc',
+      name: 'libc',
+      version: '0.1.8'
+    )
+  }
+
+  let(:product6){
+    Product.new(
+      language: Product::A_LANGUAGE_RUST,
+      prod_type: Project::A_TYPE_CARGO,
+      prod_key: 'user32-sys',
+      name: 'user32-sys',
+      version: '0.1.1'
+    )
+  }
+
+  let(:product7){
+    Product.new(
+      language: Product::A_LANGUAGE_RUST,
+      prod_type: Project::A_TYPE_CARGO,
+      prod_key: 'winapi-build',
+      name: 'winapi-build',
+      version: '0.1.0'
+    )
+  }
+
+  let(:product8){
+    Product.new(
+      language: Product::A_LANGUAGE_RUST,
+      prod_type: Project::A_TYPE_CARGO,
+      prod_key: 'winmm-sys',
+      name: 'winmm-sys',
+      version: '0.1.0'
+    )
+  }
+
+
   context "parse_content" do
     before do
       product3.versions << Version.new(version: '0.1.0')
       product3.versions << Version.new(version: '0.2.0')
       product3.save
+
+      product4.versions << Version.new(version: '0.1.20')
+      product4.save
+
+      product5.versions << Version.new(version: '0.1.8')
+      product5.save
+
+      product6.versions << Version.new(version: '0.1.1')
+      product6.save
+
+      product7.versions << Version.new(version: '0.1.0')
+      product7.save
+
+      product8.versions << Version.new(version: '0.1.0')
+      product8.save
+
     end
 
     after do
@@ -233,6 +305,109 @@ describe CargoLockParser do
       expect(dep1[:comperator]).to eq('=')
       expect(dep1[:outdated]).to be_truthy
       expect(dep1[:transitive]).to be_falsey
+
+      dep2 = proj.dependencies[1]
+      expect(dep2[:name]).to eq(product4[:name])
+      expect(dep2[:prod_key]).to eq(product4[:prod_key])
+      expect(dep2[:version_requested]).to eq(product4[:version])
+      expect(dep2[:version_label]).to eq(product4[:version])
+      expect(dep2[:comperator]).to eq('=')
+      expect(dep2[:outdated]).to be_falsey
+      expect(dep2[:transitive]).to be_truthy
+      expect(dep2[:deepness]).to eq(1)
+      expect(dep2[:parent_id]).to eq(dep1.id)
+      expect(dep2[:parent_prod_key]).to eq(dep1[:prod_key])
+      expect(dep2[:parent_version]).to eq(dep1[:version_label])
+
+      dep3 = proj.dependencies[2]
+      expect(dep3[:name]).to eq(product5[:name])
+      expect(dep3[:prod_key]).to eq(product5[:prod_key])
+      expect(dep3[:version_requested]).to eq(product5[:version])
+      expect(dep3[:version_label]).to eq(product5[:version])
+      expect(dep3[:comperator]).to eq('=')
+      expect(dep3[:outdated]).to be_falsey
+      expect(dep3[:transitive]).to be_truthy
+      expect(dep3[:deepness]).to eq(2)
+      expect(dep3[:parent_prod_key]).to eq(dep2[:prod_key])
+      expect(dep3[:parent_version]).to eq(dep2[:version_label])
+
+      dep4 = proj.dependencies[3]
+      expect(dep4[:name]).to eq(product6[:name])
+      expect(dep4[:prod_key]).to eq(product6[:prod_key])
+      expect(dep4[:version_requested]).to eq(product6[:version])
+      expect(dep4[:version_label]).to eq(product6[:version])
+      expect(dep4[:comperator]).to eq('=')
+      expect(dep4[:outdated]).to be_falsey
+      expect(dep4[:transitive]).to be_falsey
+      expect(dep4[:deepness]).to eq(0)
+      expect(dep4[:parent_prod_key]).to be_nil
+      expect(dep4[:parent_version]).to be_nil
+
+
+      dep5 = proj.dependencies[4]
+      expect(dep5[:name]).to eq(product4[:name])
+      expect(dep5[:prod_key]).to eq(product4[:prod_key])
+      expect(dep5[:version_requested]).to eq(product4[:version])
+      expect(dep5[:version_label]).to eq(product4[:version])
+      expect(dep5[:comperator]).to eq('=')
+      expect(dep5[:outdated]).to be_falsey
+      expect(dep5[:transitive]).to be_truthy
+      expect(dep5[:deepness]).to eq(1)
+      expect(dep5[:parent_id]).to eq(dep4.id)
+      expect(dep5[:parent_prod_key]).to eq(dep4[:prod_key])
+      expect(dep5[:parent_version]).to eq(dep4[:version_label])
+
+      dep6 = proj.dependencies[5]
+      expect(dep6[:name]).to eq(product7[:name])
+      expect(dep6[:prod_key]).to eq(product7[:prod_key])
+      expect(dep6[:version_requested]).to eq(product7[:version])
+      expect(dep6[:version_label]).to eq(product7[:version])
+      expect(dep6[:comperator]).to eq('=')
+      expect(dep6[:outdated]).to be_falsey
+      expect(dep6[:transitive]).to be_truthy
+      expect(dep6[:deepness]).to eq(1)
+      expect(dep6[:parent_id]).to eq(dep4.id)
+      expect(dep6[:parent_prod_key]).to eq(dep4[:prod_key])
+      expect(dep6[:parent_version]).to eq(dep4[:version_label])
+
+      dep7 = proj.dependencies[6]
+      expect(dep7[:name]).to eq(product4[:name])
+      expect(dep7[:prod_key]).to eq(product4[:prod_key])
+      expect(dep7[:version_requested]).to eq(product4[:version])
+      expect(dep7[:version_label]).to eq(product4[:version])
+      expect(dep7[:comperator]).to eq('=')
+      expect(dep7[:outdated]).to be_falsey
+      expect(dep7[:transitive]).to be_falsey
+      expect(dep7[:deepness]).to eq(0)
+      expect(dep7[:parent_prod_key]).to be_nil
+      expect(dep7[:parent_version]).to be_nil
+
+      dep8 = proj.dependencies[7]
+      expect(dep8[:name]).to eq(product8[:name])
+      expect(dep8[:prod_key]).to eq(product8[:prod_key])
+      expect(dep8[:version_requested]).to eq(product8[:version])
+      expect(dep8[:version_label]).to eq(product8[:version])
+      expect(dep8[:comperator]).to eq('=')
+      expect(dep8[:outdated]).to be_falsey
+      expect(dep8[:transitive]).to be_falsey
+      expect(dep8[:deepness]).to eq(0)
+      expect(dep8[:parent_prod_key]).to be_nil
+      expect(dep8[:parent_version]).to be_nil
+
+      dep9 = proj.dependencies[8]
+      expect(dep9[:name]).to eq(product4[:name])
+      expect(dep9[:prod_key]).to eq(product4[:prod_key])
+      expect(dep9[:version_requested]).to eq(product4[:version])
+      expect(dep9[:version_label]).to eq(product4[:version])
+      expect(dep9[:comperator]).to eq('=')
+      expect(dep9[:outdated]).to be_falsey
+      expect(dep9[:transitive]).to be_truthy
+      expect(dep9[:deepness]).to eq(1)
+      expect(dep9[:parent_id]).to eq(dep8.id)
+      expect(dep9[:parent_prod_key]).to eq(dep8[:prod_key])
+      expect(dep9[:parent_version]).to eq(dep8[:version_label])
+
+
     end
   end
 end
