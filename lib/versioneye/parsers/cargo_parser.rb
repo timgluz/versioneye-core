@@ -150,6 +150,7 @@ class CargoParser < CommonParser
     if product.nil?
       log.error "dependency #{dependency} has no product or its unknown"
       dependency[:version_requested] = version
+      dependency[:version_label]     = version
       return dependency
     end
 

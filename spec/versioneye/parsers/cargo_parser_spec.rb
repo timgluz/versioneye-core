@@ -96,6 +96,15 @@ describe CargoParser do
       expect(dep[:comperator]).to eq('=')
     end
 
+    it "uses version label when product is nil" do
+      dep = parser.parse_requested_version('^0.2', dep1, nil)
+
+      expect(dep).not_to be_nil
+      expect(dep[:version_requested]).to eq('^0.2')
+      expect(dep[:version_label]).to eq('^0.2')
+      expect(dep[:comperator]).to eq('=')
+    end
+
     it "uses latest product version if version label is *, x, X" do
       dep = parser.parse_requested_version("*", dep1, product1)
 
