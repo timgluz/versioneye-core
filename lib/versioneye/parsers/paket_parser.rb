@@ -46,7 +46,7 @@ class PaketParser < CommonParser
     })
   end
 
-  def parse_content(paket_doc)
+  def parse_content(paket_doc, token = nil)
     lines = paket_doc.split(/\n+/)
     if lines.empty?
       log.error "PaketParser: got empty file"
@@ -55,10 +55,10 @@ class PaketParser < CommonParser
 
     deps = []
     current_group = '*'
-    lines.each do |line| 
+    lines.each do |line|
       new_group, parsed_dep = parse_line(current_group, line)
       current_group = new_group if current_group != new_group
-    
+
       deps << parsed_dep if parsed_dep
     end
 
@@ -75,7 +75,7 @@ class PaketParser < CommonParser
     end
 
     tkns.shift if tkns.first == '' #remove empty string that caused by tabulation in groups
-    
+
     source_id, pkg_id, comperator, version = tkns
     source_id.downcase!
     dep_dt = {
@@ -99,9 +99,9 @@ class PaketParser < CommonParser
         dep_dt[:comperator] = '='
         dep_dt[:version] = comperator
       end
-      
+
       return [current_group, dep_dt]
-    
+
     when 'git'
       if comperator?(comperator) and version
         dep_dt[:comperator] = comperator
@@ -110,7 +110,7 @@ class PaketParser < CommonParser
         dep_dt[:comperator] = '='
         dep_dt[:version] = comperator
       end
-       
+
       return [current_group, dep_dt]
     when 'github'
       pkg_id, version = pkg_id.split(':')
@@ -145,10 +145,10 @@ class PaketParser < CommonParser
     if version_label.to_s.empty? and product
       dep[:version] = product.version
     end
-  
+
     dep_db = init_dependency(dep) #TODO: should i moved to parse_line?
     parse_requested_version(version_label, dep_db, product)
-    
+
     project.out_number += 1 if dep_db.outdated?
     project.unknown_number += 1 if product.nil?
     project.projectdependencies << dep_db
@@ -193,7 +193,7 @@ class PaketParser < CommonParser
     return dependency if product.nil?
     return dependency if ignore_source?(dependency[:source]) #TODO: HOW TO HANDLE WITH GIT/GIST
 
-    if version_label.to_s.empty? 
+    if version_label.to_s.empty?
       return self.update_requested_with_current(dependency, product)
     end
 
@@ -225,7 +225,7 @@ class PaketParser < CommonParser
     end
 
     #TODO: how to handle http, git, gist
-    
+
     dependency
   end
 end

@@ -20,7 +20,10 @@ class CargoParser < CommonParser
     nil
   end
 
-  def parse_content(content)
+  # params:
+  #   content - string, content of Cargo.toml file
+  #   token - empty param to comply with CommonParser
+  def parse_content(content, token = nil)
     return nil if content.to_s.empty?
     return nil if content.to_s.strip.eql?('Not Found')
 
