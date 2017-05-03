@@ -302,6 +302,12 @@ describe ProjectService do
       described_class.type_by_filename("app/project.clj/new").should be_nil
     end
 
+    it "returns Cargo" do
+      described_class.type_by_filename("/Cargo.toml").should eql(Project::A_TYPE_CARGO)
+      described_class.type_by_filename("/Cargo.lock").should eql(Project::A_TYPE_CARGO)
+
+    end
+
   end
 
 

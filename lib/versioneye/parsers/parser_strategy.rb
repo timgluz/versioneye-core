@@ -93,8 +93,11 @@ class ParserStrategy
         return CpanParser.new
 
       when Project::A_TYPE_CARGO
-        return CargoParser.new
-
+        if url.match( /Cargo\.lock\z/i )
+          return CargoLockParser.new
+        else
+          return CargoParser.new
+        end
       else
         nil
 
