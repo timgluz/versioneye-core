@@ -57,6 +57,7 @@ describe CargoParser do
       expect( parser.caret_upper_border('1.2') ).to eq('2.0.0')
       expect( parser.caret_upper_border('1') ).to eq('2.0.0')
       expect( parser.caret_upper_border('0.2.3')).to eq('0.3.0')
+      expect( parser.caret_upper_border('0.3') ).to eq('0.4.0')
       expect( parser.caret_upper_border('0.0.3')).to eq('0.0.4')
       expect( parser.caret_upper_border('0.0.0')).to eq('1.0.0')
     end
@@ -202,6 +203,40 @@ describe CargoParser do
       expect(dep[:version_requested]).to eq('0.6.2')
       expect(dep[:version_label]).to eq('0.6')
       expect(dep[:comperator]).to eq('^')
+    end
+
+    it "parses correctly ^0.3" do
+      product1.versions = []
+      product1.versions << Version.new(version: '0.2.9')
+      product1.versions << Version.new(version: '0.3.1')
+      product1.versions << Version.new(version: '0.3.2')
+      product1.versions << Version.new(version: '0.3.15')
+      product1.versions << Version.new(version: '0.4.0')
+      product1[:version] = '0.4.0'
+      product1.save
+
+      dep = parser.parse_requested_version '^0.3', dep1, product1
+      expect(dep).not_to be_nil
+      expect(dep[:version_requested]).to eq('0.3.15')
+      expect(dep[:version_label]).to eq('0.3')
+      expect(dep[:comperator]).to eq('^')
+    end
+
+    it "^0.3 shouldnt be outdated when matches range" do
+      product1.versions = []
+      product1.versions << Version.new(version: '0.2.9')
+      product1.versions << Version.new(version: '0.3.1')
+      product1.versions << Version.new(version: '0.3.2')
+      product1.versions << Version.new(version: '0.3.15')
+      product1[:version] = '0.3.15'
+      product1.save
+
+      dep = parser.parse_requested_version '^0.3', dep1, product1
+      expect(dep).not_to be_nil
+      expect(dep[:version_requested]).to eq('0.3.15')
+      expect(dep[:version_label]).to eq('0.3')
+      expect(dep[:comperator]).to eq('^')
+      expect(ProjectdependencyService.outdated?(dep)).to be_falsey
     end
 
     it "parses correctly tilde specifiers" do
