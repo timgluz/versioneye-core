@@ -17,7 +17,10 @@ class GodepParser < PackageParser
     return nil
   end
 
-  def parse_content(content)
+  # params:
+  #   content - string, Godep project file
+  #   token - empty param, to match CommonParser.parse_content
+  def parse_content(content, token = nil)
     raise "GodepParser.parse_content: empty document" if content.to_s.empty?
 
     godeps_doc = from_json content #replaces unicode spaces and returns symbolized doc
