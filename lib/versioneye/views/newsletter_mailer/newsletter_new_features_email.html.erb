@@ -4,39 +4,19 @@
     Hey <%= @user.fullname %>,
 
     <p style="padding-bottom: 0px;">
-      Hope you are doing well. Here are the latest news from VersionEye.
-    </p>
-    <h2>Shazam for software libraries</h2>
-    <p>
-      Nowadays its’ common to use package managers to describe, fetch and install 3rd party open source dependencies. But that was not always the case and there are many legacy projects out there in the Enterprises of this world there 3rd party libraries are stored in a “lib” directory without any documentation. It’s not a rare case that there are dependencies like a “beanutils.jar”. But which version is it? Which license does it have? Are there any known security vulnerabilities? Nobody knows!
+      Hope you are doing well.
     </p>
     <p>
-      That’s why we developed a command line tool which can identify those files and output an inventory with all relevant information. The <a href="https://github.com/versioneye/veye-checker">veye_checker</a> is implemented in Rust and we have binaries for Windows, Linux and Mac OS X which run out of the box! Simply download the binary from <a href="https://github.com/versioneye/veye-checker/releases/tag/v0.1.0">here</a>, make the binary executable and run this command:
+      Rust is a blazingly fast new language which guarantees thread safety! Our latest project, a command line tool to identify random components by their SHA values, is implemented in Rust. As we use Rust for our own purposes we want to track Rust dependencies of course That’s why added support for Rust now! VersionEye is tracking more than 9K Rust packages from crates.io now and they are all available through our public search.
     </p>
-    <pre style="margin: 0 0 1.75em;
-    max-width: 100%;
-    padding: .6em;
-    background: #f7fafb;
-    border: 1px solid #e3edf3;
-    border-radius: 3px;
-    font-family: "Courier 10 Pitch", Courier, monospace;
-    font-size: 15px;
-    font-size: 1.5rem;
-    line-height: 1.5;
-    white-space: pre;
-    overflow: auto;">./veye_checker resolve ~/lib -a "YOUR_API_KEY" -o inventory.csv</pre>
     <p>
-      The results is a CSV which shows you exactly the files, their coordinates in the corresponding package manager, their license, the number of security vulnerabilities and a link to their VersionEye page. Read more <a href="https://blog.versioneye.com/2017/04/27/shazam-for-software-libraries/">here</a>.
-    </p>
-    <h2>Maven VersionEye Plugin 3.11.2</h2>
-    <p>
-      This releases improves the implementation of this configuration option "transitiveDependencies". Now this option will collect ALL transitive dependencies with RUNTIME scope. That means transitive dependencies with TEST or PROVIDED scopes are ignored. Read more <a href="https://github.com/versioneye/versioneye_maven_plugin/releases/tag/3.11.2">here</a>.
+      Beside that VersionEye can parse cargo.toml and cargo.lock files. If you are using cargo to manage your Rust dependencies then you can let VersionEye monitore those files to receive notifications about new releases of your dependencies.
+      Read more <a href="https://blog.versioneye.com/2017/05/04/rust-support/">here</a>.
     </p>
     <p>
       Your feedback is highly appreciated.<br/>
       Simply reply to this email if you want to give feedback.
     </p>
-
     <p>
       Best Regards, <br/>
       Robert @ VersionEye <br/>

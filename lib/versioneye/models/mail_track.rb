@@ -43,6 +43,7 @@ class MailTrack < Versioneye::Model
     User.find self.user_id
   end
 
+
   def project
     Project.find self.project_id
   end
