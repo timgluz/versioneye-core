@@ -57,7 +57,7 @@ class VersionPdfService
 
     def self.fill_dto project, flatten = false
       uniq_array = []
-      dto = { :ok => [], :outdated => [], :unknown => [] }
+      dto = { :outdated => [], :unknown => [], :ok => [] }
 
       fill_dto_with project.dependencies, dto, uniq_array
 
