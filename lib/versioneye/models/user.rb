@@ -83,7 +83,7 @@ class User < Versioneye::Model
   validates_length_of :username, minimum: 2, maximum: 50, :message => 'length is not ok'
   validates_length_of :fullname, minimum: 2, maximum: 50, :message => 'length is not ok'
 
-  validates_format_of :username, with: /\A[a-zA-Z0-9_]+\z/
+  validates_format_of :username, with: /\A[a-zA-Z0-9_-]+\z/
   validates_format_of :email   , :with => A_EMAIL_REGEX, :message => 'is not valid.'
 
   before_validation :downcase_email, :check_password

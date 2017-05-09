@@ -63,10 +63,15 @@
       .small{
         font-size: 10px;
       }
+      thead { display: table-header-group }
+      tfoot { display: table-row-group }
+      tr { page-break-inside: avoid }
     </style>
   </head>
   <body>
     <div class="container">
+
+      <h1>Security Report for <%= project.name %></h1>
 
       <p>
         <b>Date:</b> <%= DateTime.now.strftime("%d.%m.%Y") %> <br/>
@@ -89,14 +94,18 @@
           <tbody>
             <% [:vulnerable, :ok].each do |key| %>
               <% project.sec_pdf_list[key].each do |dep| %>
+                <% cell_style = "" %>
+                <% if key.to_s.eql?("vulnerable") %>
+                  <% cell_style = "font-weight: bold; color: red;" %>
+                <% end %>
                 <tr>
-                  <td class="left">
+                  <td class="left" style="<%= cell_style %>">
                     (<%= dep[:language] %>) <%= dep[:component] %>
                     <% if dep[:group_id] %>
                       <br/> <span class='small'>GroupId: <%= dep[:group_id] %></span>
                     <% end %>
                   </td>
-                  <td class="left">
+                  <td class="left" style="<%= cell_style %>">
                     <% if dep[:version].to_s.strip.match(/\A\:path/) %>
                       :path
                     <% elsif dep[:version].to_s.strip.match(/\A\:git/) %>
@@ -105,7 +114,7 @@
                       <%= dep[:version].to_s.strip %>
                     <% end %>
                   </td>
-                  <td class="left"> <%= key.to_s %> </td>
+                  <td class="left" style="<%= cell_style %>"> <%= key.to_s %> </td>
                 </tr>
               <% end %>
             <% end %>
@@ -169,6 +178,26 @@
                 <div><%= link %></div>
               <% end %>
               <hr/>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <% if children && !children.empty? %>
+        <% children.each do |project| %>
+          <% if !project.sec_pdf_list[:vulnerable].to_a.empty? %>
+            <% project.sec_pdf_list[:vulnerable].each do |dep| %>
+              <h3>(<%= dep[:language] %>) <%= dep[:component] %> : <%= dep[:version] %></h3>
+              <% dep[:sv_ids].each do |sv_id| %>
+                <% sv = SecurityVulnerability.find sv_id %>
+                <% if sv %>
+                  <div><%= sv.summary %></div>
+                  <% sv.links.values.each do |link| %>
+                    <div><%= link %></div>
+                  <% end %>
+                  <hr/>
+                <% end %>
+              <% end %>
             <% end %>
           <% end %>
         <% end %>

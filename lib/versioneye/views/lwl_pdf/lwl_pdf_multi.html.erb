@@ -63,15 +63,19 @@
       .small{
         font-size: 10px;
       }
+      thead { display: table-header-group }
+      tfoot { display: table-row-group }
+      tr { page-break-inside: avoid }
     </style>
   </head>
   <body>
     <div class="container">
 
       <p>
-        <b>Date:</b> <%= DateTime.now.strftime("%d.%m.%Y") %> <br/>
+        <b>Date:</b> <%= DateTime.now.strftime("%b %d, %Y - %I:%m %p") %> <br/>
       </p>
 
+      <% license_libs = {} %>
       <% if projects && !projects.empty? %>
         <% projects.each do |project| %>
           <div style="padding-top: 15px;">
@@ -92,31 +96,77 @@
               <tbody>
                 <% [:whitelisted, :unknown, :violated].each do |key| %>
                   <% project.lwl_pdf_list[key].each do |dep| %>
+                    <% fcolor = "" %>
+                    <% fcolor = "red" if key.to_s.eql?('violated') %>
+                    <% fcolor = "orange" if key.to_s.eql?('unknown') %>
                     <tr>
-                      <td class="left"> <%= key.to_s %> </td>
                       <td class="left">
-                        (<%= dep[:language] %>) <%= dep[:component] %>
+                        <span style="color: <%= fcolor %>"><%= key.to_s %></span>
+                      </td>
+                      <td class="left">
+                        <span style="color: <%= fcolor %>">(<%= dep[:language] %>) <%= dep[:component] %></span>
                         <% if dep[:group_id] %>
                           <br/> <span class='small'>GroupId: <%= dep[:group_id] %></span>
                         <% end %>
                       </td>
                       <td class="left">
                         <% if dep[:version].to_s.strip.match(/\A\:path/) %>
-                          :path
+                          <span style="color: <%= fcolor %>">:path</span>
                         <% elsif dep[:version].to_s.strip.match(/\A\:git/) %>
-                          :git
+                          <span style="color: <%= fcolor %>">:git</span>
                         <% else %>
-                          <%= dep[:version].to_s.strip %>
+                          <span style="color: <%= fcolor %>"><%= dep[:version].to_s.strip %></span>
                         <% end %>
                       </td>
-                      <td class="left"> <%= dep[:license] %> </td>
+                      <td class="left">
+                        <% if !dep[:license_url].to_s.empty? %>
+                          <a href="<%= dep[:license_url].to_s %>"><span style="color: <%= fcolor %>"><%= dep[:license] %></span></a>
+                        <% else %>
+                          <span style="color: <%= fcolor %>"><%= dep[:license] %></span>
+                        <% end %>
+                      </td>
                     </tr>
+                    <% license_libs[dep[:license]] = [] if license_libs[dep[:license]].nil? %>
+                    <% license_lib_val = "#{dep[:language]} / #{dep[:component]}" %>
+                    <% license_libs[dep[:license]].push( license_lib_val ) if !license_libs[dep[:license]].include?( license_lib_val ) %>
                   <% end %>
                 <% end %>
               </tbody>
             </table>
           </div>
         <% end %>
+      <% end %>
+
+      <% if !license_libs.keys.empty? %>
+        <p>
+          <%= license_libs.keys.count %> licenses used through all dependencies:
+        </p>
+        <table class="list">
+          <thead>
+            <tr>
+              <td class="left">License</td>
+              <td class="left">Status</td>
+              <td class="left">Components</td>
+            </tr>
+          </thead>
+          <tbody>
+            <% license_libs.keys.each do |key| %>
+              <tr>
+                <td class="left"> <%= key.to_s %> </td>
+                <td class="left">
+                  <% if lwl.include_license_substitute?( key ) %>
+                    whitelisted by license whitelist
+                  <% else %>
+                    <span style="color: red;">not whitelisted</span>
+                  <% end %>
+                </td>
+                <td class="left">
+                  <%= license_libs[key].count %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
       <% end %>
 
       <p>
