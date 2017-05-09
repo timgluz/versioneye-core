@@ -112,8 +112,9 @@ class Project < Versioneye::Model
   scope :parents   , -> { where(parent_id: nil ) }
   scope :by_github , ->(reponame){ where(source: A_SOURCE_GITHUB, scm_fullname: reponame) }
 
-  attr_accessor :lwl_pdf_list # list of dtos for the License Whitelist PDF
-  attr_accessor :sec_pdf_list # list of dtos for the Security PDF
+  attr_accessor :lwl_pdf_list # list of dtos for the License  PDF export
+  attr_accessor :sec_pdf_list # list of dtos for the Security PDF export
+  attr_accessor :ver_pdf_list # list of dtos for the Version  PDF export
   attr_accessor :has_kids
 
   before_save :perpare_name_for_search

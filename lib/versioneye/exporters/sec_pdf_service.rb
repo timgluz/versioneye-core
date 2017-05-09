@@ -63,7 +63,7 @@ class SecPdfService
   private
 
 
-    def self.prepare_kids project, exclude_kids = false, flatten
+    def self.prepare_kids project, exclude_kids = false, flatten = false
       children = []
       return children if exclude_kids || flatten
 

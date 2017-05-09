@@ -41,10 +41,6 @@ module Versioneye
     require 'versioneye/services/component_whitelist_service'
     require 'versioneye/services/license_whitelist_service'
     require 'versioneye/services/license_service'
-    require 'versioneye/services/lwl_service'
-    require 'versioneye/services/lwl_pdf_service'
-    require 'versioneye/services/lwl_csv_service'
-    require 'versioneye/services/sec_pdf_service'
     require 'versioneye/services/sync_service'
     require 'versioneye/services/transfer_service'
     require 'versioneye/services/enterprise_service'
@@ -161,6 +157,12 @@ module Versioneye
     require 'versioneye/workers/team_notification_worker.rb'
 
     require 'versioneye/importers/sap_team_user_importer.rb'
+
+    require 'versioneye/exporters/lwl_service'
+    require 'versioneye/exporters/lwl_pdf_service'
+    require 'versioneye/exporters/lwl_csv_service'
+    require 'versioneye/exporters/sec_pdf_service'
+    require 'versioneye/exporters/version_pdf_service'
 
     def self.log
       Versioneye::Log.instance.log
