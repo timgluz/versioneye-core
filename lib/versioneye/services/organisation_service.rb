@@ -94,6 +94,7 @@ class OrganisationService < Versioneye::Service
     return false if orga.nil? || user.nil?
     return false if !member?( orga, user )
     return true  if owner?( orga, user )
+    return true  if user.admin == true
     return true  if orga.matattp == true
     return false
   end
