@@ -93,7 +93,7 @@
             </tr>
           </thead>
           <tbody>
-            <% [:ok, :outdated, :unknown].each do |key| %>
+            <% [:outdated, :unknown, :ok].each do |key| %>
               <% project.ver_pdf_list[key].each do |dep| %>
                 <% cell_style = "" %>
                 <% if key.to_s.eql?("outdated") %>
@@ -148,7 +148,7 @@
                 </tr>
               </thead>
               <tbody>
-                <% [:ok, :outdated, :unknown].each do |key| %>
+                <% [:outdated, :unknown, :ok].each do |key| %>
                   <% project.ver_pdf_list[key].each do |dep| %>
                     <% cell_style = "" %>
                     <% if key.to_s.eql?("outdated") %>

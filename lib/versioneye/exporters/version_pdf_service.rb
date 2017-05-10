@@ -67,9 +67,9 @@ class VersionPdfService
         end
       end
 
-      dto[:ok].sort_by!{ |hsh| hsh[:component] }
       dto[:outdated].sort_by!{ |hsh| hsh[:component] }
       dto[:unknown].sort_by!{ |hsh| hsh[:component] }
+      dto[:ok].sort_by!{ |hsh| hsh[:component] }
       project.ver_pdf_list = dto
       dto
     end
