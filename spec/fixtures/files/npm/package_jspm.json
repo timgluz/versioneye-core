@@ -1,0 +1,60 @@
+{
+  "jspm": {
+    "name": "jspm-react-component",
+    "dependencies": {
+      "react-dom": "npm:react-dom@^0.14.6"
+    },
+    "devDependencies": {
+      "plugin-babel": "npm:systemjs-plugin-babel@^0.0.5",
+      "systemjs-hot-reloader": "github:capaj/systemjs-hot-reloader@^0.5.1"
+    },
+    "peerDependencies": {
+      "core-js": "npm:core-js@^1.2.0"
+    },
+    "overrides": {
+      "github:capaj/systemjs-hot-reloader@0.5.5": {
+        "format": "detect",
+        "meta": {}
+      },
+      "npm:babel-runtime@5.8.34": {
+        "main": false,
+        "dependencies": {},
+        "optionalDependencies": {
+          "core-js": "^1.2.0"
+        }
+      },
+      "npm:fbjs@0.6.1": {
+        "dependencies": {}
+      },
+      "npm:inherits@2.0.1": {
+        "ignore": [
+          "test.js"
+        ]
+      },
+      "npm:react@0.14.6": {
+        "dependencies": {
+          "fbjs": "^0.6.1"
+        },
+        "format": "cjs",
+        "meta": {
+          "*": {
+            "globals": {
+              "process": "process"
+            }
+          }
+        },
+        "map": {
+          "fbjs/lib/ExecutionEnvironment.js": {
+            "production": "@empty"
+          },
+          "./lib/ReactDefaultPerf.js": {
+            "production": "@empty"
+          },
+          "./lib/ReactTestUtils.js": {
+            "production": "@empty"
+          }
+        }
+      }
+    }
+  }
+}

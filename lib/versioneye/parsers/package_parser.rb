@@ -7,7 +7,6 @@ class PackageParser < CommonParser
   # https://github.com/isaacs/node-semver
   # https://npmjs.org/doc/json.html
   # http://wiki.commonjs.org/wiki/Packages/1.1
-  #
   def parse ( url )
     return nil if url.to_s.empty?
 
@@ -48,8 +47,18 @@ class PackageParser < CommonParser
     if optionalDependencies && !optionalDependencies.empty?
       parse_dependencies optionalDependencies, project, Dependency::A_SCOPE_OPTIONAL
     end
-
     project.dep_number = project.dependencies.size
+
+    if data.has_key?['jspm']
+      jspm_parser = JspmParser.new
+      #JSPM parser expects that all the fields are keywords
+      symbolized_doc = JSON.parse(content, symbolize_names: true)
+      child_project = jspm_parser.parse_project_doc(symbolized_doc, project.id)
+      if child_project
+        project_dep_number += child_project.dependencies.size
+      end
+    end
+
     project
   rescue => e
     log.error e.message
@@ -317,6 +326,7 @@ class PackageParser < CommonParser
     version
   end
 
+  #TODO: remove it as it is used nowhere
   def parse_json_safely(json_txt, keywordize =  true)
     json_txt = json_txt.to_s.strip
     return nil if json_txt.nil?

@@ -21,6 +21,7 @@ class Project < Versioneye::Model
   A_TYPE_GODEP     = 'Godep'
   A_TYPE_CPAN      = 'Cpan'
   A_TYPE_CARGO     = 'Cargo'
+  A_TYPE_JSPM      = 'Jspm'
 
   A_SOURCE_UPLOAD    = 'upload'
   A_SOURCE_URL       = 'url'
