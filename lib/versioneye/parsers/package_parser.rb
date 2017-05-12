@@ -327,15 +327,4 @@ class PackageParser < CommonParser
     end
     version
   end
-
-  #TODO: remove it as it is used nowhere
-  def parse_json_safely(json_txt, keywordize =  true)
-    json_txt = json_txt.to_s.strip
-    return nil if json_txt.nil?
-
-    JSON.parse(json_txt, symbolize_names: (keywordize == true) )
-  rescue
-    logger.error "parse_json_safely: failed to parse json text: `#{json_txt}`"
-    nil
-  end
 end
