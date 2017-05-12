@@ -49,13 +49,15 @@ class PackageParser < CommonParser
     end
     project.dep_number = project.dependencies.size
 
-    if data.has_key?['jspm']
+    if data.has_key?('jspm')
+      log.info "going to parse child JSPM project dependencies"
       jspm_parser = JspmParser.new
       #JSPM parser expects that all the fields are keywords
       symbolized_doc = JSON.parse(content, symbolize_names: true)
-      child_project = jspm_parser.parse_project_doc(symbolized_doc, project.id)
+      child_project = jspm_parser.parse_project_doc(symbolized_doc, project.id.to_s)
       if child_project
-        project_dep_number += child_project.dependencies.size
+        project.dep_number += child_project.dependencies.size
+        child_project.save
       end
     end
 
