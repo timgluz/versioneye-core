@@ -361,6 +361,14 @@ describe NugetParser do
 
 
   context "parse" do
+    before do
+      product1.versions << Version.new(version: '5.0.0')
+      product1.save
+
+      product2.versions << Version.new(version: '2.1.10')
+      product2.save
+    end
+
     it "fetches file properly" do
       project = parser.parse(test_file_url)
       expect( project ).not_to be_nil
@@ -376,13 +384,13 @@ describe NugetParser do
       expect( dep1.name).to eq(product1[:name])
       expect( dep1.version_requested).to eq(product1[:version])
       expect( dep1.target).to eq("net40")
-      expect( dep1.comperator).to eq("=")
+      expect( dep1.comperator).to eq(">=")
 
       dep2 = project.dependencies[1]
       expect( dep2.name).to eq(product1[:name])
       expect( dep2.version_requested).to eq(product1[:version])
       expect( dep2.target).to eq("net45")
-      expect( dep2.comperator).to eq("=")
+      expect( dep2.comperator).to eq(">=")
 
       dep3 = project.dependencies[2]
       expect( dep3.name).to eq(product1[:name])

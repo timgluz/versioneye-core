@@ -1,4 +1,3 @@
-require 'semverly'
 require 'versioneye/parsers/common_parser'
 
 class NugetParser < CommonParser
@@ -275,7 +274,6 @@ class NugetParser < CommonParser
     deps
   end
 
-
   def parse_group_dependencies(group, target)
     deps = []
     group.xpath('dependency').each do |node|
@@ -285,22 +283,11 @@ class NugetParser < CommonParser
     deps
   end
 
-
   def parse_dependency(node, target = nil, scope = nil)
     prod_name = node.attr("id").to_s.strip
     version_label = node.attr("version").to_s.strip
 
-    dep = Projectdependency.new({
-      language: Product::A_LANGUAGE_CSHARP,
-      name: prod_name,
-      prod_key: prod_name,
-      version_label: version_label,
-      version_requested: version_label,
-      target: target,
-      scope: scope
-    })
-
-    dep
+    init_dependency(prod_name, version_label, target, scope)
   end
 
 
