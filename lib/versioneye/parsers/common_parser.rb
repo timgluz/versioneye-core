@@ -114,6 +114,7 @@ class CommonParser
     dependency
   end
 
+  #TODO: it's should really be called as parse_xml and should handle parse error
   def fetch_xml( content )
     doc = Nokogiri::XML( content )
     return nil if doc.nil?

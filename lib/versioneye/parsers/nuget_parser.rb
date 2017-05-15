@@ -113,7 +113,7 @@ class NugetParser < CommonParser
     parse_content( response_body, url )
   end
 
-  def parse_content( response_body, url )
+  def parse_content( response_body, url = nil)
     deps = []
 
     doc     = fetch_xml( response_body )
@@ -340,4 +340,18 @@ class NugetParser < CommonParser
 
     project
   end
+
+  def init_dependency(prod_key, version_label, target = nil, scope = nil)
+    return if prod_key.nil?
+
+    Projectdependency.new(
+      language: Product::A_LANGUAGE_CSHARP,
+      prod_key: prod_key,
+      name: prod_key,
+      version_label: version_label,
+      target: target,
+      scope: scope
+    )
+  end
+
 end
