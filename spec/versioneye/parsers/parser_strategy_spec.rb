@@ -90,6 +90,11 @@ describe ParserStrategy do
       expect( parser.is_a?(NugetPackagesParser) ).to be_truthy
     end
 
+    it "return CsprojParser" do
+      parser = ParserStrategy.parser_for(Project::A_TYPE_NUGET, 'veye.csproj')
+      expect( parser.is_a?(CsprojParser) ).to be_truthy
+    end
+
     it "returns NugetParser" do
       parser = ParserStrategy.parser_for(Project::A_TYPE_NUGET, "http://s3.aws.com/project.nuspec")
       expect( parser.is_a?(NugetParser) ).to be_truthy
