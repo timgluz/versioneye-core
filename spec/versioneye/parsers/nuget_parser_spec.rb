@@ -153,7 +153,7 @@ describe NugetParser do
       expect( range.match("[1.2.1,2.0+build.1]") ).not_to be_nil
    end
   end
-  
+
   context "split_version" do
     it "splits front of leading prerelease" do
       expect(parser.split_version('1-alpha+build1') ).to eq(['1', 'alpha+build1', '-'])
@@ -173,7 +173,7 @@ describe NugetParser do
       expect( parser.normalize_version('1.00')    ).to eq('1.0')
       expect( parser.normalize_version('1.01.1')  ).to eq('1.1.1')
       expect( parser.normalize_version('1.00.0.1')).to eq('1.0.0.1')
-      
+
       expect( parser.normalize_version('001.1001.000001') ).to eq('1.1001.1')
     end
 
@@ -241,6 +241,39 @@ describe NugetParser do
       expect( version_data[:label] ).to eq("*")
       expect( version_data[:version] ).to eq("2.1")
       expect( version_data[:comperator] ).to eq('=')
+    end
+
+    it "returns correct version for if  minor is wildcarded by `*`" do
+      version_data = parser.parse_version_data('1.*', product3)
+
+      expect( version_data ).not_to be_nil
+      expect( version_data[:label] ).to eq('1.*')
+      expect( version_data[:version]).to eq('1.9')
+      expect( version_data[:comperator]).to eq('*')
+    end
+
+    it "returns correct version if minor is wildcarded by `x`" do
+      version_data = parser.parse_version_data('1.x', product3)
+
+      expect( version_data ).not_to be_nil
+      expect( version_data[:label] ).to eq('1.*')
+      expect( version_data[:version] ).to eq('1.9')
+      expect( version_data[:comperator] ).to eq('*')
+    end
+
+    it "returns correct version if patch version is wildcard" do
+      product2.versions << Version.new(version: '2.3.0')
+      product2.versions << Version.new(version: '2.3.1')
+      product2.versions << Version.new(version: '2.3.9')
+      product2.versions << Version.new(version: '2.4.0')
+      product2.save
+
+      version_data = parser.parse_version_data('2.3.*', product2)
+
+      expect( version_data ).not_to be_nil
+      expect( version_data[:label] ).to eq('2.3.*')
+      expect( version_data[:version] ).to eq('2.3.9')
+      expect( version_data[:comperator] ).to eq('*')
     end
 
     it "returns exact version when version label is [1.6]" do
@@ -570,7 +603,7 @@ describe NugetParser do
       product7.versions << FactoryGirl.build(:product_version, version: '1.0.1')
       product7.save
     end
-    
+
     it "parses and matches all the versions correctly" do
       proj = parser.parse_content(issue62_file_content, 'ftp://spec3')
       expect(proj).not_to be_nil
@@ -584,7 +617,7 @@ describe NugetParser do
       expect(dep[:version_current]).to eq('1.3.1')
       expect(dep[:comperator]).to eq('=')
       expect(dep[:outdated]).to be_truthy
-     
+
       dep = proj.dependencies[1]
       expect(dep[:name]).to eq(product6[:name])
       expect(dep[:prod_key]).to eq(product6[:prod_key])

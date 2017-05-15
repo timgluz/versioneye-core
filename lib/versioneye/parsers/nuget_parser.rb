@@ -1,3 +1,4 @@
+require 'semverly'
 require 'versioneye/parsers/common_parser'
 
 class NugetParser < CommonParser
@@ -172,10 +173,15 @@ class NugetParser < CommonParser
       return version_data
     end
 
-    if version.empty?
+    if version.empty? or ['*', 'x', 'X'].include?(version)
       newest = VersionService.newest_version(product.versions)
       version_data[:version] = newest.version if newest
       version_data[:label] = '*'
+
+    elsif /\*|x/i.match(version)
+      latest_version = VersionService.newest_version_from_wildcard(product.versions, version)
+      version_data[:version] = latest_version if latest_version
+      version_data[:comperator] = '*'
 
     elsif ( m = rules[:exact].match(version) )
       lbl = m[:semver].to_s.strip
@@ -251,8 +257,8 @@ class NugetParser < CommonParser
 
     version_data
   rescue Exception => e
-    log.error "NugetParser.parse_version_data: Failed to find match for version label #{version} for #{product.prod_id}"
-    log.error e.backtrace.inspect
+    log.error "NugetParser.parse_version_data: Failed to find match for version label #{version} for #{product.prod_key}"
+    log.error e.backtrace.join('\n')
     return nil
   end
 
