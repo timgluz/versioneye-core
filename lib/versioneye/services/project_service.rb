@@ -35,12 +35,7 @@ class ProjectService < Versioneye::Service
     return Project::A_TYPE_CHEF      if (!(/Berksfile.lock\z/ =~ trimmed_name).nil?)  or (!(/Berksfile\z/ =~ trimmed_name).nil?) or (!(/metadata.rb\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_NUGET     if (!(/project\.json\z/ =~ trimmed_name).nil?) or (!(/.*\.nuspec\z/ =~ trimmed_name).nil?)  or (!(/packages\.config\z/ =~ trimmed_name).nil?)
     return Project::A_TYPE_CPAN      if (/\Acpanfile\z/i =~ trimmed_name) != nil
-
-    if (/Cargo\.toml\z/i =~ trimmed_name) != nil \
-      or (/Cargo\.lock\z/i =~ trimmed_name ) != nil
-
-      return Project::A_TYPE_CARGO
-    end
+    return Project::A_TYPE_CARGO     if (/Cargo\.toml\z/i =~ trimmed_name) != nil or (/Cargo\.lock\z/i =~ trimmed_name ) != nil
 
     return nil
   end
