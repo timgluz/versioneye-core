@@ -209,6 +209,7 @@ class ProductService < Versioneye::Service
       average_release_time = VersionService.estimated_average_release_time( product.versions )
     end
     product.average_release_time = average_release_time
+    average_release_time
   end
 
 

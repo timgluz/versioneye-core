@@ -291,7 +291,7 @@ class Organisation < Versioneye::Model
 
 
     def show_duplicates_filter( inventory, comps )
-      inventory.inventory_items.destroy_all
+      inventory.inventory_items.delete_all
       inventory.updated_at = Time.now
       inventory.save
 

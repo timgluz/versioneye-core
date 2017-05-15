@@ -425,12 +425,12 @@ class User < Versioneye::Model
     def check_terms
       if self.terms == false || self.terms == nil
         self.errors.messages[:terms] = ["must be accepted"]
-        return false
+        throw(:abort)
       end
 
       if self.datenerhebung == false || self.datenerhebung == nil
         self.errors.messages[:datenerhebung] = ["must be accepted"]
-        return false
+        throw(:abort)
       end
 
       return true

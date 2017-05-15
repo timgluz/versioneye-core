@@ -80,8 +80,8 @@ class Receipt < Versioneye::Model
   end
 
   def pre_process
-    return false if company_mandatory? && company.to_s.empty?
-    return false if taxid_mandatory? && taxid.to_s.empty?
+    throw(:abort) if company_mandatory? && company.to_s.empty?
+    throw(:abort) if taxid_mandatory? && taxid.to_s.empty?
     true
   end
 

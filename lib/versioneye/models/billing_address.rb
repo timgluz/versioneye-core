@@ -62,7 +62,7 @@ class BillingAddress < Versioneye::Model
     def validate_company
       if company_mandatory? && company.to_s.empty?
         self.errors.messages[:company] = ["is mandatory"]
-        return false
+        throw(:abort)
       end
       true
     end
@@ -71,7 +71,7 @@ class BillingAddress < Versioneye::Model
     def validate_taxid
       if taxid_mandatory? && taxid.to_s.empty?
         self.errors.messages[:taxid] = ["is mandatory"]
-        return false
+        throw(:abort)
       end
       true
     end
@@ -79,7 +79,7 @@ class BillingAddress < Versioneye::Model
     def validate_country
       if !A_COUNTRIES.keys.include?(self.country)
         self.errors.messages[:country] = ["is not valid value"]
-        return false
+        throw(:abort)
       end
       true
     end

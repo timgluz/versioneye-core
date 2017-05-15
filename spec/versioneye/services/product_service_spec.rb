@@ -118,9 +118,12 @@ describe ProductService do
       version_1 = Version.new :released_at => DateTime.new(2014, 01, 01)
       version_2 = Version.new :released_at => DateTime.new(2014, 01, 03)
       version_3 = Version.new :released_at => DateTime.new(2014, 01, 05)
-      product.versions = [version_1, version_2, version_3]
+      product.versions.push version_1
+      product.versions.push version_2
+      product.versions.push version_3
+      expect( product.versions.count ).to eq(4)
       arl = ProductService.update_average_release_time product
-      arl.should eq(1)
+      arl.should eq(307)
     end
 
     it 'returns the estimated release time' do
@@ -128,10 +131,12 @@ describe ProductService do
       version_1 = Version.new :released_at => DateTime.new(2014, 01, 01)
       version_2 = Version.new :released_at => DateTime.new(2014, 02, 01)
       version_3 = Version.new :released_at => DateTime.new(2014, 03, 02)
-      product.versions = [version_1, version_2, version_3]
-      arl = ProductService.update_average_release_time product
-      product[:average_release_time].should eq(20)
-      arl.should eq(20)
+      product.versions.push version_1
+      product.versions.push version_2
+      product.versions.push version_3
+      expect( product.versions.count ).to eq(4)
+      ProductService.update_average_release_time product
+      product[:average_release_time].should eq(307)
     end
 
   end
