@@ -295,6 +295,8 @@ describe ProjectService do
     it "returns Nuget" do
       described_class.type_by_filename("/project.json").should eql(Project::A_TYPE_NUGET)
       described_class.type_by_filename("/something.nuspec").should eql(Project::A_TYPE_NUGET)
+      described_class.type_by_filename('veye.csproj').should eq(Project::A_TYPE_NUGET)
+      described_class.type_by_filename('/a/b/c/veye.csproj').should eq(Project::A_TYPE_NUGET)
     end
 
     it "returns nil for wrong Lein file" do

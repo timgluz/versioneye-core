@@ -82,6 +82,8 @@ class ParserStrategy
           return NugetJsonParser.new
         when /packages\.config/i
           return NugetPackagesParser.new
+        when /\.csproj/i
+          return CsprojParser.new
         else
           return NugetParser.new
         end
