@@ -62,7 +62,7 @@ class VersioneyeCore
     MavenRepository.fill_it
 
     puts "START to import spdx licenses"
-    LicenseService.import_from "/app/data/spdx_license.csv"
+    #LicenseService.import_from "/app/data/spdx_license.csv"
     puts "---"
   rescue => e
     log.error e.message

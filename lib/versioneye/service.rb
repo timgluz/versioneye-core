@@ -103,6 +103,7 @@ module Versioneye
     require 'versioneye/parsers/shrinkwrap_parser'
     require 'versioneye/parsers/cargo_parser'
     require 'versioneye/parsers/cargo_lock_parser'
+    require 'versioneye/parsers/jspm_parser'
 
     require 'versioneye/updaters/update_strategy'
     require 'versioneye/updaters/common_updater'
