@@ -28,6 +28,7 @@ class Product < Versioneye::Model
   field :parent_id  , type: String # Maven specific
   field :group_id_orig   , type: String # Maven specific
   field :artifact_id_orig, type: String # Maven specific
+  field :repo_name, type: String # GoLang specific
 
   field :description       , type: String
   field :description_manual, type: String
