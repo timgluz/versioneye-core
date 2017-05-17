@@ -17,6 +17,7 @@ class Version < Versioneye::Model
   field :sha256         , type: String
   field :sha512         , type: String
   field :md5            , type: String
+  field :commit_sha     , type: String
   field :prefer_global  , type: Boolean, default: false
 
   embedded_in :product
