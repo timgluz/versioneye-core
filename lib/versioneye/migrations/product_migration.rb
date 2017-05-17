@@ -10,6 +10,11 @@ class ProductMigration < Versioneye::Service
     AuthorService.all_authors_paged do |authors|
       authors.each do |author|
         next if author.nil?
+        next if author.to_param.match(/\.json\z/)
+        next if author.to_param.match(/\.xml\z/)
+        next if author.to_param.match(/\.js\z/)
+        next if author.to_param.match(/\.css\z/)
+        next if author.to_param.match(/\.html\z/)
 
         uri = "authors/#{author.to_param}"
         modified = DateTime.now.strftime("%Y-%m-%d")
