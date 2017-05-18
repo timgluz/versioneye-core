@@ -172,10 +172,15 @@ class NugetParser < CommonParser
       return version_data
     end
 
-    if version.empty?
+    if version.empty? or ['*', 'x', 'X'].include?(version)
       newest = VersionService.newest_version(product.versions)
       version_data[:version] = newest.version if newest
       version_data[:label] = '*'
+
+    elsif /\*|x/i.match(version)
+      latest_version = VersionService.newest_version_from_wildcard(product.versions, version)
+      version_data[:version] = latest_version if latest_version
+      version_data[:comperator] = '*'
 
     elsif ( m = rules[:exact].match(version) )
       lbl = m[:semver].to_s.strip
@@ -251,8 +256,8 @@ class NugetParser < CommonParser
 
     version_data
   rescue Exception => e
-    log.error "NugetParser.parse_version_data: Failed to find match for version label #{version} for #{product.prod_id}"
-    log.error e.backtrace.inspect
+    log.error "NugetParser.parse_version_data: Failed to find match for version label #{version} for #{product.prod_key}"
+    log.error e.backtrace.join('\n')
     return nil
   end
 
@@ -269,7 +274,6 @@ class NugetParser < CommonParser
     deps
   end
 
-
   def parse_group_dependencies(group, target)
     deps = []
     group.xpath('dependency').each do |node|
@@ -279,22 +283,11 @@ class NugetParser < CommonParser
     deps
   end
 
-
   def parse_dependency(node, target = nil, scope = nil)
     prod_name = node.attr("id").to_s.strip
     version_label = node.attr("version").to_s.strip
 
-    dep = Projectdependency.new({
-      language: Product::A_LANGUAGE_CSHARP,
-      name: prod_name,
-      prod_key: prod_name,
-      version_label: version_label,
-      version_requested: version_label,
-      target: target,
-      scope: scope
-    })
-
-    dep
+    init_dependency(prod_name, version_label, target, scope)
   end
 
 
