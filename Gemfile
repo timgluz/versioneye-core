@@ -6,7 +6,7 @@ gemspec
 group :test do
   gem 'rack-test'       , '0.6.3'
   gem 'simplecov'       , '~> 0.14.1'
-  gem 'rspec'           , '~> 3.5.0'
+  gem 'rspec'           , '~> 3.6.0'
   gem 'rspec_junit_formatter', '0.2.3'
   gem 'database_cleaner', '~> 1.5.1'
   gem 'factory_girl'    , '~> 4.8.0'
