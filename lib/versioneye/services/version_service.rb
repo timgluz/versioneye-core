@@ -360,8 +360,7 @@ class VersionService < Versioneye::Service
 
     diff = last.to_i - first.to_i
     diff_days = diff / 60 / 60 / 24
-    average = diff_days / sorted_versions.size
-    average
+    (diff_days.to_f / sorted_versions.size.to_f).round
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
