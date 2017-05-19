@@ -2,7 +2,8 @@
   "jspm": {
     "name": "jspm-react-component",
     "dependencies": {
-      "react-dom": "npm:react-dom@^0.14.6"
+      "react-dom": "npm:react-dom@^0.14.6",
+      "typhonjs-core-utils": "github:typhonjs-common/typhonjs-core-utils@master"
     },
     "devDependencies": {
       "plugin-babel": "npm:systemjs-plugin-babel@^0.0.5",

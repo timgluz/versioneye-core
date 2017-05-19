@@ -61,7 +61,7 @@ class JspmParser < PackageParser
 
 
   def parse_dependency(project, pkg_id, dep_line, scope, default_registry)
-    github_match = dep_line[0..5].match(/\Agithub:(.*)(@.*)/i)
+    github_match = dep_line.to_s.strip.match(/\Agithub:(.*)(@.*)/i)
     if github_match
       version_label = "github#{github_match[2]}"
       product = nil

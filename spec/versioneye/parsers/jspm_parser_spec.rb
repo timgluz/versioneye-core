@@ -54,7 +54,7 @@ describe JspmParser do
     it "parses correctly test file" do
       proj = parser.parse_content test_content
       expect(proj).not_to be_nil
-      expect(proj.dependencies.size).to eq(4)
+      expect(proj.dependencies.size).to eq(5)
 
       dep1 = proj.dependencies[0]
       expect(dep1[:name]).to eq(react_dom[:name])
@@ -67,6 +67,17 @@ describe JspmParser do
       expect(dep1[:outdated]).to be_falsey
 
       dep2 = proj.dependencies[1]
+      expect(dep2[:name]).to eq("typhonjs-core-utils")
+      expect(dep2[:prod_key]).to be_nil
+      expect(dep2[:ext_link]).to eq("https://github.com/typhonjs-common/typhonjs-core-utils")
+      expect(dep2[:language]).to eq( Product::A_LANGUAGE_NODEJS )
+      expect(dep2[:scope]).to eq( Dependency::A_SCOPE_COMPILE )
+      expect(dep2[:version_requested]).to eq('github@master')
+      expect(dep2[:version_label]).to eq('github@master')
+      expect(dep2[:comperator]).to eq('=')
+      expect(dep2[:outdated]).to be_falsey
+
+      dep2 = proj.dependencies[2]
       expect(dep2[:name]).to eq(plugin_babel[:name])
       expect(dep2[:prod_key]).to eq(plugin_babel[:prod_key])
       expect(dep2[:language]).to eq(plugin_babel[:language])
@@ -76,7 +87,7 @@ describe JspmParser do
       expect(dep2[:comperator]).to eq('^')
       expect(dep2[:outdated]).to be_truthy
 
-      dep3 = proj.dependencies[2]
+      dep3 = proj.dependencies[3]
       expect(dep3[:name]).to eq('systemjs-hot-reloader')
       expect(dep3[:prod_key]).to be_nil
       expect(dep3[:language]).to eq(plugin_babel[:language])
@@ -86,7 +97,7 @@ describe JspmParser do
       expect(dep3[:comperator]).to eq('=')
       expect(dep3[:outdated]).to be_falsey
 
-      dep4 = proj.dependencies[3]
+      dep4 = proj.dependencies[4]
       expect(dep4[:name]).to eq(core_js[:name])
       expect(dep4[:prod_key]).to eq(core_js[:prod_key])
       expect(dep4[:language]).to eq(core_js[:language])
@@ -95,7 +106,6 @@ describe JspmParser do
       expect(dep4[:version_label]).to eq('^1.2.0')
       expect(dep4[:comperator]).to eq('^')
       expect(dep4[:outdated]).to be_falsey
-
     end
   end
 
