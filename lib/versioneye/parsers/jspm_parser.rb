@@ -61,18 +61,20 @@ class JspmParser < PackageParser
 
 
   def parse_dependency(project, pkg_id, dep_line, scope, default_registry)
-    if dep_line[0..5] == 'github'
-      #TODO if pkg is from GITHUB
-      version_label = 'git'
+    github_match = dep_line[0..5].match(/\Agithub:(.*)(@.*)/i)
+    if github_match
+      version_label = "github#{github_match[2]}"
       product = nil
     else
       version_label = dep_line.to_s.split('@').last
       product = Product::fetch_product(Product::A_LANGUAGE_NODEJS, pkg_id)
     end
 
-
-    dep = init_dependency(product, pkg_id)
-    dep[:scope] = scope
+    dep = init_dependency( product, pkg_id )
+    dep.scope = scope
+    if github_match
+      dep.ext_link = "https://github.com/#{github_match[1]}"
+    end
     parse_requested_version( version_label, dep, product )
 
     project.projectdependencies.push dep
