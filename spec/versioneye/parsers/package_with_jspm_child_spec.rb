@@ -116,8 +116,8 @@ describe PackageParser do
       expect(cdep1[:prod_key]).to eq(backbone_es6[:prod_key])
       expect(cdep1[:language]).to eq(backbone_es6[:language])
       expect(cdep1[:scope]).to eq(Dependency::A_SCOPE_COMPILE)
-      expect(cdep1[:version_requested]).to eq('git')
-      expect(cdep1[:version_label]).to eq('git')
+      expect(cdep1[:version_requested]).to eq('github@master')
+      expect(cdep1[:version_label]).to eq('github@master')
       expect(cdep1[:comperator]).to eq('=')
       expect(cdep1[:outdated]).to be_falsey
 

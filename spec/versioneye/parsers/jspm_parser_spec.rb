@@ -92,8 +92,8 @@ describe JspmParser do
       expect(dep3[:prod_key]).to be_nil
       expect(dep3[:language]).to eq(plugin_babel[:language])
       expect(dep3[:scope]).to eq(Dependency::A_SCOPE_DEVELOPMENT)
-      expect(dep3[:version_requested]).to eq('git')
-      expect(dep3[:version_label]).to eq('git')
+      expect(dep3[:version_requested]).to eq('github@^0.5.1')
+      expect(dep3[:version_label]).to eq('github@^0.5.1')
       expect(dep3[:comperator]).to eq('=')
       expect(dep3[:outdated]).to be_falsey
 
