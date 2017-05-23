@@ -418,6 +418,7 @@ class ProjectService < Versioneye::Service
 
   def self.outdated?( project )
     return true if outdated_single?( project )
+
     project.children.each do |child_project|
       return true if outdated_single?( child_project )
     end

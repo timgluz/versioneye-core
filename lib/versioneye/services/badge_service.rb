@@ -11,8 +11,8 @@ class BadgeService < Versioneye::Service
     return badge if badge
 
     badge = Badge.where(:key => key).first
-    if badge
-      DependencyBadgeProducer.new(key) if badge.updated_at < 1.day.ago
+    if badge && badge.updated_at < 1.day.ago
+      DependencyBadgeProducer.new(key)
     else
       badge = update( key )
     end
