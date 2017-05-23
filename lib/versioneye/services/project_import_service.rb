@@ -368,12 +368,12 @@ class ProjectImportService < Versioneye::Service
     if private_project
       max_allowed = orga.max_private_projects_count
       project_count = Project.private_project_count_by_orga( orga.ids ) # orga.projects.parents.count
-      return false if project_count.to_i >= max_allowed.to_i
+      return false if (project_count.to_i + 1) >= max_allowed.to_i
       return true
     else # open source projects
       max_allowed = orga.max_os_projects_count
       project_count = Project.public_project_count_by_orga( orga.ids )
-      return false if project_count.to_i >= max_allowed.to_i
+      return false if (project_count.to_i + 1) >= max_allowed.to_i
       return true
     end
   rescue => e
