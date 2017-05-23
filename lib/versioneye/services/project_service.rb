@@ -209,6 +209,9 @@ class ProjectService < Versioneye::Service
     Project.where(:temp => true, :temp_lock => false).each do |project|
       destroy project
     end
+    Project.where(:temp => true, :created_at.lt => 1.hour.ago).each do |project|
+      destroy project
+    end
   end
 
 
