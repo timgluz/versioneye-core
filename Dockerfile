@@ -12,7 +12,7 @@ RUN apt-get update
 RUN apt-get install -y libfontconfig1 # mandatory for PDFKit
 RUN apt-get install -y supervisor;
 RUN gem uninstall -i /usr/local/lib/ruby/gems/2.3.0 bundler -a -x
-RUN gem install bundler --version 1.14.6
+RUN gem install bundler --version 1.15.0
 RUN rm -Rf /app; mkdir -p /app; mkdir -p /app/log; mkdir -p /app/pids
 
 ADD . /app/
