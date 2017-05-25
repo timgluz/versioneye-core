@@ -1,4 +1,4 @@
-class Author < Versioneye::Model
+Author < Versioneye::Model
 
 # The Author collections is an aggregation for the Developer collection.
 # The crawlers are storing author & maintainer information in the
@@ -58,6 +58,9 @@ class Author < Versioneye::Model
   def self.encode_name name
     name.gsub(" ", "_").gsub("ß", "ss")
       .gsub("/", ":")
+      .gsub(".", "::")
+      .gsub(",", ":::")
+      .gsub("@", ":_:")
       .gsub("ü", "ue").gsub("Ü", "Ue")
       .gsub("ä", "ae").gsub("Ä", "Ae")
       .gsub("ö", "oe").gsub("Ö", "Oe").downcase
