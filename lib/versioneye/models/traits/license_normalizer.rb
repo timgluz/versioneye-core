@@ -608,7 +608,8 @@ module VersionEye
       new_name.match(/\ALesser\s+General\s+Public\s*2\.1\z/i) ||
       new_name.match(/\ALesser\s+General\s+Public\s*\(LGPL\)\s*2\.1\z/i) ||
       new_name.match(/\AGeneral\s+Lesser\s+Public\s+\(LGPL\)\s+2\.1\z/i) ||
-      new_name.match(/\ALesser\s+General\s+Public\s+2\.1\s+February\s+1999\z/)
+      new_name.match(/\ALesser\s+General\s+Public\s+2\.1\s+February\s+1999\z/i) ||
+      new_name.match(/\ALIBRARY\s+General\s+Public\s+2\.1\s+February\s+1999\z/i)
     end
 
     def lgpl_3_match name
