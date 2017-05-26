@@ -35,10 +35,10 @@ class License < Versioneye::Model
 
 
   def label
-    return spdx_id if !spdx_id.to_s.empty?
-
     name = license_for_url
     return name if !name.to_s.empty?
+
+    return spdx_id if !spdx_id.to_s.empty?
 
     name_substitute
   end
@@ -96,6 +96,15 @@ class License < Versioneye::Model
     return 'LGPL-2.1' if url.to_s.eql?('http://www.opensource.org/licenses/LGPL-2.1')
 
     return 'LGPL-3.0' if url.to_s.eql?('http://www.gnu.org/licenses/lgpl.html')
+
+    return 'CDDL-1.0' if url.to_s.eql?('http://repository.jboss.org/licenses/cddl.txt')
+    return 'CDDL-1.0' if url.to_s.eql?('https://opensource.org/licenses/cddl1.php')
+
+    return 'CC0-1.0' if url.to_s.eql?('http://repository.jboss.org/licenses/cc0-1.0.txt')
+    return 'CC0-1.0' if url.to_s.eql?('http://repository.jboss.org/licenses/cc0-1.0.html')
+
+    return 'EPL-1.0' if url.to_s.eql?('http://www.eclipse.org/legal/epl-v10.html')
+
     return nil
   end
 

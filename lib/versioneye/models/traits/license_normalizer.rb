@@ -335,6 +335,7 @@ module VersionEye
       name.match(/\AEPLv1\z/i) ||
       name.match(/\AEPLv1\.1\z/i) ||
       name.match(/\AEclipse\z/i) ||
+      name.match(/\AEclipse\s+1\z/i) ||
       name.match(/\AEclipse\s*Public\z/i) ||
       name.match(/\AEclipse\s*Public\s*1\z/i) ||
       name.match(/\AEclipse\s*Public\s*v1\z/i) ||
@@ -600,6 +601,7 @@ module VersionEye
     end
 
     def lgpl_21_match name
+      return true if name.to_s.match(/lgpl_v2_1/i)
       new_name = name.gsub(/gnu/i, '').strip
       new_name.match(/\ALGPL\z/i) ||
       new_name.match(/\ALGPL\s*2\.1\z/i) ||
@@ -732,6 +734,7 @@ module VersionEye
     def cddl_match name
       name.match(/\ACDDL\z/i) ||
       name.match(/\ACDDL\s*1\z/i) ||
+      name.match(/\ACommon\s+Development\s+and\s+Distribution\z/i) ||
       name.match(/\ACommon\s+Development\s+and\s+Distribution\s+1\z/i) ||
       name.match(/\ACOMMON\s+DEVELOPMENT\s+AND\s+DISTRIBUTION\s+\(CDDL\)\s+1\z/i) ||
       name.match(/\ACommon\s+Development\s+and\s+Distribution\s+\(CDDL\s*1\)\z/i) ||
