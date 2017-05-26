@@ -24,6 +24,11 @@ describe License do
       expect( license.label ).to eq("MIT")
     end
 
+    it 'returns the spdx_id identifier because URL is set' do
+      license = License.new({:spdx_id => '', :name => 'MIT', :url => 'https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt'})
+      expect( license.label ).to eq("LGPL-2.1")
+    end
+
   end
 
   describe 'find_or_create' do
