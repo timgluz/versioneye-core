@@ -37,6 +37,9 @@ class License < Versioneye::Model
   def label
     return spdx_id if !spdx_id.to_s.empty?
 
+    name = license_for_url
+    return name if !name.to_s.empty?
+
     name_substitute
   end
 
@@ -80,6 +83,20 @@ class License < Versioneye::Model
     else
       return "[License for (#{language}/#{prod_key}/#{version}) : #{name}]"
     end
+  end
+
+
+  def license_for_url
+    return 'LGPL-2.1' if url.to_s.eql?('https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt')
+    return 'LGPL-2.1' if url.to_s.eql?('https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html')
+    return 'LGPL-2.1' if url.to_s.eql?('http://www.gnu.org/licenses/lgpl-2.1.html')
+    return 'LGPL-2.1' if url.to_s.eql?('http://www.gnu.org/licenses/lgpl-2.1.txt')
+    return 'LGPL-2.1' if url.to_s.eql?('http://www.gnu.org/licenses/lgpl-2.1.en.html')
+    return 'LGPL-2.1' if url.to_s.eql?('http://creativecommons.org/licenses/LGPL/2.1/')
+    return 'LGPL-2.1' if url.to_s.eql?('http://www.opensource.org/licenses/LGPL-2.1')
+
+    return 'LGPL-3.0' if url.to_s.eql?('http://www.gnu.org/licenses/lgpl.html')
+    return nil
   end
 
 
