@@ -168,15 +168,12 @@ class ProjectService < Versioneye::Service
 
     Projectdependency.any_of(
       {:project_id => project.ids, :outdated => true},
-      {:project_id => project.ids, :prod_key => nil} ).each do |dep|
-      map[project.ids][:dependencies].push dep
-    end
-
-    Projectdependency.any_of(
+      {:project_id => project.ids, :prod_key => nil},
       {:project_id => project.ids, :lwl_violation => 'true'},
       {:project_id => project.ids, :license_caches => nil},
-      {:project_id => project.ids, :license_caches.with_size => 0} ).each do |dep|
-      map[project.ids][:licenses].push dep
+      {:project_id => project.ids, :license_caches.with_size => 0}
+      ).each do |dep|
+      map[project.ids][:dependencies].push dep
     end
 
     fill_sv project, map
