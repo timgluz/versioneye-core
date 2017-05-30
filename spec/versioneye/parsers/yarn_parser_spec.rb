@@ -12,7 +12,7 @@ describe YarnParser do
       expect( "1.0.1".match(rule) ).not_to be_nil
       expect( "1.0.1+build42".match(rule)).not_to be_nil
     end
-    
+
     it "matches dependency item" do
       rule = parser.rules[:dep]
 
@@ -20,6 +20,15 @@ describe YarnParser do
       expect(m).not_to be_nil
       expect(m[:depname]).to eq('acorn-js')
       expect(m[:selector]).to eq('^3.0.0')
+    end
+
+    it "matches dependency item with dots in the name" do
+      rule = parser.rules[:dep]
+
+      m = "lodash.isplainobject@^4.0.6:".match(rule)
+      expect(m).not_to be_nil
+      expect(m[:depname]).to eq('lodash.isplainobject')
+      expect(m[:selector]).to eq('^4.0.6')
     end
 
     it "matches dependency row with single item" do
@@ -64,7 +73,7 @@ describe YarnParser do
       prod_type: Project::A_TYPE_NPM,
       language: Product::A_LANGUAGE_NODEJS,
       version: '1.0.9'
-    )  
+    )
   }
 
   let(:product2){
@@ -88,7 +97,7 @@ describe YarnParser do
       version: '1.1.2'
     )
   }
-  
+
   let(:product4){
     FactoryGirl.create(
       :product_with_versions,
@@ -122,12 +131,23 @@ describe YarnParser do
     )
   }
 
+  let(:product7){
+    FactoryGirl.create(
+      :product_with_versions,
+      name: 'lodash.isplainobject',
+      prod_key: 'lodash.isplainobject',
+      prod_type: Project::A_TYPE_NPM,
+      language: Product::A_LANGUAGE_NODEJS,
+      version: '4.0.6'
+    )
+  }
+
   describe "parse_file_content" do
     it "extracts correct dependency data from the file" do
       txt = File.read test_file_path
       deps = parser.parse_file_content txt
       expect(deps).not_to be_nil
-      expect(deps.size).to eq(6)
+      expect(deps.size).to eq(7)
 
       dep = deps[0]
       expect(dep[:name]       ).to eq(product1[:name])
@@ -143,24 +163,24 @@ describe YarnParser do
       expect(dep[:name]       ).to eq(product3[:name])
       expect(dep[:version]    ).to eq(product3[:version])
       expect(dep[:deps].size  ).to eq(2)
-   
+
       dep = deps[3]
       expect(dep[:name]       ).to eq(product4[:name])
       expect(dep[:version]    ).to eq(product4[:version])
       expect(dep[:deps].size  ).to eq(1)
       expect(dep[:optionalDeps].size ).to eq(1)
-      
+
       dep = deps[4]
       expect(dep[:name]       ).to eq(product5[:name])
       expect(dep[:version]    ).to eq(product5[:version])
       expect(dep[:deps].size  ).to eq(1)
-   
+
       dep = deps[5]
       expect(dep[:name]       ).to eq(product6[:name])
       expect(dep[:version]    ).to eq(product6[:version])
       expect(dep[:deps].size  ).to eq(7)
-    
-    end 
+
+    end
   end
 
   describe "parse_content" do
@@ -172,13 +192,14 @@ describe YarnParser do
       product4.save
       product5.save
       product6.save
+      product7.save
 
       #run test
       txt = File.read test_file_path
       project = parser.parse_content txt
-      
+
       expect(project).not_to be_nil
-      expect(project.dep_number).to eq(6)
+      expect(project.dep_number).to eq(7)
 
       dep = project.dependencies[0]
       expect(dep[:name]).to eq(product1[:name])
@@ -215,6 +236,13 @@ describe YarnParser do
       expect(dep[:version_requested]).to eq(product6[:version])
       expect(dep[:version_current]).to eq(product6[:version])
       expect(dep[:comperator]).to eq('=')
+
+      dep = project.dependencies[6]
+      expect(dep[:name]).to eq(product7[:name])
+      expect(dep[:version_requested]).to eq(product7[:version])
+      expect(dep[:version_current]).to eq(product7[:version])
+      expect(dep[:comperator]).to eq('=')
+
 
     end
   end
