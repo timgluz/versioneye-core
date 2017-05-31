@@ -6,14 +6,14 @@ class YarnParser < PackageParser
   def initialize
     # ATOMIC RULES
     numeric         = '\\d+'
-    ident           = "[\\w-]" # identificator aka textual value
+    ident           = "\\w(\\w|-|\\.)*" # valid JS identifier
     prerelease_info = "\\-(?<prerelease>#{ident}[\\.#{ident}]*)" # matches release info: -alpha.1
     build_info      = "\\+(?<build>#{ident}[\\.#{ident}]*)"      # matches build info
     version         = "(?<version>[v|V]?(#{numeric})(\\.(#{numeric})(\\.(#{numeric}))*)?)" #matches more than m.m.p
 
     semver          = "(?<semver>#{version}(#{prerelease_info})?(#{build_info})?)"
-    
-    dep_item        = "(?<depname>#{ident}+)\\@(?<selector>.+?)[\\,|\:]"
+
+    dep_item        = "(?<depname>#{ident})\\@(?<selector>.+?)[\\,|\:]"
     version_row     = "version\\s+\"#{semver}\""
     subdep_row      = "(?<depname>#{ident}+)\\s+\"(?<selector>.+?)\""
 
@@ -36,7 +36,7 @@ class YarnParser < PackageParser
       return
     end
 
-    project = init_project({'name' => 'yarn.lock'})   
+    project = init_project({'name' => 'yarn.lock'})
     parse_dependencies(dep_items, project)
 
     project.dep_number = project.dependencies.size
@@ -87,7 +87,7 @@ class YarnParser < PackageParser
       elsif line.match /\AoptionalDependencies:/i
         isSubDep = false
         isOptionalDep = true
-      
+
       elsif ( m = line.match(rules[:subdep_row]) )
         dep_name = m[:depname]
         selector = m[:selector]
