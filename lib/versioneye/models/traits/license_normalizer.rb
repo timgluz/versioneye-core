@@ -2,6 +2,8 @@ module VersionEye
   module LicenseNormalizer
 
 
+    # TODO add rule for GPLv2 (with classpath exception) -> GPL-2.0-CE
+
     A_CDDL_GPL2_W_CPE = 'CDDL+GPLv2 with classpath exception'
     A_CDDL_GPL        = 'CDDL+GPL' # with calsspaht exception
 
