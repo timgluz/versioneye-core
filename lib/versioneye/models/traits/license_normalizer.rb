@@ -1,9 +1,6 @@
 module VersionEye
   module LicenseNormalizer
 
-
-    # TODO add rule for GPLv2 (with classpath exception) -> GPL-2.0-CE
-
     A_CDDL_GPL2_W_CPE = 'CDDL+GPLv2 with classpath exception'
     A_CDDL_GPL        = 'CDDL+GPL' # with calsspaht exception
 
@@ -45,8 +42,7 @@ module VersionEye
 
       return A_CDDL_GPL2_W_CPE if cddl_gpl2_w_class_exception( tmp_name )
       return A_CDDL_GPL        if cddl_gpl( tmp_name )
-
-      return 'GPL-2.0-with-classpath-exception' if gpl_20_match_w_cpe( tmp_name )
+      return 'GPL-2.0-CE'      if gpl_20_match_w_cpe( tmp_name )
 
       return 'AGPL-3.0' if agpl_30_match( tmp_name )
       return 'AGPL-1.0' if agpl_10_match( tmp_name )
@@ -527,6 +523,8 @@ module VersionEye
       new_name.match(/\AGeneral\s*Public\s*2\s*w\s*Classpath\s*Exception\z/i) ||
       new_name.match(/\AGeneral\s*Public\s*2\s*\+\s*Classpath\s*Exception\z/i) ||
       new_name.match(/\AGeneral\s*Public\s*2\s*\+\s*Cpe\z/i) ||
+      new_name.match(/\AGPL\s*2\s*with\s*classpath\s*exception\z/i) ||
+      new_name.match(/\AGPLv2\s*\(with\s*classpath\s*exception\)\z/i) ||
       new_name.match(/\AGPL\s*2\s*w\/\s*CPE\z/i) ||
       new_name.match(/\AGPL\s*2\s*w\/\s*CPE\z/i) ||
       new_name.match(/\Agplv2\+ce\z/i) ||
@@ -1154,7 +1152,7 @@ module VersionEye
         map['GPL-2.0+']                         = {:fullname => 'GNU General Public License v2.0 or later', :osi_approved => false}
         map['GPL-2.0-with-autoconf-exception']  = {:fullname => 'GNU General Public License v2.0 w/Autoconf exception', :osi_approved => false}
         map['GPL-2.0-with-bison-exception']     = {:fullname => 'GNU General Public License v2.0 w/Bison exception', :osi_approved => false}
-        map['GPL-2.0-with-classpath-exception'] = {:fullname => 'GNU General Public License v2.0 w/Classpath exception', :osi_approved => false}
+        map['GPL-2.0-CE']                       = {:fullname => 'GNU General Public License v2.0 w/Classpath exception', :osi_approved => false}
         map['GPL-2.0-with-font-exception']      = {:fullname => 'GNU General Public License v2.0 w/Font exception', :osi_approved => false}
         map['GPL-2.0-with-GCC-exception']       = {:fullname => 'GNU General Public License v2.0 w/GCC Runtime Library exception', :osi_approved => false}
         map['GPL-3.0+']                         = {:fullname => 'GNU General Public License v3.0 or later', :osi_approved => false}

@@ -851,57 +851,68 @@ describe License do
 
     it "should return GPL-2.0-with-classpath-exception name" do
       license = License.new({:name => "GPL 2.0 w/ cpe"})
-      license.name_substitute.should eq("GPL-2.0-with-classpath-exception")
+      license.name_substitute.should eq("GPL-2.0-CE")
     end
     it "should return GPL-2.0-with-classpath-exception name" do
       license = License.new({:name => "GPLv2.0 w/ cpe"})
-      license.name_substitute.should eq("GPL-2.0-with-classpath-exception")
+      license.name_substitute.should eq("GPL-2.0-CE")
     end
     it "should return GPL-2.0-with-classpath-exception name" do
       license = License.new({:name => "GPL2 w/ cpe"})
-      license.name_substitute.should eq("GPL-2.0-with-classpath-exception")
+      license.name_substitute.should eq("GPL-2.0-CE")
     end
     it "should return GPL-2.0-with-classpath-exception name" do
       license = License.new({:name => "GNU General Public License, version 2, with the Classpath Exception"})
-      license.name_substitute.should eq("GPL-2.0-with-classpath-exception")
+      license.name_substitute.should eq("GPL-2.0-CE")
     end
     it "should return GPL-2.0-with-classpath-exception name" do
       license = License.new({:name => "General Public License, version 2, with Classpath Exception"})
-      license.name_substitute.should eq("GPL-2.0-with-classpath-exception")
+      license.name_substitute.should eq("GPL-2.0-CE")
     end
     it "should return GPL-2.0-with-classpath-exception name" do
       license = License.new({:name => "General Public License 2 w\ Classpath Exception"})
-      license.name_substitute.should eq("GPL-2.0-with-classpath-exception")
+      license.name_substitute.should eq("GPL-2.0-CE")
     end
     it "should return GPL-2.0-with-classpath-exception name" do
       license = License.new({:name => "General Public License 2 w Classpath Exception"})
-      license.name_substitute.should eq("GPL-2.0-with-classpath-exception")
+      license.name_substitute.should eq("GPL-2.0-CE")
     end
     it "should return GPL-2.0-with-classpath-exception name" do
       license = License.new({:name => "General Public License 2 + Classpath Exception"})
-      license.name_substitute.should eq("GPL-2.0-with-classpath-exception")
+      license.name_substitute.should eq("GPL-2.0-CE")
     end
     it "should return GPL-2.0-with-classpath-exception name" do
       license = License.new({:name => "General Public License 2 + CPE"})
-      license.name_substitute.should eq("GPL-2.0-with-classpath-exception")
+      license.name_substitute.should eq("GPL-2.0-CE")
     end
     it "should return GPL-2.0-with-classpath-exception name" do
       license = License.new({:name => "GNU General Public License v2.0 w/Classpath exception"})
-      license.name_substitute.should eq("GPL-2.0-with-classpath-exception")
+      license.name_substitute.should eq("GPL-2.0-CE")
     end
     it "should return GPL-2.0-with-classpath-exception name" do
       license = License.new({:name => "gplv2+ce"})
-      license.name_substitute.should eq("GPL-2.0-with-classpath-exception")
+      license.name_substitute.should eq("GPL-2.0-CE")
     end
     it "should return GPL-2.0-with-classpath-exception name" do
       license = License.new({:name => "The GNU General Public License (GPL) Version 2, June 1991 with \"ClassPath\" Exception"})
-      license.name_substitute.should eq("GPL-2.0-with-classpath-exception")
+      license.name_substitute.should eq("GPL-2.0-CE")
     end
     it "should return GPL-2.0-with-classpath-exception name" do
       license = License.new({:name => "The GNU General Public License (GPL) Version 2, June 1991 with classpath Exception"})
-      license.name_substitute.should eq("GPL-2.0-with-classpath-exception")
+      license.name_substitute.should eq("GPL-2.0-CE")
     end
-
+    it "should return GPL-2.0-with-classpath-exception name" do
+      license = License.new({:name => "GPL-2.0-CE"})
+      license.name_substitute.should eq("GPL-2.0-CE")
+    end
+    it "should return GPL-2.0-with-classpath-exception name" do
+      license = License.new({:name => "GPL-2.0-with-classpath-exception"})
+      license.name_substitute.should eq("GPL-2.0-CE")
+    end
+    it "should return GPL-2.0-with-classpath-exception name" do
+      license = License.new({:name => "GPLv2 (with classpath exception)"})
+      license.name_substitute.should eq("GPL-2.0-CE")
+    end
 
 
 
