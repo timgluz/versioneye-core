@@ -80,8 +80,6 @@ class MixParser < CommonParser
       return dependency
     end
 
-    #TODO: handle combined version ranges
-
     n = version_label.size - 1
     case version_label
     when /\band\b/i
