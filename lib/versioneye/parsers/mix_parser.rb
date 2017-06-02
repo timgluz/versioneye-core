@@ -25,7 +25,7 @@ class MixParser < CommonParser
     return nil if content.to_s.strip.eql?('Not Found')
 
     proj = init_project
-    parse_dependencies project, content
+    parse_dependencies proj, content
 
     proj
   rescue => e
@@ -36,7 +36,7 @@ class MixParser < CommonParser
 
   def parse_dependencies(project, content)
 
-    dep_items = extract_dep_items extract_deps_bloc preprocess(content)
+    dep_items = extract_dep_items extract_deps_block preprocess(content)
     if dep_items.nil?
       log.error "parse_dependencies: found no dep items from `#{content}`"
       return
@@ -49,16 +49,21 @@ class MixParser < CommonParser
 
   def parse_line(project, dep_line)
     dep_doc  = parse_dep_item dep_line
+    if dep_doc.nil?
+      logger.error "parse_line: failed to parse: `#{dep_line}`"
+      return
+    end
+
     product = Product.where(
       language: Product::A_LANGUAGE_ELIXIR,
       prod_key: dep_doc[:name]
     ).first
 
     dep =  init_dependency(product, dep_doc)
-    parse_requested_version( dep_doc[:version], dependency, product )
+    parse_requested_version( dep_doc[:version], dep, product )
 
     project.projectdependencies.push dep
-    project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
+    project.out_number     += 1 if ProjectdependencyService.outdated?( dep )
     project.unknown_number += 1 if product.nil?
   end
 
@@ -246,16 +251,17 @@ class MixParser < CommonParser
   end
 
   def init_dependency(product, dep_doc)
-    dep = ProjectDependency.new(
+
+    dep = Projectdependency.new(
       language: Product::A_LANGUAGE_ELIXIR,
       name: dep_doc[:name],
       version_label: dep_doc[:version],
-      scope: dep[:scope]
+      scope: dep_doc[:scope]
     )
 
     if product
       dep[:prod_key] = product[:prod_key]
-      dep[:version_current] = product.versio
+      dep[:version_current] = product[:version]
     end
 
     dep

@@ -312,4 +312,79 @@ describe MixParser do
       expect(dep[:comperator]).to eq('=')
     end
   end
+
+  context "parse_content" do
+    before do
+      prod1.versions << Version.new(version: '2.0.0')
+      prod1.versions << Version.new(version: '2.0.9')
+      prod1.versions << Version.new(version: '2.1.0')
+      prod1.save
+
+      prod2.versions << Version.new(version: '0.14.0')
+      prod2.versions << Version.new(version: '0.99.0')
+      prod2.versions << Version.new(version: '1.0.0')
+      prod2.save
+
+      prod3.versions << Version.new(version: '0.3.0')
+      prod3.save
+
+      prod4.versions << Version.new(version: '0.2.0')
+      prod4.save
+
+      prod5.save
+    end
+
+    it "creates project with right dependencies" do
+      proj = parser.parse_content(test_content)
+
+      expect(proj).not_to be_nil
+      expect(proj.dependencies.size).to eq(5)
+
+      dep1 = proj.dependencies[0]
+      expect(dep1[:language]).to eq(prod1[:language])
+      expect(dep1[:prod_key]).to eq(prod1[:prod_key])
+      expect(dep1[:version_requested]).to eq('2.0.9')
+      expect(dep1[:version_label]).to eq('~> 2.0.0')
+      expect(dep1[:comperator]).to eq('~>')
+      expect(dep1[:outdated]).to be_truthy
+      expect(dep1[:scope]).to eq('test')
+
+      dep2 = proj.dependencies[1]
+      expect(dep2[:language]).to eq(prod2[:language])
+      expect(dep2[:prod_key]).to eq(prod2[:prod_key])
+      expect(dep2[:version_requested]).to eq('0.99.0')
+      expect(dep2[:version_label]).to eq('~> 0.14')
+      expect(dep2[:comperator]).to eq('~>')
+      expect(dep2[:outdated]).to be_truthy
+      expect(dep2[:scope]).to eq('dev')
+
+      dep3 = proj.dependencies[2]
+      expect(dep3[:language]).to eq(prod3[:language])
+      expect(dep3[:prod_key]).to eq(prod3[:prod_key])
+      expect(dep3[:version_requested]).to eq('0.3.0')
+      expect(dep3[:version_label]).to eq('~> 0.3.0')
+      expect(dep3[:comperator]).to eq('~>')
+      expect(dep3[:outdated]).to be_falsey
+      expect(dep3[:scope]).to eq('dev')
+
+      dep4 = proj.dependencies[3]
+      expect(dep4[:language]).to eq(prod4[:language])
+      expect(dep4[:prod_key]).to eq(prod4[:prod_key])
+      expect(dep4[:version_requested]).to eq('0.2.0')
+      expect(dep4[:version_label]).to eq('~> 0.2')
+      expect(dep4[:comperator]).to eq('~>')
+      expect(dep4[:outdated]).to be_falsey
+      expect(dep4[:scope]).to be_nil
+
+      dep5 = proj.dependencies[4]
+      expect(dep5[:language]).to eq(prod5[:language])
+      expect(dep5[:name]).to eq(prod5[:name])
+      expect(dep5[:prod_key]).to eq(prod5[:prod_key])
+      expect(dep5[:version_requested]).to eq('GIT')
+      expect(dep5[:version_label]).to eq('GIT')
+      expect(dep5[:comperator]).to eq('=')
+      expect(dep5[:outdated]).to be_falsey
+      expect(dep5[:scope]).to eq('test')
+    end
+  end
 end
