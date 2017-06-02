@@ -238,6 +238,10 @@ class Organisation < Versioneye::Model
     versions
   end
 
+  def comp_bucket_count
+    ApiCmp.where( :api_key => self.api_key ).count
+  end
+
   def os_project_count
     Project.where( organisation_id: self.ids, private_project: false, :parent_id => nil ).count
   end
