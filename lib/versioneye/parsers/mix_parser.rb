@@ -195,8 +195,20 @@ class MixParser < CommonParser
       when /\Agit:/
         dep_doc[:version] = item.to_s.gsub(/\s+/, '').strip
 
+      when /\Apath:/
+        dep_doc[:version] = item.to_s.gsub(/\s+/, '').strip
+
+      when /\Agithub:/
+        dep_doc[:version] = item.to_s.gsub(/\s+/, '').strip
+
       when /\Atag:/
         dep_doc[:tag] = item.gsub(/\Atag:/, '').to_s.strip
+
+      when /\Arev:/
+        dep_doc[:rev] = item.gsub(/\Arev:/, '').to_s.strip
+
+      when /\Abranch:/
+        dep_doc[:branch] = item.gsub(/\Abranch:/, '').to_s.strip
 
       when /^[~|>|<|=|\d]/
         dep_doc[:version] = item

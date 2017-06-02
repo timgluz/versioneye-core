@@ -109,6 +109,15 @@ describe MixParser do
       expect(dep_dt[:version]).to eq('git:https://test.url')
       expect(dep_dt[:tag]).to eq('0.1.0')
     end
+
+    it "extracts github field into version" do
+      dep_dt = parser.parse_dep_item('{:ex_spec, github: "ninenines/cowboy"}, rev: "sha1-val"')
+
+      expect(dep_dt).not_to be_nil
+      expect(dep_dt[:name]).to eq('ex_spec')
+      expect(dep_dt[:version]).to eq('github:ninenines/cowboy')
+      expect(dep_dt[:rev]).to eq('sha1-val')
+    end
   end
 
   let(:prod1){
