@@ -194,7 +194,16 @@ class MixParser < CommonParser
     n = scope_txt.size - 1
     return "" if n < 4
 
-    scope_txt[4..n].to_s.delete('[]:').gsub(/\s+/, '').to_s
+    scope_id = scope_txt[4..n].to_s.delete('[]:').gsub(/\s+/, '').to_s.strip
+
+    case scope_id
+    when /test/i
+      Dependency::A_SCOPE_TEST
+    when /dev/i
+      Dependency::A_SCOPE_DEVELOPMENT
+    else
+      scope_id
+    end
   end
 
   # takes out of dependency items from extracted dep_block

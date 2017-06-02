@@ -91,14 +91,14 @@ describe MixParser do
       expect(dep_dt).not_to be_nil
       expect(dep_dt[:name]).to eq('ex_spec')
       expect(dep_dt[:version]).to be_nil
-      expect(dep_dt[:scope]).to eq('dev')
+      expect(dep_dt[:scope]).to eq(Dependency::A_SCOPE_DEVELOPMENT)
     end
 
     it "returns the correct value when user attache list of scopes" do
       dep_dt = parser.parse_dep_item('{:ex_spec, only: [:test, :dev]}')
       expect(dep_dt).not_to be_nil
       expect(dep_dt[:name]).to eq('ex_spec')
-      expect(dep_dt[:scope]).to eq('test') #NB! Projectdependencies support only 1scope
+      expect(dep_dt[:scope]).to eq(Dependency::A_SCOPE_TEST) #NB! Projectdependencies support only 1scope
       expect(dep_dt[:version]).to be_nil
     end
 
@@ -347,7 +347,7 @@ describe MixParser do
       expect(dep1[:version_label]).to eq('~> 2.0.0')
       expect(dep1[:comperator]).to eq('~>')
       expect(dep1[:outdated]).to be_truthy
-      expect(dep1[:scope]).to eq('test')
+      expect(dep1[:scope]).to eq(Dependency::A_SCOPE_TEST)
 
       dep2 = proj.dependencies[1]
       expect(dep2[:language]).to eq(prod2[:language])
@@ -356,7 +356,7 @@ describe MixParser do
       expect(dep2[:version_label]).to eq('~> 0.14')
       expect(dep2[:comperator]).to eq('~>')
       expect(dep2[:outdated]).to be_truthy
-      expect(dep2[:scope]).to eq('dev')
+      expect(dep2[:scope]).to eq(Dependency::A_SCOPE_DEVELOPMENT)
 
       dep3 = proj.dependencies[2]
       expect(dep3[:language]).to eq(prod3[:language])
@@ -365,7 +365,7 @@ describe MixParser do
       expect(dep3[:version_label]).to eq('~> 0.3.0')
       expect(dep3[:comperator]).to eq('~>')
       expect(dep3[:outdated]).to be_falsey
-      expect(dep3[:scope]).to eq('dev')
+      expect(dep3[:scope]).to eq(Dependency::A_SCOPE_DEVELOPMENT)
 
       dep4 = proj.dependencies[3]
       expect(dep4[:language]).to eq(prod4[:language])
@@ -384,7 +384,7 @@ describe MixParser do
       expect(dep5[:version_label]).to eq('GIT')
       expect(dep5[:comperator]).to eq('=')
       expect(dep5[:outdated]).to be_falsey
-      expect(dep5[:scope]).to eq('test')
+      expect(dep5[:scope]).to eq(Dependency::A_SCOPE_TEST)
     end
   end
 end
