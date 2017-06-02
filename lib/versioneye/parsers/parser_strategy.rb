@@ -100,6 +100,10 @@ class ParserStrategy
         else
           return CargoParser.new
         end
+
+      when Project::A_TYPE_MIX
+        return MixParser.new
+
       else
         nil
 
