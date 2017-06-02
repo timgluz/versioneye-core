@@ -285,6 +285,39 @@ describe MixParser do
       expect(dep[:comperator]).to eq('~>')
     end
 
+    it "handles combined AND ranges correctly" do
+      prod1.versions = []
+      prod1.versions << Version.new(version: '1.1')
+      prod1.versions << Version.new(version: '1.1.5')
+      prod1.versions << Version.new(version: '1.5')
+      prod1.versions << Version.new(version: '2.0.0')
+      prod1.save
+
+      range = '>= 1.0 and < 2.0'
+      dep = parser.parse_requested_version(range, dep1, prod1)
+
+      expect(dep).not_to be_nil
+      expect(dep[:version_requested]).to eq('1.5')
+      expect(dep[:version_label]).to eq(range)
+      expect(dep[:comperator]).to eq('&&')
+    end
+
+    it "handles correctly OR ranges" do
+      prod1.versions = []
+      prod1.versions << Version.new(version: '0.8.9')
+      prod1.versions << Version.new(version: '1.0.0')
+      prod1.versions << Version.new(version: '1.2.2')
+      prod1.save
+
+      range = '< 0.9 or >= 1.2'
+      dep = parser.parse_requested_version(range, dep1, prod1)
+
+      expect(dep).not_to be_nil
+      expect(dep[:version_requested]).to eq('1.2.2')
+      expect(dep[:version_label]).to eq(range)
+      expect(dep[:comperator]).to eq('||')
+    end
+
     it "can handle Git dependency" do
       dep = parser.parse_requested_version('git:https://test', dep1, prod1)
 

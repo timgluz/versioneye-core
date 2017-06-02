@@ -84,6 +84,23 @@ class MixParser < CommonParser
 
     n = version_label.size - 1
     case version_label
+    when /\band\b/i
+      latest_version = VersionService.from_common_range(
+        product.versions, version_label, false,  'and'
+      )
+      latest_version ||= version_label
+      dependency[:version_requested] = latest_version
+      dependency[:comperator]        = '&&'
+
+    when /\bor\b/i
+      latest_versions = VersionService.from_or_ranges(
+        product.versions, version_label, 'or'
+      )
+      latest_version = VersionService.newest_version(latest_versions)
+
+      dependency[:version_requested] = latest_version
+      dependency[:comperator]        = '||'
+
     when /\A==/
       version = version_label[2..n].strip
       dependency[:version_requested] = version
