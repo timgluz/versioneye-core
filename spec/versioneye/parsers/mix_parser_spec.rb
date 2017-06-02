@@ -250,6 +250,41 @@ describe MixParser do
       expect(dep[:comperator]).to eq('<')
     end
 
+    it "return biggest version in minor range" do
+      prod1.versions = []
+      prod1.versions << Version.new(version: '1.9.0')
+      prod1.versions << Version.new(version: '2.0.0')
+      prod1.versions << Version.new(version: '2.0.1')
+      prod1.versions << Version.new(version: '2.0.2')
+      prod1.versions << Version.new(version: '2.1.0')
+      prod1.save
+
+      dep = parser.parse_requested_version('~> 2.0.0', dep1, prod1)
+
+      expect(dep).not_to be_nil
+      expect(dep[:version_requested]).to eq('2.0.2')
+      expect(dep[:version_label]).to eq('~> 2.0.0')
+      expect(dep[:comperator]).to eq('~>')
+    end
+
+    it "returns biggest version in major range" do
+      prod1.versions = []
+      prod1.versions << Version.new(version: '1.9.0')
+      prod1.versions << Version.new(version: '2.0.0')
+      prod1.versions << Version.new(version: '2.0.1')
+      prod1.versions << Version.new(version: '2.0.2')
+      prod1.versions << Version.new(version: '2.1.0')
+      prod1.versions << Version.new(version: '3.0.0')
+      prod1.save
+
+      dep = parser.parse_requested_version('~> 2.0', dep1, prod1)
+
+      expect(dep).not_to be_nil
+      expect(dep[:version_requested]).to eq('2.1.0')
+      expect(dep[:version_label]).to eq('~> 2.0')
+      expect(dep[:comperator]).to eq('~>')
+    end
+
     it "can handle Git dependency" do
       dep = parser.parse_requested_version('git:https://test', dep1, prod1)
 

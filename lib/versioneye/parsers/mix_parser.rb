@@ -110,8 +110,17 @@ class MixParser < CommonParser
 
     when /\A~>/
       version = version_label[2..n].strip
-      #TODO: finish
+      starter         = VersionService.version_approximately_greater_than_starter( version )
+      versions        = VersionService.versions_start_with( product.versions, starter )
 
+      highest_version = VersionService.newest_version_from( versions )
+      if highest_version
+        dependency[:version_requested] = highest_version.to_s
+      else
+        dependency[:version_requested] = ver
+      end
+
+      dependency[:comperator]        = '~>'
 
     when /\Agit:/i
       dependency[:version_requested] = 'GIT'
