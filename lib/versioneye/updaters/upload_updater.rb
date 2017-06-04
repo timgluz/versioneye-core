@@ -26,6 +26,8 @@ class UploadUpdater < CommonUpdater
     project.dep_number = dep_number
     project.out_number = out_number
     project.sum_own!
+    project.updated_at = Time.now
+    project.save
     project
   end
 
