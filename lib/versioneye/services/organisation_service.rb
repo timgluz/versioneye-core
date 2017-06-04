@@ -15,6 +15,7 @@ class OrganisationService < Versioneye::Service
     team.add_member user
     team.organisation = orga
     team.save
+    create_default_lwl orga
     orga
   end
 
@@ -153,6 +154,26 @@ class OrganisationService < Versioneye::Service
       orgas.push(orga) if OrganisationService.allowed_to_transfer_projects?( orga, user )
     end
     orgas
+  end
+
+
+  def self.create_default_lwl orga
+    lwl = LicenseWhitelistService.create orga, 'default_lwl'
+    lwl.default = true
+    lwl.save
+    lwl.add_license_element 'MIT'
+    lwl.add_license_element 'BSD'
+    lwl.add_license_element 'BSD-2-Clause'
+    lwl.add_license_element 'BSD-3-Clause'
+    lwl.add_license_element 'BSD-4-Clause'
+    lwl.add_license_element 'BSD-4-Clause-UC'
+    lwl.add_license_element 'Apache-1.0'
+    lwl.add_license_element 'Apache-1.1'
+    lwl.add_license_element 'Apache-2.0'
+    lwl.add_license_element 'WTFPL'
+    lwl.add_license_element 'Public Domain'
+    lwl.add_license_element 'CC0'
+    lwl.add_license_element 'CC0-1.0'
   end
 
 
