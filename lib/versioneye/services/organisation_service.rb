@@ -162,6 +162,8 @@ class OrganisationService < Versioneye::Service
   def self.create_default_lwl orga
     list_name = 'default_lwl'
     lwl = LicenseWhitelistService.create orga, list_name
+    return nil if lwl.nil?
+
     LicenseWhitelistService.default orga, list_name
     orga.reload
     lwl.add_license_element 'MIT'
