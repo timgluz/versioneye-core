@@ -5,6 +5,7 @@ describe OrganisationService do
   describe "transfer" do
 
     it "transfers a project to the orga" do
+      LicenseWhitelist.delete_all
       user = UserFactory.create_new
       user.fullname = 'HansTanz'
       expect( user.save ).to be_truthy
@@ -51,6 +52,10 @@ describe OrganisationService do
 
   describe "delete" do
     it "deletes an orga" do
+      LicenseWhitelist.delete_all
+      Plan.delete_all
+      Plan.create_defaults
+
       user = UserFactory.create_new
       user.fullname = 'HansTanz'
       expect( user.save ).to be_truthy
@@ -60,7 +65,9 @@ describe OrganisationService do
 
       orga = OrganisationService.create_new user, "myorga"
       expect( orga ).to_not be_nil
+      expect( orga.save ).to be_truthy
 
+      orga = Organisation.where(:name => 'myorga').first
       cwl = ComponentWhitelist.new({:name => 'cwl', :default => true})
       cwl.organisation = orga
       expect( cwl.save ).to be_truthy
@@ -68,6 +75,7 @@ describe OrganisationService do
       lwl = LicenseWhitelist.new({:name => 'lwl', :default => true})
       lwl.organisation = orga
       expect( lwl.save ).to be_truthy
+      expect( orga.license_whitelists.count ).to eq(2)
 
       expect( OrganisationService.transfer project, orga ).to be_truthy
       expect( OrganisationService.delete orga ).to be_truthy
@@ -206,8 +214,11 @@ describe OrganisationService do
       user = UserFactory.create_new
       user.fullname = 'HansTanz'
       expect( user.save ).to be_truthy
+
       orga = OrganisationService.create_new user, "myorga"
       expect( orga ).to_not be_nil
+      expect( OrganisationService.owner?(  orga, user ) ).to be_truthy
+      expect( OrganisationService.member?( orga, user ) ).to be_truthy
 
       expect( OrganisationService.allowed_to_transfer_projects?(orga, user) ).to be_truthy
     end

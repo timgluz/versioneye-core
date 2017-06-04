@@ -11,11 +11,13 @@ class OrganisationService < Versioneye::Service
     orga = Organisation.new({:name => name})
     orga.plan = Plan.free_plan
     orga.save
-    team = Team.new(:name => Team::A_OWNERS)
-    team.add_member user
-    team.organisation = orga
-    team.save
     create_default_lwl orga
+    owners_team = Team.new(:name => Team::A_OWNERS)
+    owners_team.add_member user
+    owners_team.organisation = orga
+    owners_team.save
+    orga.teams.push owners_team
+    orga.save
     orga
   end
 
@@ -46,7 +48,7 @@ class OrganisationService < Versioneye::Service
       TeamService.delete team
     end
 
-    orga.license_whitelists.each do |lwl|
+    LicenseWhitelist.where(:organisation_id => orga.ids).each do |lwl|
       lwl.delete
     end
 
@@ -158,9 +160,10 @@ class OrganisationService < Versioneye::Service
 
 
   def self.create_default_lwl orga
-    lwl = LicenseWhitelistService.create orga, 'default_lwl'
-    lwl.default = true
-    lwl.save
+    list_name = 'default_lwl'
+    lwl = LicenseWhitelistService.create orga, list_name
+    LicenseWhitelistService.default orga, list_name
+    orga.reload
     lwl.add_license_element 'MIT'
     lwl.add_license_element 'BSD'
     lwl.add_license_element 'BSD-2-Clause'

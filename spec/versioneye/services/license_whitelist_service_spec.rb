@@ -19,8 +19,9 @@ describe LicenseWhitelistService do
       lwl.save.should be_truthy
       lwls = LicenseWhitelistService.index @orga
       lwls.should_not be_nil
-      lwls.first.name.should eq("OkForMe")
-      lwls.count.should == 1
+      lwls.first.name.should eq("default_lwl")
+      lwls.last.name.should eq("OkForMe")
+      expect( lwls.count ).to eq(2)
     end
 
   end
@@ -41,7 +42,7 @@ describe LicenseWhitelistService do
 
     it 'create a list for a user' do
       resp = LicenseWhitelistService.create @orga, 'SuperList'
-      resp.should be_truthy
+      expect( resp ).to be_truthy
     end
 
   end
@@ -50,9 +51,11 @@ describe LicenseWhitelistService do
 
     it 'add new license to list for a user' do
       resp = LicenseWhitelistService.create @orga, 'SuperList'
-      resp.should be_truthy
+      expect( resp ).to be_truthy
       resp = LicenseWhitelistService.add @orga, 'SuperList', 'MIT'
-      resp.should be_truthy
+      expect( resp ).to be_truthy
+      @orga.reload
+      expect( @orga.license_whitelists.count ).to eq(2)
       list = LicenseWhitelistService.fetch_by @orga, 'SuperList'
       list.license_elements.count.should eq(1)
       list.license_elements.first.name.should eq('MIT')
@@ -64,14 +67,17 @@ describe LicenseWhitelistService do
 
     it 'sets the default' do
       resp = LicenseWhitelistService.create @orga, 'SuperList'
-      resp.should be_truthy
+      expect( resp ).to be_truthy
       resp = LicenseWhitelistService.create @orga, 'MyList'
-      resp.should be_truthy
+      expect( resp ).to be_truthy
       resp = LicenseWhitelistService.create @orga, 'YourList'
-      resp.should be_truthy
+      expect( resp ).to be_truthy
+      @orga.reload
+      expect( @orga.license_whitelists.count ).to eq(4)
 
-      LicenseWhitelist.count.should eq(3)
+      LicenseWhitelist.count.should eq(4)
       LicenseWhitelist.all.each do |lwl|
+        next if lwl.name.eql?('default_lwl')
         lwl.default.should be_falsy
       end
 

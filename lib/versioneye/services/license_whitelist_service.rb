@@ -13,7 +13,12 @@ class LicenseWhitelistService < Versioneye::Service
   def self.create orga, name
     whitelist = LicenseWhitelist.new( {:name => name} )
     whitelist.organisation = orga
-    whitelist.save
+    orga.license_whitelists.push whitelist
+    orga.save
+    if whitelist.save
+      return whitelist
+    end
+    nil
   end
 
   def self.add orga, list_name, license_name
@@ -29,15 +34,18 @@ class LicenseWhitelistService < Versioneye::Service
   end
 
   def self.default orga, list_name
+    response = false
     list = index( orga )
     list.each do |lwl|
       if lwl.name.eql?( list_name )
         lwl.default = true
+        response = true
       else
         lwl.default = false
       end
       lwl.save
     end
+    response
   end
 
 

@@ -448,12 +448,15 @@ describe ProjectService do
       dep_2 = ProjectdependencyFactory.create_new project, prod_2, true
       dep_3 = ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => '0.0.0'}
 
-      LicenseWhitelistService.create user, 'SuperList'
-      LicenseWhitelistService.add user, 'SuperList', 'MIT'
+      orga1 = Organisation.new(:name => 'orga1', :plan => Plan.micro)
+      expect( orga1.save ).to be_truthy
+
+      LicenseWhitelistService.create orga1, 'SuperList'
+      LicenseWhitelistService.add orga1, 'SuperList', 'MIT'
       LicenseFactory.create_new prod_2, 'GPL'
 
-      expect( LicenseWhitelist.count ).to eq(1)
-      project.license_whitelist_id = LicenseWhitelist.first.ids
+      expect( LicenseWhitelist.count ).to eq(2)
+      project.license_whitelist_id = LicenseWhitelist.last.ids
       expect( project.save ).to be_truthy
 
       add_sv prod_1

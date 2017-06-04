@@ -72,6 +72,13 @@ class Organisation < Versioneye::Model
     nil
   end
 
+  def default_lwl
+    lwl_id = default_lwl_id
+    return nil if lwl_id.nil?
+
+    LicenseWhitelist.find lwl_id
+  end
+
   def default_cwl_id
     return nil if component_whitelists.nil? || component_whitelists.empty?
 
