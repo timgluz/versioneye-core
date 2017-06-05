@@ -14,14 +14,24 @@ class GithubWebHook < Versioneye::Service
   def self.create_project_hook repo_fullname, project_id, api_key, github_token
     github_api_url = get_github_api_url
     url = "#{github_api_url}/repos/#{repo}/hooks"
-    hook_dt = build_project_hook_body( callback_url, project_id, api_key )
+    callback_url = ""
+    payload = build_project_hook_body( callback_url, project_id, api_key )
 
-    res = post_json url, body_hash, github_token
+    res = create_webhook url, body_hash, payload
+
   end
 
-  def self.delete_webhook(repo, token, hook_id)
+  #registers a new webhook and returns results from API
+  def self.create_webhook(repo_fullname, token, payload = nil)
+    github_api_url = get_github_api_url
+    url = "#{github_api_url}/repos/#{repo}/hooks"
+
+    post_json url, payload, token
+  end
+
+  def self.delete_webhook(repo_fullname, token, hook_id)
     api_url = get_github_api_url
-    url = "#{api_url}/repos/#{repo}/hooks/#{hook_id}"
+    url = "#{api_url}/repos/#{repo_fullname}/hooks/#{hook_id}"
 
     res = delete(url)
     is_success = res.nil? == false and res.code >= 200 and res.code < 300
