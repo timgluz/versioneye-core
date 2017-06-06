@@ -20,7 +20,6 @@ describe ProjectImportService do
       user = UserFactory.create_new 1
       orga = Organisation.new :name => 'test_org'
       orga.plan = Plan.free_plan
-      orga.plan = Plan.micro
       expect( orga.save ).to be_truthy
       expect( described_class.allowed_to_add?(orga, true) ).to be_truthy
     end
@@ -34,6 +33,11 @@ describe ProjectImportService do
       project = ProjectFactory.create_new user, nil, true, orga
       project.private_project = true
       expect( project.save ).to be_truthy
+
+      project = ProjectFactory.create_new user, nil, true, orga
+      project.private_project = true
+      expect( project.save ).to be_truthy
+
       expect( described_class.allowed_to_add?(orga, true) ).to be_falsey
     end
   end
@@ -238,7 +242,7 @@ describe ProjectImportService do
       orga = Organisation.new({:name => 'test_orga'})
       orga.plan = plan
       orga.save
-      plan.private_projects.times { ProjectFactory.create_new( github_user, {:private_project => true}, true, orga ) }
+      (plan.private_projects + 1).times { ProjectFactory.create_new( github_user, {:private_project => true}, true, orga ) }
       expect( described_class.allowed_to_add_project?(orga, true) ).to be_falsey
     end
 
@@ -249,6 +253,7 @@ describe ProjectImportService do
       orga.plan = plan
       orga.save
       max = plan.private_projects
+      max += 1
       max.times { ProjectFactory.create_new( github_user, {:private_project => true}, true, orga ) }
       expect( described_class.allowed_to_add_project?(orga, true) ).to be_falsey
     end

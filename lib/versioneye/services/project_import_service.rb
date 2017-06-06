@@ -8,7 +8,7 @@ class ProjectImportService < Versioneye::Service
   def self.import_all_github user, orga_id, pfs = [
     'Gemfile', 'Gemfile.lock', '.gemspec', 'package.json', 'pom.xml', 'bower.json',
     'Podfile', 'Podfile.lock', '.gradle', 'yarn.lock', 'npm-shrinkwrap.json',
-    'Cargo.toml', 'Cargo.lock', '.csproj'
+    'Cargo.toml', 'Cargo.lock', '.csproj', 'mix.exs'
     ], max_depth = 2
     user.github_repos.where(:fullname => /\Ablinkist/, :private => true).each do |repo|
       if repo.branches.to_a.empty?

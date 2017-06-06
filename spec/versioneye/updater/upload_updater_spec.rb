@@ -42,9 +42,14 @@ describe UploadUpdater do
       LicenseFactory.create_new product, 'GPL'
       expect( License.count ).to eq(1)
 
-      LicenseWhitelistService.create user, 'SuperList'
-      LicenseWhitelistService.add user, 'SuperList', 'MIT'
-      lwl = LicenseWhitelistService.fetch_by user, 'SuperList'
+      Plan.create_defaults
+      orga = OrganisationService.create_new user, "myorga"
+      expect( orga ).to_not be_nil
+      expect( orga.save ).to be_truthy
+
+      LicenseWhitelistService.create orga, 'SuperList'
+      LicenseWhitelistService.add orga, 'SuperList', 'MIT'
+      lwl = LicenseWhitelistService.fetch_by orga, 'SuperList'
       project.license_whitelist_id = lwl.ids
       project.save
 

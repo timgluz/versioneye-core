@@ -37,7 +37,9 @@ class ProjectUpdateService < Versioneye::Service
 
     project = update_single project
     project.children.each do |child_project|
+      child_project.organisation_id = project.organisation_id
       child_project.license_whitelist_id = project.license_whitelist_id
+      child_project.component_whitelist_id = project.component_whitelist_id
       child_project.save
       update_single child_project
     end
@@ -52,8 +54,6 @@ class ProjectUpdateService < Versioneye::Service
 
 
   def self.update_single project
-    return nil if not_updateable?( project )
-
     project.parsing_errors = []
     updater = UpdateStrategy.updater_for project.source
     updater.update project

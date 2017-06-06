@@ -72,6 +72,13 @@ class Organisation < Versioneye::Model
     nil
   end
 
+  def default_lwl
+    lwl_id = default_lwl_id
+    return nil if lwl_id.nil?
+
+    LicenseWhitelist.find lwl_id
+  end
+
   def default_cwl_id
     return nil if component_whitelists.nil? || component_whitelists.empty?
 
@@ -236,6 +243,14 @@ class Organisation < Versioneye::Model
     end
 
     versions
+  end
+
+  def comp_bucket_count
+    ApiCmp.where( :api_key => self.api_key ).count
+  end
+
+  def os_project_count
+    Project.where( organisation_id: self.ids, private_project: false, :parent_id => nil ).count
   end
 
   def private_project_count

@@ -93,6 +93,9 @@ class ProjectdependencyService < Versioneye::Service
     product.version = dep.version_requested
     fill_license_cache project, dep, product.licenses
     dep.save if save_dep
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join "\n"
   end
 
 
@@ -137,6 +140,9 @@ class ProjectdependencyService < Versioneye::Service
     new_count = project.sv_count + dep.sv_ids.size
     project.sv_count = new_count
     project.update_attribute(:sv_count, new_count)
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join "\n"
   end
 
 
@@ -146,8 +152,8 @@ class ProjectdependencyService < Versioneye::Service
     pcount1 = Projectdependency.where(:project_id => project.id).count
     project.projectdependencies.each do |dep|
       product = dep.find_or_init_product
-      update_licenses_for project, dep, product, false
-      update_security_for project, dep, product, false
+      update_licenses_for project, dep, product, true
+      update_security_for project, dep, product, true
       dep.save
     end
     project.sv_count = project.sv_count - project.muted_svs.keys.count
