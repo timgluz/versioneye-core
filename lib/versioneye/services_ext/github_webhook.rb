@@ -1,36 +1,70 @@
 require 'httparty'
 require 'persistent_httparty'
+require 'versioneye/models/webhook'
 
-class GithubWebHook < Versioneye::Service
+class GithubWebhook < Versioneye::Service
   include HTTParty
+
+  A_USER_AGENT = 'Chrome/28(www.versioneye.com, support@versioneye.com)'
+  A_DEFAULT_HEADERS = {
+    'Accept' => 'application/vnd.github.v3+json',
+    'User-Agent' => A_USER_AGENT,
+    'Connection' => 'Keep-Alive'
+  }
+
   persistent_connection_adapter({
     name: 'versioneye_github_client',
     pool_size: 30,
     keep_alive: 30
   })
 
-  #TODO: finish it
   #creates a new Github hook and saves result into Webhook model
-  def self.create_project_hook repo_fullname, project_id, api_key, github_token
-    github_api_url = get_github_api_url
-    url = "#{github_api_url}/repos/#{repo}/hooks"
-    callback_url = ""
-    payload = build_project_hook_body( callback_url, project_id, api_key )
+  def self.create_project_hook(repo_fullname, project_id, api_key, github_token)
+    if repo_fullname.nil? or project_id.nil?
+      log.error "create_project_hook: repo_fullname or project_id cant be nil"
+      return
+    end
 
-    res = create_webhook url, body_hash, payload
+    payload = build_project_payload(project_id, api_key)
+    if payload.nil?
+      log.error "create_project_hook: failed to build request body for #{project_id} project hook"
+      return nil
+    end
 
+    res = create_webhook repo_fullname, github_token, payload
+
+    upsert_project_webhook(res, repo_fullname, project_id)
   end
 
+  # unhooks project on Github and deletes webhooks connected to project
+  def self.delete_project_hook(project_id, github_token)
+    hook = Webhook.where(scm: Webhook::A_TYPE_GITHUB, project_id: project_id).first
+    if hook.nil?
+      log.error "delete_project_hook: found no webhook for project.#{project_id}"
+      return false
+    end
+
+    is_disconnected = delete_webhook(hook[:fullname], github_token, hook[:hook_id])
+    if is_disconnected != true
+      log.error "delete_project_hook: failed to disconnect hook on github #{hook[:fullname]} - #{hook[:hook_id]}"
+      return false
+    end
+
+    hook.delete
+    true
+  end
+
+#-- API CRUD request makers
   #registers a new webhook and returns results from API
   def self.create_webhook(repo_fullname, token, payload = nil)
-    github_api_url = get_github_api_url
-    url = "#{github_api_url}/repos/#{repo}/hooks"
+    github_api_url = get_api_url
+    url = "#{github_api_url}/repos/#{repo_fullname}/hooks"
 
     post_json url, payload, token
   end
 
   def self.delete_webhook(repo_fullname, token, hook_id)
-    api_url = get_github_api_url
+    api_url = get_api_url
     url = "#{api_url}/repos/#{repo_fullname}/hooks/#{hook_id}"
 
     res = delete(url)
@@ -43,6 +77,42 @@ class GithubWebHook < Versioneye::Service
 
     true
   end
+
+#-- persistance helpers
+  # updates or creates webhook for Versineye project
+  def self.upsert_project_webhook(hook_dt, repo_fullname, project_id)
+    if hook_dt.nil? or hook_dt.empty?
+      log.error "upsert_project_webhook: got no hook data"
+      return
+    end
+
+    hook = Webhook.where(
+      scm: Webhook::A_TYPE_GITHUB,
+      fullname: repo_fullname,
+      project_id: project_id
+    ).first_or_create
+
+    hook.update(
+      hook_id: hook_dt[:id],
+      service_name: hook_dt[:name],
+      active: hook_dt[:active],
+      events: hook_dt[:events],
+      config: hook_dt[:config],
+      repo_url: "github.com/#{repo_fullname}",
+      source_url: hook_dt[:url],
+      test_url: hook_dt[:test_url],
+      ping_url: hook_dt[:ping_url]
+    )
+
+    if hook.errors.full_messages.size > 0
+      log.error "upsert_project_webhook: failed to save project hook."
+      return
+    end
+
+    log.info "upsert_project_webhook: upserted a hook for project.#{project_id}"
+    hook
+  end
+
 
 #-- request helpers
   # make HTTP post request
@@ -81,6 +151,7 @@ class GithubWebHook < Versioneye::Service
   rescue => e
     log.error "parse_safely: failed to parse `#{json_txt}`"
     log.error e.backtrace.join('\n')
+    nil
   end
 
   def self.get_api_url
@@ -88,12 +159,12 @@ class GithubWebHook < Versioneye::Service
   end
 
   #construct valid hash table to create a new hook
-  def self.build_project_hook_body(project_id, api_key)
+  def self.build_project_payload(project_id, api_key)
     callback_url = Settings.instance.server_url
     callback_url += "/api/v2/github/hook/#{project_id}?api_key=#{api_key}"
 
     {
-      name: 'web'
+      name: 'web',
       active: true,
       events: ['push', 'pull_request'],
       config: {

@@ -11,14 +11,12 @@ class Webhook < Versioneye::Model
   field :fullname, type: String # the repo fullname, format: owner_name/repo_name ~> Repo mode
 
   #linked model ids
-  field :user_id, type: String #which user/orga tokens to use #TODO: required??
   field :project_id, type: String #to which project this hook belongs
 
   #foreign ids
   field :app_id,  type: String # app_id, required to Github authorization
   field :hook_id, type: String # id from SCM
   field :service_name, type: String, default: 'web' # the service name of the webhook, aka name on Github docs
-  field :type, type: String    # type of hook, value from API
 
   field :active, type: Boolean, default: true
   field :events, type: Array # array of string: ["push", "pull_request"]
@@ -40,10 +38,9 @@ class Webhook < Versioneye::Model
 
   validates_presence_of :scm, :message => 'is mandatory'
   validates_presence_of :fullname, :message => 'is mandatory'
-  validates_presence_of :service_name, :message => 'is mandatory'
 
   #-- INDEXes
 
-  index({:scm 1, :fullname 1}, {name: 'scm_fullname', background: true})
+  index({scm: 1, fullname: 1}, {name: 'scm_fullname', background: true})
 
 end
