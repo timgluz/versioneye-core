@@ -331,21 +331,29 @@ class ProjectService < Versioneye::Service
     return false if project.nil?
 
     if project.is_collaborator?( user ) || user.admin == true
-      destroy project
+      destroy project, user.github_token
     else
       raise "User has no permission to delete this project!"
     end
   end
 
 
-  def self.destroy project
+  def self.destroy project, github_token = nil
     return false if project.nil?
 
     project.children.each do |child_project|
+      # remove any attached Github hook associated with the child project
+      GithubWebhook.delete_project_hook(child_project.id, github_token)
+
       destroy_single child_project.id
     end
+
+    # remove any attached Github hook associated with the project
+    GithubWebhook.delete_project_hook(project.id, github_token)
+
     parent = project.parent
     destroy_single project.id
+
     update_sums parent
     return true
   end

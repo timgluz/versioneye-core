@@ -38,6 +38,11 @@ class GithubWebhook < Versioneye::Service
 
   # unhooks project on Github and deletes webhooks connected to project
   def self.delete_project_hook(project_id, github_token)
+    if github_token.to_s.empty?
+      log.error "delete_project_hook: user of #{project_id} has no github token - aborting"
+      return false
+    end
+
     hook = Webhook.where(scm: Webhook::A_TYPE_GITHUB, project_id: project_id).first
     if hook.nil?
       log.error "delete_project_hook: found no webhook for project.#{project_id}"

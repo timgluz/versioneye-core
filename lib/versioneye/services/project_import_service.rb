@@ -110,12 +110,21 @@ class ProjectImportService < Versioneye::Service
 
     api_key = user.api.api_key
     api_key = organisation.api.api_key if organisation
-    create_github_webhook repo_name, project.ids, api_key, user.github_token
+
+    hook = GithubWebhook.create_project_hook(
+      repo_name, project.ids, api_key, user.github_token
+    )
+    if hook
+      log.info "created Github hook for project #{project.ids} - #{hook[:hook_id]}"
+    else
+      log.error "failed to create Github hook for project #{project.ids} - #{repo_name}"
+    end
 
     project
   end
 
 
+  #TODO: it is replace by service_ext/GithubWebhook, which also saves hook details
   def self.create_github_webhook repo_name, project_id, api_key, token
     body_hash = { :name => "web", :active => true, :events => ["push", "pull_request"], :config => {
         :url => "#{Settings.instance.server_url}/api/v2/github/hook/#{project_id}?api_key=#{api_key}",
