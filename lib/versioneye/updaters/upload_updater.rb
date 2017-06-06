@@ -21,7 +21,7 @@ class UploadUpdater < CommonUpdater
 
     unknown_licenses = ProjectService.unknown_licenses( project )
     red_licenses     = ProjectService.red_licenses( project )
-    project.licenses_red = red_licenses.count
+    project.licenses_red     = red_licenses.count
     project.licenses_unknown = unknown_licenses.count
     project.dep_number = dep_number
     project.out_number = out_number

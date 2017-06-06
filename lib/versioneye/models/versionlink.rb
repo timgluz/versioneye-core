@@ -95,7 +95,9 @@ class Versionlink < Versioneye::Model
     versionlinks = Versionlink.find_version_link(language, prod_key, version_number, link)
     return nil if versionlinks && !versionlinks.empty?
 
-    versionlink = Versionlink.new({:name => name, :link => link,
+    versionlink = Versionlink.new({
+      :name => name,
+      :link => link,
       :language => language, :prod_key => prod_key,
       :version_id => version_number })
     versionlink.save
