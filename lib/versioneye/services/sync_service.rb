@@ -36,7 +36,7 @@ class SyncService < Versioneye::Service
 
 
   def self.sync_project project
-    sync_status = SyncStatus.find_or_create_by( :object_type => 'Project', :object_id => project.ids )
+    sync_status = SyncStatus.find_or_create_by( :comp_type => 'Project', :comp_id => project.ids )
     sync_status.update_attribute(:status, 'running')
 
     sync_projectdependencies project.unknown_dependencies, false
@@ -83,7 +83,7 @@ class SyncService < Versioneye::Service
 
 
   def self.update_sync_info dependency
-    sync_status = SyncStatus.find_or_create_by( :object_type => 'Project', :object_id => dependency.project.ids )
+    sync_status = SyncStatus.find_or_create_by( :comp_type => 'Project', :comp_id => dependency.project.ids )
     sync_status.update_attribute(:info, dependency.name)
   rescue => e
     log.error e.message
