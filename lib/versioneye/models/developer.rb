@@ -19,12 +19,15 @@ class Developer < Versioneye::Model
   field :name            , type: String # This is the real name of the developer!
   field :email           , type: String
   field :homepage        , type: String
+  field :twitter         , type: String
+  field :github          , type: String
   field :organization    , type: String
   field :organization_url, type: String
   field :role            , type: String
   field :timezone        , type: String
   field :contributor     , type: Boolean, default: false
 
+  # This will set to true from a background job, after an Author profile was created for this developer.
   field :to_author       , type: Boolean, default: false
 
 
