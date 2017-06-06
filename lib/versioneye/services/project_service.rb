@@ -44,6 +44,7 @@ class ProjectService < Versioneye::Service
 
     return Project::A_TYPE_CPAN      if (/\Acpanfile\z/i =~ trimmed_name) != nil
     return Project::A_TYPE_CARGO     if (/Cargo\.toml\z/i =~ trimmed_name) != nil or (/Cargo\.lock\z/i =~ trimmed_name ) != nil
+    return Project::A_TYPE_MIX       if ( /mix\.exs\z/i =~ trimmed_name ) != nil
 
     return nil
   end

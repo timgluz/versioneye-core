@@ -175,16 +175,16 @@ describe ProjectService do
 
   describe "corresponding_file" do
     it "returns nil for pom.xml" do
-      described_class.corresponding_file('pom.xml').should be_nil
+      expect( described_class.corresponding_file('pom.xml') ).to be_nil
     end
     it "returns Gemfile.lock" do
-      described_class.corresponding_file('Gemfile').should eq('Gemfile.lock')
+      expect( described_class.corresponding_file('Gemfile') ).to eq('Gemfile.lock')
     end
     it "returns composer.lock" do
-      described_class.corresponding_file('composer.json').should eq('composer.lock')
+      expect( described_class.corresponding_file('composer.json') ).to eq('composer.lock')
     end
     it "returns Podfile.lock" do
-      described_class.corresponding_file('Podfile').should eq('Podfile.lock')
+      expect( described_class.corresponding_file('Podfile') ).to eq('Podfile.lock')
     end
   end
 
@@ -206,45 +206,47 @@ describe ProjectService do
     it "returns RubyGems. OK" do
       url1 = "http://localhost:4567/veye_dev_projects/i5lSWS951IxJjU1rurMg_Gemfile?AWSAccessKeyId=123&Expires=1360525084&Signature=HRPsn%2Bai%2BoSjm8zqwZFRtzxJvvE%3D"
       url2 = "http://localhost:4567/veye_dev_projects/i5lSWS951IxJjU1rurMg_Gemfile.lock?AWSAccessKeyId=123&Expires=1360525084&Signature=HRPsn%2Bai%2BoSjm8zqwZFRtzxJvvE%3D"
-      described_class.type_by_filename(url1).should eql(Project::A_TYPE_RUBYGEMS)
-      described_class.type_by_filename(url2).should eql(Project::A_TYPE_RUBYGEMS)
-      described_class.type_by_filename("Gemfile").should eql(Project::A_TYPE_RUBYGEMS)
-      described_class.type_by_filename("Gemfile.lock").should eql(Project::A_TYPE_RUBYGEMS)
-      described_class.type_by_filename("app/Gemfile").should eql(Project::A_TYPE_RUBYGEMS)
-      described_class.type_by_filename("app/Gemfile.lock").should eql(Project::A_TYPE_RUBYGEMS)
+      expect( described_class.type_by_filename(url1) ).to eql(Project::A_TYPE_RUBYGEMS)
+      expect( described_class.type_by_filename(url2) ).to eql(Project::A_TYPE_RUBYGEMS)
+      expect( described_class.type_by_filename("Gemfile") ).to eql(Project::A_TYPE_RUBYGEMS)
+      expect( described_class.type_by_filename("Gemfile.lock") ).to eql(Project::A_TYPE_RUBYGEMS)
+      expect( described_class.type_by_filename("app/Gemfile")  ).to eql(Project::A_TYPE_RUBYGEMS)
+      expect( described_class.type_by_filename("app/Gemfile.lock") ).to eql(Project::A_TYPE_RUBYGEMS)
     end
     it "returns nil for wrong Gemfiles. OK" do
-      described_class.type_by_filename("Gemfile/").should be_nil
-      described_class.type_by_filename("Gemfile.lock/a").should be_nil
-      described_class.type_by_filename("app/Gemfile/new.html").should be_nil
-      described_class.type_by_filename("app/Gemfile.lock/new").should be_nil
+      expect( described_class.type_by_filename("Gemfile/") ).to be_nil
+      expect( described_class.type_by_filename("Gemfile.lock/a") ).to be_nil
+      expect( described_class.type_by_filename("app/Gemfile/new.html") ).to be_nil
+      expect( described_class.type_by_filename("app/Gemfile.lock/new") ).to be_nil
     end
     it "returns nil for wrong CMakeLists.txt. OK" do
-      described_class.type_by_filename("CMakeLists.txt").should be_nil
+      expect( described_class.type_by_filename("CMakeLists.txt") ).to be_nil
     end
 
     it "returns Composer. OK" do
       url1 = "http://localhost:4567/veye_dev_projects/i5lSWS951IxJjU1rurMg_composer.json?AWSAccessKeyId=123&Expires=1360525084&Signature=HRPsn%2Bai%2BoSjm8zqwZFRtzxJvvE%3D"
-      described_class.type_by_filename(url1).should eql(Project::A_TYPE_COMPOSER)
-      described_class.type_by_filename(url1).should eql(Project::A_TYPE_COMPOSER)
-      described_class.type_by_filename("composer.json").should eql(Project::A_TYPE_COMPOSER)
-      described_class.type_by_filename("composer.lock").should eql(Project::A_TYPE_COMPOSER)
-      described_class.type_by_filename("app/composer.json").should eql(Project::A_TYPE_COMPOSER)
-      described_class.type_by_filename("app/composer.lock").should eql(Project::A_TYPE_COMPOSER)
+      expect( described_class.type_by_filename(url1) ).to eql(Project::A_TYPE_COMPOSER)
+      expect( described_class.type_by_filename(url1) ).to eql(Project::A_TYPE_COMPOSER)
+      expect( described_class.type_by_filename("composer.json") ).to eql(Project::A_TYPE_COMPOSER)
+      expect( described_class.type_by_filename("composer.lock") ).to eql(Project::A_TYPE_COMPOSER)
+      expect( described_class.type_by_filename("app/composer.json") ).to eql(Project::A_TYPE_COMPOSER)
+      expect( described_class.type_by_filename("app/composer.lock") ).to eql(Project::A_TYPE_COMPOSER)
     end
+
     it "returns nil for wrong composer. OK" do
-      described_class.type_by_filename("composer.json/").should be_nil
-      described_class.type_by_filename("composer.lock/a").should be_nil
-      described_class.type_by_filename("app/composer.json/new.html").should be_nil
-      described_class.type_by_filename("app/composer.lock/new").should be_nil
+      expect( described_class.type_by_filename("composer.json/")  ).to be_nil
+      expect( described_class.type_by_filename("composer.lock/a") ).to be_nil
+      expect( described_class.type_by_filename("app/composer.json/new.html") ).to be_nil
+      expect( described_class.type_by_filename("app/composer.lock/new")      ).to be_nil
     end
 
     it "returns PIP. OK" do
       url1 = "http://localhost:4567/veye_dev_projects/i5lSWS951IxJjU1rurMg_requirements.txt?AWSAccessKeyId=123&Expires=1360525084&Signature=HRPsn%2Bai%2BoSjm8zqwZFRtzxJvvE%3D"
-      described_class.type_by_filename(url1).should eql(Project::A_TYPE_PIP)
-      described_class.type_by_filename("requirements.txt").should eql(Project::A_TYPE_PIP)
-      described_class.type_by_filename("app/requirements.txt").should eql(Project::A_TYPE_PIP)
+      expect( described_class.type_by_filename(url1) ).to eql(Project::A_TYPE_PIP)
+      expect( described_class.type_by_filename("requirements.txt") ).to eql(Project::A_TYPE_PIP)
+      expect( described_class.type_by_filename("app/requirements.txt") ).to eql(Project::A_TYPE_PIP)
     end
+
     it "returns nil for wrong pip file" do
       described_class.type_by_filename("requirements.txta").should be_nil
       described_class.type_by_filename("app/requirements.txt/new").should be_nil
@@ -307,7 +309,11 @@ describe ProjectService do
     it "returns Cargo" do
       described_class.type_by_filename("/Cargo.toml").should eql(Project::A_TYPE_CARGO)
       described_class.type_by_filename("/Cargo.lock").should eql(Project::A_TYPE_CARGO)
+    end
 
+    it "returns Mix" do
+      expect( described_class.type_by_filename('mix.exs') ).to eq(Project::A_TYPE_MIX)
+      expect( described_class.type_by_filename('/a/b/c/mix.exs') ).to eq(Project::A_TYPE_MIX)
     end
 
   end
