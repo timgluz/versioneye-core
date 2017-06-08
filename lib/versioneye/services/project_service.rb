@@ -15,36 +15,23 @@ class ProjectService < Versioneye::Service
     return nil if filename.to_s.match(/new_file.txt\z/i)
 
     trimmed_name = filename.split('?')[0]
-    return Project::A_TYPE_RUBYGEMS  if (!(/Gemfile\z/ =~ trimmed_name).nil?)        or (!(/Gemfile.lock\z/  =~ trimmed_name).nil?) or (/\w\.gemspec\z/ =~ trimmed_name)
-    return Project::A_TYPE_COMPOSER  if (!(/composer.json\z/ =~ trimmed_name).nil?)  or (!(/composer.lock\z/ =~ trimmed_name).nil?)
-    return Project::A_TYPE_PIP       if (!(/requirements.txt\z/ =~ trimmed_name).nil?) or (!(/requirements\/.+\.txt/i =~ trimmed_name).nil?) or (!(/setup.py\z/ =~ trimmed_name).nil?) or (!(/pip.log\z/ =~ trimmed_name).nil?)
 
-    if (!(/package.json\z/ =~ trimmed_name).nil? \
-        or !(/yarn\.lock\z/i =~ trimmed_name).nil? \
-        or !(/npm-shrinkwrap\.json\z/i =~ trimmed_name).nil?)
-      return Project::A_TYPE_NPM
-    end
-
-    return Project::A_TYPE_GRADLE    if (!(/.gradle\z/ =~ trimmed_name).nil?)
-    return Project::A_TYPE_SBT       if (!(/.sbt\z/ =~ trimmed_name).nil?)
-    return Project::A_TYPE_MAVEN2    if (!(/pom.xml\z/ =~ trimmed_name).nil?) or (!(/.pom\z/ =~ trimmed_name).nil?) or (!(/external_dependencies.xml\z/ =~ trimmed_name).nil?) or (!(/external-dependencies.xml\z/ =~ trimmed_name).nil?) or (!(/pom.json\z/ =~ trimmed_name).nil?)
-    return Project::A_TYPE_LEIN      if (!(/project.clj\z/ =~ trimmed_name).nil?)
-    return Project::A_TYPE_BOWER     if (!(/bower.json\z/ =~ trimmed_name).nil?)
-    return Project::A_TYPE_BIICODE   if (!(/biicode.conf\z/ =~ trimmed_name).nil?)
-    return Project::A_TYPE_COCOAPODS if (!(/Podfile\z/ =~ trimmed_name).nil?)  or (!(/.podfile\z/ =~ trimmed_name).nil?) or (!(/Podfile.lock\z/ =~ trimmed_name).nil?)
-    return Project::A_TYPE_CHEF      if (!(/Berksfile.lock\z/ =~ trimmed_name).nil?)  or (!(/Berksfile\z/ =~ trimmed_name).nil?) or (!(/metadata.rb\z/ =~ trimmed_name).nil?)
-
-    if (!(/project\.json\z/ =~ trimmed_name).nil?) \
-        or (!(/.*\.nuspec\z/ =~ trimmed_name).nil?)  \
-        or (!(/packages\.config\z/ =~ trimmed_name).nil?) \
-        or (!(/.*\.csproj\z/ =~ trimmed_name).nil? )
-
-      return Project::A_TYPE_NUGET
-    end
-
-    return Project::A_TYPE_CPAN      if (/\Acpanfile\z/i =~ trimmed_name) != nil
-    return Project::A_TYPE_CARGO     if (/Cargo\.toml\z/i =~ trimmed_name) != nil or (/Cargo\.lock\z/i =~ trimmed_name ) != nil
-    return Project::A_TYPE_MIX       if ( /mix\.exs\z/i =~ trimmed_name ) != nil
+    return Project::A_TYPE_RUBYGEMS   if CommonParser.rubygems_file?(trimmed_name)
+    return Project::A_TYPE_COMPOSER   if CommonParser.composer_file?(trimmed_name)
+    return Project::A_TYPE_PIP        if CommonParser.pip_file?(trimmed_name)
+    return Project::A_TYPE_NPM        if CommonParser.npm_file?(trimmed_name)
+    return Project::A_TYPE_GRADLE     if CommonParser.gradle_file?(trimmed_name)
+    return Project::A_TYPE_SBT        if CommonParser.sbt_file?(trimmed_name)
+    return Project::A_TYPE_MAVEN2     if CommonParser.maven_file?(trimmed_name)
+    return Project::A_TYPE_LEIN       if CommonParser.lein_file?(trimmed_name)
+    return Project::A_TYPE_BOWER      if CommonParser.bower_file?(trimmed_name)
+    return Project::A_TYPE_BIICODE    if CommonParser.biicode_file?(trimmed_name)
+    return Project::A_TYPE_COCOAPODS  if CommonParser.cocoapods_file?(trimmed_name)
+    return Project::A_TYPE_CHEF       if CommonParser.chef_file?(trimmed_name)
+    return Project::A_TYPE_NUGET      if CommonParser.nuget_file?(trimmed_name)
+    return Project::A_TYPE_CPAN       if CommonParser.cpan_file?(trimmed_name)
+    return Project::A_TYPE_CARGO      if CommonParser.cargo_file?(trimmed_name)
+    return Project::A_TYPE_MIX        if CommonParser.mix_file?(trimmed_name)
 
     return nil
   end

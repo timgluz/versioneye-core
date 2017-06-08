@@ -125,4 +125,123 @@ class CommonParser
     doc
   end
 
+
+# -- helpers for file type matchers
+
+  def self.rubygems_file?(filename)
+    return true if /Gemfile\z/.match?(filename)
+    return true if /Gemfile\.lock\z/.match?(filename)
+    return true if /\w\.gemspec\z/.match?(filename)
+
+    return false
+  end
+
+  def self.composer_file?(filename)
+    return true if /composer\.json\z/.match?(filename)
+    return true if /composer\.lock\z/.match?(filename)
+
+    return false
+  end
+
+  def self.pip_file?(filename)
+    return true if /requirements\.txt\z/.match?(filename)
+    return true if /requirements\/.+\.txt/i.match?(filename)
+    return true if /setup\.py\z/.match?(filename)
+    return true if /pip\.log\z/.match?(filename)
+
+    return false
+  end
+
+  def self.npm_file?(filename)
+    return true if /package\.json\z/.match?(filename)
+    return true if /yarn\.lock\z/i.match?(filename)
+    return true if /npm-shrinkwrap\.json\z/i.match?(filename)
+
+    return false
+  end
+
+  def self.gradle_file?(filename)
+    return true if /\.gradle\z/.match?(filename)
+
+    return false
+  end
+
+  def self.sbt_file?(filename)
+    return true if /\.sbt\z/.match?(filename)
+
+    return false
+  end
+
+  def self.maven_file?(filename)
+    return true if /pom\.xml\z/.match?(filename)
+    return true if /\.pom\z/.match?(filename)
+    return true if /external_dependencies\.xml\z/.match?(filename)
+    return true if /external-dependencies\.xml\z/.match?(filename)
+    return true if /pom\.json\z/.match?(filename)
+
+    return false
+  end
+
+  def self.lein_file?(filename)
+    return true if /project\.clj\z/.match?(filename)
+
+    return false
+  end
+
+  def self.bower_file?(filename)
+    return true if /bower\.json\z/.match?(filename)
+
+    return false
+  end
+
+  def self.biicode_file?(filename)
+    return true if /biicode\.conf\z/.match?(filename)
+
+    return false
+  end
+
+  def self.cocoapods_file?(filename)
+    return true if /Podfile\z/.match?(filename)
+    return true if /\.podfile\z/.match?(filename)
+    return true if /Podfile\.lock\z/.match?(filename)
+
+    return false
+  end
+
+  def self.chef_file?(filename)
+    return true if /Berksfile\.lock\z/.match?(filename)
+    return true if /Berksfile\z/.match?(filename)
+    return true if /metadata\.rb\z/.match?(filename)
+
+    return false
+  end
+
+  def self.nuget_file?(filename)
+    return true if /project\.json\z/.match?(filename)
+    return true if /.*\.nuspec\z/.match?(filename)
+    return true if /packages\.config\z/.match?(filename)
+    return true if /.*\.csproj\z/.match?(filename)
+
+    return false
+  end
+
+  def self.cpan_file?(filename)
+    return true if /cpanfile\z/i.match?(filename)
+
+    return false
+  end
+
+  def self.cargo_file?(filename)
+    return true if /Cargo\.toml\z/i.match?(filename)
+    return true if /Cargo\.lock\z/i.match?(filename)
+
+    return false
+  end
+
+  def self.mix_file?(filename)
+    return true if /\bmix\.exs\z/i.match?(filename)
+
+    return false
+  end
 end
+
