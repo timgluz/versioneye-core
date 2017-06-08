@@ -248,67 +248,75 @@ describe ProjectService do
     end
 
     it "returns nil for wrong pip file" do
-      described_class.type_by_filename("requirements.txta").should be_nil
-      described_class.type_by_filename("app/requirements.txt/new").should be_nil
+      expect( described_class.type_by_filename("requirements.txta") ).to be_nil
+      expect( described_class.type_by_filename("app/requirements.txt/new") ).to be_nil
     end
 
     it "returns NPM. OK" do
       url1 = "http://localhost:4567/veye_dev_projects/i5lSWS951IxJjU1rurMg_package.json?AWSAccessKeyId=123&Expires=1360525084&Signature=HRPsn%2Bai%2BoSjm8zqwZFRtzxJvvE%3D"
-      described_class.type_by_filename(url1).should eql(Project::A_TYPE_NPM)
-      described_class.type_by_filename("package.json").should eql(Project::A_TYPE_NPM)
-      described_class.type_by_filename("app/package.json").should eql(Project::A_TYPE_NPM)
+
+      expect( described_class.type_by_filename(url1) ).to eql(Project::A_TYPE_NPM)
+      expect( described_class.type_by_filename("package.json") ).to eql(Project::A_TYPE_NPM)
+      expect( described_class.type_by_filename("app/package.json") ).to eql(Project::A_TYPE_NPM)
     end
+
     it "returns nil for wrong npm file" do
-      described_class.type_by_filename("package.jsona").should be_nil
-      described_class.type_by_filename("app/package.json/new").should be_nil
+      expect( described_class.type_by_filename("package.jsona") ).to be_nil
+      expect( described_class.type_by_filename("app/package.json/new") ).to be_nil
     end
 
     it "returns Gradle. OK" do
       url1 = "http://localhost:4567/veye_dev_projects/i5lSWS951IxJjU1rurMg_dep.gradle?AWSAccessKeyId=123&Expires=1360525084&Signature=HRPsn%2Bai%2BoSjm8zqwZFRtzxJvvE%3D"
-      described_class.type_by_filename(url1).should eql(Project::A_TYPE_GRADLE)
-      described_class.type_by_filename("dependencies.gradle").should eql(Project::A_TYPE_GRADLE)
-      described_class.type_by_filename("app/dependencies.gradle").should eql(Project::A_TYPE_GRADLE)
-      described_class.type_by_filename("app/deps.gradle").should eql(Project::A_TYPE_GRADLE)
+
+      expect( described_class.type_by_filename(url1) ).to eql(Project::A_TYPE_GRADLE)
+      expect( described_class.type_by_filename("dependencies.gradle") ).to eql(Project::A_TYPE_GRADLE)
+      expect( described_class.type_by_filename("app/dependencies.gradle") ).to eql(Project::A_TYPE_GRADLE)
+      expect( described_class.type_by_filename("app/deps.gradle") ).to eql(Project::A_TYPE_GRADLE)
     end
+
     it "returns nil for wrong gradle file" do
-      described_class.type_by_filename("dependencies.gradlea").should be_nil
-      described_class.type_by_filename("dep.gradleo1").should be_nil
-      described_class.type_by_filename("app/dependencies.gradle/new").should be_nil
-      described_class.type_by_filename("app/dep.gradle/new").should be_nil
+
+      expect( described_class.type_by_filename("dependencies.gradlea") ).to be_nil
+      expect( described_class.type_by_filename("dep.gradleo1") ).to be_nil
+      expect( described_class.type_by_filename("app/dependencies.gradle/new") ).to be_nil
+      expect( described_class.type_by_filename("app/dep.gradle/new") ).to be_nil
     end
 
     it "returns Maven2. OK" do
       url1 = "http://localhost:4567/veye_dev_projects/i5lSWS951IxJjU1rurMg_pom.xml?AWSAccessKeyId=123&Expires=1360525084&Signature=HRPsn%2Bai%2BoSjm8zqwZFRtzxJvvE%3D"
-      described_class.type_by_filename(url1).should          eql(Project::A_TYPE_MAVEN2)
-      described_class.type_by_filename("app/pom.xml").should eql(Project::A_TYPE_MAVEN2)
+
+      expect( described_class.type_by_filename(url1) ).to eql(Project::A_TYPE_MAVEN2)
+      expect( described_class.type_by_filename("app/pom.xml") ).to eql(Project::A_TYPE_MAVEN2)
     end
+
     it "returns nil for wrong maven2 file" do
-      described_class.type_by_filename("pom.xmla").should be_nil
-      described_class.type_by_filename("app/pom.xml/new").should be_nil
+      expect( described_class.type_by_filename("pom.xmla") ).to be_nil
+      expect( described_class.type_by_filename("app/pom.xml/new") ).to be_nil
     end
 
     it "returns Lein. OK" do
       url1 = "http://localhost:4567/veye_dev_projects/i5lSWS951IxJjU1rurMg_project.clj?AWSAccessKeyId=123&Expires=1360525084&Signature=HRPsn%2Bai%2BoSjm8zqwZFRtzxJvvE%3D"
-      described_class.type_by_filename(url1).should eql(Project::A_TYPE_LEIN)
-      described_class.type_by_filename("project.clj").should eql(Project::A_TYPE_LEIN)
-      described_class.type_by_filename("app/project.clj").should eql(Project::A_TYPE_LEIN)
+
+      expect( described_class.type_by_filename(url1) ).to eql(Project::A_TYPE_LEIN)
+      expect( described_class.type_by_filename("project.clj") ).to eql(Project::A_TYPE_LEIN)
+      expect( described_class.type_by_filename("app/project.clj") ).to eql(Project::A_TYPE_LEIN)
     end
 
     it "returns Nuget" do
-      described_class.type_by_filename("/project.json").should eql(Project::A_TYPE_NUGET)
-      described_class.type_by_filename("/something.nuspec").should eql(Project::A_TYPE_NUGET)
-      described_class.type_by_filename('veye.csproj').should eq(Project::A_TYPE_NUGET)
-      described_class.type_by_filename('/a/b/c/veye.csproj').should eq(Project::A_TYPE_NUGET)
+      expect( described_class.type_by_filename("/project.json") ).to eql(Project::A_TYPE_NUGET)
+      expect( described_class.type_by_filename("/something.nuspec") ).to eql(Project::A_TYPE_NUGET)
+      expect( described_class.type_by_filename('veye.csproj') ).to eq(Project::A_TYPE_NUGET)
+      expect( described_class.type_by_filename('/a/b/c/veye.csproj') ).to eq(Project::A_TYPE_NUGET)
     end
 
     it "returns nil for wrong Lein file" do
-      described_class.type_by_filename("project.clja").should be_nil
-      described_class.type_by_filename("app/project.clj/new").should be_nil
+      expect( described_class.type_by_filename("project.clja") ).to be_nil
+      expect( described_class.type_by_filename("app/project.clj/new") ).to be_nil
     end
 
     it "returns Cargo" do
-      described_class.type_by_filename("/Cargo.toml").should eql(Project::A_TYPE_CARGO)
-      described_class.type_by_filename("/Cargo.lock").should eql(Project::A_TYPE_CARGO)
+      expect( described_class.type_by_filename("/Cargo.toml") ).to eql(Project::A_TYPE_CARGO)
+      expect( described_class.type_by_filename("/Cargo.lock") ).to eql(Project::A_TYPE_CARGO)
     end
 
     it "returns Mix" do
@@ -339,7 +347,8 @@ describe ProjectService do
       dep_2 = ProjectdependencyFactory.create_new project, prod_2, true, {:version_requested => zz_1, :version_current => rc_1}
       dep_3 = ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => '0.0.0'}
 
-      project.dependencies.count.should eq(3)
+      expect( project.dependencies.count ).to eq(3)
+
       project.dependencies.each do |dep|
         dep.outdated = nil
         dep.release = nil
@@ -347,15 +356,16 @@ describe ProjectService do
       end
 
       project.dependencies.each do |dep|
-        dep.outdated.should be_nil
-        dep.release.should be_nil
+        expect( dep.outdated ).to be_nil
+        expect( dep.release ).to be_nil
       end
 
       proj = ProjectService.find project.id.to_s
-      proj.dependencies.count.should eq(3)
+
+      expect(proj.dependencies.count ).to eq(3)
       proj.dependencies.each do |dep|
-        dep.outdated.should be_nil
-        dep.release.should be_nil
+        expect( dep.outdated  ).to be_nil
+        expect( dep.release   ).to be_nil
       end
     end
   end
@@ -383,7 +393,7 @@ describe ProjectService do
       dep_2 = ProjectdependencyFactory.create_new project2, prod_2, true, {:version_requested => zz_1, :version_current => rc_1}
       dep_3 = ProjectdependencyFactory.create_new project2, prod_3, true, {:version_requested => '0.0.0'}
 
-      project2.dependencies.count.should eq(3)
+      expect( project2.dependencies.count ).to eq(3)
       project2.dependencies.each do |dep|
         dep.outdated = nil
         dep.release = nil
@@ -391,17 +401,18 @@ describe ProjectService do
       end
 
       project2.dependencies.each do |dep|
-        dep.outdated.should be_nil
-        dep.release.should be_nil
+        expect( dep.outdated  ).to be_nil
+        expect( dep.release   ).to be_nil
       end
 
       proj = ProjectService.find_child project1.id.to_s, project2.id.to_s
-      proj.should_not be_nil
-      proj.id.to_s.should eq(project2.id.to_s)
-      proj.dependencies.count.should eq(3)
+
+      expect( proj ).not_to be_nil
+      expect( proj.id.to_s ).to eq(project2.id.to_s)
+      expect( proj.dependencies.count ).to eq(3)
       proj.dependencies.each do |dep|
-        dep.outdated.should be_nil
-        dep.release.should be_nil
+        expect( dep.outdated  ).to be_nil
+        expect( dep.release   ).to be_nil
       end
     end
   end
@@ -421,21 +432,17 @@ describe ProjectService do
       dep_2 = ProjectdependencyFactory.create_new project, prod_2, false, {:version_requested => '0.1.0'}
       dep_3 = ProjectdependencyFactory.create_new project, prod_3, false, {:version_requested => '0.0.0'}
 
-      Product.count.should == 3
-      Project.count.should == 0
-      Projectdependency.count.should == 0
+      expect( Product.count ).to eq(3)
+      expect( Project.count ).to eq(0)
+      expect( Projectdependency.count ).to eq(0)
 
-      resp =described_class.store project
-      resp.should be_truthy
-
-      Product.count.should == 3
-      Project.count.should == 1
-      Projectdependency.count.should == 3
+      resp = described_class.store project
+      expect( resp ).to be_truthy
+      expect( Product.count ).to eq(3)
+      expect( Project.count ).to eq(1)
+      expect( Projectdependency.count ).to eq(3)
     end
-
   end
-
-
 
   describe 'summary' do
 
@@ -503,15 +510,17 @@ describe ProjectService do
   describe 'ensure_unique_ga' do
     it 'returns true because its turned off' do
       Settings.instance.projects_unique_ga = false
-      ProjectService.ensure_unique_ga(nil).should be_truthy
+      expect( ProjectService.ensure_unique_ga(nil) ).to be_truthy
     end
+
     it 'returns true because there is no other project in db!' do
       Settings.instance.projects_unique_ga = true
       user    = UserFactory.create_new
       project = ProjectFactory.create_new user, nil, false
       project.group_id = "org.junit"
       project.artifact_id = 'junit'
-      ProjectService.ensure_unique_ga(project).should be_truthy
+
+      expect( ProjectService.ensure_unique_ga(project) ).to be_truthy
       Settings.instance.projects_unique_ga = false
     end
     it 'returns true because there is no other project in db!' do
@@ -530,8 +539,9 @@ describe ProjectService do
   describe 'ensure_unique_gav' do
     it 'returns true because its turned off' do
       Settings.instance.projects_unique_gav = false
-      ProjectService.ensure_unique_gav(nil).should be_truthy
+      expect( ProjectService.ensure_unique_gav(nil) ).to be_truthy
     end
+
     it 'returns true because there is no other project in db!' do
       Settings.instance.projects_unique_gav = true
       user    = UserFactory.create_new
@@ -563,8 +573,9 @@ describe ProjectService do
   describe 'ensure_unique_scm' do
     it 'returns true because its turned off' do
       Settings.instance.projects_unique_scm = false
-      ProjectService.ensure_unique_scm(nil).should be_truthy
+      expect( ProjectService.ensure_unique_scm(nil) ).to be_truthy
     end
+
     it 'returns true because there is no other project in db!' do
       Settings.instance.projects_unique_scm = true
       user    = UserFactory.create_new
@@ -573,9 +584,11 @@ describe ProjectService do
       project.scm_fullname = 'reiz/boom'
       project.scm_branch = 'master'
       project.s3_filename = 'pom.xml'
-      ProjectService.ensure_unique_scm(project).should be_truthy
+
+      expect( ProjectService.ensure_unique_scm(project) ).to be_truthy
       Settings.instance.projects_unique_scm = false
     end
+
     it 'returns true because there is no other project in db!' do
       Settings.instance.projects_unique_scm = true
       user    = UserFactory.create_new
@@ -623,15 +636,15 @@ describe ProjectService do
       dep_2 = ProjectdependencyFactory.create_new project, prod_2, true, {:version_requested => '0.1.0'}
       dep_3 = ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => '0.0.0'}
 
-      Product.count.should == 3
-      Project.count.should == 1
-      Projectdependency.count.should == 3
+      expect( Product.count ).to eq(3)
+      expect( Project.count ).to eq(1)
+      expect( Projectdependency.count ).to eq(3)
 
       ProjectService.destroy_single project.id
 
-      Product.count.should == 3
-      Project.count.should == 0
-      Projectdependency.count.should == 0
+      expect( Product.count ).to eq(3)
+      expect( Project.count ).to eq(0)
+      expect( Projectdependency.count ).to eq(0)
     end
 
   end
@@ -657,17 +670,16 @@ describe ProjectService do
 
       dep_4 = ProjectdependencyFactory.create_new child, prod_1, true, {:version_requested => '1.0.0'}
 
-      Product.count.should == 3
-      Project.count.should == 2
-      Projectdependency.count.should == 4
+      expect( Product.count ).to eq(3)
+      expect( Project.count ).to eq(2)
+      expect( Projectdependency.count ).to eq(4)
 
       ProjectService.destroy project
 
-      Product.count.should == 3
-      Project.count.should == 0
-      Projectdependency.count.should == 0
+      expect( Product.count ).to eq(3)
+      expect( Project.count ).to eq(0)
+      expect( Projectdependency.count ).to eq(0)
     end
-
   end
 
 
@@ -696,9 +708,9 @@ describe ProjectService do
       prod_1  = ProductFactory.create_new 1
       dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1.0.0'}
 
-      Project.count.should == 1
+      expect( Project.count ).to eq(1)
       expect { ProjectService.destroy_by(dude, project) }.to raise_exception
-      Project.count.should == 1
+      expect( Project.count ).to eq(1)
     end
 
     it 'throws exeception because user has no right to delete project.' do
@@ -711,9 +723,9 @@ describe ProjectService do
       prod_1  = ProductFactory.create_new 1
       dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1.0.0'}
 
-      Project.count.should == 1
+      expect( Project.count ).to eq(1)
       ProjectService.destroy_by(admin, project)
-      Project.count.should == 0
+      expect( Project.count ).to eq(0)
     end
 
   end
@@ -734,16 +746,16 @@ describe ProjectService do
       project2 = ProjectFactory.create_new user, nil, true
       dep_1    = ProjectdependencyFactory.create_new project2, prod_1, true, {:version_requested => '1.0.0'}
 
-      Project.where(:parent_id.ne => nil).count.should eq(0)
+      expect( Project.where(:parent_id.ne => nil).count ).to eq(0)
 
       response = ProjectService.merge_by_ga project.group_id, project.artifact_id, project2.id, user.id
-      response.should be_truthy
+      expect( response ).to be_truthy
 
-      Project.where(:parent_id.ne => nil).count.should eq(1)
+      expect( Project.where(:parent_id.ne => nil).count ).to eq(1)
 
       project2 = Project.find project2.id.to_s
-      project2.parent_id.should_not be_empty
-      project2.parent_id.to_s.should eq( project.id.to_s )
+      expect( project2.parent_id ).not_to be_empty
+      expect( project2.parent_id.to_s ).to eq( project.id.to_s )
     end
 
   end
@@ -761,16 +773,16 @@ describe ProjectService do
       project2 = ProjectFactory.create_new user, nil, true
       dep_1    = ProjectdependencyFactory.create_new project2, prod_1, true, {:version_requested => '1.0.0'}
 
-      Project.where(:parent_id.ne => nil).count.should eq(0)
+      expect( Project.where(:parent_id.ne => nil).count ).to eq(0)
 
       response = ProjectService.merge project.id, project2.id, user.id
-      response.should be_truthy
-
-      Project.where(:parent_id.ne => nil).count.should eq(1)
+      expect( response ).to be_truthy
+      expect( Project.where(:parent_id.ne => nil).count ).to eq(1)
 
       project2 = Project.find project2.id.to_s
-      project2.parent_id.should_not be_empty
-      project2.parent_id.to_s.should eq( project.id.to_s )
+
+      expect( project2.parent_id ).not_to be_empty
+      expect( project2.parent_id.to_s ).to eq( project.id.to_s )
     end
 
   end
@@ -792,9 +804,8 @@ describe ProjectService do
       project2.save
 
       response = ProjectService.unmerge project.id, project2.id, user.id
-      response.should be_truthy
-
-      Project.where(:parent_id.ne => nil).count.should eq(0)
+      expect( response ).to be_truthy
+      expect( Project.where(:parent_id.ne => nil).count ).to eq(0)
     end
 
     it 'throws exception because user is not a collaborator' do
@@ -822,7 +833,7 @@ describe ProjectService do
     it 'returns an empty hash because user has no projects' do
       user = UserFactory.create_new
       map = ProjectService.user_product_index_map user
-      map.empty?().should be_truthy
+      expect( map.empty?() ).to be_truthy
     end
 
     it 'returns an empty hash because user has no projects' do
@@ -841,18 +852,16 @@ describe ProjectService do
       dep_4 = ProjectdependencyFactory.create_new project_2, prod_1, true, {:version_requested => '0.0.0'}
 
       map = ProjectService.user_product_index_map user
-      map.empty?().should be_falsey
-      map.count.should == 3
+      expect( map.empty? ).to be_falsey
+      expect( map.count  ).to eq(3)
 
       key = "#{prod_1.language_esc}_#{prod_1.prod_key}"
-      map[key].count.should == 2
+      expect( map[key].count ).to eq(2)
 
       key = "#{prod_2.language_esc}_#{prod_2.prod_key}"
-      map[key].count.should == 1
+      expect( map[key].count ).to eq(1)
     end
-
   end
-
 
   describe 'outdated_dependencies' do
 
@@ -869,12 +878,10 @@ describe ProjectService do
       dep_3 = ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => '0.0.0'}
 
       outdated_deps = ProjectService.outdated_dependencies project
-      outdated_deps.should_not be_nil
-      outdated_deps.count.should == 2
+      expect( outdated_deps ).not_to be_nil
+      expect( outdated_deps.count ).to eq(2)
     end
-
   end
-
 
   describe 'unknown_licenses' do
 
@@ -882,12 +889,14 @@ describe ProjectService do
       user    = UserFactory.create_new
       project = ProjectFactory.create_new user, nil, true
       unknown = described_class.unknown_licenses( project )
-      unknown.should be_empty
+
+      expect(unknown).to be_empty
     end
     it 'returns an empty list' do
       unknown = described_class.unknown_licenses( nil )
-      unknown.should be_empty
+      expect(unknown ).to be_empty
     end
+
     it 'returns a list with 1 element, because the according product doesnt has a license' do
       user    = UserFactory.create_new
       project = ProjectFactory.create_new user, nil, true
@@ -896,9 +905,9 @@ describe ProjectService do
       dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1000000.0.0'}
 
       unknown = described_class.unknown_licenses( project )
-      unknown.should_not be_empty
-      unknown.size.should eq(1)
-      unknown.first.name.should eq(prod_1.name)
+      expect( unknown ).not_to be_empty
+      expect( unknown.size ).to eq(1)
+      expect( unknown.first.name ).to eq(prod_1.name)
     end
     it 'returns a list with 1 element, because the according product is unknown.' do
       user    = UserFactory.create_new
@@ -907,9 +916,9 @@ describe ProjectService do
       dep_1 = ProjectdependencyFactory.create_new project, nil, true, {:version_requested => '1000000.0.0'}
 
       unknown = described_class.unknown_licenses( project )
-      unknown.should_not be_empty
-      unknown.size.should eq(1)
-      unknown.first.id.should eq(dep_1.id)
+      expect( unknown ).not_to be_empty
+      expect( unknown.size ).to eq(1)
+      expect( unknown.first.id ).to eq(dep_1.id)
     end
     it 'returns a list with 1 element' do
       user    = UserFactory.create_new
@@ -927,9 +936,9 @@ describe ProjectService do
       dep_3 = ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => prod_3.version}
 
       unknown = described_class.unknown_licenses( project )
-      unknown.should_not be_empty
-      unknown.size.should eq(1)
-      unknown.first.id.should eq(dep_3.id)
+      expect( unknown       ).not_to be_empty
+      expect( unknown.size  ).to eq(1)
+      expect( unknown.first.id ).to eq(dep_3.id)
     end
     it 'returns a list with 2 elements. One requested version of the product has no license.' do
       user    = UserFactory.create_new
@@ -947,8 +956,8 @@ describe ProjectService do
       dep_3 = ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => prod_3.version}
 
       unknown = described_class.unknown_licenses( project )
-      unknown.should_not be_empty
-      unknown.size.should eq(2)
+      expect( unknown ).not_to be_empty
+      expect( unknown.size ).to eq(2)
     end
 
   end
@@ -958,13 +967,13 @@ describe ProjectService do
 
     it 'returns an empty list because project is nil' do
       red = ProjectService.red_licenses nil
-      red.should be_empty
+      expect( red ).to be_empty
     end
     it 'returns an empty list because project dependencies is empty' do
       user    = UserFactory.create_new
       project = ProjectFactory.create_new user, nil, true
       red = ProjectService.red_licenses project
-      red.should be_empty
+      expect( red ).to be_empty
     end
     it 'returns an empty list because project has no whitelist assigned.' do
       user    = UserFactory.create_new
@@ -975,7 +984,7 @@ describe ProjectService do
       dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => prod_1.version}
 
       red = ProjectService.red_licenses project
-      red.should be_empty
+      expect( red ).to be_empty
     end
     it 'returns an empty list because Projectdependency is on whitelist' do
       user    = UserFactory.create_new
@@ -990,7 +999,7 @@ describe ProjectService do
       project.save
 
       red = ProjectService.red_licenses project
-      red.should be_empty
+      expect( red ).to be_empty
     end
     it 'returns a list with 1 element' do
       user    = UserFactory.create_new
@@ -1027,19 +1036,19 @@ describe ProjectService do
       project = Project.new({ :dep_number => 5, :out_number => 1,
         :unknown_number => 2, :licenses_red => 2, :licenses_unknown => 2 })
 
-      project.dep_number_sum.should eq(0)
-      project.out_number_sum.should eq(0)
-      project.unknown_number_sum.should eq(0)
-      project.licenses_red_sum.should eq(0)
-      project.licenses_unknown_sum.should eq(0)
+      expect( project.dep_number_sum ).to eq(0)
+      expect( project.out_number_sum ).to eq(0)
+      expect( project.unknown_number_sum  ).to eq(0)
+      expect( project.licenses_red_sum    ).to eq(0)
+      expect( project.licenses_unknown_sum ).to eq(0)
 
       ProjectService.update_sums( project )
 
-      project.dep_number_sum.should eq( project.dep_number )
-      project.out_number_sum.should eq( project.out_number )
-      project.unknown_number_sum.should eq( project.unknown_number )
-      project.licenses_red_sum.should eq( project.licenses_red )
-      project.licenses_unknown_sum.should eq( project.licenses_unknown )
+      expect( project.dep_number_sum        ).to eq( project.dep_number )
+      expect( project.out_number_sum        ).to eq( project.out_number )
+      expect( project.unknown_number_sum    ).to eq( project.unknown_number )
+      expect( project.licenses_red_sum      ).to eq( project.licenses_red )
+      expect( project.licenses_unknown_sum  ).to eq( project.licenses_unknown )
     end
 
     it 'updates the sums for a project with a child' do
@@ -1088,12 +1097,12 @@ describe ProjectService do
       expect( project2.licenses_unknown ).to eq(3)
 
       ProjectService.update_sums( project )
-      project.licenses_red_sum.should eq( 1 )
-      project.licenses_unknown_sum.should eq( 3 )
+      expect( project.licenses_red_sum      ).to eq( 1 )
+      expect( project.licenses_unknown_sum  ).to eq( 3 )
 
-      project.dep_number_sum.should eq( 5 )
-      project.out_number_sum.should eq( 2 )
-      project.unknown_number_sum.should eq( 1 )
+      expect( project.dep_number_sum ).to eq( 5 )
+      expect( project.out_number_sum ).to eq( 2 )
+      expect( project.unknown_number_sum ).to eq( 1 )
     end
 
     it 'updates the sums for a project with a child' do
@@ -1144,8 +1153,8 @@ describe ProjectService do
       expect( project2.licenses_unknown ).to eq(3)
 
       ProjectService.update_sums( project )
-      project.licenses_red_sum.should eq( 1 )
-      project.licenses_unknown_sum.should eq( 4 )
+      expect( project.licenses_red_sum ).to eq( 1 )
+      expect( project.licenses_unknown_sum ).to eq( 4 )
     end
 
     it 'updates the sums for a project with a child and no LWL' do
