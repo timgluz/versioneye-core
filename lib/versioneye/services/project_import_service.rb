@@ -124,22 +124,6 @@ class ProjectImportService < Versioneye::Service
   end
 
 
-  # TODO: it is replace by service_ext/GithubWebhook, which also saves hook details
-  def self.create_github_webhook repo_name, project_id, api_key, token
-    body_hash = { :name => "web", :active => true, :events => ["push", "pull_request"], :config => {
-        :url => "#{Settings.instance.server_url}/api/v2/github/hook/#{project_id}?api_key=#{api_key}",
-        :content_type => "json",
-        :api_key => api_key,
-        :project_id => project_id
-      }
-    }
-    Github.create_webhook repo_name, token, body_hash
-  rescue => e
-    log.error "ERROR in create_github_webhook() error message: #{e.message}"
-    log.error e.backtrace.join("\n")
-  end
-
-
   def self.create_project_from project_file, token = nil, filename = nil
     file_txt = GitHubService.pure_text_from project_file
     fn_last  = GitHubService.filename_from project_file
