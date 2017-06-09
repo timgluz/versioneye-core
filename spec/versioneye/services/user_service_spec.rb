@@ -89,7 +89,7 @@ describe UserService do
   describe "active_users" do
 
     before(:each) do
-      User.destroy_all
+      User.delete_all
       @user = User.new
       @user.fullname = "Hans Tanz"
       @user.username = "hans_tanz"

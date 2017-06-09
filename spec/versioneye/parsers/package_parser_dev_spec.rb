@@ -3,11 +3,11 @@ require 'spec_helper'
 describe PackageParser do
 
   before(:each) do
-    Product.destroy_all
+    Product.delete_all
   end
 
   after(:each) do
-    Product.destroy_all
+    Product.delete_all
   end
 
   describe "parse" do

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Developer do
 
   before(:each) do
-    Developer.destroy_all
+    Developer.delete_all
     @developer = Developer.new({:language => Product::A_LANGUAGE_JAVA, :prod_key => "junit/junit", :version => "1.0", :name => "Hans Banz", :email => "hans@banz.de"})
     @developer.save
   end

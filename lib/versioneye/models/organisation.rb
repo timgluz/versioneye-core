@@ -177,7 +177,7 @@ class Organisation < Versioneye::Model
       return build_comps_hash_from( inventory )
     end
 
-    inventory.inventory_items.destroy_all
+    inventory.inventory_items.delete_all
     inventory.updated_at = Time.now
     inventory.save
 

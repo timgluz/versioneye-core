@@ -3,9 +3,9 @@ require 'spec_helper'
 describe Notification do
 
   before(:each) do
-    User.destroy_all
-    Product.destroy_all
-    Notification.destroy_all
+    User.delete_all
+    Product.delete_all
+    Notification.delete_all
 
     @user         = UserFactory.create_new 1
     @notification = NotificationFactory.create_new @user

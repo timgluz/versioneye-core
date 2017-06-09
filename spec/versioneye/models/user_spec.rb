@@ -6,7 +6,7 @@ describe User do
   let(:bitbucket_user) { FactoryGirl.create(:bitbucket_user)}
 
   before(:each) do
-    User.destroy_all
+    User.delete_all
     UserFactory.create_defaults
   end
 
@@ -275,7 +275,7 @@ describe User do
 
   describe 'find_all' do
     it 'finds something' do
-      User.destroy_all
+      User.delete_all
       User.send  :include, WillPaginateMongoid::MongoidPaginator
       user_1 = UserFactory.create_new 1, true
       user_2 = UserFactory.create_new 2, true

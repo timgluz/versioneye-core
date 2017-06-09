@@ -5,7 +5,7 @@ describe PythonSetupParser do
   describe 'parse' do
 
     before(:each) do
-      Product.destroy_all
+      Product.delete_all
 
       @testfile_url = 'https://s3.amazonaws.com/veye_test_env/setup.py'
 
@@ -33,7 +33,7 @@ describe PythonSetupParser do
     end
 
     after :each do
-      Product.destroy_all
+      Product.delete_all
     end
 
     def fetch_by_name(dependencies, name)
