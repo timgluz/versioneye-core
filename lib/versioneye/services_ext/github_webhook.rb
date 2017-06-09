@@ -1,37 +1,33 @@
-require 'httparty'
-require 'persistent_httparty'
+require 'octokit'
 require 'versioneye/models/webhook'
 
+# docs for octokit:
+# https://octokit.github.io/octokit.rb/Octokit/Client/Hooks.html
+
 class GithubWebhook < Versioneye::Service
-  include HTTParty
 
-  A_USER_AGENT = 'Chrome/28(www.versioneye.com, support@versioneye.com)'
-  A_DEFAULT_HEADERS = {
-    'Accept' => 'application/vnd.github.v3+json',
-    'User-Agent' => A_USER_AGENT,
-    'Connection' => 'Keep-Alive'
-  }
-
-  persistent_connection_adapter({
-    name: 'versioneye_github_client',
-    pool_size: 30,
-    keep_alive: 30
-  })
-
-  #creates a new Github hook and saves result into Webhook model
+  # creates a new Github hook and saves result into Webhook model
+  # returns:
+  #   success: Webhook model
+  #   failure: nil
   def self.create_project_hook(repo_fullname, project_id, api_key, github_token)
     if repo_fullname.nil? or project_id.nil?
       log.error "create_project_hook: repo_fullname or project_id cant be nil"
       return
     end
 
-    payload = build_project_payload(project_id, api_key)
-    if payload.nil?
+    #those are values for our hook endpoit
+    hook_configs = build_project_configs(project_id, api_key)
+    if hook_configs.nil?
       log.error "create_project_hook: failed to build request body for #{project_id} project hook"
       return nil
     end
 
-    res = create_webhook repo_fullname, github_token, payload
+    res = create_webhook repo_fullname, github_token, hook_configs
+    if res.nil?
+      log.error "create_webhook: failed to register webhook on Github."
+      return nil
+    end
 
     upsert_project_webhook(res, repo_fullname, project_id)
   end
@@ -60,23 +56,38 @@ class GithubWebhook < Versioneye::Service
   end
 
 #-- API CRUD request makers
-  #registers a new webhook and returns results from API
-  def self.create_webhook(repo_fullname, token, payload = nil)
-    github_api_url = get_api_url
-    url = "#{github_api_url}/repos/#{repo_fullname}/hooks"
+  # registers a new webhook and returns results from API
+  # params:
+  #   repo_fullname: String, fullname of github repo, including owner and repo, 'versioneye/veye'
+  #   token : String, github access_token
+  #   hook_configs: Hash, config data which Github api will pass to our API
+  #   hook_options: Hash, optional, settings for Hoot itself, check doc in header
+  def self.create_webhook(repo_fullname, token, hook_configs, hook_options = nil)
+    if token.to_s.empty?
+      log.error "create_webhook: no api_token attached for #{repo_fullname}"
+      return
+    end
 
-    post_json url, payload, token
+    #those are values for Github
+    hook_options ||= default_hook_options
+
+    client = Octokit::Client.new(access_token: token)
+    client.create_hook(repo_fullname, 'web', hook_configs, hook_options)
+  rescue => e
+    log.error "create_webhook: failed to create webhook for #{repo_fullname}"
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
   end
 
   def self.delete_webhook(repo_fullname, token, hook_id)
-    api_url = get_api_url
-    url = "#{api_url}/repos/#{repo_fullname}/hooks/#{hook_id}"
-    request_headers = build_request_headers token
+    if token.to_s.empty?
+      log.error "delete_webhook: no api token attached for #{repo_fullname}"
+      return false
+    end
 
-    res = HTTParty.delete(url, headers: request_headers)
-
-    is_success = (res.is_a?(HTTParty::Response) and res.code.to_i == 204)
-    is_success
+    client = Octokit::Client.new(access_token: token)
+    client.remove_hook(repo_fullname, hook_id)
   rescue => e
     log.error "delete_webhook: failed to remove webhook.#{hook_id} on #{repo_fullname}"
     log.error e.message
@@ -103,7 +114,7 @@ class GithubWebhook < Versioneye::Service
       service_name: hook_dt[:name],
       active: hook_dt[:active],
       events: hook_dt[:events],
-      config: hook_dt[:config],
+      config: hook_dt[:config].to_hash,
       repo_url: "github.com/#{repo_fullname}",
       source_url: hook_dt[:url],
       test_url: hook_dt[:test_url],
@@ -120,91 +131,29 @@ class GithubWebhook < Versioneye::Service
   end
 
 
-#-- request helpers
-  # make HTTP post request
-  # params:
-  #   url - url to github url
-  #   body_hash - hash_table, accepted form data to send to API
-  #   token     - string, request token for Github API
-  #   raw       - Bool, default false, if true, then it will pass raw HTTParty request object
-  def self.post_json( url, body_hash, token, raw = false, updated_at = nil )
-    request_headers = build_request_headers token, updated_at
-    response = HTTParty.post(url, body: body_hash.to_json, headers: request_headers)
-    return response if raw
-
-    catch_github_exception parse_safely( response.body )
-  rescue => e
-    log.error "ERROR in post_json( #{url} ) error message: #{e.message}"
-    log.error e.backtrace.join("\n")
-    nil
-  end
-
-  def self.build_request_headers token, updated_at = nil
-    request_headers = A_DEFAULT_HEADERS
-    if token
-      request_headers["Authorization"] = "token #{token}"
-    end
-
-    if updated_at.is_a?(Date) or updated_at.is_a?(DateTime)
-      request_headers["If-Modified-Since"] = updated_at.to_datetime.rfc822
-    end
-
-    request_headers
-  end
-
-
-  def self.parse_safely(json_txt)
-    JSON.parse(json_txt.to_s, symbolize_names: true)
-
-  rescue => e
-    log.error "parse_safely: failed to parse `#{json_txt}`"
-    log.error e.backtrace.join('\n')
-    nil
-  end
-
   def self.get_api_url
     Settings.instance.github_api_url.gsub(/\/\z/, "")
   end
 
+  def self.default_hook_options
+    {
+      name: 'web',
+      active: true,
+      events: ['push', 'pull_request']
+    }
+  end
+
   #construct valid hash table to create a new hook
-  def self.build_project_payload(project_id, api_key)
+  def self.build_project_configs(project_id, api_key)
     callback_url = Settings.instance.server_url
     callback_url += "/api/v2/github/hook/#{project_id}?api_key=#{api_key}"
 
     {
-      name: 'web',
-      active: true,
-      events: ['push', 'pull_request'],
-      config: {
-        url: callback_url,
-        content_type: 'json',
-        project_id: project_id,
-        api_key: api_key
-      }
+      url: callback_url,
+      content_type: 'json',
+      project_id: project_id,
+      api_key: api_key
     }
   end
-
-=begin
-  Method that checks does Github sent error message
-  If yes, then it'll log it and return nil
-  Otherwise it sends object itself
-  Github responses for client errors:
-  {"message": "Problems parsing JSON"}
-=end
-    def self.catch_github_exception(data)
-      if data.is_a?(Hash) and data.has_key?(:message)
-        log.error "Catched exception in response from Github API: #{data}"
-        return nil
-      end
-
-      return data
-    rescue => e
-      # by default here should be no message or nil
-      # We expect that everything is ok and there is no error message
-      log.error e.message
-      log.error e.backtrace.join("\n")
-      nil
-    end
-
 
 end

@@ -13,12 +13,13 @@ describe GithubWebhook do
   context "create and delete webhook" do
     it "saves a new hook" do
       VCR.use_cassette('github/webhooks/create') do
-        payload = GithubWebhook.build_project_payload(project_id, api_key)
-        res = GithubWebhook.create_webhook(repo_fullname, github_token, payload)
+        configs = GithubWebhook.build_project_configs(project_id, api_key)
+        res = GithubWebhook.create_webhook(repo_fullname, github_token, configs)
 
         expect(res).not_to be_nil
-        expect(res.has_key?(:id)).to be_truthy
-        expect(res.has_key?(:name)).to be_truthy
+        expect(res[:id]).not_to be_nil
+        expect(res[:name]).not_to be_nil
+
         expect(res[:name]).to eq('web')
         expect(res[:events]).to eq(['push', 'pull_request'])
         expect(res[:active]).to be_truthy
