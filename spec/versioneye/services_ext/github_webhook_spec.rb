@@ -40,6 +40,22 @@ describe GithubWebhook do
       end
     end
 
+    it "pulls right list of repos" do
+      VCR.use_cassette('github/webhooks/fetch_repo_hooks') do
+        res = GithubWebhook.fetch_repo_hooks(repo_fullname, github_token)
+
+        expect(res).not_to be_nil
+        expect(res.size).to eq(1)
+
+        hook = res.first
+        expect(hook).not_to be_nil
+        expect(hook[:type]).to eq('Repository')
+        expect(hook[:name]).to eq('web')
+        expect(hook[:id]).not_to be_nil
+        expect(hook[:config][:project_id]).to eq('593aa2002066ab005710e6b0')
+      end
+    end
+
   end
 
   let(:hook_dt){
