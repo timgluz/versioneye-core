@@ -1,6 +1,8 @@
 class ParserStrategy
 
   def self.parser_for( project_type, url )
+    url = url.to_s.strip
+
     case project_type
       when Project::A_TYPE_MAVEN2
         if url.match(/pom.json/)
@@ -30,6 +32,8 @@ class ParserStrategy
           return YarnParser.new
         elsif url.match(/npm-shrinkwrap\.json\z/i)
           return ShrinkwrapParser.new
+        elsif url.match(/package-lock\.json\z/)
+          return PackageLockParser.new
         else
           return PackageParser.new
         end
