@@ -51,12 +51,15 @@ describe CommonParser do
       expect(CommonParser.npm_file?('a/b/yarn.lock')).to be_truthy
       expect(CommonParser.npm_file?('npm-shrinkwrap.json')).to be_truthy
       expect(CommonParser.npm_file?('/a/b/npm-shrinkwrap.json')).to be_truthy
+      expect(CommonParser.npm_file?('package-lock.json')).to be_truthy
+      expect(CommonParser.npm_file?('/a/b/package-lock.json')).to be_truthy
     end
 
     it "misses NPM like garbage" do
       expect(CommonParser.npm_file?('package/json')).to be_falsey
       expect(CommonParser.npm_file?('yarn/lock')).to be_falsey
       expect(CommonParser.npm_file?('npm-shrinkwrap/json')).to be_falsey
+      expect(CommonParser.npm_file?('package.lock.json')).to be_falsey
     end
 
     it "matches with Gradle files" do

@@ -155,7 +155,8 @@ class CommonParser
   def self.npm_file?(filename)
     return true if /package\.json\z/.match?(filename)
     return true if /yarn\.lock\z/i.match?(filename)
-    return true if /npm-shrinkwrap\.json\z/i.match?(filename)
+    return true if /npm-shrinkwrap\.json\z/.match?(filename)
+    return true if /package-lock\.json\z/.match?(filename)
 
     return false
   end

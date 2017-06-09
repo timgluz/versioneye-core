@@ -102,6 +102,7 @@ module Versioneye
     require 'versioneye/parsers/gemspec_parser'
     require 'versioneye/parsers/yarn_parser'
     require 'versioneye/parsers/shrinkwrap_parser'
+    require 'versioneye/parsers/package_lock_parser'
     require 'versioneye/parsers/cargo_parser'
     require 'versioneye/parsers/cargo_lock_parser'
     require 'versioneye/parsers/jspm_parser'
