@@ -70,7 +70,7 @@ class GithubPullRequestService < Versioneye::Service
            dep.license_caches.to_a.empty? ||   # unknown license
            dep.license_violation == true)      # violating lwl and/or cwl
         # Skip if no security vulnerability and on component whitelist
-        if (dep.sv_ids.empty? && new_project.component_whitelist.is_on_list?( dep.cwl_key ))
+        if (dep.sv_ids.empty? && new_project.component_whitelist && new_project.component_whitelist.is_on_list?( dep.cwl_key ))
           next
         end
 

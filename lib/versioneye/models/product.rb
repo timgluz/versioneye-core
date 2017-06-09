@@ -411,7 +411,11 @@ class Product < Versioneye::Model
   end
 
   def developers
-    Developer.find_by self.language, self.prod_key, self.version
+    devs = Developer.find_by self.language, self.prod_key, self.version
+    if devs.nil? || devs.empty?
+      devs = Developer.where( language: self.language, prod_key: self.prod_key )
+    end
+    devs
   end
 
   def dependencies scope = nil
