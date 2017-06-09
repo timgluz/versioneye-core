@@ -55,6 +55,11 @@ class GithubPullRequestService < Versioneye::Service
     tree_sha = pr.tree_sha
     project_file = Github.fetch_project_file_from_branch( repo_name, filename, branch, token, tree_sha )
     new_project  = ProjectImportService.create_project_from project_file, token
+    if new_project.nil?
+      log.error "Could not create project for #{repo_name} / #{filename} on branch #{branch}"
+      return false
+    end
+
     new_project.name = filename
     new_project.temp = true
     new_project.temp_lock = true # prevent from deleting
