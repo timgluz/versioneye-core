@@ -95,6 +95,26 @@ class GithubWebhook < Versioneye::Service
     false
   end
 
+
+  # fetches list of registered hooks on the Github repo
+  # params:
+  #   repo_fullname: String, fullname of github repo, 'versioneye/veye'
+  #   token :  String, github access_token
+  def self.fetch_repo_hooks(repo_fullname, token)
+    if token.to_s.empty?
+      log.error "fetch_repo_hooks: no api token attached for #{repo_fullname} request"
+      return
+    end
+
+    client = Octokit::Client.new(access_token: token)
+    client.hooks(repo_fullname)
+  rescue => e
+    log.error "fetch_repo_hooks: failed to request data from API"
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
+  end
+
 #-- persistance helpers
   # updates or creates webhook for Versineye project
   def self.upsert_project_webhook(hook_dt, repo_fullname, project_id)
