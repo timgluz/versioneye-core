@@ -50,7 +50,7 @@ class GithubWebhook < Versioneye::Service
     end
 
     is_disconnected = delete_webhook(hook[:fullname], github_token, hook[:hook_id])
-    if is_disconnected != true
+    if is_disconnected == false
       log.error "delete_project_hook: failed to disconnect hook on github #{hook[:fullname]} - #{hook[:hook_id]}"
       return false
     end
@@ -71,16 +71,17 @@ class GithubWebhook < Versioneye::Service
   def self.delete_webhook(repo_fullname, token, hook_id)
     api_url = get_api_url
     url = "#{api_url}/repos/#{repo_fullname}/hooks/#{hook_id}"
+    request_headers = build_request_headers token
 
-    res = delete(url)
-    is_success = res.nil? == false and res.code >= 200 and res.code < 300
-    return false if is_success == false
+    res = HTTParty.delete(url, headers: request_headers)
 
-    #if api returned 200, but content include error message
-    has_error_message = catch_github_exception(res.body).nil?
-    return false if has_error_message
-
-    true
+    is_success = (res.is_a?(HTTParty::Response) and res.code.to_i == 204)
+    is_success
+  rescue => e
+    log.error "delete_webhook: failed to remove webhook.#{hook_id} on #{repo_fullname}"
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    false
   end
 
 #-- persistance helpers
@@ -143,9 +144,11 @@ class GithubWebhook < Versioneye::Service
     if token
       request_headers["Authorization"] = "token #{token}"
     end
+
     if updated_at.is_a?(Date) or updated_at.is_a?(DateTime)
       request_headers["If-Modified-Since"] = updated_at.to_datetime.rfc822
     end
+
     request_headers
   end
 
