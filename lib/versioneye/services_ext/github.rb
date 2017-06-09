@@ -438,7 +438,6 @@ class Github < Versioneye::Service
     post_json url, body_hash, token
   end
 
-
   def self.update_status repo, sha, token, body_hash
     github_api_url = get_github_api_url
     url = "#{github_api_url}/repos/#{repo}/statuses/#{sha}"

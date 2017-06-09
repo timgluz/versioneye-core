@@ -1,0 +1,78 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.github.com/repos/timgluz/versioneye-core/hooks
+    body:
+      encoding: UTF-8
+      string: '{"name":"web","active":true,"events":["push","pull_request"],"config":{"url":"http://localhost:3000/api/v2/github/hook/test-project-id?api_key=veye-api-key-123","content_type":"json","project_id":"test-project-id","api_key":"veye-api-key-123"}}'
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Chrome/28(www.versioneye.com, support@versioneye.com)
+      Connection:
+      - Keep-Alive
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Fri, 09 Jun 2017 08:19:40 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '681'
+      Status:
+      - 201 Created
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4997'
+      X-Ratelimit-Reset:
+      - '1496999763'
+      Cache-Control:
+      - private, max-age=60, s-maxage=60
+      Vary:
+      - Accept, Authorization, Cookie, X-GitHub-OTP
+      - Accept-Encoding
+      Etag:
+      - '"b1c363c2340632f26fa92d5c3606c1b5"'
+      X-Oauth-Scopes:
+      - admin:org_hook, admin:repo_hook, repo
+      X-Accepted-Oauth-Scopes:
+      - admin:repo_hook, public_repo, repo, write:repo_hook
+      Location:
+      - https://api.github.com/repos/timgluz/versioneye-core/hooks/14264227
+      X-Github-Media-Type:
+      - github.v3; format=json
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Security-Policy:
+      - default-src 'none'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Runtime-Rack:
+      - '0.065831'
+      X-Served-By:
+      - 15bc4ab707db6d6b474783868c7cc828
+      X-Github-Request-Id:
+      - EF4B:651A:1DA9F9D:2379D39:593A5A1C
+    body:
+      encoding: UTF-8
+      string: '{"type":"Repository","id":14264227,"name":"web","active":true,"events":["push","pull_request"],"config":{"url":"http://localhost:3000/api/v2/github/hook/test-project-id?api_key=veye-api-key-123","content_type":"json","project_id":"test-project-id","api_key":"veye-api-key-123","insecure_ssl":"0"},"updated_at":"2017-06-09T08:19:40Z","created_at":"2017-06-09T08:19:40Z","url":"https://api.github.com/repos/timgluz/versioneye-core/hooks/14264227","test_url":"https://api.github.com/repos/timgluz/versioneye-core/hooks/14264227/test","ping_url":"https://api.github.com/repos/timgluz/versioneye-core/hooks/14264227/pings","last_response":{"code":null,"status":"unused","message":null}}'
+    http_version: 
+  recorded_at: Fri, 09 Jun 2017 08:19:40 GMT
+recorded_with: VCR 3.0.3
