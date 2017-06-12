@@ -84,8 +84,8 @@ class GithubPullRequestService < Versioneye::Service
       end
 
       if !dep.unmuted_security_vulnerabilities.empty? || # security vulnerability
-          dep.license_caches.to_a.empty? ||   # unknown license
-          dep.license_violation == true)      # violating lwl and/or cwl
+          dep.license_caches.to_a.empty? ||              # unknown license
+          dep.license_violation == true                  # violating lwl and/or cwl
         create_pr_issue filename, dep, pr
       end
     end
