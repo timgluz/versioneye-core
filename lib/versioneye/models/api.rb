@@ -53,6 +53,10 @@ class Api < Versioneye::Model
     self.api_key = Api.generate_api_key(length)
   end
 
+  def component_bucket
+    ApiCmp.where(:api_key => self.api_key)
+  end
+
   def user
     User.find user_id
   rescue => e
