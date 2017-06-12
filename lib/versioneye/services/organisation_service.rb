@@ -179,6 +179,7 @@ class OrganisationService < Versioneye::Service
     lwl.add_license_element 'Public Domain'
     lwl.add_license_element 'CC0'
     lwl.add_license_element 'CC0-1.0'
+    lwl.add_license_element 'ISC'
   end
 
 
