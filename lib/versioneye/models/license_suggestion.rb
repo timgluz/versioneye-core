@@ -36,6 +36,7 @@ class LicenseSuggestion < Versioneye::Model
     license.name     = self.name
     license.url      = self.url
     license.comments = self.comments
+    license.crowdsourced = true
     saved = license.save
     if saved
       self.approved = true
