@@ -25,6 +25,9 @@ class Organisation < Versioneye::Model
   field :pdf_exports         , type: Boolean, default: false
   field :change_visibility   , type: Boolean, default: false
 
+  # Skip license check on pull requests
+  field :skip_license_check_on_pr, type: Boolean, default: false
+
   belongs_to :plan
   has_one    :billing_address
   has_many   :projects
