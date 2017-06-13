@@ -7,10 +7,11 @@ require 'versioneye/parsers/godep_parser'
 # https://github.com/Masterminds/glide
 # https://glide.readthedocs.io/en/latest/glide.yaml/
 
-class GlideParser < GodepParser
+
+class GlideLockParser < GodepParser
   def parse(url)
     if url.to_s.empty?
-      log.error "GlideParser cant handle empty urls"
+      log.error "GlideLockParser cant handle empty urls"
       return
     end
 
@@ -35,8 +36,8 @@ class GlideParser < GodepParser
     end
 
     project = init_project glide_doc
-    parse_dependencies(project, glide_doc['import'], Dependency::A_SCOPE_COMPILE)
-    parse_dependencies(project, glide_doc['testImport'], Dependency::A_SCOPE_TEST)
+    parse_dependencies(project, glide_doc['imports'], Dependency::A_SCOPE_COMPILE)
+    parse_dependencies(project, glide_doc['testImports'], Dependency::A_SCOPE_TEST)
 
     project
   rescue => e
@@ -56,7 +57,7 @@ class GlideParser < GodepParser
   end
 
   def parse_dependency(project, dep_doc, scope)
-    dep_id = dep_doc['package'].to_s.strip
+    dep_id = dep_doc['name'].to_s.strip
     prod_db = Product.fetch_product(Product::A_LANGUAGE_GO, dep_id)
 
     dep_db = init_dependency( prod_db, dep_id, scope)
@@ -70,8 +71,8 @@ class GlideParser < GodepParser
     Project.new(
       project_type: Project::A_TYPE_GLIDE,
       language: Product::A_LANGUAGE_GO,
-      name: glide_doc['package'].to_s,
-      description: 'GlideParser'
+      name: glide_doc['hash'].to_s,
+      description: 'GlideLockParser'
     )
   end
 
@@ -90,4 +91,7 @@ class GlideParser < GodepParser
 
     dep_db
   end
+
+
+
 end
