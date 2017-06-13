@@ -3,7 +3,10 @@ require 'versioneye/parsers/common_parser'
 require 'yaml'
 
 # parser for Golang Glide.yaml files
+#
+# DOCS:
 # https://github.com/Masterminds/glide
+# https://glide.readthedocs.io/en/latest/glide.yaml/
 
 class GlideParser < GodepParser
   def parse(url)
@@ -33,7 +36,8 @@ class GlideParser < GodepParser
     end
 
     project = init_project glide_doc
-    parse_dependencies(project, glide_doc['import'])
+    parse_dependencies(project, glide_doc['import'], Dependency::A_SCOPE_COMPILE)
+    parse_dependencies(project, glide_doc['testImport'], Dependency::A_SCOPE_TEST)
 
     project
   rescue => e
@@ -42,21 +46,21 @@ class GlideParser < GodepParser
     nil
   end
 
-  def parse_dependencies(project, deps)
+  def parse_dependencies(project, deps, scope)
     if deps.nil? or deps.empty?
       log.error "parse_dependencies: got no dependencies for #{project}"
       return
     end
 
-    deps.to_a.each {|dep| parse_dependency(project, dep) }
+    deps.to_a.each {|dep| parse_dependency(project, dep, scope) }
     project
   end
 
-  def parse_dependency(project, dep_doc)
+  def parse_dependency(project, dep_doc, scope)
     dep_id = dep_doc['package'].to_s.strip
     prod_db = Product.fetch_product(Product::A_LANGUAGE_GO, dep_id)
 
-    dep_db = init_dependency( prod_db, dep_id)
+    dep_db = init_dependency( prod_db, dep_id, scope)
     dep_db = parse_requested_version(dep_doc['version'], dep_db, prod_db)
     add_dependency_to_project(project, dep_db, prod_db)
 
@@ -71,13 +75,14 @@ class GlideParser < GodepParser
     )
   end
 
-  def init_dependency(prod_db, dep_id)
+  def init_dependency(prod_db, dep_id, scope = Dependency::A_SCOPE_COMPILE)
     dep_db = Projectdependency.new(
       language: Product::A_LANGUAGE_GO,
       prod_key: dep_id,
-      name: dep_id,
-      scope: Dependency::A_SCOPE_COMPILE
+      name: dep_id
     )
+
+    dep_db[:scope] = scope
 
     if prod_db
       dep_db[:version_current] = prod_db[:version]
