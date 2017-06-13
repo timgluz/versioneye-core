@@ -1,6 +1,7 @@
 require 'versioneye/log'
 require 'nokogiri'
 require 'json'
+require 'yaml'
 
 class CommonParser
 
@@ -12,16 +13,26 @@ class CommonParser
     raise NotImplementedError, 'Implement me in subclass!'
   end
 
-  def from_json(json_doc)
-    json_doc = json_doc.force_encoding(Encoding::UTF_8).strip
-    json_doc = clean_spaces(json_doc) #replace non-ascii spaces with ascii spaces
-    JSON.parse(json_doc, {symbolize_names: true})
+  def from_json(json_txt)
+    json_txt = json_txt.to_s.force_encoding(Encoding::UTF_8).strip
+    json_txt = clean_spaces(json_txt) #replace non-ascii spaces with ascii spaces
+    JSON.parse(json_txt, {symbolize_names: true})
   rescue => e
-    log.error "from_json: failed to parse #{json_doc}"
+    log.error "from_json: failed to parse #{json_txt}"
     log.error e.backtrace.join('\n')
     return nil
   end
 
+  def from_yaml(yaml_txt)
+    yaml_txt = yaml_txt.to_s.force_encoding(Encoding::UTF_8).strip
+    yaml_txt = clean_spaces(yaml_txt) # replace non-ascii spaces with ascii
+    YAML.load(yaml_txt)
+  rescue => e
+    log.error "from_yaml: failed to parse #{yaml_txt}"
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
+  end
 
   SPECIAL_SPACES = [
     0x00A0,                # NO-BREAK SPACE
@@ -243,6 +254,17 @@ class CommonParser
     return true if /\bmix\.exs\z/i.match?(filename)
 
     return false
+  end
+
+  def add_dependency_to_project(project, dep_db, prod_db)
+    return if project.nil?
+
+    project.dependencies << dep_db if dep_db
+    project.out_number += 1 if ProjectdependencyService.outdated?(dep_db)
+    project.unknown_number += 1 if prod_db.nil?
+    project.dep_number = project.dependencies.size
+
+    project
   end
 end
 

@@ -4,7 +4,7 @@ require 'semverly'
 
 # parser for Godeps/Godeps.json
 # https://github.com/tools/godep
-class GodepParser < PackageParser
+class GodepParser < CommonParser
 
   def parse(url)
     raise "GodepParser cant handle empty urls" if url.to_s.empty?
@@ -65,6 +65,7 @@ class GodepParser < PackageParser
     the_dep  = init_dependency( the_prod, dep_prod_key )
     the_dep  = parse_requested_version(dep_doc[:Rev], the_dep, the_prod, dep_doc[:Comment])
 
+    #TODO: replace it with CommonParser.add_dependency_to_project
     project.dependencies << the_dep if the_dep
     project.out_number += 1 if ProjectdependencyService.outdated?(the_dep)
     project.unknown_number += 1 if the_prod.nil?
@@ -86,7 +87,7 @@ class GodepParser < PackageParser
     end
 
     version_db = product.versions.find_by(tag: dep_comment) unless dep_comment.nil? #search by version tag
-    version_db ||= product.versions.find_by(sha1: version_label)
+    version_db ||= product.versions.find_by(commit_sha: version_label)
 
     if version_db.nil?
       log.warn "GodepParser.parse_requested_version: failed to find version #{version_label} for #{product[:prod_key]}"
