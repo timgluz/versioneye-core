@@ -1,6 +1,5 @@
 require 'versioneye/parsers/common_parser'
 require 'semverly'
-require 'tomlrb'
 
 # Parser for cargo.toml used in Rust projects.
 # official doc: http://doc.crates.io/specifying-dependencies.html
@@ -27,7 +26,7 @@ class CargoParser < CommonParser
     return nil if content.to_s.empty?
     return nil if content.to_s.strip.eql?('Not Found')
 
-    doc = Tomlrb.parse(content, symbolize_keys: true)
+    doc = from_toml(content)
     if doc.nil?
       log.error "Failed to parse Cargo.toml content: #{content}"
       return nil

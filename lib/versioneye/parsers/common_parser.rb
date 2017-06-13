@@ -2,6 +2,7 @@ require 'versioneye/log'
 require 'nokogiri'
 require 'json'
 require 'yaml'
+require 'tomlrb'
 
 class CommonParser
 
@@ -32,6 +33,16 @@ class CommonParser
     log.error e.message
     log.error e.backtrace.join('\n')
     nil
+  end
+
+  def from_toml(toml_txt)
+    toml_txt = toml_txt.to_s.force_encoding(Encoding::UTF_8).strip
+    toml_txt = clean_spaces(toml_txt)
+    Tomlrb.parse(toml_txt, symbolize_keys: true)
+  rescue => e
+    log.error "from_toml: failed to parse `#{toml_txt}`"
+    log.error e.message
+    log.error e.backtrace.join('\n')
   end
 
   SPECIAL_SPACES = [
