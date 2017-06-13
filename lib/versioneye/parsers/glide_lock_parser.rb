@@ -15,7 +15,7 @@ class GlideLockParser < GodepParser
       return
     end
 
-    body = self.fetch_response_body url
+    body = fetch_response_body url
     parse_content body
   rescue => e
     log.error e.message
@@ -31,7 +31,7 @@ class GlideLockParser < GodepParser
 
     glide_doc = from_yaml content
     if glide_doc.nil?
-      log.error "parse-content: failed to parse YAML document: `#{content}`"
+      log.error "parse_content: failed to parse YAML document: `#{content}`"
       return
     end
 

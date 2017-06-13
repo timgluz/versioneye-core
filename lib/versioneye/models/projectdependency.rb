@@ -30,6 +30,11 @@ class Projectdependency < Versioneye::Model
   field :parent_prod_key  , type: String
   field :parent_version   , type: String
 
+  #git , scm related details
+  field :commit_sha       , type: String
+  field :tag              , type: String
+  field :branch           , type: String
+
   field :status_class  , type: String
   field :status_rank   , type: String
 
