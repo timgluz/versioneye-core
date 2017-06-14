@@ -66,18 +66,6 @@ class Version < Versioneye::Model
     SecurityVulnerability.where(:_id.in => sv_ids)
   end
 
-  # it adds project dependency into project and updates some metrics
-  def add_dependency_to_project(project, dep_db, prod_db)
-    return if project.nil?
-
-    project.dependencies << dep_db if dep_db
-    project.out_number += 1 if ProjectdependencyService.outdated(dep_db)
-    project.unknown_number += 1 if prod_db.nil?
-    project.dep_number = project.dependencies.size
-
-    project
-  end
-
   def licenses
     License.where(:language => product.language, :prod_key => product.prod_key, :version => self.version)
   end
