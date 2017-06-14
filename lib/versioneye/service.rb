@@ -112,6 +112,7 @@ module Versioneye
     require 'versioneye/parsers/glide_parser'
     require 'versioneye/parsers/glide_lock_parser'
     require 'versioneye/parsers/gopkg_parser'
+    require 'versioneye/parsers/gopkg_lock_parser'
 
     require 'versioneye/updaters/update_strategy'
     require 'versioneye/updaters/common_updater'

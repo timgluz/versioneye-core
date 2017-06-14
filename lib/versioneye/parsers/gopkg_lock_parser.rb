@@ -1,13 +1,13 @@
 require 'versioneye/parsers/common_parser'
 require 'versioneye/parsers/godep_parser'
 
-# parser for Gokpg file used by Golang Dep pkg-manager
+# parser for Gokpg.lock used by Golang Dep pkg-manager
 # it will be official package manager
 #
 # Docs:
 # https://github.com/golang/dep
 
-class GopkgParser < GodepParser
+class GopkgLockParser < GodepParser
   def parse(url)
     if url.to_s.empty?
       log.error "#{self.class.name} cant handle empty urls"
@@ -35,7 +35,7 @@ class GopkgParser < GodepParser
     end
 
     project = init_project gopkg_doc
-    parse_dependencies(project, gopkg_doc[:constraint])
+    parse_dependencies(project, gopkg_doc[:projects])
 
   end
 
@@ -55,15 +55,15 @@ class GopkgParser < GodepParser
     prod_db = Product.fetch_product(Product::A_LANGUAGE_GO, dep_id)
 
     dep_db = init_dependency( prod_db, dep_id)
-    dep_db[:version_label] = dep_doc[:version]
-    dep_db[:commit_sha] = dep_doc[:rev]
+    dep_db[:commit_sha] = dep_doc[:revision]
     dep_db[:branch] = dep_doc[:branch]
     dep_db[:tag] = dep_doc[:tag]
 
-
-    version_label = (dep_db[:version_label] || dep_db[:commit_sha])
+    version_label = (dep_doc[:version] || dep_db[:revision])
     version_label ||= dep_db[:tag]
     version_label ||= dep_db[:branch]
+
+    dep_db[:version_label] = version_label
 
     dep_db = parse_requested_version(version_label, dep_db, prod_db)
     add_dependency_to_project(project, dep_db, prod_db)
@@ -75,8 +75,8 @@ class GopkgParser < GodepParser
     Project.new(
       project_type: Project::A_TYPE_GOPKG,
       language: Product::A_LANGUAGE_GO,
-      name: 'gopkg project',
-      description: 'GopkgParser'
+      name: 'gopkg.lock project',
+      description: 'GopkgLockParser'
     )
   end
 
@@ -94,6 +94,4 @@ class GopkgParser < GodepParser
 
     dep_db
   end
-
-
 end
