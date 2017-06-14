@@ -8,20 +8,6 @@ require 'versioneye/parsers/godep_parser'
 # https://github.com/golang/dep
 
 class GopkgLockParser < GodepParser
-  def parse(url)
-    if url.to_s.empty?
-      log.error "#{self.class.name} cant handle empty urls"
-      return
-    end
-
-    body = fetch_response_body url
-    parse_content body
-  rescue => e
-    log.error e.message
-    log.error e.backtrace.join('\n')
-    return nil
-  end
-
   def parse_content(content, token = nil)
     if content.to_s.empty?
       log.error "parse_content: got empty document, stopping parser"

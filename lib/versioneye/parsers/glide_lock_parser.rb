@@ -9,19 +9,6 @@ require 'versioneye/parsers/godep_parser'
 
 
 class GlideLockParser < GodepParser
-  def parse(url)
-    if url.to_s.empty?
-      log.error "GlideLockParser cant handle empty urls"
-      return
-    end
-
-    body = fetch_response_body url
-    parse_content body
-  rescue => e
-    log.error e.message
-    log.error e.backtrace.join('\n')
-    return nil
-  end
 
   def parse_content(content, token = nil)
     if content.to_s.empty?

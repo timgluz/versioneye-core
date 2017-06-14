@@ -7,7 +7,10 @@ require 'semverly'
 class GodepParser < CommonParser
 
   def parse(url)
-    raise "GodepParser cant handle empty urls" if url.to_s.empty?
+    if url.to_s.empty?
+      log.error "#{self.class.name} cant handle empty urls"
+      return
+    end
 
     body = self.fetch_response_body url
     parse_content body
@@ -21,10 +24,16 @@ class GodepParser < CommonParser
   #   content - string, Godep project file
   #   token - empty param, to match CommonParser.parse_content
   def parse_content(content, token = nil)
-    raise "GodepParser.parse_content: empty document" if content.to_s.empty?
+    if content.to_s.empty?
+      log.error "GodepParser.parse_content: empty document"
+      return
+    end
 
     godeps_doc = from_json content #replaces unicode spaces and returns symbolized doc
-    raise "GodepParser.parse_content: failed to parse #{content}" if godeps_doc.nil?
+    if godeps_doc.nil?
+      log.error "GodepParser.parse_content: failed to parse #{content}"
+      return
+    end
 
     project = init_project godeps_doc
     parse_dependencies(project, godeps_doc[:Deps])
@@ -53,25 +62,32 @@ class GodepParser < CommonParser
   def parse_dependencies(project, deps)
     return project if deps.to_a.empty?
 
-    deps.each {|dep_doc| parse_dependency_from_doc(project, dep_doc)}
+    deps.each {|dep_doc| parse_dependency(project, dep_doc)}
     project
   end
 
   #parses version info of the item of godeps[:Deps] list
-  def parse_dependency_from_doc(project, dep_doc)
-    dep_prod_key = dep_doc[:ImportPath]
+  def parse_dependency(project, dep_doc)
+    dep_prod_key = dep_doc[:ImportPath].to_s.strip
     the_prod = Product.fetch_product( Product::A_LANGUAGE_GO, dep_prod_key)
 
+    version_label = (dep_doc[:Rev] || dep_doc[:Comment])
     the_dep  = init_dependency( the_prod, dep_prod_key )
-    the_dep  = parse_requested_version(dep_doc[:Rev], the_dep, the_prod, dep_doc[:Comment])
+    the_dep[:commit_sha] = dep_doc[:Rev]
+    the_dep[:tag] = dep_doc[:comment]
 
-    #TODO: replace it with CommonParser.add_dependency_to_project
-    project.dependencies << the_dep if the_dep
-    project.out_number += 1 if ProjectdependencyService.outdated?(the_dep)
-    project.unknown_number += 1 if the_prod.nil?
+    common_branches = Set.new ['master', 'default', 'dev', 'test', 'release']
+    if common_branches.include?(dep_doc[:branch])
+      the_dep[:branch] = dep_doc[:branch]
+    end
+
+    the_dep  = parse_requested_version(version_label, the_dep, the_prod, dep_doc[:Comment])
+    add_dependency_to_project(project, the_dep, the_prod)
     project
   end
 
+  #TODO: add support for SEMVER selectors
+  #TODO: add comperator for SHA, BRANCH, TAGS
   def parse_requested_version(version_label, dependency, product, dep_comment = nil)
     version_label = version_label.to_s.strip
 
@@ -119,7 +135,6 @@ class GodepParser < CommonParser
       language: Product::A_LANGUAGE_GO,
       prod_key: dep_prod_key,
       name: dep_prod_key,
-      comperator: '=', #GoDEP doesnt support version ranges
       version_current: cur_version,
       scope: Dependency::A_SCOPE_COMPILE
     })

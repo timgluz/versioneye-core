@@ -8,19 +8,6 @@ require 'versioneye/parsers/godep_parser'
 # https://glide.readthedocs.io/en/latest/glide.yaml/
 
 class GlideParser < GodepParser
-  def parse(url)
-    if url.to_s.empty?
-      log.error "GlideParser cant handle empty urls"
-      return
-    end
-
-    body = self.fetch_response_body url
-    parse_content body
-  rescue => e
-    log.error e.message
-    log.error e.backtrace.join('\n')
-    return nil
-  end
 
   def parse_content(content, token = nil)
     if content.to_s.empty?
