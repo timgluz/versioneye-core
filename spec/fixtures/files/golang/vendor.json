@@ -1,0 +1,25 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "Ex4zN+CcY/wtoDoK/penrVAxAok=",
+			"path": "github.com/aws/aws-sdk-go/aws",
+			"revision": "d54f7c6d021d8fca3275e29d13255ededdc54839",
+			"revisionTime": "2016-09-15T23:18:18Z"
+		},
+		{
+			"checksumSHA1": "Y9W+4GimK4Fuxq+vyIskVYFRnX4=",
+			"path": "github.com/aws/aws-sdk-go/aws/awserr",
+			"revision": "d54f7c6d021d8fca3275e29d13255ededdc54839",
+			"revisionTime": "2016-09-15T23:18:18Z"
+		},
+		{
+			"checksumSHA1": "+q4vdl3l1Wom8K1wfIpJ4jlFsbY=",
+			"path": "github.com/aws/aws-sdk-go/aws/awsutil",
+			"revision": "d54f7c6d021d8fca3275e29d13255ededdc54839",
+			"revisionTime": "2016-09-15T23:18:18Z"
+		}
+	],
+	"rootPath": "github.com/saymedia/journald-cloudwatch-logs"
+}
