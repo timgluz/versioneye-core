@@ -111,7 +111,7 @@ class CommonParser
 
   def fetch_response_body( url )
     response = self.fetch_response( url )
-    response.body
+    response.body if response
   rescue => e
     log.error "#{e.message} for #{url}"
     log.error e.backtrace.join("\n")
