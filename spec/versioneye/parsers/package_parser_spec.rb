@@ -1,18 +1,56 @@
 require 'spec_helper'
 
 describe PackageParser do
+  let(:parser){ PackageParser.new }
+  let(:product1){ create_product('connect-redis', 'connect-redis', '1.3.0') }
+  let(:dep1){ parser.init_dependency(nil, 'test-js-pkg') }
+
+  #TODO: add test cases SEMVER comparition
+  context "parse_requested_version" do
+
+    it "parses correctly version labels with git urls" do
+      git_version = 'git+https://example.com/foo/bar#115311855adb0789a0466714ed48a1499ffea97e'
+      parser.parse_requested_version(git_version, dep1, product1)
+
+      expect(dep1).not_to be_nil
+      expect(dep1[:version_requested]).to eq('GIT')
+      expect(dep1[:version_label]).to eq('115311855adb0789a0466714ed48a1499ffea97e')
+      expect(dep1[:comperator]).to eq('=')
+    end
+
+    it "parses correctly version labels with urls with tarball" do
+      tarbal_version = 'https://example.com/example-1.3.0.tgz'
+      parser.parse_requested_version(tarbal_version, dep1, product1)
+
+      expect(dep1).not_to be_nil
+      expect(dep1[:version_requested]).to eq('1.3.0')
+      expect(dep1[:version_label]).to eq('1.3.0')
+      expect(dep1[:comperator]).to eq('=')
+    end
+
+    it "parses correctly version from filepath of the tarball" do
+      tarball_version = 'file:///opt/storage/example-1.3.0.tgz'
+      parser.parse_requested_version(tarball_version, dep1, product1)
+
+      expect(dep1).not_to be_nil
+      expect(dep1[:version_requested]).to eq('1.3.0')
+      expect(dep1[:version_label]).to eq('1.3.0')
+      expect(dep1[:comperator]).to eq('=')
+
+    end
+  end
+
 
   describe "parse" do
 
     it "parse from https the file correctly" do
-      parser = PackageParser.new
       project = parser.parse('https://s3.amazonaws.com/veye_test_env/package.json')
       expect( project ).to_not be_nil
     end
 
     it "parse from http the file correctly" do
-
       product1  = create_product('connect-redis', 'connect-redis', '1.3.0')
+
       product2  = create_product('redis'        , 'redis'        , '1.3.0')
       product3  = create_product('memcache'     , 'memcache'     , '1.4.0')
       product4  = create_product('mongo'        , 'mongo'        , '1.1.7')

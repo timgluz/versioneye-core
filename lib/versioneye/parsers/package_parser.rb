@@ -119,10 +119,26 @@ class PackageParser < CommonParser
 
     version = pre_process version
 
-    if version.match(/\Agit/)
+    if version.match(/\Agit[:|\+]/)
       commit_sha = version.split('#').to_a.last
       dependency[:version_requested] = 'GIT'
       dependency[:version_label] = commit_sha
+
+    elsif version.match(/\Ahttps?:\/\//)
+      version_label = extract_version_from_tarball_uri(version)
+      version_label ||= 'HTTP'
+
+      dependency[:version_requested]  = version_label
+      dependency[:version_label]      = version_label
+      dependency[:comperator]         = '='
+
+    elsif version.match(/\Afile:\/\//)
+      version_label = extract_version_from_tarball_uri(version)
+      version_label ||= 'FILE'
+
+      dependency[:version_requested]  = version_label
+      dependency[:version_label]      = version_label
+      dependency[:comperator]         = '='
 
     elsif version.match(/\|\|/)
       parsed_versions = []
@@ -331,5 +347,20 @@ class PackageParser < CommonParser
       version = "#{version}.*"
     end
     version
+  end
+
+  # parses dependency version from tarball URIs
+  # returns:
+  #   version_label, String, only if it had match
+  #   nil - when no match
+  # example urls:
+  #   https://example.com/example-1.3.0.tgz
+  #   file:///opt/storage/example-1.3.0.tgz
+  def extract_version_from_tarball_uri(version)
+    file_name = version.split('/').last
+    m = file_name.to_s.match(/-(?<version>.+)\.tgz/)
+    return if m.nil?
+
+    m[:version].to_s.strip
   end
 end
