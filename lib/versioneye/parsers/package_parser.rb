@@ -23,7 +23,7 @@ class PackageParser < CommonParser
     return nil if content.to_s.empty?
     return nil if (content =~ /Not\s+found/i)
 
-    data = JSON.parse( content )
+    data = from_json( content , false)
     return nil if data.nil?
 
     project = init_project( data )
@@ -119,7 +119,28 @@ class PackageParser < CommonParser
 
     version = pre_process version
 
-    if version.match(/\|\|/)
+    if version.match(/\Agit[:|\+]/)
+      commit_sha = version.split('#').to_a.last
+      dependency[:version_requested] = 'GIT'
+      dependency[:version_label] = commit_sha
+
+    elsif version.match(/\Ahttps?:\/\//)
+      version_label = extract_version_from_tarball_uri(version)
+      version_label ||= 'HTTP'
+
+      dependency[:version_requested]  = version_label
+      dependency[:version_label]      = version_label
+      dependency[:comperator]         = '='
+
+    elsif version.match(/\Afile:\/\//)
+      version_label = extract_version_from_tarball_uri(version)
+      version_label ||= 'FILE'
+
+      dependency[:version_requested]  = version_label
+      dependency[:version_label]      = version_label
+      dependency[:comperator]         = '='
+
+    elsif version.match(/\|\|/)
       parsed_versions = []
       versions = version.split("||")
       versions.each do |verso|
@@ -251,8 +272,8 @@ class PackageParser < CommonParser
         end
 
         version_range   = VersionService.version_range(product.versions, start, upper_range )
-        version_range.each do |version|
-          version_range.delete version if version.to_s.eql?(upper_range)
+        version_range.each do |v|
+          version_range.delete(v) if v.to_s.eql?(upper_range)
         end
         highest_version = VersionService.newest_version_from( version_range )
         if highest_version
@@ -326,5 +347,20 @@ class PackageParser < CommonParser
       version = "#{version}.*"
     end
     version
+  end
+
+  # parses dependency version from tarball URIs
+  # returns:
+  #   version_label, String, only if it had match
+  #   nil - when no match
+  # example urls:
+  #   https://example.com/example-1.3.0.tgz
+  #   file:///opt/storage/example-1.3.0.tgz
+  def extract_version_from_tarball_uri(version)
+    file_name = version.split('/').last
+    m = file_name.to_s.match(/-(?<version>.+)\.tgz/)
+    return if m.nil?
+
+    m[:version].to_s.strip
   end
 end
