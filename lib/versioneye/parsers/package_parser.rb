@@ -23,7 +23,7 @@ class PackageParser < CommonParser
     return nil if content.to_s.empty?
     return nil if (content =~ /Not\s+found/i)
 
-    data = JSON.parse( content )
+    data = from_json( content , false)
     return nil if data.nil?
 
     project = init_project( data )
@@ -119,7 +119,12 @@ class PackageParser < CommonParser
 
     version = pre_process version
 
-    if version.match(/\|\|/)
+    if version.match(/\Agit/)
+      commit_sha = version.split('#').to_a.last
+      dependency[:version_requested] = 'GIT'
+      dependency[:version_label] = commit_sha
+
+    elsif version.match(/\|\|/)
       parsed_versions = []
       versions = version.split("||")
       versions.each do |verso|
