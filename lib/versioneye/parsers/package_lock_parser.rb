@@ -11,7 +11,7 @@ class PackageLockParser < ShrinkwrapParser
     return nil if content.empty?
     return nil if (content =~ /Not\s+found/i)
 
-    proj_doc = parse_json_safely content
+    proj_doc = from_json content
     return nil if proj_doc.nil?
 
     project = init_project({
