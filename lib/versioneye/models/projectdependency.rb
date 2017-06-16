@@ -86,7 +86,7 @@ class Projectdependency < Versioneye::Model
 
   def self.find_by_id id
     Projectdependency.find id
-  rescue => e
+  rescue
     nil
   end
 
