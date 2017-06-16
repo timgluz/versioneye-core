@@ -71,7 +71,7 @@ describe PackageLockParser do
       expect(proj).not_to be_nil
       expect(proj[:name]).to eq('pkg-lock-test')
       expect(proj[:version]).to eq('1.0.0')
-      expect(proj.dep_number).to eq(5)
+      expect(proj.dep_number).to eq(6)
 
       dep = proj.dependencies[0]
       expect(dep[:name]).to eq(product1[:name])
