@@ -358,7 +358,7 @@ class PackageParser < CommonParser
   #   file:///opt/storage/example-1.3.0.tgz
   def extract_version_from_tarball_uri(version)
     file_name = version.split('/').last
-    m = file_name.to_s.match(/-(?<version>.+)\.tgz/)
+    m = file_name.to_s.match(/-(?<version>\d.+)\.tgz/)
     return if m.nil?
 
     m[:version].to_s.strip
