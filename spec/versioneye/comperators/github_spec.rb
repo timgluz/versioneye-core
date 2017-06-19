@@ -1,11 +1,13 @@
 require 'spec_helper'
 
+
 class TestC
   include Comperators::Github
 end
 
 describe TestC do
   let(:cmp){ TestC.new }
+  let(:auth_token){ Settings.instance.github_client_secret }
 
   context "commit_sha?" do
     it "returns true for a valid long SHA1 values" do
@@ -26,5 +28,55 @@ describe TestC do
       expect(cmp.commit_sha?('master')).to be_falsey
       expect(cmp.commit_sha?('1-abcdef01234')).to be_falsey
     end
+  end
+
+  let(:test_repo){ 'serde-rs/serde'  }
+  let(:test_sha){ 'fd3d1396d33a49200daaaf8bf17eba78fe4183d8' }
+  let(:prod1){
+    Product.new(
+      language: Product::A_LANGUAGE_RUST,
+      prod_type: Project::A_TYPE_CARGO,
+      prod_key: 'serde',
+      name: 'serde',
+      version: '1.0.1'
+    )
+  }
+
+  let(:dep1){
+    Projectdependency.new(
+      language: Product::A_LANGUAGE_RUST,
+      prod_key: 'serde_derive',
+      name: 'serde_derive',
+      version_label: '1.0.0',
+      repo_fullname: test_repo
+    )
+  }
+
+  context "compare_github_version" do
+    before do
+      prod1.versions = []
+    end
+
+    it "returns IS_UPTODATE if github commit date >= latest stable" do
+      prod1.versions << Version.new(
+        version: '1.0.7',
+        released_at: DateTime.parse('2017-05-01')
+      )
+
+      prod1.versions << Version.new(
+        version: '1.0.8',
+        released_at: DateTime.parse('2017-05-24')
+      )
+      prod1.save
+
+      VCR.use_cassette('github/comperator/by_commit_sha') do
+        res = cmp.compare_github_version(test_sha, dep1, prod1.versions, auth_token)
+        expect(res).not_to be_nil
+        expect(res).to eq( Comperators::IS_UPTODATE )
+      end
+    end
+
+    #TODO: add case when commit is outdated
+    #TODO: check possible scenarios for UNKNOWNs
   end
 end
