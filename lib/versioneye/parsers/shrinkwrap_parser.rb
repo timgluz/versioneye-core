@@ -6,7 +6,7 @@ class ShrinkwrapParser < PackageParser
     return nil if content.empty?
     return nil if (content =~ /Not\s+found/i)
 
-    proj_doc = parse_json_safely content
+    proj_doc = from_json content
     return nil if proj_doc.nil?
 
     project = init_project({
@@ -72,16 +72,6 @@ class ShrinkwrapParser < PackageParser
     end
 
     dep
-  end
-
-  def parse_json_safely(json_txt, keywordize =  true)
-    json_txt = json_txt.to_s.strip
-    return nil if json_txt.nil?
-
-    JSON.parse(json_txt, symbolize_names: keywordize )
-  rescue
-    logger.error "parse_json_safely: failed to parse json text: `#{json_txt}`"
-    nil
   end
 
 end

@@ -12,10 +12,10 @@ class CommonParser
     raise NotImplementedError, 'Implement me in subclass!'
   end
 
-  def from_json(json_doc)
+  def from_json(json_doc, as_symbols = true)
     json_doc = json_doc.force_encoding(Encoding::UTF_8).strip
     json_doc = clean_spaces(json_doc) #replace non-ascii spaces with ascii spaces
-    JSON.parse(json_doc, {symbolize_names: true})
+    JSON.parse(json_doc, {symbolize_names: as_symbols})
   rescue => e
     log.error "from_json: failed to parse #{json_doc}"
     log.error e.backtrace.join('\n')
