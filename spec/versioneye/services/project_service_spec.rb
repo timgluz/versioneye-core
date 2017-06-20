@@ -320,8 +320,8 @@ describe ProjectService do
     end
 
     it "returns Mix" do
-      expect( described_class.type_by_filename('mix.exs') ).to eq(Project::A_TYPE_MIX)
-      expect( described_class.type_by_filename('/a/b/c/mix.exs') ).to eq(Project::A_TYPE_MIX)
+      expect( described_class.type_by_filename('mix.exs') ).to eq(Project::A_TYPE_HEX)
+      expect( described_class.type_by_filename('/a/b/c/mix.exs') ).to eq(Project::A_TYPE_HEX)
     end
 
   end
@@ -343,9 +343,9 @@ describe ProjectService do
       prod_2.save
       prod_3  = ProductFactory.create_new 3
 
-      dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1000.0.0'}
-      dep_2 = ProjectdependencyFactory.create_new project, prod_2, true, {:version_requested => zz_1, :version_current => rc_1}
-      dep_3 = ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => '0.0.0'}
+      ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1000.0.0'}
+      ProjectdependencyFactory.create_new project, prod_2, true, {:version_requested => zz_1, :version_current => rc_1}
+      ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => '0.0.0'}
 
       expect( project.dependencies.count ).to eq(3)
 
@@ -389,9 +389,9 @@ describe ProjectService do
       prod_2.save
       prod_3  = ProductFactory.create_new 3
 
-      dep_1 = ProjectdependencyFactory.create_new project2, prod_1, true, {:version_requested => '1000.0.0'}
-      dep_2 = ProjectdependencyFactory.create_new project2, prod_2, true, {:version_requested => zz_1, :version_current => rc_1}
-      dep_3 = ProjectdependencyFactory.create_new project2, prod_3, true, {:version_requested => '0.0.0'}
+      ProjectdependencyFactory.create_new project2, prod_1, true, {:version_requested => '1000.0.0'}
+      ProjectdependencyFactory.create_new project2, prod_2, true, {:version_requested => zz_1, :version_current => rc_1}
+      ProjectdependencyFactory.create_new project2, prod_3, true, {:version_requested => '0.0.0'}
 
       expect( project2.dependencies.count ).to eq(3)
       project2.dependencies.each do |dep|
@@ -428,9 +428,9 @@ describe ProjectService do
       prod_2  = ProductFactory.create_new 2
       prod_3  = ProductFactory.create_new 3
 
-      dep_1 = ProjectdependencyFactory.create_new project, prod_1, false, {:version_requested => '1.0.0'}
-      dep_2 = ProjectdependencyFactory.create_new project, prod_2, false, {:version_requested => '0.1.0'}
-      dep_3 = ProjectdependencyFactory.create_new project, prod_3, false, {:version_requested => '0.0.0'}
+      ProjectdependencyFactory.create_new project, prod_1, false, {:version_requested => '1.0.0'}
+      ProjectdependencyFactory.create_new project, prod_2, false, {:version_requested => '0.1.0'}
+      ProjectdependencyFactory.create_new project, prod_3, false, {:version_requested => '0.0.0'}
 
       expect( Product.count ).to eq(3)
       expect( Project.count ).to eq(0)
@@ -457,9 +457,9 @@ describe ProjectService do
       prod_2  = ProductFactory.create_new 2
       prod_3  = ProductFactory.create_new 3
 
-      dep_1 = ProjectdependencyFactory.create_new project2, prod_1, true
-      dep_2 = ProjectdependencyFactory.create_new project, prod_2, true
-      dep_3 = ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => '0.0.0'}
+      ProjectdependencyFactory.create_new project2, prod_1, true
+      ProjectdependencyFactory.create_new project, prod_2, true
+      ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => '0.0.0'}
 
       orga1 = Organisation.new(:name => 'orga1', :plan => Plan.micro)
       expect( orga1.save ).to be_truthy
@@ -632,9 +632,9 @@ describe ProjectService do
       prod_2  = ProductFactory.create_new 2
       prod_3  = ProductFactory.create_new 3
 
-      dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1.0.0'}
-      dep_2 = ProjectdependencyFactory.create_new project, prod_2, true, {:version_requested => '0.1.0'}
-      dep_3 = ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => '0.0.0'}
+      ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1.0.0'}
+      ProjectdependencyFactory.create_new project, prod_2, true, {:version_requested => '0.1.0'}
+      ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => '0.0.0'}
 
       expect( Product.count ).to eq(3)
       expect( Project.count ).to eq(1)
@@ -664,11 +664,11 @@ describe ProjectService do
       prod_2  = ProductFactory.create_new 2
       prod_3  = ProductFactory.create_new 3
 
-      dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1.0.0'}
-      dep_2 = ProjectdependencyFactory.create_new project, prod_2, true, {:version_requested => '0.1.0'}
-      dep_3 = ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => '0.0.0'}
+      ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1.0.0'}
+      ProjectdependencyFactory.create_new project, prod_2, true, {:version_requested => '0.1.0'}
+      ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => '0.0.0'}
 
-      dep_4 = ProjectdependencyFactory.create_new child, prod_1, true, {:version_requested => '1.0.0'}
+      ProjectdependencyFactory.create_new child, prod_1, true, {:version_requested => '1.0.0'}
 
       expect( Product.count ).to eq(3)
       expect( Project.count ).to eq(2)
@@ -693,7 +693,7 @@ describe ProjectService do
       expect( project.user_id.to_s.eql?(user.ids) ).to be_truthy
 
       prod_1 = ProductFactory.create_new 1
-      dep_1  = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1.0.0'}
+      ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1.0.0'}
 
       expect( Project.count ).to eq(1)
       ProjectService.destroy_by( user, project.ids )
@@ -706,7 +706,7 @@ describe ProjectService do
       project = ProjectFactory.create_new user, nil, true
 
       prod_1  = ProductFactory.create_new 1
-      dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1.0.0'}
+      ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1.0.0'}
 
       expect( Project.count ).to eq(1)
       expect { ProjectService.destroy_by(dude, project) }.to raise_exception
@@ -721,7 +721,7 @@ describe ProjectService do
       project = ProjectFactory.create_new user, nil, true
 
       prod_1  = ProductFactory.create_new 1
-      dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1.0.0'}
+      ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1.0.0'}
 
       expect( Project.count ).to eq(1)
       ProjectService.destroy_by(admin, project)
@@ -846,10 +846,10 @@ describe ProjectService do
       prod_2  = ProductFactory.create_new 2
       prod_3  = ProductFactory.create_new 3
 
-      dep_1 = ProjectdependencyFactory.create_new project_1, prod_1, true, {:version_requested => '1.0.0'}
-      dep_2 = ProjectdependencyFactory.create_new project_2, prod_2, true, {:version_requested => '0.1.0'}
-      dep_3 = ProjectdependencyFactory.create_new project_2, prod_3, true, {:version_requested => '0.0.0'}
-      dep_4 = ProjectdependencyFactory.create_new project_2, prod_1, true, {:version_requested => '0.0.0'}
+      ProjectdependencyFactory.create_new project_1, prod_1, true, {:version_requested => '1.0.0'}
+      ProjectdependencyFactory.create_new project_2, prod_2, true, {:version_requested => '0.1.0'}
+      ProjectdependencyFactory.create_new project_2, prod_3, true, {:version_requested => '0.0.0'}
+      ProjectdependencyFactory.create_new project_2, prod_1, true, {:version_requested => '0.0.0'}
 
       map = ProjectService.user_product_index_map user
       expect( map.empty? ).to be_falsey
@@ -873,9 +873,9 @@ describe ProjectService do
       prod_2  = ProductFactory.create_new 2
       prod_3  = ProductFactory.create_new 3
 
-      dep_1 = ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1000000.0.0'}
-      dep_2 = ProjectdependencyFactory.create_new project, prod_2, true, {:version_requested => '0.0.0'}
-      dep_3 = ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => '0.0.0'}
+      ProjectdependencyFactory.create_new project, prod_1, true, {:version_requested => '1000000.0.0'}
+      ProjectdependencyFactory.create_new project, prod_2, true, {:version_requested => '0.0.0'}
+      ProjectdependencyFactory.create_new project, prod_3, true, {:version_requested => '0.0.0'}
 
       outdated_deps = ProjectService.outdated_dependencies project
       expect( outdated_deps ).not_to be_nil
