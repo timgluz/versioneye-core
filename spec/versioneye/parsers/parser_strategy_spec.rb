@@ -136,7 +136,7 @@ describe ParserStrategy do
     end
 
     it "returns MixParser" do
-      parser = ParserStrategy.parser_for(Project::A_TYPE_MIX, 'mix.exs')
+      parser = ParserStrategy.parser_for(Project::A_TYPE_HEX, 'mix.exs')
       expect( parser.is_a?(MixParser) ).to be_truthy
     end
 

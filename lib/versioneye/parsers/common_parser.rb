@@ -239,8 +239,10 @@ class CommonParser
     return false
   end
 
-  def self.mix_file?(filename)
+  def self.hex_file?(filename)
     return true if /\bmix\.exs\z/i.match?(filename)
+    return true if /rebar\.config\z/i.match?(filename)
+    return true if /erlang\.mk\z/i.match?(filename)
 
     return false
   end
