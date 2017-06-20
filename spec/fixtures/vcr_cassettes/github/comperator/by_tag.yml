@@ -25,7 +25,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Tue, 20 Jun 2017 11:39:20 GMT
+      - Tue, 20 Jun 2017 13:37:21 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -35,9 +35,9 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4999'
+      - '5000'
       X-Ratelimit-Reset:
-      - '1497961788'
+      - '1497969441'
       Cache-Control:
       - no-cache
       X-Oauth-Scopes:
@@ -62,18 +62,249 @@ http_interactions:
       X-Xss-Protection:
       - 1; mode=block
       X-Runtime-Rack:
-      - '0.020425'
+      - '0.024410'
       Vary:
       - Accept-Encoding
       X-Served-By:
-      - 4537b68c46a1b65b106078b0a2578ee2
+      - 62cdcc2d03a2f173f1c58590d1a90077
       X-Github-Request-Id:
-      - D9FF:17E1F:1DE29B7:268B145:59490968
+      - DDBF:17E22:EC8191:130D03C:59492512
     body:
       encoding: ASCII-8BIT
-      string: '{"resources":{"core":{"limit":5000,"remaining":4999,"reset":1497961788},"search":{"limit":30,"remaining":30,"reset":1497958820},"graphql":{"limit":5000,"remaining":5000,"reset":1497962360}},"rate":{"limit":5000,"remaining":4999,"reset":1497961788}}'
+      string: '{"resources":{"core":{"limit":5000,"remaining":5000,"reset":1497969441},"search":{"limit":30,"remaining":30,"reset":1497965901},"graphql":{"limit":5000,"remaining":5000,"reset":1497969441}},"rate":{"limit":5000,"remaining":5000,"reset":1497969441}}'
     http_version: 
-  recorded_at: Tue, 20 Jun 2017 11:39:20 GMT
+  recorded_at: Tue, 20 Jun 2017 13:37:22 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/serde-rs/serde/branches/v1.0.8
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 4.7.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - token 72e349235658c7d30e4974d794f2d08284006b65
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 20 Jun 2017 13:37:22 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 404 Not Found
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4999'
+      X-Ratelimit-Reset:
+      - '1497969442'
+      X-Oauth-Scopes:
+      - admin:org_hook, admin:repo_hook, repo
+      X-Accepted-Oauth-Scopes:
+      - ''
+      X-Github-Media-Type:
+      - github.v3; format=json
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Security-Policy:
+      - default-src 'none'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Runtime-Rack:
+      - '0.035393'
+      X-Github-Request-Id:
+      - DDC0:17E1F:1ED1B2D:27C3A7C:59492512
+    body:
+      encoding: ASCII-8BIT
+      string: '{"message":"Branch not found","documentation_url":"https://developer.github.com/v3/repos/#get-branch"}'
+    http_version: 
+  recorded_at: Tue, 20 Jun 2017 13:37:22 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/serde-rs/serde/git/refs/tags/v1.0.8
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 4.7.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - token 72e349235658c7d30e4974d794f2d08284006b65
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 20 Jun 2017 13:37:23 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4998'
+      X-Ratelimit-Reset:
+      - '1497969442'
+      Cache-Control:
+      - private, max-age=60, s-maxage=60
+      Vary:
+      - Accept, Authorization, Cookie, X-GitHub-OTP
+      - Accept-Encoding
+      Etag:
+      - W/"9435af1777571bbc5b045294a7055f6a"
+      Last-Modified:
+      - Tue, 20 Jun 2017 09:44:22 GMT
+      X-Poll-Interval:
+      - '300'
+      X-Oauth-Scopes:
+      - admin:org_hook, admin:repo_hook, repo
+      X-Accepted-Oauth-Scopes:
+      - ''
+      X-Github-Media-Type:
+      - github.v3; format=json
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Security-Policy:
+      - default-src 'none'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Runtime-Rack:
+      - '0.043564'
+      X-Served-By:
+      - a474937f3b2fa272558fa6dc951018ad
+      X-Github-Request-Id:
+      - DDC1:17E1F:1ED1B75:27C3ADC:59492513
+    body:
+      encoding: ASCII-8BIT
+      string: '{"ref":"refs/tags/v1.0.8","url":"https://api.github.com/repos/serde-rs/serde/git/refs/tags/v1.0.8","object":{"sha":"ab41284202bc60e32bfe3dae1f5b7dca0c0ad182","type":"tag","url":"https://api.github.com/repos/serde-rs/serde/git/tags/ab41284202bc60e32bfe3dae1f5b7dca0c0ad182"}}'
+    http_version: 
+  recorded_at: Tue, 20 Jun 2017 13:37:23 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/serde-rs/serde/git/tags/ab41284202bc60e32bfe3dae1f5b7dca0c0ad182
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 4.7.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - token 72e349235658c7d30e4974d794f2d08284006b65
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 20 Jun 2017 13:37:23 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4997'
+      X-Ratelimit-Reset:
+      - '1497969442'
+      Cache-Control:
+      - private, max-age=60, s-maxage=60
+      Vary:
+      - Accept, Authorization, Cookie, X-GitHub-OTP
+      - Accept-Encoding
+      Etag:
+      - W/"88d0e6982c2f6511290af402f760dc79"
+      Last-Modified:
+      - Tue, 20 Jun 2017 09:44:22 GMT
+      X-Oauth-Scopes:
+      - admin:org_hook, admin:repo_hook, repo
+      X-Accepted-Oauth-Scopes:
+      - ''
+      X-Github-Media-Type:
+      - github.v3; format=json
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Security-Policy:
+      - default-src 'none'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Runtime-Rack:
+      - '0.085708'
+      X-Served-By:
+      - bd82876e9bf04990f289ba22f246ee9b
+      X-Github-Request-Id:
+      - DDC2:17E1F:1ED1BB3:27C3B38:59492513
+    body:
+      encoding: ASCII-8BIT
+      string: '{"sha":"ab41284202bc60e32bfe3dae1f5b7dca0c0ad182","url":"https://api.github.com/repos/serde-rs/serde/git/tags/ab41284202bc60e32bfe3dae1f5b7dca0c0ad182","tagger":{"name":"David
+        Tolnay","email":"dtolnay@gmail.com","date":"2017-05-24T07:17:27Z"},"object":{"sha":"fd3d1396d33a49200daaaf8bf17eba78fe4183d8","type":"commit","url":"https://api.github.com/repos/serde-rs/serde/git/commits/fd3d1396d33a49200daaaf8bf17eba78fe4183d8"},"tag":"v1.0.8","message":"Release
+        1.0.8\n-----BEGIN PGP SIGNATURE-----\nVersion: GnuPG v1\n\niQIcBAABAgAGBQJZJTOPAAoJEPm6FDuV/22CzIYP/3ARUjq1nsf2Gg62xHznk1PX\nthsgqix6ngOgg9It03KW1YGJmubQd6Vv9jLN/KnbVSD+bIabA/7nRDJxSoLGb8zB\nivAjPXS+RRKbGLjKXmXHL+eGICMkxs9OLY+/p1WrKuKPdWaueUYdP8AaqPHjSRIm\nO1w+f3NL0EqFpmCDIxT+A2C29Qg0/5NRKvSAkwjDnR3LAKvAGyW75nFTI4AT4y4X\nq1GPkiZzMgNi/R1jz3tyk5fChNQUTLyzanF3eTJp6TDOseleDHWSNq9Kq/khnuch\nbTvmK+FVATN0LX3X2AbN/aKT1fXxCbMhwkEscA9jnuI7P6ufGmJ1RMR4oLCgvaLy\nSBZxwomWB7j/XYHXYch/b1ve3Y/3X0AOMj9aqcb2mhHto/ICAduV5HD97T+ho51H\n9leLJVW/H9U1xgj/1/lYmbZHsQlrQ++U6TjJQ7iqRf0Ty9ajvlz9YroAR/onTGwt\nW1Z50/t4d5ckyOlpv9n49P+wD0pafT5aoyFT6lan+ntYbJaTU8UysHnAqF5d0SCQ\nJLW4FmA5WdJPteGKMY13OYGUeUfqk5iZ0M4KECKTZSKZSqOeHe0VhjFCk99b4YVB\n7huviSyl73IHBcRWoOtI7XTUCH1jfuFWODlsJRgv2LPlmw3wt6ldDdAkHBqug/nC\n81BiPPY+UTIltieO4lax\n=fdCt\n-----END
+        PGP SIGNATURE-----\n"}'
+    http_version: 
+  recorded_at: Tue, 20 Jun 2017 13:37:23 GMT
 - request:
     method: get
     uri: https://api.github.com/repos/serde-rs/serde/commits/fd3d1396d33a49200daaaf8bf17eba78fe4183d8
@@ -99,7 +330,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Tue, 20 Jun 2017 11:39:21 GMT
+      - Tue, 20 Jun 2017 13:37:24 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -109,9 +340,9 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4998'
+      - '4996'
       X-Ratelimit-Reset:
-      - '1497961788'
+      - '1497969442'
       Cache-Control:
       - private, max-age=60, s-maxage=60
       Vary:
@@ -143,11 +374,11 @@ http_interactions:
       X-Xss-Protection:
       - 1; mode=block
       X-Runtime-Rack:
-      - '0.096146'
+      - '0.112387'
       X-Served-By:
-      - 88531cdcf1929112ec480e1806d44a33
+      - 62cdcc2d03a2f173f1c58590d1a90077
       X-Github-Request-Id:
-      - DA00:17E20:2181FAA:2B2A025:59490969
+      - DDC3:17E20:228C0DA:2C85B47:59492514
     body:
       encoding: ASCII-8BIT
       string: '{"sha":"fd3d1396d33a49200daaaf8bf17eba78fe4183d8","commit":{"author":{"name":"David
@@ -196,5 +427,5 @@ http_interactions:
         = \"https://docs.rs/serde_test/1.0.8\")]\n \n #[macro_use]\n extern crate
         serde;"}]}'
     http_version: 
-  recorded_at: Tue, 20 Jun 2017 11:39:21 GMT
+  recorded_at: Tue, 20 Jun 2017 13:37:24 GMT
 recorded_with: VCR 3.0.3

@@ -57,7 +57,7 @@ describe TestC do
       prod1.versions = []
     end
 
-    it "returns IS_UPTODATE if github commit date >= latest stable" do
+    it "returns IS_UPTODATE if github commit date >= the date of latest stable" do
       prod1.versions << Version.new(
         version: '1.0.7',
         released_at: DateTime.parse('2017-05-01')
@@ -76,7 +76,83 @@ describe TestC do
       end
     end
 
-    #TODO: add case when commit is outdated
-    #TODO: check possible scenarios for UNKNOWNs
+    it "returns IS_OUTDATED if github commit date < the date of latest stable" do
+      prod1.versions << Version.new(
+        version: '1.0.8',
+        released_at: DateTime.parse('2017-05-24')
+      )
+
+      prod1.versions << Version.new(
+        version: '1.0.9',
+        released_at: DateTime.parse('2017-07-01')
+      )
+
+      prod1.save
+
+      VCR.use_cassette('github/comperator/by_commit_sha') do
+        res = cmp.compare_github_version(test_sha, dep1, prod1.versions, auth_token)
+        expect(res).not_to be_nil
+        expect(res).to eq( Comperators::IS_OUTDATED )
+      end
+    end
+
+    it  "returns IS_UNKNOWN when dependency has no repo_name" do
+      dep2 = dep1.clone
+      dep2[:repo_fullname] = nil
+
+      res = cmp.compare_github_version(test_sha, dep2, prod1.versions, auth_token)
+      expect(res).to eq( Comperators::IS_UNKNOWN )
+    end
+
+    it "returns IS_UPTODATE when user compares with master branch" do
+      prod1.versions << Version.new(
+        version: '1.0.8',
+        released_at: DateTime.parse('2017-05-24')
+      )
+
+      prod1.save
+
+      VCR.use_cassette('github/comperator/by_branch') do
+        res = cmp.compare_github_version('master', dep1, prod1.versions, auth_token)
+        expect(res).not_to be_nil
+        expect(res).to eq( Comperators::IS_UPTODATE )
+      end
+    end
+
+    it "returns IS_UPTODATE when the tag has newer release date as latest stable release" do
+      prod1.versions << Version.new(
+        version: '1.0.8',
+        released_at: DateTime.parse('2017-05-24')
+      )
+
+      prod1.save
+
+      VCR.use_cassette('github/comperator/by_tag') do
+        res = cmp.compare_github_version('v1.0.8', dep1, prod1.versions, auth_token)
+        expect(res).not_to be_nil
+        expect(res).to eq( Comperators::IS_UPTODATE )
+      end
+    end
+
+    it "returns IS_OUTDATED if latest stable release > tag release date" do
+       prod1.versions << Version.new(
+        version: '1.0.8',
+        released_at: DateTime.parse('2017-05-24')
+      )
+
+       prod1.versions << Version.new(
+        version: '1.0.9',
+        released_at: DateTime.parse('2017-06-24')
+      )
+
+      prod1.save
+
+      VCR.use_cassette('github/comperator/by_tag') do
+        res = cmp.compare_github_version('v1.0.8', dep1, prod1.versions, auth_token)
+        expect(res).not_to be_nil
+        expect(res).to eq( Comperators::IS_OUTDATED )
+      end
+
+    end
   end
 end

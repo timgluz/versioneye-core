@@ -2,26 +2,17 @@ require 'octokit'
 
 module Comperators
   module Github
+    MAX_REQUEST_COST = 3
+
     def log
       Versioneye::Log.instance.log
     end
 
-
-    #TODO: remove it as every pkg-manager have their own versions
-    def parse_requested_version_github(version_label, dependency, product = nil)
-      if commit_sha?(version_label)
-        dependency[:version_requested] = version_label
-        dependency[:version_label] = version_label
-        comperator[:comperator] = '='
-      end
-    end
-
-
     #checks the state of version label
     def compare_github_version(version_label, dependency, product_versions, auth_token)
 
-      repo_fullname = dependency[:repo_fullname]
-      if repo_fullname.nil?
+      repo_fullname = dependency[:repo_fullname].to_s
+      if repo_fullname.nil? or repo_fullname.empty?
         log.error "compare_github_version: dependency has no :repo_fullname, #{dependency}"
         return IS_UNKNOWN
       end
@@ -60,19 +51,64 @@ module Comperators
       IS_UNKNOWN
     end
 
-    #TODO: check Request LIMITS
-    #TODO: add cases for tags and branches
     def fetch_version_commit(repo_fullname, version_label, auth_token)
-      if commit_sha?(version_label)
-        fetch_commit_details(repo_fullname, version_label, auth_token)
+      gh = Octokit::Client.new(access_token: auth_token)
+      if gh.rate_limit.remaining < MAX_REQUEST_COST #some fetchers may need many request to get commit details
+        log.error "fetch_version_commit: hit request limit for #{repo_fullname}/#{version_label}"
+        return
       end
+
+      commit_dt = nil
+      if commit_sha?(version_label)
+        commit_dt = fetch_commit_details(gh, repo_fullname, version_label)
+      end
+
+      commit_dt ||= fetch_branch_details(gh, repo_fullname, version_label)
+      commit_dt ||= fetch_tag_details(gh, repo_fullname, version_label)
+
+      return commit_dt
     end
 
-    def fetch_commit_details(repo_fullname, commit_sha, auth_token)
-      gh = Octokit::Client.new(auth_token: auth_token)
+    def fetch_commit_details(gh, repo_fullname, commit_sha)
       res = gh.commit(repo_fullname, commit_sha)
       res[:commit]
-    rescue
+    rescue => e
+      log.error "fetch_commit_details: failed to fetch #{repo_fullname}/#{commit_sha}"
+      log.error e.message.to_s
+      log.error e.backtrace.join('\n')
+      nil
+    end
+
+    def fetch_branch_details(gh, repo_fullname, branch_name)
+      res = gh.branch(repo_fullname, branch_name)
+      res[:commit][:commit]
+    rescue => e
+      log.error "fetch_branch_details: failed to fetch #{repo_fullname}/#{branch_name}"
+      log.error e.message.to_s
+      log.error e.backtrace.join('\n')
+
+      nil
+    end
+
+    def fetch_tag_details(gh, repo_fullname, tag_name)
+      ref_dt = gh.ref(repo_fullname, "tags/#{tag_name}")
+      if ref_dt.nil?
+        log.error "fetch_tag_details: failed to fetch ref data #{repo_fullname}/#{tag_name}"
+        return
+      end
+
+      tag_dt = gh.tag(repo_fullname, ref_dt[:object][:sha])
+      if tag_dt.nil?
+        log.error "fetch_tag_details: failed to fetch tag data: #{repo_fullname}/#{tag_name}, #{ref_dt}"
+        return
+      end
+
+      fetch_commit_details(gh, repo_fullname, tag_dt[:object][:sha])
+    rescue => e
+      log.error "fetch_tag_details: failed to fetch for #{repo_fullname}/#{tag_name}"
+      log.error e.message.to_s
+      log.error e.backtrace.join('\n')
+
       nil
     end
 
