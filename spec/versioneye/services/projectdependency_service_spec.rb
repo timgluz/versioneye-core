@@ -442,7 +442,6 @@ describe ProjectdependencyService do
           res = ProjectdependencyService.outdated?(dep1, prod1, auth_token)
           expect(res).to be_falsey
         end
-
       end
     end
   end
