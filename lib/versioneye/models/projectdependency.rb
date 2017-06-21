@@ -33,7 +33,6 @@ class Projectdependency < Versioneye::Model
   #git related data
   field :repo_fullname    , type: String
   field :repo_ref         , type: String # commit_sha, branch, or tag
-  field :commit_sha       , type: String #Deprecated: to specific
 
   field :status_class  , type: String
   field :status_rank   , type: String
