@@ -222,7 +222,6 @@ describe Projectdependency do
       expect( pr.group_id).to eq('org.spring')
       expect( pr.artifact_id).to eq('spring-core')
     end
-
   end
 
 end

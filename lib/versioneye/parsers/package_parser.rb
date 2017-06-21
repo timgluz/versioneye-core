@@ -88,7 +88,12 @@ class PackageParser < CommonParser
     dependency = init_dependency( product, package_name )
     dependency.scope = scope
     parse_requested_version( version_label, dependency, product )
-    project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
+
+    #TODO: refactor into CommonParser
+    #TODO: check up auth token only when dep is GITHUB project
+    auth_token = GithubUpdateService.fetch_token_for(project)
+    is_outdated = ProjectdependencyService.outdated?(dependency, product, auth_token)
+    project.out_number     += 1 if is_outdated
     project.unknown_number += 1 if product.nil?
     project.projectdependencies.push dependency
   end

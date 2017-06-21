@@ -2,7 +2,7 @@ require 'octokit'
 
 module Comperators
   module Github
-    MAX_REQUEST_COST = 3
+    MAX_REQUEST_COST = 3 # if version is tag, then we need 3request for commit date
 
     def log
       Versioneye::Log.instance.log
