@@ -341,12 +341,12 @@ class ComposerParser < CommonParser
 
 
   def fetch_product_for key
-    key = key.to_s
+    key = key.to_s.strip
     return nil if key.empty?
 
     case key
     when /\Anpm\-asset\//
-      new_key = key.gsub("npm-asset/", '').strip
+      new_key = key.gsub("npm-asset/", '').to_s.strip
       Product.fetch_product( Product::A_LANGUAGE_NODEJS, new_key )
 
     when /\Abower\-asset\//
