@@ -28,7 +28,7 @@ class ComposerParser < CommonParser
     end
 
     self.token = token
-    json_content = JSON.parse( data )
+    json_content = from_json( data, false )
     self.composer_json = json_content
     project = init_project
 
