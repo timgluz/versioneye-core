@@ -344,20 +344,22 @@ class ComposerParser < CommonParser
 
 
     def fetch_product_for key
-      return nil if key.to_s.empty?
+      key = key.to_s
+      return nil if key.empty?
 
-      if key.to_s.match(/\Anpm-asset\//)
-        new_key = key.gsub("npm-asset/", "")
-        return Product.fetch_product( Product::A_LANGUAGE_NODEJS, new_key )
+      case key
+      when /\Anpm\-asset\//
+        new_key = key.gsub("npm-asset/", '').strip
+        Product.fetch_product( Product::A_LANGUAGE_NODEJS, new_key )
 
-      elsif key.to_s.match(/\Abower-asset\//)
-        new_key = key.gsub("bower-asset/", "")
-        return Product.fetch_bower( new_key )
+      when /\Abower\-asset\//
+        new_key = key.gsub(/\Abower-asset\//, '').to_s.strip
+        Product.fetch_bower( new_key )
 
       else
-        return Product.fetch_product( Product::A_LANGUAGE_PHP, key )
-
+        Product.fetch_product( Product::A_LANGUAGE_PHP, key )
       end
+
     end
 
 

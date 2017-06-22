@@ -1,15 +1,17 @@
 require 'spec_helper'
 
 describe ComposerParser do
+  let(:parser){ ComposerParser.new }
+  let(:test_file_url ){ "https://s3.amazonaws.com/veye_test_env/composer.json" }
 
   describe 'parse_content' do
 
     it 'parses the content' do
       cp = CommonParser.new
-      response = cp.fetch_response "https://s3.amazonaws.com/veye_test_env/composer.json"
-      parser  = ComposerParser.new
+      response = cp.fetch_response test_file_url
       project = parser.parse_content response.body
-      project.should_not be_nil
+
+      expect( project ).not_to be_nil
     end
 
   end
@@ -24,8 +26,8 @@ describe ComposerParser do
 
     it "parse from https the file correctly" do
       parser  = ComposerParser.new
-      project = parser.parse("https://s3.amazonaws.com/veye_test_env/composer.json")
-      project.should_not be_nil
+      project = parser.parse(test_file_url)
+      expect( project ).not_to be_nil
     end
 
     it "parse from http the file correctly" do
@@ -164,178 +166,178 @@ describe ComposerParser do
       product_25.save
 
 
-      parser  = ComposerParser.new
       project = parser.parse("https://s3.amazonaws.com/veye_test_env/composer.json")
-      project.should_not be_nil
-      project.dependencies.size.should eql(25)
+      expect( project ).not_to be_nil
+      expect(project.dependencies.size).to eql(25)
 
 
-      dep_01 = fetch_by_name(project.dependencies, "symfony/symfony")
-      dep_01.name.should eql("symfony/symfony")
-      dep_01.version_requested.should eql("2.0.7")
-      dep_01.version_current.should eql("2.0.7")
-      dep_01.stability.should eql("stable")
-      dep_01.comperator.should eql("=")
+      dep_01 = fetch_by_name(project.dependencies, product_01[:name])
+      expect( dep_01.name ).to              eql(product_01[:name])
+      expect( dep_01.version_requested ).to eql("2.0.7")
+      expect( dep_01.version_current ).to   eql("2.0.7")
+      expect( dep_01.stability ).to         eql("stable")
+      expect( dep_01.comperator ).to        eql("=")
 
-      dep_02 = fetch_by_name(project.dependencies, "symfony/doctrine-bundle")
-      dep_02.name.should eql("symfony/doctrine-bundle")
-      dep_02.version_requested.should eql("2.0.7")
-      dep_02.version_current.should eql("2.0.7")
-      dep_02.comperator.should eql("=")
+      dep_02 = fetch_by_name(project.dependencies, product_02[:name])
+      expect( dep_02.name ).to              eql(product_02[:name])
+      expect( dep_02.version_requested ).to eql("2.0.7")
+      expect( dep_02.version_current ).to   eql("2.0.7")
+      expect( dep_02.comperator ).to        eql("=")
 
-      dep_03 = fetch_by_name(project.dependencies, "symfony/process")
-      dep_03.name.should eql("symfony/process")
-      dep_03.version_requested.should eql("2.0.7")
-      dep_03.version_current.should eql("2.0.7")
-      dep_03.comperator.should eql("=")
+      dep_03 = fetch_by_name(project.dependencies, product_03[:name])
+      expect( dep_03.name ).to              eql(product_03[:name])
+      expect( dep_03.version_requested ).to eql("2.0.7")
+      expect( dep_03.version_current ).to   eql("2.0.7")
+      expect( dep_03.comperator ).to        eql("=")
 
-      dep_04 = fetch_by_name(project.dependencies, "symfony/browser-kit")
-      dep_04.name.should eql("symfony/browser-kit")
-      dep_04.version_requested.should eql("2.0.7")
-      dep_04.version_current.should eql("2.0.7")
-      dep_04.comperator.should eql("!=")
+      dep_04 = fetch_by_name(project.dependencies, product_04[:name])
+      expect( dep_04.name ).to              eql(product_04[:name])
+      expect( dep_04.version_requested ).to eql("2.0.7")
+      expect( dep_04.version_current ).to   eql("2.0.7")
+      expect( dep_04.comperator ).to        eql("!=")
 
-      dep_05 = fetch_by_name(project.dependencies, "symfony/security-bundle")
-      dep_05.name.should eql("symfony/security-bundle")
-      dep_05.version_requested.should eql("2.0.7")
-      dep_05.version_current.should eql("2.0.7")
-      dep_05.comperator.should eql(">=")
+      dep_05 = fetch_by_name(project.dependencies, product_05[:name])
+      expect( dep_05.name ).to              eql(product_05[:name])
+      expect( dep_05.version_requested ).to eql("2.0.7")
+      expect( dep_05.version_current ).to   eql("2.0.7")
+      expect( dep_05.comperator ).to        eql(">=")
 
-      dep_06 = fetch_by_name(project.dependencies, "symfony/locale")
-      dep_06.name.should eql("symfony/locale")
-      dep_06.version_requested.should eql("2.0.7")
-      dep_06.version_current.should eql("2.0.8")
-      dep_06.comperator.should eql("<=")
+      dep_06 = fetch_by_name(project.dependencies, product_06[:name])
+      expect( dep_06.name ).to              eql(product_06[:name])
+      expect( dep_06.version_requested ).to eql("2.0.7")
+      expect( dep_06.version_current ).to   eql("2.0.8")
+      expect( dep_06.comperator ).to        eql("<=")
 
-      dep_07 = fetch_by_name(project.dependencies, "symfony/yaml")
-      dep_07.name.should eql("symfony/yaml")
-      dep_07.version_requested.should eql("2.0.7")
-      dep_07.version_current.should eql("2.0.8")
-      dep_07.comperator.should eql("<")
+      dep_07 = fetch_by_name(project.dependencies, product_07[:name])
+      expect( dep_07.name ).to              eql(product_07[:name])
+      expect( dep_07.version_requested ).to eql("2.0.7")
+      expect( dep_07.version_current ).to   eql("2.0.8")
+      expect( dep_07.comperator ).to        eql("<")
 
-      dep_08 = fetch_by_name(project.dependencies, "symfony/http-kernel")
-      dep_08.name.should eql("symfony/http-kernel")
-      dep_08.version_requested.should eql("2.0.7")
-      dep_08.version_current.should eql("2.0.7")
-      dep_08.comperator.should eql(">")
+      dep_08 = fetch_by_name(project.dependencies, product_08[:name])
+      expect( dep_08.name ).to              eql(product_08[:name])
+      expect( dep_08.version_requested ).to eql("2.0.7")
+      expect( dep_08.version_current ).to   eql("2.0.7")
+      expect( dep_08.comperator ).to        eql(">")
 
-      dep_09 = fetch_by_name(project.dependencies, "twig/twig")
-      dep_09.name.should eql("twig/twig")
-      dep_09.version_requested.should eql("1.9.9")
-      dep_09.version_current.should eql("2.0.0")
-      dep_09.version_label.should eql(">=1.9.1,<2.0.0")
-      dep_09.comperator.should eql("=")
+      dep_09 = fetch_by_name(project.dependencies, product_09[:name])
+      expect( dep_09.name ).to              eql(product_09[:name])
+      expect( dep_09.version_requested ).to eql("1.9.9")
+      expect( dep_09.version_current ).to   eql("2.0.0")
+      expect( dep_09.version_label ).to     eql(">=1.9.1,<2.0.0")
+      expect( dep_09.comperator ).to        eql("=")
 
-      dep_10 = fetch_by_name(project.dependencies, "doctrine/common")
-      dep_10.name.should eql("doctrine/common")
-      dep_10.version_requested.should eql("2.3")
-      dep_10.version_current.should eql("2.4")
-      dep_10.comperator.should eql("=")
+      dep_10 = fetch_by_name(project.dependencies, product_10[:name])
+      expect( dep_10.name ).to              eql(product_10[:name])
+      expect( dep_10.version_requested ).to eql("2.3")
+      expect( dep_10.version_current ).to   eql("2.4")
+      expect( dep_10.comperator ).to        eql("=")
 
-      dep_11 = fetch_by_name(project.dependencies, "symfony/console")
-      dep_11.name.should eql("symfony/console")
-      dep_11.version_requested.should eql("2.0.7")
-      dep_11.version_current.should eql("2.0.10")
-      dep_11.comperator.should eql("=")
-      dep_11.stability.should eql("stable")
+      dep_11 = fetch_by_name(project.dependencies, product_11[:name])
+      expect( dep_11.name ).to              eql(product_11[:name])
+      expect( dep_11.version_requested ).to eql("2.0.7")
+      expect( dep_11.version_current ).to   eql("2.0.10")
+      expect( dep_11.comperator ).to        eql("=")
+      expect( dep_11.stability ).to         eql("stable")
 
-      dep_12 = fetch_by_name(project.dependencies, "symfony/translation")
-      dep_12.name.should eql("symfony/translation")
-      dep_12.version_requested.should eql("2.2.x-dev")
-      dep_12.version_current.should eql("2.2.x-dev")
-      dep_12.comperator.should eql("=")
-      dep_12.outdated.should be_falsey
-      dep_12.stability.should eql("dev")
+      dep_12 = fetch_by_name(project.dependencies, product_12[:name])
+      expect( dep_12.name ).to              eql(product_12[:name])
+      expect( dep_12.version_requested ).to eql("2.2.x-dev")
+      expect( dep_12.version_current ).to   eql("2.2.x-dev")
+      expect( dep_12.comperator ).to        eql("=")
+      expect( dep_12.outdated ).to          be_falsey
+      expect( dep_12.stability ).to         eql("dev")
 
-      dep_13 = fetch_by_name(project.dependencies, "symfony/filesystem")
-      dep_13.name.should eql("symfony/filesystem")
-      dep_13.version_label.should eql("2.2.*@dev")
-      dep_13.version_requested.should eql("2.2.x-dev")
-      dep_13.version_current.should   eql("2.2.x-dev")
-      dep_13.outdated.should be_falsey
-      dep_13.comperator.should eql("=")
+      dep_13 = fetch_by_name(project.dependencies, product_13[:name])
+      expect( dep_13.name ).to              eql(product_13[:name])
+      expect( dep_13.version_label ).to     eql("2.2.*@dev")
+      expect( dep_13.version_requested ).to eql("2.2.x-dev")
+      expect( dep_13.version_current ).to   eql("2.2.x-dev")
+      expect( dep_13.outdated ).to          be_falsey
+      expect( dep_13.comperator ).to        eql("=")
 
-      dep_14 = fetch_by_name(project.dependencies, "symfony/stopwatch")
-      dep_14.name.should eql("symfony/stopwatch")
-      dep_14.version_label.should eql("2.2.*@stable")
-      dep_14.version_requested.should eql("2.2.1")
-      dep_14.version_current.should   eql("2.2.1")
-      dep_14.outdated.should be_falsey
-      dep_14.comperator.should eql("=")
-      dep_14.stability.should eql("stable")
+      dep_14 = fetch_by_name(project.dependencies, product_14[:name])
+      expect( dep_14.name ).to              eql(product_14[:name])
+      expect( dep_14.version_label ).to     eql("2.2.*@stable")
+      expect( dep_14.version_requested ).to eql("2.2.1")
+      expect( dep_14.version_current ).to   eql("2.2.1")
+      expect( dep_14.outdated ).to          be_falsey
+      expect( dep_14.comperator ).to        eql("=")
+      expect( dep_14.stability ).to         eql("stable")
 
-      dep_16 = fetch_by_name(project.dependencies, "symfony/finder")
-      dep_16.name.should eql("symfony/finder")
-      dep_16.version_label.should eql("@dev")
-      dep_16.version_requested.should eql("2.2.1")
-      dep_16.version_current.should   eql("2.2.1")
-      dep_16.comperator.should eql("=")
+      dep_16 = fetch_by_name(project.dependencies, product_16[:name])
+      expect( dep_16.name ).to              eql(product_16[:name])
+      expect( dep_16.version_label ).to     eql("@dev")
+      expect( dep_16.version_requested ).to eql("2.2.1")
+      expect( dep_16.version_current ).to   eql("2.2.1")
+      expect( dep_16.comperator ).to        eql("=")
 
-      dep_17 = fetch_by_name(project.dependencies, "symfony/config")
-      dep_17.name.should eql("symfony/config")
-      dep_17.version_label.should eql("~2.2")
-      dep_17.version_requested.should eql("2.3.1")
-      dep_17.version_current.should   eql("3.0.0")
-      dep_17.comperator.should eql("~")
+      dep_17 = fetch_by_name(project.dependencies, product_17[:name])
+      expect( dep_17.name ).to              eql(product_17[:name])
+      expect( dep_17.version_label ).to     eql("~2.2")
+      expect( dep_17.version_requested ).to eql("2.3.1")
+      expect( dep_17.version_current ).to   eql("3.0.0")
+      expect( dep_17.comperator ).to        eql("~")
 
-      dep_18 = fetch_by_name(project.dependencies, "symfony/http-foundation")
-      dep_18.name.should eql("symfony/http-foundation")
-      dep_18.version_label.should eql(">=2.1,<2.4-dev")
-      dep_18.version_requested.should eql("2.3.x-dev")
-      dep_18.version_current.should   eql("2.3.x-dev")
-      dep_18.comperator.should eql("=")
+      dep_18 = fetch_by_name(project.dependencies, product_18[:name])
+      expect( dep_18.name ).to              eql(product_18[:name])
+      expect( dep_18.version_label ).to     eql(">=2.1,<2.4-dev")
+      expect( dep_18.version_requested ).to eql("2.3.x-dev")
+      expect( dep_18.version_current ).to   eql("2.3.x-dev")
+      expect( dep_18.comperator ).to        eql("=")
 
-      dep_19 = fetch_by_name(project.dependencies, "symfony/http-kernel_2")
-      dep_19.name.should              eql("symfony/http-kernel_2")
-      dep_19.version_label.should     eql(">=2.1,<2.4-dev")
-      dep_19.version_requested.should eql("2.3-dev")
-      dep_19.version_current.should   eql("2.4-dev")
-      dep_19.comperator.should        eql("=")
+      dep_19 = fetch_by_name(project.dependencies, product_19[:name])
+      expect( dep_19.name ).to              eql(product_19[:name])
+      expect( dep_19.version_label ).to     eql(">=2.1,<2.4-dev")
+      expect( dep_19.version_requested ).to eql("2.3-dev")
+      expect( dep_19.version_current ).to   eql("2.4-dev")
+      expect( dep_19.comperator ).to        eql("=")
 
-      dep_20 = fetch_by_name(project.dependencies, "phpunit/phpunit")
-      dep_20.name.should              eql('phpunit/phpunit')
-      dep_20.version_label.should     eql('~3')
-      dep_20.version_requested.should eql('3.7.29')
-      dep_20.version_current.should   eql('3.7.29')
-      dep_20.comperator.should        eql('~')
+      dep_20 = fetch_by_name(project.dependencies, product_20[:name])
+      expect( dep_20.name ).to              eql(product_20[:name])
+      expect( dep_20.version_label ).to     eql('~3')
+      expect( dep_20.version_requested ).to eql('3.7.29')
+      expect( dep_20.version_current ).to   eql('3.7.29')
+      expect( dep_20.comperator ).to        eql('~')
 
-      dep_22 = fetch_by_name(project.dependencies, "phpuno/phpuno")
-      dep_22.name.should              eql('phpuno/phpuno')
-      dep_22.version_label.should     eql('^4.3.0')
-      dep_22.version_requested.should eql('4.5.0')
-      dep_22.version_current.should   eql('4.5.0')
-      dep_22.comperator.should        eql('^')
+      dep_21 = fetch_by_name(project.dependencies, product_21[:name])
+      expect( dep_21.name ).to              eql(product_21[:name])
+      expect( dep_21.version_label ).to     eql('~2.0 | ~1.10')
+      expect( dep_21.version_requested ).to eql('2.1.0')
+      expect( dep_21.version_current ).to   eql('2.1.0')
+      expect( dep_21.comperator ).to        eql('=')
 
-      dep_21 = fetch_by_name(project.dependencies, "yiisoft/jquery")
-      dep_21.name.should              eql('yiisoft/jquery')
-      dep_21.version_label.should     eql('~2.0 | ~1.10')
-      dep_21.version_requested.should eql('2.1.0')
-      dep_21.version_current.should   eql('2.1.0')
-      dep_21.comperator.should        eql('=')
+      dep_22 = fetch_by_name(project.dependencies, product_22[:name])
+      expect( dep_22.name ).to              eql(product_22[:name])
+      expect( dep_22.version_label ).to     eql('^4.3.0')
+      expect( dep_22.version_requested ).to eql('4.5.0')
+      expect( dep_22.version_current ).to   eql('4.5.0')
+      expect( dep_22.comperator ).to        eql('^')
 
-      dep_21 = fetch_by_name(project.dependencies, "bootstrap")
-      dep_21.name.should              eql('bootstrap')
-      dep_21.version_label.should     eql('3.3')
-      dep_21.version_requested.should eql('3.3')
-      dep_21.version_current.should   eql('3.3')
-      dep_21.comperator.should        eql('=')
-      dep_21.language.should          eql(Product::A_LANGUAGE_JAVASCRIPT)
 
-      dep_21 = fetch_by_name(project.dependencies, "request")
-      dep_21.name.should              eql('request')
-      dep_21.version_label.should     eql('1.0.0')
-      dep_21.version_requested.should eql('1.0.0')
-      dep_21.version_current.should   eql('1.0.0')
-      dep_21.comperator.should        eql('=')
-      dep_21.language.should          eql(Product::A_LANGUAGE_NODEJS)
+      dep_23 = fetch_by_name(project.dependencies, product_23[:name])
+      expect( dep_23.name ).to              eql(product_23[:name])
+      expect( dep_23.version_label ).to     eql('3.3')
+      expect( dep_23.version_requested ).to eql('3.3')
+      expect( dep_23.version_current ).to   eql('3.3')
+      expect( dep_23.comperator ).to        eql('=')
+      expect( dep_23.language ).to          eql(Product::A_LANGUAGE_JAVASCRIPT)
 
-      dep_21 = fetch_by_name(project.dependencies, "satooshi/php-coveralls")
-      dep_21.name.should              eql('satooshi/php-coveralls')
-      dep_21.version_label.should     eql('dev-master|^1.0')
-      dep_21.version_requested.should eql('1.0.1')
-      dep_21.version_current.should   eql('1.0.1')
-      dep_21.comperator.should        eql('=')
-      dep_21.language.should          eql(Product::A_LANGUAGE_PHP)
+      dep_24 = fetch_by_name(project.dependencies, product_24[:name])
+      expect( dep_24.name ).to              eql(product_24[:name])
+      expect( dep_24.version_label ).to     eql('1.0.0')
+      expect( dep_24.version_requested ).to eql('1.0.0')
+      expect( dep_24.version_current ).to   eql('1.0.0')
+      expect( dep_24.comperator ).to        eql('=')
+      expect( dep_24.language ).to          eql(Product::A_LANGUAGE_NODEJS)
+
+      dep_25 = fetch_by_name(project.dependencies, "satooshi/php-coveralls")
+      expect( dep_25.name ).to              eql('satooshi/php-coveralls')
+      expect( dep_25.version_label ).to     eql('dev-master|^1.0')
+      expect( dep_25.version_requested ).to eql('1.0.1')
+      expect( dep_25.version_current ).to   eql('1.0.1')
+      expect( dep_25.comperator ).to        eql('=')
+      expect( dep_25.language ).to          eql(Product::A_LANGUAGE_PHP)
     end
 
   end
@@ -344,7 +346,7 @@ describe ComposerParser do
 
     it "returns false because of nil parameters" do
       parser = ComposerParser.new
-      parser.dependency_in_repositories?(nil, nil).should be_falsey
+      expect( parser.dependency_in_repositories?(nil, nil) ).to be_falsey
     end
 
   end
