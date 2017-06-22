@@ -198,14 +198,14 @@ describe CommonParser do
       expect(CommonParser.cargo_file?('cargo/lock')).to be_falsey
     end
 
-    it "matches Mix filenames" do
-      expect(CommonParser.mix_file?('mix.exs') ).to be_truthy
-      expect(CommonParser.mix_file?('/a/b/mix.exs')).to be_truthy
+    it "matches Hex filenames" do
+      expect(CommonParser.hex_file?('mix.exs') ).to be_truthy
+      expect(CommonParser.hex_file?('/a/b/mix.exs')).to be_truthy
     end
 
-    it "misses Mix looking filenames" do
-      expect(CommonParser.mix_file?('mix/exs')).to be_falsey
-      expect(CommonParser.mix_file?('remix.exs')).to be_falsey
+    it "misses Hex looking filenames" do
+      expect(CommonParser.hex_file?('mix/exs')).to be_falsey
+      expect(CommonParser.hex_file?('remix.exs')).to be_falsey
     end
   end
 end

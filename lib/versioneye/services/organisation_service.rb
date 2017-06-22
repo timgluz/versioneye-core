@@ -24,14 +24,14 @@ class OrganisationService < Versioneye::Service
 
   def self.create_new_for user
     orga_name = "#{user.username}_orga".downcase
-    orga_name = orga_name.gsub("@", "").gsub(" ", "_").gsub(".", "")
+    orga_name = orga_name.gsub("@", "").gsub(" ", "_").gsub(".", "").gsub(",", "")
     if !Organisation.where(:name => orga_name).first.nil?
       random = create_random_value
       orga_name = "#{orga_name}_#{random}"
     end
     create_new user, orga_name
   rescue => e
-    log.error e.message
+    log.error "ERROR in create_new_for(user) - #{e.message}"
     log.error e.backtrace.join("\n")
     nil
   end
@@ -177,6 +177,7 @@ class OrganisationService < Versioneye::Service
     lwl.add_license_element 'Apache-2.0'
     lwl.add_license_element 'WTFPL'
     lwl.add_license_element 'Public Domain'
+    lwl.add_license_element 'Unlicense'
     lwl.add_license_element 'CC0'
     lwl.add_license_element 'CC0-1.0'
     lwl.add_license_element 'ISC'

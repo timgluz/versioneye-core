@@ -31,7 +31,7 @@ class ProjectService < Versioneye::Service
     return Project::A_TYPE_NUGET      if CommonParser.nuget_file?(trimmed_name)
     return Project::A_TYPE_CPAN       if CommonParser.cpan_file?(trimmed_name)
     return Project::A_TYPE_CARGO      if CommonParser.cargo_file?(trimmed_name)
-    return Project::A_TYPE_MIX        if CommonParser.mix_file?(trimmed_name)
+    return Project::A_TYPE_HEX        if CommonParser.hex_file?(trimmed_name)
 
     return nil
   end

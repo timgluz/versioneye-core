@@ -208,7 +208,7 @@ class MixParser < CommonParser
       when /\Abranch:/
         dep_doc[:branch] = item.gsub(/\Abranch:/, '').to_s.strip
 
-      when /^[~|>|<|=|\d]/
+      when /^[~| > | < | = |\d]/
         dep_doc[:version] = item
       end
     end
@@ -280,7 +280,7 @@ class MixParser < CommonParser
 
   def init_project(url = nil)
     Project.new(
-      project_type: Project::A_TYPE_MIX,
+      project_type: Project::A_TYPE_HEX,
       language:  Product::A_LANGUAGE_ELIXIR,
       url: url
     )
