@@ -340,29 +340,26 @@ class ComposerParser < CommonParser
   end
 
 
-  private
+  def fetch_product_for key
+    key = key.to_s
+    return nil if key.empty?
 
+    case key
+    when /\Anpm\-asset\//
+      new_key = key.gsub("npm-asset/", '').strip
+      Product.fetch_product( Product::A_LANGUAGE_NODEJS, new_key )
 
-    def fetch_product_for key
-      key = key.to_s
-      return nil if key.empty?
+    when /\Abower\-asset\//
+      new_key = key.gsub(/\Abower-asset\//, '').to_s.strip
+      Product.fetch_bower( new_key )
 
-      case key
-      when /\Anpm\-asset\//
-        new_key = key.gsub("npm-asset/", '').strip
-        Product.fetch_product( Product::A_LANGUAGE_NODEJS, new_key )
-
-      when /\Abower\-asset\//
-        new_key = key.gsub(/\Abower-asset\//, '').to_s.strip
-        Product.fetch_bower( new_key )
-
-      else
-        Product.fetch_product( Product::A_LANGUAGE_PHP, key )
-      end
-
+    else
+      Product.fetch_product( Product::A_LANGUAGE_PHP, key )
     end
 
+  end
 
+    private
     def init_projectdependency key, product
       dependency          = Projectdependency.new
       dependency.name     = key

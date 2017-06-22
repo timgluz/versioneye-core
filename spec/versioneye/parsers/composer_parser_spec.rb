@@ -4,6 +4,48 @@ describe ComposerParser do
   let(:parser){ ComposerParser.new }
   let(:test_file_url ){ "https://s3.amazonaws.com/veye_test_env/composer.json" }
 
+  let(:product_01){ ProductFactory.create_for_composer("symfony/symfony", "2.0.7") }
+  let(:product_23){ ProductFactory.create_for_bower("bootstrap", "3.3") }
+  let(:product_24){ ProductFactory.create_for_npm("request", "1.0.0") }
+
+  describe 'fetch_product_for' do
+    before do
+      product_01.save
+      product_23.save
+      product_24.save
+    end
+
+
+
+    it "returns correct Composer product" do
+      prod = parser.fetch_product_for 'symfony/symfony'
+
+      expect( prod ).not_to be_nil
+      expect( prod[:language] ).to  eq(product_01[:language])
+      expect( prod[:prod_key] ).to  eq(product_01[:prod_key])
+      expect( prod[:name] ).to      eq(product_01[:name])
+    end
+
+    it "returns correct Bower product" do
+      prod = parser.fetch_product_for 'bower-asset/bootstrap'
+
+      expect( prod ).not_to be_nil
+      expect( prod[:language] ).to  eq(product_23[:language])
+      expect( prod[:prod_key] ).to  eq(product_23[:prod_key])
+      expect( prod[:name] ).to      eq(product_23[:name])
+    end
+
+    it "returns correct NPM product" do
+      prod = parser.fetch_product_for 'npm-asset/request'
+
+      expect( prod ).not_to be_nil
+      expect( prod[:language] ).to  eq(product_24[:language])
+      expect( prod[:prod_key] ).to  eq(product_24[:prod_key])
+      expect( prod[:name] ).to      eq(product_24[:name])
+    end
+
+  end
+
   describe 'parse_content' do
 
     it 'parses the content' do
@@ -31,8 +73,7 @@ describe ComposerParser do
     end
 
     it "parse from http the file correctly" do
-      product_01 = ProductFactory.create_for_composer("symfony/symfony", "2.0.7")
-      product_01.versions.push( Version.new({ :version => "2.0.7-dev" }) )
+      product_01.versions << Version.new({ :version => "2.0.7-dev" })
       product_01.save
 
       product_02 = ProductFactory.create_for_composer("symfony/doctrine-bundle", "2.0.7")
@@ -148,12 +189,10 @@ describe ComposerParser do
       product_22.versions.push( Version.new({ :version => "dev-master"  }) )
       product_22.save
 
-      product_23 = ProductFactory.create_for_bower("bootstrap", "3.3")
-      product_23.versions.push( Version.new({ :version => "3.3"       }) )
-      product_23.versions.push( Version.new({ :version => "1.4.0"       }) )
+      product_23.versions << Version.new({ :version => "3.3"       })
+      product_23.versions << Version.new({ :version => "1.4.0"       })
       product_23.save
 
-      product_24 = ProductFactory.create_for_npm("request", "1.0.0")
       product_24.versions.push( Version.new({ :version => "1.0.0"       }) )
       product_24.versions.push( Version.new({ :version => "0.1.0"       }) )
       product_24.save
