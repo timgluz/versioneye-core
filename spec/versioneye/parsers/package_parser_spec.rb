@@ -1,18 +1,56 @@
 require 'spec_helper'
 
 describe PackageParser do
+  let(:parser){ PackageParser.new }
+  let(:product1){ create_product('connect-redis', 'connect-redis', '1.3.0') }
+  let(:dep1){ parser.init_dependency(nil, 'test-js-pkg') }
+
+  #TODO: add test cases SEMVER comparition
+  context "parse_requested_version" do
+
+    it "parses correctly version labels with git urls" do
+      git_version = 'git+https://example.com/foo/bar#115311855adb0789a0466714ed48a1499ffea97e'
+      parser.parse_requested_version(git_version, dep1, product1)
+
+      expect(dep1).not_to be_nil
+      expect(dep1[:version_requested]).to eq('GIT')
+      expect(dep1[:version_label]).to eq('115311855adb0789a0466714ed48a1499ffea97e')
+      expect(dep1[:comperator]).to eq('=')
+    end
+
+    it "parses correctly version labels with urls with tarball" do
+      tarbal_version = 'https://example.com/example-1.3.0.tgz'
+      parser.parse_requested_version(tarbal_version, dep1, product1)
+
+      expect(dep1).not_to be_nil
+      expect(dep1[:version_requested]).to eq('1.3.0')
+      expect(dep1[:version_label]).to eq('1.3.0')
+      expect(dep1[:comperator]).to eq('=')
+    end
+
+    it "parses correctly version from filepath of the tarball" do
+      tarball_version = 'file:///opt/storage/example-1.3.0.tgz'
+      parser.parse_requested_version(tarball_version, dep1, product1)
+
+      expect(dep1).not_to be_nil
+      expect(dep1[:version_requested]).to eq('1.3.0')
+      expect(dep1[:version_label]).to eq('1.3.0')
+      expect(dep1[:comperator]).to eq('=')
+
+    end
+  end
+
 
   describe "parse" do
 
     it "parse from https the file correctly" do
-      parser = PackageParser.new
       project = parser.parse('https://s3.amazonaws.com/veye_test_env/package.json')
       expect( project ).to_not be_nil
     end
 
     it "parse from http the file correctly" do
-
       product1  = create_product('connect-redis', 'connect-redis', '1.3.0')
+
       product2  = create_product('redis'        , 'redis'        , '1.3.0')
       product3  = create_product('memcache'     , 'memcache'     , '1.4.0')
       product4  = create_product('mongo'        , 'mongo'        , '1.1.7')
@@ -44,85 +82,85 @@ describe PackageParser do
       expect( project.dependencies.size ).to eql(21)
 
       dep_01 = project.dependencies.first
-      expect( dep_01.name ).to eql('connect-redis')
+      expect( dep_01.name ).to eql(product1[:name])
       expect( dep_01.version_requested ).to eql('1.3.0')
       expect( dep_01.version_current ).to eql('1.3.0')
       expect( dep_01.comperator ).to eql('=')
 
       dep_02 = project.dependencies[1]
-      expect( dep_02.name ).to eql('redis')
+      expect( dep_02.name ).to eql(product2[:name])
       expect( dep_02.version_requested ).to eql('1.3.0')
       expect( dep_02.version_current ).to eql('1.3.0')
       expect( dep_02.comperator ).to eql('=')
 
       dep_03 = project.dependencies[2]
-      expect( dep_03.name ).to eql('memcache')
+      expect( dep_03.name ).to eql(product3[:name])
       expect( dep_03.version_requested ).to eql('1.4.0')
       expect( dep_03.version_current ).to eql('1.4.0')
       expect( dep_03.comperator ).to eql('=')
 
       dep_04 = project.dependencies[3]
-      expect( dep_04.name ).to eql('mongo')
+      expect( dep_04.name ).to eql(product4[:name])
       expect( dep_04.version_requested ).to eql('1.1.7')
       expect( dep_04.version_current ).to eql('1.1.7')
       expect( dep_04.comperator ).to eql('=')
 
       dep_05 = project.dependencies[4]
-      expect( dep_05.name ).to eql('mongoid')
+      expect( dep_05.name ).to eql(product5[:name])
       expect( dep_05.version_requested ).to eql('1.1.7')
       expect( dep_05.version_current ).to eql('1.1.7')
       expect( dep_05.comperator ).to eql('=')
 
       dep_06 = project.dependencies[5]
-      expect( dep_06.name ).to eql('express')
+      expect( dep_06.name ).to eql(product6[:name])
       expect( dep_06.version_requested ).to eql('2.4.7')
       expect( dep_06.version_current ).to eql('2.4.7')
       expect( dep_06.comperator ).to eql('=')
 
       dep_07 = project.dependencies[6]
-      expect( dep_07.name ).to eql('fs-ext')
+      expect( dep_07.name ).to eql(product7[:name])
       expect( dep_07.version_requested ).to eql('0.2.7')
       expect( dep_07.version_current ).to eql('2.4.7')
       expect( dep_07.comperator ).to eql('=')
 
       dep_08 = project.dependencies[7]
-      expect( dep_08.name ).to eql('jade')
+      expect( dep_08.name ).to eql(product8[:name])
       expect( dep_08.version_requested ).to eql('0.2.7')
       expect( dep_08.version_current ).to eql('2.4.7')
       expect( dep_08.comperator ).to eql('~')
 
       dep_09 = project.dependencies[8]
-      expect( dep_09.name ).to eql('mailer')
+      expect( dep_09.name ).to eql(product9[:name])
       expect( dep_09.version_requested ).to eql('0.6.9')
       expect( dep_09.version_current ).to eql('0.7.0')
       expect( dep_09.comperator ).to eql('=')
 
       dep_10 = project.dependencies[9]
-      expect( dep_10.name ).to eql('markdown')
+      expect( dep_10.name ).to eql(product10[:name])
       expect( dep_10.version_requested ).to eql('0.2.0')
       expect( dep_10.version_current ).to eql('0.4.0')
       expect( dep_10.comperator ).to eql('<')
 
       dep_11 = project.dependencies[10]
-      expect( dep_11.name ).to eql('mu2')
+      expect( dep_11.name ).to eql(product11[:name])
       expect( dep_11.version_requested ).to eql('0.6.0')
       expect( dep_11.version_current ).to eql('0.6.0')
       expect( dep_11.comperator ).to eql('>')
 
       dep_12 = project.dependencies[11]
-      expect( dep_12.name ).to eql('pg')
+      expect( dep_12.name ).to eql(product12[:name])
       expect( dep_12.version_requested ).to eql('0.6.6')
       expect( dep_12.version_current ).to eql('0.6.6')
       expect( dep_12.comperator ).to eql('>=')
 
       dep_13 = project.dependencies[12]
-      expect( dep_13.name ).to eql('pg_connect')
+      expect( dep_13.name ).to eql(product13[:name])
       expect( dep_13.version_requested ).to eql('0.6.9')
       expect( dep_13.version_current ).to eql('0.6.9')
       expect( dep_13.comperator ).to eql('<=')
 
       dep_14 = project.dependencies[13]
-      expect( dep_14.name ).to eql('mocha')
+      expect( dep_14.name ).to eql(product14[:name])
       expect( dep_14.version_requested ).to eql('1.16.2')
       expect( dep_14.version_current ).to eql('1.16.2')
       expect( dep_14.comperator ).to eql('=')
@@ -130,7 +168,7 @@ describe PackageParser do
       expect( dep_14.outdated?() ).to be_falsey
 
       dep_15 = project.dependencies[14]
-      expect( dep_15.name ).to eql('bruno')
+      expect( dep_15.name ).to eql(product15[:name])
       expect( dep_15.version_requested ).to eql('1.12.1')
       expect( dep_15.version_current ).to eql('1.12.1')
       expect( dep_15.comperator ).to eql('^')
@@ -138,7 +176,7 @@ describe PackageParser do
       expect( dep_15.outdated?() ).to be_falsey
 
       dep_15 = project.dependencies[15]
-      expect( dep_15.name ).to eql('gulp')
+      expect( dep_15.name ).to eql(product16[:name])
       expect( dep_15.version_requested ).to eql('1.12.1')
       expect( dep_15.version_current ).to eql('1.12.1')
       expect( dep_15.comperator ).to eql('!=')
@@ -146,7 +184,7 @@ describe PackageParser do
       expect( dep_15.outdated?() ).to be_falsey
 
       dep_16 = project.dependencies[16]
-      expect( dep_16.name ).to eql('async')
+      expect( dep_16.name ).to eql(product17[:name])
       expect( dep_16.version_requested ).to eql('0.9.0')
       expect( dep_16.version_current ).to eql('0.9.0')
       expect( dep_16.comperator ).to eql('=')
@@ -154,7 +192,7 @@ describe PackageParser do
       expect( dep_16.outdated?() ).to be_falsey
 
       dep_17 = project.dependencies[17]
-      expect( dep_17.name ).to eql('gulp-webserver')
+      expect( dep_17.name ).to eql(product18[:name])
       expect( dep_17.version_label ).to eql('^0.9.*')
       expect( dep_17.version_requested ).to eql('0.9.1')
       expect( dep_17.version_current ).to eql('0.9.1')
@@ -162,7 +200,7 @@ describe PackageParser do
       expect( dep_17.outdated?() ).to be_falsey
 
       dep_18 = project.dependencies[18]
-      expect( dep_18.name ).to eql('eslint')
+      expect( dep_18.name ).to eql(product19[:name])
       expect( dep_18.version_label ).to eql('^0.24.0')
       expect( dep_18.version_requested ).to eql('0.24.1')
       expect( dep_18.version_current ).to eql('1.1.0')
@@ -170,7 +208,7 @@ describe PackageParser do
       expect( dep_18.outdated?() ).to be_truthy
 
       dep_19 = project.dependencies[19]
-      expect( dep_19.name ).to eql('inquirer')
+      expect( dep_19.name ).to eql(product20[:name])
       expect( dep_19.version_label ).to eql('^0.8.0')
       expect( dep_19.version_requested ).to eql('0.8.5')
       expect( dep_19.version_current ).to eql('0.9.0')

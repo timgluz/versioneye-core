@@ -58,6 +58,8 @@ class ComposerParser < CommonParser
 
   def parse_dependencies dependencies, project, json_content, scope = Dependency::A_SCOPE_COMPILE
     dependencies.each do |key, value|
+      next if key.to_s.match(/\Aext-/i) # Skip PHP extensions because we do't have infos about them
+
       self.process_dependency( key, value, project, json_content, scope )
     end
   end

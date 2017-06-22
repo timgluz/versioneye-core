@@ -14,10 +14,10 @@ class CommonParser
     raise NotImplementedError, 'Implement me in subclass!'
   end
 
-  def from_json(json_txt)
-    json_txt = json_txt.to_s.force_encoding(Encoding::UTF_8).strip
-    json_txt = clean_spaces(json_txt) #replace non-ascii spaces with ascii spaces
-    JSON.parse(json_txt, {symbolize_names: true})
+  def from_json(json_doc, as_symbols = true)
+    json_doc = json_doc.force_encoding(Encoding::UTF_8).strip
+    json_doc = clean_spaces(json_doc) #replace non-ascii spaces with ascii spaces
+    JSON.parse(json_doc, {symbolize_names: as_symbols})
   rescue => e
     log.error "from_json: failed to parse #{json_txt}"
     log.error e.backtrace.join('\n')
@@ -261,8 +261,10 @@ class CommonParser
     return false
   end
 
-  def self.mix_file?(filename)
+  def self.hex_file?(filename)
     return true if /\bmix\.exs\z/i.match?(filename)
+    return true if /rebar\.config\z/i.match?(filename)
+    return true if /erlang\.mk\z/i.match?(filename)
 
     return false
   end
