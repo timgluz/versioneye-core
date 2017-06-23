@@ -320,12 +320,15 @@ class PackageParser < CommonParser
 
 
   def init_project( data )
+    project_name = data['name']
+    project_name ||= "npm_project_#{ Time.now.to_i}"
+
     project = Project.new
     project.project_type = Project::A_TYPE_NPM
     project.language     = Product::A_LANGUAGE_NODEJS
-    project.name         = data[:name]
-    project.description  = data[:description]
-    project.version      = data[:version]
+    project.name         = project_name
+    project.description  = data['description']
+    project.version      = data['version']
     project
   end
 

@@ -92,7 +92,7 @@ class JspmParser < PackageParser
                    elsif proj_doc[:jspm].has_key?(:name)
                       proj_doc[:jspm][:name]
                    else
-                      Time.now.to_s
+                     Time.now.to_i
                    end
 
     Project.new(
