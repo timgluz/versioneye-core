@@ -8,14 +8,15 @@ class JspmParser < PackageParser
     return nil if content.to_s.empty?
     return nil if content.to_s.strip.eql?('Not Found')
 
-    proj_doc = JSON.parse(content, symbolize_names: true)
+    proj_doc = from_json content
     if proj_doc.to_s.empty?
-      log.error "Project document is empty - stopping parser"
+      log.error "parse_content: project document is not valid JSON - stopping parser"
       return nil
     end
 
     parse_project_doc proj_doc
   rescue => e
+    log.error "parse_content: failed to parse JSPM file"
     log.error e.message
     log.error e.backtrace.join("\n")
     nil
@@ -46,6 +47,7 @@ class JspmParser < PackageParser
     project.dep_number = project.dependencies.size
     project
   rescue => e
+    log.error "parse_project_doc: failed to parse JSPM document,\n `#{proj_doc}`"
     log.error e.message
     log.error e.backtrace.join("\n")
     nil
@@ -75,6 +77,7 @@ class JspmParser < PackageParser
     if github_match
       dep.ext_link = "https://github.com/#{github_match[1]}"
     end
+
     parse_requested_version( version_label, dep, product )
 
     project.projectdependencies.push dep
@@ -89,12 +92,12 @@ class JspmParser < PackageParser
                    elsif proj_doc[:jspm].has_key?(:name)
                       proj_doc[:jspm][:name]
                    else
-                      "jspm_project" + Time.now.to_i
+                      "jspm_project_" + Time.now.to_s
                    end
 
     Project.new(
       parent_id: parent_id,
-      name: project_name,
+      name: project_name.to_s,
       project_type: Project::A_TYPE_JSPM,
       language: Product::A_LANGUAGE_NODEJS,
       description: proj_doc[:description],
