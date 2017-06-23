@@ -92,12 +92,12 @@ class JspmParser < PackageParser
                    elsif proj_doc[:jspm].has_key?(:name)
                       proj_doc[:jspm][:name]
                    else
-                      "jspm_project_" + Time.now.to_s
+                      Time.now.to_s
                    end
 
     Project.new(
       parent_id: parent_id,
-      name: project_name.to_s,
+      name: 'jspm_' + project_name.to_s,
       project_type: Project::A_TYPE_JSPM,
       language: Product::A_LANGUAGE_NODEJS,
       description: proj_doc[:description],
