@@ -1,0 +1,29 @@
+{
+    "require": {
+        "symfony/symfony": "2.0.7",
+        "symfony/doctrine-bundle" : "*",
+        "symfony/process" : "2.0.*",
+        "symfony/browser-kit" : "!= 2.0.6",
+        "symfony/security-bundle" : ">=2.0.7",
+        "symfony/locale" : "<=2.0.7",
+        "symfony/yaml": "<2.0.8",
+        "symfony/http-kernel": ">2.0.6",
+        "twig/twig" : ">=1.9.1,<2.0.0",
+        "doctrine/common" : ">2.2 , <2.4",
+        "symfony/console" : ">=2.0.0, <2.0.10, !=2.0.6",
+        "symfony/translation" : "2.2.x-dev",
+        "symfony/filesystem" : "2.2.*@dev",
+        "symfony/stopwatch" : "2.2.*@stable",
+        "symfony/serializer" : "2.2.*@RC",
+        "symfony/finder" : "@dev",
+        "symfony/config" : "~2.2",
+        "symfony/http-foundation": ">=2.1,<2.4-dev",
+        "symfony/http-kernel_2": ">=2.1,<2.4-dev",
+        "phpunit/phpunit": "~3",
+        "phpuno/phpuno": "^4.3.0",
+        "yiisoft/jquery": "~2.0 | ~1.10",
+        "bower-asset/bootstrap": "3.3",
+        "npm-asset/request": "1.0.0",
+        "satooshi/php-coveralls": "dev-master|^1.0"
+    }
+}
