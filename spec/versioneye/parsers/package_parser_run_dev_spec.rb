@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe PackageParser do
+  let(:parser){ PackageParser.new }
+  let(:test_file_url){ "https://s3.amazonaws.com/veye_test_env/package_run_dev.json"}
 
   before(:each) do
     Product.delete_all
@@ -13,9 +15,8 @@ describe PackageParser do
   describe "parse" do
 
     it "parse from https the file correctly" do
-      parser = PackageParser.new
-      project = parser.parse("https://s3.amazonaws.com/veye_test_env/package_run_dev.json")
-      project.should_not be_nil
+      project = parser.parse test_file_url
+      expect( project ).not_to be_nil
     end
 
     it "parse from http the file correctly" do
@@ -33,88 +34,87 @@ describe PackageParser do
       product12 = create_product('pg'           , 'pg'        , '0.6.6', ['0.5.0' , '0.6.1' ] )
       product13 = create_product('pg_connect'   , 'pg_connect', '0.6.9', ['0.5.0' , '0.6.1' ] )
 
-      parser = PackageParser.new
-      project = parser.parse("https://s3.amazonaws.com/veye_test_env/package_run_dev.json")
-      project.should_not be_nil
-      project.dependencies.size.should eql(13)
+      project = parser.parse test_file_url
+      expect( project ).not_to be_nil
+      expect( project.dependencies.size ).to eql(13)
 
       dep_01 = project.dependencies.first
-      dep_01.name.should eql("connect-redis")
-      dep_01.version_requested.should eql("1.3.0")
-      dep_01.version_current.should eql("1.3.0")
-      dep_01.comperator.should eql("=")
+      expect( dep_01.name ).to              eql(product1[:name])
+      expect( dep_01.version_requested ).to eql("1.3.0")
+      expect( dep_01.version_current ).to   eql("1.3.0")
+      expect( dep_01.comperator ).to        eql("=")
 
       dep_03 = project.dependencies[1]
-      dep_03.name.should eql("memcache")
-      dep_03.version_requested.should eql("1.4.0")
-      dep_03.version_current.should eql("1.4.0")
-      dep_03.comperator.should eql("=")
+      expect( dep_03.name ).to              eql(product3[:name])
+      expect( dep_03.version_requested ).to eql("1.4.0")
+      expect( dep_03.version_current ).to   eql("1.4.0")
+      expect( dep_03.comperator ).to        eql("=")
 
       dep_04 = project.dependencies[2]
-      dep_04.name.should eql("mongo")
-      dep_04.version_requested.should eql("1.1.7")
-      dep_04.version_current.should eql("1.1.7")
-      dep_04.comperator.should eql("=")
+      expect( dep_04.name ).to              eql(product4[:name])
+      expect( dep_04.version_requested ).to eql("1.1.7")
+      expect( dep_04.version_current ).to   eql("1.1.7")
+      expect( dep_04.comperator ).to        eql("=")
 
       dep_05 = project.dependencies[3]
-      dep_05.name.should eql("mongoid")
-      dep_05.version_requested.should eql("1.1.7")
-      dep_05.version_current.should eql("1.1.7")
-      dep_05.comperator.should eql("=")
+      expect( dep_05.name ).to              eql(product5[:name])
+      expect( dep_05.version_requested ).to eql("1.1.7")
+      expect( dep_05.version_current ).to   eql("1.1.7")
+      expect( dep_05.comperator ).to        eql("=")
 
       dep_06 = project.dependencies[4]
-      dep_06.name.should eql("express")
-      dep_06.version_requested.should eql("2.4.7")
-      dep_06.version_current.should eql("2.4.7")
-      dep_06.comperator.should eql("=")
+      expect( dep_06.name ).to              eql(product6[:name])
+      expect( dep_06.version_requested ).to eql("2.4.7")
+      expect( dep_06.version_current ).to   eql("2.4.7")
+      expect( dep_06.comperator ).to        eql("=")
 
       dep_07 = project.dependencies[5]
-      dep_07.name.should eql("fs-ext")
-      dep_07.version_requested.should eql("0.2.7")
-      dep_07.version_current.should eql("2.4.7")
-      dep_07.comperator.should eql("=")
+      expect( dep_07.name ).to              eql(product7[:name])
+      expect( dep_07.version_requested ).to eql("0.2.7")
+      expect( dep_07.version_current ).to   eql("2.4.7")
+      expect( dep_07.comperator ).to        eql("=")
 
       dep_08 = project.dependencies[6]
-      dep_08.name.should eql("jade")
-      dep_08.version_requested.should eql("0.2.7")
-      dep_08.version_current.should eql("2.4.7")
-      dep_08.comperator.should eql("~")
+      expect( dep_08.name ).to              eql(product8[:name])
+      expect( dep_08.version_requested ).to eql("0.2.7")
+      expect( dep_08.version_current ).to   eql("2.4.7")
+      expect( dep_08.comperator ).to        eql("~")
 
       dep_09 = project.dependencies[7]
-      dep_09.name.should eql("mailer")
-      dep_09.version_requested.should eql("0.6.9")
-      dep_09.version_current.should eql("0.7.0")
-      dep_09.comperator.should eql("=")
+      expect( dep_09.name ).to              eql(product9[:name])
+      expect( dep_09.version_requested ).to eql("0.6.9")
+      expect( dep_09.version_current ).to   eql("0.7.0")
+      expect( dep_09.comperator ).to        eql("=")
 
       dep_10 = project.dependencies[8]
-      dep_10.name.should eql("markdown")
-      dep_10.version_requested.should eql("0.2.0")
-      dep_10.version_current.should eql("0.4.0")
-      dep_10.comperator.should eql("<")
+      expect( dep_10.name ).to              eql(product10[:name])
+      expect( dep_10.version_requested ).to eql("0.2.0")
+      expect( dep_10.version_current ).to   eql("0.4.0")
+      expect( dep_10.comperator ).to        eql("<")
 
       dep_11 = project.dependencies[9]
-      dep_11.name.should eql("mu2")
-      dep_11.version_requested.should eql("0.6.0")
-      dep_11.version_current.should eql("0.6.0")
-      dep_11.comperator.should eql(">")
+      expect( dep_11.name ).to              eql(product11[:name])
+      expect( dep_11.version_requested ).to eql("0.6.0")
+      expect( dep_11.version_current ).to   eql("0.6.0")
+      expect( dep_11.comperator ).to        eql(">")
 
       dep_12 = project.dependencies[10]
-      dep_12.name.should eql("pg")
-      dep_12.version_requested.should eql("0.6.6")
-      dep_12.version_current.should eql("0.6.6")
-      dep_12.comperator.should eql(">=")
+      expect( dep_12.name ).to              eql(product12[:name])
+      expect( dep_12.version_requested ).to eql("0.6.6")
+      expect( dep_12.version_current ).to   eql("0.6.6")
+      expect( dep_12.comperator ).to        eql(">=")
 
       dep_13 = project.dependencies[11]
-      dep_13.name.should eql("pg_connect")
-      dep_13.version_requested.should eql("0.6.9")
-      dep_13.version_current.should eql("0.6.9")
-      dep_13.comperator.should eql("<=")
+      expect( dep_13.name ).to              eql(product13[:name])
+      expect( dep_13.version_requested ).to eql("0.6.9")
+      expect( dep_13.version_current ).to   eql("0.6.9")
+      expect( dep_13.comperator ).to        eql("<=")
 
       dep_02 = project.dependencies[12]
-      dep_02.name.should eql("redis")
-      dep_02.version_requested.should eql("1.3.0")
-      dep_02.version_current.should eql("1.3.0")
-      dep_02.comperator.should eql("=")
+      expect( dep_02.name ).to              eql(product2[:name])
+      expect( dep_02.version_requested ).to eql("1.3.0")
+      expect( dep_02.version_current ).to   eql("1.3.0")
+      expect( dep_02.comperator ).to        eql("=")
 
     end
 
