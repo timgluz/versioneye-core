@@ -10,9 +10,9 @@ class ShrinkwrapParser < PackageParser
     return nil if proj_doc.nil?
 
     project = init_project({
-      name: proj_doc[:name],
-      version: proj_doc[:version],
-      description: "npm-shrinkwrap.json"
+      'name'        => proj_doc[:name],
+      'version'     => proj_doc[:version],
+      'description' => "npm-shrinkwrap.json"
     })
 
     parse_dependency_items proj_doc, project

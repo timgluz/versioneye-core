@@ -99,7 +99,6 @@ module Versioneye
     require 'versioneye/parsers/paket_parser'
     require 'versioneye/parsers/nuget_json_parser'
     require 'versioneye/parsers/nuget_packages_parser'
-    require 'versioneye/parsers/godep_parser'
     require 'versioneye/parsers/cpan_parser'
     require 'versioneye/parsers/gemspec_parser'
     require 'versioneye/parsers/yarn_parser'
@@ -110,6 +109,13 @@ module Versioneye
     require 'versioneye/parsers/jspm_parser'
     require 'versioneye/parsers/csproj_parser'
     require 'versioneye/parsers/mix_parser'
+
+    require 'versioneye/parsers/godep_parser'
+    require 'versioneye/parsers/glide_parser'
+    require 'versioneye/parsers/glide_lock_parser'
+    require 'versioneye/parsers/gopkg_parser'
+    require 'versioneye/parsers/gopkg_lock_parser'
+    require 'versioneye/parsers/govendor_parser'
 
     require 'versioneye/updaters/update_strategy'
     require 'versioneye/updaters/common_updater'

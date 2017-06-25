@@ -33,6 +33,11 @@ class Projectdependency < Versioneye::Model
   #git related data
   field :repo_fullname    , type: String
   field :repo_ref         , type: String # commit_sha, branch, or tag
+  
+  #git , scm related details
+  field :commit_sha       , type: String
+  field :tag              , type: String
+  field :branch           , type: String
 
   field :status_class  , type: String
   field :status_rank   , type: String

@@ -59,15 +59,16 @@ describe ComposerLockParser do
     it "parses correctly from S3 file" do
       parser = ComposerLockParser.new
       project = parser.parse @project_file_url
-      project.should_not be_nil
-      project.dependencies.size.should eql(17)
+      expect( project ).not_to be_nil
+      expect( project.dependencies.size ).to eql(17)
 
       @products.each do |product|
         dep1 = fetch_by_name(project.dependencies, product.name)
-        dep1.should_not be_nil
-        dep1.name.should eql( product.name )
-        dep1.version_requested.should eql( product.version )
-        dep1.comperator.should eql("=")
+
+        expect( dep1 ).not_to be_nil
+        expect( dep1.name ).to eql( product.name )
+        expect( dep1.version_requested ).to eql( product.version )
+        expect( dep1.comperator ).to eql("=")
       end
 
     end

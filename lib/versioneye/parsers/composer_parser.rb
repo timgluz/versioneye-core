@@ -28,7 +28,7 @@ class ComposerParser < CommonParser
     end
 
     self.token = token
-    json_content = JSON.parse( data )
+    json_content = from_json( data, false )
     self.composer_json = json_content
     project = init_project
 
@@ -340,27 +340,26 @@ class ComposerParser < CommonParser
   end
 
 
-  private
+  def fetch_product_for key
+    key = key.to_s.strip
+    return nil if key.empty?
 
+    case key
+    when /\Anpm\-asset\//
+      new_key = key.gsub("npm-asset/", '').to_s.strip
+      Product.fetch_product( Product::A_LANGUAGE_NODEJS, new_key )
 
-    def fetch_product_for key
-      return nil if key.to_s.empty?
+    when /\Abower\-asset\//
+      new_key = key.gsub(/\Abower-asset\//, '').to_s.strip
+      Product.fetch_bower( new_key )
 
-      if key.to_s.match(/\Anpm-asset\//)
-        new_key = key.gsub("npm-asset/", "")
-        return Product.fetch_product( Product::A_LANGUAGE_NODEJS, new_key )
-
-      elsif key.to_s.match(/\Abower-asset\//)
-        new_key = key.gsub("bower-asset/", "")
-        return Product.fetch_bower( new_key )
-
-      else
-        return Product.fetch_product( Product::A_LANGUAGE_PHP, key )
-
-      end
+    else
+      Product.fetch_product( Product::A_LANGUAGE_PHP, key )
     end
 
+  end
 
+    private
     def init_projectdependency key, product
       dependency          = Projectdependency.new
       dependency.name     = key

@@ -105,9 +105,14 @@ class ParserStrategy
           return CargoParser.new
         end
 
-      when Project::A_TYPE_MIX
-        return MixParser.new
-
+      when Project::A_TYPE_HEX
+        case url.to_s
+        when /rebar\.config\z/
+          #TODO: add parser for Rebar and erlang.mk
+          nil
+        else
+          MixParser.new
+        end
       else
         nil
 

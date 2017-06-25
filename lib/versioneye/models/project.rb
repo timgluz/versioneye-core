@@ -19,11 +19,12 @@ class Project < Versioneye::Model
   A_TYPE_CHEF      = 'Chef'
   A_TYPE_NUGET     = 'Nuget'
   A_TYPE_GODEP     = 'Godep'
+  A_TYPE_GLIDE     = 'Glide'
+  A_TYPE_GOPKG     = 'Gopkg'
   A_TYPE_CPAN      = 'Cpan'
   A_TYPE_CARGO     = 'Cargo'
   A_TYPE_JSPM      = 'Jspm'
   A_TYPE_HEX       = 'Hex'
-  A_TYPE_MIX       = 'Mix'
 
   A_SOURCE_UPLOAD    = 'upload'
   A_SOURCE_URL       = 'url'

@@ -58,7 +58,7 @@ class PackageParser < CommonParser
       log.info "going to parse child JSPM project dependencies"
       jspm_parser = JspmParser.new
       # JSPM parser expects that all the fields are keywords
-      symbolized_doc = JSON.parse(content, symbolize_names: true)
+      symbolized_doc = from_json content
       child_project = jspm_parser.parse_project_doc(symbolized_doc, project.id.to_s)
       if child_project
         project.dep_number += child_project.dependencies.size
@@ -68,6 +68,7 @@ class PackageParser < CommonParser
 
     project
   rescue => e
+    log.error "parse_content: failed to parse Package.json"
     log.error e.message
     log.error e.backtrace.join("\n")
     nil
@@ -331,12 +332,15 @@ class PackageParser < CommonParser
 
 
   def init_project( data )
+    project_name = data['name']
+    project_name ||= "npm_project_#{ Time.now.to_i}"
+
     project = Project.new
     project.project_type = Project::A_TYPE_NPM
     project.language     = Product::A_LANGUAGE_NODEJS
-    project.name         = data[:name]
-    project.description  = data[:description]
-    project.version      = data[:version]
+    project.name         = project_name
+    project.description  = data['description']
+    project.version      = data['version']
     project
   end
 
