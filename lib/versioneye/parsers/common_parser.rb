@@ -1,6 +1,8 @@
 require 'versioneye/log'
 require 'nokogiri'
 require 'json'
+require 'yaml'
+require 'tomlrb'
 
 class CommonParser
 
@@ -17,11 +19,31 @@ class CommonParser
     json_doc = clean_spaces(json_doc) #replace non-ascii spaces with ascii spaces
     JSON.parse(json_doc, {symbolize_names: as_symbols})
   rescue => e
-    log.error "from_json: failed to parse #{json_doc}"
+    log.error "from_json: failed to parse #{json_txt}"
     log.error e.backtrace.join('\n')
     return nil
   end
 
+  def from_yaml(yaml_txt)
+    yaml_txt = yaml_txt.to_s.force_encoding(Encoding::UTF_8).strip
+    yaml_txt = clean_spaces(yaml_txt) # replace non-ascii spaces with ascii
+    YAML.load(yaml_txt)
+  rescue => e
+    log.error "from_yaml: failed to parse #{yaml_txt}"
+    log.error e.message
+    log.error e.backtrace.join('\n')
+    nil
+  end
+
+  def from_toml(toml_txt)
+    toml_txt = toml_txt.to_s.force_encoding(Encoding::UTF_8).strip
+    toml_txt = clean_spaces(toml_txt)
+    Tomlrb.parse(toml_txt, symbolize_keys: true)
+  rescue => e
+    log.error "from_toml: failed to parse `#{toml_txt}`"
+    log.error e.message
+    log.error e.backtrace.join('\n')
+  end
 
   SPECIAL_SPACES = [
     0x00A0,                # NO-BREAK SPACE
@@ -89,7 +111,7 @@ class CommonParser
 
   def fetch_response_body( url )
     response = self.fetch_response( url )
-    response.body
+    response.body if response
   rescue => e
     log.error "#{e.message} for #{url}"
     log.error e.backtrace.join("\n")
@@ -245,6 +267,17 @@ class CommonParser
     return true if /erlang\.mk\z/i.match?(filename)
 
     return false
+  end
+
+  def add_dependency_to_project(project, dep_db, prod_db)
+    return if project.nil?
+
+    project.dependencies << dep_db if dep_db
+    project.out_number += 1 if ProjectdependencyService.outdated?(dep_db)
+    project.unknown_number += 1 if prod_db.nil?
+    project.dep_number = project.dependencies.size
+
+    project
   end
 end
 

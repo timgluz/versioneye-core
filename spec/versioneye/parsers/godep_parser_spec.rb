@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe GodepParser do
   let(:test_file_url){}
-  let(:test_file){ File.read("spec/fixtures/files/godep/Godeps.json") }
+  let(:test_file){ File.read("spec/fixtures/files/golang/Godeps.json") }
   let(:parser){ GodepParser.new }
 
   let(:shax){ '0d7f52660096c5a22f2cb95c102e0693f773a593' }
@@ -77,7 +77,7 @@ describe GodepParser do
       product1.versions << FactoryGirl.build(
         :product_version,
         version: "0.0.0+0754dfcca172cfc4c07a61c123b23e5127d26760",
-        sha1: "0754dfcca172cfc4c07a61c123b23e5127d26760"
+        commit_sha: "0754dfcca172cfc4c07a61c123b23e5127d26760"
       )
 
       dep = parser.parse_requested_version(nil, dep_empty, product1)
@@ -105,8 +105,8 @@ describe GodepParser do
 
     it "returns dependency that uses semver matching with the corresponding sha" do
       product2.versions.delete_all
-      product2.versions << FactoryGirl.build(:product_version, version: "1.6", sha1: shax)
-      product2.versions << FactoryGirl.build(:product_version, version: '2.0', sha1: "222")
+      product2.versions << FactoryGirl.build(:product_version, version: "1.6", commit_sha: shax)
+      product2.versions << FactoryGirl.build(:product_version, version: '2.0', commit_sha: "222")
 
       prod2_dep = parser.init_dependency(product2, 'Godep2')
       dep = parser.parse_requested_version(shax, prod2_dep, product2)
@@ -139,7 +139,7 @@ describe GodepParser do
       product1.versions << FactoryGirl.build(
         :product_version,
         version: "0.0.0+0754dfcca172cfc4c07a61c123b23e5127d26760",
-        sha1: product1_sha
+        commit_sha: product1_sha
       )
       product1.save
 
@@ -154,7 +154,7 @@ describe GodepParser do
         :product_version,
         version: '0.2.0',
         tag: 'v0.2.0',
-        sha1: "87d4004f2ab62d0d255e0a38f1680aa534549fe3"
+        commit_sha: "87d4004f2ab62d0d255e0a38f1680aa534549fe3"
       )
       product4.save
     end
