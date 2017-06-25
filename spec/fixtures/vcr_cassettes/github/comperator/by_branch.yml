@@ -1,0 +1,161 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.github.com/rate_limit
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 4.7.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - token 72e349235658c7d30e4974d794f2d08284006b65
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 20 Jun 2017 13:11:20 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4984'
+      X-Ratelimit-Reset:
+      - '1497965581'
+      Cache-Control:
+      - no-cache
+      X-Oauth-Scopes:
+      - admin:org_hook, admin:repo_hook, repo
+      X-Accepted-Oauth-Scopes:
+      - ''
+      X-Github-Media-Type:
+      - github.v3; format=json
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Security-Policy:
+      - default-src 'none'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Runtime-Rack:
+      - '0.015802'
+      Vary:
+      - Accept-Encoding
+      X-Served-By:
+      - 77fbfb53269bbb85f82f23584d59f7c1
+      X-Github-Request-Id:
+      - DCE7:17E20:224EDD5:2C36AD8:59491EF9
+    body:
+      encoding: ASCII-8BIT
+      string: '{"resources":{"core":{"limit":5000,"remaining":4984,"reset":1497965581},"search":{"limit":30,"remaining":30,"reset":1497964340},"graphql":{"limit":5000,"remaining":5000,"reset":1497967880}},"rate":{"limit":5000,"remaining":4984,"reset":1497965581}}'
+    http_version: 
+  recorded_at: Tue, 20 Jun 2017 13:11:21 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/serde-rs/serde/branches/master
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 4.7.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - token 72e349235658c7d30e4974d794f2d08284006b65
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 20 Jun 2017 13:11:21 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4983'
+      X-Ratelimit-Reset:
+      - '1497965581'
+      Cache-Control:
+      - private, max-age=60, s-maxage=60
+      Vary:
+      - Accept, Authorization, Cookie, X-GitHub-OTP
+      - Accept-Encoding
+      Etag:
+      - W/"d5cb44260c2beed0e59111a9ad17f255"
+      X-Oauth-Scopes:
+      - admin:org_hook, admin:repo_hook, repo
+      X-Accepted-Oauth-Scopes:
+      - ''
+      X-Github-Media-Type:
+      - github.v3; format=json
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Security-Policy:
+      - default-src 'none'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Runtime-Rack:
+      - '0.046822'
+      X-Served-By:
+      - 15bc4ab707db6d6b474783868c7cc828
+      X-Github-Request-Id:
+      - DCE8:17E1F:1E9A935:277C5BE:59491EF9
+    body:
+      encoding: ASCII-8BIT
+      string: '{"name":"master","commit":{"sha":"4fdba725fe30dc30658b8e71bead7d9b83ab9b0f","commit":{"author":{"name":"David
+        Tolnay","email":"dtolnay@gmail.com","date":"2017-06-18T16:11:21Z"},"committer":{"name":"David
+        Tolnay","email":"dtolnay@gmail.com","date":"2017-06-18T16:11:21Z"},"message":"Revert
+        \"Support deserialization of struct keys from integers\"\n\nThis is not as
+        useful as expected because the Serializer does not know the real\nindex of
+        each struct field being serialized. The best it can do is keep a\ncounter,
+        which goes wrong if fields are conditionally skipped.\n\nThis reverts commit
+        eec710189423d5770bd498fd674e3431483649db.","tree":{"sha":"60238f386a00410576017377d4ca9ffec6bb8b8c","url":"https://api.github.com/repos/serde-rs/serde/git/trees/60238f386a00410576017377d4ca9ffec6bb8b8c"},"url":"https://api.github.com/repos/serde-rs/serde/git/commits/4fdba725fe30dc30658b8e71bead7d9b83ab9b0f","comment_count":0},"url":"https://api.github.com/repos/serde-rs/serde/commits/4fdba725fe30dc30658b8e71bead7d9b83ab9b0f","html_url":"https://github.com/serde-rs/serde/commit/4fdba725fe30dc30658b8e71bead7d9b83ab9b0f","comments_url":"https://api.github.com/repos/serde-rs/serde/commits/4fdba725fe30dc30658b8e71bead7d9b83ab9b0f/comments","author":{"login":"dtolnay","id":1940490,"avatar_url":"https://avatars1.githubusercontent.com/u/1940490?v=3","gravatar_id":"","url":"https://api.github.com/users/dtolnay","html_url":"https://github.com/dtolnay","followers_url":"https://api.github.com/users/dtolnay/followers","following_url":"https://api.github.com/users/dtolnay/following{/other_user}","gists_url":"https://api.github.com/users/dtolnay/gists{/gist_id}","starred_url":"https://api.github.com/users/dtolnay/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/dtolnay/subscriptions","organizations_url":"https://api.github.com/users/dtolnay/orgs","repos_url":"https://api.github.com/users/dtolnay/repos","events_url":"https://api.github.com/users/dtolnay/events{/privacy}","received_events_url":"https://api.github.com/users/dtolnay/received_events","type":"User","site_admin":false},"committer":{"login":"dtolnay","id":1940490,"avatar_url":"https://avatars1.githubusercontent.com/u/1940490?v=3","gravatar_id":"","url":"https://api.github.com/users/dtolnay","html_url":"https://github.com/dtolnay","followers_url":"https://api.github.com/users/dtolnay/followers","following_url":"https://api.github.com/users/dtolnay/following{/other_user}","gists_url":"https://api.github.com/users/dtolnay/gists{/gist_id}","starred_url":"https://api.github.com/users/dtolnay/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/dtolnay/subscriptions","organizations_url":"https://api.github.com/users/dtolnay/orgs","repos_url":"https://api.github.com/users/dtolnay/repos","events_url":"https://api.github.com/users/dtolnay/events{/privacy}","received_events_url":"https://api.github.com/users/dtolnay/received_events","type":"User","site_admin":false},"parents":[{"sha":"75eed8cdde9625f7d171bded3f4d3fb0355f46f1","url":"https://api.github.com/repos/serde-rs/serde/commits/75eed8cdde9625f7d171bded3f4d3fb0355f46f1","html_url":"https://github.com/serde-rs/serde/commit/75eed8cdde9625f7d171bded3f4d3fb0355f46f1"}]},"_links":{"self":"https://api.github.com/repos/serde-rs/serde/branches/master","html":"https://github.com/serde-rs/serde/tree/master"}}'
+    http_version: 
+  recorded_at: Tue, 20 Jun 2017 13:11:21 GMT
+recorded_with: VCR 3.0.3

@@ -1,6 +1,7 @@
 class ProjectdependencyService < Versioneye::Service
 
   require 'naturalsorter'
+  extend Comperators::Github
 
   A_SECONDS_PER_DAY = 24 * 60 * 60 # 24h * 60min * 60s = 86400
 
@@ -206,17 +207,21 @@ class ProjectdependencyService < Versioneye::Service
   end
 
 
-  def self.outdated?( projectdependency )
+  def self.outdated?( projectdependency, product = nil, auth_token = nil)
     return nil if projectdependency.nil?
 
-    return update_outdated!(projectdependency) if projectdependency.outdated.nil?
+    if projectdependency.outdated.nil?
+      log.info "outdated? - checking new dependency #{projectdependency}"
+      return update_outdated!(projectdependency, product, auth_token)
+    end
 
     last_update_ago = DateTime.now.to_i - projectdependency.outdated_updated_at.to_i
     return projectdependency.outdated if last_update_ago < A_SECONDS_PER_DAY
 
-    update_outdated!( projectdependency )
+    update_outdated!( projectdependency, product, auth_token )
   end
 
+  #TODO: shas can only include HEX (0-9A-F), mostly 40chars, but maybe as short 7char
   def self.sha?(txt)
     ( txt.to_s.strip.match(/\w{40}/i) != nil )
   end
@@ -225,7 +230,7 @@ class ProjectdependencyService < Versioneye::Service
     not SemVer.parse(txt).nil?
   end
 
-  def self.update_outdated!( projectdependency )
+  def self.update_outdated!( projectdependency, product = nil, auth_token = nil)
     update_version_current( projectdependency )
 
     if ( projectdependency.prod_key.nil? && projectdependency.version_current.nil? ) ||
@@ -237,6 +242,12 @@ class ProjectdependencyService < Versioneye::Service
     end
 
     outdated = false
+
+    # checks does Projectdependency on Github is outdated or not
+    if projectdependency[:version_requested] == 'GITHUB'
+      is_outdated = check_github_version(projectdependency, product, auth_token)
+      return update_outdated(projectdependency, is_outdated)
+    end
 
     # Handle GO-DEP versions differently
     if projectdependency[:language] == Product::A_LANGUAGE_GO
@@ -253,6 +264,39 @@ class ProjectdependencyService < Versioneye::Service
 
     update_outdated( projectdependency, outdated )
     projectdependency.outdated
+  end
+
+  # compares latest stable release date with the commit date on Github
+  #
+  # expects that projectDependency models has specified additional fields:
+  # repo_fullname - string, format `owner_name/repo_name`
+  # repo_ref      - string, git reference to look up commit details,
+  #                 can be commit_sha, tag, or branch
+  #
+  # returns:
+  #   true - if package is out-dated
+  #   false - if package is up-to-date or we failed to make request or it's unknown
+  def self.check_github_version(dep, product, auth_token)
+    log.info "check_github_version: going to check state of #{dep}"
+    if auth_token.nil?
+      log.error "check_github_version: auth_token is missing"
+      return false
+    end
+
+    if dep[:repo_fullname].nil? or dep[:repo_ref].nil?
+      log.error "check_github_version: :repo_fullname or :repo_ref is unspecified"
+      log.error " dependency: #{dep}"
+      return false
+    end
+
+    if product.nil? or product.is_a?(Product) == false
+      log.error "check_github_version: no product for dep.#{dep}"
+      return false
+    end
+
+    # comes from Comperators::Github
+    gh_state = compare_github_version(dep[:repo_ref], dep, product.versions, auth_token)
+    gh_state == Comperators::IS_OUTDATED
   end
 
   def self.godep_to_semver(proj_dep)

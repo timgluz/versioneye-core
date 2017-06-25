@@ -391,6 +391,59 @@ describe ProjectdependencyService do
       dep.release.should be_truthy
     end
 
+    let(:prod1){
+      Product.new(
+        language: Product::A_LANGUAGE_RUST,
+        prod_key: 'serde',
+        name: 'serde',
+        version: '1.0.8'
+      )
+    }
+
+    let(:dep1){
+      Projectdependency.new(
+        language: Product::A_LANGUAGE_RUST,
+        prod_key: 'serde_derive',
+        version_requested: 'GITHUB',
+        version_label: 'serde-rs/serde#fd3d1396d',
+        repo_fullname: 'serde-rs/serde',
+        repo_ref: 'fd3d1396d33a49200daaaf8bf17eba78fe4183d8'
+      )
+    }
+
+    let(:auth_token){ Settings.instance.github_client_secret }
+
+
+    context "dependencies on github" do
+
+      it "returns true when commit date is older than current stable release" do
+        prod1.versions << Version.new(
+          version: '1.0.8',
+          released_at: DateTime.now
+        )
+        prod1.save
+
+        expect(auth_token).not_to be_nil
+        VCR.use_cassette('github/projectdependency_service/by_commit_sha') do
+          res = ProjectdependencyService.outdated?(dep1, prod1, auth_token)
+          expect(res).to be_truthy
+        end
+      end
+
+      it "returns false when commit date is newer than current stable release" do
+        prod1.versions << Version.new(
+          version: '1.0.6',
+          released_at: DateTime.parse('2017-05-17')
+        )
+        prod1.save
+
+        expect(auth_token).not_to be_nil
+        VCR.use_cassette('github/projectdependency_service/by_commit_sha') do
+          res = ProjectdependencyService.outdated?(dep1, prod1, auth_token)
+          expect(res).to be_falsey
+        end
+      end
+    end
   end
 
   describe "update_version_current" do

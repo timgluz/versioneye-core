@@ -1,0 +1,9 @@
+{
+  "name": "foo",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "expressjs/express",
+    "mocha": "mochajs/mocha#4727d357ea",
+    "chai": "chaijs/chai#master"
+  }
+}

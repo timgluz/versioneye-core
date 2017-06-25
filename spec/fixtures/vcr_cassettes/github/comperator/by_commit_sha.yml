@@ -1,0 +1,200 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.github.com/rate_limit
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 4.7.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - token 72e349235658c7d30e4974d794f2d08284006b65
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 20 Jun 2017 11:39:20 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4999'
+      X-Ratelimit-Reset:
+      - '1497961788'
+      Cache-Control:
+      - no-cache
+      X-Oauth-Scopes:
+      - admin:org_hook, admin:repo_hook, repo
+      X-Accepted-Oauth-Scopes:
+      - ''
+      X-Github-Media-Type:
+      - github.v3; format=json
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Security-Policy:
+      - default-src 'none'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Runtime-Rack:
+      - '0.020425'
+      Vary:
+      - Accept-Encoding
+      X-Served-By:
+      - 4537b68c46a1b65b106078b0a2578ee2
+      X-Github-Request-Id:
+      - D9FF:17E1F:1DE29B7:268B145:59490968
+    body:
+      encoding: ASCII-8BIT
+      string: '{"resources":{"core":{"limit":5000,"remaining":4999,"reset":1497961788},"search":{"limit":30,"remaining":30,"reset":1497958820},"graphql":{"limit":5000,"remaining":5000,"reset":1497962360}},"rate":{"limit":5000,"remaining":4999,"reset":1497961788}}'
+    http_version: 
+  recorded_at: Tue, 20 Jun 2017 11:39:20 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/serde-rs/serde/commits/fd3d1396d33a49200daaaf8bf17eba78fe4183d8
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 4.7.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - token 72e349235658c7d30e4974d794f2d08284006b65
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 20 Jun 2017 11:39:21 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4998'
+      X-Ratelimit-Reset:
+      - '1497961788'
+      Cache-Control:
+      - private, max-age=60, s-maxage=60
+      Vary:
+      - Accept, Authorization, Cookie, X-GitHub-OTP
+      - Accept-Encoding
+      Etag:
+      - W/"63e0802ab3a2abcaa73543bbe406a6f8"
+      Last-Modified:
+      - Wed, 24 May 2017 07:17:27 GMT
+      X-Oauth-Scopes:
+      - admin:org_hook, admin:repo_hook, repo
+      X-Accepted-Oauth-Scopes:
+      - ''
+      X-Github-Media-Type:
+      - github.v3; format=json
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Security-Policy:
+      - default-src 'none'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Runtime-Rack:
+      - '0.096146'
+      X-Served-By:
+      - 88531cdcf1929112ec480e1806d44a33
+      X-Github-Request-Id:
+      - DA00:17E20:2181FAA:2B2A025:59490969
+    body:
+      encoding: ASCII-8BIT
+      string: '{"sha":"fd3d1396d33a49200daaaf8bf17eba78fe4183d8","commit":{"author":{"name":"David
+        Tolnay","email":"dtolnay@gmail.com","date":"2017-05-24T07:17:27Z"},"committer":{"name":"David
+        Tolnay","email":"dtolnay@gmail.com","date":"2017-05-24T07:17:27Z"},"message":"Release
+        1.0.8","tree":{"sha":"8c2b446fc20bdc7479c34fe0cc3506c13ed1f307","url":"https://api.github.com/repos/serde-rs/serde/git/trees/8c2b446fc20bdc7479c34fe0cc3506c13ed1f307"},"url":"https://api.github.com/repos/serde-rs/serde/git/commits/fd3d1396d33a49200daaaf8bf17eba78fe4183d8","comment_count":0},"url":"https://api.github.com/repos/serde-rs/serde/commits/fd3d1396d33a49200daaaf8bf17eba78fe4183d8","html_url":"https://github.com/serde-rs/serde/commit/fd3d1396d33a49200daaaf8bf17eba78fe4183d8","comments_url":"https://api.github.com/repos/serde-rs/serde/commits/fd3d1396d33a49200daaaf8bf17eba78fe4183d8/comments","author":{"login":"dtolnay","id":1940490,"avatar_url":"https://avatars1.githubusercontent.com/u/1940490?v=3","gravatar_id":"","url":"https://api.github.com/users/dtolnay","html_url":"https://github.com/dtolnay","followers_url":"https://api.github.com/users/dtolnay/followers","following_url":"https://api.github.com/users/dtolnay/following{/other_user}","gists_url":"https://api.github.com/users/dtolnay/gists{/gist_id}","starred_url":"https://api.github.com/users/dtolnay/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/dtolnay/subscriptions","organizations_url":"https://api.github.com/users/dtolnay/orgs","repos_url":"https://api.github.com/users/dtolnay/repos","events_url":"https://api.github.com/users/dtolnay/events{/privacy}","received_events_url":"https://api.github.com/users/dtolnay/received_events","type":"User","site_admin":false},"committer":{"login":"dtolnay","id":1940490,"avatar_url":"https://avatars1.githubusercontent.com/u/1940490?v=3","gravatar_id":"","url":"https://api.github.com/users/dtolnay","html_url":"https://github.com/dtolnay","followers_url":"https://api.github.com/users/dtolnay/followers","following_url":"https://api.github.com/users/dtolnay/following{/other_user}","gists_url":"https://api.github.com/users/dtolnay/gists{/gist_id}","starred_url":"https://api.github.com/users/dtolnay/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/dtolnay/subscriptions","organizations_url":"https://api.github.com/users/dtolnay/orgs","repos_url":"https://api.github.com/users/dtolnay/repos","events_url":"https://api.github.com/users/dtolnay/events{/privacy}","received_events_url":"https://api.github.com/users/dtolnay/received_events","type":"User","site_admin":false},"parents":[{"sha":"c47b4c8e0b2a4bfed26b8790b4b76561bebff955","url":"https://api.github.com/repos/serde-rs/serde/commits/c47b4c8e0b2a4bfed26b8790b4b76561bebff955","html_url":"https://github.com/serde-rs/serde/commit/c47b4c8e0b2a4bfed26b8790b4b76561bebff955"}],"stats":{"total":18,"additions":9,"deletions":9},"files":[{"sha":"045d52f4aad140085b5dca3f4867a0a8a8aa7e38","filename":"serde/Cargo.toml","status":"modified","additions":1,"deletions":1,"changes":2,"blob_url":"https://github.com/serde-rs/serde/blob/fd3d1396d33a49200daaaf8bf17eba78fe4183d8/serde/Cargo.toml","raw_url":"https://github.com/serde-rs/serde/raw/fd3d1396d33a49200daaaf8bf17eba78fe4183d8/serde/Cargo.toml","contents_url":"https://api.github.com/repos/serde-rs/serde/contents/serde/Cargo.toml?ref=fd3d1396d33a49200daaaf8bf17eba78fe4183d8","patch":"@@
+        -1,6 +1,6 @@\n [package]\n name = \"serde\"\n-version = \"1.0.7\" # remember
+        to update html_root_url\n+version = \"1.0.8\" # remember to update html_root_url\n
+        authors = [\"Erick Tryzelaar <erick.tryzelaar@gmail.com>\", \"David Tolnay
+        <dtolnay@gmail.com>\"]\n license = \"MIT/Apache-2.0\"\n description = \"A
+        generic serialization/deserialization framework\""},{"sha":"fe8258a9b9e169b58223b64ff9c20ae195f47b3e","filename":"serde/src/lib.rs","status":"modified","additions":1,"deletions":1,"changes":2,"blob_url":"https://github.com/serde-rs/serde/blob/fd3d1396d33a49200daaaf8bf17eba78fe4183d8/serde/src/lib.rs","raw_url":"https://github.com/serde-rs/serde/raw/fd3d1396d33a49200daaaf8bf17eba78fe4183d8/serde/src/lib.rs","contents_url":"https://api.github.com/repos/serde-rs/serde/contents/serde/src/lib.rs?ref=fd3d1396d33a49200daaaf8bf17eba78fe4183d8","patch":"@@
+        -79,7 +79,7 @@\n ////////////////////////////////////////////////////////////////////////////////\n
+        \n // Serde types in rustdoc of other crates get linked to here.\n-#![doc(html_root_url
+        = \"https://docs.rs/serde/1.0.7\")]\n+#![doc(html_root_url = \"https://docs.rs/serde/1.0.8\")]\n
+        \n // Support using Serde without the standard library!\n #![cfg_attr(not(feature
+        = \"std\"), no_std)]"},{"sha":"b9fb57b4fb609b8d7b52871991889550b4b5825a","filename":"serde_derive/Cargo.toml","status":"modified","additions":2,"deletions":2,"changes":4,"blob_url":"https://github.com/serde-rs/serde/blob/fd3d1396d33a49200daaaf8bf17eba78fe4183d8/serde_derive/Cargo.toml","raw_url":"https://github.com/serde-rs/serde/raw/fd3d1396d33a49200daaaf8bf17eba78fe4183d8/serde_derive/Cargo.toml","contents_url":"https://api.github.com/repos/serde-rs/serde/contents/serde_derive/Cargo.toml?ref=fd3d1396d33a49200daaaf8bf17eba78fe4183d8","patch":"@@
+        -1,6 +1,6 @@\n [package]\n name = \"serde_derive\"\n-version = \"1.0.7\" #
+        remember to update html_root_url\n+version = \"1.0.8\" # remember to update
+        html_root_url\n authors = [\"Erick Tryzelaar <erick.tryzelaar@gmail.com>\",
+        \"David Tolnay <dtolnay@gmail.com>\"]\n license = \"MIT/Apache-2.0\"\n description
+        = \"Macros 1.1 implementation of #[derive(Serialize, Deserialize)]\"\n@@ -20,5
+        +20,5 @@ proc-macro = true\n \n [dependencies]\n quote = \"0.3.8\"\n-serde_derive_internals
+        = { version = \"=0.15.0\", default-features = false, path = \"../serde_derive_internals\"
+        }\n+serde_derive_internals = { version = \"=0.15.1\", default-features = false,
+        path = \"../serde_derive_internals\" }\n syn = { version = \"0.11\", features
+        = [\"visit\"] }"},{"sha":"029c8bb71dcdae97af7e7b4251ef0cf6b620248f","filename":"serde_derive/src/lib.rs","status":"modified","additions":1,"deletions":1,"changes":2,"blob_url":"https://github.com/serde-rs/serde/blob/fd3d1396d33a49200daaaf8bf17eba78fe4183d8/serde_derive/src/lib.rs","raw_url":"https://github.com/serde-rs/serde/raw/fd3d1396d33a49200daaaf8bf17eba78fe4183d8/serde_derive/src/lib.rs","contents_url":"https://api.github.com/repos/serde-rs/serde/contents/serde_derive/src/lib.rs?ref=fd3d1396d33a49200daaaf8bf17eba78fe4183d8","patch":"@@
+        -16,7 +16,7 @@\n //!\n //! [https://serde.rs/derive.html]: https://serde.rs/derive.html\n
+        \n-#![doc(html_root_url = \"https://docs.rs/serde_derive/1.0.7\")]\n+#![doc(html_root_url
+        = \"https://docs.rs/serde_derive/1.0.8\")]\n \n #![cfg_attr(feature = \"cargo-clippy\",
+        allow(too_many_arguments))]\n #![cfg_attr(feature = \"cargo-clippy\", allow(used_underscore_binding))]"},{"sha":"6d8c3f00ade46c372a395e89b8fa8cbb047dc1e6","filename":"serde_derive_internals/Cargo.toml","status":"modified","additions":1,"deletions":1,"changes":2,"blob_url":"https://github.com/serde-rs/serde/blob/fd3d1396d33a49200daaaf8bf17eba78fe4183d8/serde_derive_internals/Cargo.toml","raw_url":"https://github.com/serde-rs/serde/raw/fd3d1396d33a49200daaaf8bf17eba78fe4183d8/serde_derive_internals/Cargo.toml","contents_url":"https://api.github.com/repos/serde-rs/serde/contents/serde_derive_internals/Cargo.toml?ref=fd3d1396d33a49200daaaf8bf17eba78fe4183d8","patch":"@@
+        -1,6 +1,6 @@\n [package]\n name = \"serde_derive_internals\"\n-version = \"0.15.0\"
+        # remember to update html_root_url\n+version = \"0.15.1\" # remember to update
+        html_root_url\n authors = [\"Erick Tryzelaar <erick.tryzelaar@gmail.com>\",
+        \"David Tolnay <dtolnay@gmail.com>\"]\n license = \"MIT/Apache-2.0\"\n description
+        = \"AST representation used by Serde derive macros. Unstable.\""},{"sha":"b1505d3146be2914cbc611a7777f3af8b597e655","filename":"serde_derive_internals/src/lib.rs","status":"modified","additions":1,"deletions":1,"changes":2,"blob_url":"https://github.com/serde-rs/serde/blob/fd3d1396d33a49200daaaf8bf17eba78fe4183d8/serde_derive_internals/src/lib.rs","raw_url":"https://github.com/serde-rs/serde/raw/fd3d1396d33a49200daaaf8bf17eba78fe4183d8/serde_derive_internals/src/lib.rs","contents_url":"https://api.github.com/repos/serde-rs/serde/contents/serde_derive_internals/src/lib.rs?ref=fd3d1396d33a49200daaaf8bf17eba78fe4183d8","patch":"@@
+        -6,7 +6,7 @@\n // option. This file may not be copied, modified, or distributed\n
+        // except according to those terms.\n \n-#![doc(html_root_url = \"https://docs.rs/serde_derive_internals/0.15.0\")]\n+#![doc(html_root_url
+        = \"https://docs.rs/serde_derive_internals/0.15.1\")]\n \n extern crate syn;\n
+        #[macro_use]"},{"sha":"4d2648d12d7fe781b4cce404eceea33a9f783756","filename":"serde_test/Cargo.toml","status":"modified","additions":1,"deletions":1,"changes":2,"blob_url":"https://github.com/serde-rs/serde/blob/fd3d1396d33a49200daaaf8bf17eba78fe4183d8/serde_test/Cargo.toml","raw_url":"https://github.com/serde-rs/serde/raw/fd3d1396d33a49200daaaf8bf17eba78fe4183d8/serde_test/Cargo.toml","contents_url":"https://api.github.com/repos/serde-rs/serde/contents/serde_test/Cargo.toml?ref=fd3d1396d33a49200daaaf8bf17eba78fe4183d8","patch":"@@
+        -1,6 +1,6 @@\n [package]\n name = \"serde_test\"\n-version = \"1.0.7\" # remember
+        to update html_root_url\n+version = \"1.0.8\" # remember to update html_root_url\n
+        authors = [\"Erick Tryzelaar <erick.tryzelaar@gmail.com>\", \"David Tolnay
+        <dtolnay@gmail.com>\"]\n license = \"MIT/Apache-2.0\"\n description = \"Token
+        De/Serializer for testing De/Serialize implementations\""},{"sha":"4007c5f94e844ba32a7f7c1bd01849d887772592","filename":"serde_test/src/lib.rs","status":"modified","additions":1,"deletions":1,"changes":2,"blob_url":"https://github.com/serde-rs/serde/blob/fd3d1396d33a49200daaaf8bf17eba78fe4183d8/serde_test/src/lib.rs","raw_url":"https://github.com/serde-rs/serde/raw/fd3d1396d33a49200daaaf8bf17eba78fe4183d8/serde_test/src/lib.rs","contents_url":"https://api.github.com/repos/serde-rs/serde/contents/serde_test/src/lib.rs?ref=fd3d1396d33a49200daaaf8bf17eba78fe4183d8","patch":"@@
+        -155,7 +155,7 @@\n //! # }\n //! ```\n \n-#![doc(html_root_url = \"https://docs.rs/serde_test/1.0.7\")]\n+#![doc(html_root_url
+        = \"https://docs.rs/serde_test/1.0.8\")]\n \n #[macro_use]\n extern crate
+        serde;"}]}'
+    http_version: 
+  recorded_at: Tue, 20 Jun 2017 11:39:21 GMT
+recorded_with: VCR 3.0.3

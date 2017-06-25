@@ -5,6 +5,8 @@ module Versioneye
     require 'versioneye/cache'
     require 'versioneye/etcd_client'
 
+    require 'versioneye/comperators'
+
     require 'versioneye/services/auth_service'
     require 'versioneye/services/analytics_service'
     require 'versioneye/services/author_service'

@@ -7,6 +7,9 @@ class PackageParser < CommonParser
   # https://github.com/isaacs/node-semver
   # https://npmjs.org/doc/json.html
   # http://wiki.commonjs.org/wiki/Packages/1.1
+
+  attr_reader :auth_token
+
   def parse ( url )
     return nil if url.to_s.empty?
 
@@ -22,6 +25,8 @@ class PackageParser < CommonParser
   def parse_content( content, token = nil )
     return nil if content.to_s.empty?
     return nil if (content =~ /Not\s+found/i)
+
+    @auth_token = token # remember auth_token for outdated?
 
     data = from_json( content , false)
     return nil if data.nil?
@@ -79,17 +84,13 @@ class PackageParser < CommonParser
 
   def parse_line( package_name, version_label, project, scope = Dependency::A_SCOPE_COMPILE )
     product = Product.fetch_product( Product::A_LANGUAGE_NODEJS, package_name )
-    # matchi = package_name.match(/\A(@\S*\/)\S*/i)
-    # if product.nil? && matchi
-    #   package_name = package_name.gsub(matchi[1], '')
-    #   scope = matchi[1].gsub("@", '').gsub("/", "")
-    #   product = Product.fetch_product( Product::A_LANGUAGE_NODEJS, package_name )
-    # end
 
     dependency = init_dependency( product, package_name )
     dependency.scope = scope
     parse_requested_version( version_label, dependency, product )
-    project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
+
+    is_outdated = ProjectdependencyService.outdated?(dependency, product, @auth_token)
+    project.out_number     += 1 if is_outdated
     project.unknown_number += 1 if product.nil?
     project.projectdependencies.push dependency
   end
@@ -140,6 +141,17 @@ class PackageParser < CommonParser
       dependency[:version_requested]  = version_label
       dependency[:version_label]      = version_label
       dependency[:comperator]         = '='
+
+    elsif /\w\/\w/.match?(version)
+      # if github dependency
+      repo_fullname, repo_ref = version.split('#', 2)
+      repo_ref ||= 'master'
+
+      dependency[:version_requested] = 'GITHUB'
+      dependency[:version_label] = version
+      dependency[:repo_fullname] = repo_fullname.to_s.strip
+      dependency[:repo_ref]      = repo_ref
+
 
     elsif version.match(/\|\|/)
       parsed_versions = []

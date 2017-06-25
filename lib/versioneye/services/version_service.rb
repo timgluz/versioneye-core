@@ -256,8 +256,8 @@ class VersionService < Versioneye::Service
       ranges << VersionService.from_ranges(product_versions, version_range)
     end
 
-    common_range = ranges.to_a.reduce(product_versions) do |intersection, range|
-      VersionService.intersect_versions(intersection, range, true)
+    common_range = ranges.to_a.reduce(product_versions) do |intersection, range_ |
+      VersionService.intersect_versions(intersection, range_ , true)
     end
 
     #return a versions that match all the selectors or only highest
