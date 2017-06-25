@@ -27,6 +27,7 @@ class MongoProduct < Versioneye::Service
     return empty_criteria
   end
 
+
   # languages have to be an array of strings.
   def self.find_all(searched_name, description, group_id, languages=nil, limit=300, exclude_keys)
     query = empty_criteria
@@ -49,6 +50,7 @@ class MongoProduct < Versioneye::Service
     log.error e.backtrace.join("\n")
     return empty_criteria
   end
+
 
   def self.find_by_name(searched_name)
     if searched_name.nil? || searched_name.strip.empty?
