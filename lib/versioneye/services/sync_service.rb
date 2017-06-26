@@ -393,6 +393,9 @@ class SyncService < Versioneye::Service
     def self.parsed_date released_at
       DateTime.parse( released_at )
     rescue => e
+      log.error "parsed_date: failed to parse `#{released_at}`"
+      log.error e.message
+      log.error e.backtrace.join('\n')
       nil
     end
 
