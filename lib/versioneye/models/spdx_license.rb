@@ -10,6 +10,8 @@ class SpdxLicense < Versioneye::Model
   index({ fullname: 1 }  , { name: "fullname_index"  , background: true })
   index({ identifier: 1 }, { name: "identifier_index", background: true, unique: true, drop_dups: true })
 
+  validates_uniqueness_of :identifier, :message => 'exist already.'
+
 
   def to_s
     "#{identifier} - #{fullname} - #{osi_approved}"
