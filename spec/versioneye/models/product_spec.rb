@@ -408,16 +408,17 @@ describe Product do
     it "returns the correct product" do
       product1 = ProductFactory.create_for_gemfile('xiki', '1.4.0')
       product1.versions.push( Version.new({version: '1.4.0'}) )
-      product1.save
+      expect( product1.save ).to be_truthy
+
       product2 = ProductFactory.create_for_gemfile('tire', '1.4.0')
       product2.versions.push( Version.new({version: '1.4.0'}) )
-      product2.save
+      expect( product2.save ).to be_truthy
+
       results = described_class.by_prod_keys(Product::A_LANGUAGE_RUBY, ['xiki', 'tire'])
-      results.should_not be_nil
-      results.size.should eq(2)
-      results.first.name.should eq('xiki')
-      last = results.count - 1
-      results.all[last].name.should eq('tire')
+      expect( results ).to_not be_nil
+      expect( results.size ).to eq(2)
+      expect( results.first.name ).to eq('xiki')
+      expect( results.last.name ).to eq('tire')
     end
 
   end
