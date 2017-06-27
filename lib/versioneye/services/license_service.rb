@@ -132,8 +132,7 @@ class LicenseService < Versioneye::Service
 
 
     def self.create_spdx_license name, identifier, approved
-      spdx = SpdxLicense.new :fullname => name, :identifier => identifier, :osi_approved => approved
-      spdx.save
+      SpdxLicense.find_or_create_by :fullname => name, :identifier => identifier, :osi_approved => approved
     rescue => e
       p e.message
     end
