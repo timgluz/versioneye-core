@@ -38,6 +38,11 @@ class Plan < Versioneye::Model
 
   has_many :organisations
 
+  index({ name_id: 1 }, { name: "name_id_index", background: true, unique: true, drop_dups: true })
+
+  validates_uniqueness_of :name_id, :message => 'exist already.'
+
+
   def self.by_name_id name_id
     Plan.where(:name_id => name_id).shift
   end
