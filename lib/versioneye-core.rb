@@ -49,6 +49,9 @@ class VersioneyeCore
     user_count = User.count
     return nil if user_count.to_i > 0
 
+    puts "START to create indexes"
+    Indexer.create_indexes
+
     puts "START to create default admin"
     AdminService.create_default_admin
 
