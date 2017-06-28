@@ -55,15 +55,8 @@ class PackageParser < CommonParser
     project.dep_number = project.dependencies.size
 
     if data.has_key?('jspm')
-      log.info "going to parse child JSPM project dependencies"
-      jspm_parser = JspmParser.new
-      # JSPM parser expects that all the fields are keywords
       symbolized_doc = from_json content
-      child_project = jspm_parser.parse_project_doc(symbolized_doc, project.id.to_s)
-      if child_project
-        project.dep_number += child_project.dependencies.size
-        child_project.save
-      end
+      parse_jspm_doc( symbolized_doc, project )
     end
 
     project
@@ -379,4 +372,71 @@ class PackageParser < CommonParser
 
     m[:version].to_s.strip
   end
+
+
+
+  # Parse JSPM dependencies
+  def parse_jspm_doc(proj_doc, project)
+    if proj_doc.nil? or proj_doc.has_key?(:jspm) == false
+      log.error "project file has no `:jspm` subdocument"
+      return nil
+    end
+
+    jspm_doc = proj_doc[:jspm]
+
+    parse_jspm_dependencies(
+      project, jspm_doc[:dependencies], Dependency::A_SCOPE_COMPILE, proj_doc[:registry]
+    )
+    parse_jspm_dependencies(
+      project, jspm_doc[:devDependencies], Dependency::A_SCOPE_DEVELOPMENT, proj_doc[:registry]
+    )
+
+    parse_jspm_dependencies(
+      project, jspm_doc[:peerDependencies], Dependency::A_SCOPE_OPTIONAL, proj_doc[:registry]
+    )
+
+    project.dep_number = project.dependencies.size
+    project
+  rescue => e
+    log.error "parse_jspm_doc: failed to parse JSPM document,\n `#{proj_doc}`"
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    nil
+  end
+
+
+  def parse_jspm_dependencies(project, deps, scope, default_registry = nil)
+    deps.to_a.each do |pkg_id, dep_line|
+      parse_jspm_dependency(project, pkg_id.to_s, dep_line, scope, default_registry)
+    end
+
+    project
+  end
+
+
+  def parse_jspm_dependency(project, pkg_id, dep_line, scope, default_registry)
+    github_match = dep_line.to_s.strip.match(/\Agithub:(.*)(@.*)/i)
+    if github_match
+      version_label = "github#{github_match[2]}"
+      product = nil
+    else
+      version_label = dep_line.to_s.split('@').last
+      product = Product::fetch_product(Product::A_LANGUAGE_NODEJS, pkg_id)
+    end
+
+    dep = init_dependency( product, pkg_id )
+    dep.scope = "jspm_#{scope}"
+    if github_match
+      dep.ext_link = "https://github.com/#{github_match[1]}"
+    end
+
+    parse_requested_version( version_label, dep, product )
+
+    project.projectdependencies.push dep
+    project.out_number     += 1 if ProjectdependencyService.outdated?( dep )
+    project.unknown_number += 1 if product.nil?
+    project
+  end
+
+
 end

@@ -354,15 +354,6 @@ class Project < Versioneye::Model
     self.updated_at = Time.now
 
     self.overwrite_dependencies( new_project.projectdependencies )
-
-    # move children project and abandon the previous kids
-    # needed for JSPM projects that are children of Package project
-    self.children.to_a.each {|p| p.delete }
-    new_project.children.to_a.each do |child_proj|
-      child_proj.update(parent_id: self.ids)
-      child_proj.save
-    end
-
     self.save
   end
 

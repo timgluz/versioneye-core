@@ -106,7 +106,6 @@ module Versioneye
     require 'versioneye/parsers/package_lock_parser'
     require 'versioneye/parsers/cargo_parser'
     require 'versioneye/parsers/cargo_lock_parser'
-    require 'versioneye/parsers/jspm_parser'
     require 'versioneye/parsers/csproj_parser'
     require 'versioneye/parsers/mix_parser'
 
