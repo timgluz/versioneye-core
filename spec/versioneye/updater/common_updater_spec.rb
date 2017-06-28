@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe CommonUpdater do
+
   let(:content_without_jspm){ File.read 'spec/fixtures/files/npm/package_without_jspm.json' }
   let(:content_with_jspm){ File.read 'spec/fixtures/files/npm/package_with_jspm.json' }
 
@@ -44,15 +45,14 @@ describe CommonUpdater do
       new_project[:user_id] = user.ids
       expect(new_project).not_to be_nil
       expect(new_project.dep_number).to eq(5)
-      expect(new_project.children.to_a.size).to eq(1)
+      expect(new_project.children.to_a.size).to eq(0)
 
       # move new project into old project
       CommonUpdater.new.update_old_with_new old_project, new_project
       old_project.reload
       expect(old_project).not_to be_nil
       expect(old_project.dep_number).to eq(5)
-      expect(old_project.children.to_a.size).to eq(1)
-
+      expect(old_project.children.to_a.size).to eq(0)
 
     end
   end

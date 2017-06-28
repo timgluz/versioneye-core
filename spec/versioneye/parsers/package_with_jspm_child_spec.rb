@@ -79,9 +79,11 @@ describe PackageParser do
 
     it "parses test file correctly" do
       proj = parser.parse_content test_content
-      expect(proj).not_to be_nil
-      expect(proj.dependencies.size).to eq(2)
-      expect(proj.dep_number).to eq(5) #2 NPM + 3 JSPM deps
+      proj.save
+      proj = Project.find proj.ids
+      expect( proj ).not_to be_nil
+      expect(proj.dependencies.count).to eq(5)
+      expect(proj.dep_number).to eq(5) # 2 NPM + 3 JSPM deps
 
       # check did we get all the dependencies for parent project right
       dep1 = proj.dependencies[0]
@@ -104,38 +106,31 @@ describe PackageParser do
       expect(dep2[:comperator]).to eq('^')
       expect(dep2[:outdated]).to be_falsey
 
-      # check did we get all the dependencies for JSPM project right
-      jspm_proj = proj.children.first
-      expect(jspm_proj).not_to be_nil
-      expect(jspm_proj.dependencies.size).to eq(3)
-      expect(jspm_proj.dep_number).to eq(3) #only its own deps 3 JSPM deps
-
-
-      cdep1 = jspm_proj.dependencies[0]
+      cdep1 = proj.dependencies[2]
       expect(cdep1[:name]).to eq(backbone_es6[:name])
       expect(cdep1[:prod_key]).to eq(backbone_es6[:prod_key])
       expect(cdep1[:language]).to eq(backbone_es6[:language])
-      expect(cdep1[:scope]).to eq(Dependency::A_SCOPE_COMPILE)
+      expect(cdep1[:scope]).to eq("jspm_#{Dependency::A_SCOPE_COMPILE}")
       expect(cdep1[:version_requested]).to eq('github@master')
       expect(cdep1[:version_label]).to eq('github@master')
       expect(cdep1[:comperator]).to eq('=')
       expect(cdep1[:outdated]).to be_falsey
 
-      cdep2 = jspm_proj.dependencies[1]
+      cdep2 = proj.dependencies[3]
       expect(cdep2[:name]).to eq(underscore[:name])
       expect(cdep2[:prod_key]).to eq(underscore[:prod_key])
       expect(cdep2[:language]).to eq(underscore[:language])
-      expect(cdep2[:scope]).to eq(Dependency::A_SCOPE_COMPILE)
+      expect(cdep2[:scope]).to eq("jspm_#{Dependency::A_SCOPE_COMPILE}")
       expect(cdep2[:version_requested]).to eq('1.0.0')
       expect(cdep2[:version_label]).to eq('^1.0.0')
       expect(cdep2[:comperator]).to eq('^')
       expect(cdep2[:outdated]).to be_falsey
 
-      cdep3 = jspm_proj.dependencies[2]
+      cdep3 = proj.dependencies[4]
       expect(cdep3[:name]).to eq(babel[:name])
       expect(cdep3[:prod_key]).to eq(babel[:prod_key])
       expect(cdep3[:language]).to eq(babel[:language])
-      expect(cdep3[:scope]).to eq(Dependency::A_SCOPE_DEVELOPMENT)
+      expect(cdep3[:scope]).to eq("jspm_#{Dependency::A_SCOPE_DEVELOPMENT}")
       expect(cdep3[:version_requested]).to eq('5.0.0')
       expect(cdep3[:version_label]).to eq('^5.0.0')
       expect(cdep3[:comperator]).to eq('^')

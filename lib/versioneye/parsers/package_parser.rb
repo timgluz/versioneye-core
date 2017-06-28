@@ -52,12 +52,13 @@ class PackageParser < CommonParser
     if optionalDependencies && !optionalDependencies.empty?
       parse_dependencies optionalDependencies, project, Dependency::A_SCOPE_OPTIONAL
     end
-    project.dep_number = project.dependencies.size
 
     if data.has_key?('jspm')
       symbolized_doc = from_json content
       parse_jspm_doc( symbolized_doc, project )
     end
+
+    project.dep_number = project.dependencies.size
 
     project
   rescue => e
@@ -80,6 +81,7 @@ class PackageParser < CommonParser
 
     dependency = init_dependency( product, package_name )
     dependency.scope = scope
+    dependency.project = project
     parse_requested_version( version_label, dependency, product )
 
     is_outdated = ProjectdependencyService.outdated?(dependency, product, @auth_token)
@@ -395,7 +397,6 @@ class PackageParser < CommonParser
       project, jspm_doc[:peerDependencies], Dependency::A_SCOPE_OPTIONAL, proj_doc[:registry]
     )
 
-    project.dep_number = project.dependencies.size
     project
   rescue => e
     log.error "parse_jspm_doc: failed to parse JSPM document,\n `#{proj_doc}`"
@@ -425,6 +426,7 @@ class PackageParser < CommonParser
     end
 
     dep = init_dependency( product, pkg_id )
+    dep.project = project
     dep.scope = "jspm_#{scope}"
     if github_match
       dep.ext_link = "https://github.com/#{github_match[1]}"
