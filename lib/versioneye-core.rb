@@ -66,6 +66,8 @@ class VersioneyeCore
 
     puts "START to import spdx licenses"
     LicenseService.import_from "/app/data/spdx_license.csv"
+
+    GlobalSetting.set( 'enterprise', 'sync_db', '17 2 * * *' )
     puts "---"
   rescue => e
     log.error e.message
