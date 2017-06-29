@@ -45,7 +45,7 @@ class Organisation < Versioneye::Model
     name
   end
 
-  def by_name name
+  def self.by_name name
     Organisation.where(:name => name).first
   end
 
