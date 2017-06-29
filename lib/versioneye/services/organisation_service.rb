@@ -60,7 +60,7 @@ class OrganisationService < Versioneye::Service
       customer = StripeService.fetch_customer orga.stripe_customer_id
       if customer
         customer.update_subscription( :plan => Plan::A_PLAN_FREE )
-        organisation.plan = Plan.free_plan
+        orga.plan = Plan.free_plan
         orga.save
       end
     end

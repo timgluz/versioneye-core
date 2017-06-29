@@ -45,6 +45,10 @@ class Organisation < Versioneye::Model
     name
   end
 
+  def by_name name
+    Organisation.where(:name => name).first
+  end
+
   def receipts
     Receipt.where(:organisation_id => self.ids)
   end
