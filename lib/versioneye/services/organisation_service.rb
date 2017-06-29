@@ -56,11 +56,13 @@ class OrganisationService < Versioneye::Service
       cwl.delete
     end
 
-    customer = StripeService.fetch_customer orga.stripe_customer_id
-    if customer
-      customer.update_subscription( :plan => Plan::A_PLAN_FREE )
-      organisation.plan = Plan.free_plan
-      orga.save
+    if !orga.stripe_customer_id.to_s.empty?
+      customer = StripeService.fetch_customer orga.stripe_customer_id
+      if customer
+        customer.update_subscription( :plan => Plan::A_PLAN_FREE )
+        organisation.plan = Plan.free_plan
+        orga.save
+      end
     end
 
     api = orga.api( false )
