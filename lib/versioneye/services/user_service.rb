@@ -73,6 +73,9 @@ class UserService < Versioneye::Service
     user.bitbucket_token  = nil
     user.bitbucket_secret = nil
 
+    api = user.api
+    api.delete
+
     user.products.clear
     if user.save
       notify_rob( user, why )

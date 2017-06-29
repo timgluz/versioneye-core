@@ -56,6 +56,18 @@ class OrganisationService < Versioneye::Service
       cwl.delete
     end
 
+    customer = StripeService.fetch_customer orga.stripe_customer_id
+    if customer
+      customer.update_subscription( :plan => Plan::A_PLAN_FREE )
+      organisation.plan = Plan.free_plan
+      orga.save
+    end
+
+    api = orga.api( false )
+    api.delete
+    api = orga.api( true )
+    api.delete
+
     orga.delete
   end
 
@@ -119,33 +131,9 @@ class OrganisationService < Versioneye::Service
   end
 
 
-  # Returns all organisations there the given user
-  # is member in. If `only_owners` is true, only the
-  # organisations are returned there the given user
-  # is in the owner team.
   def self.index user, only_owners = false
-    return Organisation.all if user.admin == true
-
-    tms = TeamMember.where(:user_id => user.ids)
-    return [] if tms.empty?
-
-    organisations = []
-    orga_ids = []
-    tms.each do |tm|
-      if tm.team.nil?
-        tm.delete
-        next
-      end
-      next if only_owners == true && !tm.team.name.eql?(Team::A_OWNERS)
-
-      orga = tm.team.organisation
-      next if orga.nil?
-      next if orga_ids.include?(orga.ids)
-
-      orga_ids.push(orga.ids)
-      organisations.push(orga)
-    end
-    organisations
+    return [] if user.nil?
+    user.orgas only_owners
   end
 
 

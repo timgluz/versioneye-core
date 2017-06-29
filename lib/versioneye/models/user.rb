@@ -420,6 +420,37 @@ class User < Versioneye::Model
     false
   end
 
+
+  # Returns all organisations there the given user
+  # is member in. If `only_owners` is true, only the
+  # organisations are returned there the given user
+  # is in the owner team.
+  def orgas only_owners = false
+    return Organisation.all if user.admin == true
+
+    tms = TeamMember.where(:user_id => self.ids)
+    return [] if tms.empty?
+
+    organisations = []
+    orga_ids = []
+    tms.each do |tm|
+      if tm.team.nil?
+        tm.delete
+        next
+      end
+      next if only_owners == true && !tm.team.name.eql?(Team::A_OWNERS)
+
+      orga = tm.team.organisation
+      next if orga.nil?
+      next if orga_ids.include?(orga.ids)
+
+      orga_ids.push(orga.ids)
+      organisations.push(orga)
+    end
+    organisations
+  end
+
+
   private
 
     def check_terms
