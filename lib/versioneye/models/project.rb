@@ -218,6 +218,17 @@ class Project < Versioneye::Model
     self.s3_filename.to_s.gsub(/\A\S+\_/, "")
   end
 
+  def source_url
+    if source.to_s.eql?(A_SOURCE_URL)
+      return self.url
+    elsif source.to_s.eql?(A_SOURCE_GITHUB)
+      return "https://github.com/#{self.scm_fullname}/#{self.filename}"
+    elsif source.to_s.eql?(A_SOURCE_BITBUCKET)
+      return "https://bitbucket.org/#{self.scm_fullname}/#{self.filename}"
+    end
+    nil
+  end
+
   def self.private_project_count_by_user user_id
     Project.where( user_id: user_id, private_project: true, :parent_id => nil ).count
   end

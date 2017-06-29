@@ -58,6 +58,16 @@ class UserMailer < SuperMailer
   end
 
 
+  def project_removed( user, project )
+    @user    = user
+    @project = project
+    m = mail(:to => user.email, :subject => "Project #{project.name} removed") do |format|
+      format.html{ render layout: 'email_html_layout' }
+    end
+    set_from( m )
+  end
+
+
   def deleted( user, why )
     @user = user
     @why = why

@@ -528,6 +528,16 @@ class ProjectService < Versioneye::Service
   end
 
 
+  def self.cleanup
+    Project.where(:parsing_errors.ne => []).each do |project|
+      next if project.children.count > 0
+
+      UserMailer.project_removed( project.user, project ).deliver_now
+      destroy_single project.ids
+    end
+  end
+
+
   private
 
     # TODO optimize this by only loading affected deps.

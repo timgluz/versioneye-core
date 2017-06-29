@@ -1,0 +1,15 @@
+<p>
+  Hello <%= @user.fullname %>
+</p>
+<p>
+  There was a VersionEye project created from this file <a href="<%= @project.source_url %>"><%= @project.source_url %></a>.<br/>
+  Unfortunately the file can not be fetched anymore, that's why the project was removed.
+  If the file was just renamed or moved you can create a new VersionEye project out of it.
+</p>
+<p>
+  Your remaining projects are here: <a href="<%= Settings.instance.server_url %>/organisations/<%= @project.organisation.name %>"><%= Settings.instance.server_url %>/organisations/<%= @project.organisation.name %></a>
+</p>
+<p>
+  Have a great day!
+  Your VersionEye Team
+</p>
