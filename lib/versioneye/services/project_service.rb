@@ -532,7 +532,9 @@ class ProjectService < Versioneye::Service
     Project.where(:parsing_errors.ne => []).each do |project|
       next if project.children.count > 0
 
-      UserMailer.project_removed( project.user, project ).deliver_now
+      if project.user && project.user.deleted_user != true
+        UserMailer.project_removed( project.user, project ).deliver_now
+      end
       destroy_single project.ids
     end
   end
