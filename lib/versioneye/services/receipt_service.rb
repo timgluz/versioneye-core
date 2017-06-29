@@ -46,7 +46,7 @@ class ReceiptService < Versioneye::Service
   end
 
 
-  def self.handle_orga( orga )
+  def self.handle_orga( orga, send_email = true )
     customer = StripeService.fetch_customer orga.stripe_customer_id
     return nil if customer.nil?
 
@@ -54,7 +54,7 @@ class ReceiptService < Versioneye::Service
     return nil if invoices.nil? || invoices.count == 0
 
     invoices.each do |invoice|
-      handle_invoice orga, invoice
+      handle_invoice orga, invoice, send_email
     end
   rescue => e
     log.error e.message
@@ -62,7 +62,7 @@ class ReceiptService < Versioneye::Service
   end
 
 
-  def self.handle_invoice orga, invoice
+  def self.handle_invoice orga, invoice, send_email = true
     receipt = Receipt.where(:invoice_id => invoice[:id]).shift
     return receipt if receipt # Early exit if receipt exist already in db
 
@@ -72,7 +72,7 @@ class ReceiptService < Versioneye::Service
     pdf     = compile_pdf_invoice html
     upload( receipt, pdf )
     if receipt.save && orga.plan && orga.plan.name_id.to_s.match(/\A04/)
-      email receipt, pdf
+      email( receipt, pdf ) if send_email == true
     else
       log.error "Could not persist receipt for orga '#{orga.id}' and invoice '#{invoice[:id]}' - #{receipt.errors.full_messages}"
     end
