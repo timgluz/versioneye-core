@@ -426,7 +426,7 @@ class User < Versioneye::Model
   # organisations are returned there the given user
   # is in the owner team.
   def orgas only_owners = false
-    return Organisation.all if user.admin == true
+    return Organisation.all if self.admin == true
 
     tms = TeamMember.where(:user_id => self.ids)
     return [] if tms.empty?
