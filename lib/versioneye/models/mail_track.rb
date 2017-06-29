@@ -7,10 +7,13 @@ class MailTrack < Versioneye::Model
   A_TEMPLATE_PROJECT_SV   = 'projects_security_email'
   A_TEMPLATE_NEWSLETTER   = 'newsletter'
   A_TEMPLATE_TEAM_NOTIFICATION = 'team_notification'
+  A_TEMPLATE_PROJECT_REMOVED = 'proejct_removed'
 
   field :user_id    , type: String
   field :template   , type: String
   field :period     , type: String
+  field :project_name, type: String
+  field :project_url, type: String
   field :project_id , type: String
   field :project_ids, type: Array
   field :team_id    , type: String
@@ -27,6 +30,11 @@ class MailTrack < Versioneye::Model
 
   def self.add_team template_name, orga_id = nil, team_id = nil, project_ids = nil
     MailTrack.new(:template => template_name, :orga_id => orga_id, :team_id => team_id, :project_ids => project_ids ).save
+  end
+
+
+  def self.add_project_deletion user_id, orga_id = nil, project_name, project_url
+    MailTrack.new(:template => A_TEMPLATE_PROJECT_REMOVED, :orga_id => orga_id, :user_id => user_id, :project_name => project_name, :project_url => project_url ).save
   end
 
 

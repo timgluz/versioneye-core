@@ -534,6 +534,7 @@ class ProjectService < Versioneye::Service
 
       if project.user && project.user.deleted_user != true
         UserMailer.project_removed( project.user, project ).deliver_now
+        MailTrack.add_project_deletion project.user.ids, project.organisation_id, project.name, project.source_url
       end
       destroy_single project.ids
     end

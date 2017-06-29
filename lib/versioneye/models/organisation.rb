@@ -28,6 +28,9 @@ class Organisation < Versioneye::Model
   # Skip license check on pull requests
   field :skip_license_check_on_pr, type: Boolean, default: false
 
+  field :plan_period_start, type: Time
+  field :plan_period_end  , type: Time
+
   belongs_to :plan
   has_one    :billing_address
   has_many   :projects
