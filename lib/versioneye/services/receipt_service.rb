@@ -31,6 +31,7 @@ class ReceiptService < Versioneye::Service
 
     orgas.each do |orga|
       next if orga.nil?
+      next if orga.plan.price.to_s.eql?('0')
       next if orga.plan.name_id.eql?(Plan::A_PLAN_FREE)
       next if orga.plan.name_id.eql?('01_free')
       next if orga.plan.name_id.eql?('02_free')
