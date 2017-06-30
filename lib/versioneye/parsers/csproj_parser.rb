@@ -16,11 +16,16 @@ class CsprojParser < NugetParser
   def parse_dependency(pkg_node)
     prod_key = pkg_node.attr('Include').to_s.strip
     version_label = if pkg_node.has_attribute?('Version')
-                      pkg_node.attr('Version').to_s.strip
+                      pkg_node.attr('Version').to_s
                     else
                       #version wasnt specified as attribute, check child nodes
                       pkg_node.xpath('//Version').text
                     end
+    version_label = version_label.to_s.strip
+    # solves issue #97 - "1.2.3" is default equal to "[1.2.3]"
+    if version_label[0] != '(' and version_label[0] != '['
+      version_label = "[#{version_label}]"
+    end
 
     init_dependency(prod_key, version_label, nil, Dependency::A_SCOPE_COMPILE)
   end

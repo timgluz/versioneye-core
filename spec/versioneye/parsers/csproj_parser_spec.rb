@@ -41,7 +41,7 @@ describe 'CsprojParser' do
       expect(deps[1][:language]).to eq(product2[:language])
       expect(deps[1][:prod_key]).to eq(product2[:prod_key])
       expect(deps[1][:name]).to eq(product2[:name])
-      expect(deps[1][:version_label]).to eq('1.1.0')
+      expect(deps[1][:version_label]).to eq('[1.1.0]')
 
     end
   end
@@ -78,8 +78,8 @@ describe 'CsprojParser' do
       expect(dep2[:language]).to eq(product2[:language])
       expect(dep2[:scope]).to eq(Dependency::A_SCOPE_COMPILE)
       expect(dep2[:version_requested]).to eq('1.1.0')
-      expect(dep2[:version_label]).to eq('1.1.0')
-      expect(dep2[:comperator]).to eq('>=')
+      expect(dep2[:version_label]).to eq('[1.1.0]')
+      expect(dep2[:comperator]).to eq('=')
       expect(dep2[:outdated]).to be_falsey
 
     end
