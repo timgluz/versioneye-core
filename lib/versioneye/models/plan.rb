@@ -221,7 +221,7 @@ class Plan < Versioneye::Model
   end
 
   def self.current_plans
-    Plan.where(name_id: /\A04/)
+    Plan.where(name_id: /\A04/).asc(:price)
   end
 
   def self.free_plan
