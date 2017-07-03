@@ -43,6 +43,8 @@ class CommonWorker < Worker
       LanguageService.update_distinct_languages
     elsif message.eql?("remove_temp_projects")
       ProjectService.remove_temp_projects
+    elsif message.eql?('remove_broken_projects')
+      ProjectService.cleanup
     elsif message.eql?('update_authors')
       AuthorService.update_authors_all
     end
