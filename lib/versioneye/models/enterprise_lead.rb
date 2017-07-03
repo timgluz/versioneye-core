@@ -7,9 +7,11 @@ class EnterpriseLead < Versioneye::Model
   field :repository    , type: String, default: 'nexus'
   field :ci            , type: String, default: 'jenkins'
   field :virtualization, type: String, default: 'vmware'
+  field :package_managers, type: String
   field :name          , type: String
   field :email         , type: String
   field :note          , type: String
+
 
   validates_presence_of :scm,            :message => 'is mandatory'
   validates_presence_of :repository,     :message => 'is mandatory'
