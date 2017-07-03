@@ -221,7 +221,15 @@ class Plan < Versioneye::Model
   end
 
   def self.current_plans
-    Plan.where(name_id: /\A04/).asc(:price)
+    Plan.where(name_id: /\A04/)
+  end
+
+  def self.current_plans_monthly
+    Plan.where(:period => A_PERIOD_MONTHLY, name_id: /\A04/).asc(:private_projects)
+  end
+
+  def self.current_plans_yearly
+    Plan.where(:period => A_PERIOD_YEARLY, name_id: /\A04/).asc(:private_projects)
   end
 
   def self.free_plan
