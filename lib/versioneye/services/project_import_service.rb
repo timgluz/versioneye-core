@@ -297,7 +297,6 @@ class ProjectImportService < Versioneye::Service
     project.source      = Project::A_SOURCE_UPLOAD
     project.source      = Project::A_SOURCE_API if api_created
     project.user        = user
-    project.period      = Settings.instance.default_project_period
     project.public      = Settings.instance.default_project_public
 
     update_project_with_orga( project, orga_id, user )

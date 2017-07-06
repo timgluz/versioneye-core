@@ -177,8 +177,11 @@ class ProjectService < Versioneye::Service
     ensure_unique_scm( project )
 
     if project.save
+      log.info "#{project.ids} - save dependencies"
       project.save_dependencies
+      log.info "#{project.ids} - update_license_numbers"
       update_license_numbers!( project )
+      log.info "#{project.ids} - update_security"
       ProjectdependencyService.update_security project
       SyncService.sync_project_async project # For Enterprise environment only!
     else

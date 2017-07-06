@@ -148,6 +148,9 @@ class ProjectdependencyService < Versioneye::Service
 
 
   def self.update_licenses_security project
+    return nil if project.nil?
+
+    log.info "start update_licenses_security for #{project.ids}"
     project.update_attribute(:sv_count, 0)
     project.update_attribute(:sv_count_sum, 0)
     pcount1 = Projectdependency.where(:project_id => project.id).count
@@ -164,6 +167,7 @@ class ProjectdependencyService < Versioneye::Service
       project.reload
       update_licenses_security( project )
     end
+    log.info "finish update_licenses_security for #{project.ids}"
     project
   rescue => e
     log.error e.message
