@@ -14,4 +14,12 @@ class ApiCmp < Versioneye::Model
 
   validates :api_key, presence: true
 
+  def prod_key_decoded
+    self.prod_key.to_s.gsub(":", "/").gsub("~", ".")
+  end
+
+  def product
+    Product.fetch_product self.language, self.prod_key_decoded
+  end
+
 end
