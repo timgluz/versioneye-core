@@ -98,7 +98,6 @@ class ProjectImportService < Versioneye::Service
       scm_branch: branch,
       s3_filename: filename,
       url: project_file[:url],
-      period: Settings.instance.default_project_period,
       public: Settings.instance.default_project_public
     })
 
@@ -184,7 +183,6 @@ class ProjectImportService < Versioneye::Service
       private_project: private_project,
       s3_filename: filename,
       url: nil,
-      period: Settings.instance.default_project_period,
       public: Settings.instance.default_project_public
     })
 
@@ -238,7 +236,6 @@ class ProjectImportService < Versioneye::Service
       private_project: private_project,
       s3_filename: filename,
       url: nil,
-      period: Settings.instance.default_project_period,
       public: Settings.instance.default_project_public
     })
 
@@ -264,7 +261,6 @@ class ProjectImportService < Versioneye::Service
       source: Project::A_SOURCE_URL,
       s3_filename: project_name,
       url: url,
-      period: Settings.instance.default_project_period,
       public: Settings.instance.default_project_public
     })
 

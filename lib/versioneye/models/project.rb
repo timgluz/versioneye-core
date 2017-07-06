@@ -107,7 +107,6 @@ class Project < Versioneye::Model
   scope :by_user_id, ->(user_id) { where(user_id: user_id.to_s) }
   scope :by_id     , ->(id)      { where(_id: id.to_s) }
   scope :by_source , ->(source)  { where(source:  source ) }
-  scope :by_period , ->(period)  { where(period:  period ) }
   scope :parents   , -> { where(parent_id: nil ) }
   scope :by_github , ->(reponame){ where(source: A_SOURCE_GITHUB, scm_fullname: reponame) }
 

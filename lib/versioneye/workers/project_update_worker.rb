@@ -1,6 +1,6 @@
 class ProjectUpdateWorker < Worker
 
-# This worker handels the period update jobs (DAILY, WEEKLY, MONTHLY)
+# This worker handels the period update jobs
 # And the single project updates.
 
   def work
