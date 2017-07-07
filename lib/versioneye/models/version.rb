@@ -9,6 +9,9 @@ class Version < Versioneye::Model
   field :pom            , type: String # maven specific
   field :tag            , type: String # biicode specific - git tag string
   field :status         , type: String # Userd in biitcode & Nuget - [STABLE, DEV, PRERELEASE]
+
+  field :release_id     , type: String # CPAN specific, it's unique id to get version release details
+  field :modules        , type: Array  # Cpan specific, it includes all the version specific modules
   field :released_at    , type: DateTime, default: DateTime.now
   field :released_string, type: String
   field :sv_ids         , type: Array, default: []  # SecurityVulnerability IDs

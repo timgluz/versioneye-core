@@ -29,6 +29,7 @@ class Product < Versioneye::Model
   field :group_id_orig   , type: String # Maven specific
   field :artifact_id_orig, type: String # Maven specific
   field :repo_name, type: String # GoLang specific
+  field :modules, type: Array # CPAN specific, each pod may have 100s of subfolders/modules
 
   field :description       , type: String
   field :description_manual, type: String
