@@ -224,8 +224,8 @@ describe Product do
       product1.versions.push( Version.new({version: '1.4.0'}) )
       product1.save
 
-      expect( described_class.fetch_product( Product::A_LANGUAGE_RUBY, 'Bee' ) ).not be_nil
-      expect( described_class.fetch_product( Product::A_LANGUAGE_RUBY, 'bee' ) ).not be_nil
+      expect( described_class.fetch_product( Product::A_LANGUAGE_RUBY, 'Bee' ) ).not_to be_nil
+      expect( described_class.fetch_product( Product::A_LANGUAGE_RUBY, 'bee' ) ).not_to be_nil
 
       result = described_class.fetch_product( Product::A_LANGUAGE_RUBY, 'bee' )
 
@@ -822,7 +822,7 @@ describe Product do
       link.name = "Name"
       expect( link.save ).to be_truthy
       db_link = Versionlink.find(link.id)
-      db_link.should_not be_nil
+      expect( db_link ).not_to be_nil
       links = product.http_links
       expect( links.size ).to eq(1)
       link.remove
