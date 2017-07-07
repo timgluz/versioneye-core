@@ -51,14 +51,14 @@ class CpanParser < CommonParser
 
     parse_content(body, url)
   end
-  
+
   def parse_content(cpan_doc, url = "")
     return nil if cpan_doc.empty?
 
     project = init_project(url)
     deps = parse_dependencies(cpan_doc)
     save_project_dependencies(project, deps)
-    
+
     project.dep_number = project.projectdependencies.size
     project
   rescue => e
@@ -162,7 +162,7 @@ class CpanParser < CommonParser
   end
 
   def save_project_dependency(project, dep)
-    product = Product.find_by(language: Product::A_LANGUAGE_PERL, prod_key: dep[:prod_key])
+    product = Product.fetch_cpan(  dep[:prod_key] )
     if product
       dep[:version_current] = product.version
     end
@@ -200,7 +200,7 @@ class CpanParser < CommonParser
     if line.empty?
       return [current_scope, nil]
     end
-    
+
     if ( m = @rules[:comment].match(line) )
       #ignore lines which are commented out
       [current_scope, nil]
@@ -241,7 +241,7 @@ class CpanParser < CommonParser
   def extract_dependency(current_scope, line)
     if ( m = @rules[:dependency].match(line) )
       init_dependency(m[:package], m[:ranges], current_scope)
-    
+
     elsif ( m = @rules[:plain_dependency].match(line) )
       init_dependency(m[:package], nil, current_scope)
     else

@@ -261,6 +261,65 @@ describe Product do
     end
   end
 
+  let(:cpan_prod1){
+    Product.new(
+      language: Product::A_LANGUAGE_PERL,
+      prod_type: Project::A_TYPE_CPAN,
+      prod_key: 'DBD::SQLite',
+      name: 'DBD-SQLite',
+      name_downcase: 'dbd-sqlite',
+      version: '1.54'
+    )
+  }
+
+  let(:cpan_prod2){
+    Product.new(
+      language: Product::A_LANGUAGE_PERL,
+      prod_type: Project::A_TYPE_CPAN,
+      prod_key: 'DBD',
+      name: 'DBD',
+      name_downcase: 'dbd',
+      version: '0.2'
+    )
+  }
+
+
+  describe "fetch_cpan" do
+    before do
+      cpan_prod1.save
+      cpan_prod2.save
+    end
+
+    it "finds match by parent module name" do
+      prod = Product.fetch_cpan(cpan_prod1[:prod_key])
+
+      expect(prod).not_to be_nil
+      expect(prod[:language]).to eq(cpan_prod1[:language])
+      expect(prod[:prod_type]).to eq(cpan_prod1[:prod_type])
+      expect(prod[:prod_key]).to eq(cpan_prod1[:prod_key])
+      expect(prod[:name]).to eq(cpan_prod1[:name])
+    end
+
+    it "finds match by submodule" do
+      prod = Product.fetch_cpan('DBD::SQLite::VirtualTable::FileContent::Cursor')
+
+      expect(prod).not_to be_nil
+      expect(prod[:language]).to eq(cpan_prod1[:language])
+      expect(prod[:prod_type]).to eq(cpan_prod1[:prod_type])
+      expect(prod[:prod_key]).to eq(cpan_prod1[:prod_key])
+      expect(prod[:name]).to eq(cpan_prod1[:name])
+    end
+
+    it "finds match by distribution id" do
+      prod = Product.fetch_cpan('DBD-SQLite')
+
+      expect(prod).not_to be_nil
+      expect(prod[:language]).to eq(cpan_prod1[:language])
+      expect(prod[:prod_type]).to eq(cpan_prod1[:prod_type])
+      expect(prod[:prod_key]).to eq(cpan_prod1[:prod_key])
+      expect(prod[:name]).to eq(cpan_prod1[:name])
+    end
+  end
 
   describe "find_by_key" do
 
@@ -339,7 +398,7 @@ describe Product do
       product.group_id = group
       product.artifact_id = artifact
       product.save
-      version = Version.new
+
       prod = described_class.find_by_group_and_artifact(group, artifact)
       prod.should_not be_nil
       prod.group_id.should eql(group)
