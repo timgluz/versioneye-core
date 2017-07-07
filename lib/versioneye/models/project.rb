@@ -33,10 +33,6 @@ class Project < Versioneye::Model
   A_SOURCE_STASH     = 'stash'
   A_SOURCE_API       = 'API'
 
-  A_PERIOD_MONTHLY = 'monthly'
-  A_PERIOD_WEEKLY  = 'weekly'
-  A_PERIOD_DAILY   = 'daily'
-
   field :name         , type: String
   field :name_downcase, type: String # downcased name, because MongoDB doesn't support case insensitive search.
   field :description  , type: String
@@ -49,7 +45,6 @@ class Project < Versioneye::Model
 
   field :language      , type: String
   field :project_type  , type: String,  :default => A_TYPE_MAVEN2
-  field :period        , type: String,  :default => A_PERIOD_DAILY
   field :notify_after_api_update, type: Boolean, :default => false
 
   field :email         , type: String
@@ -112,7 +107,6 @@ class Project < Versioneye::Model
   scope :by_user_id, ->(user_id) { where(user_id: user_id.to_s) }
   scope :by_id     , ->(id)      { where(_id: id.to_s) }
   scope :by_source , ->(source)  { where(source:  source ) }
-  scope :by_period , ->(period)  { where(period:  period ) }
   scope :parents   , -> { where(parent_id: nil ) }
   scope :by_github , ->(reponame){ where(source: A_SOURCE_GITHUB, scm_fullname: reponame) }
 

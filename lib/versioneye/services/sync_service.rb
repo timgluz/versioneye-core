@@ -57,7 +57,7 @@ class SyncService < Versioneye::Service
     return nil if !env.to_s.eql?("enterprise")
     return nil if project.sync_lock == true
 
-    project_id = project.id.to_s
+    project_id = project.ids
     SyncProducer.new "project::#{project_id}"
   end
 
@@ -391,6 +391,8 @@ class SyncService < Versioneye::Service
 
 
     def self.parsed_date released_at
+      return nil if released_at.to_s.empty?
+
       DateTime.parse( released_at )
     rescue => e
       log.error "parsed_date: failed to parse `#{released_at}`"
