@@ -2,17 +2,21 @@
 http_interactions:
 - request:
     method: delete
-    uri: https://api.github.com/repos/timgluz/versioneye-core/hooks/14264227
+    uri: https://api.github.com/repos/timgluz/versioneye-core/hooks/14810962
     body:
-      encoding: US-ASCII
-      string: ''
+      encoding: UTF-8
+      string: "{}"
     headers:
       Accept:
       - application/vnd.github.v3+json
       User-Agent:
-      - Chrome/28(www.versioneye.com, support@versioneye.com)
-      Connection:
-      - Keep-Alive
+      - Octokit Ruby Gem 4.7.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - token 6dadec9f9f3f62409c2d6c674ac2bf6d4e601493
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
   response:
     status:
       code: 204
@@ -21,17 +25,17 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Fri, 09 Jun 2017 08:19:41 GMT
+      - Fri, 07 Jul 2017 15:06:53 GMT
       Status:
       - 204 No Content
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4996'
+      - '4998'
       X-Ratelimit-Reset:
-      - '1496999763'
+      - '1499443612'
       X-Oauth-Scopes:
-      - admin:org_hook, admin:repo_hook, repo
+      - admin:org_hook, admin:repo_hook, read:org, repo
       X-Accepted-Oauth-Scopes:
       - admin:repo_hook, public_repo, repo
       X-Github-Media-Type:
@@ -52,16 +56,16 @@ http_interactions:
       X-Xss-Protection:
       - 1; mode=block
       X-Runtime-Rack:
-      - '0.034792'
+      - '0.051521'
       Vary:
       - Accept-Encoding
       X-Served-By:
-      - 7b641bda7ec2ca7cd9df72d2578baf75
+      - 10ea50bffaded85949561216def301f3
       X-Github-Request-Id:
-      - EF4C:651A:1DAA064:2379E11:593A5A1D
+      - D576:17D45:171996:202A5A:595FA38C
     body:
       encoding: UTF-8
       string: ''
     http_version: 
-  recorded_at: Fri, 09 Jun 2017 08:19:41 GMT
+  recorded_at: Fri, 07 Jul 2017 15:06:53 GMT
 recorded_with: VCR 3.0.3
