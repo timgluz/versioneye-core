@@ -3,7 +3,7 @@ require 'spec_helper'
 describe GemfileParser do
 
   describe "helper functions" do
-    let(:parser){ GemfilelockParser.new }
+    let(:parser){ GemfileParser.new }
 
     describe "strip_platform_quotes" do
       it "returns non-matching strings untouched" do
@@ -146,105 +146,105 @@ describe GemfileParser do
       expect( project.dependencies.size ).to eql(15)
 
       dep_1 = fetch_by_name project.dependencies, "rails"
-      dep_1.name.should eql("rails")
-      dep_1.version_requested.should eql("3.2.6")
-      dep_1.comperator.should eql("=")
+      expect( dep_1.name ).to eql("rails")
+      expect( dep_1.version_requested).to eql("3.2.6")
+      expect( dep_1.comperator).to eql("=")
       expect( dep_1.language ).to eql(Product::A_LANGUAGE_RUBY)
 
       dep_2 = fetch_by_name project.dependencies, "jquery-rails"
-      dep_2.name.should eql("jquery-rails")
-      dep_2.version_requested.should eql("1.0.0")
-      dep_2.version_current.should eql("1.0.0")
-      dep_2.comperator.should eql("=")
+      expect( dep_2.name).to eql("jquery-rails")
+      expect( dep_2.version_requested).to eql("1.0.0")
+      expect( dep_2.version_current).to eql("1.0.0")
+      expect( dep_2.comperator).to eql("=")
       expect( dep_2.language ).to eql(Product::A_LANGUAGE_RUBY)
 
       dep_3 = fetch_by_name project.dependencies, "execjs"
-      dep_3.name.should eql("execjs")
-      dep_3.version_requested.should eql("1.3.0")
-      dep_3.version_current.should eql("1.4.0")
-      dep_3.version_label.should eql("1.4.0")
-      dep_3.comperator.should eql("<")
+      expect( dep_3.name).to eql("execjs")
+      expect( dep_3.version_requested).to eql("1.3.0")
+      expect( dep_3.version_current).to eql("1.4.0")
+      expect( dep_3.version_label).to eql("1.4.0")
+      expect( dep_3.comperator).to eql("<")
       expect( dep_3.language ).to eql(Product::A_LANGUAGE_RUBY)
 
       dep_4 = fetch_by_name project.dependencies, "therubyracer"
-      dep_4.name.should eql("therubyracer")
-      dep_4.version_requested.should eql("0.11.3")
-      dep_4.version_current.should eql("0.11.3")
-      dep_4.version_label.should eql("0.10.1")
-      dep_4.comperator.should eql(">")
+      expect( dep_4.name).to eql("therubyracer")
+      expect( dep_4.version_requested).to eql("0.11.3")
+      expect( dep_4.version_current).to eql("0.11.3")
+      expect( dep_4.version_label).to eql("0.10.1")
+      expect( dep_4.comperator).to eql(">")
       expect( dep_4.language ).to eql(Product::A_LANGUAGE_RUBY)
 
       dep_5 = fetch_by_name project.dependencies, "will_paginate"
-      dep_5.name.should eql("will_paginate")
-      dep_5.version_requested.should eql("3.0.3")
-      dep_5.version_current.should eql("4.0.3")
-      dep_5.version_label.should eql("3.0.3")
-      dep_5.comperator.should eql("<=")
+      expect( dep_5.name).to eql("will_paginate")
+      expect( dep_5.version_requested).to eql("3.0.3")
+      expect( dep_5.version_current).to eql("4.0.3")
+      expect( dep_5.version_label).to eql("3.0.3")
+      expect( dep_5.comperator).to eql("<=")
 
       dep_6 = fetch_by_name project.dependencies, "gravatar_image_tag"
-      dep_6.name.should eql("gravatar_image_tag")
-      dep_6.version_requested.should eql("1.1.6")
-      dep_6.version_current.should eql("1.1.6")
-      dep_6.version_label.should eql("1.1.3")
-      dep_6.comperator.should eql(">=")
-      dep_6.release.should_not be_nil
-      dep_6.release.should be_truthy
+      expect( dep_6.name).to eql("gravatar_image_tag")
+      expect( dep_6.version_requested).to eql("1.1.6")
+      expect( dep_6.version_current).to eql("1.1.6")
+      expect( dep_6.version_label).to eql("1.1.3")
+      expect( dep_6.comperator).to eql(">=")
+      expect( dep_6.release).to_not be_nil
+      expect( dep_6.release).to be_truthy
 
       dep_7 = fetch_by_name project.dependencies, "sassy"
-      dep_7.name.should eql("sassy")
-      dep_7.version_requested.should eql("3.2.9")
-      dep_7.version_current.should eql("3.3.9")
-      dep_7.version_label.should eql("3.2.0")
-      dep_7.comperator.should eql("~>")
+      expect( dep_7.name).to eql("sassy")
+      expect( dep_7.version_requested).to eql("3.2.9")
+      expect( dep_7.version_current).to eql("3.3.9")
+      expect( dep_7.version_label).to eql("3.2.0")
+      expect( dep_7.comperator).to eql("~>")
 
       dep_8 = fetch_by_name project.dependencies, "sass-rails"
-      dep_8.name.should eql("sass-rails")
-      dep_8.version_requested.should eql("3.3.9")
-      dep_8.version_current.should eql("3.3.9")
-      dep_8.comperator.should eql("~>")
-      dep_8.outdated.should be_falsey
+      expect( dep_8.name).to eql("sass-rails")
+      expect( dep_8.version_requested).to eql("3.3.9")
+      expect( dep_8.version_current).to eql("3.3.9")
+      expect( dep_8.comperator).to eql("~>")
+      expect( dep_8.outdated).to be_falsey
 
       dep_9 = fetch_by_name project.dependencies, "cucumber-rails"
-      dep_9.name.should eql("cucumber-rails")
-      dep_9.version_requested.should eql("1.0.0")
-      dep_9.version_current.should eql("1.0.0")
-      dep_9.comperator.should eql("=")
+      expect( dep_9.name).to eql("cucumber-rails")
+      expect( dep_9.version_requested).to eql("1.0.0")
+      expect( dep_9.version_current).to eql("1.0.0")
+      expect( dep_9.comperator).to eql("=")
 
       dep_10 = fetch_by_name project.dependencies, "fastercsv"
-      dep_10.name.should eql("fastercsv")
-      dep_10.version_requested.should eql("1.0.0")
-      dep_10.version_current.should eql("1.0.0")
-      dep_10.comperator.should eql("=")
+      expect( dep_10.name).to eql("fastercsv")
+      expect( dep_10.version_requested).to eql("1.0.0")
+      expect( dep_10.version_current).to eql("1.0.0")
+      expect( dep_10.comperator).to eql("=")
 
       dep_11 = fetch_by_name project.dependencies, "guard-livereload"
-      dep_11.name.should eql("guard-livereload")
-      dep_11.version_requested.should eql("1.0.0")
-      dep_11.version_current.should eql("1.0.0")
-      dep_11.comperator.should eql("=")
+      expect( dep_11.name).to eql("guard-livereload")
+      expect( dep_11.version_requested).to eql("1.0.0")
+      expect( dep_11.version_current).to eql("1.0.0")
+      expect( dep_11.comperator).to eql("=")
 
       dep_12 = fetch_by_name project.dependencies, "copycopter_client"
-      dep_12.name.should eql("copycopter_client")
-      dep_12.version_requested.should eql("GIT")
-      dep_12.version_current.should eql("1.0.0")
-      dep_12.comperator.should eql("=")
+      expect( dep_12.name).to eql("copycopter_client")
+      expect( dep_12.version_requested).to eql("GIT")
+      expect( dep_12.version_current).to eql("1.0.0")
+      expect( dep_12.comperator).to eql("=")
 
       dep_13 = fetch_by_name project.dependencies, "govkit"
-      dep_13.name.should eql("govkit")
-      dep_13.version_requested.should eql("PATH")
-      dep_13.version_current.should eql("1.0.0")
-      dep_13.comperator.should eql("=")
+      expect( dep_13.name).to eql("govkit")
+      expect( dep_13.version_requested).to eql("PATH")
+      expect( dep_13.version_current).to eql("1.0.0")
+      expect( dep_13.comperator).to eql("=")
 
       dep_15 = fetch_by_name project.dependencies, "libnotify"
-      dep_15.name.should eql("libnotify")
-      dep_15.version_requested.should eql("1.0.0")
-      dep_15.version_current.should eql("1.0.0")
-      dep_15.comperator.should eql("=")
+      expect( dep_15.name).to eql("libnotify")
+      expect( dep_15.version_requested).to eql("1.0.0")
+      expect( dep_15.version_current).to eql("1.0.0")
+      expect( dep_15.comperator).to eql("=")
 
       dep_16 = fetch_by_name project.dependencies, "growl"
-      dep_16.name.should eql("growl")
-      dep_16.version_requested.should eql("3.3.3")
-      dep_16.version_current.should eql("3.3.3")
-      dep_16.comperator.should eql("=")
+      expect( dep_16.name).to eql("growl")
+      expect( dep_16.version_requested).to eql("3.3.3")
+      expect( dep_16.version_current).to eql("3.3.3")
+      expect( dep_16.comperator).to eql("=")
     end
   end
 
