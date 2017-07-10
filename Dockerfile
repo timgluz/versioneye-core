@@ -24,6 +24,5 @@ ADD . /app/
 WORKDIR /app
 
 RUN bundle update; \
-    apt-get remove --purge -y git; \
     apt-get remove --purge --force-yes `apt-mark showauto`; \
     apt-get clean;
