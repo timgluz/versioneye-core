@@ -233,10 +233,36 @@ class GemfileParser < CommonParser
   end
 
 
-  def fetch_line_elements( line )
+  # splits line into sub-items
+  # it will keep list items as it is and
+  # it removes leading spaces from each sub-item
+  def fetch_line_elements( line, separator = ',' )
     line = replace_comments( line )
     line = line.to_s.strip
-    line.split(",")
+
+    tokens = []
+    in_list = false
+    token = ''
+    line.each_char do |ch|
+      if ch == separator and in_list == false
+        token = token.strip
+        tokens << token
+        token = ''
+      else
+        token += ch
+      end
+
+      # update state machine
+      if ch == '['
+        in_list = true
+      elsif ch == ']'
+        in_list = false
+      end
+
+    end
+
+    tokens << token.strip # the last left over
+    tokens
   end
 
   def fetch_gem_name( line_elements )
@@ -256,6 +282,9 @@ class GemfileParser < CommonParser
   # returns:
   #   version_label, string
   def fetch_version( gem_doc )
+    return "" if gem_doc.nil?
+    return "" if gem_doc.is_a?(Hash) != true
+
     version = if gem_doc.fetch(:version, '').to_s.size > 0
                 gem_doc[:version]
               elsif gem_doc.has_key?(:github)
@@ -272,7 +301,7 @@ class GemfileParser < CommonParser
 
     #removes -x64,-x86, -mingw32 etc from version id
     version = strip_quotes(version)
-    strip_platform_exts(version)
+    strip_platform_exts(version).to_s
   end
 
 

@@ -11,21 +11,33 @@ describe GemfileParser do
     it "returns the right elements" do
       line = "gem 'will_paginate'     , '<= 3.0.3'"
       elements = @parser.fetch_line_elements( line )
+
       elements.should_not be_nil
       elements.size.should eq(2)
-      elements.first.should eql("gem 'will_paginate'     ")
-      elements.last.should  eql(" '<= 3.0.3'")
+      elements.first.should eql("gem 'will_paginate'")
+      elements.last.should  eql("'<= 3.0.3'")
     end
 
     it "returns the right elements without comments" do
       line = " gem 'will_paginate'     , '<= 3.0.3' # comment "
       elements = @parser.fetch_line_elements( line )
+
       elements.should_not be_nil
       elements.size.should eq(2)
-      elements.first.should eql("gem 'will_paginate'     ")
-      elements.last.should  eql(" '<= 3.0.3'")
+      elements.first.should eql("gem 'will_paginate'")
+      elements.last.should  eql("'<= 3.0.3'")
     end
 
+    it "returns the right elements for list items" do
+      line = ' gem "will_paginate", "*", platforms: ["osx", "unix"]'
+      elements = @parser.fetch_line_elements(line)
+
+      expect( elements ).not_to be_nil
+      expect( elements.size ).to eq(3)
+      expect( elements[0] ).to eq('gem "will_paginate"')
+      expect( elements[1] ).to eq('"*"')
+      expect( elements[2] ).to eq('platforms: ["osx", "unix"]')
+    end
   end
 
   describe "fetch_gem_name" do
@@ -62,51 +74,51 @@ describe GemfileParser do
 
     it "returns the right version" do
       line = "gem 'will_paginate'     , '<= 3.0.3'"
-      elements = @parser.fetch_line_elements( line )
+      elements = @parser.parse_gem_line( line )
       @parser.fetch_version( elements ).should eql('<= 3.0.3')
     end
 
     it "returns the right version" do
       line = " gem 'will_paginate'     , \"> 3.0.3\""
-      elements = @parser.fetch_line_elements( line )
+      elements = @parser.parse_gem_line( line )
       @parser.fetch_version( elements ).should eql('> 3.0.3')
     end
 
     it "returns the right version for GIT" do
       line = "gem \"copycopter_client\", :git     => \"git://github.com/nmk/copycopter-ruby-client.git\" "
-      elements = @parser.fetch_line_elements( line )
-      @parser.fetch_version( elements ).should eql(':git     => git://github.com/nmk/copycopter-ruby-client.git')
+      elements = @parser.parse_gem_line( line )
+      @parser.fetch_version( elements ).should eql('git://github.com/nmk/copycopter-ruby-client.git')
     end
 
     it "returns the right version for PATH" do
       line = "gem 'govkit'           , :path    => '/../vendor/gems'"
-      elements = @parser.fetch_line_elements( line )
-      @parser.fetch_version( elements ).should eql(":path    => /../vendor/gems")
+      elements = @parser.parse_gem_line( line )
+      @parser.fetch_version( elements ).should eql("path:/../vendor/gems")
     end
 
     it "returns the right version for Platforms" do
       line = "gem 'therubyracer'     , :platforms => :ruby"
-      elements = @parser.fetch_line_elements( line )
+      elements = @parser.parse_gem_line( line )
       @parser.fetch_version( elements ).should eql("")
     end
 
     it "returns empty string with multiple platforms" do
       line = "gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :mswin64]"
-      elements = @parser.fetch_line_elements( line )
+      elements = @parser.parse_gem_line( line )
       @parser.fetch_version( elements ).should eql("")
     end
 
     it "returns correct version with multiple platforms" do
       line = "gem 'tzinfo-data', '= 3.0.3', platforms: [:mingw, :mswin, :x64_mingw, :mswin64]"
-      elements = @parser.fetch_line_elements( line )
+      elements = @parser.parse_gem_line( line )
       @parser.fetch_version( elements ).should eql("= 3.0.3")
     end
 
     it "returns the right empty string because there is not version, only a group" do
       line = "gem 'rspec',     :group => [:test, :development]"
       elements = @parser.fetch_line_elements( line )
-      version = @parser.fetch_version( elements )
-      version.should be_empty
+      version = @parser.parse_gem_line( elements )
+      expect( version.nil? ).to be_truthy
     end
 
   end

@@ -76,7 +76,16 @@ describe GemfileParser do
         expect(gem_doc[:github]).to eq('rails/rails')
         expect(gem_doc[:branch]).to eq('master')
         expect(gem_doc[:tag]).to eq('v1.2.3')
+      end
 
+      it "parses correctly list items" do
+        gem_line = 'gem "tzinfo-data", "= 3.0.3", platforms: [:mingw, :mswin]'
+        gem_doc = parser.parse_gem_line(gem_line)
+
+        expect(gem_doc).not_to be_nil
+        expect(gem_doc[:name]).to eq('tzinfo-data')
+        expect(gem_doc[:version]).to eq('= 3.0.3')
+        expect(gem_doc[:platforms]).to eq('[:mingw, :mswin]')
       end
     end
 
