@@ -1,4 +1,4 @@
-FROM        ruby:2.4.1-slim
+FROM        ruby:2.4.1
 MAINTAINER  Robert Reiz <reiz@versioneye.com>
 
 ENV RAILS_ENV enterprise
@@ -23,4 +23,7 @@ ADD . /app/
 
 WORKDIR /app
 
-RUN bundle update
+RUN bundle update; \
+    apt-get remove --purge -y git; \
+    apt-get remove --purge --force-yes `apt-mark showauto`; \
+    apt-get clean;
