@@ -21,7 +21,7 @@ class GemfileParser < CommonParser
   # Parser for Gemfile. For Ruby.
   # http://gembundler.com/man/gemfile.5.html
   # http://guides.rubygems.org/patterns/#semantic_versioning
-  #
+  # ps: It handles GITHUB and Git deps on Github like PackageParser
   def parse( url )
     return nil if url.nil? || url.empty?
 
@@ -72,9 +72,12 @@ class GemfileParser < CommonParser
 
     parse_requested_version( version, dependency, product )
 
-    project.projectdependencies.push dependency
-    project.out_number     += 1 if ProjectdependencyService.outdated?( dependency )
+    is_outdated = ProjectdependencyService.outdated?(dependency, product, @auth_token)
+
+    project.out_number     += 1 if is_outdated
     project.unknown_number += 1 if product.nil?
+    project.projectdependencies.push dependency
+
   rescue => e
     log.error "ERROR in parse_line(#{line}) -> #{e.message}"
     log.error e.backtrace.join("\n")
@@ -214,17 +217,37 @@ class GemfileParser < CommonParser
       dependency.comperator = "~>"
       dependency.version_label = ver
 
-    elsif version.match(/^git:/) or version.match(/\A:git/)
-      #TODO: check is GITHUB url
-      dependency.version_requested = "GIT"
-      dependency.version_label     = "GIT"
+    elsif version.match(/^git:/)
+      if /github\.com/.match?(version)
+        repo_url, repo_ref = version.split('#', 2)
+        repo_ref ||= 'master'
+        repo_fullname = extract_repo_name(repo_url)
+
+        dependency[:version_requested]  = 'GITHUB'
+        dependency[:version_label]      = version
+        dependency[:repo_fullname]      = repo_fullname.to_s.strip
+        dependency[:repo_ref]           = repo_ref
+      else
+        dependency.version_requested = "GIT"
+        dependency.version_label     = "GIT"
+      end
+
       dependency.comperator        = "="
 
-    elsif version.match(/^path:/) or version.match(/\A:path/)
+    elsif version.match(/^path:/)
       dependency.version_requested = "PATH"
       dependency.version_label     = "PATH"
       dependency.comperator        = "="
 
+    elsif /\w\/\w/.match?(version)
+      # if it is GITHUB dependency
+      repo_fullname, repo_ref = version.split('#', 2)
+      repo_ref ||= 'master'
+
+      dependency[:version_requested]  = 'GITHUB'
+      dependency[:version_label]      = version
+      dependency[:repo_fullname]      = repo_fullname.to_s.strip
+      dependency[:repo_ref]           = repo_ref
     else
       dependency.version_requested = version
       dependency.comperator        = "="
@@ -289,9 +312,20 @@ class GemfileParser < CommonParser
                 gem_doc[:version]
               elsif gem_doc.has_key?(:github)
                 rev = (gem_doc[:rev] || gem_doc[:tag] || gem_doc[:branch])
-                "#{gem_doc[:github]}##{rev}"
+                if rev
+                  "#{gem_doc[:github]}##{rev}"
+                else
+                  gem_doc[:github]
+                end
+
               elsif gem_doc.has_key?(:git)
-                gem_doc[:git]
+                rev = (gem_doc[:rev] || gem_doc[:tag] || gem_doc[:branch])
+                if rev
+                  "#{gem_doc[:git]}#{rev}"
+                else
+                  gem_doc[:git]
+                end
+
               elsif gem_doc.has_key?(:path)
                 "path:#{gem_doc[:path]}"
               else
@@ -384,6 +418,13 @@ class GemfileParser < CommonParser
     end
 
     tokens.join('-')
+  end
+
+  def extract_repo_name(git_url)
+    repo_owner, repo_fullname = git_url.to_s.split('/').pop(2)
+    repo_fullname = repo_fullname.gsub(/\.git\z/, '').to_s.strip
+
+    "#{repo_owner}/#{repo_fullname}"
   end
 
   private
