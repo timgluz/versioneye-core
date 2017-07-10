@@ -294,6 +294,7 @@ class ProjectImportService < Versioneye::Service
     project.source      = Project::A_SOURCE_API if api_created
     project.user        = user
     project.public      = Settings.instance.default_project_public
+    project.private_project = true # projects through API & file upload are considered as private project.
 
     update_project_with_orga( project, orga_id, user )
 
