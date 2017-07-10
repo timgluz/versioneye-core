@@ -3,6 +3,7 @@ require 'versioneye/parsers/common_parser'
 class GemfileParser < CommonParser
 
   attr_accessor :language, :type, :keyword
+  attr_reader :auth_token
 
   def language
     Product::A_LANGUAGE_RUBY
@@ -39,6 +40,8 @@ class GemfileParser < CommonParser
     return nil if gemfile.to_s.strip.empty?
     return nil if gemfile.to_s.strip.eql?('Not Found')
 
+    @auth_token = token
+
     gemfile = gemfile.encode("UTF-8")
     project = init_project
     gemfile.each_line do |line|
@@ -53,6 +56,51 @@ class GemfileParser < CommonParser
     nil
   end
 
+  def preprocess_line(gem_line)
+    line = gem_line.to_s.strip
+
+    if !line.valid_encoding?
+      line = line.unpack('C*').pack('U*')
+      line = line.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
+    end
+    line          = line.delete("\n")
+    line          = line.delete("\t")
+
+    line
+  end
+
+  # parses gem line and returns a hash map with parsed key-values
+  # returns:
+  #   dep_doc, Hashmap, with fields [:name, :version, :require, :git, :github, :branch, :tag, :ref, :branch, etc]
+  def parse_gem_line(gem_line)
+    line_items = fetch_line_elements(preprocess_line(gem_line)).to_a
+    return if line_items.empty?
+
+    gem_name = fetch_gem_name([line_items.shift])
+
+    dep_doc = {
+      name: gem_name,
+      versions: []
+    }
+
+    line_items.reduce(dep_doc) do |acc, item|
+      k, v = item.split(/\s*\=\>\s*/, 2)
+      if v.nil?
+        # if no keyword were given, then it must be version label
+        acc[:versions] << k.to_s.gsub(/\"/, '').strip
+      else
+        # turn key into symbol and clean up value
+        k = k.to_s.delete(':').strip.to_sym
+        v = v.to_s.gsub(/\"|\'/, '').strip
+        acc[k] = v
+      end
+
+      acc
+    end
+
+    dep_doc[:version] = dep_doc[:versions].to_a.join(',')
+    dep_doc
+  end
 
   def parse_line( line, project )
     if !line.valid_encoding?
@@ -208,7 +256,9 @@ class GemfileParser < CommonParser
     version = ""
     line_elements.each_with_index do |element, index|
       next if index == 0
-      element = element.strip
+      element = element.to_s.strip
+      p "element: #{element}"
+
       if element.match(/^require:/) || element.match(/\A:require/) || element.match(/\Arequire/)
         next
       elsif element.match(/\A:group/) or element.match(/^group:/)

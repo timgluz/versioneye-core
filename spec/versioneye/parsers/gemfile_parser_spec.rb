@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe GemfileParser do
-  
+
   describe "helper functions" do
     let(:parser){ GemfilelockParser.new }
 
@@ -20,6 +20,55 @@ describe GemfileParser do
         expect( parser.strip_platform_exts('1.0-mingw32')   ).to eq('1.0')
       end
     end
+
+    describe "parse_gem_file" do
+      it "parses correctly default gem line" do
+        gem_doc = parser.parse_gem_line('gem "abc", "2.3.4"')
+
+        expect(gem_doc).not_to be_nil
+        expect(gem_doc[:name]).to eq("abc")
+        expect(gem_doc[:version]).to eq("2.3.4")
+      end
+
+      it "parses correcty long gem line" do
+        gem_line = 'gem "abc2", ">= 2.3.4", :require => true, :group => test'
+        gem_doc = parser.parse_gem_line(gem_line)
+
+        p gem_doc
+        expect(gem_doc).not_to be_nil
+        expect(gem_doc[:name]).to eq('abc2')
+        expect(gem_doc[:version]).to eq('>= 2.3.4')
+        expect(gem_doc[:require]).to eq('true')
+        expect(gem_doc[:group]).to eq('test')
+      end
+
+      it "parses correctly a line with multiple version range" do
+        gem_line = 'gem "abc3", "> 1.0.1", "<= 1.8.1", "!= 1.3.4, :group => "test"'
+        gem_doc = parser.parse_gem_line(gem_line)
+
+        p gem_doc
+        expect(gem_doc).not_to be_nil
+        expect(gem_doc[:name]).to eq('abc3')
+        expect(gem_doc[:versions].size).to eq(3)
+        expect(gem_doc[:version]).to eq('> 1.0.1,<= 1.8.1,!= 1.3.4')
+        expect(gem_doc[:group]).to eq('test')
+      end
+
+      it "parses correctly gem line with github coords" do
+        gem_line = 'gem "abc4", :github => "rails/rails", :branch => "master", :tag=>"v1.2.3"'
+        gem_doc = parser.parse_gem_line(gem_line)
+
+        p gem_doc
+        expect(gem_doc).not_to be_nil
+        expect(gem_doc[:name]).to eq('abc4')
+        expect(gem_doc[:versions].empty? ).to be_truthy
+        expect(gem_doc[:version].empty?).to be_truthy
+        expect(gem_doc[:github]).to eq('rails/rails')
+        expect(gem_doc[:branch]).to eq('master')
+        expect(gem_doc[:tag]).to eq('v1.2.3')
+      end
+    end
+
   end
 
   describe "parse" do
@@ -33,7 +82,7 @@ describe GemfileParser do
     it "parse from https the file correctly" do
       parser = GemfileParser.new
       project = parser.parse("https://s3.amazonaws.com/veye_test_env/Gemfile")
-      project.should_not be_nil
+      expect( project ).not_to be_nil
     end
 
     it "parse from http the file correctly" do
@@ -93,8 +142,8 @@ describe GemfileParser do
 
       parser  = GemfileParser.new
       project = parser.parse("http://s3.amazonaws.com/veye_test_env/Gemfile")
-      project.should_not be_nil
-      project.dependencies.size.should eql(15)
+      expect( project ).not_to be_nil
+      expect( project.dependencies.size ).to eql(15)
 
       dep_1 = fetch_by_name project.dependencies, "rails"
       dep_1.name.should eql("rails")
@@ -213,7 +262,7 @@ describe GemfileParser do
         version: '5.1'
       )
     }
-    
+
     let(:product2){
       FactoryGirl.create(
         :product_with_versions,
@@ -223,7 +272,7 @@ describe GemfileParser do
         language: Product::A_LANGUAGE_RUBY,
         version: '5.2'
       )
-    
+
     }
 
     let(:project_text){
@@ -233,13 +282,13 @@ describe GemfileParser do
         gem "actionsupport", "5.2"
       }
     }
-    
+
     it "removes platform extensions #issue53 " do
       product1.versions << FactoryGirl.build(:product_version, version: '5.1')
       product1.save
       product2.versions << FactoryGirl.build(:product_version, version: '5.2')
       product2.save
-      
+
       proj = parser.parse_content(project_text)
       expect(proj).to_not be_nil
       expect(proj.projectdependencies.size ).to eq(2)
@@ -255,6 +304,6 @@ describe GemfileParser do
       expect( dep2.version_requested ).to eq(product2[:version])
       expect( dep2.comperator ).to eq('=')
     end
-   
+
   end
 end
