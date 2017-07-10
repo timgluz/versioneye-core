@@ -1,4 +1,4 @@
-FROM        ruby:2.4.1
+FROM        ruby:2.3.3
 MAINTAINER  Robert Reiz <reiz@versioneye.com>
 
 ENV RAILS_ENV enterprise
@@ -15,7 +15,7 @@ RUN apt-get update; \
     apt-get install -y git; \
     apt-get install -y build-essential; \
     apt-get install -y supervisor; \
-    gem uninstall -i /usr/local/lib/ruby/gems/2.4.0 bundler -a -x; \
+    gem uninstall -i /usr/local/lib/ruby/gems/2.3.0 bundler -a -x; \
     gem install bundler --version 1.15.1; \
     rm -Rf /app; mkdir -p /app; mkdir -p /app/log; mkdir -p /app/pids
 
