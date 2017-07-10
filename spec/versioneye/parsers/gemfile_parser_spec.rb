@@ -34,7 +34,6 @@ describe GemfileParser do
         gem_line = 'gem "abc2", ">= 2.3.4", :require => true, :group => test'
         gem_doc = parser.parse_gem_line(gem_line)
 
-        p gem_doc
         expect(gem_doc).not_to be_nil
         expect(gem_doc[:name]).to eq('abc2')
         expect(gem_doc[:version]).to eq('>= 2.3.4')
@@ -46,7 +45,6 @@ describe GemfileParser do
         gem_line = 'gem "abc3", "> 1.0.1", "<= 1.8.1", "!= 1.3.4, :group => "test"'
         gem_doc = parser.parse_gem_line(gem_line)
 
-        p gem_doc
         expect(gem_doc).not_to be_nil
         expect(gem_doc[:name]).to eq('abc3')
         expect(gem_doc[:versions].size).to eq(3)
@@ -58,7 +56,6 @@ describe GemfileParser do
         gem_line = 'gem "abc4", :github => "rails/rails", :branch => "master", :tag=>"v1.2.3"'
         gem_doc = parser.parse_gem_line(gem_line)
 
-        p gem_doc
         expect(gem_doc).not_to be_nil
         expect(gem_doc[:name]).to eq('abc4')
         expect(gem_doc[:versions].empty? ).to be_truthy
@@ -66,6 +63,20 @@ describe GemfileParser do
         expect(gem_doc[:github]).to eq('rails/rails')
         expect(gem_doc[:branch]).to eq('master')
         expect(gem_doc[:tag]).to eq('v1.2.3')
+      end
+
+      it "parses correctly keys as Ruby symbols" do
+        gem_line = 'gem "abc5", github: "rails/rails", branch: "master", tag: "v1.2.3"'
+        gem_doc = parser.parse_gem_line(gem_line)
+
+        expect(gem_doc).not_to be_nil
+        expect(gem_doc[:name]).to eq('abc5')
+        expect(gem_doc[:versions].empty? ).to be_truthy
+        expect(gem_doc[:version].empty?).to be_truthy
+        expect(gem_doc[:github]).to eq('rails/rails')
+        expect(gem_doc[:branch]).to eq('master')
+        expect(gem_doc[:tag]).to eq('v1.2.3')
+
       end
     end
 

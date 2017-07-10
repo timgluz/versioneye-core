@@ -47,6 +47,7 @@ class GemfileParser < CommonParser
     gemfile.each_line do |line|
       parse_line( line, project )
     end
+
     project.dep_number = project.dependencies.size
     update_project gemfile, project
     project
@@ -56,67 +57,16 @@ class GemfileParser < CommonParser
     nil
   end
 
-  def preprocess_line(gem_line)
-    line = gem_line.to_s.strip
-
-    if !line.valid_encoding?
-      line = line.unpack('C*').pack('U*')
-      line = line.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
-    end
-    line          = line.delete("\n")
-    line          = line.delete("\t")
-
-    line
-  end
-
-  # parses gem line and returns a hash map with parsed key-values
-  # returns:
-  #   dep_doc, Hashmap, with fields [:name, :version, :require, :git, :github, :branch, :tag, :ref, :branch, etc]
-  def parse_gem_line(gem_line)
-    line_items = fetch_line_elements(preprocess_line(gem_line)).to_a
-    return if line_items.empty?
-
-    gem_name = fetch_gem_name([line_items.shift])
-
-    dep_doc = {
-      name: gem_name,
-      versions: []
-    }
-
-    line_items.reduce(dep_doc) do |acc, item|
-      k, v = item.split(/\s*\=\>\s*/, 2)
-      if v.nil?
-        # if no keyword were given, then it must be version label
-        acc[:versions] << k.to_s.gsub(/\"/, '').strip
-      else
-        # turn key into symbol and clean up value
-        k = k.to_s.delete(':').strip.to_sym
-        v = v.to_s.gsub(/\"|\'/, '').strip
-        acc[k] = v
-      end
-
-      acc
-    end
-
-    dep_doc[:version] = dep_doc[:versions].to_a.join(',')
-    dep_doc
-  end
-
   def parse_line( line, project )
-    if !line.valid_encoding?
-      line = line.unpack('C*').pack('U*')
-      line = line.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
-    end
-    line          = line.delete("\n")
-    line          = line.delete("\t")
-    line          = line.gsub(/require:.+\[.+\]/i, "")
-    line          = line.gsub(/:require.+\[.+\]/i, "")
-    line_elements = fetch_line_elements( line )
-    gem_name      = fetch_gem_name( line_elements )
+    return if line.to_s.empty?
 
-    return nil if gem_name.to_s.empty?
+    gem_doc = parse_gem_line(line.to_s)
+    return if gem_doc.nil? # it wasnt dependency line
 
-    version    = fetch_version( line_elements )
+    gem_name = gem_doc[:name].to_s
+    return nil if gem_name.empty?
+
+    version    = fetch_version( gem_doc )
     product    = fetch_product_for gem_name
     dependency = init_dependency( product, gem_name )
 
@@ -129,6 +79,55 @@ class GemfileParser < CommonParser
     log.error "ERROR in parse_line(#{line}) -> #{e.message}"
     log.error e.backtrace.join("\n")
     nil
+  end
+
+
+  def preprocess_line(gem_line)
+    line = gem_line.to_s.strip
+
+    if !line.valid_encoding?
+      line = line.unpack('C*').pack('U*')
+      line = line.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
+    end
+    line          = line.delete("\n")
+    line          = line.delete("\t")
+
+    line.to_s
+  end
+
+  # parses gem line and returns a hash map with parsed key-values
+  # returns:
+  #   dep_doc, Hashmap, with fields [:name, :version, :require, :git, :github, :branch, :tag, :ref, :branch, etc]
+  #   nil if the gem_line is not dependency line
+  def parse_gem_line(gem_line)
+    line_items = fetch_line_elements(preprocess_line(gem_line)).to_a
+    return if line_items.empty?
+
+    gem_name = fetch_gem_name([line_items.shift]) # take and remove first item which maybe gem name
+    return if gem_name.to_s.empty? # it wasnt dependeny line
+
+    dep_doc = {
+      name: gem_name,
+      versions: []
+    }
+
+    line_items.reduce(dep_doc) do |acc, item|
+      k, v = item.split(/\=\>|:\s+/, 2)
+      if v.nil?
+        # if no keyword were given, then it must be version label
+        acc[:versions] << strip_quotes(k.to_s.strip)
+      else
+        # turn key into symbol and clean up value
+        k = k.to_s.delete(':').strip.to_sym
+        v = strip_quotes( v.to_s.strip )
+        acc[k] = v
+      end
+
+      acc
+    end
+
+    dep_doc[:version] = dep_doc[:versions].to_a.join(',')
+    dep_doc
   end
 
 
@@ -216,6 +215,7 @@ class GemfileParser < CommonParser
       dependency.version_label = ver
 
     elsif version.match(/^git:/) or version.match(/\A:git/)
+      #TODO: check is GITHUB url
       dependency.version_requested = "GIT"
       dependency.version_label     = "GIT"
       dependency.comperator        = "="
@@ -235,63 +235,40 @@ class GemfileParser < CommonParser
 
   def fetch_line_elements( line )
     line = replace_comments( line )
-    line = line.strip
+    line = line.to_s.strip
     line.split(",")
   end
-
 
   def fetch_gem_name( line_elements )
     gem_name = line_elements.first
     return nil if gem_name.nil? || gem_name.empty?
-    return nil if gem_name.match(/^#{keyword} /).nil? # TODO check git as well !
-    gem_name.gsub!("#{keyword} ", "")
-    gem_name = gem_name.strip
-    gem_name = gem_name.gsub('"', '')
-    gem_name = gem_name.gsub("'", "")
-    gem_name.split(" ").first
+    return nil if gem_name.match(/^#{keyword}\s+/).nil?
+    gem_name.gsub!("#{keyword}", "")
+    gem_name = gem_name.to_s.strip
+    gem_name = gem_name.split(/\s+/).first
+
+    strip_quotes(gem_name)
   end
 
+  # gets version from parsed gemline doc
+  # gemline doc is output of parse_gem_line('gem "pkg", "1.2.3"')
+  # if it has github dependency, then it combines repo, ( branch or rev or tag ) as packages.json
+  # returns:
+  #   version_label, string
+  def fetch_version( gem_doc )
+    version = if gem_doc.fetch(:version, '').to_s.size > 0
+                gem_doc[:version]
+              elsif gem_doc.has_key?(:github)
+                rev = (gem_doc[:rev] || gem_doc[:tag] || gem_doc[:branch])
+                "#{gem_doc[:github]}##{rev}"
+              elsif gem_doc.has_key?(:git)
+                gem_doc[:git]
+              elsif gem_doc.has_key?(:path)
+                "path:#{gem_doc[:path]}"
+              else
+                gem_doc[:version]
+              end
 
-  def fetch_version( line_elements )
-    version = ""
-    line_elements.each_with_index do |element, index|
-      next if index == 0
-      element = element.to_s.strip
-      p "element: #{element}"
-
-      if element.match(/^require:/) || element.match(/\A:require/) || element.match(/\Arequire/)
-        next
-      elsif element.match(/\A:group/) or element.match(/^group:/)
-        next
-      elsif element.match(/\A:development/) or element.match(/^development:/)
-        next
-      elsif element.match(/\A:test/) or element.match(/^test:/)
-        next
-      elsif element.match(/\A:platforms/) or element.match(/^platforms:/)
-        next
-      elsif element.match(/\A:platform/) or element.match(/^platform:/)
-        next
-      elsif element.match(/\A:engine/) or element.match(/^engine:/)
-        next
-      elsif element.match(/\A:engine_version/) or element.match(/^engine_version:/)
-        next
-      elsif element.match(/\A:branch/) or element.match(/^branch:/)
-        next
-      elsif element.match(/\A:tag/) or element.match(/^tag:/)
-        next
-      elsif element.match(/\A:path/) or element.match(/^path:/)
-        version = element
-        break
-      elsif element.match(/\A:git/) or element.match(/^git:/)
-        version = element
-        break
-      elsif element.match(/\A:github/i) or element.match(/^github:/i)
-        version = element
-        break
-      else
-        version = element if gem_requirement?(element)
-      end
-    end
 
     #removes -x64,-x86, -mingw32 etc from version id
     version = strip_quotes(version)
