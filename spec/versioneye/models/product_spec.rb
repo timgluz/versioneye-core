@@ -12,13 +12,14 @@ describe Product do
 
     it "downcases the name" do
       product = described_class.new({:language => 'Java', :prod_type => 'Maven', :prod_key => 'junit', :name => 'JUnit'})
-      product.save.should be_truthy
-      product.name_downcase.should eq('junit')
+      expect( product.save ).to be_truthy
+      expect( product.name_downcase ).to eq('junit')
     end
     it "downcases the name !" do
       product = described_class.new({:language => 'Java', :prod_type => 'Maven', :prod_key => 'junit', :name => 'JUnit'})
-      product.save!.should be_truthy
-      product.name_downcase.should eq('junit')
+
+      expect( product.save! ).to be_truthy
+      expect( product.name_downcase ).to eq('junit')
     end
 
   end
@@ -27,14 +28,14 @@ describe Product do
   describe "to_s" do
     it 'returns the correct to_s' do
       prod = Product.new({:language => 'Clojure', :prod_key => 'storm', :version => '1.0.0'})
-      prod.to_s.should eq('<Product Clojure / storm (1.0.0) >')
+      expect( prod.to_s ).to eq('<Product Clojure / storm (1.0.0) >')
     end
   end
 
   describe "name_and_version" do
     it 'returns the correct name and version' do
       prod = Product.new({:language => 'Clojure', :name => 'storm', :version => '1.0.0'})
-      prod.name_and_version.should eq('storm : 1.0.0')
+      expect( prod.name_and_version ).to eq('storm : 1.0.0')
     end
   end
 
@@ -42,11 +43,11 @@ describe Product do
   describe "long_name" do
     it 'returns the long name' do
       prod = Product.new({:group_id => "org", :artifact_id => "apache"})
-      prod.long_name.should eq("org:apache")
+      expect( prod.long_name ).to eq("org:apache")
     end
     it 'returns the name' do
       prod = Product.new({:name => "org"})
-      prod.long_name.should eq("org")
+      expect( prod.long_name ).to eq("org")
     end
   end
 
@@ -147,33 +148,34 @@ describe Product do
   describe "find_by_id" do
 
     it "return nil. Because input is nil" do
-      described_class.find_by_id(nil).should be_nil
+      expect( described_class.find_by_id(nil) ).to be_nil
     end
 
     it "return nil. Because input is empty" do
       result = described_class.find_by_id("  ")
-      result.should be_nil
+      expect( result ).to be_nil
     end
 
     it "return nil. Because there are no results." do
       result = described_class.find_by_id("gasflasjgfaskjgas848asjgfasgfasgf")
-      result.should be_nil
+      expect( result ).to be_nil
     end
 
     it "returns the product for string id" do
       product = described_class.new({:language => 'Java', :prod_type => 'Maven', :prod_key => 'junit', :name => 'junit'})
-      product.save.should be_truthy
+      expect( product.save ).to be_truthy
       result = described_class.find_by_id( product.id.to_s )
-      result.should_not be_nil
-      result.name.should eq('junit')
+      expect( result ).not_to be_nil
+      expect( result.name ).to eq('junit')
     end
 
     it "returns the product for object id" do
       product = described_class.new({:language => 'Java', :prod_type => 'Maven', :prod_key => 'junit', :name => 'junit'})
-      product.save.should be_truthy
+      expect( product.save ).to be_truthy
+
       result = described_class.find_by_id( product.id )
-      result.should_not be_nil
-      result.name.should eq('junit')
+      expect( result ).not_to be_nil
+      expect( result.name ).to eq('junit')
     end
 
   end
@@ -182,47 +184,53 @@ describe Product do
   describe "fetch_product" do
 
     it "return nil. Because all inputs are nil" do
-      described_class.fetch_product(nil, nil).should be_nil
+      expect( described_class.fetch_product(nil, nil) ).to be_nil
     end
     it "return nil. Because all inputs are empty" do
-      described_class.fetch_product('', '').should be_nil
+      expect( described_class.fetch_product('', '') ).to be_nil
     end
     it "return nil. Because prod_key is nil" do
-      described_class.fetch_product('ruby', nil).should be_nil
+      expect( described_class.fetch_product('ruby', nil) ).to be_nil
     end
     it "return nil. Because language is nil" do
-      described_class.fetch_product(nil, 'xiki').should be_nil
+      expect( described_class.fetch_product(nil, 'xiki') ).to be_nil
     end
     it "returns nil because the language is wrong" do
       product1 = ProductFactory.create_for_gemfile('bee', '1.4.0')
       product1.versions.push( Version.new({version: '1.4.0'}) )
       product1.save
-      described_class.fetch_product( Product::A_LANGUAGE_JAVA, "bee" ).should be_nil
+
+      expect( described_class.fetch_product( Product::A_LANGUAGE_JAVA, "bee" ) ).to be_nil
     end
     it "returns nil because the prod_key is wrong" do
       product1 = ProductFactory.create_for_gemfile('bee', '1.4.0')
       product1.versions.push( Version.new({version: '1.4.0'}) )
       product1.save
-      described_class.fetch_product( Product::A_LANGUAGE_RUBY, "bee_bee" ).should be_nil
+
+      expect( described_class.fetch_product( Product::A_LANGUAGE_RUBY, "bee_bee" ) ).to be_nil
     end
     it "returns product for package language" do
       product1 = ProductFactory.create_for_gemfile('bee', '1.4.0')
       product1.versions.push( Version.new({version: '1.4.0'}) )
       product1.save
       result = described_class.fetch_product( 'package', "bee" )
-      result.should_not be_nil
-      result.language.should eq('Ruby')
-      result.prod_key.should eq('bee')
+
+      expect( result ).not_to be_nil
+      expect( result.language ).to eq('Ruby')
+      expect( result.prod_key ).to eq('bee')
     end
     it "returns the searched product" do
       product1 = ProductFactory.create_for_gemfile('bee', '1.4.0')
       product1.versions.push( Version.new({version: '1.4.0'}) )
       product1.save
-      described_class.fetch_product( Product::A_LANGUAGE_RUBY, 'Bee' ).should_not be_nil
-      described_class.fetch_product( Product::A_LANGUAGE_RUBY, 'bee' ).should_not be_nil
+
+      expect( described_class.fetch_product( Product::A_LANGUAGE_RUBY, 'Bee' ) ).not_to be_nil
+      expect( described_class.fetch_product( Product::A_LANGUAGE_RUBY, 'bee' ) ).not_to be_nil
+
       result = described_class.fetch_product( Product::A_LANGUAGE_RUBY, 'bee' )
-      result.should_not be_nil
-      result.prod_key.should eql('bee')
+
+      expect( result ).not_to be_nil
+      expect( result.prod_key ).to eql('bee')
     end
 
   end
@@ -231,58 +239,119 @@ describe Product do
   describe "fetch_bower" do
     it "return nil. Because input is nil" do
       result = described_class.fetch_bower(nil)
-      result.should be_nil
+      expect( result ).to be_nil
     end
     it "return nil. Because input is empty" do
       result = described_class.fetch_bower("  ")
-      result.should be_nil
+      expect( result ).to be_nil
     end
     it "return nil. Because there are no results." do
       result = described_class.fetch_bower("gasflasjgfaskjgas848asjgfasgfasgf")
-      result.should be_nil
+      expect( result ).to be_nil
     end
     it "return searched product" do
       product = described_class.new({:language => 'JavaScript', :prod_type => 'Bower', :prod_key => 'moment/moment', :name => 'moment'})
-      product.save.should be_truthy
+      expect( product.save ).to be_truthy
+
       result = described_class.fetch_bower('moment')
-      result.should_not be_nil
-      result.prod_key.should eq('moment/moment')
-      result.name.should eq('moment')
+      expect( result ).not_to be_nil
+      expect( result.prod_key ).to eq('moment/moment')
+      expect( result.name     ).to eq('moment')
     end
     it "return searched product, the first one" do
       product  = described_class.new({:language => 'JavaScript', :prod_type => 'Bower', :prod_key => 'moment/moment', :name => 'moment'})
-      product.save.should be_truthy
+      expect( product.save ).to be_truthy
       product2 = described_class.new({:language => 'JavaScript', :prod_type => 'Bower', :prod_key => 'moment/', :name => 'moment'})
-      product2.save.should be_truthy
+      expect( product2.save ).to be_truthy
       result = described_class.fetch_bower('moment')
-      result.should_not be_nil
-      result.prod_key.should eq('moment/moment')
-      result.name.should eq('moment')
+      expect( result ).not_to be_nil
+      expect( result.prod_key ).to eq('moment/moment')
+      expect( result.name ).to eq('moment')
     end
   end
 
+  let(:cpan_prod1){
+    Product.new(
+      language: Product::A_LANGUAGE_PERL,
+      prod_type: Project::A_TYPE_CPAN,
+      prod_key: 'DBD::SQLite',
+      name: 'DBD-SQLite',
+      name_downcase: 'dbd-sqlite',
+      version: '1.54'
+    )
+  }
+
+  let(:cpan_prod2){
+    Product.new(
+      language: Product::A_LANGUAGE_PERL,
+      prod_type: Project::A_TYPE_CPAN,
+      prod_key: 'DBD',
+      name: 'DBD',
+      name_downcase: 'dbd',
+      version: '0.2'
+    )
+  }
+
+
+  describe "fetch_cpan" do
+    before do
+      cpan_prod1.save
+      cpan_prod2.save
+    end
+
+    it "finds match by parent module name" do
+      prod = Product.fetch_cpan(cpan_prod1[:prod_key])
+
+      expect(prod).not_to be_nil
+      expect(prod[:language]).to eq(cpan_prod1[:language])
+      expect(prod[:prod_type]).to eq(cpan_prod1[:prod_type])
+      expect(prod[:prod_key]).to eq(cpan_prod1[:prod_key])
+      expect(prod[:name]).to eq(cpan_prod1[:name])
+    end
+
+    it "finds match by submodule" do
+      prod = Product.fetch_cpan('DBD::SQLite::VirtualTable::FileContent::Cursor')
+
+      expect(prod).not_to be_nil
+      expect(prod[:language]).to eq(cpan_prod1[:language])
+      expect(prod[:prod_type]).to eq(cpan_prod1[:prod_type])
+      expect(prod[:prod_key]).to eq(cpan_prod1[:prod_key])
+      expect(prod[:name]).to eq(cpan_prod1[:name])
+    end
+
+    it "finds match by distribution id" do
+      prod = Product.fetch_cpan('DBD-SQLite')
+
+      expect(prod).not_to be_nil
+      expect(prod[:language]).to eq(cpan_prod1[:language])
+      expect(prod[:prod_type]).to eq(cpan_prod1[:prod_type])
+      expect(prod[:prod_key]).to eq(cpan_prod1[:prod_key])
+      expect(prod[:name]).to eq(cpan_prod1[:name])
+    end
+  end
 
   describe "find_by_key" do
 
     it "return nil. Because input is nil" do
       result = described_class.find_by_key(nil)
-      result.should be_nil
+      expect( result ).to be_nil
     end
     it "return nil. Because input is empty" do
       result = described_class.find_by_key("  ")
-      result.should be_nil
+      expect( result ).to be_nil
     end
     it "return nil. Because there are no results." do
       result = described_class.find_by_key("gasflasjgfaskjgas848asjgfasgfasgf")
-      result.should be_nil
+      expect( result ).to be_nil
     end
     it "return searched product" do
       product = described_class.new({:language => 'Java', :prod_type => 'Maven', :prod_key => 'junit', :name => 'junit'})
-      product.save.should be_truthy
+      expect( product.save ).to be_truthy
       result = described_class.find_by_key('junit')
-      result.should_not be_nil
-      result.prod_key.should eq('junit')
-      result.name.should eq('junit')
+
+      expect( result ).not_to be_nil
+      expect( result.prod_key ).to eq('junit')
+      expect( result.name ).to eq('junit')
     end
 
   end
@@ -291,27 +360,29 @@ describe Product do
   describe "find_by_lang_key" do
 
     it "return nil. Because all inputs are nil" do
-      described_class.find_by_lang_key(nil, nil).should be_nil
+      expect( described_class.find_by_lang_key(nil, nil) ).to be_nil
     end
     it "return nil. Because all inputs are empty" do
-      described_class.find_by_lang_key('', '').should be_nil
+      expect( described_class.find_by_lang_key('', '') ).to be_nil
     end
     it "return nil. Because prod_key is nil" do
-      described_class.find_by_lang_key('ruby', nil).should be_nil
+      expect( described_class.find_by_lang_key('ruby', nil) ).to be_nil
     end
     it "return nil. Because language is nil" do
-      described_class.find_by_lang_key(nil, 'xiki').should be_nil
+      expect( described_class.find_by_lang_key(nil, 'xiki') ).to be_nil
     end
     it "returns the searched product" do
       product1 = ProductFactory.create_for_gemfile('bee', '1.4.0')
       product1.versions.push( Version.new({version: '1.4.0'}) )
       product1.save
-      described_class.find_by_lang_key( Product::A_LANGUAGE_JAVA, "bee" ).should be_nil
-      described_class.find_by_lang_key( Product::A_LANGUAGE_RUBY, "Bee" ).should be_nil
-      described_class.find_by_lang_key( Product::A_LANGUAGE_RUBY.downcase, "bee" ).should be_nil
+
+      expect( described_class.find_by_lang_key( Product::A_LANGUAGE_JAVA, "bee" ) ).to be_nil
+      expect( described_class.find_by_lang_key( Product::A_LANGUAGE_RUBY, "Bee" ) ).to be_nil
+      expect( described_class.find_by_lang_key( Product::A_LANGUAGE_RUBY.downcase, "bee") ).to be_nil
+
       result = described_class.find_by_lang_key( Product::A_LANGUAGE_RUBY, "bee" )
-      result.should_not be_nil
-      result.prod_key.should eql("bee")
+      expect( result ).not_to be_nil
+      expect( result.prod_key ).to eql("bee")
     end
 
   end
@@ -320,13 +391,13 @@ describe Product do
   describe "find_by_group_and_artifact" do
 
     it "returns nil because of wrong parameters" do
-      described_class.find_by_group_and_artifact("bullshit", "bingo").should be_nil
+      expect( described_class.find_by_group_and_artifact("bullshit", "bingo") ).to be_nil
     end
     it "returns nil because of wrong parameters" do
-      described_class.find_by_group_and_artifact('', '').should be_nil
+      expect( described_class.find_by_group_and_artifact('', '') ).to be_nil
     end
     it "returns nil because of wrong parameters" do
-      described_class.find_by_group_and_artifact(nil, nil).should be_nil
+      expect( described_class.find_by_group_and_artifact(nil, nil) ).to be_nil
     end
     it "returns the correct product" do
       group = "junit56"
@@ -339,11 +410,11 @@ describe Product do
       product.group_id = group
       product.artifact_id = artifact
       product.save
-      version = Version.new
+
       prod = described_class.find_by_group_and_artifact(group, artifact)
-      prod.should_not be_nil
-      prod.group_id.should eql(group)
-      prod.artifact_id.should eql(artifact)
+      expect( prod ).not_to be_nil
+      expect( prod.group_id ).to eql(group)
+      expect( prod.artifact_id ).to eql(artifact)
     end
     it "returns the fallback product" do
       group = "junit56"
@@ -358,10 +429,10 @@ describe Product do
       product.save
 
       prod = described_class.find_by_group_and_artifact(group, artifact, "Clojure")
-      prod.should_not be_nil
-      prod.group_id.should eql(group)
-      prod.artifact_id.should eql(artifact)
-      prod.language.should eql('Java')
+      expect( prod ).not_to be_nil
+      expect( prod.group_id     ).to eql(group)
+      expect( prod.artifact_id  ).to eql(artifact)
+      expect( prod.language     ).to eql('Java')
     end
     it "returns the clojure product" do
       group = "junit56"
@@ -383,13 +454,13 @@ describe Product do
       product_2.prod_type = 'Maven'
       product_2.group_id = group
       product_2.artifact_id = artifact
-      product_2.save.should be_truthy
+      expect( product_2.save ).to be_truthy
 
       prod = described_class.find_by_group_and_artifact(group, artifact, "Clojure")
-      prod.should_not be_nil
-      prod.group_id.should eql(group)
-      prod.artifact_id.should eql(artifact)
-      prod.language.should eql('Clojure')
+      expect( prod ).not_to be_nil
+      expect( prod.group_id ).to eql(group)
+      expect( prod.artifact_id ).to eql(artifact)
+      expect( prod.language   ).to eql('Clojure')
     end
   end
 
@@ -397,13 +468,13 @@ describe Product do
   describe "by_prod_keys" do
 
     it "returns nil because of wrong parameters" do
-      described_class.by_prod_keys(nil, nil).should be_empty
+      expect( described_class.by_prod_keys(nil, nil) ).to be_empty
     end
     it "returns nil because of wrong parameters" do
-      described_class.by_prod_keys('', '').should be_empty
+      expect( described_class.by_prod_keys('', '') ).to be_empty
     end
     it "returns nil because of wrong parameters" do
-      described_class.by_prod_keys("bullshit", "bingo").should be_empty
+      expect( described_class.by_prod_keys("bullshit", "bingo") ).to be_empty
     end
     it "returns the correct product" do
       product1 = ProductFactory.create_for_gemfile('xiki', '1.4.0')
@@ -428,18 +499,18 @@ describe Product do
   describe "version_by_number" do
 
     it "returns nil when number is nil" do
-      product.version_by_number(nil).should be_nil
+      expect( product.version_by_number(nil) ).to be_nil
     end
 
     it "returns nil when product has no versions" do
-      product.version_by_number("1.0.0").should be_nil
+      expect( product.version_by_number("1.0.0") ).to be_nil
     end
 
     it "returns nil when prodoct has no matching versions" do
       product.versions << version1
       product.versions << version2
       product.save
-      product.version_by_number("1.0.0").should be_nil
+      expect( product.version_by_number("1.0.0") ).to be_nil
     end
 
     it "returns correct version when there's matching version" do
@@ -448,8 +519,8 @@ describe Product do
       product.versions << version2
       product.save
       version = product.version_by_number("0.0.1")
-      version.should_not be_nil
-      version.version.should eq('0.0.1')
+      expect( version ).not_to be_nil
+      expect( version.version ).to eq('0.0.1')
     end
 
     it "should find correct version when there's massive set of subdoc" do
@@ -459,8 +530,8 @@ describe Product do
       end
       product.save
       match = product.version_by_number("0.12.1")
-      match.should_not be_nil
-      match[:version].should eql("0.12.1")
+      expect( match ).not_to be_nil
+      expect( match[:version] ).to eql("0.12.1")
     end
 
     it "should find correct version even there may be versions with invalid or missing value" do
@@ -474,8 +545,8 @@ describe Product do
       product.versions << version2
       product.save
       match = product.version_by_number(version2[:version])
-      match.should_not be_nil
-      match[:version].should eql(version2[:version])
+      expect( match ).not_to be_nil
+      expect( match[:version] ).to eql(version2[:version])
     end
 
   end
@@ -486,18 +557,18 @@ describe Product do
     it 'returns true if versions nil' do
       product = Product.new
       product.versions = nil
-      product.versions_empty?().should be_truthy
+      expect( product.versions_empty?() ).to be_truthy
     end
     it 'returns true if versions empty' do
       product = Product.new
       product.versions = Array.new
-      product.versions_empty?().should be_truthy
+      expect( product.versions_empty? ).to be_truthy
     end
     it 'returns false if versions not empty' do
       product = Product.new
       product.versions = Array.new
       product.versions.push(Version.new({:version => '1.0.0'}))
-      product.versions_empty?().should be_falsey
+      expect( product.versions_empty? ).to be_falsey
     end
 
   end
@@ -508,19 +579,20 @@ describe Product do
     it 'adds new version' do
       product = Product.new
       product.add_version('1.0.0')
-      product.versions.size.should eq(1)
-      product.versions_empty?().should be_falsey
-      product.version_by_number('1.0.0').should_not be_nil
+      expect( product.versions.size ).to eq(1)
+      expect( product.versions_empty? ).to be_falsey
+      expect( product.version_by_number('1.0.0') ).not_to be_nil
     end
 
     it 'doesnt add new version because its existing already' do
       product = Product.new
       product.add_version('1.0.0')
-      product.versions.size.should eq(1)
+      expect( product.versions.size ).to eq(1)
       product.add_version('1.0.0')
-      product.versions.size.should eq(1)
-      product.versions_empty?().should be_falsey
-      product.version_by_number('1.0.0').should_not be_nil
+
+      expect( product.versions.size ).to eq(1)
+      expect( product.versions_empty? ).to be_falsey
+      expect( product.version_by_number('1.0.0') ).not_to be_nil
     end
 
   end
@@ -553,11 +625,11 @@ describe Product do
       product = Product.new
       product.add_version('1.0.0')
       product.add_version('1.1.0')
-      product.versions.size.should eq(2)
-      product.versions_empty?().should be_falsey
-      product.remove_version('0.0.0').should be_falsey
-      product.remove_version('1.1.0').should be_truthy
-      product.version.should eq('1.0.0')
+      expect( product.versions.size ).to eq(2)
+      expect( product.versions_empty? ).to be_falsey
+      expect( product.remove_version('0.0.0') ).to be_falsey
+      expect( product.remove_version('1.1.0') ).to be_truthy
+      expect( product.version ).to eq('1.0.0')
     end
 
   end
@@ -568,18 +640,18 @@ describe Product do
     it 'returns nil' do
       product = Product.new
       product.check_nil_version
-      product.version.should eq('0.0.0+NA')
+      expect( product.version ).to eq('0.0.0+NA')
     end
     it 'returns 1.0.0' do
       product = Product.new(:prod_type => 'Maven', :language => 'Java', :prod_key => 'junit', :name => 'name')
       product.versions.push(Version.new({:version => '1.0.0'}))
       product.check_nil_version
-      product.version.should eq('1.0.0')
+      expect( product.version ).to eq('1.0.0')
     end
     it 'returns 2.0.0' do
       product = Product.new({:version => '2.0.0'})
       product.check_nil_version
-      product.version.should eq('2.0.0')
+      expect( product.version ).to eq('2.0.0')
     end
 
   end
@@ -618,19 +690,19 @@ describe Product do
   describe "encode_prod_key" do
 
     it "returns 0 for nil" do
-      described_class.encode_prod_key(nil).should eq("0")
+      expect( described_class.encode_prod_key(nil) ).to eq("0")
     end
     it "returns 0 for empty string" do
-      described_class.encode_prod_key("").should eq("0")
+      expect( described_class.encode_prod_key("") ).to eq("0")
     end
     it "returns 0 for empty string after strip" do
-      described_class.encode_prod_key("  ").should eq("0")
+      expect( described_class.encode_prod_key("  ") ).to eq("0")
     end
     it "returns rails" do
-      described_class.encode_prod_key('rails').should eq('rails')
+      expect( described_class.encode_prod_key('rails') ).to eq('rails')
     end
     it "returns zend:zend" do
-      described_class.encode_prod_key('zend/zend').should eq('zend:zend')
+      expect( described_class.encode_prod_key('zend/zend') ).to eq('zend:zend')
     end
 
   end
@@ -638,19 +710,19 @@ describe Product do
   describe "decode_prod_key" do
 
     it "returns nil for nil" do
-      described_class.decode_prod_key(nil).should be_nil
+      expect( described_class.decode_prod_key(nil) ).to be_nil
     end
     it "returns nil for empty string" do
-      described_class.decode_prod_key("").should be_nil
+      expect( described_class.decode_prod_key("") ).to be_nil
     end
     it "returns nil for empty string after strip" do
-      described_class.decode_prod_key("  ").should be_nil
+      expect( described_class.decode_prod_key("  ") ).to be_nil
     end
     it "returns rails" do
-      described_class.decode_prod_key('rails').should eq('rails')
+      expect( described_class.decode_prod_key('rails') ).to eq('rails')
     end
     it "returns zend/zend" do
-      described_class.decode_prod_key('zend:zend').should eq('zend/zend')
+      expect( described_class.decode_prod_key('zend:zend') ).to eq('zend/zend')
     end
 
   end
@@ -659,25 +731,25 @@ describe Product do
   describe "encode_language" do
 
     it "returns nil for nil" do
-      described_class.encode_language(nil).should be_nil
+      expect( described_class.encode_language(nil) ).to be_nil
     end
     it "returns nil for empty string" do
-      described_class.encode_language("").should be_nil
+      expect( described_class.encode_language("") ).to be_nil
     end
     it "returns 0 for empty string after strip" do
-      described_class.encode_language("  ").should be_nil
+      expect( described_class.encode_language("  ") ).to be_nil
     end
     it "returns php" do
-      described_class.encode_language('php').should eq('php')
+      expect( described_class.encode_language('php') ).to eq('php')
     end
     it "returns php" do
-      described_class.encode_language('PHP').should eq('php')
+      expect( described_class.encode_language('PHP') ).to eq('php')
     end
     it "returns nodejs" do
-      described_class.encode_language('Node.JS').should eq('nodejs')
+      expect( described_class.encode_language('Node.JS') ).to eq('nodejs')
     end
     it "returns objective-c" do
-      described_class.encode_language('Objective-C').should eq('objective-c')
+      expect( described_class.encode_language('Objective-C') ).to eq('objective-c')
     end
 
   end
@@ -686,31 +758,31 @@ describe Product do
   describe "decode_language" do
 
     it "returns nil for nil" do
-      described_class.decode_language(nil).should be_nil
+      expect( described_class.decode_language(nil) ).to be_nil
     end
     it "returns nil for empty string" do
-      described_class.decode_language("").should be_nil
+      expect( described_class.decode_language("") ).to be_nil
     end
     it "returns 0 for empty string after strip" do
-      described_class.decode_language("  ").should be_nil
+      expect( described_class.decode_language("  ") ).to be_nil
     end
     it "returns PHP" do
-      described_class.decode_language('php').should eq(described_class::A_LANGUAGE_PHP)
+      expect( described_class.decode_language('php') ).to eq(described_class::A_LANGUAGE_PHP)
     end
     it "returns Node.JS" do
-      described_class.decode_language('nodejs').should eq(described_class::A_LANGUAGE_NODEJS)
+      expect( described_class.decode_language('nodejs') ).to eq(described_class::A_LANGUAGE_NODEJS)
     end
     it "returns Objective-C" do
-      described_class.decode_language('objective-c').should eq(described_class::A_LANGUAGE_OBJECTIVEC)
+      expect( described_class.decode_language('objective-c') ).to eq(described_class::A_LANGUAGE_OBJECTIVEC)
     end
     it "returns JavaScript" do
-      described_class.decode_language('javascript').should eq(described_class::A_LANGUAGE_JAVASCRIPT)
+      expect( described_class.decode_language('javascript') ).to eq(described_class::A_LANGUAGE_JAVASCRIPT)
     end
     it "returns Ruby" do
-      described_class.decode_language('ruby').should eq(described_class::A_LANGUAGE_RUBY)
+      expect( described_class.decode_language('ruby') ).to eq(described_class::A_LANGUAGE_RUBY)
     end
     it "returns Ruby" do
-      described_class.decode_language('rUBy').should eq(described_class::A_LANGUAGE_RUBY)
+      expect( described_class.decode_language('rUBy') ).to eq(described_class::A_LANGUAGE_RUBY)
     end
 
   end
@@ -720,19 +792,19 @@ describe Product do
 
     it 'returns ruby' do
       product = described_class.new({:language => Product::A_LANGUAGE_RUBY})
-      product.language_esc.should eq('ruby')
+      expect( product.language_esc ).to eq('ruby')
     end
     it 'returns nodejs' do
       product = described_class.new({:language => Product::A_LANGUAGE_NODEJS})
-      product.language_esc.should eq('nodejs')
+      expect( product.language_esc ).to eq('nodejs')
     end
     it 'returns objective-c' do
       product = described_class.new({:language => Product::A_LANGUAGE_OBJECTIVEC})
-      product.language_esc.should eq('objective-c')
+      expect( product.language_esc ).to eq('objective-c')
     end
     it 'returns titi' do
       product = described_class.new({:language => Product::A_LANGUAGE_OBJECTIVEC})
-      product.language_esc('TiTi').should eq('titi')
+      expect( product.language_esc('TiTi') ).to eq('titi')
     end
 
   end
@@ -741,18 +813,18 @@ describe Product do
   describe "http_links" do
 
     it "returns an empty array" do
-      product.http_links.size.should eq(0)
+      expect( product.http_links.size ).to eq(0)
     end
 
     it "returns one link" do
       link = Versionlink.new({language: product.language, prod_key: product.prod_key})
       link.link = "http://link.de"
       link.name = "Name"
-      link.save.should be_truthy
+      expect( link.save ).to be_truthy
       db_link = Versionlink.find(link.id)
-      db_link.should_not be_nil
+      expect( db_link ).not_to be_nil
       links = product.http_links
-      links.size.should eq(1)
+      expect( links.size ).to eq(1)
       link.remove
     end
 
@@ -764,7 +836,7 @@ describe Product do
       link.version_id = "nope"
       link.name = "Name"
       link.save
-      product.http_links.size.should eq(0)
+      expect( product.http_links.size ).to eq(0)
       link.remove
     end
 
@@ -775,7 +847,7 @@ describe Product do
       link.name = "Name"
       link.save
       product.version = "1.1"
-      product.http_version_links.size.should eq(1)
+      expect( product.http_version_links.size ).to eq(1)
       link.remove
     end
 
@@ -792,7 +864,7 @@ describe Product do
       link2.save
 
       product.version = "1.1"
-      product.http_version_links_combined.size.should eq(2)
+      expect( product.http_version_links_combined.size ).to eq(2)
       link.remove
       link2.remove
     end
@@ -834,13 +906,15 @@ describe Product do
       license = License.new({:language => product1.language, :prod_key => product1.prod_key,
         :version => product1.version, :name => "MIT"})
       license.save
-      product1.license_info.should eql("MIT")
+
+      expect( product1.license_info ).to eql("MIT")
       license = License.new({:language => product1.language, :prod_key => product1.prod_key,
         :version => product1.version, :name => "GLP"})
       license.save
-      product1.licenses.count.should eq(2)
-      product1.license_info.should match("MIT")
-      product1.license_info.should match("GLP")
+
+      expect( product1.licenses.count ).to eq(2)
+      expect( product1.license_info ).to match("MIT")
+      expect( product1.license_info ).to match("GLP")
     end
 
     it "returns unified licenses" do
@@ -850,12 +924,13 @@ describe Product do
       license = License.new({:language => product1.language, :prod_key => product1.prod_key,
         :version => product1.version, :name => "MIT"})
       license.save
-      product1.license_info.should eql("MIT")
+
+      expect( product1.license_info ).to eql("MIT")
       license = License.new({:language => product1.language, :prod_key => product1.prod_key,
         :version => product1.version, :name => "The MIT License"})
       license.save
-      product1.licenses.count.should eq(1)
-      product1.licenses.first.name_substitute.should eq("MIT")
+      expect( product1.licenses.count ).to eq(1)
+      expect( product1.licenses.first.name_substitute ).to eq("MIT")
     end
   end
 
@@ -866,9 +941,9 @@ describe Product do
       product_2 = ProductFactory.create_new 2
       product_3 = ProductFactory.create_new 3, Project::A_TYPE_COMPOSER
       languages = described_class.unique_languages_for_product_ids( [product_1.id, product_2.id, product_3.id] )
-      languages.size.should eq(2)
-      languages.include?("PHP").should be_truthy
-      languages.include?("Java").should be_truthy
+      expect( languages.size ).to eq(2)
+      expect( languages.include?("PHP")   ).to be_truthy
+      expect( languages.include?("Java")  ).to be_truthy
     end
 
   end

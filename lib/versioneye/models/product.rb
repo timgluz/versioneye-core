@@ -130,6 +130,10 @@ class Product < Versioneye::Model
 
   def self.fetch_product lang, key
     return nil if lang.to_s.strip.empty? || key.to_s.strip.empty?
+    if lang == Product::A_LANGUAGE_PERL
+      return fetch_cpan(key)
+    end
+
     return Product.find_by_key( key ) if lang.eql? 'package'
 
     product = Product.find_by_lang_key( lang, key )
@@ -143,6 +147,45 @@ class Product < Versioneye::Model
 
     product = Product.where(prod_type: Project::A_TYPE_BOWER, name: name).first
     product = Product.where(prod_type: Project::A_TYPE_BOWER, name_downcase: name.to_s.downcase).first if product.nil?
+    product
+  end
+
+  # retrieves Perl package by main module id, or extracting parent id, by distribution id
+  def self.fetch_cpan module_id
+    module_id = module_id.to_s.strip
+    if module_id.empty?
+      log.error "fetch_cpan: module_id cant be empty"
+      return
+    end
+
+    # first try exact match on prod_key as it's the id of main module
+    product = Product.where(
+      language: Product::A_LANGUAGE_PERL,
+      prod_type: Project::A_TYPE_CPAN,
+      prod_key: module_id
+    ).first
+    return product if product
+
+    # expect that its name of submodule -> extract parent module
+    # parent module can be like DBD::Sqlite (modern), or just Test (older)
+    module_tokens = module_id.split("::")
+    double_id = module_tokens.take(2).join('::')
+    single_id = module_tokens.first
+    product = Product.where(
+      language: Product::A_LANGUAGE_PERL,
+      prod_type: Project::A_TYPE_CPAN,
+      :prod_key.in => [double_id, single_id]
+    ).first
+
+
+    # try to find product by distribution name
+    product ||= Product.where(
+      language: Product::A_LANGUAGE_PERL,
+      prod_type: Project::A_TYPE_CPAN,
+      name_downcase: module_id.downcase
+    ).first
+
+
     product
   end
 

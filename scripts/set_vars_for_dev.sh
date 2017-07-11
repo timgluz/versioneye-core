@@ -37,7 +37,7 @@ export BITBUCKET_USER_TOKEN=
 export BITBUCKET_USER_SECRET=
 
 export GITHUB_CLIENT_ID=
-export GITHUB_CLIENT_SECRET=
+export GITHUB_CLIENT_SECRET=""
 
 export RAILS_ENV="development"
 echo "Rails mode: $RAILS_ENV"

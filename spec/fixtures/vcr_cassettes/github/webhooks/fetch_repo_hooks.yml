@@ -13,6 +13,8 @@ http_interactions:
       - Octokit Ruby Gem 4.7.0
       Content-Type:
       - application/json
+      Authorization:
+      - token 6dadec9f9f3f62409c2d6c674ac2bf6d4e601493
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
   response:
@@ -23,7 +25,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Fri, 09 Jun 2017 13:30:47 GMT
+      - Fri, 07 Jul 2017 15:06:53 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -33,17 +35,18 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4942'
+      - '4997'
       X-Ratelimit-Reset:
-      - '1497016525'
+      - '1499443612'
       Cache-Control:
       - private, max-age=60, s-maxage=60
       Vary:
       - Accept, Authorization, Cookie, X-GitHub-OTP
+      - Accept-Encoding
       Etag:
-      - W/"4bc807d8d2a1dbd1abb763829e691863"
+      - W/"e1a68e5c8288f5f31ed98e8e5ae0c57c"
       X-Oauth-Scopes:
-      - admin:org_hook, admin:repo_hook, repo
+      - admin:org_hook, admin:repo_hook, read:org, repo
       X-Accepted-Oauth-Scopes:
       - admin:repo_hook, public_repo, read:repo_hook, repo, write:repo_hook
       X-Github-Media-Type:
@@ -64,12 +67,14 @@ http_interactions:
       X-Xss-Protection:
       - 1; mode=block
       X-Runtime-Rack:
-      - '0.068032'
+      - '0.096743'
+      X-Served-By:
+      - 52189b7290fad804d77890ef34a1eeae
       X-Github-Request-Id:
-      - F98D:620A:6B07DC:893CDC:593AA307
+      - D577:17D45:171A88:202BAF:595FA38D
     body:
       encoding: ASCII-8BIT
       string: '[{"type":"Repository","id":14269317,"name":"web","active":true,"events":["pull_request","push"],"config":{"api_key":"709cd0c2e2523fd268e4","content_type":"json","project_id":"593aa2002066ab005710e6b0","url":"https://www.versioneye.com/api/v2/github/hook/593aa2002066ab005710e6b0?api_key=709cd0c2e2523fd268e4","insecure_ssl":"0"},"updated_at":"2017-06-09T13:26:26Z","created_at":"2017-06-09T13:26:26Z","url":"https://api.github.com/repos/timgluz/versioneye-core/hooks/14269317","test_url":"https://api.github.com/repos/timgluz/versioneye-core/hooks/14269317/test","ping_url":"https://api.github.com/repos/timgluz/versioneye-core/hooks/14269317/pings","last_response":{"code":200,"status":"active","message":"OK"}}]'
     http_version: 
-  recorded_at: Fri, 09 Jun 2017 13:30:47 GMT
+  recorded_at: Fri, 07 Jul 2017 15:06:53 GMT
 recorded_with: VCR 3.0.3
