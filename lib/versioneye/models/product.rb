@@ -130,11 +130,13 @@ class Product < Versioneye::Model
 
   def self.fetch_product lang, key
     return nil if lang.to_s.strip.empty? || key.to_s.strip.empty?
-    if lang == Product::A_LANGUAGE_PERL
-      return fetch_cpan(key)
-    end
 
-    return Product.find_by_key( key ) if lang.eql? 'package'
+    if lang.eql?(Product::A_LANGUAGE_PERL)
+      prod = fetch_cpan( key )
+    elsif lang.eql? 'package'
+      prod = find_by_key( key )
+    end
+    return prod if prod
 
     product = Product.find_by_lang_key( lang, key )
     product = Product.find_by_lang_key( lang, key.downcase ) if product.nil?
