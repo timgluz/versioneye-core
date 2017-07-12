@@ -341,6 +341,7 @@ class Product < Versioneye::Model
     return A_LANGUAGE_LIVESCRIPT   if language.match(/\ALiveScript/i)
     return A_LANGUAGE_HTML         if language.match(/\Ahtml/i)
     return A_LANGUAGE_CSHARP       if language.match(/\Acsharp/i)
+    return A_LANGUAGE_PERL         if language.match(/\Aperl/i)
     return language.capitalize
   end
 
