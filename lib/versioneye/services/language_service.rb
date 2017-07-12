@@ -1,7 +1,7 @@
 class LanguageService < Versioneye::Service
 
 
-  A_DISTINCT_LANGUAGES = ["Java", "CSharp", "PHP", "CSS", "Rust", "Ruby", "Python", "Node.JS", "CoffeeScript", "HTML", "JavaScript", "Clojure", "Objective-C", "R", "Biicode", "PureScript", "Go", "Haskell", "Perl", "C#", "TypeScript", "Handlebars", "Opa", "C", "none", "Nix", "Shell", "wisp", "LiveScript", "Makefile", "ApacheConf", "C++", "ActionScript", "Scala", "Processing", "PowerShell", "Dart", "XSLT", "Lua", "XML", "ASP", "TeX", "Liquid", "Groovy", "Gettext Catalog", "Cirru", "Smarty", "Eagle", "Puppet", "SuperCollider", "Chef"]
+  A_DISTINCT_LANGUAGES = ["ASP", "ActionScript", "ApacheConf", "Batchfile", "Biicode", "C", "C#", "C++", "CSS", "CSharp", "Chef", "Cirru", "Clojure", "CoffeeScript", "Dart", "Eagle", "Elixir", "Erlang", "GCC Machine Description", "Go", "Groff", "Groovy", "HTML", "Handlebars", "Haskell", "Idris", "Java", "JavaScript", "Jupyter Notebook", "Liquid", "LiveScript", "Lua", "Makefile", "Matlab", "Nix", "Node.JS", "Objective-C", "Opa", "PHP", "Pascal", "Perl", "Processing", "Protocol Buffer", "Puppet", "PureBasic", "PureScript", "Python", "R", "RAML", "Ruby", "Rust", "Scala", "Scheme", "Scilab", "Shell", "Smarty", "Standard ML", "SuperCollider", "Swift", "TypeScript", "Vala", "Vim script", "VimL", "Vue", "XSLT", "wisp"]
   A_KEY = "distinct_languages"
 
 
