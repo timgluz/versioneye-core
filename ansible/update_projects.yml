@@ -29,6 +29,21 @@
     - name: Git push
       shell: git push --tags
 
+    - name: Update version file
+      lineinfile: dest="../../versioneye-tasks/Gemfile" regexp="^gem 'versioneye-core'" line="gem 'versioneye-core', :git => 'https://github.com/versioneye/versioneye-core.git', :tag => 'v{{release_version}}'"
+
+
+    - name: Bundle update for versioneye-tasks
+      shell: cd ../../versioneye-tasks/; bundle update;
+
+    - name: Git add all
+      shell: cd ../../versioneye-tasks/; git add --all
+
+    - name: Git commit
+      shell: cd ../../versioneye-tasks/; git commit -m "Update Core"
+
+    - name: Git push
+      shell: cd ../../versioneye-tasks/; git push
 
 
   # roles:
