@@ -46,5 +46,53 @@
       shell: cd ../../versioneye-tasks/; git push
 
 
-  # roles:
-  # - release
+    - name: Bundle update for versioneye-api
+      shell: cd ../../versioneye-api/; bundle update;
+
+    - name: Git add all
+      shell: cd ../../versioneye-api/; git add --all
+
+    - name: Git commit
+      shell: cd ../../versioneye-api/; git commit -m "Update Core"
+
+    - name: Git push
+      shell: cd ../../versioneye-api/; git push
+
+
+    - name: Bundle update for versioneye
+      shell: cd ../../versioneye/; bundle update;
+
+    - name: Git add all
+      shell: cd ../../versioneye/; git add --all
+
+    - name: Git commit
+      shell: cd ../../versioneye/; git commit -m "Update Core"
+
+    - name: Git push
+      shell: cd ../../versioneye/; git push
+
+
+    - name: Bundle update for versioneye-security
+      shell: cd ../../versioneye-security/; bundle update;
+
+    - name: Git add all
+      shell: cd ../../versioneye-security/; git add --all
+
+    - name: Git commit
+      shell: cd ../../versioneye-security/; git commit -m "Update Core"
+
+    - name: Git push
+      shell: cd ../../versioneye-security/; git push
+
+
+    - name: Bundle update for crawl_r
+      shell: cd ../../crawl_r/; bundle update;
+
+    - name: Git add all
+      shell: cd ../../crawl_r/; git add --all
+
+    - name: Git commit
+      shell: cd ../../crawl_r/; git commit -m "Update Core"
+
+    - name: Git push
+      shell: cd ../../crawl_r/; git push
