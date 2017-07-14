@@ -29,9 +29,12 @@
     - name: Git push
       shell: git push --tags
 
-    - name: Update version file
-      lineinfile: dest="../../versioneye-tasks/Gemfile" regexp="^gem 'versioneye-core'" line="gem 'versioneye-core', :git => 'https://github.com/versioneye/versioneye-core.git', :tag => 'v{{release_version}}'"
+    - name: wait a bit
+      pause: seconds=5
 
+
+    - name: Update version in file for versioneye-tasks
+      lineinfile: dest="../../versioneye-tasks/Gemfile" regexp="^gem 'versioneye-core'" line="gem 'versioneye-core', :git => 'https://github.com/versioneye/versioneye-core.git', :tag => 'v{{release_version}}'"
 
     - name: Bundle update for versioneye-tasks
       shell: cd ../../versioneye-tasks/; bundle update;
@@ -46,6 +49,9 @@
       shell: cd ../../versioneye-tasks/; git push
 
 
+    - name: Update version in file for versioneye-api
+      lineinfile: dest="../../versioneye-api/Gemfile" regexp="^gem 'versioneye-core'" line="gem 'versioneye-core', :git => 'https://github.com/versioneye/versioneye-core.git', :tag => 'v{{release_version}}'"
+
     - name: Bundle update for versioneye-api
       shell: cd ../../versioneye-api/; bundle update;
 
@@ -58,6 +64,9 @@
     - name: Git push for versioneye-api
       shell: cd ../../versioneye-api/; git push
 
+
+    - name: Update version in file for versioneye
+      lineinfile: dest="../../versioneye/Gemfile" regexp="^gem 'versioneye-core'" line="gem 'versioneye-core', :git => 'https://github.com/versioneye/versioneye-core.git', :tag => 'v{{release_version}}'"
 
     - name: Bundle update for versioneye
       shell: cd ../../versioneye/; bundle update;
@@ -72,6 +81,9 @@
       shell: cd ../../versioneye/; ./script/push_to_master.sh
 
 
+    - name: Update version in file for versioneye-security
+      lineinfile: dest="../../versioneye-security/Gemfile" regexp="^gem 'versioneye-core'" line="gem 'versioneye-core', :git => 'https://github.com/versioneye/versioneye-core.git', :tag => 'v{{release_version}}'"
+
     - name: Bundle update for versioneye-security
       shell: cd ../../versioneye-security/; bundle update;
 
@@ -84,6 +96,9 @@
     - name: Git push for versioneye-security
       shell: cd ../../versioneye-security/; git push
 
+
+    - name: Update version in file for crawl_r
+      lineinfile: dest="../../crawl_r/Gemfile" regexp="^gem 'versioneye-core'" line="gem 'versioneye-core', :git => 'https://github.com/versioneye/versioneye-core.git', :tag => 'v{{release_version}}'"
 
     - name: Bundle update for crawl_r
       shell: cd ../../crawl_r/; bundle update;
