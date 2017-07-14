@@ -26,8 +26,8 @@
     - name: Git tag
       shell: git tag -a v{{release_version}} -m "{{release_message}}"
 
-    - name: Git push
-      shell: git push --tags
+    - name: Git push --tags
+      shell: git push origin master --tags
 
     - name: wait a bit
       pause: seconds=5
