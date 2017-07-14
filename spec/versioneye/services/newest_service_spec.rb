@@ -51,7 +51,7 @@ describe NewestService do
 
     it "updates maven based product and dependency" do
       product_1 = ProductFactory.create_new(36)
-      product_1.add_version "100000000"
+      product_1.add_version "1000000"
       product_2 = ProductFactory.create_new(37)
 
       dependency = Dependency.new({ :known => true, :language => product_2.language,
@@ -66,7 +66,7 @@ describe NewestService do
       p_dep_1 = ProjectdependencyFactory.create_new project, product_1, true
       p_dep_1.save
 
-      NewestService.create_newest product_1, '100000000'
+      NewestService.create_newest product_1, '1000000'
       newest = Newest.last
 
       described_class.post_process
