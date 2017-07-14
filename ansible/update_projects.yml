@@ -1,0 +1,35 @@
+---
+- hosts: 127.0.0.1
+  connection: local
+
+  vars_prompt:
+    - name: "release_version"
+      prompt: "Product release version"
+      default: "1.0"
+      private: no
+
+    - name: "release_message"
+      prompt: "Product release message"
+      default: "Small patches"
+      private: no
+
+  tasks:
+    - name: Update version file
+      lineinfile: dest="../lib/versioneye/version.rb" regexp='^  VERSION = ' line="  VERSION = '{{release_version}}'"
+
+    - name: Git add all
+      shell: git add --all
+
+    - name: Git commit
+      shell: git commit -m "{{release_message}}"
+
+    - name: Git tag
+      shell: git tag -a v{{release_version}} -m "{{release_message}}"
+
+    - name: Git push
+      shell: git push --tags
+
+
+
+  # roles:
+  # - release

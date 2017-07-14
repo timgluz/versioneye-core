@@ -1,0 +1,7 @@
+---
+- name: This option
+  script: "/bin/cat ../lib/versioneye/version.rb"
+  register: version_number
+
+- name: stdout of getIt
+  debug: msg={{ version_number.stdout }}
