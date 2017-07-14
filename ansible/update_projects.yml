@@ -36,63 +36,63 @@
     - name: Bundle update for versioneye-tasks
       shell: cd ../../versioneye-tasks/; bundle update;
 
-    - name: Git add all
+    - name: Git add all for versioneye-tasks
       shell: cd ../../versioneye-tasks/; git add --all
 
-    - name: Git commit
+    - name: Git commit for versioneye-tasks
       shell: cd ../../versioneye-tasks/; git commit -m "Update Core"
 
-    - name: Git push
+    - name: Git push for versioneye-tasks
       shell: cd ../../versioneye-tasks/; git push
 
 
     - name: Bundle update for versioneye-api
       shell: cd ../../versioneye-api/; bundle update;
 
-    - name: Git add all
+    - name: Git add all for versioneye-api
       shell: cd ../../versioneye-api/; git add --all
 
-    - name: Git commit
+    - name: Git commit for versioneye-api
       shell: cd ../../versioneye-api/; git commit -m "Update Core"
 
-    - name: Git push
+    - name: Git push for versioneye-api
       shell: cd ../../versioneye-api/; git push
 
 
     - name: Bundle update for versioneye
       shell: cd ../../versioneye/; bundle update;
 
-    - name: Git add all
+    - name: Git add all for versioneye
       shell: cd ../../versioneye/; git add --all
 
-    - name: Git commit
+    - name: Git commit for versioneye
       shell: cd ../../versioneye/; git commit -m "Update Core"
 
-    - name: Git push
-      shell: cd ../../versioneye/; git push
+    - name: Git push for versioneye
+      shell: cd ../../versioneye/; ./script/push_to_master.sh
 
 
     - name: Bundle update for versioneye-security
       shell: cd ../../versioneye-security/; bundle update;
 
-    - name: Git add all
+    - name: Git add all for versioneye-security
       shell: cd ../../versioneye-security/; git add --all
 
-    - name: Git commit
+    - name: Git commit for versioneye-security
       shell: cd ../../versioneye-security/; git commit -m "Update Core"
 
-    - name: Git push
+    - name: Git push for versioneye-security
       shell: cd ../../versioneye-security/; git push
 
 
     - name: Bundle update for crawl_r
       shell: cd ../../crawl_r/; bundle update;
 
-    - name: Git add all
+    - name: Git add all for crawl_r
       shell: cd ../../crawl_r/; git add --all
 
-    - name: Git commit
+    - name: Git commit for crawl_r
       shell: cd ../../crawl_r/; git commit -m "Update Core"
 
-    - name: Git push
+    - name: Git push for crawl_r
       shell: cd ../../crawl_r/; git push
