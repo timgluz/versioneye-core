@@ -245,7 +245,7 @@ describe GemfileParser do
       dep_12 = fetch_by_name project.dependencies, "copycopter_client"
       expect( dep_12.name).to eql("copycopter_client")
       expect( dep_12.version_requested).to eql("GITHUB")
-      expect( dep_12.version_label).to eql('git://github.com/nmk/copycopter-ruby-client.git')
+      expect( dep_12.version_label).to eql('git:git://github.com/nmk/copycopter-ruby-client.git')
       expect( dep_12.version_current).to eql("1.0.0")
       expect( dep_12.comperator).to eql("=")
 
