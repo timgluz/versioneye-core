@@ -217,7 +217,8 @@ class GemfileParser < CommonParser
       dependency.comperator = "~>"
       dependency.version_label = ver
 
-    elsif version.match(/^git:/)
+    elsif version.match(/\Agit:/i)
+      # handle github url differently
       if /github\.com/.match?(version)
         repo_url, repo_ref = version.split('#', 2)
         repo_ref ||= 'master'
@@ -239,10 +240,11 @@ class GemfileParser < CommonParser
       dependency.version_label     = "PATH"
       dependency.comperator        = "="
 
-    elsif /\w\/\w/.match?(version)
+    elsif /\Agithub/i.match?(version)
       # if it is GITHUB dependency
       repo_fullname, repo_ref = version.split('#', 2)
       repo_ref ||= 'master'
+      repo_fullname = extract_repo_name(repo_fullname) #removes leading `github:`
 
       dependency[:version_requested]  = 'GITHUB'
       dependency[:version_label]      = version
@@ -313,17 +315,17 @@ class GemfileParser < CommonParser
               elsif gem_doc.has_key?(:github)
                 rev = (gem_doc[:rev] || gem_doc[:tag] || gem_doc[:branch])
                 if rev
-                  "#{gem_doc[:github]}##{rev}"
+                  "github:#{gem_doc[:github]}##{rev}"
                 else
-                  gem_doc[:github]
+                  "github:" + gem_doc[:github].to_s
                 end
 
               elsif gem_doc.has_key?(:git)
                 rev = (gem_doc[:rev] || gem_doc[:tag] || gem_doc[:branch])
                 if rev
-                  "#{gem_doc[:git]}#{rev}"
+                  "git:#{gem_doc[:git]}##{rev}"
                 else
-                  gem_doc[:git]
+                  "git:#{gem_doc[:git]}"
                 end
 
               elsif gem_doc.has_key?(:path)
@@ -421,7 +423,7 @@ class GemfileParser < CommonParser
   end
 
   def extract_repo_name(git_url)
-    repo_owner, repo_fullname = git_url.to_s.split('/').pop(2)
+    repo_owner, repo_fullname = git_url.to_s.split(/\/|\:/).to_a.pop(2)
     repo_fullname = repo_fullname.gsub(/\.git\z/, '').to_s.strip
 
     "#{repo_owner}/#{repo_fullname}"

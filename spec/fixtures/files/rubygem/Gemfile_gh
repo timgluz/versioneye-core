@@ -1,0 +1,9 @@
+# git dependencies
+
+gem "rails", git: "https://github.com/rails/rails.git", rev: "f8f3d70" # use modern Hashmap
+gem "rspec", :git => "git@github.com:rspec/rspec.git", :branch => "2-0-stable" #should be outdated
+gem "devise", git: "git@github.com:plataformatec/devise", tag: "v4.3.0"
+
+# github dependencies
+
+gem "sass", github: "sass/sass", tag: "3.4.21"
