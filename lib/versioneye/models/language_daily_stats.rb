@@ -16,6 +16,9 @@ class LanguageDailyStats < Versioneye::Model
   field :R         , type: Hash
   field :Ruby      , type: Hash
   field :Objectivec, type: Hash
+  field :Rust      , type: Hash
+  field :Perl      , type: Hash
+  field :Elixir    , type: Hash
 
   index({date: -1},        {background: true})
   index({date_string: -1}, {background: true})

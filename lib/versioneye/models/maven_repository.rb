@@ -62,6 +62,7 @@ class MavenRepository < Versioneye::Model
     repos['adobe']              = 'https://repo.adobe.com/nexus/content/groups/public/'
     repos['jenkins']            = 'https://repo.jenkins-ci.org/public/'
     repos['redhat']             = 'https://maven.repository.redhat.com/ga/'
+    repos['google']             = 'https://dl.google.com/dl/android/maven2/'
 
     repos.keys.each do |key|
       repo = MavenRepository.new( { :name => key, :url => repos[key], :language => Product::A_LANGUAGE_JAVA } )

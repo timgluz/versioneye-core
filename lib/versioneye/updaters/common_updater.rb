@@ -32,6 +32,8 @@ class CommonUpdater < Versioneye::Service
 
 
   def update_private_project project
+    return false if !project.source.to_s.eql?(Project::A_SOURCE_GITHUB)
+
     user = user_for project
     project.private_project = Github.private_repo? user.github_token, project.scm_fullname
     project.save

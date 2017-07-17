@@ -36,6 +36,7 @@ class LdapService < Versioneye::Service
                              :password => password,
                              :method => auth_method.to_sym } }
       ldap = Net::LDAP.new( ldap_args )
+      log.info "Net::LDAP.new for #{ldap_host}:#{ldap_port}"
     end
 
     encryption = Settings.instance.ldap_encryption.to_s
@@ -52,7 +53,7 @@ class LdapService < Versioneye::Service
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
-    e.message
+    nil
   end
 
 
