@@ -24,6 +24,7 @@ class LanguageDailyStats < Versioneye::Model
   index({date_string: -1}, {background: true})
   index({created_at: -1},  {background: true})
 
+
   def self.initial_metrics_table
     {
       'new_version'    => 0, # new   versions  publised
@@ -32,6 +33,7 @@ class LanguageDailyStats < Versioneye::Model
       'total_artifact' => 0  # total artifacts upto this date
     }
   end
+
 
   def self.update_counts(ndays = 1, skip = 0)
     ndays += skip
@@ -45,12 +47,14 @@ class LanguageDailyStats < Versioneye::Model
     nil
   end
 
+
   def initialize_metrics_tables
     Product::A_LANGS_SUPPORTED.each do |lang|
       lang_key       = LanguageDailyStats.language_to_sym( lang )
       self[lang_key] = LanguageDailyStats.initial_metrics_table
     end
   end
+
 
   def self.language_to_sym(lang)
     lang = Product.encode_language(lang).capitalize
@@ -59,11 +63,13 @@ class LanguageDailyStats < Versioneye::Model
     lang.to_sym
   end
 
+
   def self.to_date_string(that_day)
     that_day.strftime('%Y-%m-%d')
   end
 
-  def self.new_document(that_day, save = false)
+
+  def self.new_document(that_day = DateTime.now, save = false)
     day_string = self.to_date_string(that_day)
     self.where(date_string: day_string).delete_all # remove previous document
 
@@ -75,6 +81,7 @@ class LanguageDailyStats < Versioneye::Model
     new_doc
   end
 
+
   def self.update_day_stats( n )
     that_day = n.days.ago.at_beginning_of_day
     that_day_doc = self.new_document(that_day, false)
@@ -83,6 +90,7 @@ class LanguageDailyStats < Versioneye::Model
     that_day_doc.count_language_artifacts
     that_day_doc.save
   end
+
 
   def count_releases
     that_day = self[:date]
@@ -94,6 +102,7 @@ class LanguageDailyStats < Versioneye::Model
       self.count_release( release )
     end
   end
+
 
   def count_release(release)
     if release[:language].nil? || release[:language].empty?
@@ -118,6 +127,7 @@ class LanguageDailyStats < Versioneye::Model
     self.inc_novel(metric_key) if count > 0
   end
 
+
   def count_language_packages
     that_day = self[:date]
     Product::A_LANGS_SUPPORTED.each do |lang|
@@ -126,6 +136,7 @@ class LanguageDailyStats < Versioneye::Model
       self.inc_total_package(language_key, lang_total)
     end
   end
+
 
   def count_language_artifacts
     that_day = self[:date]
@@ -164,17 +175,21 @@ class LanguageDailyStats < Versioneye::Model
     self[metric_key]['new_version'] += val
   end
 
+
   def inc_novel(metric_key, val =  1)
     self[metric_key]['novel_package'] += val
   end
+
 
   def inc_total_package(metric_key, val =  1)
     self[metric_key]['total_package'] += val
   end
 
+
   def inc_total_artifact(metric_key, val = 1)
     self[metric_key]['total_artifact'] += val
   end
+
 
   def metrics
     doc = self.attributes
@@ -182,6 +197,7 @@ class LanguageDailyStats < Versioneye::Model
     Product::A_LANGS_SUPPORTED.each {|lang| langs_keys << LanguageDailyStats.language_to_sym(lang)}
     doc.keep_if {|key, val| langs_keys.include?(key.to_sym)}
   end
+
 
   #shows only metrics of Stats doc
   def self.doc_metrics(doc)
@@ -191,6 +207,7 @@ class LanguageDailyStats < Versioneye::Model
     end
     doc.metrics
   end
+
 
   def self.combine_docs(docs)
     stats = {}
@@ -205,6 +222,7 @@ class LanguageDailyStats < Versioneye::Model
     stats
   end
 
+
   #-- query helpers
   def self.latest_stats(lang = "Ruby")
     lang_key = LanguageDailyStats.language_to_sym(lang)
@@ -212,9 +230,11 @@ class LanguageDailyStats < Versioneye::Model
     self.doc_metrics(doc)
   end
 
+
   def self.since_to(dt_since, dt_to)
     self.where(:date.gte => dt_since, :date.lt => dt_to).desc(:date)
   end
+
 
   def self.today_stats
     dt_string = LanguageDailyStats.to_date_string(Date.today)
@@ -222,11 +242,13 @@ class LanguageDailyStats < Versioneye::Model
     self.doc_metrics(doc)
   end
 
+
   def self.yesterday_stats
     dt_string = LanguageDailyStats.to_date_string(1.day.ago)
     doc = self.where(date_string: dt_string).shift
     self.doc_metrics(doc)
   end
+
 
   #stats for 2days ago
   def self.t2_stats
