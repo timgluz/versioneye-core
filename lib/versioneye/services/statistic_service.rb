@@ -11,6 +11,8 @@ class StatisticService < Versioneye::Service
       Product::A_LANGUAGE_CLOJURE,
       Product::A_LANGUAGE_OBJECTIVEC,
       Product::A_LANGUAGE_RUST,
+      Product::A_LANGUAGE_ELIXIR,
+      Product::A_LANGUAGE_PERL,
       Product::A_LANGUAGE_CHEF
     ]
 
