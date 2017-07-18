@@ -38,7 +38,7 @@ describe PackageParser do
 
   context "parse_content with Github dependencies" do
     before do
-        prod1.versions << Version.new(version: '4.15.3', released_at: DateTime.parse('2017-05-12'))
+      prod1.versions << Version.new(version: '4.15.3', released_at: DateTime.parse('2017-05-12'))
       prod1.save
 
       prod2.versions << Version.new(version: '3.4.2', released_at: DateTime.now)
