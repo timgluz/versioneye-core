@@ -196,8 +196,9 @@ class Product < Versioneye::Model
         prod_type: Project::A_TYPE_CPAN,
         prod_key: 'perl'
       ).first
-
-      product = perl_db if perl_db.modules.to_a.include?(module_id)
+      if perl_db and perl_db[:modules].to_a.include?(module_id)
+        product = perl_db
+      end
     end
 
     product
