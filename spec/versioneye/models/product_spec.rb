@@ -292,11 +292,24 @@ describe Product do
     )
   }
 
+  let(:cpan_perl){
+    Product.new(
+      language: Product::A_LANGUAGE_PERL,
+      prod_type: Project::A_TYPE_CPAN,
+      prod_key: 'perl',
+      name: 'perl',
+      name_downcase: 'perl',
+      version: '5.26',
+      modules: ['File::Basename', 'Sys::Hostname']
+    )
+  }
+
 
   describe "fetch_cpan" do
     before do
       cpan_prod1.save
       cpan_prod2.save
+      cpan_perl.save
     end
 
     it "finds match by parent module name" do
@@ -327,6 +340,17 @@ describe Product do
       expect(prod[:prod_type]).to eq(cpan_prod1[:prod_type])
       expect(prod[:prod_key]).to eq(cpan_prod1[:prod_key])
       expect(prod[:name]).to eq(cpan_prod1[:name])
+    end
+
+    it "finds match from perl submodule" do
+      prod = Product.fetch_cpan('Sys::Hostname')
+
+      expect(prod).not_to be_nil
+      expect(prod[:language]).to eq(cpan_perl[:language])
+      expect(prod[:prod_type]).to eq(cpan_perl[:prod_type])
+      expect(prod[:prod_key]).to eq(cpan_perl[:prod_key])
+      expect(prod[:name]).to eq(cpan_perl[:name])
+
     end
   end
 
