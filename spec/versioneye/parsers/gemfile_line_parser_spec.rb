@@ -101,7 +101,7 @@ describe GemfileParser do
       line = "gem \"copycopter_client\", :git     => \"git://github.com/nmk/copycopter-ruby-client.git\" "
       elements = parser.parse_gem_line( line )
 
-      expect( parser.fetch_version( elements )).to eql('git://github.com/nmk/copycopter-ruby-client.git')
+      expect( parser.fetch_version( elements )).to eql('git:git://github.com/nmk/copycopter-ruby-client.git')
     end
 
     it "returns the right version for PATH" do
