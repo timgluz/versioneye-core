@@ -30,7 +30,7 @@
       shell: git push origin master --tags
 
     - name: wait a bit
-      pause: seconds=10
+      pause: seconds=15
 
 
     - name: Update version in file for versioneye-tasks
