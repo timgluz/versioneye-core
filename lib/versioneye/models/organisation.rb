@@ -178,7 +178,7 @@ class Organisation < Versioneye::Model
   end
 
   # https://github.com/versioneye/versioneye-api/blob/master/docs/api/v2/organisation.md
-  def component_list team = 'ALL', language = nil, version = nil, after_filter = 'ALL'
+  def component_list team = 'ALL', language = nil, version = nil, after_filter = 'ALL', use_cache = true
     return {} if projects.to_a.empty?
 
     inventory = Inventory.find_or_create_by( :orga_name => self.name,
@@ -187,7 +187,7 @@ class Organisation < Versioneye::Model
                                              :project_version => version,
                                              :post_filter => after_filter )
     hour_ago = Time.now - 1.hour
-    if inventory.updated_at > hour_ago && !inventory.inventory_items.empty?
+    if use_cache && inventory.updated_at > hour_ago && !inventory.inventory_items.empty?
       return build_comps_hash_from( inventory )
     end
 

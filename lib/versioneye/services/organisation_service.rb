@@ -37,6 +37,65 @@ class OrganisationService < Versioneye::Service
   end
 
 
+  def self.inventory_diff_async orga_name, filter1, filter2
+    orga = Organisation.where(:name => orga_name).first
+    if orga.nil?
+      log.error "ERROR in inventory_diff_async - no orga found for #{orga_name}"
+      return nil
+    end
+    diff = InventoryDiff.new(:organisation_id => orga.ids)
+    diff.save
+
+    InventoryProducer.new({:type => "diff",
+           :diff_id => diff.ids,
+           :orga_name => orga_name,
+           :filter1 => filter1,
+           :filter2 => filter2}.to_json)
+
+    diff.ids
+  end
+
+
+  def self.inventory_diff orga_name, filter1, filter2, diff_id = nil, use_cache = true
+    orga = Organisation.where(:name => orga_name).first
+    return nil if orga.nil?
+
+    items_added = []
+    items_removed = []
+
+    inv1 = orga.component_list filter1[:team], filter1[:language], filter1[:version], filter1[:after_filter], use_cache
+    inv2 = orga.component_list filter2[:team], filter2[:language], filter2[:version], filter2[:after_filter], use_cache
+
+    inv1_set = []
+    inv1.each do |element|
+      element.last.keys.each do |key|
+        inv1_set << key if !inv1_set.include?(key)
+      end
+    end
+
+    inv2_set = []
+    inv2.each do |element|
+      element.last.keys.each do |key|
+        inv2_set << key if !inv2_set.include?(key)
+      end
+    end
+
+    items_removed = inv1_set - inv2_set
+    items_added   = inv2_set - inv1_set
+
+    idiff = if diff_id
+              InventoryDiff.find diff_id
+            else
+              InventoryDiff.new
+            end
+    idiff.items_added = items_added
+    idiff.items_removed = items_removed
+    idiff.finished = true
+    idiff.save
+    idiff
+  end
+
+
   def self.delete orga
     return false if orga.nil?
 

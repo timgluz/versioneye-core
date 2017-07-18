@@ -489,7 +489,6 @@ describe Organisation do
 
       comps = @orga.component_list team.name, 'ALL', 'ALL', 'show_duplicates'
       expect( comps ).to_not be_nil
-      p comps
       expect( comps['Java:org.junit/junit:2.0.0'] ).to_not be_nil
       expect( comps['Java:org.junit/junit:2.0.0'].count ).to eq(2)
       expect( comps['Java:org.junit/junit:2.0.0']['org.junit/junit::2.0.0::UNKNOWN::0'] ).to_not be_nil
@@ -497,5 +496,6 @@ describe Organisation do
     end
 
   end
+
 
 end

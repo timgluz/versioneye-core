@@ -2,6 +2,137 @@ require 'spec_helper'
 
 describe OrganisationService do
 
+
+  describe "inventory_diff" do
+    it "returns the inventory_diff" do
+      Plan.create_defaults
+
+      user = UserFactory.create_new
+      expect( user.save ).to be_truthy
+
+      @user1 = UserFactory.create_new 392
+      @orga = OrganisationService.create_new_for @user1
+
+      team = Team.new(:name => 'devs', :organisation => @orga)
+      expect( team.save ).to be_truthy
+
+      TeamService.add 'devs', @orga.ids, user.username, @user1
+      expect( @orga.teams.count ).to eq(2)
+
+      project = ProjectFactory.create_new user, {:name => 'project_1'}, true, @orga
+      project.language = 'Java'
+      project.teams = [team]
+      expect( project.save ).to be_truthy
+      expect( @orga.projects.count ).to eq(1)
+
+      project2 = ProjectFactory.create_new user, {:name => 'project_2'}, true, @orga
+      project2.language = 'Java'
+      project2.teams = [@orga.owner_team]
+      expect( project2.save ).to be_truthy
+      expect( project2.teams.count ).to eq(1)
+      expect( project2.teams.first.name ).to eq("Owners")
+      expect( @orga.projects.count ).to eq(2)
+      expect( Project.count ).to eq(2)
+
+      junit  = ProductFactory.create_for_maven 'org.junit', 'junit', '2.0.0'
+      junit.add_version '1.9.9'
+      expect( junit.save ).to be_truthy
+
+      dep_1 = ProjectdependencyFactory.create_new project, junit, true
+      dep_1.version_requested = junit.version
+      expect( dep_1.save ).to be_truthy
+
+      dep_2 = ProjectdependencyFactory.create_new project2, junit, true
+      dep_2.version_label = '1.9.9'
+      dep_2.version_requested = '1.9.9'
+      expect( dep_2.save ).to be_truthy
+      expect( dep_2.project.ids.eql?(project2.ids) ).to be_truthy
+
+      expect( @orga.projects[0].dependencies.count ).to eq(1)
+      expect( @orga.projects[1].dependencies.count ).to eq(1)
+
+      diff = OrganisationService.inventory_diff @orga,
+                                         {:team => team.ids, :language => nil, :version => nil, :after_filter => nil},
+                                         {:team => "ALL", :language => nil, :version => nil, :after_filter => nil}
+      expect( diff.items_added ).to eq(["org.junit/junit::1.9.9::UNKNOWN::0"])
+      expect( diff.items_removed ).to be_empty
+
+      diff = OrganisationService.inventory_diff @orga,
+                                         {:team => "ALL", :language => nil, :version => nil, :after_filter => nil},
+                                         {:team => team.ids, :language => nil, :version => nil, :after_filter => nil}
+      expect( diff.items_removed ).to eq(["org.junit/junit::1.9.9::UNKNOWN::0"])
+      expect( diff.items_added ).to be_empty
+    end
+  end
+
+
+  describe "inventory_diff_async" do
+    it "returns the inventory_diff" do
+      Plan.create_defaults
+
+      user = UserFactory.create_new
+      expect( user.save ).to be_truthy
+
+      @user1 = UserFactory.create_new 392
+      @orga = OrganisationService.create_new_for @user1
+
+      team = Team.new(:name => 'devs', :organisation => @orga)
+      expect( team.save ).to be_truthy
+
+      TeamService.add 'devs', @orga.ids, user.username, @user1
+      expect( @orga.teams.count ).to eq(2)
+
+      project = ProjectFactory.create_new user, {:name => 'project_1'}, true, @orga
+      project.language = 'Java'
+      project.teams = [team]
+      expect( project.save ).to be_truthy
+      expect( @orga.projects.count ).to eq(1)
+
+      project2 = ProjectFactory.create_new user, {:name => 'project_2'}, true, @orga
+      project2.language = 'Java'
+      project2.teams = [@orga.owner_team]
+      expect( project2.save ).to be_truthy
+      expect( project2.teams.count ).to eq(1)
+      expect( project2.teams.first.name ).to eq("Owners")
+      expect( @orga.projects.count ).to eq(2)
+      expect( Project.count ).to eq(2)
+
+      junit  = ProductFactory.create_for_maven 'org.junit', 'junit', '2.0.0'
+      junit.add_version '1.9.9'
+      expect( junit.save ).to be_truthy
+
+      dep_1 = ProjectdependencyFactory.create_new project, junit, true
+      dep_1.version_requested = junit.version
+      expect( dep_1.save ).to be_truthy
+
+      dep_2 = ProjectdependencyFactory.create_new project2, junit, true
+      dep_2.version_label = '1.9.9'
+      dep_2.version_requested = '1.9.9'
+      expect( dep_2.save ).to be_truthy
+      expect( dep_2.project.ids.eql?(project2.ids) ).to be_truthy
+
+      expect( @orga.projects[0].dependencies.count ).to eq(1)
+      expect( @orga.projects[1].dependencies.count ).to eq(1)
+
+      worker = Thread.new{ InventoryWorker.new.work }
+
+      diff_id = OrganisationService.inventory_diff_async( @orga.name,
+                                         {:team => team.ids, :language => nil, :version => nil, :after_filter => nil},
+                                         {:team => "ALL", :language => nil, :version => nil, :after_filter => nil})
+      expect( diff_id ).to_not be_nil
+      idiff = InventoryDiff.find diff_id
+      while idiff.finished == false do
+        sleep 1
+        idiff = InventoryDiff.find diff_id
+        p "reload inventory diff: #{diff_id}"
+      end
+      expect( idiff.items_added.count ).to eq(1)
+      expect( idiff.items_removed.count ).to eq(0)
+      worker.exit
+    end
+  end
+
+
   describe "transfer" do
 
     it "transfers a project to the orga" do
