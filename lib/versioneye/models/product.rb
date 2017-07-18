@@ -140,7 +140,10 @@ class Product < Versioneye::Model
 
     product = Product.find_by_lang_key( lang, key )
     product = Product.find_by_lang_key( lang, key.downcase ) if product.nil?
-    product = Product.where(:language => lang, :prod_key_dc => key.downcase).first if ( product.nil? && lang.eql?( A_LANGUAGE_NODEJS ) )
+    if ( product.nil? && lang.eql?( A_LANGUAGE_NODEJS ) )
+      product = Product.where(:language => lang, :prod_key_dc => key.downcase).first
+    end
+
     product
   end
 
@@ -179,7 +182,6 @@ class Product < Versioneye::Model
       :prod_key.in => [double_id, single_id]
     ).first
 
-
     # try to find product by distribution name
     product ||= Product.where(
       language: Product::A_LANGUAGE_PERL,
@@ -187,6 +189,17 @@ class Product < Versioneye::Model
       name_downcase: module_id.downcase
     ).first
 
+    #finally look from the core modules of perl
+    if product.nil?
+      perl_db = Product.where(
+        language: Product::A_LANGUAGE_PERL,
+        prod_type: Project::A_TYPE_CPAN,
+        prod_key: 'perl'
+      ).first
+      if perl_db and perl_db[:modules].to_a.include?(module_id)
+        product = perl_db
+      end
+    end
 
     product
   end
