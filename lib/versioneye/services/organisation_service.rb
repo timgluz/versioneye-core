@@ -140,6 +140,8 @@ class OrganisationService < Versioneye::Service
     return false if team.nil?
 
     team.members.each do |member|
+      next if member.nil? || member.user.nil?
+
       return true if member.user.ids.eql?(user.ids)
     end
     false
@@ -151,6 +153,8 @@ class OrganisationService < Versioneye::Service
 
     orga.teams.each do |team|
       team.members.each do |member|
+        next if member.nil? || member.user.nil?
+
         return true if member.user.ids.eql?(user.ids)
       end
     end
