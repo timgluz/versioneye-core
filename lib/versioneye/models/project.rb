@@ -256,6 +256,8 @@ class Project < Versioneye::Model
     if teams && !teams.empty?
       teams.each do |team|
         team.members.each do |tm|
+          next if tm.nil? || tm.user.nil?
+
           return true if tm.user.ids.eql?(user.ids)
         end
       end
