@@ -37,7 +37,8 @@ class SyncService < Versioneye::Service
 
   def self.sync_project project
     sync_status = SyncStatus.find_or_create_by( :comp_type => 'Project', :comp_id => project.ids )
-    sync_status.update_attribute(:status, 'running')
+    sync_status.status = 'running'
+    sync_status.save
 
     sync_projectdependencies project.unknown_dependencies, false
     sync_projectdependencies project.known_dependencies, true
@@ -48,7 +49,9 @@ class SyncService < Versioneye::Service
     project.update_attribute(:sync_lock, false)
     log.info "sync lock false ... sync done for project #{project.ids}"
 
-    sync_status.update_attribute(:status, 'done')
+    sync_status = SyncStatus.find_or_create_by( :comp_type => 'Project', :comp_id => project.ids )
+    sync_status.status = 'done'
+    sync_status.save
   end
 
 

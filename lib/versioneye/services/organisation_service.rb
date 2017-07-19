@@ -205,6 +205,10 @@ class OrganisationService < Versioneye::Service
       orgas.push(orga) if OrganisationService.allowed_to_transfer_projects?( orga, user )
     end
     orgas
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    []
   end
 
 
