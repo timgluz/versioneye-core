@@ -1,5 +1,6 @@
 class SendNotificationEmailsWorker < Worker
 
+
   def work
     connection = get_connection
     connection.start
@@ -23,11 +24,13 @@ class SendNotificationEmailsWorker < Worker
     end
   end
 
+
   def send_notification_emails msg
     NotificationService.send_notifications
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
   end
+
 
 end
