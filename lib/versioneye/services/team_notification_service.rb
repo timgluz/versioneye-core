@@ -3,9 +3,9 @@ class TeamNotificationService  < Versioneye::Service
 
   def self.start serial = true
     Plan.all.desc(:prio).each do |plan|
-      process_orgas plan.organisations
+      process_orgas plan.organisations, serial
     end
-    orgas = Organisation.where(:plan_id => nil, serial)
+    orgas = Organisation.where(:plan_id => nil)
     process_orgas orgas, serial
   end
 
