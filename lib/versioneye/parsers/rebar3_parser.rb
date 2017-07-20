@@ -26,21 +26,170 @@ class Rebar3Parser < CommonParser
     rebar_txt = preprocess_text(rebar_txt)
     return if rebar_txt.empty?
 
+    # parse plain erlang file to ruby hashmap
     project_doc = parse_into_ruby(rebar_txt)
     if project_doc.nil? or project_doc.empty?
       log.error "parse_content: failed to decode erlang blocks into ruby data"
       return
     end
 
-    p project_doc
-    # create project
-    # parse dependencies
+    p project_doc[:deps], project_doc[:profiles]
 
+
+    # parse dependencies
+    deps = parse_dependencies(project_doc[:deps]).to_a
+    deps += parse_profile_dependencies(project_doc[:profiles]).to_a
+    if deps.nil?
+      log.error "parse_content: failed to parse dependencies"
+      return
+    end
+
+    # create project and attach processed dependencies
+    project = init_project
+    process_project_dependencies(project, deps)
+
+    project
   rescue => e
     log.error "ERROR in parse_content:\n#{rebar_txt}"
     log.error "\treason: #{e.message}"
     log.error e.backtrace.join('\n')
     nil
+  end
+
+  def process_project_dependencies(project, deps)
+    return project if deps.nil? or deps.empty?
+
+    deps.each {|dep_db| process_project_dependency(project, dep_db)}
+
+    project
+  end
+
+  def process_project_dependency(project, dep_db)
+    return if dep_db.nil?
+
+    product = Product.where(
+      prod_type: Project::A_TYPE_HEX,
+      prod_key: dep_db[:prod_key]
+    ).first
+
+    if product
+      parse_requested_version(dep_db[:version_label], dep_db, product)
+      dep_db[:language] = product.language
+      dep_db[:version_current] = product.version
+    else
+      project.unknown_number += 1
+    end
+
+    project.projectdependencies << dep_db
+    project.out_number += 1 if ProjectdependencyService.outdated?(dep_db)
+    project
+  end
+
+  def parse_requested_version(version_label, dep_db, product)
+    version_label = version_label.to_s.strip
+
+    case version_label
+    when /\A\*/
+      # select the newest
+    when /\Agit\+/
+     # handle github version
+    when /\A\.*/
+      # handle 0.x
+    when /\d+\.\*/
+      # handle patterns
+    when /\A\d+/, /\A\d+\.\d+/
+      # handle exact semver match
+    else
+      log.error "parse_requested_version"
+    end
+
+    dep_db
+  end
+
+  def parse_profile_dependencies(profile_doc)
+    profile_doc.to_a.reduce([]) do |acc, profile_item|
+      scope_name = profile_item.keys.first.to_s
+      profile = profile_item.values.first.find {|x| x.keys.include?(:deps)}
+      if profile
+        deps = parse_dependencies(profile[:deps], scope_name).to_a
+        acc += deps
+      end
+
+      acc
+    end
+  end
+
+  def parse_dependencies(dep_items, scope = Dependency::A_SCOPE_COMPILE)
+    dep_items.to_a.reduce([]) do |acc, dep_doc|
+      dep_db = parse_dependency(dep_doc, scope)
+      if dep_db
+        acc << dep_db
+      else
+        log.error "parse_dependencies: failed to parse #{dep_doc}"
+      end
+
+      acc
+    end
+  end
+
+  def parse_dependency(dep_doc, scope)
+
+    p "#-- scope: #{scope} --> #{dep_doc}"
+    prod_key = dep_doc.keys.first.to_s
+    version_label = extract_version_label(dep_doc.values.first)
+
+    p "#-- #{prod_key} --> #{version_label}"
+
+    init_dependency(prod_key, version_label, scope)
+  end
+
+  def extract_version_label(version_doc)
+    if version_doc.nil?
+      "*"
+    elsif version_doc.is_a?(String)
+      version_doc
+    elsif version_doc.is_a?(Hash)
+      scm_id = version_doc.keys.first.to_s
+      scm_val = version_doc.values.first
+      extract_scm_label(scm_id, scm_val)
+
+    elsif version_doc.is_a?(Array)
+      #find plain version string, ignore SCM details
+      lbl = version_doc.find {|x| x.is_a?(String) }
+      return lbl if lbl
+
+      #find first hash map that includes SCM info
+      scm_doc = version_doc.find {|x| x.is_a?(Hash) }
+      if scm_doc
+        extract_scm_label( scm_doc.keys.first, scm_doc.values.first )
+      end
+    end
+  end
+
+  # turns SCM values into scm version label
+  def extract_scm_label(scm_id, scm_doc)
+    scm_id = scm_id.to_s.strip
+
+    if scm_doc.is_a?(String)
+      "#{scm_id}+#{scm_doc}"
+    elsif scm_doc.is_a?(Array)
+      scm_url = scm_doc.find {|x| x.is_a?(String) }
+      scm_tag_doc = scm_doc.find {|x| x.is_a?(Hash)}
+      scm_tag = fetch_scm_tag(scm_tag_doc)
+      if scm_tag
+        "#{scm_id}+#{scm_url}##{scm_tag}"
+      else
+        "#{scm_id}+#{scm_url}"
+      end
+    else
+      log.error "extract_scm_label: failed to extract from #{scm_doc}"
+      nil
+    end
+  end
+
+  def fetch_scm_tag(tag_doc)
+    return nil if tag_doc.is_a?(Hash) == false
+    ( tag_doc[:tag] || tag_doc[:rev] || tag_doc[:ref] || tag_doc[:branch] )
   end
 
   def init_project( url = nil )
@@ -51,21 +200,14 @@ class Rebar3Parser < CommonParser
     )
   end
 
-  def init_dependency(product, dep_name)
-    dep = Projectdependency.new(
-      name: dep_name,
-      language: Product::A_LANGUAGE_ERLANG
+  def init_dependency(prod_key, version_label, scope = nil)
+    Projectdependency.new(
+      language: Product::A_LANGUAGE_ERLANG,
+      prod_key: prod_key,
+      name: prod_key,
+      version_label: version_label,
+      scope: scope
     )
-
-    if product
-      dep.name      = product.name
-      dep.language  = product.language
-      dep.prod_key  = product.prod_key
-      dep.version_current = product.version
-    end
-
-
-    dep
   end
 
   def parse_into_ruby(rebar_txt)
@@ -130,7 +272,7 @@ class Rebar3Parser < CommonParser
     txt = txt.to_s.gsub(/\n|\r/, ' ') # remove new lines
     txt = txt.to_s.gsub(/\s+/, ' ') # remove repeating spaces
 
-    txt.to_s
+    txt.to_s.strip
   rescue => e
     log.error "preprocess_text: failed to preprocess text #{e.message}"
     log.error e.backtrace.join('\n')
