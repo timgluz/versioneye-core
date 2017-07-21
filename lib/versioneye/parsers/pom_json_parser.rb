@@ -34,16 +34,25 @@ class PomJsonParser < PomParser
     project.project_type = pom_json['prod_type'] if !pom_json['prod_type'].to_s.empty?
     project.language     = pom_json['language']  if !pom_json['language'].to_s.empty?
     project.license      = fetch_license( pom_json )
+    uniq_deps = []
     pom_json['dependencies'].each do |json_dep|
       version     = json_dep['version']
       name        = json_dep['name']
       scope       = json_dep['scope']
       scope       = 'compile' if scope.to_s.empty?
+
+      uniq_key    = "#{name}:#{version}:#{scope}"
+      if uniq_deps.include?( uniq_key )
+        uniq_deps << uniq_key
+      else
+        next
+      end
+
       spliti      = name.split(':')
       group_id    = spliti[0].to_s.downcase
       artifact_id = spliti[1].to_s.downcase
       dependency  = init_dependency(name, group_id, artifact_id, version, scope)
-      product     = Product.find_by_group_and_artifact(dependency.group_id, dependency.artifact_id )
+      product     = Product.find_by_group_and_artifact( dependency.group_id, dependency.artifact_id )
       parse_requested_version(version, dependency, product)
       dependency.prod_key     = product.prod_key if product
       project.unknown_number += 1 if product.nil?
