@@ -172,6 +172,7 @@ class Projectdependency < Versioneye::Model
     possible_prod_key
   end
 
+
   def cwl_key with_version = true
     if with_version
       return "#{group_id}:#{artifact_id}:#{version_requested}"       if !group_id.to_s.empty? && !artifact_id.to_s.empty?

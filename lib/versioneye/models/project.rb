@@ -377,7 +377,7 @@ class Project < Versioneye::Model
     mute_messages = muted_deps[:messages]
     remove_dependencies
     new_dependencies.each do |dep|
-      key = dep_key(dep)
+      key = dep_key( dep )
       if muted_keys.include?( key )
         dep.muted = true
         dep.mute_message = mute_messages[key]
