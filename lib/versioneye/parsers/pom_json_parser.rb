@@ -42,7 +42,7 @@ class PomJsonParser < PomParser
       scope       = 'compile' if scope.to_s.empty?
 
       uniq_key    = "#{name}:#{version}:#{scope}"
-      if uniq_deps.include?( uniq_key )
+      if !uniq_deps.include?( uniq_key )
         uniq_deps << uniq_key
       else
         next
