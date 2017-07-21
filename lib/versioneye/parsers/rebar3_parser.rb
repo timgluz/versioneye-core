@@ -33,8 +33,6 @@ class Rebar3Parser < CommonParser
       return
     end
 
-    p project_doc[:deps], project_doc[:profiles]
-
 
     # parse dependencies
     deps = parse_dependencies(project_doc[:deps]).to_a
@@ -86,21 +84,72 @@ class Rebar3Parser < CommonParser
   end
 
   def parse_requested_version(version_label, dep_db, product)
-    version_label = version_label.to_s.strip
+    dep_db[:version_label] = version_label
 
+    if product.nil?
+      dep_db[:version_requested] = "UNKNOWN"
+      return dep_db
+    end
+
+    version_label = version_label.to_s.strip
     case version_label
-    when /\A\*/
-      # select the newest
+    when '', /\A\*/
+      latest = VersionService.newest_version(product.versions)
+      dep_db[:version_label]     = '*' if version_label.empty?
+      dep_db[:version_requested] = latest[:version] if latest
+      dep_db[:comperator] = '*'
+
     when /\Agit\+/
-     # handle github version
-    when /\A\.*/
+      # handle git version
+      dep_db[:version_requested] = "GIT"
+
+    when /\Ahg\+/
+      dep_db[:version_requested] = 'HG'
+
+    when /\Abzr+/
+      dep_db[:version_requested] = 'BZR'
+
+    when /\Ahttp\:/
+      dep_db[:version_requested] = 'HTTP'
+
+    when /\A\.\*/
       # handle 0.x
-    when /\d+\.\*/
-      # handle patterns
-    when /\A\d+/, /\A\d+\.\d+/
+      version = VersionService.newest_version_from_wildcard(
+        product.versions, '0' + version_label
+      )
+
+      if version
+        dep_db[:version_requested] = version
+      else
+        log.error "parse_requested_version: no match for `#{version_label}` => #{product}"
+        dep_db[:version_requested] = 'UNKNOWN'
+      end
+      dep_db[:comperator] = '*'
+
+    when/\d+\.\*/
+      # handle wildcard patterns
+      version = VersionService.newest_version_from_wildcard(product.versions, version_label)
+      if version
+        dep_db[:version_requested] = version
+      else
+        log.error "parse_requested_version: no match for `#{version_label}` => #{product}"
+        dep_db[:version_requested] = 'UNKNOWN'
+      end
+      dep_db[:comperator] = '*'
+
+    when /\A\d+\.\d+\.\d+/, /\A\d+/
       # handle exact semver match
+      version_db = product.versions.where(version: version_label).first
+      if version_db
+        dep_db[:version_requested] =  version_db[:version]
+      else
+        log.warn "parse_requested_version: #{product} has no #{version_label}"
+        dep_db[:version_requested] = version_label
+      end
+
     else
-      log.error "parse_requested_version"
+      log.warn "parse_requested_version: unknwon version range `#{version_label}` for #{product}"
+      dep_db[:version_requested] = 'UNKNOWN'
     end
 
     dep_db
