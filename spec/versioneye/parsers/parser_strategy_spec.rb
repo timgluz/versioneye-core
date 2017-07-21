@@ -140,6 +140,12 @@ describe ParserStrategy do
       expect( parser.is_a?(MixParser) ).to be_truthy
     end
 
+    it "returns MixParser" do
+      parser = ParserStrategy.parser_for(Project::A_TYPE_HEX, 'rebar.config')
+      expect( parser.is_a?(Rebar3Parser) ).to be_truthy
+    end
+
+
     it "returns nil" do
       parser = ParserStrategy.parser_for( "HujBuy", "lein" )
       expect( parser ).to be_nil

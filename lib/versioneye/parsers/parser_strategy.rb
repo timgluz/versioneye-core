@@ -108,8 +108,7 @@ class ParserStrategy
       when Project::A_TYPE_HEX
         case url.to_s
         when /rebar\.config\z/
-          #TODO: add parser for Rebar and erlang.mk
-          nil
+          Rebar3Parser.new
         else
           MixParser.new
         end
