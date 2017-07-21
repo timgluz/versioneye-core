@@ -48,13 +48,21 @@ class Organisation < Versioneye::Model
     name
   end
 
+
+  def to_param
+    name
+  end
+
+
   def self.by_name name
     Organisation.where(:name => name).first
   end
 
+
   def receipts
     Receipt.where(:organisation_id => self.ids)
   end
+
 
   def api( read_only = false )
     api = Api.where( active: true, organisation_id: self.ids, read_only: read_only ).first
@@ -62,9 +70,11 @@ class Organisation < Versioneye::Model
     api
   end
 
+
   def api_key( read_only = false )
     self.api( read_only ).api_key
   end
+
 
   def fetch_or_create_billing_address
     if self.billing_address.nil?
@@ -72,6 +82,7 @@ class Organisation < Versioneye::Model
     end
     self.billing_address
   end
+
 
   def default_lwl_id
     return nil if license_whitelists.nil? || license_whitelists.empty?
@@ -82,12 +93,14 @@ class Organisation < Versioneye::Model
     nil
   end
 
+
   def default_lwl
     lwl_id = default_lwl_id
     return nil if lwl_id.nil?
 
     LicenseWhitelist.find lwl_id
   end
+
 
   def default_cwl_id
     return nil if component_whitelists.nil? || component_whitelists.empty?
@@ -98,17 +111,16 @@ class Organisation < Versioneye::Model
     nil
   end
 
-  def to_param
-    name
-  end
 
   def team_projects team_id
     projects.parents.where(:team_ids => team_id, :temp => false)
   end
 
+
   def parent_projects
     projects.parents.where(:temp => false)
   end
+
 
   def owner_team
     teams.each do |team|
@@ -116,6 +128,7 @@ class Organisation < Versioneye::Model
     end
     nil
   end
+
 
   def teams_by user
     return [] if user.nil?
@@ -131,10 +144,12 @@ class Organisation < Versioneye::Model
     ts
   end
 
+
   def team_by name
     return nil if name.to_s.empty?
     teams.where(:name => name).first
   end
+
 
   def unknown_license_deps
     deps = []
@@ -146,6 +161,7 @@ class Organisation < Versioneye::Model
         k = "#{dep.language}:#{prod_key}:#{dep.version_requested}"
         next if deps.include?( k )
         next if k.match(/com\.hybris/)
+
         deps.push k
         p "#{k} - #{dep.ids}"
       end

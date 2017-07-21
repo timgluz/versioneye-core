@@ -17,6 +17,9 @@ class CsprojParser < NugetParser
     prod_key = pkg_node.attr('Include').to_s.strip
     version_label = if pkg_node.has_attribute?('Version')
                       pkg_node.attr('Version').to_s
+                    elsif pkg_node.has_attribute?('version')
+                      #issue #116 - version attribute was lowercased
+                      pkg_node.attr('version').to_s
                     else
                       #version wasnt specified as attribute, check child nodes
                       pkg_node.xpath('//Version').text

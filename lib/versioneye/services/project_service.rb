@@ -81,6 +81,10 @@ class ProjectService < Versioneye::Service
     else
       Project.where( filter_options ).asc(:name_downcase).desc(:licenses_red_sum)
     end
+  rescue => e
+    log.error e.message
+    log.error e.backtrace.join("\n")
+    nil
   end
 
 

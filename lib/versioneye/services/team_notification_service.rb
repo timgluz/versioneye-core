@@ -3,12 +3,19 @@ class TeamNotificationService  < Versioneye::Service
 
   def self.start serial = true
     Plan.all.desc(:prio).each do |plan|
-      plan.organisations.each do |orga|
-        if serial
-          process_orga( orga )
-        else
-          TeamNotificationProducer.new(orga.ids)
-        end
+      process_orgas plan.organisations, serial
+    end
+    orgas = Organisation.where(:plan_id => nil)
+    process_orgas orgas, serial
+  end
+
+
+  def self.process_orgas organisations, serial
+    organisations.each do |orga|
+      if serial
+        process_orga( orga )
+      else
+        TeamNotificationProducer.new(orga.ids)
       end
     end
   end
