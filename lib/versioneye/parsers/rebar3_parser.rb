@@ -183,11 +183,8 @@ class Rebar3Parser < CommonParser
 
   def parse_dependency(dep_doc, scope)
 
-    p "#-- scope: #{scope} --> #{dep_doc}"
     prod_key = dep_doc.keys.first.to_s
     version_label = extract_version_label(dep_doc.values.first)
-
-    p "#-- #{prod_key} --> #{version_label}"
 
     init_dependency(prod_key, version_label, scope)
   end
