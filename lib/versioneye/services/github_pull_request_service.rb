@@ -71,17 +71,16 @@ class GithubPullRequestService < Versioneye::Service
     ProjectdependencyService.update_licenses_security new_project
 
     new_project.dependencies.each do |dep|
-      next if project.organisation.skip_license_check_on_pr == true &&
-              dep.unmuted_security_vulnerabilities.empty?
+      next if dep.unmuted_security_vulnerabilities.empty? &&
+              project.organisation.skip_license_check_on_pr == true
 
-      next if dep.sv_ids.empty? &&
+      next if dep.unmuted_security_vulnerabilities.empty? &&
               new_project.component_whitelist &&
               new_project.component_whitelist.is_on_list?( dep.cwl_key )
 
-      if project.organisation.skip_license_check_on_pr && !dep.unmuted_security_vulnerabilities.empty?
-        create_pr_issue filename, dep, pr
-        next
-      end
+      next if dep.unmuted_security_vulnerabilities.empty? &&
+              new_project.license_whitelist &&
+              new_project.license_whitelist.ignore_unknowns_on_pr == true
 
       if !dep.unmuted_security_vulnerabilities.empty? || # security vulnerability
           dep.license_caches.to_a.empty? ||              # unknown license

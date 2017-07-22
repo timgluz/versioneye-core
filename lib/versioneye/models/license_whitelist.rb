@@ -6,6 +6,7 @@ class LicenseWhitelist < Versioneye::Model
   field :name,             type: String
   field :default,          type: Boolean, default: false
   field :pessimistic_mode, type: Boolean, default: false
+  field :ignore_unknowns_on_pr, type: Boolean, default: false
 
   embeds_many :license_elements
 
