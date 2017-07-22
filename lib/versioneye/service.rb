@@ -108,6 +108,7 @@ module Versioneye
     require 'versioneye/parsers/cargo_lock_parser'
     require 'versioneye/parsers/csproj_parser'
     require 'versioneye/parsers/mix_parser'
+    require 'versioneye/parsers/rebar3_parser'
 
     require 'versioneye/parsers/godep_parser'
     require 'versioneye/parsers/glide_parser'
