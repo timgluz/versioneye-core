@@ -452,7 +452,7 @@ class PackageParser < CommonParser
 
   def semver?(version_label)
     res = SemVer.parse(version_label.to_s)
-    true if res
+    (res.nil? == false)
   rescue
     false
   end
