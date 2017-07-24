@@ -36,7 +36,34 @@ describe PackageParser do
       expect(dep1[:version_requested]).to eq('1.3.0')
       expect(dep1[:version_label]).to eq('1.3.0')
       expect(dep1[:comperator]).to eq('=')
+    end
 
+    it "returns correct tagged stable version" do
+      product1.versions = []
+      product1.versions << Version.new(version: '0.9.0', tags: ['next'])
+      product1.versions << Version.new(version: '1.0.0', tags: ['next'])
+      product1.save
+
+      parser.parse_requested_version('next', dep1, product1)
+      expect(dep1).not_to be_nil
+      expect(dep1[:version_requested]).to eq('1.0.0')
+      expect(dep1[:version_label]).to eq('next')
+      expect(dep1[:comperator]).to eq('=')
+    end
+
+    # issue #117 , product: `react-router-redux`
+    it "returns correct tagged unstable version" do
+      product1.versions = []
+      product1.versions << Version.new(version: '5.0.0-alpha.6', tags: ['next'])
+      product1.versions << Version.new(version: '5.0.0-alpha.5', tags: ['next'])
+      product1.versions << Version.new(version: '5.0.0-alpha.4', tags: ['next'])
+      product1.save
+
+      parser.parse_requested_version('next', dep1, product1)
+      expect(dep1).not_to be_nil
+      expect(dep1[:version_requested]).to eq('5.0.0-alpha.6')
+      expect(dep1[:version_label]).to eq('next')
+      expect(dep1[:comperator]).to eq('=')
     end
   end
 
@@ -64,7 +91,11 @@ describe PackageParser do
       product12 = create_product('pg'           , 'pg'           , '0.6.6', ['0.5.0' , '0.6.1' ] )
       product13 = create_product('pg_connect'   , 'pg_connect'   , '0.6.9', ['0.5.0' , '0.6.1' ] )
 
-      product14 = create_product('mocha'        , 'mocha'        , '1.16.2', ['1.0.0' , '1.16.0', '1.16.2' ] )
+      product14 = create_product('mocha'        , 'mocha'        , '1.16.2', ['1.0.0' , '1.16.0'] )
+      product14.versions << Version.new(version: '1.15.0', tags: ['latest'])
+      product14.versions << Version.new(version: '1.16.2', tags: ['latest'])
+      product14.save
+
       product15 = create_product('bruno'        , 'bruno'        , '1.12.1', ['1.0.0' , '1.12.0', '1.12.1' ] )
       product16 = create_product('gulp'         , 'gulp'         , '1.12.1', ['1.0.0' , '1.12.0', '1.12.1' ] )
 

@@ -161,22 +161,16 @@ class PackageParser < CommonParser
       dependency.version_label = version
       dependency.comperator = '||'
 
-    elsif version.match(/\A\*\z/)
-      # Start Matching. Matches everything.
+    elsif version.match(/\A\*\z/) or version.casecmp('latest') == 0
+      # Start Matching. Matches everything in stable releases.
       dependency.version_requested = product.version
-      dependency.version_label = '*'
+      dependency.version_label = version
       dependency.comperator = '='
 
     elsif version.match(/\A\X\z/)
       # Start Matching. Matches everything.
       dependency.version_requested = product.version
       dependency.version_label = 'X'
-      dependency.comperator = '='
-
-    elsif version.casecmp('latest') == 0
-      # Start Matching. Matches everything.
-      dependency.version_requested = product.version
-      dependency.version_label = 'latest'
       dependency.comperator = '='
 
     elsif version.match(/\A=/)
@@ -318,7 +312,23 @@ class PackageParser < CommonParser
       dependency.comperator    = "="
       dependency.version_label = version
 
+    elsif semver?(version)
+      # when it is fixed version
+      dependency.version_requested = version
+      dependency.comperator        = "="
+      dependency.version_label     = version
+
+    elsif /\w+/.match?(version)
+      matching_versions = product.versions.to_a.keep_if {|v| v[:tags].to_a.include?(version) }.to_a
+      latest = VersionService.newest_version(matching_versions, 'unstable')
+      # version was tag
+      dependency[:version_requested] = latest[:version] if latest
+      dependency[:version_requested] ||=  'UNKNOWN'
+      dependency[:version_label]     = version
+      dependency[:comperator]        = '='
     else
+      log.warn "parse_requested_version: unknown version selection `#{version}`"
+
       dependency.version_requested = version
       dependency.comperator        = "="
       dependency.version_label     = version
@@ -440,5 +450,10 @@ class PackageParser < CommonParser
     project
   end
 
-
+  def semver?(version_label)
+    res = SemVer.parse(version_label.to_s)
+    true if res
+  rescue
+    false
+  end
 end
