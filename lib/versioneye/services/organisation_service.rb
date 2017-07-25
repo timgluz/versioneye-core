@@ -63,8 +63,11 @@ class OrganisationService < Versioneye::Service
     items_added = []
     items_removed = []
 
-    inv1 = orga.component_list filter1[:team], filter1[:language], filter1[:version], filter1[:after_filter], use_cache
-    inv2 = orga.component_list filter2[:team], filter2[:language], filter2[:version], filter2[:after_filter], use_cache
+    inv1_obj = orga.component_list filter1[:team], filter1[:language], filter1[:version], filter1[:after_filter], use_cache, false
+    inv2_obj = orga.component_list filter2[:team], filter2[:language], filter2[:version], filter2[:after_filter], use_cache, false
+
+    inv1 = orga.component_list filter1[:team], filter1[:language], filter1[:version], filter1[:after_filter], true, true
+    inv2 = orga.component_list filter2[:team], filter2[:language], filter2[:version], filter2[:after_filter], true, true
 
     inv1_set = []
     inv1.each do |element|
@@ -91,8 +94,8 @@ class OrganisationService < Versioneye::Service
     idiff.items_added = items_added
     idiff.items_removed = items_removed
     idiff.finished = true
-    idiff.inventory1_id = inv1.ids
-    idiff.inventory2_id = inv2.ids
+    idiff.inventory1_id = inv1_obj.ids
+    idiff.inventory2_id = inv2_obj.ids
     idiff.save
     idiff
   end

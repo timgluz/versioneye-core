@@ -194,7 +194,7 @@ class Organisation < Versioneye::Model
   end
 
   # https://github.com/versioneye/versioneye-api/blob/master/docs/api/v2/organisation.md
-  def component_list team = 'ALL', language = nil, version = nil, after_filter = 'ALL', use_cache = true
+  def component_list team = 'ALL', language = nil, version = nil, after_filter = 'ALL', use_cache = true, return_hash = true
     return {} if projects.to_a.empty?
 
     inventory = Inventory.find_or_create_by( :orga_name => self.name,
@@ -243,7 +243,9 @@ class Organisation < Versioneye::Model
     elsif after_filter.to_s.eql?('show_duplicates')
       return show_duplicates_filter( inventory, comps )
     end
-    comps
+
+    return comps if return_hash == true
+    return inventory
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
