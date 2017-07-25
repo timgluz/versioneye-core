@@ -54,13 +54,13 @@ describe OrganisationService do
       diff = OrganisationService.inventory_diff @orga,
                                          {:team => team.ids, :language => nil, :version => nil, :after_filter => nil},
                                          {:team => "ALL", :language => nil, :version => nil, :after_filter => nil}
-      expect( diff.items_added ).to eq(["org.junit/junit::1.9.9::UNKNOWN::0"])
+      expect( diff.items_added ).to eq(["Java::org.junit/junit::1.9.9::UNKNOWN::0"])
       expect( diff.items_removed ).to be_empty
 
       diff = OrganisationService.inventory_diff @orga,
                                          {:team => "ALL", :language => nil, :version => nil, :after_filter => nil},
                                          {:team => team.ids, :language => nil, :version => nil, :after_filter => nil}
-      expect( diff.items_removed ).to eq(["org.junit/junit::1.9.9::UNKNOWN::0"])
+      expect( diff.items_removed ).to eq(["Java::org.junit/junit::1.9.9::UNKNOWN::0"])
       expect( diff.items_added ).to be_empty
     end
   end
