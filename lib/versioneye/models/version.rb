@@ -8,6 +8,7 @@ class Version < Versioneye::Model
   field :downloads      , type: Integer
   field :pom            , type: String # maven specific
   field :tag            , type: String # biicode specific - git tag string
+  field :tags           , type: Array, default: [] # distribution tags for NPM(latest, next, etc)
   field :status         , type: String # Userd in biitcode & Nuget - [STABLE, DEV, PRERELEASE]
 
   field :release_id     , type: String # CPAN specific, it's unique id to get version release details
