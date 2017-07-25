@@ -70,18 +70,10 @@ class OrganisationService < Versioneye::Service
     inv2 = orga.component_list filter2[:team], filter2[:language], filter2[:version], filter2[:after_filter], true, true
 
     inv1_set = []
-    inv1.each do |element|
-      element.last.keys.each do |key|
-        inv1_set << key if !inv1_set.include?(key)
-      end
-    end
+    fill_inv_set inv1, inv1_set
 
     inv2_set = []
-    inv2.each do |element|
-      element.last.keys.each do |key|
-        inv2_set << key if !inv2_set.include?(key)
-      end
-    end
+    fill_inv_set inv2, inv2_set
 
     items_removed = inv1_set - inv2_set
     items_added   = inv2_set - inv1_set
@@ -98,6 +90,19 @@ class OrganisationService < Versioneye::Service
     idiff.inventory2_id = inv2_obj.ids
     idiff.save
     idiff
+  end
+
+
+  def self.fill_inv_set col, set
+    col.each do |element|
+      current_prod = element.first
+      language = current_prod.split(":").first
+      deps = element.last
+      deps.keys.each do |key|
+        lang_prod_key = "#{language}::#{key}"
+        set << lang_prod_key if !set.include?(lang_prod_key)
+      end
+    end
   end
 
 
