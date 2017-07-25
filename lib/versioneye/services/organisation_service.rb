@@ -91,6 +91,8 @@ class OrganisationService < Versioneye::Service
     idiff.items_added = items_added
     idiff.items_removed = items_removed
     idiff.finished = true
+    idiff.inventory1_id = inv1.ids
+    idiff.inventory2_id = inv2.ids
     idiff.save
     idiff
   end
