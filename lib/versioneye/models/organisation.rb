@@ -204,7 +204,8 @@ class Organisation < Versioneye::Model
                                              :post_filter => after_filter )
     hour_ago = Time.now - 1.hour
     if use_cache && inventory.updated_at > hour_ago && !inventory.inventory_items.empty?
-      return build_comps_hash_from( inventory )
+      return build_comps_hash_from( inventory ) if return_hash == true
+      return inventory
     end
 
     inventory.inventory_items.delete_all
@@ -239,9 +240,11 @@ class Organisation < Versioneye::Model
     end
 
     if after_filter.to_s.eql?('duplicates_only')
-      return duplicates_only_filter( comps )
+      return duplicates_only_filter( comps ) if return_hash == true
+      return inventory
     elsif after_filter.to_s.eql?('show_duplicates')
-      return show_duplicates_filter( inventory, comps )
+      return show_duplicates_filter( inventory, comps ) if return_hash == true
+      return inventory
     end
 
     return comps if return_hash == true
