@@ -178,6 +178,7 @@ class ProjectService < Versioneye::Service
     raise "project is nil." if project.nil?
 
     ensure_unique_ga( project )
+    ensure_unique_gav( project )
     ensure_unique_scm( project )
 
     if project.save
