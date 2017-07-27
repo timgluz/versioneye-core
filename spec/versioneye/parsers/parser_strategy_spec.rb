@@ -110,6 +110,18 @@ describe ParserStrategy do
       expect( parser.is_a?(CpanParser) ).to be_truthy
     end
 
+    it "returns MetaJsonParser" do
+      parser = ParserStrategy.parser_for(Project::A_TYPE_CPAN, "https://s3.com/META.json")
+      expect( parser.is_a?(MetaJsonParser) ).to be_truthy
+    end
+
+    it "returns MetaYamlParser" do
+      parser = ParserStrategy.parser_for(Project::A_TYPE_CPAN, "https://s3.com/META.yml")
+      expect( parser.is_a?(MetaYamlParser) ).to be_truthy
+    end
+
+
+
     it "returns YarnParser" do
       parser = ParserStrategy.parser_for(Project::A_TYPE_NPM, 'yarn.lock')
       expect( parser.is_a?(YarnParser) ).to be_truthy

@@ -180,6 +180,10 @@ describe CommonParser do
     it "matches Cpan filenames" do
       expect(CommonParser.cpan_file?('Cpanfile')).to be_truthy
       expect(CommonParser.cpan_file?('/a/b/cpanfile')).to be_truthy
+      expect(CommonParser.cpan_file?('META.json')).to be_truthy
+      expect(CommonParser.cpan_file?('/a/b/META.json')).to be_truthy
+      expect(CommonParser.cpan_file?('META.yml')).to be_truthy
+      expect(CommonParser.cpan_file?('/a/b/META.yml')).to be_truthy
     end
 
     it "misses Cpan looking filenames" do

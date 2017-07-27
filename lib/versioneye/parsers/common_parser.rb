@@ -250,6 +250,8 @@ class CommonParser
 
   def self.cpan_file?(filename)
     return true if /cpanfile\z/i.match?(filename)
+    return true if /META\.json\z/i.match?(filename)
+    return true if /META\.ya?ml\z/i.match?(filename)
 
     return false
   end
