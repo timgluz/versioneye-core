@@ -110,6 +110,7 @@ module Versioneye
     require 'versioneye/parsers/mix_parser'
     require 'versioneye/parsers/rebar3_parser'
     require 'versioneye/parsers/meta_json_parser'
+    require 'versioneye/parsers/meta_yaml_parser'
 
     require 'versioneye/parsers/godep_parser'
     require 'versioneye/parsers/glide_parser'

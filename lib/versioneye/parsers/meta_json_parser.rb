@@ -1,5 +1,6 @@
 require 'versioneye/parsers/common_parser'
 
+# a parser for CPAN meta.json files
 class MetaJsonParser < CpanParser
 
   def parse_content(meta_txt, token = nil)
@@ -18,8 +19,8 @@ class MetaJsonParser < CpanParser
     project.dep_number = project.projectdependencies.size
     project
   rescue => e
-    log.error "MetaJsonParser: error in parse_content. #{e.message} \n #{meta_doc}"
-    log.error e.backtrace.join('\n')
+    logger.error "MetaJsonParser: error in parse_content. #{e.message} \n #{meta_doc}"
+    logger.error e.backtrace.join('\n')
     nil
   end
 
