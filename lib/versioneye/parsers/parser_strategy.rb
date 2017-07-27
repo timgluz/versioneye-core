@@ -96,7 +96,14 @@ class ParserStrategy
         return GodepParser.new
 
       when Project::A_TYPE_CPAN
-        return CpanParser.new
+        case url
+        when /meta\.json/i
+          MetaJsonParser.new
+        when /meta\.ya?ml/i
+          MetaYamlParser.new
+        else
+          return CpanParser.new
+        end
 
       when Project::A_TYPE_CARGO
         if url.match( /Cargo\.lock\z/i )
