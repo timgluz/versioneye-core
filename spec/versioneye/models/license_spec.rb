@@ -1679,6 +1679,10 @@ describe License do
       license = License.new({:name => "cc0-1 universal"})
       license.name_substitute.should eq("CC0-1.0")
     end
+    it "check for CC0-1.0 license" do
+      license = License.new({:name => "Public Domain, per Creative Commons CC0"})
+      license.name_substitute.should eq("CC0-1.0")
+    end
 
     it "check for SAP DEVELOPER LICENSE AGREEMENT license" do
       license = License.new({:name => "SAP DEVELOPER LICENSE AGREEMENT"})

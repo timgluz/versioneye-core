@@ -275,7 +275,9 @@ module VersionEye
     def cc0_1_match name
       name.match(/\ACC0\s+1\z/i) ||
       name.match(/\ACC0\s+1\.0\z/i) ||
-      name.match(/\ACC0\s+1\s+Universal\z/i)
+      name.match(/\ACC0\s+1\s+Universal\z/i) ||
+      name.match(/\APublic\s+Domain\s+per\s+Creative\s+Commons\s+CC0\z/i) ||
+      name.match(/\APublic\s+Domain,\s+per\s+Creative\s+Commons\s+CC0\z/i)
     end
 
     def json_match name
