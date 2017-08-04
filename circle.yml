@@ -4,14 +4,14 @@ machine:
 
 dependencies:
   override:
-    - docker pull versioneye/mongodb:3.2.6
+    - docker pull versioneye/mongodb:3.4.6
     - docker pull reiz/elasticsearch:0.9.1-1
-    - docker pull reiz/memcached:1.4.14
-    - docker pull reiz/rabbitmq:3.4.2
-    - docker run --name mongodb       -d versioneye/mongodb:3.2.6
-    - docker run --name memcached     -d reiz/memcached:1.4.14
+    - docker pull versioneye/memcached:1.4.33-1ubuntu2
+    - docker pull versioneye/rabbitmq:3.6.10-1
+    - docker run --name mongodb       -d versioneye/mongodb:3.4.6
+    - docker run --name memcached     -d versioneye/memcached:1.4.33-1ubuntu2
     - docker run --name elasticsearch -d reiz/elasticsearch:0.9.1-1
-    - docker run --name rabbitmq      -d reiz/rabbitmq:3.4.2
+    - docker run --name rabbitmq      -d versioneye/rabbitmq:3.6.10-1
 
 database:
   override:
