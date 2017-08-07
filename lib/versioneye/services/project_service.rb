@@ -177,7 +177,8 @@ class ProjectService < Versioneye::Service
   def self.store project
     raise "project is nil." if project.nil?
 
-    ensure_unique_ga( project )
+    Settings.instance.reload_from_db GlobalSetting.new
+    ensure_unique_ga(  project )
     ensure_unique_gav( project )
     ensure_unique_scm( project )
 
@@ -223,7 +224,7 @@ class ProjectService < Versioneye::Service
 
   def self.ensure_unique_gav project
     return true if Settings.instance.projects_unique_gav == false
-    return true if project.group_id.to_s.empty? && project.artifact_id.to_s.empty? && project.version.to_s.empty?
+    return true if project.group_id.to_s.empty? && project.artifact_id.to_s.empty?
 
     db_projects = Project.where(:group_id => project.group_id, :artifact_id => project.artifact_id, :version => project.version )
     return true if db_projects.nil? || db_projects.empty?
