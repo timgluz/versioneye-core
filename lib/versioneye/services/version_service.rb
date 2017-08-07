@@ -120,6 +120,7 @@ class VersionService < Versioneye::Service
     range
   end
 
+
   # for wildcard version like 1.2.x or 1.2.*
   def self.wildcard_versions( versions, version, include_v = false )
     ver = version[0..version.length - 2]
