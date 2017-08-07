@@ -83,6 +83,7 @@ class BowerParser < PackageParser
     project.language     = Product::A_LANGUAGE_JAVASCRIPT
     project.name         = data['name']
     project.description  = data['description']
+    project.version      = data['version']
     project
   end
 
