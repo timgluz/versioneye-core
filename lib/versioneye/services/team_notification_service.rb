@@ -35,7 +35,7 @@ class TeamNotificationService  < Versioneye::Service
 
 
   def self.process_team orga, team
-    p " - Process orga #{orga.name} and team #{team.name}"
+    log.info " - Process orga #{orga.name} and team #{team.name}"
     return nil if team.notifications_all_disabled?
     return nil if team.notify_today? == false
     return nil if team.emails.empty?
@@ -44,7 +44,13 @@ class TeamNotificationService  < Versioneye::Service
     projects = orga.team_projects team.ids
     return nil if projects.nil? || projects.empty?
 
-    TeamMailer.team_notification( orga, team, projects ).deliver_now
+    affected_projects = filter_affected projects
+    if affected_projects.nil? || affected_projects.empty?
+      log.info "  - No affected projects for orga #{orga.name} / team #{team.name}"
+      return nil
+    end
+    
+    TeamMailer.team_notification( orga, team, affected_projects ).deliver_now
     MailTrack.add_team MailTrack::A_TEMPLATE_TEAM_NOTIFICATION, orga.ids, team.ids, projects.map(&:ids)
   end
 
@@ -61,6 +67,20 @@ class TeamNotificationService  < Versioneye::Service
       ProjectUpdateService.update project
     end
     p " -- All projects updated for orga #{orga.name}"
+  end
+
+
+  def self.filter_affected projects
+    affected_projects = []
+    projects.each do |project|
+      if project.out_number_sum.to_i > 0 || 
+         project.licenses_red_sum.to_i > 0 || 
+         project.licenses_unknown_sum.to_i > 0 ||
+         project.sv_count_sum.to_i > 0
+        affected_projects << project
+      end
+    end
+    affected_projects
   end
 
 
