@@ -31,6 +31,11 @@ class Organisation < Versioneye::Model
   field :plan_period_start, type: Time
   field :plan_period_end  , type: Time
 
+  # Tracking Enterprise trial users
+  field :trial_start, type: Time
+  field :trial_end  , type: Time
+  field :notes, type: String
+
   belongs_to :plan
   has_one    :billing_address
   has_many   :projects
