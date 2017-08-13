@@ -63,14 +63,13 @@ class MavenRepository < Versioneye::Model
     repos['jenkins']            = 'https://repo.jenkins-ci.org/public/'
     repos['redhat']             = 'https://maven.repository.redhat.com/ga/'
     repos['google']             = 'https://dl.google.com/dl/android/maven2/'
+    repos['thenewmotion']       = 'http://nexus.thenewmotion.com/content/groups/public/'
 
     repos.keys.each do |key|
-      repo = MavenRepository.new( { :name => key, :url => repos[key], :language => Product::A_LANGUAGE_JAVA } )
-      repo.save
+      MavenRepository.find_or_create_by( :name => key, :url => repos[key], :language => Product::A_LANGUAGE_JAVA )
     end
 
-    repo_clojure = MavenRepository.new( { :name => 'cloJars', :url => 'https://clojars.org/repo', :language => Product::A_LANGUAGE_CLOJURE } )
-    repo_clojure.save
+    MavenRepository.find_or_create_by( :name => 'cloJars', :url => 'https://clojars.org/repo', :language => Product::A_LANGUAGE_CLOJURE )
   end
 
 end
