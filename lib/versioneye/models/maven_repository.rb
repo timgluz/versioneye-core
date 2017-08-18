@@ -64,6 +64,7 @@ class MavenRepository < Versioneye::Model
     repos['redhat']             = 'https://maven.repository.redhat.com/ga/'
     repos['google']             = 'https://dl.google.com/dl/android/maven2/'
     repos['thenewmotion']       = 'http://nexus.thenewmotion.com/content/groups/public/'
+    repos['everpeace']          = 'http://dl.bintray.com/everpeace/maven/com/github/everpeace/'
 
     repos.keys.each do |key|
       MavenRepository.find_or_create_by( :name => key, :url => repos[key], :language => Product::A_LANGUAGE_JAVA )
