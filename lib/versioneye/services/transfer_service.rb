@@ -39,12 +39,14 @@ class TransferService < Versioneye::Service
   end
 
 
-  def self.download_receipts directory = '/Users/reiz/stripe'
-    bucket_name = 'veye-prod-receipt'
+  def self.download_receipts prefix = '2017-07', bucket_name = 'veye-prod-receipt', directory = '/app/log'
+    bucket_name = 'veye-prod-receipt' if bucket_name.to_s.empty?
     s3 = Aws::S3::Client.new
     s3.list_objects(bucket: bucket_name).each do |response|
       response.contents.each do |content|
         obj_key = content.key
+        next if obj_key.match(/\A#{prefix}/).nil?
+
         download directory, s3, bucket_name, obj_key
       end
     end
