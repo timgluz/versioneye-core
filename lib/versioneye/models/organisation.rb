@@ -28,12 +28,15 @@ class Organisation < Versioneye::Model
   # Skip license check on pull requests
   field :skip_license_check_on_pr, type: Boolean, default: false
 
+  # tracking plan period for organisations who don't pay with cc.
   field :plan_period_start, type: Time
   field :plan_period_end  , type: Time
 
   # Tracking Enterprise trial users
   field :trial_start, type: Time
   field :trial_end  , type: Time
+  
+  # Internal notes. Not visible on web page. 
   field :notes, type: String
 
   belongs_to :plan
