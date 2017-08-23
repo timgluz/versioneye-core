@@ -147,6 +147,16 @@ class Project < Versioneye::Model
     scopes
   end
 
+  # A list of ALL dependencies. This includes dep. from childs as well.
+  def all_dependencies
+    ids = []
+    ids << self.ids
+    children.each do |child|
+      ids << child.ids
+    end
+    Projectdependency.where(:project_id.in => ids)
+  end
+
   def dependencies(scope = nil)
     return self.projectdependencies if self.projectdependencies.nil? || self.projectdependencies.empty?
     return self.projectdependencies if scope.nil?

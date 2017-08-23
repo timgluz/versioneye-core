@@ -33,6 +33,9 @@
       pause: seconds=15
 
 
+    - name: Git pull versioneye-tasks
+      shell: cd ../../versioneye-tasks/; git pull
+
     - name: Update version in file for versioneye-tasks
       lineinfile: dest="../../versioneye-tasks/Gemfile" regexp="^gem 'versioneye-core'" line="gem 'versioneye-core', :git => 'https://github.com/versioneye/versioneye-core.git', :tag => 'v{{release_version}}'"
 
@@ -48,6 +51,9 @@
     - name: Git push for versioneye-tasks
       shell: cd ../../versioneye-tasks/; git push
 
+
+    - name: Git pull versioneye-api
+      shell: cd ../../versioneye-api/; git pull
 
     - name: Update version in file for versioneye-api
       lineinfile: dest="../../versioneye-api/Gemfile" regexp="^gem 'versioneye-core'" line="gem 'versioneye-core', :git => 'https://github.com/versioneye/versioneye-core.git', :tag => 'v{{release_version}}'"
@@ -65,6 +71,9 @@
       shell: cd ../../versioneye-api/; git push
 
 
+    - name: Git pull versioneye
+      shell: cd ../../versioneye/; git pull
+
     - name: Update version in file for versioneye
       lineinfile: dest="../../versioneye/Gemfile" regexp="^gem 'versioneye-core'" line="gem 'versioneye-core', :git => 'https://github.com/versioneye/versioneye-core.git', :tag => 'v{{release_version}}'"
 
@@ -81,6 +90,9 @@
       shell: cd ../../versioneye/; ./script/push_to_master.sh
 
 
+    - name: Git pull versioneye-security
+      shell: cd ../../versioneye-security/; git pull
+
     - name: Update version in file for versioneye-security
       lineinfile: dest="../../versioneye-security/Gemfile" regexp="^gem 'versioneye-core'" line="gem 'versioneye-core', :git => 'https://github.com/versioneye/versioneye-core.git', :tag => 'v{{release_version}}'"
 
@@ -96,6 +108,9 @@
     - name: Git push for versioneye-security
       shell: cd ../../versioneye-security/; git push
 
+
+    - name: Git pull crawl_r
+      shell: cd ../../crawl_r/; git pull
 
     - name: Update version in file for crawl_r
       lineinfile: dest="../../crawl_r/Gemfile" regexp="^gem 'versioneye-core'" line="gem 'versioneye-core', :git => 'https://github.com/versioneye/versioneye-core.git', :tag => 'v{{release_version}}'"
