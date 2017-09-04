@@ -44,12 +44,12 @@ class TeamNotificationService  < Versioneye::Service
     projects = orga.team_projects team.ids
     return nil if projects.nil? || projects.empty?
 
-    affected_projects = filter_affected projects
+    affected_projects = filter_affected projects, team
     if affected_projects.nil? || affected_projects.empty?
       log.info "  - No affected projects for orga #{orga.name} / team #{team.name}"
       return nil
     end
-    
+
     TeamMailer.team_notification( orga, team, affected_projects ).deliver_now
     MailTrack.add_team MailTrack::A_TEMPLATE_TEAM_NOTIFICATION, orga.ids, team.ids, projects.map(&:ids)
   end
@@ -70,14 +70,22 @@ class TeamNotificationService  < Versioneye::Service
   end
 
 
-  def self.filter_affected projects
+  def self.filter_affected projects, team
     affected_projects = []
     projects.each do |project|
-      if project.out_number_sum.to_i > 0 || 
-         project.licenses_red_sum.to_i > 0 || 
-         project.licenses_unknown_sum.to_i > 0 ||
-         project.sv_count_sum.to_i > 0
+      if team.version_notifications == true && project.out_number_sum.to_i > 0
         affected_projects << project
+        next
+      end
+
+      if team.license_notifications == true && (project.licenses_red_sum.to_i > 0 || project.licenses_unknown_sum.to_i > 0)
+        affected_projects << project
+        next
+      end
+
+      if team.security_notifications == true && project.sv_count_sum.to_i > 0
+        affected_projects << project
+        next
       end
     end
     affected_projects
