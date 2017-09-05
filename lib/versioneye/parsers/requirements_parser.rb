@@ -1,3 +1,4 @@
+require 'uri'
 require 'versioneye/parsers/common_parser'
 
 class RequirementsParser < CommonParser
@@ -39,7 +40,6 @@ class RequirementsParser < CommonParser
     log.error e.backtrace.join("\n")
     nil
   end
-
 
   def parse_line( line, project )
     return false if line.to_s.strip.empty?
@@ -219,6 +219,100 @@ class RequirementsParser < CommonParser
 
   end
 
+  # processes requirements from SCM (git, hg, bzr) to like PIP line, except GH deps
+  #
+  # For Github dependencies it returns similar format as NPM github dep,
+  # so it GithubComperator could pick it up and check it against latest version
+  #
+  # for other SCM it just retuns PIP-like format: EGG-NAMe==scm_value
+  # so these packages doesnt get lost and user can still see them
+  #
+  # returns:
+  #  pip_line - String format EGG_NAME=NPM_GH_FORMAT|SCM_STRING
+  #  nil - if parsing failed for some reason
+  def process_scm_line(scm_line)
+    scm_line = scm_line.to_s.strip.gsub(/^\[?\-\w\]?\s+/, '') # remove prefix -r/-e
+    scm_url = parse_url(scm_line)
+
+
+    # extract Egg's name from URL fragment
+    egg = extract_egg_name(scm_url)
+    if egg.empty?
+      log.error "process_scm_line: scm line misses egg name: #{scm_line}"
+      return
+    end
+
+    # extract SCM revision, it can be either before Egg name or after
+    scm_path, rev = extract_scm_details(scm_url)
+
+    # build dep string from SCM
+    # NB! it ignores user logins in the url, so it wouldnt expose outside
+    # example url: bzr+ftp://user@myproject.org/MyProject/trunk/#egg=MyProject
+    scm_url_txt = scm_url.scheme + '://' + scm_url.host + scm_path
+    if github_url?(scm_url_txt)
+      repo_name = extract_git_fullname(scm_url_txt)
+      return if repo_name.nil?
+
+      "#{egg}==#{repo_name}##{rev}"
+
+    elsif rev.nil?
+      "#{egg}==#{scm_url_txt}"
+
+    else
+      "#{egg}==#{scm_url_txt}##{rev}"
+
+    end
+  end
+
+  def extract_egg_name(scm_url)
+    return "" unless scm_url.is_a?(URI)
+
+    scm_url.fragment.to_s.gsub(/\Aegg\=/, '').to_s.strip
+  end
+
+  def extract_scm_details(scm_url)
+    rev = nil
+    scm_path = scm_url.path.to_s
+
+    # remove revision details from the path
+    if scm_path.rindex(/\w\@?/)
+      scm_path, rev = scm_path.split(/\@/, 2)
+    end
+    scm_path = scm_path.gsub(/\/\z/, '').to_s.strip
+
+    [scm_path, rev]
+  end
+
+  def parse_url(scm_url)
+    URI.parse scm_url
+  rescue => e
+    log.error "parse_url: failed to parse SCM url `#{scm_url}`"
+    log.error "\treason: #{e.message}"
+    nil
+  end
+
+  # extracts repo owner and name from long GIT url and returns repo fullname
+  # ps: it expects URL string as parameters and not line from requirements.txt
+  def extract_git_fullname(scm_url)
+    u = URI.parse(scm_url)
+    path = u.path.to_s.gsub(/\.git.*\z/, '').to_s
+
+    # ignore empty tokens then join next 2 non-empty strings ones together
+    path.split(/\//).reject {|tkn| tkn.empty? }.take(2).join('/')
+  rescue
+    log.error "extract_repo_name: failed to parse `#{scm_url}` as url"
+    nil
+  end
+
+  def github_url?(scm_url)
+    /github\.com/.match?(scm_url.to_s.strip)
+  end
+
+  def scm_line?(scm_line)
+    return false if scm_line.is_a?(String) == false
+
+    return /^(\[?-?\w?\]?\s+)?(git|bzr|hg|svn)/i.match?(scm_line)
+  end
 
   def init_dependency package, comparator
     dependency = Projectdependency.new
