@@ -128,35 +128,9 @@ class RequirementsParser < CommonParser
 
     if version.match(/,/)
       # Version Ranges
-      # TODO: check VersionServices for better implementation
-      version_splitted = version.split(",")
-      prod = Product.new
-      prod.versions = product.versions
-      version_splitted.each do |verso|
-        verso.gsub!(" ", "")
-        if verso.match(/\A>=/)
-          verso.gsub!(">=", "")
-          new_range = VersionService.greater_than_or_equal( product.versions, verso, true )
-          prod.versions = new_range
-        elsif verso.match(/\A>/)
-          verso.gsub!(">", "")
-          new_range = VersionService.greater_than( product.versions, verso, true )
-          prod.versions = new_range
-        elsif verso.match(/\A<=/)
-          verso.gsub!("<=", "")
-          new_range = VersionService.smaller_than_or_equal( product.versions, verso, true )
-          prod.versions = new_range
-        elsif verso.match(/\A</)
-          verso.gsub!("<", "")
-          new_range = VersionService.smaller_than( product.versions, verso, true )
-          prod.versions = new_range
-        elsif verso.match(/\A!=/)
-          verso.gsub!("!=", "")
-          new_range = VersionService.newest_but_not( product.versions, verso, true)
-          prod.versions = new_range
-        end
-      end
-      highest_version = VersionService.newest_version_from( prod.versions )
+      range_versions = VersionService.from_or_ranges(prod.versions, version, ',')
+      highest_version = VersionService.newest_version_from range_versions
+
       if highest_version
         dependency.version_requested = highest_version.to_s
       else
