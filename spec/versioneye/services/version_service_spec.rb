@@ -8,7 +8,7 @@ describe VersionService do
   describe "equal" do
 
     it "is equal" do
-      VersionService.equal("0.4.0", "0.4.0").should be_truthy
+      expect( VersionService.equal("0.4.0", "0.4.0") ).to be_truthy
     end
     it "is equal" do
       VersionService.equal("0.4", "0.4.0").should be_truthy
@@ -717,6 +717,65 @@ describe VersionService do
     end
   end
 
+  context "caret_lower_border" do
+    it "returns correct semver strings" do
+      expect( VersionService.caret_lower_border("1.2.3")).to eq('1.2.3')
+      expect( VersionService.caret_lower_border("1.2.3-alpha")).to eq('1.2.3')
+      expect( VersionService.caret_lower_border("1.2.3-beta")).to eq('1.2.3')
+
+      expect( VersionService.caret_lower_border('1.2') ).to eq('1.2.0')
+      expect( VersionService.caret_lower_border('0.2.3') ).to eq('0.2.3')
+      expect( VersionService.caret_lower_border('0.0.3') ).to eq('0.0.3')
+      expect( VersionService.caret_lower_border('0.0')).to eq('0.0.0')
+      expect( VersionService.caret_lower_border('0')).to eq('0.0.0')
+    end
+  end
+
+  context "caret_upper_border" do
+    it "returns correct upper lever semver" do
+      expect( VersionService.caret_upper_border('1.2.3') ).to eq('2.0.0')
+      expect( VersionService.caret_upper_border('1.2') ).to eq('2.0.0')
+      expect( VersionService.caret_upper_border('1') ).to eq('2.0.0')
+      expect( VersionService.caret_upper_border('0.2.3')).to eq('0.3.0')
+      expect( VersionService.caret_upper_border('0.3') ).to eq('0.4.0')
+      expect( VersionService.caret_upper_border('0.0.3')).to eq('0.0.4')
+      expect( VersionService.caret_upper_border('0.0.0')).to eq('1.0.0')
+    end
+  end
+
+  describe 'newest_caret_version' do
+    it "returns for ^0 biggest value in the range 0 <= x < 1.0.0" do
+      versions = ['0.0.9', '0.1.0', '0.9.2', '1.0.0', '1.0.1', '1.2.0']
+      expect( VersionService.newest_caret_version(versions, '0') ).to eq('0.9.2')
+    end
+
+    it "returns for ^0.1 biggest value in the range 0.1 <= x < 0.2.0" do
+      versions = ['0.0.9', '0.1.0', '0.1.9', '0.2.0', '0.2.1', '1.0.0']
+      expect( VersionService.newest_caret_version(versions, '0.1') ).to eq('0.1.9')
+    end
+
+    it "returns for ^0.2.3 biggest value in the range 0.2.3 <= x < 0.3.0" do
+      versions = ['0.1.0', '0.2.1', '0.2.3', '0.2.9', '0.2.11', '0.3.0', '0.3.1']
+      expect( VersionService.newest_caret_version(versions, '0.2.3')).to eq('0.2.11')
+    end
+
+    it "returns for ^1.2.3 biggest value in the range 1.2.3 <= x < 2.0.0" do
+      versions = ['1.2.2', '1.2.3', '1.2.9', '1.3.0', '1.5.2', '2.0.0', '2.0.1']
+      expect( VersionService.newest_caret_version(versions, '1.2.3')).to eq('1.5.2')
+    end
+
+    it "returns for ^1.2 biggest value in the range 1.2.0 <= x < 2.0.0" do
+      versions = ['1.2.2', '1.2.3', '1.2.9', '1.3.0', '1.5.2', '2.0.0', '2.0.1']
+      expect( VersionService.newest_caret_version(versions, '1.2')).to eq('1.5.2')
+    end
+
+    it "returns for ^1 biggest value in the range 1.0 <= x < 2.0.0" do
+      versions = ['0.9.0', '1.2.0', '1.2.9', '1.3.0', '1.5.2', '2.0.0', '2.0.1']
+      expect( VersionService.newest_caret_version(versions, '1')).to eq('1.5.2')
+    end
+
+
+  end
 
   describe 'average_release_time' do
 
