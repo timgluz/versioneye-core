@@ -139,7 +139,8 @@ class Product < Versioneye::Model
     return prod if prod
 
     product = Product.find_by_lang_key( lang, key )
-    product = Product.find_by_lang_key( lang, key.downcase ) if product.nil?
+    product ||= Product.find_by_lang_key( lang, key.downcase )
+
     if ( product.nil? && lang.eql?( A_LANGUAGE_NODEJS ) )
       product = Product.where(:language => lang, :prod_key_dc => key.downcase).first
     end

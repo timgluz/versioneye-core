@@ -1,0 +1,28 @@
+ # This is a test line
+# this is a comment to be ignored
+Django==1.3.1 # This is a comment
+PIL==1.1.7
+South<=0.7.3
+amqplib>=1.0.2
+anyjson==0.3.1
+celery==2.4.6
+certifi==0.0.6
+chardet==1.0.1
+django-celery==2.4.2
+django-emailauth==0.1
+django-facebook==3.4.4
+django-kombu==0.9.4
+django-picklefield==0.1.9
+django-profiles==0.2
+https://bitbucket.org/ubernostrum/django-registration/downloads/django-registration-0.8-alpha-1.tar.gz
+kombu==1.5.1
+meld3==0.6.7
+opentok-python-sdk==0.91.0
+python-dateutil==1.5
+requests==0.9.0
+xmpppy==0.5.0rc1 \
+    --hash=sha256:3ffb26342b3526390646697ed5cde4714d2cc46c50e8a13ced2b303fcb59c11d \
+    --hash=sha256:a483e7891ce3a06dadfc6cb9095b0938aca58940d43576d72e4502b480c085d7 # via pylint
+
+jsmin
+emencia.django.newsletter

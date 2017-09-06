@@ -115,7 +115,8 @@ class RequirementsParser < CommonParser
     dependency.version_label = String.new(version)
 
     if product.nil?
-      dependency.version_requested = version
+      log.warn "parse_requested_version: no product for `#{dependency}`"
+      dependency.version_requested = 'UNKNOWN'
       return nil
     end
 
@@ -178,10 +179,11 @@ class RequirementsParser < CommonParser
       dependency.version_label = "*"
       dependency.comperator = ">="
 
-    elsif version.match(/\A==/)
+    elsif version.match(/\=\=/)
       # Equals
-      version.gsub!(/\A==/, "")
+      version.gsub!(/\A\=\=/, "")
       version.gsub!(" ", "")
+
       dependency.version_requested = version.strip
       dependency.comperator = "=="
 
