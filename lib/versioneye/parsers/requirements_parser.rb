@@ -356,23 +356,17 @@ class RequirementsParser < CommonParser
     package
   end
 
-  # TODO: refactor as case switch
   def extract_comparator line
-    comparator = nil
-    if line.match(/>=/)
-      comparator = ">="
-    elsif line.match(/>/)
-      comparator = ">"
-    elsif line.match(/<=/)
-      comparator = "<="
-    elsif line.match(/</)
-      comparator = "<"
-    elsif line.match(/!=/)
-      comparator = "!="
-    elsif line.match(/==/)
-      comparator = "=="
+    case line
+    when />=/ then '>='
+    when />/  then '>'
+    when /<=/ then '<='
+    when /</  then '<'
+    when /!=/ then '!='
+    when /==/ then '=='
+    else
+      nil
     end
-    comparator
   end
 
 end
