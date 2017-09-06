@@ -128,8 +128,7 @@ class RequirementsParser < CommonParser
 
     if version.match(/,/)
       # Version Ranges
-      range_versions = VersionService.from_or_ranges(prod.versions, version, ',')
-      highest_version = VersionService.newest_version_from range_versions
+      highest_version = VersionService.from_common_range(product.versions, version, false, ',')
 
       if highest_version
         dependency.version_requested = highest_version.to_s
