@@ -286,6 +286,32 @@ class RequirementsParser < CommonParser
     scm_url.fragment.to_s.gsub(/\Aegg\=/, '').to_s.strip
   end
 
+  def github_url?(scm_url)
+    /github\.com/.match?(scm_url.to_s.strip)
+  end
+
+  def scm_line?(scm_line)
+    return false if scm_line.is_a?(String) == false
+
+    return /^(\[?-?\w?\]?\s+)?(git|bzr|hg|svn)/i.match?(scm_line)
+  end
+
+  def init_dependency( product, package_name, comperator = '==')
+    dependency = Projectdependency.new(
+      name: package_name,
+      language: Product::A_LANGUAGE_PYTHON,
+      comperator: comperator,
+      scope: Dependency::A_SCOPE_COMPILE
+    )
+
+    if product
+      dependency.prod_key = product.prod_key
+      dependency.version_current = product.version
+    end
+
+    dependency
+  end
+
   def extract_scm_details(scm_url)
     rev = nil
     scm_path = scm_url.path.to_s
@@ -318,32 +344,6 @@ class RequirementsParser < CommonParser
   rescue
     log.error "extract_repo_name: failed to parse `#{scm_url}` as url"
     nil
-  end
-
-  def github_url?(scm_url)
-    /github\.com/.match?(scm_url.to_s.strip)
-  end
-
-  def scm_line?(scm_line)
-    return false if scm_line.is_a?(String) == false
-
-    return /^(\[?-?\w?\]?\s+)?(git|bzr|hg|svn)/i.match?(scm_line)
-  end
-
-  def init_dependency( product, package_name, comperator = '==')
-    dependency = Projectdependency.new(
-      name: package_name,
-      language: Product::A_LANGUAGE_PYTHON,
-      comperator: comperator,
-      scope: Dependency::A_SCOPE_COMPILE
-    )
-
-    if product
-      dependency.prod_key = product.prod_key
-      dependency.version_current = product.version
-    end
-
-    dependency
   end
 
 
