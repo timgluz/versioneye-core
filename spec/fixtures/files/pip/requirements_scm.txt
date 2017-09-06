@@ -20,7 +20,7 @@
 -e git+https://github.com/datagovuk/ckanext-spatial.git@dgu#egg=ckanext-spatial
 
 # ckanext-qa
-git+https://github.com/ckan/ckanext-qa.git#egg=ckanext-qa
+git+ssh://github.com/ckan/ckanext-qa.git#egg=ckanext-qa
 
 ## Related extension dependencies
 

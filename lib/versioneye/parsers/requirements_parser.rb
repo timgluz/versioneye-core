@@ -23,10 +23,14 @@ class RequirementsParser < CommonParser
 
 
   def parse_content( txt, token = nil )
-    return nil if txt.to_s.empty?
-    return nil if txt.to_s.strip.eql?('Not Found')
+    txt = txt.to_s.strip
+    return nil if txt.empty?
+    return nil if txt.eql?('Not Found')
 
-    project = Project.new({:project_type => Project::A_TYPE_PIP, :language => Product::A_LANGUAGE_PYTHON })
+    project = Project.new(
+      project_type: Project::A_TYPE_PIP,
+      language: Product::A_LANGUAGE_PYTHON
+    )
 
     txt.each_line do |line|
       parse_line line, project
@@ -42,52 +46,56 @@ class RequirementsParser < CommonParser
   end
 
   def parse_line( line, project )
-    return false if line.to_s.strip.empty?
+    dep_line = line.to_s.strip
+    return false if dep_line.empty?
+    return false if /\A\#/.match?(dep_line) # if it is line comment
+    return false if /\A\-r\s*/.match?(dep_line) # ignore recursive deps file
 
-    sp = line.split("#") # Remove comments
-    return false if sp.nil? || sp.empty?
+    dep_line = if scm_line?(dep_line)
+                 process_scm_line(dep_line) # turns scm req into pip req
+               else
+                 line.split("#", 2).to_a.first # Remove comments at the end
+               end
+    return false if dep_line.nil? || dep_line.empty?
 
-    line = sp.first
-    return false if line.to_s.strip.empty?
+    comparator  = extract_comparator dep_line
+    requirement = dep_line.split(comparator, 2) # it should have only 1 comperator
 
-    return false if line.match(/\A\-e /)
-    return false if line.match(/\A\-r /i)
+    package     = extract_name requirement
+    if package.nil? || package.strip.empty?
+      log.error "parse_line: dependency line includes no package name: `#{line}`"
+      return false
+    end
 
-    comparator  = extract_comparator line
-    requirement = line.split(comparator)
-    package     = get_package_name requirement
-
-    return false if package.nil? || package.strip.empty?
     return false if package.match(/\Ahttp:\/\//)
     return false if package.match(/\Ahttps:\/\//)
     return false if package.match(/\A--/)
 
-    dependency = init_dependency package, comparator
 
+    # process version label
     version = ''
     if requirement.count > 1
       version = requirement[1]
       version = version.gsub("\n", '')
       version = version.gsub("\\", '')
       version = version.gsub(/--hash.+\z/i, '') # ignore hash values
-      dependency.version_label = version.strip
+      version = version.to_s.strip
     end
 
     product = Product.fetch_product Product::A_LANGUAGE_PYTHON, package
     if product.nil? && package.match(/-/)
       product = Product.fetch_product Product::A_LANGUAGE_PYTHON, package.gsub("-", "_")
     end
-    if product
-      dependency.prod_key = product.prod_key
-    else
-      project.unknown_number = project.unknown_number + 1
-    end
 
+    dependency = init_dependency product, package, comparator
+    dependency.version_label = version
     parse_requested_version("#{comparator}#{version}", dependency, product)
 
+    project.unknown_number += 1 if product.nil?
     if ProjectdependencyService.outdated?( dependency )
       project.out_number = project.out_number + 1
     end
+
     project.projectdependencies.push dependency
   end
 
@@ -96,12 +104,14 @@ class RequirementsParser < CommonParser
   #
   def parse_requested_version(version, dependency, product)
     if version.nil? || version.empty?
+      dependency[:comperator] = '>='
       self.update_requested_with_current(dependency, product)
       return
     end
+
     version = version.strip
     version = version.gsub('"', '')
-    version = version.gsub("'", '')
+    version = version.gsub("'", '').to_s.strip
     dependency.version_label = String.new(version)
 
     if product.nil?
@@ -111,6 +121,7 @@ class RequirementsParser < CommonParser
 
     if version.match(/,/)
       # Version Ranges
+      # TODO: check VersionServices for better implementation
       version_splitted = version.split(",")
       prod = Product.new
       prod.versions = product.versions
@@ -147,10 +158,11 @@ class RequirementsParser < CommonParser
       dependency.comperator = "="
 
 
-    elsif version.match(/.\*\z/)
+    elsif version.match(/\.\*\z/)
       # WildCards. 1.0.* => 1.0.0 | 1.0.2 | 1.0.20
       ver = version.gsub("*", "")
-      ver = ver.gsub(" ", "")
+      ver = ver.gsub(/\s+/, "").to_s.strip
+
       highest_version = VersionService.newest_version_from_wildcard( product.versions, ver, dependency.stability )
       if highest_version
         dependency.version_requested = highest_version
@@ -159,17 +171,18 @@ class RequirementsParser < CommonParser
       end
       dependency.comperator = "="
 
-    elsif version.empty? || version.match(/\A\*\z/)
-      # This case is not allowed. But we handle it anyway. Because we are fucking awesome!
-      dependency.version_requested = VersionService.newest_version_number( product.versions, dependency.stability )
+    elsif version.match(/\A\*\z/)
+      latest_version = VersionService.newest_version_number( product.versions, dependency.stability )
+
+      dependency.version_requested = latest_version.to_s
       dependency.version_label = "*"
-      dependency.comperator = "="
+      dependency.comperator = ">="
 
     elsif version.match(/\A==/)
       # Equals
-      version.gsub!("==", "")
+      version.gsub!(/\A==/, "")
       version.gsub!(" ", "")
-      dependency.version_requested = version
+      dependency.version_requested = version.strip
       dependency.comperator = "=="
 
     elsif version.match(/\A!=/)
@@ -251,16 +264,17 @@ class RequirementsParser < CommonParser
     scm_url_txt = scm_url.scheme + '://' + scm_url.host + scm_path
     if github_url?(scm_url_txt)
       repo_name = extract_git_fullname(scm_url_txt)
-      return if repo_name.nil?
+      scm_url_txt = repo_name if repo_name.nil? == false
+    end
 
-      "#{egg}==#{repo_name}##{rev}"
+    format_scm_dep egg, scm_url_txt, rev
+  end
 
-    elsif rev.nil?
-      "#{egg}==#{scm_url_txt}"
-
+  def format_scm_dep(pkg_name, scm_url, rev = nil)
+    if rev.to_s.empty?
+      "#{pkg_name}==#{scm_url}"
     else
-      "#{egg}==#{scm_url_txt}##{rev}"
-
+      "#{pkg_name}==#{scm_url}##{rev}"
     end
   end
 
@@ -314,25 +328,33 @@ class RequirementsParser < CommonParser
     return /^(\[?-?\w?\]?\s+)?(git|bzr|hg|svn)/i.match?(scm_line)
   end
 
-  def init_dependency package, comparator
-    dependency = Projectdependency.new
-    dependency.name = package
-    dependency.comperator = comparator
-    dependency.scope = Dependency::A_SCOPE_COMPILE
-    dependency.language = Product::A_LANGUAGE_PYTHON
+  def init_dependency( product, package_name, comperator = '==')
+    dependency = Projectdependency.new(
+      name: package_name,
+      language: Product::A_LANGUAGE_PYTHON,
+      comperator: comperator,
+      scope: Dependency::A_SCOPE_COMPILE
+    )
+
+    if product
+      dependency.prod_key = product.prod_key
+      dependency.version_current = product.version
+    end
+
     dependency
   end
 
 
-  def get_package_name requirement
+  def extract_name requirement
     package = requirement[0].to_s.strip
     if package.match(/.+\[(.+)\]/i) # for example: prospector[with_pyroma,with_vulture]
       package = package.gsub(/\[.+\]/, "") # replace the brackets
     end
+
     package
   end
 
-
+  # TODO: refactor as case switch
   def extract_comparator line
     comparator = nil
     if line.match(/>=/)
