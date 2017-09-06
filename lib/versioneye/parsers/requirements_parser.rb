@@ -1,14 +1,18 @@
 require 'uri'
 require 'versioneye/parsers/common_parser'
 
-class RequirementsParser < CommonParser
+# Parser for requirements.txt files from pip. Python.
+# http://www.pip-installer.org/en/latest/requirements.html#the-requirements-file-format
+# http://www.pip-installer.org/en/latest/#requirements-files
+#
+# it will resolve state of GITHUB dependency, only if you set token with valid GH token
 
-  # Parser for requirements.txt files from pip. Python.
-  # http://www.pip-installer.org/en/latest/requirements.html#the-requirements-file-format
-  # http://www.pip-installer.org/en/latest/#requirements-files
-  #
-  def parse( url )
+class RequirementsParser < CommonParser
+  attr_reader :auth_token
+
+  def parse( url, token = nil )
     return nil if url.nil?
+    @auth_token = token
 
     response = self.fetch_response(url)
     return nil if response.nil?
@@ -23,6 +27,8 @@ class RequirementsParser < CommonParser
 
 
   def parse_content( txt, token = nil )
+    @auth_token = token if token
+
     txt = txt.to_s.strip
     return nil if txt.empty?
     return nil if txt.eql?('Not Found')
@@ -38,7 +44,7 @@ class RequirementsParser < CommonParser
 
     project.dep_number = project.dependencies.size
 
-    return project
+    project
   rescue => e
     log.error e.message
     log.error e.backtrace.join("\n")
@@ -91,12 +97,12 @@ class RequirementsParser < CommonParser
     dependency.version_label = version
     parse_requested_version("#{comparator}#{version}", dependency, product)
 
+    is_outdated = ProjectdependencyService.outdated?(dependency, product, @auth_token)
+    project.out_number     += 1 if is_outdated
     project.unknown_number += 1 if product.nil?
-    if ProjectdependencyService.outdated?( dependency )
-      project.out_number = project.out_number + 1
-    end
-
     project.projectdependencies.push dependency
+
+    project
   end
 
 
@@ -186,7 +192,9 @@ class RequirementsParser < CommonParser
 
       dependency.version_requested = version.strip
       dependency.comperator = "=="
+      add_scm_details(dependency, version)
 
+      dependency
     elsif version.match(/\A!=/)
       # Not equal to version
       version.gsub!("!=", "")
@@ -232,6 +240,27 @@ class RequirementsParser < CommonParser
       dependency.comperator = "=="
     end
 
+  end
+
+  def add_scm_details(dependency, version)
+    return if /\A\d/.match?(version) # ignore if version starts with number == not SCM url
+
+    scm_type = case version
+               when /\Agit[:|\+]/i then 'GIT'
+               when /\Ahg[:|\+]/i then 'HG'
+               when /\Abzr[:|\+]/i then 'BZR'
+               when /\w\/\w/ then 'GITHUB'
+               else 'UNKNOWN'
+               end
+
+    dependency[:version_requested] = scm_type
+    if scm_type == 'GITHUB'
+      repo_name, repo_ref = version.split('#', 2)
+      repo_ref ||= 'master'
+
+      dependency[:repo_fullname] = repo_name.to_s.strip
+      dependency[:repo_ref]      = repo_ref.to_s.strip
+    end
   end
 
   # processes requirements from SCM (git, hg, bzr) to like PIP line, except GH deps

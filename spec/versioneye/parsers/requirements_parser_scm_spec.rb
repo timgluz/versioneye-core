@@ -195,28 +195,28 @@ describe RequirementsParser do
       expect(dep1[:prod_key]).to eq(prod1[:prod_key])
       expect(dep1[:language]).to eq(prod1[:language])
       expect(dep1[:version_current]).to eq(prod1[:version])
-      expect(dep1[:version_requested]).to eq('datagovuk/ckanext-harvest#2.0')
+      expect(dep1[:version_requested]).to eq('GITHUB')
       expect(dep1[:version_label]).to eq('==datagovuk/ckanext-harvest#2.0')
       expect(dep1[:comperator]).to eq('==')
-      expect(dep1[:outdated]).to be_truthy
+      expect(dep1[:outdated]).to be_falsey
 
       dep2 = proj.projectdependencies[1]
       expect(dep2[:prod_key]).to eq(prod2[:prod_key])
       expect(dep2[:language]).to eq(prod2[:language])
       expect(dep2[:version_current]).to eq(prod2[:version])
-      expect(dep2[:version_requested]).to eq('datagovuk/ckanext-spatial#dgu')
+      expect(dep2[:version_requested]).to eq('GITHUB')
       expect(dep2[:version_label]).to eq('==datagovuk/ckanext-spatial#dgu')
       expect(dep2[:comperator]).to eq('==')
-      expect(dep2[:outdated]).to be_truthy
+      expect(dep2[:outdated]).to be_falsey
 
       dep3 = proj.projectdependencies[2]
       expect(dep3[:prod_key]).to eq(prod3[:prod_key])
       expect(dep3[:language]).to eq(prod3[:language])
       expect(dep3[:version_current]).to eq(prod3[:version])
-      expect(dep3[:version_requested]).to eq('ckan/ckanext-qa')
+      expect(dep3[:version_requested]).to eq('GITHUB')
       expect(dep3[:version_label]).to eq('==ckan/ckanext-qa')
       expect(dep3[:comperator]).to eq('==')
-      expect(dep3[:outdated]).to be_truthy
+      expect(dep3[:outdated]).to be_falsey
 
       dep4 = proj.projectdependencies[3]
       expect(dep4[:prod_key]).to eq(prod4[:prod_key])

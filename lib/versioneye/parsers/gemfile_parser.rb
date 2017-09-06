@@ -22,7 +22,7 @@ class GemfileParser < CommonParser
   # http://gembundler.com/man/gemfile.5.html
   # http://guides.rubygems.org/patterns/#semantic_versioning
   # ps: It handles GITHUB and Git deps on Github like PackageParser
-  def parse( url )
+  def parse( url, token = nil )
     return nil if url.nil? || url.empty?
 
     gemfile = fetch_response_body( url )
