@@ -78,6 +78,21 @@ describe PackageParser do
       expect(dep1[:comperator]).to eq('^')
     end
 
+    it "returns correct version for `^5.0.0`" do
+      # should here include lower border but exlude upper border of the range
+      product1.versions = []
+      product1.versions << Version.new(version: '0.2.3')
+      product1.versions << Version.new(version: '4.0.0')
+      product1.versions << Version.new(version: '5.0.0')
+      product1.versions << Version.new(version: '6.0.0')
+
+      parser.parse_requested_version('^5.0.0', dep1, product1)
+      expect(dep1).not_to be_nil
+      expect(dep1[:version_requested]).to eq('5.0.0')
+      expect(dep1[:version_label]).to eq('^5.0.0')
+      expect(dep1[:comperator]).to eq('^')
+    end
+
 
 
     it "parses correctly version labels with git urls" do

@@ -256,9 +256,8 @@ class PackageParser < CommonParser
       ver = ver.gsub(" ", "")
       ver = ver.gsub(/\.\*\z/i, ".0")
       ver = ver.gsub(/\.x\z/i, ".0")
-      dependency[:version_requested] = VersionService.newest_caret_version(
-        product.versions, ver
-      )
+      highest_version = VersionService.newest_caret_version( product.versions, ver)
+      dependency[:version_requested] = highest_version || ver
 
     elsif version.match(/\.x\z/i) || version.match(/\.\*\z/i)
       # X Version Ranges or .* version range
